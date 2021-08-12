@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
+    <title>Carrot Clicker beta 0.09</title>
+
+    <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
+</head>
+<body>
+  <p id="Basic_Info"><p>
+  <div id="container">
+    <!--Basic Info Carrots; Cpc; Cps-->
+
+      <!-- Right Section -->
+      <div id="left-section">
+
+        <!-- Carrot image-->
+        <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()">
+
+        <!--Random things to replace-->
+        <p id="BelleHoeCosts"><p>
+        <!-- Prestige Section -->
+        <div id="prestige-section">
+          <button type="button" onClick="Prestige()" class="prestigebutton">Prestige</button>
+          <p id="Prestige" class="prestigetooltip"><p>
+        </div>
+
+      </div>
+  
+      <!-- Right Section -->
+      <div id="right-section">
+          <!--Boomer Bill Rendering-->
+          <div class="Bill characterbox">
+            <!-- Top -->
+            <div class="top">
+              <img src="./assets/characters/Boomer_Bill.png" alt="Boomer Bill" id="bill_avatar" class="characterimg">
+              <p id="UpBillCost"></p>
+            </div>
+
+            <!-- Bottom -->
+            <div class="bottom">
+              <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
+              <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill)">
+                <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number"></p>
+                <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(0,0)" class="toolicon">
+              <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number"></p>
+              <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(0,1)" class="toolicon">
+              <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number"></p>
+              <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(0,2)" class="toolicon">
+              <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number"></p>
+              <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(0,3)" class="toolicon">
+              <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">1</p>
+              <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(0,4)" class="toolicon">
+              <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">1</p>
+              <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(0,5)" class="toolicon">
+            </div>
+
+          </div>
+  
+        <!--Belle Boomerette Rendering-->
+        <div class="Belle characterbox">
+
+          <!-- Top -->
+          <div class="top">
+            <img src="./assets/characters/BelleBommerette.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
+            <p id="UpBelleCost"></p>
+          </div>
+
+          <!-- Bottom -->
+          <div class="bottom">
+            <figcaption id="Belle_lvl" class="characterlevel"></figcaption>
+            <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette)" class="levelupimg">
+
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">1</p>
+            <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(1,0)" class="toolicon">
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">1</p>
+            <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(1,1)" class="toolicon">
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">1</p>
+            <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(1,2)" class="toolicon">
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">1</p>
+            <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(1,3)" class="toolicon">
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">1</p>
+            <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(1,4)" class="toolicon">
+            <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">1</p>
+            <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(1,5)" class="toolicon">
+          </div>
+
+        </div>
+        <!--Gregory Rendering-->
+        <div class="Greg characterbox">
+          <!-- Top -->
+          <div class="top">
+            <img src="./assets/characters/Gregory.png" alt="Gregory" id="Greg_avatar" class="characterimg">
+            <p id="UpGregCost">show</p>
+          </div>
+
+          <!-- Bottom -->
+          <div class="bottom">
+
+            <figcaption id="Greg_lvl" class="characterlevel">lvl:0</figcaption>
+            <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory)" class="levelupimg">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Wooden_Hoe_Number">1</p>
+            <div class="Greg_Hoe_Container">
+              <img src="./assets/tools/wood_hoe.png" class="toolicon" onclick="CreateHoe(0)">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">1</p>
+            <img src="./assets/tools/stone_hoe.png" class="toolicon" onclick="CreateHoe(1)">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">1</p>
+            <img src="./assets/tools/iron_hoe.png" class="toolicon" onclick="CreateHoe(2)">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">1</p>
+            <img src="./assets/tools/gold_hoe.png" class="toolicon" onclick="CreateHoe(3)">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">1</p>
+            <img src="./assets/tools/diamond_hoe.png" class="toolicon" onclick="CreateHoe(4)">
+            <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">1</p>
+            <img src="./assets/tools/netherite_hoe.png" class="toolicon" onclick="CreateHoe(5)">
+            </div>
+            
+            
+
+            <!-- Progress Bar -->
+            <div id="Wooden_Hoe_Bar">
+              <div id="Wooden_Hoe_Progress"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+  
+      </div>
+
+  </div>
+
+
+
+
+
+  <!-- Javascript -->
+  <script src="carrot_clicker.js"></script>
+
+</body>
+</html>
+
+
