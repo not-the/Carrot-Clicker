@@ -140,9 +140,12 @@ return Value;
     function Prestige(){
         console.log("foo");
         player.golden_carrots+=player.prestige_potential;
+        Boomer_Bill.lvlupPrice=100;
+        Belle_Boomerette.lvlupPrice=500;
         [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
         for(i=0;i<Boomer_Bill.Hoes.length;i++){
             Boomer_Bill.Hoes[i]=0;
+            Gregory.HoePrices[i]=[0];
             Belle_Boomerette.Hoes[i]=0;
             Gregory.Hoes[i]=0;
         }    
