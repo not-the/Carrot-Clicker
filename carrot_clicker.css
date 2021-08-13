@@ -292,3 +292,20 @@ p {
     height:10px;
     background-color: lightgreen;
 }
+
+/* Media queries */
+/* Minimum supported width: 417px */
+@media only screen and (max-width: 760px) {
+    #container {
+        flex-direction: column;
+        align-items: center;
+    }
+    #left-section {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    #right-section {
+        border: none;
+        border-top: 1px solid white;
+    }
+}
