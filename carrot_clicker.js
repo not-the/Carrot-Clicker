@@ -249,9 +249,11 @@ var bonusID = 0;
 // Click bonus popup
 function popupHandler() {
     var clickVisualElement = document.createElement("div");
+    var randomX = Math.floor((Math.random() * 10) - 5) + mouseX;
+    var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
 
-    clickVisualElement.style.left = mouseX + "px";
-    clickVisualElement.style.top = mouseY + "px";
+    clickVisualElement.style.left = randomX + "px";
+    clickVisualElement.style.top = randomY + "px";
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
     clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;

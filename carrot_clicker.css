@@ -189,11 +189,11 @@ p {
     0% {
         transform: translateY(-20px) translateX(-60%);
     }
-    50% {
+    10% {
         opacity: 1;
     }
     100% {
-        transform: translateY(-80px) translateX(-60%);
+        transform: translateY(-90px) translateX(-60%);
         opacity: 0;
     }
 }
