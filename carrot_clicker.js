@@ -183,7 +183,13 @@ setInterval(function(){
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
     //The Basic info for the player, Carrots; Cpc; Cps
-    Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
+    if(player.golden_carrots>=0.01 || player.prestige_potential>=1){
+        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
+    }
+    else{
+        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2);
+    }
+    
     //Farmers Upgrade Cost
     CharacterUpCost[0].innerText = "Cost to upgrade Bill:"+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
     CharacterUpCost[1].innerText = "Cost to upgrade Belle:"+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
@@ -205,6 +211,11 @@ setInterval(function(){
     player.prestige_potential=Math.floor(l+h);
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
+    if(player.golden_carrots>=0.01 || player.prestige_potential>=1){
+        console.log("o");
+        document.getElementById("prestige-section").style.visibility="visible";
+        
+    }
 },25);
 
 setInterval(() => {
@@ -243,7 +254,7 @@ function popupHandler() {
     clickVisualElement.style.top = mouseY + "px";
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
-    clickVisualElement.innerText = `+${player.cpc}`;
+    clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;
 
     bonusVisualArea.append(clickVisualElement);
     var bonusCurrent = document.getElementById("bonus" + bonusID);
