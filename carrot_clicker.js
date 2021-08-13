@@ -43,9 +43,10 @@ let Basic_Info = document.getElementById("Basic_Info");
 const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
 const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
 //On Carrots Click
-function onClick(){
+function onClick() {
     player.Carrots+=player.cpc;
-    }
+    popupHandler();
+}
 
 //level up characters 
 function LevelUp(character){
@@ -53,7 +54,7 @@ function LevelUp(character){
         character.lvl+=1;
         player.Carrots-=character.lvlupPrice;
         character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
-        }
+    }
 }
 //Hoes
 function CreateHoe(type){
@@ -193,3 +194,73 @@ setInterval(function(){
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
 },25);
+
+
+
+
+
+
+
+
+//// UI HANDLER ////
+// var tooltip = document.getElementById("tooltip");
+// var dudeman = document.getElementsByClassName("dude");
+var bonusVisualArea = document.getElementById("bonusVisualArea");
+var mouseX = 0;
+var mouseY = 0;
+var bonusID = 0;
+
+// Click bonus popup
+function popupHandler() {
+    var clickVisualElement = document.createElement("div");
+
+    clickVisualElement.style.left = mouseX + "px";
+    clickVisualElement.style.top = mouseY + "px";
+    clickVisualElement.classList.add("clickvisual");
+    clickVisualElement.id = `bonus${bonusID}`;
+    clickVisualElement.innerText = `+${player.cpc}`;
+
+    bonusVisualArea.append(clickVisualElement);
+    var bonusCurrent = document.getElementById("bonus" + bonusID);
+    setTimeout(() => {
+        bonusCurrent.remove();
+    }, 2000);
+
+    // Incremement element ids
+    if(bonusID < 100) {
+        bonusID += 1;
+    } else {
+        bonusID = 0;
+    }
+}
+
+// Mouse position handler
+// https://stackoverflow.com/a/7790764
+(function() {
+    document.onmousemove = handleMouseMove;
+    function handleMouseMove(event) {
+        var eventDoc, doc, body;
+
+        event = event || window.event; // IE-ism
+
+        // If pageX/Y aren't available and clientX/Y are,
+        // calculate pageX/Y - logic taken from jQuery.
+        // (This is to support old IE)
+        if (event.pageX == null && event.clientX != null) {
+            eventDoc = (event.target && event.target.ownerDocument) || document;
+            doc = eventDoc.documentElement;
+            body = eventDoc.body;
+
+            event.pageX = event.clientX +
+            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+            (doc && doc.clientLeft || body && body.clientLeft || 0);
+            event.pageY = event.clientY +
+            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+            (doc && doc.clientTop  || body && body.clientTop  || 0 );
+        }
+        
+        mouseX = event.pageX;
+        mouseY = event.pageY;
+        
+    }
+})();

@@ -166,6 +166,37 @@ p {
     display: flex;
 }
 
+/* Always on top elements */
+.clickvisual {
+    /* height: 20px;
+    width: 20px; */
+    font-size: 20pt;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    /* background-color: white; */
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+    transform: translateX(-50%);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    animation: clickBonus 1.25s linear forwards;
+}
+@keyframes clickBonus {
+    0% {
+        transform: translateY(-20px) translateX(-60%);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-40px) translateX(-60%);
+        opacity: 0;
+    }
+}
+
 /* Informational */
 #Basic_Info {
     background-color: rgb(36, 34, 34);
@@ -183,11 +214,18 @@ p {
 #left-section {
     margin-right: auto;
 }
+
+#clicking_area {
+    height: 360px;
+    width: 360px;
+    cursor: pointer;
+    position: absolute;
+    z-index: 50;
+}
 #main_carrot {
     width: 360px;
     max-width: 100%;
     height: auto;
-    cursor: pointer;
 }
 #main_carrot:active{
     transform: scale(1.05,1.05);
