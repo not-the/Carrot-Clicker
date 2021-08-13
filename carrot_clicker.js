@@ -35,7 +35,7 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
 let Boomer_Bill = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 let Belle_Boomerette = new Character("Farmer",0,500,[0,0,0,0,0,0]);
 let Gregory = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
-Gregory.HoePrices = [10000,200000,4000000,60000000,8000000000,1000000000000];
+Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
 
 //Getting InnerHtml
 let prestige_info = document.getElementById("");
@@ -65,8 +65,11 @@ function HoeCost(){
         }
     }
 }
-var price = HoeCost();
-
+let price = HoeCost();
+if(price>=(player.Carrots*2)){
+    alert("That Hoe is Currently Too Expensive");
+    return;
+}
 //Creates Hoe And Displays Progress Bar
 var i = 0;
     if (i == 0) {
@@ -86,19 +89,15 @@ var i = 0;
     } else {
     p+=(0.0333*player.Carrots);
     player.Carrots-=(0.0333*player.Carrots);
-    console.log(p)
     elem. style.width = 100*(p/price) + "%";
     }
     
 }
-}
-  
+} 
 }
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill,type=0){
-    console.log("foo");
     if(Gregory.Hoes[type]>=1){
-        console.log("bar");
         character.Hoes[type]+=1;
         Gregory.Hoes[type]-=1;
     }
@@ -138,17 +137,17 @@ return Value;
 
 //Prestige
     function Prestige(){
-        console.log("foo");
-        player.golden_carrots+=player.prestige_potential;
+        let cnfrm = confirm("Are you Sure you want to Presige?");
+        if(cnfrm==true){
+            player.golden_carrots+=player.prestige_potential;
         Boomer_Bill.lvlupPrice=100;
         Belle_Boomerette.lvlupPrice=500;
         [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
-        for(i=0;i<Boomer_Bill.Hoes.length;i++){
-            Boomer_Bill.Hoes[i]=0;
-            Gregory.HoePrices[i]=[0];
-            Belle_Boomerette.Hoes[i]=0;
-            Gregory.Hoes[i]=0;
-        }    
+        Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+        Boomer_Bill.Hoes=[0,0,0,0,0,0];
+        Belle_Boomerette.Hoes=[0,0,0,0,0,0];
+        Gregory.Hoes=[0,0,0,0,0,0];
+        }  
     }
 
 
@@ -156,14 +155,14 @@ return Value;
 //main Game loop
 setInterval(function(){
     //calculates the Cpc
-    if(((10*Boomer_Bill.Hoes[0])+(100*Boomer_Bill.Hoes[1])+(1000*Boomer_Bill.Hoes[2])+(10000*Boomer_Bill.Hoes[3])+(100000*Boomer_Bill.Hoes[4])+(1000000*Boomer_Bill.Hoes[5]))>0){
-    player.cpc=(Boomer_Bill.lvl*((10*Boomer_Bill.Hoes[0])+(100*Boomer_Bill.Hoes[1])+(1000*Boomer_Bill.Hoes[2])+(10000*Boomer_Bill.Hoes[3])+(100000*Boomer_Bill.Hoes[4])+(1000000*Boomer_Bill.Hoes[5])));
+    if(((1*Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5]))>0){
+    player.cpc=(Boomer_Bill.lvl*((1*Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5])));
     }else{
         player.cpc=Boomer_Bill.lvl;
     }
     player.cpc=(0.1*(player.golden_carrots+10))*player.cpc;
     //calculates the Cps
-    if((Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5]))>0){
+    if((Belle_Boomerette.Hoes[0]+(1*Belle_Boomerette.Hoes[1])+(10*Belle_Boomerette.Hoes[2])+(100*Belle_Boomerette.Hoes[3])+(1000*Belle_Boomerette.Hoes[4])+(10000*Belle_Boomerette.Hoes[5]))>0){
     player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5])));
     }else{
         player.cps=Belle_Boomerette.lvl;
