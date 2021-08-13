@@ -237,6 +237,7 @@ p {
     margin-left: 20px;
     margin-top: 20px;
     display: inline-flex;
+    visibility: hidden;
 }
 .prestigebutton {
     font-weight: bold;
