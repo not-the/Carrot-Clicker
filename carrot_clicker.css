@@ -98,10 +98,11 @@ img {
     background-color: lightgreen;
 }
 
-.prestige-section {
+#prestige-section {
     margin-left: 20px;
     margin-top: 50px;
     display: flex;
+    visibility:hidden;
 }
 
 .prestigebutton {
