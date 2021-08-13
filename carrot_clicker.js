@@ -208,10 +208,18 @@ setInterval(function(){
 },25);
 
 setInterval(() => {
-    localStorage.setObject("player",player);
-    localStorage.setObject("Bill",Boomer_Bill);
-    localStorage.setObject("Belle",Belle_Boomerette);
-    localStorage.setObject("Greg",Gregory);
+    if(player){
+        localStorage.setObject("player",player);
+        localStorage.setObject("Bill",Boomer_Bill);
+        localStorage.setObject("Belle",Belle_Boomerette);
+        localStorage.setObject("Greg",Gregory);
+    }
+    else{
+        localStorage.setObject("player",player1);
+        localStorage.setObject("Bill",Boomer_Bill1);
+        localStorage.setObject("Belle",Belle_Boomerette1);
+        localStorage.setObject("Greg",Gregory1);
+    }
 }, 2000);
 
 
