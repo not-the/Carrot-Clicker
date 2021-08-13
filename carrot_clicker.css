@@ -192,7 +192,7 @@ p {
         opacity: 1;
     }
     100% {
-        transform: translateY(-40px) translateX(-60%);
+        transform: translateY(-80px) translateX(-60%);
         opacity: 0;
     }
 }
@@ -273,7 +273,7 @@ p {
     border-color: rgb(29, 248, 0);
     box-sizing:border-box;
     width: 362px;
-    margin:19px;
+    margin: 19px;
     
     display: flex;
     flex-direction: column;
@@ -310,8 +310,14 @@ p {
     height: 32px;
     width: auto;
 }
-.toolicon:hover, .levelupimg:hover {transform: scale(1.1, 1.1);}
-.toolicon:active, .levelupimg:active {transform: scale(0.9, 0.9);}
+.toolicon:hover, .levelupimg:hover {
+    transform: scale(1.2, 1.2);
+    filter: brightness(150%);
+}
+.toolicon:active, .levelupimg:active {
+    transform: scale(0.9, 0.9);
+    filter: brightness(70%);
+}
 .toolnumber {
     display: inline-block;
     position: absolute;
