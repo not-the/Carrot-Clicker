@@ -4,10 +4,17 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
 
+  Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
 
 //Values Stored in a Player Object
-const player ={
+const player1 ={
     Carrots:0,
     cpc:0,
     cps:0,
@@ -32,10 +39,15 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
         }
     }
 
-let Boomer_Bill = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-let Belle_Boomerette = new Character("Farmer",0,500,[0,0,0,0,0,0]);
-let Gregory = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
-Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+let Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
+let Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
+let Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
+Gregory1.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+
+const player=localStorage.getObject("player");
+const Boomer_Bill=localStorage.getObject("Bill");
+const Belle_Boomerette=localStorage.getObject("Belle");
+const Gregory =localStorage.getObject("Greg");
 
 //Getting InnerHtml
 let prestige_info = document.getElementById("");
@@ -195,7 +207,12 @@ setInterval(function(){
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
 },25);
 
-
+setInterval(() => {
+    localStorage.setObject("player",player);
+    localStorage.setObject("Bill",Boomer_Bill);
+    localStorage.setObject("Belle",Belle_Boomerette);
+    localStorage.setObject("Greg",Gregory);
+}, 2000);
 
 
 
