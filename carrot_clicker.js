@@ -28,7 +28,7 @@ const player1 ={
     golden_carrots:0,
     prestige_potential:0,
     LifetimeCarrots:0,
-    LifetimeGolenCarrots:0
+    LifetimeGoldenCarrots:0
 }
 
 
@@ -61,6 +61,10 @@ const Gregory =localStorage.getObject("Greg");
 //Getting InnerHtml
 let prestige_info = document.getElementById("");
 let Basic_Info = document.getElementById("Basic_Info");
+let elCarrotCount = document.getElementById("Carrot_Count");
+let elCPC = document.getElementById("cpc");
+let elCPS = document.getElementById("cps");
+let elGoldenCarrotCount = document.getElementById("golden_carrot_count");
 const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
 const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
 
@@ -178,7 +182,7 @@ function Prestige(){
     let cnfrm = confirm("Are you Sure you want to Presige?");
     if(cnfrm==true){
         player.golden_carrots+=player.prestige_potential;
-        player.LifetimeGolenCarrots+=player.prestige_potential;
+        player.LifetimeGoldenCarrots+=player.prestige_potential;
         Boomer_Bill.lvlupPrice=100;
         Belle_Boomerette.lvlupPrice=500;
         [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
@@ -209,12 +213,21 @@ setInterval(()=>{
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
     
+    //// Update numbers on page
+    // Top bar
+    Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+    // New display
+    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
+    elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
+    elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
+    
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.LifetimeGolenCarrots>=1 || player.prestige_potential>=1){
-        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
+    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
+        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`
     }
-    else{
-        Basic_Info.innerText ="Carrots: "+DisplayRounded(Math.floor(player.Carrots))+" | CPC: "+DisplayRounded(Math.floor(player.cpc),2)+" | CPS: "+DisplayRounded(Math.floor(player.cps),2);
+    if(player.LifetimeGoldenCarrots>=1) {
+        elGoldenCarrotCount.style.color = "white";
     }
     
     //Farmers Upgrade Cost
@@ -238,7 +251,7 @@ setInterval(()=>{
     player.prestige_potential=Math.floor(l+h);
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
-    if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
+    if(player.LifetimeGoldenCarrots>=0.01 || player.prestige_potential>=1){
         document.getElementById("prestige-section").style.visibility="visible";
         
     }

@@ -223,6 +223,17 @@ p {
 #Tip:hover{
     text-decoration: underline;
 }
+#Carrot_Count {
+    font-size: 20pt;
+    text-align: center;
+}
+#cpc, #cps, #golden_carrot_count {
+    text-align: center;
+}
+#golden_carrot_count {
+    color: gray;
+}
+
 
 /* Left section */
 #left-section {
