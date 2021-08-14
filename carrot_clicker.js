@@ -74,6 +74,12 @@ function onClick() {
 //level up characters 
 function LevelUp(character){
     if(player.Carrots>=character.lvlupPrice) {
+        if(character==Gregory){
+            character.lvl+=1;
+            player.Carrots-=character.lvlupPrice;
+            character.lvlupPrice=Math.floor(character.lvlupPrice*1.35);
+            return;
+        }
         character.lvl+=1;
         player.Carrots-=character.lvlupPrice;
         character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
@@ -94,7 +100,11 @@ function CreateHoe(type) {
         alert("That Hoe is Currently Too Expensive");
         return;
     }
+    //Creates Hoe And Displays Progress Bar
+    var i = 0;
     if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
+
+    
         if (i == 0) {
             i = 1;
             var elem = document.getElementById("Wooden_Hoe_Progress");
@@ -116,10 +126,9 @@ function CreateHoe(type) {
                 }
             }
         } 
+    }else{
+        alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*10)+" To Create this Hoe");
     }
-
-    //Creates Hoe And Displays Progress Bar
-    var i = 0;
 
 }
 
@@ -229,8 +238,7 @@ setInterval(()=>{
     player.prestige_potential=Math.floor(l+h);
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
-    if(player.golden_carrots>=0.01 || player.prestige_potential>=1){
-        console.log("o");
+    if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
         document.getElementById("prestige-section").style.visibility="visible";
         
     }
