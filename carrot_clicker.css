@@ -205,8 +205,8 @@ p {
     margin-bottom: 20px;
     position: sticky;
     top: 0;
+    z-index: 99;
 }
-
 .Basic_Info {
     display: flex;
     flex-direction: row;
@@ -298,6 +298,7 @@ p {
     flex-direction: column;
 
     position: relative;
+    z-index: 10;
 }
 /* Character tooltips */
 .characterbox:hover .charactertooltip {
