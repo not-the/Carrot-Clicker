@@ -199,18 +199,23 @@ p {
 }
 
 /* Informational */
-#Basic_Info {
+.Basic_Info {
     background-color: rgb(36, 34, 34);
     background-image: url(./assets/Dirt-Background.jpg);
     padding: 8px 20px;
-    border: 2px solid white;
+    border: 2px solid rgb(255, 255, 255);
     border-top: hidden;
-
     margin-bottom: 20px;
     position: sticky;
     top: 0;
 }
-
+#Tip{
+    margin-left: 700px;
+    font-size: smaller;
+}
+#Tip:hover{
+    cursor: pointer;
+}
 /* Left section */
 #left-section {
     margin-right: auto;
