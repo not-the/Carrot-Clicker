@@ -169,11 +169,8 @@ p {
 
 /* Always on top elements */
 .clickvisual {
-    /* height: 20px;
-    width: 20px; */
     font-size: 20pt;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    /* background-color: white; */
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
@@ -209,13 +206,24 @@ p {
     position: sticky;
     top: 0;
 }
-#Tip{
-    margin-left: 700px;
-    font-size: smaller;
+
+.Basic_Info {
+    display: flex;
+    flex-direction: row;
 }
-#Tip:hover{
+.info-divide {
+    border: none;
+}
+#Tip{
+    /* margin-left: 700px; */
+    /* font-size: smaller; */
+    margin-left: auto;
     cursor: pointer;
 }
+#Tip:hover{
+    text-decoration: underline;
+}
+
 /* Left section */
 #left-section {
     margin-right: auto;
@@ -229,8 +237,9 @@ p {
     z-index: 50;
 }
 #main_carrot {
-    width: 360px;
-    max-width: 100%;
+    margin: 10px;
+    margin-right: 20px;
+    width: 400px;
     height: auto;
 }
 #main_carrot:active{
@@ -267,11 +276,14 @@ p {
     margin-top: 4px;
 }
 
+
+
+
 /* Right section */
 #right-section {
     width: 400px;
     height: 100%;
-    border-left: 1px solid white;
+    /* border-left: 1px solid white; */
 }
 
 /* Characters */
@@ -284,7 +296,32 @@ p {
     
     display: flex;
     flex-direction: column;
+
+    position: relative;
 }
+/* Character tooltips */
+.characterbox:hover .charactertooltip {
+    visibility: visible;
+    opacity: 1;
+}
+.tooltip {
+    position: absolute;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(88, 88, 88, 0.8);
+    backdrop-filter: blur(10px);
+    max-width: 260px;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s;
+}
+.charactertooltip {
+    transform: translateX(-270px);
+    left: 0;
+    top: unset;
+}
+/* Character info */
 .characterdesc {
     margin-left: 4px;
 }
@@ -303,6 +340,7 @@ p {
     image-rendering: pixelated;
     /* padding: 0 8px 8px 0; */
 }
+/* Tools/upgradse */
 .levelupimg, .toolicon {
     transition: 0.25s;
     cursor: pointer;
@@ -331,6 +369,9 @@ p {
     font-size: 6pt;
     transform: translateX(15px) translateY(3px);
 }
+.Greg .toolicon {
+    height: 45px;
+}
 #Wooden_Hoe_Bar{
     /* Unhide when bar is active: */
     /* visibility: hidden; */
@@ -344,9 +385,69 @@ p {
     background-color: lightgreen;
 }
 
+
+
+/* Notifications section */
+#notifs-section {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 270px;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(78, 63, 52);
+}
+#notifs-section nav {
+    /* width: 100%; */
+    margin: 0 auto;
+    background-color: rgb(78, 63, 52);;
+}
+#notifs-section nav button {
+    width: 33.33%;
+    height: 2em;
+    color: white;
+    cursor: pointer;
+}
+.tab:hover {
+    transition: 0.25s;
+    transform: translateY(-2px);
+}
+.activetab {
+    background-color: rgb(78, 63, 52);
+    border: none;
+    border-bottom: none;
+}
+.inactivetab {
+    background-color: rgb(53, 42, 34);
+    border: none;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+.inactivetab:hover {
+    filter: brightness(120%);
+}
+
+
+
+
 /* Media queries */
 /* Minimum supported width: 417px */
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 820px) {
+    .Basic_Info {
+        flex-direction: column;
+        align-items: center;
+        height: 80px;
+    }
+    .info-divide {
+        border: 1px solid white;
+        width: 100%;
+    }
+    #Tip {
+        margin-left: unset;
+    }
+    #main_carrot {
+        max-width: 100%;
+        margin: auto;
+    }
     #container {
         flex-direction: column;
         align-items: center;
@@ -359,4 +460,18 @@ p {
         border: none;
         border-top: 1px solid white;
     }
+}
+
+@media only screen and (max-width: 1080px) {
+    #container {
+        /* flex-wrap:wrap-reverse; */
+    }
+    #notifs-section {
+        width: 95%;
+        height: 360px;
+        margin: 20px;
+    }
+    /* .row-break {
+        flex-basis: 100%;
+    } */
 }

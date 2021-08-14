@@ -1,7 +1,8 @@
 //// UI HANDLER ////
-// var tooltip = document.getElementById("tooltip");
-// var dudeman = document.getElementsByClassName("dude");
 var bonusVisualArea = document.getElementById("bonusVisualArea");
+// var tooltipBill = document.getElementById("billtooltip").style.top;
+// var tooltipBelle = document.getElementById("belletooltip").style.top;
+// var tooltipGreg = document.getElementById("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 var bonusID = 0;
@@ -32,6 +33,9 @@ function popupHandler() {
     }
 }
 
+
+
+
 // Mouse position handler
 // https://stackoverflow.com/a/7790764
 (function() {
@@ -59,6 +63,13 @@ function popupHandler() {
         
         mouseX = event.pageX;
         mouseY = event.pageY;
-        
+
+
+        // Character tooltips
+        // var ctAdjust = event.pageY - 120;
+        // if(ctAdjust < -4) {
+        //     ctAdjust = -4
+        // }
+        // tooltipBill = `${ctAdjust}px`;
     }
 })();

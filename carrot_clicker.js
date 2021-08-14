@@ -4,12 +4,18 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
-const tips =["Tip: Click The Lvl Up Arrow to Level Up Characters","Tip: To Buy a Hoe, Go to Greg and Click The Correct Type","Tip: To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle","Tip: Click The Carrot","Golden Carrots Increase Your Characters by 10%"];
+const tips =[
+    "Tip: Click The Lvl Up Arrow to Level Up Characters",
+    "Tip: To Buy a Hoe, Go to Greg and Click The Correct Type",
+    "Tip: To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
+    "Tip: Click The Carrot","Golden Carrots Increase Your Characters by 10%"
+];
+
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
 }
 
-  Storage.prototype.getObject = function(key) {
+Storage.prototype.getObject = function(key) {
     var value = this.getItem(key);
     return value && JSON.parse(value);
 }
@@ -28,19 +34,19 @@ const player1 ={
 
 //Creates Bases to Display Large Numbers 
 const Bases=[];
-    for(i=1000;i<99999999999999999999999999999;i=i*1000) {
-        Bases.push(i);
-    }
+for(i=1000;i<99999999999999999999999999999;i=i*1000) {
+    Bases.push(i);
+}
 
 //Creates Characters 
-    class Character{
-        constructor(Type,lvl,lvlupPrice,Hoes){
-            this.Type=Type;
-            this.lvl=lvl;
-            this.lvlupPrice=lvlupPrice;
-            this.Hoes=Hoes;
-        }
+class Character{
+    constructor(Type,lvl,lvlupPrice,Hoes){
+        this.Type=Type;
+        this.lvl=lvl;
+        this.lvlupPrice=lvlupPrice;
+        this.Hoes=Hoes;
     }
+}
 
 let Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 let Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
@@ -57,6 +63,7 @@ let prestige_info = document.getElementById("");
 let Basic_Info = document.getElementById("Basic_Info");
 const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
 const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
+
 //On Carrots Click
 function onClick() {
     player.Carrots+=player.cpc;
@@ -66,15 +73,15 @@ function onClick() {
 
 //level up characters 
 function LevelUp(character){
-    if(player.Carrots>=character.lvlupPrice){
+    if(player.Carrots>=character.lvlupPrice) {
         character.lvl+=1;
         player.Carrots-=character.lvlupPrice;
         character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
     }
 }
 //Hoes
-function CreateHoe(type){
-//Stores The Correct Hoe Price
+function CreateHoe(type) {
+    //Stores The Correct Hoe Price
     function HoeCost(){
         for(i=0;i<Gregory.HoePrices.length;i++){
             if(type==i){
@@ -106,15 +113,16 @@ function CreateHoe(type){
                     p+=(0.01*player.Carrots);
                     player.Carrots-=(0.01*player.Carrots);
                     elem. style.width = 100*(p/price) + "%";
+                }
             }
-    
-        }
-    } 
-}
-//Creates Hoe And Displays Progress Bar
-var i = 0;
+        } 
+    }
+
+    //Creates Hoe And Displays Progress Bar
+    var i = 0;
 
 }
+
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill,type=0){
     if(Gregory.Hoes[type]>=1){
@@ -137,7 +145,7 @@ function DisplayHoes(character = Boomer_Bill){
             document.getElementById(hoetypes[i]).innerText=character.Hoes[i];
         }
         
-        }
+    }
 }
 
 //Displaying Roundced Numbers example"100m 140b
@@ -148,28 +156,29 @@ function DisplayRounded(Value,Fixedto=3){
             return (Value/Bases[i]).toFixed(Fixedto)+units[i];
         }
     }
-return Value;
+    return Value;
 }
+
 //Carrots per second
-    setInterval(function(){
-    player.Carrots+=player.cps/25;
-    },25);
+setInterval(function(){
+player.Carrots+=player.cps/25;
+},25);
 
 //Prestige
-    function Prestige(){
-        let cnfrm = confirm("Are you Sure you want to Presige?");
-        if(cnfrm==true){
-            player.golden_carrots+=player.prestige_potential;
-            player.LifetimeGolenCarrots+=player.prestige_potential;
-            Boomer_Bill.lvlupPrice=100;
-            Belle_Boomerette.lvlupPrice=500;
-            [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
-            Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
-            Boomer_Bill.Hoes=[0,0,0,0,0,0];
-            Belle_Boomerette.Hoes=[0,0,0,0,0,0];
-            Gregory.Hoes=[0,0,0,0,0,0];
-        }  
-    }
+function Prestige(){
+    let cnfrm = confirm("Are you Sure you want to Presige?");
+    if(cnfrm==true){
+        player.golden_carrots+=player.prestige_potential;
+        player.LifetimeGolenCarrots+=player.prestige_potential;
+        Boomer_Bill.lvlupPrice=100;
+        Belle_Boomerette.lvlupPrice=500;
+        [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
+        Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+        Boomer_Bill.Hoes=[0,0,0,0,0,0];
+        Belle_Boomerette.Hoes=[0,0,0,0,0,0];
+        Gregory.Hoes=[0,0,0,0,0,0];
+    }  
+}
 
 
 
@@ -196,20 +205,20 @@ setInterval(()=>{
         Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
     }
     else{
-        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2);
+        Basic_Info.innerText ="Carrots: "+DisplayRounded(Math.floor(player.Carrots))+" | CPC: "+DisplayRounded(Math.floor(player.cpc),2)+" | CPS: "+DisplayRounded(Math.floor(player.cps),2);
     }
     
     //Farmers Upgrade Cost
-    CharacterUpCost[0].innerText = "Cost to upgrade Bill:"+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
-    CharacterUpCost[1].innerText = "Cost to upgrade Belle:"+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
+    CharacterUpCost[0].innerText = "Cost to upgrade Bill: "+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
+    CharacterUpCost[1].innerText = "Cost to upgrade Belle: "+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
     //Bill's Level
-    CharacterLevel[0].innerText ="Lvl:"+DisplayRounded(Boomer_Bill.lvl,1);
+    CharacterLevel[0].innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
     //Belle's level
-    CharacterLevel[1].innerText="Lvl:"+DisplayRounded(Belle_Boomerette.lvl,1);
+    CharacterLevel[1].innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
     //Greg's Level
-    CharacterLevel[2].innerText="Lvl:"+DisplayRounded(Gregory.lvl);
+    CharacterLevel[2].innerText="Lvl: "+DisplayRounded(Gregory.lvl);
     //Blacksmiths Upgrade Cost
-    CharacterUpCost[2].innerText="Cost to Upgrade Greg:"+DisplayRounded(Gregory.lvlupPrice,1)+"";
+    CharacterUpCost[2].innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
     //Hoe Counts
     DisplayHoes(Boomer_Bill);
     DisplayHoes(Belle_Boomerette);
@@ -227,6 +236,7 @@ setInterval(()=>{
     }
 },25);
 
+// Autosave
 setInterval(() => {
     if(player){
         localStorage.setObject("player",player);
@@ -241,10 +251,21 @@ setInterval(() => {
         localStorage.setObject("Greg",Gregory1);
     }
 }, 2000);
+
+// Tips
+var tipTracker = 1;
 tipchange = function(){
     tipnumber = Math.floor(Math.random()*tips.length);
-    document.getElementById("Tip").innerText=tips[tipnumber];
+    if(tipnumber == tipTracker) {
+        tipchange();
+        return;
+    } else {
+        document.getElementById("Tip").innerText=tips[tipnumber];
+        tipTracker = tipnumber;
+    }
+    
 }
+// Automatically change tips
 setInterval(() => {
     tipchange();
 }, 10000);
