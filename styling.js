@@ -7,6 +7,38 @@ var mouseX = 0;
 var mouseY = 0;
 var bonusID = 0;
 
+
+// Panel handler
+var currentPanel = "info-panel";
+const infoPanel = document.getElementById("info-panel");
+const achievementsPanel = document.getElementById("achievements-panel");
+const settingsPanel = document.getElementById("settings-panel");
+
+const infoTab = document.getElementById("info-panel-button");
+const achievementsTab = document.getElementById("achievements-panel-button");
+const settingsTab = document.getElementById("settings-panel-button");
+function panelChange(to) {
+    if(currentPanel == to) {
+        return;
+    } else {
+        // Tab reset
+        infoTab.classList.remove("activetab");
+        achievementsTab.classList.remove("activetab");
+        settingsTab.classList.remove("activetab");
+
+        // Panel clear
+        infoPanel.style.visibility = "hidden";
+        achievementsPanel.style.visibility = "hidden";
+        settingsPanel.style.visibility = "hidden";
+
+        // Unhide selected panel
+        document.getElementById(to + "-button").classList.add("activetab");
+        document.getElementById(to).style.visibility = "visible";
+        
+        currentPanel = to;
+    }
+}
+
 // Click bonus popup
 function popupHandler() {
     var clickVisualElement = document.createElement("div");
@@ -32,9 +64,6 @@ function popupHandler() {
         bonusID = 0;
     }
 }
-
-
-
 
 // Mouse position handler
 // https://stackoverflow.com/a/7790764

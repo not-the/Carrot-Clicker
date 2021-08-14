@@ -340,7 +340,7 @@ p {
     image-rendering: pixelated;
     /* padding: 0 8px 8px 0; */
 }
-/* Tools/upgradse */
+/* Tools/upgrades */
 .levelupimg, .toolicon {
     transition: 0.25s;
     cursor: pointer;
@@ -366,11 +366,15 @@ p {
 .toolnumber {
     display: inline-block;
     position: absolute;
-    font-size: 6pt;
-    transform: translateX(15px) translateY(3px);
+    font-size: 11pt;
+    transform: translateX(22px) translateY(24px);
 }
 .Greg .toolicon {
     height: 45px;
+}
+.Greg .toolnumber {
+    font-size: 14pt;
+    transform: translateX(32px) translateY(24px);
 }
 #Wooden_Hoe_Bar{
     /* Unhide when bar is active: */
@@ -406,26 +410,65 @@ p {
     height: 2em;
     color: white;
     cursor: pointer;
-}
-.tab:hover {
-    transition: 0.25s;
-    transform: translateY(-2px);
-}
-.activetab {
-    background-color: rgb(78, 63, 52);
-    border: none;
-    border-bottom: none;
-}
-.inactivetab {
     background-color: rgb(53, 42, 34);
     border: none;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
 }
+
+.tab:hover {
+    transform: translateY(-2px);
+}
+#notifs-section nav .activetab {
+    background-color: rgb(78, 63, 52);
+    border: none;
+    border-bottom: none;
+}
 .inactivetab:hover {
     filter: brightness(120%);
 }
+.activetab#info-tab-button {
+    background-color: teal;
+}
 
+/* Info panel */
+.panel {
+    position: absolute;
+}
+#info-panel {
+    visibility: visible;
+}
+#achievements-panel {
+    visibility: hidden;
+    height: 0;
+}
+#settings-panel {
+    visibility: hidden;
+    height: 0;
+}
+
+/* Achievements */
+.info-inner {
+    width: 100%;
+}
+.info-item {
+    width: 110%;
+    margin: 10px;
+    padding: 4px;
+    background-color: #42362d;
+    border: 1px solid goldenrod;
+    border-radius: 4px;
+    display: flex;
+}
+.info-item h1 {
+    font-size: 14pt;
+    margin-bottom: 0;
+}
+.achievement-img {
+    height: 64px;
+    width: 64px;
+    margin-right: 8px;
+}
 
 
 
