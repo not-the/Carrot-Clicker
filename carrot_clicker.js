@@ -5,10 +5,18 @@ The Character Class Object stores information on each Ingame Character. Currentl
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
 const tips =[
+    "Tip: Click The Carrot",
     "Tip: Click The Lvl Up Arrow to Level Up Characters",
+    "Tip: This game has autosave! Feel free to close the game and come back later",
+
     "Tip: To Buy a Hoe, Go to Greg and Click The Correct Type",
+    "Tip: To unlock better hoes, upgrade Greg!",
     "Tip: To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
-    "Tip: Click The Carrot","Golden Carrots Increase Your Characters by 10%"
+    "Tip: Hoes will give their owner permanent buffs!",
+
+    "Tip: If progression begins to slow down, try Prestiging",
+    "Tip: Earn golden carrots by prestiging. You restart but get to keep your Golden carrots and other unlockables",
+    "Tip: Every Golden Carrot Increases Your Characters' output by 10%"
 ];
 
 Storage.prototype.setObject = function(key, value) {

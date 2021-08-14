@@ -518,9 +518,9 @@ p {
 }
 
 @media only screen and (max-width: 1080px) {
-    #container {
-        /* flex-wrap:wrap-reverse; */
-    }
+    /* #container {
+        flex-wrap:wrap-reverse;
+    } */
     #notifs-section {
         width: 95%;
         height: 360px;
