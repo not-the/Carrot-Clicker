@@ -20,15 +20,17 @@ const player1 ={
     cpc:0,
     cps:0,
     golden_carrots:0,
-    prestige_potential:0
+    prestige_potential:0,
+    LifetimeCarrots:0,
+    LifetimeGolenCarrots:0
 }
 
 
 //Creates Bases to Display Large Numbers 
 const Bases=[];
-for(i=1000;i<99999999999999999999999999999;i=i*1000) {
-    Bases.push(i);
-}
+    for(i=1000;i<99999999999999999999999999999;i=i*1000) {
+        Bases.push(i);
+    }
 
 //Creates Characters 
     class Character{
@@ -58,6 +60,7 @@ const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementB
 //On Carrots Click
 function onClick() {
     player.Carrots+=player.cpc;
+    player.LifetimeCarrots+=player.cpc;
     popupHandler();
 }
 
@@ -72,42 +75,45 @@ function LevelUp(character){
 //Hoes
 function CreateHoe(type){
 //Stores The Correct Hoe Price
-function HoeCost(){
-    for(i=0;i<Gregory.HoePrices.length;i++){
-        if(type==i){
-            return Gregory.HoePrices[i];
+    function HoeCost(){
+        for(i=0;i<Gregory.HoePrices.length;i++){
+            if(type==i){
+                return Gregory.HoePrices[i];
+            }
         }
     }
-}
-let price = HoeCost();
-if(price>=(player.Carrots*2)){
-    alert("That Hoe is Currently Too Expensive");
-    return;
+    let price = HoeCost();
+    if(price>=(player.Carrots*2)){
+        alert("That Hoe is Currently Too Expensive");
+        return;
+    }
+    if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
+        if (i == 0) {
+            i = 1;
+            var elem = document.getElementById("Wooden_Hoe_Progress");
+            var p = 0;
+            var id = setInterval(frame,100);
+            function frame() {
+                if (p >= price) {
+                    clearInterval(id);
+                    i = 0;
+                    player.Carrots+=p-price;
+                    p=0;
+                    elem.style.width = 0 + "%";
+                    Gregory.Hoes[type]+=1;
+                    Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
+                } else {
+                    p+=(0.01*player.Carrots);
+                    player.Carrots-=(0.01*player.Carrots);
+                    elem. style.width = 100*(p/price) + "%";
+            }
+    
+        }
+    } 
 }
 //Creates Hoe And Displays Progress Bar
 var i = 0;
-    if (i == 0) {
-    i = 1;
-    var elem = document.getElementById("Wooden_Hoe_Progress");
-    var p = 0;
-    var id = setInterval(frame,100);
-    function frame() {
-    if (p >= price) {
-    clearInterval(id);
-    i = 0;
-    player.Carrots+=p-price;
-    p=0;
-    elem.style.width = 0 + "%";
-    Gregory.Hoes[type]+=1;
-    Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
-    } else {
-    p+=(0.0333*player.Carrots);
-    player.Carrots-=(0.0333*player.Carrots);
-    elem. style.width = 100*(p/price) + "%";
-    }
-    
-}
-} 
+
 }
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill,type=0){
@@ -154,37 +160,39 @@ return Value;
         let cnfrm = confirm("Are you Sure you want to Presige?");
         if(cnfrm==true){
             player.golden_carrots+=player.prestige_potential;
-        Boomer_Bill.lvlupPrice=100;
-        Belle_Boomerette.lvlupPrice=500;
-        [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
-        Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
-        Boomer_Bill.Hoes=[0,0,0,0,0,0];
-        Belle_Boomerette.Hoes=[0,0,0,0,0,0];
-        Gregory.Hoes=[0,0,0,0,0,0];
+            player.LifetimeGolenCarrots+=player.prestige_potential;
+            Boomer_Bill.lvlupPrice=100;
+            Belle_Boomerette.lvlupPrice=500;
+            [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
+            Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+            Boomer_Bill.Hoes=[0,0,0,0,0,0];
+            Belle_Boomerette.Hoes=[0,0,0,0,0,0];
+            Gregory.Hoes=[0,0,0,0,0,0];
         }  
     }
 
 
 
 //main Game loop
-setInterval(function(){
+setInterval(()=>{
     //calculates the Cpc
     if(((1*Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5]))>0){
-    player.cpc=(Boomer_Bill.lvl*((1*Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5])));
+        player.cpc=(Boomer_Bill.lvl*((1*Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5])));
     }else{
         player.cpc=Boomer_Bill.lvl;
     }
     player.cpc=(0.1*(player.golden_carrots+10))*player.cpc;
     //calculates the Cps
     if((Belle_Boomerette.Hoes[0]+(1*Belle_Boomerette.Hoes[1])+(10*Belle_Boomerette.Hoes[2])+(100*Belle_Boomerette.Hoes[3])+(1000*Belle_Boomerette.Hoes[4])+(10000*Belle_Boomerette.Hoes[5]))>0){
-    player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5])));
+        player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5])));
     }else{
         player.cps=Belle_Boomerette.lvl;
     }
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
+    
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.golden_carrots>=0.01 || player.prestige_potential>=1){
+    if(player.LifetimeGolenCarrots>=1 || player.prestige_potential>=1){
         Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
     }
     else{
@@ -213,6 +221,7 @@ setInterval(function(){
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
     if(player.golden_carrots>=0.01 || player.prestige_potential>=1){
+        console.log("o");
         document.getElementById("prestige-section").style.visibility="visible";
         
     }
@@ -239,72 +248,3 @@ tipchange = function(){
 setInterval(() => {
     tipchange();
 }, 10000);
-
-
-
-
-
-//// UI HANDLER ////
-// var tooltip = document.getElementById("tooltip");
-// var dudeman = document.getElementsByClassName("dude");
-var bonusVisualArea = document.getElementById("bonusVisualArea");
-var mouseX = 0;
-var mouseY = 0;
-var bonusID = 0;
-
-// Click bonus popup
-function popupHandler() {
-    var clickVisualElement = document.createElement("div");
-    var randomX = Math.floor((Math.random() * 10) - 5) + mouseX;
-    var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
-
-    clickVisualElement.style.left = randomX + "px";
-    clickVisualElement.style.top = randomY + "px";
-    clickVisualElement.classList.add("clickvisual");
-    clickVisualElement.id = `bonus${bonusID}`;
-    clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;
-
-    bonusVisualArea.append(clickVisualElement);
-    var bonusCurrent = document.getElementById("bonus" + bonusID);
-    setTimeout(() => {
-        bonusCurrent.remove();
-    }, 2000);
-
-    // Incremement element ids
-    if(bonusID < 100) {
-        bonusID += 1;
-    } else {
-        bonusID = 0;
-    }
-}
-
-// Mouse position handler
-// https://stackoverflow.com/a/7790764
-(function() {
-    document.onmousemove = handleMouseMove;
-    function handleMouseMove(event) {
-        var eventDoc, doc, body;
-
-        event = event || window.event; // IE-ism
-
-        // If pageX/Y aren't available and clientX/Y are,
-        // calculate pageX/Y - logic taken from jQuery.
-        // (This is to support old IE)
-        if (event.pageX == null && event.clientX != null) {
-            eventDoc = (event.target && event.target.ownerDocument) || document;
-            doc = eventDoc.documentElement;
-            body = eventDoc.body;
-
-            event.pageX = event.clientX +
-            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-            (doc && doc.clientLeft || body && body.clientLeft || 0);
-            event.pageY = event.clientY +
-            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-            (doc && doc.clientTop  || body && body.clientTop  || 0 );
-        }
-        
-        mouseX = event.pageX;
-        mouseY = event.pageY;
-        
-    }
-})();
