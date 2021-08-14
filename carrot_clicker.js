@@ -4,6 +4,7 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
+const tips =["Tip: Click The Lvl Up Arrow to Level Up Characters","Tip: To Buy a Hoe, Go to Greg and Click The Correct Type","Tip: To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle","Tip: Click The Carrot","Golden Carrots Increase Your Characters by 10%"];
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
 }
@@ -232,7 +233,13 @@ setInterval(() => {
         localStorage.setObject("Greg",Gregory1);
     }
 }, 2000);
-
+tipchange = function(){
+    tipnumber = Math.floor(Math.random()*tips.length);
+    document.getElementById("Tip").innerText=tips[tipnumber];
+}
+setInterval(() => {
+    tipchange();
+}, 10000);
 
 
 
