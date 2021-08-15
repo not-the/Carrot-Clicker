@@ -5,18 +5,10 @@ The Character Class Object stores information on each Ingame Character. Currentl
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
 const tips =[
-    "Tip: Click The Carrot",
     "Tip: Click The Lvl Up Arrow to Level Up Characters",
-    "Tip: This game has autosave! Feel free to close the game and come back later",
-
     "Tip: To Buy a Hoe, Go to Greg and Click The Correct Type",
-    "Tip: To unlock better hoes, upgrade Greg!",
     "Tip: To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
-    "Tip: Hoes will give their owner permanent buffs!",
-
-    "Tip: If progression begins to slow down, try Prestiging",
-    "Tip: Earn golden carrots by prestiging. You restart but get to keep your Golden carrots and other unlockables",
-    "Tip: Every Golden Carrot Increases Your Characters' output by 10%"
+    "Tip: Click The Carrot","Golden Carrots Increase Your Characters by 10%"
 ];
 
 Storage.prototype.setObject = function(key, value) {
@@ -36,7 +28,7 @@ const player1 ={
     golden_carrots:0,
     prestige_potential:0,
     LifetimeCarrots:0,
-    LifetimeGoldenCarrots:0
+    LifetimeGolenCarrots:0
 }
 
 
@@ -59,7 +51,7 @@ class Character{
 let Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 let Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
 let Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
-Gregory1.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+Gregory1.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 
 const player=localStorage.getObject("player");
 const Boomer_Bill=localStorage.getObject("Bill");
@@ -69,13 +61,11 @@ const Gregory =localStorage.getObject("Greg");
 //Getting InnerHtml
 let prestige_info = document.getElementById("");
 let Basic_Info = document.getElementById("Basic_Info");
-let elCarrotCount = document.getElementById("Carrot_Count");
-let elCPC = document.getElementById("cpc");
-let elCPS = document.getElementById("cps");
-let elGoldenCarrotCount = document.getElementById("golden_carrot_count");
 const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
 const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
 
+//variables to prevent spamclicking
+var n = 0;
 //On Carrots Click
 function onClick() {
     player.Carrots+=player.cpc;
@@ -85,11 +75,12 @@ function onClick() {
 
 //level up characters 
 function LevelUp(character){
+    
     if(player.Carrots>=character.lvlupPrice) {
         if(character==Gregory){
             character.lvl+=1;
             player.Carrots-=character.lvlupPrice;
-            character.lvlupPrice=Math.floor(character.lvlupPrice*1.35);
+            character.lvlupPrice=Math.floor(character.lvlupPrice*1.2);
             return;
         }
         character.lvl+=1;
@@ -99,49 +90,64 @@ function LevelUp(character){
 }
 //Hoes
 function CreateHoe(type) {
-    //Stores The Correct Hoe Price
-    function HoeCost(){
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                return Gregory.HoePrices[i];
+    if(n==0){
+        n=1;
+        //Checks if Greg is Experienced Enough to Purchase a Hoe.
+        if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
+            if(type>=1){
+                alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*25)+" To Create this Hoe");
+                n=0;
+                return;
+            }else{
+                alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:1 To Create this Hoe")
+                n=0;
+                return;
             }
+            
         }
-    }
-    let price = HoeCost();
-    if(price>=(player.Carrots*2)){
-        alert("That Hoe is Currently Too Expensive");
-        return;
-    }
-    //Creates Hoe And Displays Progress Bar
-    var i = 0;
-    if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
-
-    
-        if (i == 0) {
-            i = 1;
-            var elem = document.getElementById("Wooden_Hoe_Progress");
-            var p = 0;
-            var id = setInterval(frame,100);
-            function frame() {
-                if (p >= price) {
-                    clearInterval(id);
-                    i = 0;
-                    player.Carrots+=p-price;
-                    p=0;
-                    elem.style.width = 0 + "%";
-                    Gregory.Hoes[type]+=1;
-                    Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
-                } else {
-                    p+=(0.01*player.Carrots);
-                    player.Carrots-=(0.01*player.Carrots);
-                    elem. style.width = 100*(p/price) + "%";
+        //Stores The Correct Hoe Price
+        function HoeCost(){
+            for(i=0;i<Gregory.HoePrices.length;i++){
+                if(type==i){
+                    return Gregory.HoePrices[i];
                 }
             }
-        } 
-    }else{
-        alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*10)+" To Create this Hoe");
+        }
+        let price = HoeCost();
+        //Checks if Hoe is Too expensive
+        if(price>=(player.Carrots*2)){
+            alert("That Hoe is Currently Too Expensive");
+            return;
+        }
+        //Creates Hoe And Displays Progress Bar
+        var i = 0;
+        if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
+            if (i == 0) {
+                i = 1;
+                var elem = document.getElementById("Wooden_Hoe_Progress");
+                var p = 0;
+                var id = setInterval(frame,100);
+                function frame() {
+                    if (p >= price) {
+                        clearInterval(id);
+                        i = 0;
+                        player.Carrots+=p-price;
+                        p=0;
+                        elem.style.width = 0 + "%";
+                        Gregory.Hoes[type]+=1;
+                        Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
+                        n=0;
+                    } else {
+                        p+=(0.01*player.Carrots);
+                        player.Carrots-=(0.01*player.Carrots);
+                        elem. style.width = 100*(p/price) + "%";
+                    }
+                }
+            } 
+        }else{
+            alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*10)+" To Create this Hoe");
+        }
     }
-
 }
 
 //Equips A Hoe To a Character
@@ -190,11 +196,12 @@ function Prestige(){
     let cnfrm = confirm("Are you Sure you want to Presige?");
     if(cnfrm==true){
         player.golden_carrots+=player.prestige_potential;
-        player.LifetimeGoldenCarrots+=player.prestige_potential;
+        player.LifetimeGolenCarrots+=player.prestige_potential;
         Boomer_Bill.lvlupPrice=100;
         Belle_Boomerette.lvlupPrice=500;
+        Gregory.lvlupPrice=5000;
         [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
-        Gregory.HoePrices = [15000,600000,10000000,900000000,50000000000,10000000000000];
+        Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
         Boomer_Bill.Hoes=[0,0,0,0,0,0];
         Belle_Boomerette.Hoes=[0,0,0,0,0,0];
         Gregory.Hoes=[0,0,0,0,0,0];
@@ -221,23 +228,13 @@ setInterval(()=>{
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
     
-    //// Update numbers on page
-    // Top bar
-    Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
-
-    // New display
-    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
-    elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
-    elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
-    
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
-        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`
+    if(player.LifetimeGolenCarrots>=1 || player.prestige_potential>=1){
+        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
     }
-    if(player.LifetimeGoldenCarrots>=1) {
-        elGoldenCarrotCount.style.color = "white";
+    else{
+        Basic_Info.innerText ="Carrots: "+DisplayRounded(Math.floor(player.Carrots))+" | CPC: "+DisplayRounded(Math.floor(player.cpc),2)+" | CPS: "+DisplayRounded(Math.floor(player.cps),2);
     }
-    
     //Farmers Upgrade Cost
     CharacterUpCost[0].innerText = "Cost to upgrade Bill: "+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
     CharacterUpCost[1].innerText = "Cost to upgrade Belle: "+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
@@ -259,7 +256,7 @@ setInterval(()=>{
     player.prestige_potential=Math.floor(l+h);
     document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
-    if(player.LifetimeGoldenCarrots>=0.01 || player.prestige_potential>=1){
+    if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
         document.getElementById("prestige-section").style.visibility="visible";
         
     }
