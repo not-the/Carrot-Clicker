@@ -177,6 +177,7 @@ p {
     transform: translateX(-50%);
 
     position: absolute;
+    z-index: 49;
     top: 0;
     left: 0;
     
@@ -252,11 +253,14 @@ p {
     margin-right: 20px;
     width: 400px;
     height: auto;
+    /* transition: 0.1s; */
+    position:inherit;
+    z-index: 0;
 }
-#main_carrot:active{
+/* #main_carrot:active{
     transform: scale(1.05,1.05);
     transition: 0.1s;
-}
+} */
 /* Prestige */
 #prestige-section {
     margin-left: 20px;

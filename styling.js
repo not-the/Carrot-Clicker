@@ -1,5 +1,7 @@
 //// UI HANDLER ////
-var bonusVisualArea = document.getElementById("bonusVisualArea");
+const bonusVisualArea = document.getElementById("bonusVisualArea");
+const clickingArea = document.getElementById("clicking_area");
+const mainCarrot = document.getElementById("main_carrot");
 // var tooltipBill = document.getElementById("billtooltip").style.top;
 // var tooltipBelle = document.getElementById("belletooltip").style.top;
 // var tooltipGreg = document.getElementById("gregtooltip").style.top;
@@ -7,6 +9,17 @@ var mouseX = 0;
 var mouseY = 0;
 var bonusID = 0;
 
+// Carrot animations
+clickingArea.addEventListener("mousedown", carrotDown);
+clickingArea.addEventListener("mouseup", carrotUp);
+
+function carrotDown() {
+    mainCarrot.style.transform = "scale(0.98,0.98)";
+}
+
+function carrotUp() {
+    mainCarrot.style.transform = "scale(1,1)";
+}
 
 // Panel handler
 var currentPanel = "info-panel";
@@ -44,9 +57,11 @@ function popupHandler() {
     var clickVisualElement = document.createElement("div");
     var randomX = Math.floor((Math.random() * 10) - 5) + mouseX;
     var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
+    var randomRot = Math.floor((Math.random() * 16) - 8);
 
     clickVisualElement.style.left = randomX + "px";
     clickVisualElement.style.top = randomY + "px";
+    clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
     clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;
