@@ -62,6 +62,10 @@ const Gregory =localStorage.getObject("Greg");
 //Getting InnerHtml
 let prestige_info = document.getElementById("");
 let Basic_Info = document.getElementById("Basic_Info");
+let elCarrotCount = document.getElementById("Carrot_Count");
+let elCPC = document.getElementById("cpc");
+let elCPS = document.getElementById("cps");
+let elGoldenCarrotCount = document.getElementById("golden_carrot_count");
 const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
 const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
 
@@ -247,13 +251,21 @@ setInterval(()=>{
     }
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
-    
+        //// Update numbers on page
+     // Top bar
+     Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+     // New display
+     elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
+     elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
+     elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
+
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.LifetimeGolenCarrots>=1 || player.prestige_potential>=1){
-        Basic_Info.innerText ="Carrots:"+DisplayRounded(Math.floor(player.Carrots))+" CPC:"+DisplayRounded(Math.floor(player.cpc),2)+" CPS:"+DisplayRounded(Math.floor(player.cps),2)+" Golden Carrots:"+DisplayRounded(player.golden_carrots,2);
+    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
+        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`
     }
-    else{
-        Basic_Info.innerText ="Carrots: "+DisplayRounded(Math.floor(player.Carrots))+" | CPC: "+DisplayRounded(Math.floor(player.cpc),2)+" | CPS: "+DisplayRounded(Math.floor(player.cps),2);
+    if(player.LifetimeGoldenCarrots>=1) {
+        elGoldenCarrotCount.style.color = "white";
     }
     //Farmers Upgrade Cost
     CharacterUpCost[0].innerText = "Cost to upgrade Bill: "+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
