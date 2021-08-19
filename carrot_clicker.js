@@ -51,6 +51,7 @@ class Character{
 let Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 let Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
 let Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
+let Charles1 = new Character("Librarian",0,1);
 Gregory1.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 
 const player=localStorage.getObject("player");
@@ -75,7 +76,14 @@ function onClick() {
 
 //level up characters 
 function LevelUp(character){
-    
+    if(character.type=="Librarian"){
+        if(player.golden_carrots>=character.lvlupPrice){
+            character.lvl+=1;
+            player.golden_carrots-=character.lvlupPrice;
+            character.lvlupPrice=Math.floor(character.lvlupPrice*2.5);
+            return;
+        }
+    }
     if(player.Carrots>=character.lvlupPrice) {
         if(character==Gregory){
             character.lvl+=1;
@@ -94,16 +102,21 @@ function CreateHoe(type) {
         n=1;
         //Checks if Greg is Experienced Enough to Purchase a Hoe.
         if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
+            n=0;
             if(type>=1){
                 alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*25)+" To Create this Hoe");
-                n=0;
                 return;
-            }else{
+            }
+            if(type==0){
                 alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:1 To Create this Hoe")
-                n=0;
                 return;
             }
             
+        }
+        if(Gregory.Hoes[type]>=Gregory.lvl){
+            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
+            n=0;
+            return;
         }
         //Stores The Correct Hoe Price
         function HoeCost(){
@@ -117,6 +130,7 @@ function CreateHoe(type) {
         //Checks if Hoe is Too expensive
         if(price>=(player.Carrots*2)){
             alert("That Hoe is Currently Too Expensive");
+            n=0;
             return;
         }
         //Creates Hoe And Displays Progress Bar
@@ -145,14 +159,20 @@ function CreateHoe(type) {
                 }
             } 
         }else{
-            alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*10)+" To Create this Hoe");
+            n=0;
         }
     }
 }
 
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill,type=0){
+    
     if(Gregory.Hoes[type]>=1){
+        if(character.Hoes[type]>=Gregory.lvl){
+            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
+            n=0;
+            return;
+    }
         character.Hoes[type]+=1;
         Gregory.Hoes[type]-=1;
     }
