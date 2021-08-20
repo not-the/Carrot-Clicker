@@ -242,8 +242,8 @@ p {
 }
 
 #clicking_area {
-    height: 360px;
-    width: 360px;
+    height: 400px;
+    width: 400px;
     cursor: pointer;
     position: absolute;
     z-index: 50;
