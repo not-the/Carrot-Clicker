@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker beta 1.1.1</title>
+    <title>Carrot Clicker beta 1.1</title>
 
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
@@ -32,12 +32,12 @@
         <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot">
 
                 <!-- Numbers/Info Section -->
-         <p id="Carrot_Count">Working...</p>
-         <p id="cpc">Carrots per click:</p>
-         <p id="cps">Carrots per second:</p>
-         <p id="golden_carrot_count"></p>
-         
-         <!-- Prestige Section -->
+                <p id="Carrot_Count">Working...</p>
+                <p id="cpc">Carrots per click:</p>
+                <p id="cps">Carrots per second:</p>
+                <p id="golden_carrot_count"></p>
+       
+        <!-- Prestige Section -->
         <div id="prestige-section">
           <button type="button" onClick="Prestige()" class="prestigebutton">Prestige</button>
           <p id="Prestige" class="prestigetooltip"><p>
@@ -171,7 +171,6 @@
             </div>
             
             
-            
             <!-- Progress Bar -->
             <div id="Wooden_Hoe_Bar">
               <div id="Wooden_Hoe_Progress"></div>
@@ -184,7 +183,25 @@
         <div>
           <p id="Hoe_Prices">e</p>
         </div>
-  
+                <!--Charles Rendering-->
+                <div class="Belle characterbox">
+                  <div class="belletooltip charactertooltip tooltip" id="belletooltip">Cum Charles</div>
+        
+                  <!-- Top -->
+                  <div class="top flex">
+                    <img src="./assets/characters/Charles.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
+                    <div class="characterdesc">
+                      <b class="charactername">Charles</b>
+                    </div>
+                  </div>
+        
+                  <!-- Bottom -->
+                  <div class="bottom hoecontainer">
+                  </div>
+                    <button onclick="ImproveWorkingConditions()" id="ImproveWorkingConditions">Do a thing</button>
+                    <button onclick="BetterHoes()" id="BetterHoes">Do another Thing</button>
+                    <button onclick="DecreaseWages()" id="DecreaseWages">Third Thing</button>
+                </div>
       </div>
       <!-- End Right section -->
 
