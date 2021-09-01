@@ -1,248 +1,388 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker beta 1.1</title>
-
-    <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
-    <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
-</head>
-<body>
-  <!-- On top -->
-  <div id="bonusVisualArea">
+/*
+The Base of the Game is the Objects used to easily store data. 
+The core Object is the player. The player object Stores Global Variables not Atributed to another character.
+The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
+The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
+*/
+const tips_Basic =[
+    "Click The Lvl Up Arrow to Level Up Characters",
+    "To Buy a Hoe, Go to Greg and Click The Correct Type",
+    "To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
+    "Click The Carrot",
+];
+const Tips_Begginer=[
+    "Each Hoe Can only Be stacked up to Gregs Lvl",
     
-  </div>
+];
+const tips_Medium=[
+    "Golden Carrots Increase Your Characters by 10%",
+];
+const tips_Advanced=[
 
-  <!--Basic Info Carrots; Cpc; Cps-->
-  <div class="Basic_Info"> 
-    <p id="Basic_Info">Working...<p>
-    <hr class="info-divide">
-    <div id="Tip" onclick="tipchange()">Tip: Click The Carrot</div>
-  </div>
-  
-  <div id="container" class="flex">
-      <!-- Left Section -->
-      <div id="left-section">
+];
+const tips_Fun=[
+    "Carrots Can End World Hunger",
+    "Only You Can save the Carrots!"
+];
+//Locally Store Objects
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
 
-        <!-- Carrot image-->
-        <div id="clicking_area" onclick="onClick()">
-        </div>
-        <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot">
+//Degault Values Stored in a Player Object
+const player1 ={
+    Carrots:0,
+    cpc:0,
+    cps:0,
+    golden_carrots:0,
+    prestige_potential:0,
+    LifetimeCarrots:0,
+    LifetimeGolenCarrots:0
+}
+//Creates Characters 
+class Character{
+    constructor(Type,lvl,lvlupPrice,Hoes){
+        this.Type=Type;
+        this.lvl=lvl;
+        this.lvlupPrice=lvlupPrice;
+        this.Hoes=Hoes;
+    }
+}
 
-                <!-- Numbers/Info Section -->
-                <p id="Carrot_Count">Working...</p>
-                <p id="cpc">Carrots per click:</p>
-                <p id="cps">Carrots per second:</p>
-                <p id="golden_carrot_count"></p>
-       
-        <!-- Prestige Section -->
-        <div id="prestige-section">
-          <button type="button" onClick="Prestige()" class="prestigebutton">Prestige</button>
-          <p id="Prestige" class="prestigetooltip"><p>
-        </div>
+//Creates Bases to Display Large Numbers 
+const Bases=[];
+for(i=1000;i<99999999999999999999999999999;i=i*1000) {
+    Bases.push(i);
+}
 
-      </div>
+const Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
+const Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
+const Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
+Gregory1.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+const Charles1 = {
+    BetterHoes:1,
+    ImproveWorkingConditions:1,
+    DecreaseWages:1
+}
+const Charles =localStorage.getObject("Charles");
+const player=localStorage.getObject("player");
+const Boomer_Bill=localStorage.getObject("Bill");
+const Belle_Boomerette=localStorage.getObject("Belle");
+const Gregory =localStorage.getObject("Greg");
 
+//Getting InnerHtml
+const prestige_info = document.getElementById("");
+const Basic_Info = document.getElementById("Basic_Info");
+const elCarrotCount = document.getElementById("Carrot_Count");
+const elCPC = document.getElementById("cpc");
+const elCPS = document.getElementById("cps");
+const elGoldenCarrotCount = document.getElementById("golden_carrot_count");
+const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
+const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
 
-  
-      <!-- Right Section -->
-      <div id="right-section">
-          <!--Boomer Bill Rendering-->
-          <div class="Bill characterbox">
-            <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
-            <!-- Top -->
-            <div class="top flex">
-              <img src="./assets/characters/Boomer_Bill.png" alt="Boomer Bill" id="bill_avatar" class="characterimg">
-              <div class="characterdesc">
-                <b class="charactername">Bill</b>
-                <p id="UpBillCost"></p>
-                <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
-              </div>
-
-            </div>
-
-            <!-- Bottom -->
-            <div class="bottom hoecontainer">
-
-              <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill)">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number"></p>
-              <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number"></p>
-              <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number"></p>
-              <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number"></p>
-              <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">1</p>
-              <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">1</p>
-              <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5)" class="toolicon">
-            </div>
-
-          </div>
-  
-        <!--Belle Boomerette Rendering-->
-        <div class="Belle characterbox">
-          <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
-
-          <!-- Top -->
-          <div class="top flex">
-            <img src="./assets/characters/BelleBommerette.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
-            <div class="characterdesc">
-              <b class="charactername">Belle</b>
-              <p id="UpBelleCost"></p>
-              <figcaption id="Belle_lvl" class="characterlevel"></figcaption>
-            </div>
-          </div>
-
-          <!-- Bottom -->
-          <div class="bottom hoecontainer">
-
-            <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette)" class="levelupimg">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">1</p>
-            <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0)" class="toolicon">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">1</p>
-            <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1)" class="toolicon">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">1</p>
-            <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2)" class="toolicon">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">1</p>
-            <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3)" class="toolicon">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">1</p>
-            <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4)" class="toolicon">
-
-            <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">1</p>
-            <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5)" class="toolicon">
-          </div>
-
-        </div>
-        <!--Gregory Rendering-->
-        <div class="Greg characterbox">
-          <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
-          <!-- Top -->
-          <div class="top flex">
-            <img src="./assets/characters/Gregory.png" alt="Gregory" id="Greg_avatar" class="characterimg">
-            <div class="characterdesc">
-              <b class="charactername">Greg</b>
-              <p id="UpGregCost">show</p>
-              <figcaption id="Greg_lvl" class="characterlevel">lvl:0</figcaption>
-            </div>
-            
-          </div>
-
-          <!-- Bottom -->
-          <div class="bottom">
-
-            
-            
-            
-            <div class="Greg_Hoe_Container hoecontainer">
-              <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory)" class="levelupimg">
-              
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Wooden_Hoe_Number">1</p>
-              <img src="./assets/tools/wood_hoe.png" class="toolicon" onclick="CreateHoe(0)">
-
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">1</p>
-              <img src="./assets/tools/stone_hoe.png" class="toolicon" onclick="CreateHoe(1)">
-
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">1</p>
-              <img src="./assets/tools/iron_hoe.png" class="toolicon" onclick="CreateHoe(2)">
-
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">1</p>
-              <img src="./assets/tools/gold_hoe.png" class="toolicon" onclick="CreateHoe(3)">
-
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">1</p>
-              <img src="./assets/tools/diamond_hoe.png" class="toolicon" onclick="CreateHoe(4)">
-
-              <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">1</p>
-              <img src="./assets/tools/netherite_hoe.png" class="toolicon" onclick="CreateHoe(5)">
-            </div>
-            
-            
-            <!-- Progress Bar -->
-            <div id="Wooden_Hoe_Bar">
-              <div id="Wooden_Hoe_Progress"></div>
-            </div>
-            
-            </div>
-          </div>
-
-        <!--Temporary Hoe Cost Display-->
-        <div>
-          <p id="Hoe_Prices">e</p>
-        </div>
-                <!--Charles Rendering-->
-                <div class="Belle characterbox">
-                  <div class="belletooltip charactertooltip tooltip" id="belletooltip">Cum Charles</div>
+//variables to prevent spamclicking
+var n = 0;
+//On Carrots Click
+function onClick() {
+    player.Carrots+=player.cpc;
+    player.LifetimeCarrots+=player.cpc;
+    popupHandler();
+}
+//level up characters 
+function LevelUp(character){
+    if(player.Carrots>=character.lvlupPrice) {
+        if(character==Gregory){
+            character.lvl+=1;
+            player.Carrots-=character.lvlupPrice;
+            character.lvlupPrice=Math.floor(character.lvlupPrice*1.2);
+            return;
+        }
+        character.lvl+=1;
+        player.Carrots-=character.lvlupPrice;
+        character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
+    }
+}
+//Hoes
+function CreateHoe(type) {
+    if(n==1){
+        alert("BUSY");
+        return;
+    }
+    //Checks if Greg is Experienced Enough to Purchase a Hoe.
+        if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
+            if(type>=1){
+                alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*25)+" To Create this Hoe");
+                return;
+            }
+            alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:1 To Create this Hoe")
+            return;    
+        }
+        //Checks to see if Greg Can Hold more of this Type
+         if(Gregory.Hoes[type]>=Gregory.lvl){
+            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
+            return;
+        } 
+        //Stores The Correct Hoe Price
+        function HoeCost(){
+            for(i=0;i<Gregory.HoePrices.length;i++){
+                if(type==i){
+                    return Gregory.HoePrices[i];
+                }
+            }
+        }
+        let price = HoeCost();
+        //Checks if Hoe is Too expensive
+        if(price>=(player.Carrots*2)){
+            alert("That Hoe is Currently Too Expensive");
+            return;
+        }
+    if(n==0){
+        n=1;   
+        //Creates Hoe And Displays Progress Bar
+        var i = 0;
+        if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
+            if (i == 0) {
+                i = 1;
+                var elem = document.getElementById("Wooden_Hoe_Progress");
+                var p = 0;
+                var id = setInterval(frame,100);
+                function frame() {
+                    if (p >= price) {
+                        clearInterval(id);
+                        i = 0;
+                        player.Carrots+=p-price;
+                        p=0;
+                        elem.style.width = 0 + "%";
+                        Gregory.Hoes[type]+=1;
+                        Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
+                        n=0;
+                    }else{
+                        p+=(0.01*player.Carrots);
+                        player.Carrots-=(0.01*player.Carrots);
+                        elem. style.width = 100*(p/price) + "%";
+                    }
+                    
+                }
+            } 
+        }else{
+            n=0;
+        }
+    }
+}
+//Equips A Hoe To a Character
+function EquipHoe(character=Boomer_Bill,type=0){
+    if(Gregory.Hoes[type]>=1){
+        if(character.Hoes[type]>=Gregory.lvl){
+            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
+            n=0;
+            return;
+    }
+        character.Hoes[type]+=1;
+        Gregory.Hoes[type]-=1;
+    }
+}
+function DisplayHoes(character = Boomer_Bill){
+    for (i=0; i<character.Hoes.length;i++){  
+        if (character==Boomer_Bill){
+            var hoetypes = ["Bill_Wooden_Hoe_Number","Bill_Stone_Hoe_Number","Bill_Iron_Hoe_Number","Bill_Gold_Hoe_Number","Bill_Diamond_Hoe_Number","Bill_Netherite_Hoe_Number"]
+        }else if(character==Belle_Boomerette){
+            var hoetypes = ["Belle_Wooden_Hoe_Number","Belle_Stone_Hoe_Number","Belle_Iron_Hoe_Number","Belle_Gold_Hoe_Number","Belle_Diamond_Hoe_Number","Belle_Netherite_Hoe_Number"]
+        }else if(character==Gregory){
+            var hoetypes = ["Greg_Wooden_Hoe_Number","Greg_Stone_Hoe_Number","Greg_Iron_Hoe_Number","Greg_Gold_Hoe_Number","Greg_Diamond_Hoe_Number","Greg_Netherite_Hoe_Number"]
+        }
+        if (typeof character.Hoes[i] == undefined || character.Hoes[i]==0){
+        document.getElementById(hoetypes[i]).innerText="";
+        }else{
+            document.getElementById(hoetypes[i]).innerText=character.Hoes[i];
+        }
         
-                  <!-- Top -->
-                  <div class="top flex">
-                    <img src="./assets/characters/Charles.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
-                    <div class="characterdesc">
-                      <b class="charactername">Charles</b>
-                    </div>
-                  </div>
+    }
+}
+
+//Displaying Roundced Numbers example"100m 140b
+function DisplayRounded(Value,Fixedto=3){
+    var units = ["k","m","b","t","q","Q","s","S"];
+    for(i=0;i<units.length;i++){
+        if(Value<Bases[i+1] && Value>Bases[0]){
+            return (Value/Bases[i]).toFixed(Fixedto)+units[i];
+        }
+    }
+    return Value;
+}
+
+//Carrots per second
+setInterval(function(){
+player.Carrots+=player.cps/25;
+},25);
+
+//Prestige
+function Prestige(){
+    let cnfrm = confirm("Are you Sure you want to Presige?");
+    if(cnfrm==true){
+        player.golden_carrots+=player.prestige_potential;
+        player.LifetimeGolenCarrots+=player.prestige_potential;
+        Boomer_Bill.lvlupPrice=100;
+        Belle_Boomerette.lvlupPrice=500;
+        Gregory.lvlupPrice=5000;
+        [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
+        Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+        Boomer_Bill.Hoes=[0,0,0,0,0,0];
+        Belle_Boomerette.Hoes=[0,0,0,0,0,0];
+        Gregory.Hoes=[0,0,0,0,0,0];
+    }  
+}
+//Charles Functions
+function BetterHoes(){
+    if(Math.floor(Math.pow(Charles.BetterHoes,1.25))<=player.golden_carrots){
+        player.golden_carrots-=Math.floor(Math.pow(Charles.BetterHoes,1.25));
+        Charles.BetterHoes=(Charles.BetterHoes*1.1);
+        return;
+    }
+    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.BetterHoes,1.25)))+" Golden Carrots To Purchase That")
+}
+function DecreaseWages(){
+    if(Math.floor(Math.pow(Charles.DecreaseWages,1.25))<=player.golden_carrots){
+        player.golden_carrots-=Math.pow(Charles.DecreaseWages,1.25);
+        Charles.DecreaseWages=(Charles.DecreaseWages*1.1);
+        return;
+    }
+    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25)))+" Golden Carrots To Purchase That")
+}
+function ImproveWorkingConditions(){
+    if(Math.floor(Math.pow(Charles.DecreaseWages,1.25))<=player.golden_carrots){
+        player.golden_carrots-=Math.pow(Charles.DecreaseWages,1.25);
+        Charles.ImproveWorkingConditions=(Charles.ImproveWorkingConditions*1.1);
+        return;
+    }
+    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" Golden Carrots To Purchase That")
+}
+
+//main Game loop
+setInterval(()=>{
+    //calculates the Cpc
+    var cpcHoes = (Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5]);
+    if(Boomer_Bill.Hoes[0]+cpcHoes>0){
+        player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
+    }else{
+        player.cpc=Boomer_Bill.lvl;
+    }
+    var cpsHoes= (Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5]));
+    player.cpc=(0.1*(player.golden_carrots+10))*player.cpc;
+    //calculates the Cps
+    if(Belle_Boomerette.Hoes[0]+cpsHoes>0){
+        player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(cpsHoes));
+    }else{
+        player.cps=Belle_Boomerette.lvl;
+    }
+    player.cps=(0.1*(player.golden_carrots+10))*player.cps;
+    //providing updated information to the player
+        //// Update numbers on page
+     // Top bar
+     Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+     // New display
+     elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
+     elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
+     elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
+
+    //The Basic info for the player, Carrots; Cpc; Cps
+    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
+        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`
+    }
+    if(player.LifetimeGoldenCarrots>=1) {
+        elGoldenCarrotCount.style.color = "white";
+    }
+    //Farmers Upgrade Cost
+    CharacterUpCost[0].innerText = "Cost to upgrade Bill: "+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
+    CharacterUpCost[1].innerText = "Cost to upgrade Belle: "+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
+    //Bill's Level
+    CharacterLevel[0].innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
+    //Belle's level
+    CharacterLevel[1].innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
+    //Greg's Level
+    CharacterLevel[2].innerText="Lvl: "+DisplayRounded(Gregory.lvl);
+    //Blacksmiths Upgrade Cost
+    CharacterUpCost[2].innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
+    //Hoe Counts
+    DisplayHoes(Boomer_Bill);
+    DisplayHoes(Belle_Boomerette);
+    DisplayHoes(Gregory);
+    //The Prestige Potential
+    let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
+    let h = 0.005*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
+    player.prestige_potential=Math.floor(l+h);
+    document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
+    document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
+    if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
+        document.getElementById("prestige-section").style.visibility="visible";
         
-                  <!-- Bottom -->
-                  <div class="bottom hoecontainer">
-                  </div>
-                    <button onclick="ImproveWorkingConditions()" id="ImproveWorkingConditions">Do a thing</button>
-                    <button onclick="BetterHoes()" id="BetterHoes">Do another Thing</button>
-                    <button onclick="DecreaseWages()" id="DecreaseWages">Third Thing</button>
-                </div>
-      </div>
-      <!-- End Right section -->
+    }
+    //Charles Upgrades
+    document.getElementById("ImproveWorkingConditions").innerText="Improve Working Conditions. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
+    document.getElementById("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
+    document.getElementById("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
+},25);
 
+// Autosave
+setInterval(() => {
+    if(player){
+        localStorage.setObject("player",player);
+        localStorage.setObject("Bill",Boomer_Bill);
+        localStorage.setObject("Belle",Belle_Boomerette);
+        localStorage.setObject("Greg",Gregory);
+        localStorage.setObject("Charles",Charles)
+    }
+    else{
+        localStorage.setObject("player",player1);
+        localStorage.setObject("Bill",Boomer_Bill1);
+        localStorage.setObject("Belle",Belle_Boomerette1);
+        localStorage.setObject("Greg",Gregory1);
+        localStorage.setObject("Charles",Charles1);
+        const Charles =localStorage.getObject("Charles");
+        const player=localStorage.getObject("player");
+        const Boomer_Bill=localStorage.getObject("Bill");
+        const Belle_Boomerette=localStorage.getObject("Belle");
+        const Gregory =localStorage.getObject("Greg");
+    }
+    //can probably be removed later
+    if(Charles){
+        localStorage.setObject("Charles",Charles)
+    }else{
+        localStorage.setObject("Charles",Charles1);
+        const Charles =localStorage.getObject("Charles");
+    }
+}, 2000);
 
-      <!-- Notifications section -->
-      <!-- <div class="row-break"></div> -->
-      <div id="notifs-section">
-        <nav id="notifs-nav">
-          <button class="activetab tab" id="info-panel-button" onclick="panelChange(`info-panel`)">Info</button><button class="tab" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)">Achievements</button><button class="tab" id="settings-panel-button" onclick="panelChange(`settings-panel`)">Settings</button>
-        </nav>
-        <div id="info-panel" class="panel">
-          <div class="info-item">
-            <img src="assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
-            <div>
-              <h1>Achievement earned: Click the carrot</h1>
-              <p>Click the carrot</p>
-            </div>
-          </div>
-        </div>
-        <div id="achievements-panel" class="panel">
-          Achievements will go here
-          <div id="achievements-inner">
-            
-          </div>
-        </div>
-        <div id="settings-panel" class="panel">
-          Settings will go here
-        </div>
-      </div>
-      <!-- End Notifications section -->
-  </div>
-
-
-
-
-
-
-
-
-  <!-- Javascript -->
-  <script src="carrot_clicker.js"></script>
-  <script src="styling.js"></script>
-</body>
-</html>
+// Tips
+var tipTracker = 1;
+var tipType = 0
+var TipTypeModifier = 1;
+tipchange = function(){
+    tipType=Math.random*TipTypeModifier;
+    if(tipType<0.9){
+       tipnumber = Math.floor(Math.random()*tips_Basic.length);
+        if(tipnumber == tipTracker) {
+            tipchange();
+            return;
+        }
+        document.getElementById("Tip").innerText=tips_Basic[tipnumber];
+        tipTracker = tipnumber;
+        return;
+    } 
+    tipnumber = Math.floor(Math.random()*tips_Fun.length);
+    if(tipnumber == tipTracker) {
+        tipchange();
+        return;
+    }
+    document.getElementById("Tip").innerText=tips_Fun[tipnumber];
+    tipTracker = tipnumber;
+    return;   
+}
+// Automatically change tips
+setInterval(() => {
+    tipchange();
+}, 10000);
