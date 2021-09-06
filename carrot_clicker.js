@@ -4,26 +4,26 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
-const tips_Basic =[
-    "Click The Lvl Up Arrow to Level Up Characters",
-    "To Buy a Hoe, Go to Greg and Click The Correct Type",
-    "To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
-    "Click The Carrot",
-];
-const Tips_Begginer=[
-    "Each Hoe Can only Be stacked up to Gregs Lvl",
-    
-];
-const tips_Medium=[
-    "Golden Carrots Increase Your Characters by 10%",
-];
-const tips_Advanced=[
+const tips = {
+    tips_basic: [
+        "Click The Lvl Up Arrow to Level Up Characters",
+        "To Buy a Hoe, Go to Greg and Click The Correct Type",
+        "To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
+        "Click The Carrot"
+    ],
+    tips_beginner: [
+        "Each Hoe Can only Be stacked up to Gregs Lvl",
+        
+    ],
+    tips_Advanced: [
+        "Golden Carrots Increase Your Characters by 10%",
+    ],
+    tips_fun: [
+        "Carrots Can End World Hunger",
+        "Only You Can save the Carrots!"
+    ]
+}
 
-];
-const tips_Fun=[
-    "Carrots Can End World Hunger",
-    "Only You Can save the Carrots!"
-];
 //Locally Store Objects
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -222,7 +222,7 @@ player.Carrots+=player.cps/25;
 //Prestige
 function Prestige(){
     let cnfrm = confirm("Are you Sure you want to Presige?");
-    if(cnfrm==true){
+    if(cnfrm){
         player.golden_carrots+=player.prestige_potential;
         player.LifetimeGolenCarrots+=player.prestige_potential;
         Boomer_Bill.lvlupPrice=100;
@@ -342,15 +342,15 @@ setInterval(() => {
         localStorage.setObject("Belle",Belle_Boomerette1);
         localStorage.setObject("Greg",Gregory1);
         localStorage.setObject("Charles",Charles1);
-        const Charles =localStorage.getObject("Charles");
-        const player=localStorage.getObject("player");
-        const Boomer_Bill=localStorage.getObject("Bill");
-        const Belle_Boomerette=localStorage.getObject("Belle");
-        const Gregory =localStorage.getObject("Greg");
+        Charles =localStorage.getObject("Charles");
+        player=localStorage.getObject("player");
+        Boomer_Bill=localStorage.getObject("Bill");
+        Belle_Boomerette=localStorage.getObject("Belle");
+        Gregory =localStorage.getObject("Greg");
     }
     //can probably be removed later
     if(Charles){
-        localStorage.setObject("Charles",Charles)
+        localStorage.setObject("Charles",Charles);
     }else{
         localStorage.setObject("Charles",Charles1);
         const Charles =localStorage.getObject("Charles");
@@ -373,16 +373,14 @@ tipchange = function(){
         tipTracker = tipnumber;
         return;
     } 
-    tipnumber = Math.floor(Math.random()*tips_Fun.length);
+    tipnumber = Math.floor(Math.random()*tips.tips_fun.length);
     if(tipnumber == tipTracker) {
         tipchange();
         return;
     }
-    document.getElementById("Tip").innerText=tips_Fun[tipnumber];
+    document.getElementById("Tip").innerText=tips.tips_fun[tipnumber];
     tipTracker = tipnumber;
     return;   
 }
 // Automatically change tips
-setInterval(() => {
-    tipchange();
-}, 10000);
+setInterval(tipchange(), 10000);
