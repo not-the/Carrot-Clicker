@@ -24,6 +24,9 @@ const tips = {
     ]
 }
 
+// getElementById shorthand
+function dom(id) {return document.getElementById(id);}
+
 //Locally Store Objects
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -34,7 +37,7 @@ Storage.prototype.getObject = function(key) {
 }
 
 //Degault Values Stored in a Player Object
-const player1 ={
+const player1 = {
     Carrots:0,
     cpc:0,
     cps:0,
@@ -59,6 +62,7 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
     Bases.push(i);
 }
 
+// Character Defaults
 const Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 const Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
 const Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
@@ -69,22 +73,38 @@ const Charles1 = {
     DecreaseWages:1
 }
 //Creates the Local storage
-const Charles =localStorage.getObject("Charles");
-const player=localStorage.getObject("player");
-const Boomer_Bill=localStorage.getObject("Bill");
-const Belle_Boomerette=localStorage.getObject("Belle");
-const Gregory =localStorage.getObject("Greg");
+const Charles = localStorage.getObject("Charles");
+const player = localStorage.getObject("player");
+const Boomer_Bill = localStorage.getObject("Bill");
+const Belle_Boomerette = localStorage.getObject("Belle");
+const Gregory = localStorage.getObject("Greg");
 
 
 //Getting InnerHtml
-const prestige_info = document.getElementById("");
-const Basic_Info = document.getElementById("Basic_Info");
-const elCarrotCount = document.getElementById("Carrot_Count");
-const elCPC = document.getElementById("cpc");
-const elCPS = document.getElementById("cps");
-const elGoldenCarrotCount = document.getElementById("golden_carrot_count");
-const CharacterUpCost = [document.getElementById("UpBillCost"),document.getElementById("UpBelleCost"),document.getElementById("UpGregCost")];
-const CharacterLevel = [document.getElementById("Bill_lvl"),document.getElementById("Belle_lvl"),document.getElementById("Greg_lvl")];
+const prestige_info = dom("Prestige");
+const Basic_Info = dom("Basic_Info");
+const elCarrotCount = dom("Carrot_Count");
+const elCPC = dom("cpc");
+const elCPS = dom("cps");
+const elGoldenCarrotCount = dom("golden_carrot_count");
+const CharacterUpCost = [
+    dom("UpBillCost"),
+    dom("UpBelleCost"),
+    dom("UpGregCost")
+];
+const CharacterLevel = [
+    dom("Bill_lvl"),
+    dom("Belle_lvl"),
+    dom("Greg_lvl")
+];
+const elHoePrices = {
+    wooden:     dom("wooden_hoe_price"),
+    stone:      dom("stone_hoe_price"),
+    iron:       dom("iron_hoe_price"),
+    gold:       dom("gold_hoe_price"),
+    diamond:    dom("diamond_hoe_price"),
+    netherite:  dom("netherite_hoe_price")
+}
 
 //variables to prevent spamclicking
 var n = 0;
@@ -149,7 +169,7 @@ function CreateHoe(type) {
         if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
             if (i == 0) {
                 i = 1;
-                var elem = document.getElementById("Wooden_Hoe_Progress");
+                var elem = dom("Wooden_Hoe_Progress");
                 var p = 0;
                 var id = setInterval(frame,100);
                 function frame() {
@@ -197,9 +217,9 @@ function DisplayHoes(character = Boomer_Bill){
             var hoetypes = ["Greg_Wooden_Hoe_Number","Greg_Stone_Hoe_Number","Greg_Iron_Hoe_Number","Greg_Gold_Hoe_Number","Greg_Diamond_Hoe_Number","Greg_Netherite_Hoe_Number"]
         }
         if (typeof character.Hoes[i] == undefined || character.Hoes[i]==0){
-        document.getElementById(hoetypes[i]).innerText="";
+            dom(hoetypes[i]).innerText="";
         }else{
-            document.getElementById(hoetypes[i]).innerText=character.Hoes[i];
+            dom(hoetypes[i]).innerText = `x${character.Hoes[i]}`;
         }
         
     }
@@ -323,16 +343,29 @@ setInterval(()=>{
     let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
     let h = 0.005*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
-    document.getElementById("Prestige").innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
-    document.getElementById("Hoe_Prices").innerText=DisplayRounded(Gregory.HoePrices[0],1)+" "+DisplayRounded(Gregory.HoePrices[1],1)+" "+DisplayRounded(Gregory.HoePrices[2],1)+" "+DisplayRounded(Gregory.HoePrices[3],1)+" "+DisplayRounded(Gregory.HoePrices[4],1)+" "+DisplayRounded(Gregory.HoePrices[5],1);
+    prestige_info.innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
+    // Hoe Prices
+    elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;
+    elHoePrices.stone.innerText     = `${DisplayRounded(Gregory.HoePrices[1],1)}`;
+    elHoePrices.iron.innerText      = `${DisplayRounded(Gregory.HoePrices[2],1)}`;
+    elHoePrices.gold.innerText      = `${DisplayRounded(Gregory.HoePrices[3],1)}`;
+    elHoePrices.diamond.innerText   = `${DisplayRounded(Gregory.HoePrices[4],1)}`;
+    elHoePrices.netherite.innerText = `${DisplayRounded(Gregory.HoePrices[5],1)}`;
+    // DisplayRounded(Gregory.HoePrices[0],1)+" "+
+    // DisplayRounded(Gregory.HoePrices[1],1)+" "+
+    // DisplayRounded(Gregory.HoePrices[2],1)+" "+
+    // DisplayRounded(Gregory.HoePrices[3],1)+" "+
+    // DisplayRounded(Gregory.HoePrices[4],1)+" "+
+    // DisplayRounded(Gregory.HoePrices[5],1);
     if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
-        document.getElementById("prestige-section").style.visibility="visible";
+        dom("prestige-section").style.visibility="visible";
         
     }
     //Charles Upgrades
-    document.getElementById("ImproveWorkingConditions").innerText="Improve Working Conditions. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
-    document.getElementById("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.BetterHoes,1.25))+" Golden Carrots";
-    document.getElementById("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.DecreaseWages,1.25))+" Golden Carrots";
+    dom("ImproveWorkingConditions").innerText="Improve Working Conditions. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
+    dom("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.BetterHoes,1.25))+" Golden Carrots";
+    dom("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.DecreaseWages,1.25))+" Golden Carrots";
+    dom("charlestooltip").innerText="IWC:"+Math.floor(100*Charles.ImproveWorkingConditions)+"% BH:"+Math.floor(100*Charles.BetterHoes)+"% DWW:"+Math.floor(100*Charles.DecreaseWages)+"%";
 },25);
 // Autosave
 setInterval(() => {
@@ -364,7 +397,7 @@ tipchange = function(){
             tipchange();
             return;
         }
-        document.getElementById("Tip").innerText=tips_Basic[tipnumber];
+        dom("Tip").innerText=tips_Basic[tipnumber];
         tipTracker = tipnumber;
         return;
     } 
@@ -373,7 +406,7 @@ tipchange = function(){
         tipchange();
         return;
     }
-    document.getElementById("Tip").innerText=tips.tips_fun[tipnumber];
+    dom("Tip").innerText=tips.tips_fun[tipnumber];
     tipTracker = tipnumber;
     return;   
 }
