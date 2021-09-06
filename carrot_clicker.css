@@ -346,20 +346,6 @@ button:hover {
     background-color: var(--warning-red);
 }
 
-/* Don't keep this please */
-#screen_warning {
-    font-size: 20pt;
-    visibility: hidden;
-    position: absolute;
-    color: red;
-    font-weight: bolder;
-}
-@keyframes warning {
-    to {
-        color: rgb(255, 168, 168);
-    }
-}
-
 
 /* Media queries */
 /* Minimum supported width: 417px */
@@ -393,13 +379,5 @@ button:hover {
 @media only screen and (max-width: 400px) {
     #right-section {
         width: 100%;
-    }
-    .characterbox {
-        visibility: hidden;
-        /* position: absolute; */
-    }
-    #screen_warning {
-        visibility: visible;
-        animation: warning 0.5s infinite;
     }
 }

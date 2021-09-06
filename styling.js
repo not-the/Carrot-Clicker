@@ -10,23 +10,17 @@ var mouseY = 0;
 var bonusID = 0;
 
 // Carrot animations
-clickingArea.addEventListener("mousedown", carrotDown);
-clickingArea.addEventListener("mouseup", carrotUp);
-
-function carrotDown() {
-    mainCarrot.style.transform = "scale(0.98,0.98)";
-}
-
-function carrotUp() {
-    mainCarrot.style.transform = "scale(1,1)";
-}
+clickingArea.addEventListener("mousedown", () => {mainCarrot.style.transform = "scale(0.98,0.98)";});
+clickingArea.addEventListener("mouseup", () => {mainCarrot.style.transform = "scale(1,1)";});
 
 // Panel handler
 var currentPanel = "info-panel";
+// Tab Panels
 const infoPanel = document.getElementById("info-panel");
 const achievementsPanel = document.getElementById("achievements-panel");
 const settingsPanel = document.getElementById("settings-panel");
 
+// Tab Buttons
 const infoTab = document.getElementById("info-panel-button");
 const achievementsTab = document.getElementById("achievements-panel-button");
 const settingsTab = document.getElementById("settings-panel-button");
@@ -54,19 +48,24 @@ function panelChange(to) {
 
 // Click bonus popup
 function popupHandler() {
+    // Create Element
     var clickVisualElement = document.createElement("div");
+
+    // Give element random displacement along with mouse position
     var randomX = Math.floor((Math.random() * 10) - 5) + mouseX;
     var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
-    var randomRot = Math.floor((Math.random() * 16) - 8);
+    // var randomRot = Math.floor((Math.random() * 16) - 8);
 
     clickVisualElement.style.left = randomX + "px";
     clickVisualElement.style.top = randomY + "px";
-    clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
+    // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
     clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;
 
     bonusVisualArea.append(clickVisualElement);
+
+    // Delete Popup after animation finishes/2 seconds
     var bonusCurrent = document.getElementById("bonus" + bonusID);
     setTimeout(() => {
         bonusCurrent.remove();
@@ -81,6 +80,7 @@ function popupHandler() {
 }
 
 // Mouse position handler
+// CREDIT:
 // https://stackoverflow.com/a/7790764
 (function() {
     document.onmousemove = handleMouseMove;
@@ -107,13 +107,5 @@ function popupHandler() {
         
         mouseX = event.pageX;
         mouseY = event.pageY;
-
-
-        // Character tooltips
-        // var ctAdjust = event.pageY - 120;
-        // if(ctAdjust < -4) {
-        //     ctAdjust = -4
-        // }
-        // tooltipBill = `${ctAdjust}px`;
     }
 })();

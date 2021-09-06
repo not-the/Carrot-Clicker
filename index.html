@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker beta 1.1.5</title>
+    <title>Carrot Clicker beta 1.1.6</title>
 
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
@@ -46,48 +46,45 @@
   
       <!-- Right Section -->
       <div id="right-section">
-          <div id="screen_warning">
-            That ain't gon work sorry bud
-          </div>
-          <!--Boomer Bill Rendering-->
-          <div class="Bill characterbox">
-            <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
-            <!-- Top -->
-            <div class="top flex">
-              <img src="./assets/characters/Boomer_Bill.png" alt="Boomer Bill" id="bill_avatar" class="characterimg">
-              <div class="characterdesc">
-                <b class="charactername">Bill</b>
-                <p id="UpBillCost"></p>
-                <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
-              </div>
-
-            </div>
-
-            <!-- Bottom -->
-            <div class="bottom hoecontainer">
-
-              <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill)">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number"></p>
-              <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number"></p>
-              <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number"></p>
-              <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number"></p>
-              <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">1</p>
-              <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4)" class="toolicon">
-
-              <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">1</p>
-              <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5)" class="toolicon">
+        <!--Boomer Bill Rendering-->
+        <div class="Bill characterbox">
+          <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
+          <!-- Top -->
+          <div class="top flex">
+            <img src="./assets/characters/Boomer_Bill.png" alt="Boomer Bill" id="bill_avatar" class="characterimg">
+            <div class="characterdesc">
+              <b class="charactername">Bill</b>
+              <p id="UpBillCost"></p>
+              <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
             </div>
 
           </div>
+
+          <!-- Bottom -->
+          <div class="bottom hoecontainer">
+
+            <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill)">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number"></p>
+            <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0)" class="toolicon">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number"></p>
+            <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1)" class="toolicon">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number"></p>
+            <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2)" class="toolicon">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number"></p>
+            <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3)" class="toolicon">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">1</p>
+            <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4)" class="toolicon">
+
+            <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">1</p>
+            <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5)" class="toolicon">
+          </div>
+
+        </div>
   
         <!--Belle Boomerette Rendering-->
         <div class="Belle characterbox">
@@ -128,6 +125,7 @@
           </div>
 
         </div>
+
         <!--Gregory Rendering-->
         <div class="Greg characterbox">
           <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
@@ -144,10 +142,6 @@
 
           <!-- Bottom -->
           <div class="bottom">
-
-            
-            
-            
             <div class="Greg_Hoe_Container hoecontainer">
               <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory)" class="levelupimg">
               
@@ -177,11 +171,11 @@
             </div>
             
             </div>
-          </div>
+        </div>
 
         <!--Temporary Hoe Cost Display-->
         <div>
-          <p id="Hoe_Prices">e</p>
+          <p id="Hoe_Prices">Hoe Prices</p>
         </div>
 
         <!--Charles Rendering-->
