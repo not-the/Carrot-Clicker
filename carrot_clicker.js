@@ -68,11 +68,13 @@ const Charles1 = {
     ImproveWorkingConditions:1,
     DecreaseWages:1
 }
+//Creates the Local storage
 const Charles =localStorage.getObject("Charles");
 const player=localStorage.getObject("player");
 const Boomer_Bill=localStorage.getObject("Bill");
 const Belle_Boomerette=localStorage.getObject("Belle");
 const Gregory =localStorage.getObject("Greg");
+
 
 //Getting InnerHtml
 const prestige_info = document.getElementById("");
@@ -261,6 +263,11 @@ function ImproveWorkingConditions(){
     alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" Golden Carrots To Purchase That")
 }
 
+//delete save
+function ClearLocalStorage(){
+    localStorage.clear();
+    location.reload();
+}
 //main Game loop
 setInterval(()=>{
     //calculates the Cpc
@@ -326,7 +333,6 @@ setInterval(()=>{
     document.getElementById("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
     document.getElementById("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
 },25);
-
 // Autosave
 setInterval(() => {
     if(player){
@@ -335,25 +341,13 @@ setInterval(() => {
         localStorage.setObject("Belle",Belle_Boomerette);
         localStorage.setObject("Greg",Gregory);
         localStorage.setObject("Charles",Charles)
-    }
-    else{
+    }else{
         localStorage.setObject("player",player1);
         localStorage.setObject("Bill",Boomer_Bill1);
         localStorage.setObject("Belle",Belle_Boomerette1);
         localStorage.setObject("Greg",Gregory1);
         localStorage.setObject("Charles",Charles1);
-        Charles =localStorage.getObject("Charles");
-        player=localStorage.getObject("player");
-        Boomer_Bill=localStorage.getObject("Bill");
-        Belle_Boomerette=localStorage.getObject("Belle");
-        Gregory =localStorage.getObject("Greg");
-    }
-    //can probably be removed later
-    if(Charles){
-        localStorage.setObject("Charles",Charles);
-    }else{
-        localStorage.setObject("Charles",Charles1);
-        const Charles =localStorage.getObject("Charles");
+        location.reload();
     }
 }, 2000);
 
