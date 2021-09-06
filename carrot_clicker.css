@@ -1,3 +1,7 @@
+:root {
+    --warning-red: rgb(255, 65, 65);
+}
+
 /* Universal */
 * {
     box-sizing: border-box;
@@ -17,6 +21,27 @@ p {
 }
 #container {
     margin: 0 auto;
+}
+button {
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+
+    margin: 4px 0;
+
+    font-weight: bold;
+    font-size: 11pt;
+    padding: 4px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+button:hover {
+    color: black;
+    background-color: white;
+
+    transform: translateY(-1px);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.219);
 }
 
 /* Always on top elements */
@@ -107,22 +132,14 @@ p {
     visibility: hidden;
 }
 .prestigebutton {
-    font-weight: bold;
-    font-size: 11pt;
-    padding: 4px 12px;
-    border-radius: 5px;
-    background-color: rgba(250, 225, 0, 0);
+    background-color: transparent;
     color: rgb(255, 255, 255);
     border: 2px solid rgb(250, 225, 0);
-    cursor: pointer;
 }
 .prestigebutton:hover {
-    transition: 0.25s;
     background-color: rgb(250, 225, 0);
     color: black;
-    transform: translateY(-1px);
     border: 2px solid rgb(250, 225, 0);
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.219);
 }
 .prestigetooltip {
     margin-left: 8px;
@@ -246,9 +263,8 @@ p {
 
 /* Notifications section */
 #notifs-section {
-    box-sizing: border-box;
     width: 100%;
-    height: 300px;
+    height: 410px;
     min-width: 270px;
     margin: 24px;
     padding: 0;
@@ -258,7 +274,7 @@ p {
     margin: 0 auto;
     background-color: rgb(78, 63, 52);;
 }
-#notifs-section nav button {
+#notifs-section nav .tab {
     width: 33.33%;
     height: 2em;
     color: white;
@@ -289,27 +305,24 @@ p {
 .panel {
     position: absolute;
     overflow: auto;
+    height: 400px;
+    width: 100%;
+    padding: 0px 24px;
 }
 #info-panel {
     visibility: visible;
-    /* overflow-y: auto; */
 }
 #achievements-panel {
     visibility: hidden;
-    height: 0;
 }
 #settings-panel {
     visibility: hidden;
-    height: 0;
 }
 
 /* Achievements */
-.info-inner {
-    width: 100%;
-}
 .info-item {
-    width: 110%;
-    margin: 10px;
+    /* width: calc(90% - 40px); */
+    /* max-width: 100%; */
     padding: 4px;
     background-color: #42362d;
     border: 1px solid goldenrod;
@@ -324,6 +337,15 @@ p {
     height: 64px;
     width: 64px;
     margin-right: 8px;
+}
+/* Settings */
+#clear_save_data {
+    color: var(--warning-red);
+    border: 2px solid var(--warning-red);
+}
+#clear_save_data:hover {
+    color: white;
+    background-color: var(--warning-red);
 }
 
 /* Don't keep this please */
