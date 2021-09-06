@@ -102,12 +102,9 @@ button:hover {
 #golden_carrot_count {
     color: gray;
 }
-
-
-/* Left section */
-#left-section {
-    /* margin-right: auto; */
-}
+/* #left-section {
+    margin-right: auto;
+} */
 #clicking_area {
     height: 400px;
     width: 400px;
@@ -323,6 +320,7 @@ button:hover {
 .info-item {
     /* width: calc(90% - 40px); */
     /* max-width: 100%; */
+    max-width: 500px;
     padding: 4px;
     background-color: #42362d;
     border: 1px solid goldenrod;
