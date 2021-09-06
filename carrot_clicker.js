@@ -255,8 +255,9 @@ function DecreaseWages(){
     alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25)))+" Golden Carrots To Purchase That")
 }
 function ImproveWorkingConditions(){
-    if(Math.floor(Math.pow(Charles.DecreaseWages,1.25))<=player.golden_carrots){
-        player.golden_carrots-=Math.pow(Charles.DecreaseWages,1.25);
+    console.log("f");
+    if(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))<=player.golden_carrots){
+        player.golden_carrots-=Math.pow(Charles.ImproveWorkingConditions,1.25);
         Charles.ImproveWorkingConditions=(Charles.ImproveWorkingConditions*1.1);
         return;
     }
@@ -330,8 +331,8 @@ setInterval(()=>{
     }
     //Charles Upgrades
     document.getElementById("ImproveWorkingConditions").innerText="Improve Working Conditions. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
-    document.getElementById("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
-    document.getElementById("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
+    document.getElementById("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.BetterHoes,1.25))+" Golden Carrots";
+    document.getElementById("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.DecreaseWages,1.25))+" Golden Carrots";
 },25);
 // Autosave
 setInterval(() => {
