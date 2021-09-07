@@ -1,13 +1,66 @@
 //// UI HANDLER ////
-const bonusVisualArea = document.getElementById("bonusVisualArea");
-const clickingArea = document.getElementById("clicking_area");
-const mainCarrot = document.getElementById("main_carrot");
-// var tooltipBill = document.getElementById("billtooltip").style.top;
-// var tooltipBelle = document.getElementById("belletooltip").style.top;
-// var tooltipGreg = document.getElementById("gregtooltip").style.top;
+const bonusVisualArea = dom("bonusVisualArea");
+const clickingArea = dom("clicking_area");
+const mainCarrot = dom("main_carrot");
+// var tooltipBill = dom("billtooltip").style.top;
+// var tooltipBelle = dom("belletooltip").style.top;
+// var tooltipGreg = dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 var bonusID = 0;
+
+// Dialog Elements
+const overlay = dom("overlay");
+const elDialog = {
+    main:    dom("dialog"),
+    title:   dom("dialog_title"),
+    desc:    dom("dialog_desc"),
+    buttons: dom("dialog_buttons")
+};
+const clearDataButtons =
+    `<button class="button_red" onclick="ClearLocalStorage()">
+        Delete Save Data
+    </button>
+    <button onclick="closeDialog()">
+        Cancel
+    </button>`;
+const prestigeButtons = 
+    `<button class="button_gold" onclick="Prestige()">
+        Prestige
+    </button>
+    <button onclick="closeDialog()">
+        Cancel
+    </button>`;
+
+// Popup Notifications
+function openDialog(title, desc, buttons) {
+    overlay.classList.add("visible");
+    // elDialog.main.classList.add("dialog_animate");
+
+    // Fill out dialog text, if applicable
+    if(title) {elDialog.title.innerText = title;}
+    if(desc) {elDialog.desc.innerText = desc;}
+
+    if(buttons) {elDialog.buttons.innerHTML = buttons;}
+    else {
+        elDialog.buttons.innerHTML =
+            `<button>
+                OK
+            </button>
+            <button>
+                Cancel
+            </button>`;
+    }
+}
+
+function closeDialog() {
+    overlay.classList.remove("visible");
+    // elDialog.main.classList.remove("dialog_animate");
+}
+
+function toast(option, title, desc) {
+    // Toast notifications
+}
 
 // Carrot animations
 clickingArea.addEventListener("mousedown", () => {mainCarrot.style.transform = "scale(0.98,0.98)";});
@@ -16,14 +69,14 @@ clickingArea.addEventListener("mouseup", () => {mainCarrot.style.transform = "sc
 // Panel handler
 var currentPanel = "info-panel";
 // Tab Panels
-const infoPanel = document.getElementById("info-panel");
-const achievementsPanel = document.getElementById("achievements-panel");
-const settingsPanel = document.getElementById("settings-panel");
+const infoPanel = dom("info-panel");
+const achievementsPanel = dom("achievements-panel");
+const settingsPanel = dom("settings-panel");
 
 // Tab Buttons
-const infoTab = document.getElementById("info-panel-button");
-const achievementsTab = document.getElementById("achievements-panel-button");
-const settingsTab = document.getElementById("settings-panel-button");
+const infoTab = dom("info-panel-button");
+const achievementsTab = dom("achievements-panel-button");
+const settingsTab = dom("settings-panel-button");
 function panelChange(to) {
     if(currentPanel == to) {
         return;
@@ -39,8 +92,8 @@ function panelChange(to) {
         settingsPanel.style.visibility = "hidden";
 
         // Unhide selected panel
-        document.getElementById(to + "-button").classList.add("activetab");
-        document.getElementById(to).style.visibility = "visible";
+        dom(to + "-button").classList.add("activetab");
+        dom(to).style.visibility = "visible";
         
         currentPanel = to;
     }
@@ -66,7 +119,7 @@ function popupHandler() {
     bonusVisualArea.append(clickVisualElement);
 
     // Delete Popup after animation finishes/2 seconds
-    var bonusCurrent = document.getElementById("bonus" + bonusID);
+    var bonusCurrent = dom("bonus" + bonusID);
     setTimeout(() => {
         bonusCurrent.remove();
     }, 2000);

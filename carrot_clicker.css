@@ -1,4 +1,5 @@
 :root {
+    --golden-carrot: rgb(250, 225, 0);
     --warning-red: rgb(255, 65, 65);
 }
 
@@ -19,6 +20,9 @@ p {
 .flex {
     display: flex;
 }
+.unbold {
+    font-weight: unset;
+}
 button {
     color: white;
     background-color: transparent;
@@ -28,7 +32,7 @@ button {
 
     font-weight: bold;
     font-size: 11pt;
-    padding: 4px 12px;
+    padding: 6px 12px;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.25s;
@@ -40,8 +44,93 @@ button:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.219);
 }
+.colorwhite {
+    color: white !important;
+}
 
 /* Always on top elements */
+
+/* Dialog Popup */
+#overlay {
+    visibility: hidden;
+    position: fixed;
+    z-index: 200;
+    height: 100%;
+    width: 100%;
+}
+#backdrop {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.514);
+    backdrop-filter: blur(20px);
+    animation: backdrop 1.5s forwards;
+}
+@keyframes backdrop {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+}
+#overlay.dramatic {
+    backdrop-filter: blur(20px) saturate(20%);
+}
+#dialog {
+    width: 420px;
+    background: rgb(53, 53, 53);
+    padding: 20px;
+    border-radius: 4px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* animation: dialog 0.5s cubic-bezier(0.39, 0.575, 0.565, 1); */
+}
+.dialog_animate {
+    animation: dialog 0.25s ease-out;
+}
+@keyframes dialog {
+    from {
+        transform: translate(-50%, calc(-50% + 20px));
+    }
+}
+#dialog h2, #dialog p {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+#dialog button {
+    transition: none;
+    width: 49%;
+}
+
+.visible {
+    visibility: visible !important;
+}
+
+/* Toasts */
+#toast_container {
+    /* Hidden until I get toasts working */
+    visibility: hidden;
+
+    position: fixed;
+    z-index: 201;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}
+.toast {
+    margin-top: 10px;
+    padding: 8px;
+    height: 70px;
+    width: 300px;
+    background: var(--warning-red);
+    border-radius: 4px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Number Popup */
 .clickvisual {
     font-size: 24pt;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -126,21 +215,20 @@ button:hover {
     display: inline-flex;
     visibility: hidden;
 }
-.prestigebutton {
+.button_gold {
     background-color: transparent;
-    color: rgb(255, 255, 255);
-    border: 2px solid rgb(250, 225, 0);
+    color: var(--golden-carrot);
+    border: 2px solid var(--golden-carrot);
 }
-.prestigebutton:hover {
-    background-color: rgb(250, 225, 0);
+.button_gold:hover {
+    background-color: var(--golden-carrot);
     color: black;
-    border: 2px solid rgb(250, 225, 0);
+    border: 2px solid var(--golden-carrot);
 }
 .prestigetooltip {
     margin-left: 8px;
     margin-top: 4px;
 }
-
 
 
 
@@ -353,12 +441,12 @@ button:hover {
     margin-right: 8px;
 }
 /* Settings */
-#clear_save_data {
+.button_red {
     transition: none;
     color: var(--warning-red);
     border: 2px solid var(--warning-red);
 }
-#clear_save_data:hover {
+.button_red:hover {
     transition: 0.2s;
     color: white;
     background-color: var(--warning-red);

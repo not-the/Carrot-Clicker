@@ -11,6 +11,43 @@
 </head>
 <body>
   <!-- On top -->
+
+  <!-- Dialog Popup -->
+  <!-- Optional classes: dramatic -->
+  <div id="overlay" class="dramatic">
+    <!-- Backdrop -->
+    <div id="backdrop" onclick="closeDialog()"></div>
+
+    <!-- Dialog Box -->
+    <div id="dialog">
+      <!-- Dialog info -->
+      <h2 id="dialog_title">Dialog Title</h2>
+      <p id="dialog_desc">
+        Dialog description
+      </p>
+      <!-- Dialog Options -->
+      <div id="dialog_buttons">
+        <button class="button_red">
+          Option 1
+        </button>
+        <button>
+          Option 2
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Corner Toasts -->
+  <div id="toast_container">
+    <div class="toast" onclick="openDialog('Test Dialog')">
+      This is a toast notification
+    </div>
+    <!-- <div class="toast">
+      This is a toast notification
+    </div> -->
+  </div>
+
+  <!-- Number Popup -->
   <div id="bonusVisualArea"></div>
 
   <!--Basic Info Carrots; Cpc; Cps-->
@@ -36,7 +73,7 @@
        
         <!-- Prestige Section -->
         <div id="prestige-section">
-          <button type="button" onClick="Prestige()" class="prestigebutton">Prestige</button>
+          <button type="button" onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', prestigeButtons)" class="button_gold">Prestige</button>
           <p id="Prestige" class="prestigetooltip"><p>
         </div>
 
@@ -194,9 +231,23 @@
             <!-- Bottom -->
             <div class="bottom">
             </div>
-              <button onclick="ImproveWorkingConditions()" id="ImproveWorkingConditions">Do a thing</button>
-              <button onclick="BetterHoes()" id="BetterHoes">Do another Thing</button>
-              <button onclick="DecreaseWages()" id="DecreaseWages">Third Thing</button>
+              <button
+                onclick="ImproveWorkingConditions()"
+                id="ImproveWorkingConditions"
+                class="unbold">
+              </button>
+              
+              <button
+                onclick="BetterHoes()"
+                id="BetterHoes"
+                class="unbold">
+              </button>
+
+              <button
+                onclick="DecreaseWages()"
+                id="DecreaseWages"
+                class="unbold">
+              </button>
           </div>
         </div>
       </div>
@@ -266,7 +317,7 @@
         </label><br>
         
         <!-- Options item -->
-        <button id="clear_save_data" onclick="ClearLocalStorage()">
+        <button id="clear_save_data" class="button_red" onclick="openDialog('Are you sure?', 'Your progress will be lost forever!', clearDataButtons)">
           Delete Save Data
         </button>
       </div>

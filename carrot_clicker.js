@@ -44,7 +44,7 @@ const player1 = {
     golden_carrots:0,
     prestige_potential:0,
     LifetimeCarrots:0,
-    LifetimeGolenCarrots:0
+    LifetimeGoldenCarrots:0
 }
 //Creates Characters 
 class Character{
@@ -87,16 +87,16 @@ const elCarrotCount = dom("Carrot_Count");
 const elCPC = dom("cpc");
 const elCPS = dom("cps");
 const elGoldenCarrotCount = dom("golden_carrot_count");
-const CharacterUpCost = [
-    dom("UpBillCost"),
-    dom("UpBelleCost"),
-    dom("UpGregCost")
-];
-const CharacterLevel = [
-    dom("Bill_lvl"),
-    dom("Belle_lvl"),
-    dom("Greg_lvl")
-];
+const elCharacterUpCost = {
+    bill:  dom("UpBillCost"),
+    belle: dom("UpBelleCost"),
+    greg:  dom("UpGregCost")
+};
+const elCharacterLevel = {
+    bill:  dom("Bill_lvl"),
+    belle: dom("Belle_lvl"),
+    greg:  dom("Greg_lvl") 
+}
 const elHoePrices = {
     wooden:     dom("wooden_hoe_price"),
     stone:      dom("stone_hoe_price"),
@@ -243,19 +243,16 @@ player.Carrots+=player.cps/25;
 
 //Prestige
 function Prestige(){
-    let cnfrm = confirm("Are you Sure you want to Presige?");
-    if(cnfrm){
-        player.golden_carrots+=player.prestige_potential;
-        player.LifetimeGolenCarrots+=player.prestige_potential;
-        Boomer_Bill.lvlupPrice=100;
-        Belle_Boomerette.lvlupPrice=500;
-        Gregory.lvlupPrice=5000;
-        [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
-        Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
-        Boomer_Bill.Hoes=[0,0,0,0,0,0];
-        Belle_Boomerette.Hoes=[0,0,0,0,0,0];
-        Gregory.Hoes=[0,0,0,0,0,0];
-    }  
+    player.golden_carrots+=player.prestige_potential;
+    player.LifetimeGoldenCarrots+=player.prestige_potential;
+    Boomer_Bill.lvlupPrice=100;
+    Belle_Boomerette.lvlupPrice=500;
+    Gregory.lvlupPrice=5000;
+    [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
+    Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+    Boomer_Bill.Hoes=[0,0,0,0,0,0];
+    Belle_Boomerette.Hoes=[0,0,0,0,0,0];
+    Gregory.Hoes=[0,0,0,0,0,0]; 
 }
 //Charles Functions
 function BetterHoes(){
@@ -284,14 +281,14 @@ function ImproveWorkingConditions(){
     alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" Golden Carrots To Purchase That")
 }
 
-//delete save
+// delete save
 function ClearLocalStorage(){
     localStorage.clear();
     location.reload();
 }
-//main Game loop
+// main Game loop
 setInterval(()=>{
-    //calculates the Cpc
+    // calculates the Cpc
     var cpcHoes = (Boomer_Bill.Hoes[0])+(10*Boomer_Bill.Hoes[1])+(100*Boomer_Bill.Hoes[2])+(1000*Boomer_Bill.Hoes[3])+(10000*Boomer_Bill.Hoes[4])+(100000*Boomer_Bill.Hoes[5]);
     if(Boomer_Bill.Hoes[0]+cpcHoes>0){
         player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
@@ -308,14 +305,15 @@ setInterval(()=>{
     }
     player.cps=(0.1*(player.golden_carrots+10))*player.cps;
     //providing updated information to the player
-        //// Update numbers on page
-     // Top bar
-     Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
-     // New display
-     elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
-     elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
-     elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
+    //// Update numbers on page ////
+    // Top bar
+    Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+    // New display
+    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
+    elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
+    elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
 
     //The Basic info for the player, Carrots; Cpc; Cps
     if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
@@ -325,16 +323,16 @@ setInterval(()=>{
         elGoldenCarrotCount.style.color = "white";
     }
     //Farmers Upgrade Cost
-    CharacterUpCost[0].innerText = "Cost to upgrade Bill: "+DisplayRounded(Boomer_Bill.lvlupPrice,1)+"";
-    CharacterUpCost[1].innerText = "Cost to upgrade Belle: "+DisplayRounded(Belle_Boomerette.lvlupPrice,1)+"";
+    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(Boomer_Bill.lvlupPrice,1)}`;
+    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(Belle_Boomerette.lvlupPrice,1)}`;
     //Bill's Level
-    CharacterLevel[0].innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
+    elCharacterLevel.bill.innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
     //Belle's level
-    CharacterLevel[1].innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
+    elCharacterLevel.belle.innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
     //Greg's Level
-    CharacterLevel[2].innerText="Lvl: "+DisplayRounded(Gregory.lvl);
+    elCharacterLevel.greg.innerText="Lvl: "+DisplayRounded(Gregory.lvl);
     //Blacksmiths Upgrade Cost
-    CharacterUpCost[2].innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
+    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
     //Hoe Counts
     DisplayHoes(Boomer_Bill);
     DisplayHoes(Belle_Boomerette);
@@ -344,28 +342,32 @@ setInterval(()=>{
     let h = 0.005*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
     prestige_info.innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
-    // Hoe Prices
+    // Greg's Hoe Prices
     elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;
     elHoePrices.stone.innerText     = `${DisplayRounded(Gregory.HoePrices[1],1)}`;
     elHoePrices.iron.innerText      = `${DisplayRounded(Gregory.HoePrices[2],1)}`;
     elHoePrices.gold.innerText      = `${DisplayRounded(Gregory.HoePrices[3],1)}`;
     elHoePrices.diamond.innerText   = `${DisplayRounded(Gregory.HoePrices[4],1)}`;
     elHoePrices.netherite.innerText = `${DisplayRounded(Gregory.HoePrices[5],1)}`;
-    // DisplayRounded(Gregory.HoePrices[0],1)+" "+
-    // DisplayRounded(Gregory.HoePrices[1],1)+" "+
-    // DisplayRounded(Gregory.HoePrices[2],1)+" "+
-    // DisplayRounded(Gregory.HoePrices[3],1)+" "+
-    // DisplayRounded(Gregory.HoePrices[4],1)+" "+
-    // DisplayRounded(Gregory.HoePrices[5],1);
-    if(player.LifetimeGolenCarrots>=0.01 || player.prestige_potential>=1){
+
+    if(player.LifetimeGoldenCarrots>0 || player.prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
-        
     }
     //Charles Upgrades
-    dom("ImproveWorkingConditions").innerText="Improve Working Conditions. Costs:"+Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))+" Golden Carrots";
-    dom("BetterHoes").innerText="Improve all Hoes. Costs:"+Math.floor(Math.pow(Charles.BetterHoes,1.25))+" Golden Carrots";
-    dom("DecreaseWages").innerText="Decrease Worker Wages. Costs:"+Math.floor(Math.pow(Charles.DecreaseWages,1.25))+" Golden Carrots";
-    dom("charlestooltip").innerText="IWC:"+Math.floor(100*Charles.ImproveWorkingConditions)+"% BH:"+Math.floor(100*Charles.BetterHoes)+"% DWW:"+Math.floor(100*Charles.DecreaseWages)+"%";
+    dom("ImproveWorkingConditions").innerHTML=
+        `Improve Working Conditions
+        Costs: ${Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))} Golden Carrots`;
+
+    dom("BetterHoes").innerHTML=
+        `Improve all Hoes
+        Costs: ${Math.floor(Math.pow(Charles.BetterHoes,1.25))} Golden Carrots`;
+
+    dom("DecreaseWages").innerHTML=
+        `Decrease Worker Wages
+        Costs: ${Math.floor(Math.pow(Charles.DecreaseWages,1.25))} Golden Carrots`;
+
+    dom("charlestooltip").innerHTML=
+        `IWC:${Math.floor(100*Charles.ImproveWorkingConditions)}% BH:${Math.floor(100*Charles.BetterHoes)}% DWW:${Math.floor(100*Charles.DecreaseWages)}%`;
 },25);
 // Autosave
 setInterval(() => {
