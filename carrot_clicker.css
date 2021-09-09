@@ -44,8 +44,33 @@ button:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.219);
 }
+input {
+    padding: 4px 8px;
+    border-radius: 30px;
+}
+
+/* Text Colors */
 .colorwhite {
     color: white !important;
+}
+.golden {
+    color: var(--golden-carrot) !important;
+}
+/* Background Colors */
+.background_red {
+    background: var(--warning-red) !important;
+    border: 2px solid white !important;
+}
+/* .background_red .toast_close {
+    color: white;
+} */
+.background_gold {
+    background: rgb(197, 145, 15) !important;
+    border: 2px solid var(--golden-carrot) !important;
+}
+.background_orange {
+    background: rgb(184, 94, 20) !important;    
+    border: 2px solid white !important;
 }
 
 /* Always on top elements */
@@ -112,22 +137,68 @@ button:hover {
 /* Toasts */
 #toast_container {
     /* Hidden until I get toasts working */
-    visibility: hidden;
-
+    /* visibility: hidden; */
+    
     position: fixed;
     z-index: 201;
     bottom: 0;
     right: 0;
     margin: 20px;
+
+    display: flex;
+    flex-direction: column-reverse;
+
+    height: 100%;
+    overflow: auto;
 }
 .toast {
     margin-top: 10px;
-    padding: 8px;
-    height: 70px;
+    padding: 12px 16px;
+    /* height: 70px; */
     width: 300px;
-    background: var(--warning-red);
-    border-radius: 4px;
+    background: #353535;
+    border: 2px solid gray;
+    border-radius: 8px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: toast 0.25s;
+
+    word-break: break-word;
+}
+.toast_out {animation: toast_out 0.25s forwards;}
+@keyframes toast {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+}
+@keyframes toast_out {
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+.toast_close {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    /* font-weight: bold; */
+    color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    padding: 10px;
+    margin-top: 4px;
+    margin-right: 4px;
+    top: 0;
+    right: 0;
+
+    cursor: pointer;
+}
+.toast_close:hover {
+    color: white;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.5);
+}
+.toast h3, .toast p {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 4px;
 }
 
 /* Number Popup */
@@ -280,12 +351,6 @@ button:hover {
 .charactername {
     text-decoration: underline;
 }
-.grayedout {
-    filter: brightness(50%) saturate(0%);
-}
-/* Greyed out */
-.grayedout .levelupimg, .grayedout .toolicon {cursor: unset;}
-.grayedout .levelupimg:hover, .grayedout .toolicon:hover {transform: none;}
 .characterimg {
     height: 64px;
     width: 64px;
@@ -358,6 +423,24 @@ button:hover {
     margin: 5px;
 }
 
+/* Greyed out */
+.grayedout {
+    filter: brightness(90%) saturate(0%);
+}
+.grayedout .levelupimg,
+.grayedout .toolicon,
+.grayedout.levelupimg,
+.grayedout.toolicon {
+    cursor: unset;
+}
+.grayedout .levelupimg:hover,
+.grayedout .toolicon:hover,
+.grayedout.levelupimg:hover,
+.grayedout.toolicon:hover {
+    transform: none;
+    filter: brightness(90%) saturate(0%);
+}
+
 
 
 /* Notifications section */
@@ -406,8 +489,8 @@ button:hover {
     box-sizing: unset;
     position: absolute;
     /* overflow: auto; */
-    /* height: 100%;
-    width: 100%; */
+    height: 100%;
+    width: 100%;
     padding: 0px 24px;
 }
 #info-panel {

@@ -39,16 +39,17 @@
 
   <!-- Corner Toasts -->
   <div id="toast_container">
-    <div class="toast" onclick="openDialog('Test Dialog')">
-      This is a toast notification
-    </div>
-    <!-- <div class="toast">
-      This is a toast notification
+    <!-- <div class="toast background_red" id="toastID">
+      <h3>Title</h3>
+      <span class="toast_close" onclick="closeToast('ID')">X</span>
+      <p>Description</p>
     </div> -->
   </div>
 
   <!-- Number Popup -->
   <div id="bonusVisualArea"></div>
+
+
 
   <!--Basic Info Carrots; Cpc; Cps-->
   <div class="Basic_Info flex"> 
@@ -69,7 +70,7 @@
         <p id="Carrot_Count">Working...</p>
         <p id="cpc">Carrots per click:</p>
         <p id="cps">Carrots per second:</p>
-        <p id="golden_carrot_count"></p>
+        <p id="golden_carrot_count" class="golden"></p>
        
         <!-- Prestige Section -->
         <div id="prestige-section">
@@ -89,7 +90,12 @@
             <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
             <!-- Top -->
             <div class="top flex">
-              <img src="./assets/characters/Boomer_Bill.png" alt="Boomer Bill" id="bill_avatar" class="characterimg">
+              <img
+                src="./assets/characters/Boomer_Bill.png"
+                alt="Boomer Bill"
+                id="bill_avatar"
+                class="characterimg"
+                title="Boomer Bill">
               <div class="characterdesc">
                 <b class="charactername">Bill</b>
                 <p id="UpBillCost"></p>
@@ -130,7 +136,12 @@
 
             <!-- Top -->
             <div class="top flex">
-              <img src="./assets/characters/BelleBommerette.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
+              <img
+                src="./assets/characters/BelleBommerette.png"
+                alt="Belle Boomerette"
+                id="belle_avatar"
+                class="characterimg"
+                title="Boomer Belle">
               <div class="characterdesc">
                 <b class="charactername">Belle</b>
                 <p id="UpBelleCost"></p>
@@ -169,7 +180,12 @@
             <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
             <!-- Top -->
             <div class="top flex">
-              <img src="./assets/characters/Gregory.png" alt="Gregory" id="Greg_avatar" class="characterimg">
+              <img
+                src="./assets/characters/Gregory.png"
+                alt="Gregory"
+                id="Greg_avatar"
+                class="characterimg"
+                title="Gregory">
               <div class="characterdesc">
                 <b class="charactername">Greg</b>
                 <p id="UpGregCost">show</p>
@@ -222,7 +238,12 @@
 
             <!-- Top -->
             <div class="top flex">
-              <img src="./assets/characters/Charles.png" alt="Belle Boomerette" id="belle_avatar" class="characterimg">
+              <img
+                src="./assets/characters/Charles.png"
+                alt="Belle Boomerette"
+                id="belle_avatar"
+                class="characterimg"
+                title="Charles">
               <div class="characterdesc">
                 <b class="charactername">Charles</b>
               </div>
@@ -314,8 +335,13 @@
         <label for="option_placeholder">
           <input type="checkbox" id="option_placeholder">
           Enable things and stuff
+        </label><br><br>
+
+        <!-- Notification Length -->
+        <label for="notificationLength">Time until notifications disappear (In seconds)<br>
+          <input type="number" id="notifcationLength" value="6">
         </label><br>
-        
+          
         <!-- Options item -->
         <button id="clear_save_data" class="button_red" onclick="openDialog('Are you sure?', 'Your progress will be lost forever!', clearDataButtons)">
           Delete Save Data

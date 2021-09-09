@@ -7,6 +7,9 @@ const mainCarrot = dom("main_carrot");
 // var tooltipGreg = dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
+
+// Popup counters (unique IDs so that they are deleted after a set time)
+var toastID = 0;
 var bonusID = 0;
 
 // Dialog Elements
@@ -17,6 +20,7 @@ const elDialog = {
     desc:    dom("dialog_desc"),
     buttons: dom("dialog_buttons")
 };
+const toastContainer = dom("toast_container");
 const clearDataButtons =
     `<button class="button_red" onclick="ClearLocalStorage()">
         Delete Save Data
@@ -52,14 +56,49 @@ function openDialog(title, desc, buttons) {
             </button>`;
     }
 }
-
 function closeDialog() {
     overlay.classList.remove("visible");
     // elDialog.main.classList.remove("dialog_animate");
 }
 
-function toast(option, title, desc) {
-    // Toast notifications
+// Create Toast notification
+// For the COLOR parameter, options are:
+// gray (leave blank), "red", "gold"
+function toast(title, desc, color, persistent) {
+    var toastElement = document.createElement("div");
+
+    toastElement.innerHTML =
+    `<div class="toast background_${color}" id="toast${toastID}">
+        <h3>${title}</h3>
+        <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+        <p>${desc}</p>
+    </div>`;
+
+    toastContainer.prepend(toastElement);
+
+    console.log("toast ID is " + toastID);
+    let id = toastID
+    if(!persistent) {
+        setTimeout(() => {
+            // console.log("Timeout runs: " + toastID);
+            closeToast(id);
+        }, 6000);
+    }
+    
+
+    // Increase Toast ID, and reset to zero if cycled to 200
+    toastID++;
+}
+
+// Delete Toast Notification
+function closeToast(id) {
+    console.log(id + "toast removed");
+    element = dom(`toast${id}`);
+    
+    element.classList.add("toast_out");
+    setTimeout(() => {
+        element.remove();
+    }, 300);
 }
 
 // Carrot animations
@@ -74,9 +113,9 @@ const achievementsPanel = dom("achievements-panel");
 const settingsPanel = dom("settings-panel");
 
 // Tab Buttons
-const infoTab = dom("info-panel-button");
+const infoTab =         dom("info-panel-button");
 const achievementsTab = dom("achievements-panel-button");
-const settingsTab = dom("settings-panel-button");
+const settingsTab =     dom("settings-panel-button");
 function panelChange(to) {
     if(currentPanel == to) {
         return;
@@ -162,3 +201,14 @@ function popupHandler() {
         mouseY = event.pageY;
     }
 })();
+
+
+
+
+// Tutorial things maybe
+
+// Initial Welcome
+if(store("tutorial_sample") == null) {
+    store("tutorial_sample", "done");
+    toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+}

@@ -27,6 +27,15 @@ const tips = {
 // getElementById shorthand
 function dom(id) {return document.getElementById(id);}
 
+// Local Storage shorthand (Strings only)
+function store(key, data) {
+    if(data) {
+        localStorage.setItem(key, data);
+    } else {
+        return localStorage.getItem(key);
+    }
+}
+
 //Locally Store Objects
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -131,37 +140,37 @@ function LevelUp(character){
 //Hoes
 function CreateHoe(type) {
     if(n==1){
-        alert("BUSY");
+        toast("Greg is busy", "Wait until the current hoe is done crafting before crafting another")
         return;
     }
     //Checks if Greg is Experienced Enough to Purchase a Hoe.
-        if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
-            if(type>=1){
-                alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:"+(type*25)+" To Create this Hoe");
-                return;
-            }
-            alert("Cant Create Hoe; Greg To Inexperienced. Greg Must Be atleast lvl:1 To Create this Hoe")
-            return;    
-        }
-        //Checks to see if Greg Can Hold more of this Type
-         if(Gregory.Hoes[type]>=Gregory.lvl){
-            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
-            return;
-        } 
-        //Stores The Correct Hoe Price
-        function HoeCost(){
-            for(i=0;i<Gregory.HoePrices.length;i++){
-                if(type==i){
-                    return Gregory.HoePrices[i];
-                }
-            }
-        }
-        let price = HoeCost();
-        //Checks if Hoe is Too expensive
-        if(price>=(player.Carrots*2)){
-            alert("That Hoe is Currently Too Expensive");
+    if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
+        if(type>=1){
+            toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: " + (type*25) + " to create this hoe");
             return;
         }
+        toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: 1 to create this hoe");
+        return;
+    }
+    //Checks to see if Greg Can Hold more of this Type
+        if(Gregory.Hoes[type] >= Gregory.lvl){
+        toast("Insufficient Upgrades", "You must upgrade greg to hold more hoes of that type");
+        return;
+    } 
+    //Stores The Correct Hoe Price
+    function HoeCost(){
+        for(i=0;i<Gregory.HoePrices.length;i++){
+            if(type==i){
+                return Gregory.HoePrices[i];
+            }
+        }
+    }
+    let price = HoeCost();
+    //Checks if Hoe is Too expensive
+    if(price>=(player.Carrots*2)){
+        toast("Too Expensive!", "That hoe is currently too expensive.");
+        return;
+    }
     if(n==0){
         n=1;   
         //Creates Hoe And Displays Progress Bar
@@ -199,7 +208,7 @@ function CreateHoe(type) {
 function EquipHoe(character=Boomer_Bill,type=0){
     if(Gregory.Hoes[type]>=1){
         if(character.Hoes[type]>=Gregory.lvl){
-            alert("You Must Upgrade Greg to Hold More Hoes of That Type");
+            toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
             n=0;
             return;
     }
@@ -252,7 +261,9 @@ function Prestige(){
     Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
     Boomer_Bill.Hoes=[0,0,0,0,0,0];
     Belle_Boomerette.Hoes=[0,0,0,0,0,0];
-    Gregory.Hoes=[0,0,0,0,0,0]; 
+    Gregory.Hoes=[0,0,0,0,0,0];
+
+    closeDialog();
 }
 //Charles Functions
 function BetterHoes(){
@@ -261,7 +272,7 @@ function BetterHoes(){
         Charles.BetterHoes=(Charles.BetterHoes*1.1);
         return;
     }
-    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.BetterHoes,1.25)))+" Golden Carrots To Purchase That")
+    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.BetterHoes,1.25)))+" golden carrots to purchase that.");
 }
 function DecreaseWages(){
     if(Math.floor(Math.pow(Charles.DecreaseWages,1.25))<=player.golden_carrots){
@@ -269,7 +280,7 @@ function DecreaseWages(){
         Charles.DecreaseWages=(Charles.DecreaseWages*1.1);
         return;
     }
-    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25)))+" Golden Carrots To Purchase That")
+    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25)))+" golden carrots to purchase that.");
 }
 function ImproveWorkingConditions(){
     console.log("f");
@@ -278,7 +289,7 @@ function ImproveWorkingConditions(){
         Charles.ImproveWorkingConditions=(Charles.ImproveWorkingConditions*1.1);
         return;
     }
-    alert("Cant Afford That Upgrade, It Costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" Golden Carrots To Purchase That")
+    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" golden carrots To purchase that.")
 }
 
 // delete save
