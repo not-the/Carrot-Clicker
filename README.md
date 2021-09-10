@@ -6,9 +6,9 @@ Basic clicker game themed around carrots
 https://jjcvip.github.io/Carrot-Clicker/
 
 
-Credits:
+**Credits:**
 
-Main JS, HTML/CSS - https://github.com/JJCVIP
+Main game code, game balance, developer art - https://github.com/JJCVIP
 
 
 Concept, UI Code, general code cleanup, HTML/CSS - https://github.com/not-the
