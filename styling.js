@@ -63,7 +63,7 @@ function closeDialog() {
 
 // Create Toast notification
 // For the COLOR parameter, options are:
-// gray (leave blank), "red", "gold"
+// gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt" 
 function toast(title, desc, color, persistent) {
     var toastElement = document.createElement("div");
 
@@ -76,7 +76,7 @@ function toast(title, desc, color, persistent) {
 
     toastContainer.prepend(toastElement);
 
-    console.log("toast ID is " + toastID);
+    // console.log("toast ID is " + toastID);
     let id = toastID
     if(!persistent) {
         setTimeout(() => {
@@ -86,18 +86,21 @@ function toast(title, desc, color, persistent) {
     }
     
 
-    // Increase Toast ID, and reset to zero if cycled to 200
+    // Increase Toast ID
     toastID++;
 }
 
 // Delete Toast Notification
 function closeToast(id) {
-    console.log(id + "toast removed");
+    // console.log(id + "toast removed");
     element = dom(`toast${id}`);
     
+    // Dismiss Animation
     element.classList.add("toast_out");
+
+    // Delete Element after animation is done
     setTimeout(() => {
-        element.remove();
+        if(element !== null) {element.remove();}
     }, 300);
 }
 
