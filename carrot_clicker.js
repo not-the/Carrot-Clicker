@@ -82,11 +82,11 @@ const Charles1 = {
     DecreaseWages:1
 }
 //Creates the Local storage
-const Charles = localStorage.getObject("Charles");
-const player = localStorage.getObject("player");
-const Boomer_Bill = localStorage.getObject("Bill");
+const Charles =          localStorage.getObject("Charles");
+const player =           localStorage.getObject("player");
+const Boomer_Bill =      localStorage.getObject("Bill");
 const Belle_Boomerette = localStorage.getObject("Belle");
-const Gregory = localStorage.getObject("Greg");
+const Gregory =          localStorage.getObject("Greg");
 
 
 //Getting InnerHtml
@@ -155,7 +155,7 @@ function CreateHoe(type) {
         return;
     }
     //Checks to see if Greg Can Hold more of this Type
-        if(Gregory.Hoes[type] >= Gregory.lvl){
+    if(Gregory.Hoes[type] >= Gregory.lvl){
         toast("Insufficient Upgrades", "You must upgrade greg to hold more hoes of that type");
         return;
     } 
@@ -201,7 +201,7 @@ function CreateHoe(type) {
                     
                 }
             } 
-        }else{
+        } else {
             n=0;
         }
     }
@@ -236,7 +236,7 @@ function DisplayHoes(character = Boomer_Bill){
     }
 }
 
-//Displaying Roundced Numbers example"100m 140b
+// Displaying Roundced Numbers example"100m 140b
 function DisplayRounded(Value,Fixedto=3){
     var units = ["k","m","b","t","q","Q","s","S"];
     for(i=0;i<units.length;i++){
@@ -247,30 +247,30 @@ function DisplayRounded(Value,Fixedto=3){
     return Value;
 }
 
-//Carrots per second
+// Carrots per second
 function CarrotsPerSecond(){
-    player.Carrots+=player.cps/10;
+    player.Carrots += player.cps / 10;
 }
 var cpsInterval = setInterval(CarrotsPerSecond,100);
 
-//Prestige
-function Prestige(){
-    clearInterval(cpsInterval)
-    player.golden_carrots+=player.prestige_potential;
-    player.LifetimeGoldenCarrots+=player.prestige_potential;
-    Boomer_Bill.lvlupPrice=100;
-    Belle_Boomerette.lvlupPrice=500;
-    Gregory.lvlupPrice=5000;
-    [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,]=[1,0,0];
+// Prestige
+function Prestige() {
+    clearInterval(cpsInterval);
+    player.golden_carrots += player.prestige_potential;
+    player.LifetimeGoldenCarrots += player.prestige_potential;
+    Boomer_Bill.lvlupPrice = 100;
+    Belle_Boomerette.lvlupPrice = 500;
+    Gregory.lvlupPrice = 5000;
+    [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [1,0,0];
     Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
-    Boomer_Bill.Hoes=[0,0,0,0,0,0];
-    Belle_Boomerette.Hoes=[0,0,0,0,0,0];
-    Gregory.Hoes=[0,0,0,0,0,0];
-    player.Carrots=0;
+    Boomer_Bill.Hoes = [0,0,0,0,0,0];
+    Belle_Boomerette.Hoes = [0,0,0,0,0,0];
+    Gregory.Hoes = [0,0,0,0,0,0];
+    player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
-    closeDialog(); 
+    closeDialog();
 }
-//Charles Functions
+//// Charles Functions
 function BetterHoes(){
     if(Math.floor(Math.pow(Charles.BetterHoes,1.25))<=player.golden_carrots){
         player.golden_carrots-=Math.floor(Math.pow(Charles.BetterHoes,1.25));
@@ -285,22 +285,24 @@ function DecreaseWages(){
         Charles.DecreaseWages=(Charles.DecreaseWages*1.1);
         return;
     }
-    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25)))+" golden carrots to purchase that.");
+    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25))) + " golden carrots to purchase that.");
 }
 function ImproveWorkingConditions(){
     console.log("f");
-    if(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))<=player.golden_carrots){
-        player.golden_carrots-=Math.pow(Charles.ImproveWorkingConditions,1.25);
-        Charles.ImproveWorkingConditions=(Charles.ImproveWorkingConditions*1.1);
+    if(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)) <= player.golden_carrots) {
+        player.golden_carrots -= Math.pow(Charles.ImproveWorkingConditions, 1.25);
+        Charles.ImproveWorkingConditions = (Charles.ImproveWorkingConditions * 1.1);
         return;
     }
-    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" golden carrots To purchase that.")
+    toast("Cant Afford That Upgrade", "It costs " + (Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))) + " golden carrots To purchase that.");
 }
+
 // delete save
 function ClearLocalStorage(){
     localStorage.clear();
     location.reload();
 }
+
 // main Game loop
 setInterval(()=>{
     // calculates the Cpc
@@ -310,7 +312,7 @@ setInterval(()=>{
     }else{
         player.cpc=Boomer_Bill.lvl;
     }
-    var cpsHoes= (Belle_Boomerette.Hoes[0]+(10*Belle_Boomerette.Hoes[1])+(100*Belle_Boomerette.Hoes[2])+(1000*Belle_Boomerette.Hoes[3])+(10000*Belle_Boomerette.Hoes[4])+(100000*Belle_Boomerette.Hoes[5]));
+    var cpsHoes = (Belle_Boomerette.Hoes[0] + (10*Belle_Boomerette.Hoes[1]) + (100*Belle_Boomerette.Hoes[2]) + (1000*Belle_Boomerette.Hoes[3]) + (10000*Belle_Boomerette.Hoes[4]) + (100000*Belle_Boomerette.Hoes[5]));
     player.cpc=(0.1*(player.golden_carrots+10))*player.cpc;
     //calculates the Cps
     if(Belle_Boomerette.Hoes[0]+cpsHoes>0){
@@ -337,26 +339,34 @@ setInterval(()=>{
     if(player.LifetimeGoldenCarrots>=1) {
         elGoldenCarrotCount.style.color = "white";
     }
+
     //Farmers Upgrade Cost
     elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(Boomer_Bill.lvlupPrice,1)}`;
     elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(Belle_Boomerette.lvlupPrice,1)}`;
+
     //Bill's Level
     elCharacterLevel.bill.innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
+
     //Belle's level
     elCharacterLevel.belle.innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
+
     //Greg's Level
     elCharacterLevel.greg.innerText="Lvl: "+DisplayRounded(Gregory.lvl);
+
     //Blacksmiths Upgrade Cost
     elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
+
     //Hoe Counts
     DisplayHoes(Boomer_Bill);
     DisplayHoes(Belle_Boomerette);
     DisplayHoes(Gregory);
+
     //The Prestige Potential
     let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
     let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
     prestige_info.innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
+
     // Greg's Hoe Prices
     elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;
     elHoePrices.stone.innerText     = `${DisplayRounded(Gregory.HoePrices[1],1)}`;
@@ -386,7 +396,7 @@ setInterval(()=>{
 },100);
 // Autosave
 setInterval(() => {
-     if(player){
+    if(player){
         localStorage.setObject("player",player);
         localStorage.setObject("Bill",Boomer_Bill);
         localStorage.setObject("Belle",Belle_Boomerette);
@@ -424,7 +434,7 @@ tipchange = function(){
     }
     dom("Tip").innerText=tips.tips_fun[tipnumber];
     tipTracker = tipnumber;
-    return;   
+    return;
 }
 // Automatically change tips
 setInterval(tipchange(), 10000);

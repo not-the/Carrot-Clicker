@@ -27,10 +27,10 @@
       </p>
       <!-- Dialog Options -->
       <div id="dialog_buttons">
-        <button class="button_red">
+        <button class="button_red" onclick="closeDialog()">
           Option 1
         </button>
-        <button>
+        <button onclick="closeDialog()">
           Option 2
         </button>
       </div>
@@ -39,7 +39,7 @@
 
   <!-- Corner Toasts -->
   <div id="toast_container">
-    <div id="toasts_clear">
+    <div id="toasts_clear" onclick="clearToasts()">
       Close All
     </div>
     <!-- <div class="toast background_red" id="toastID">

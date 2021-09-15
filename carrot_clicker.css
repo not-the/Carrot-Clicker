@@ -3,6 +3,12 @@
     --warning-red: rgb(255, 65, 65);
 }
 
+/* Scrollbar */
+::-webkit-scrollbar-track {
+    background-color: lawngreen;
+    width: 100px;
+}
+
 /* Universal */
 * {
     box-sizing: border-box;
@@ -181,6 +187,7 @@ input {
     flex-direction: column-reverse;
 
     max-height: 100%;
+    /* max-height: 400px; */
     overflow: auto;
 }
 .toast {

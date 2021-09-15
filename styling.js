@@ -10,7 +10,7 @@ var mouseY = 0;
 
 // Popup counters (unique IDs so that they are deleted after a set time)
 var toastID = 0;
-var activeToasts = [];
+var activeToasts = 0;
 var bonusID = 0;
 
 // Dialog Elements
@@ -76,26 +76,31 @@ function toast(title, desc, color, persistent) {
         <p>${desc}</p>
     </div>`;
 
+    let id = toastID
+
+    closeToast(id);
     toastContainer.prepend(toastElement);
 
+    // Increase Toast ID
+    activeToasts++;
+    if(toastID <= 100) {
+        toastID++;
+    } else {
+        toastID = 0;
+    }
     
 
-    // console.log("toast ID is " + toastID);
-    let id = toastID
+    // Clear all button
+    if(activeToasts > 2) {
+        console.log("Making clear all visible");
+        toastsClear.classList.add("visible");
+    }
+
     if(!persistent) {
         setTimeout(() => {
             // console.log("Timeout runs: " + toastID);
             closeToast(id);
         }, 6000);
-    }
-    
-    // Increase Toast ID
-    toastID++;
-    activeToasts.push(id);
-
-    // Clear all button
-    if(activeToasts > 2) {
-        toastsClear.classList.add("visible");
     }
 }
 
@@ -106,7 +111,8 @@ function closeToast(id) {
     element = dom(`toast${id}`);
     
     // Dismiss Animation
-    element.classList.add("toast_out");
+    if(element !== null) {element.classList.add("toast_out");}
+    
 
     // Delete Element after animation is done
     setTimeout(() => {
@@ -115,9 +121,16 @@ function closeToast(id) {
 
     // Clear all button
     if(activeToasts <= 2) {
+        console.log("Making clear all hidden");
         toastsClear.classList.remove("visible");
     }
 }
+
+// function clearToasts() {
+//     for(i = 0; i <= 100; i++) {
+//         closeToast(i);
+//     }
+// }
 
 // Carrot animations
 clickingArea.addEventListener("mousedown", () => {mainCarrot.style.transform = "scale(0.98,0.98)";});
