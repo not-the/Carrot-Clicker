@@ -45,7 +45,7 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
-//Degault Values Stored in a Player Object
+//Default Values Stored in a Player Object
 const player1 = {
     Carrots:0,
     cpc:0,
@@ -246,24 +246,27 @@ function DisplayRounded(Value,Fixedto=3){
 }
 
 //Carrots per second
-setInterval(function(){
-player.Carrots+=player.cps/25;
-},25);
+function CarrotsPerSecond(){
+    player.Carrots+=player.cps/10;
+}
+var cpsInterval = setInterval(CarrotsPerSecond,100);
 
 //Prestige
 function Prestige(){
+    clearInterval(cpsInterval)
     player.golden_carrots+=player.prestige_potential;
     player.LifetimeGoldenCarrots+=player.prestige_potential;
     Boomer_Bill.lvlupPrice=100;
     Belle_Boomerette.lvlupPrice=500;
     Gregory.lvlupPrice=5000;
-    [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,player.Carrots]=[1,0,0,0];
+    [Boomer_Bill.lvl,Belle_Boomerette.lvl,Gregory.lvl,]=[1,0,0];
     Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
     Boomer_Bill.Hoes=[0,0,0,0,0,0];
     Belle_Boomerette.Hoes=[0,0,0,0,0,0];
     Gregory.Hoes=[0,0,0,0,0,0];
-
-    closeDialog();
+    player.Carrots=0;
+    cpsInterval = setInterval(CarrotsPerSecond,100);
+    closeDialog(); 
 }
 //Charles Functions
 function BetterHoes(){
@@ -291,7 +294,6 @@ function ImproveWorkingConditions(){
     }
     toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)))+" golden carrots To purchase that.")
 }
-
 // delete save
 function ClearLocalStorage(){
     localStorage.clear();
@@ -379,10 +381,10 @@ setInterval(()=>{
 
     dom("charlestooltip").innerHTML=
         `IWC:${Math.floor(100*Charles.ImproveWorkingConditions)}% BH:${Math.floor(100*Charles.BetterHoes)}% DWW:${Math.floor(100*Charles.DecreaseWages)}%`;
-},25);
+},100);
 // Autosave
 setInterval(() => {
-    if(player){
+     if(player){
         localStorage.setObject("player",player);
         localStorage.setObject("Bill",Boomer_Bill);
         localStorage.setObject("Belle",Belle_Boomerette);
@@ -397,7 +399,6 @@ setInterval(() => {
         location.reload();
     }
 }, 2000);
-
 // Tips
 var tipTracker = 1;
 var tipType = 0
