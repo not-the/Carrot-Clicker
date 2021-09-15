@@ -88,7 +88,6 @@ function toast(title, desc, color, persistent) {
     } else {
         toastID = 0;
     }
-    
 
     // Clear all button
     if(activeToasts > 2) {
@@ -100,7 +99,8 @@ function toast(title, desc, color, persistent) {
         setTimeout(() => {
             // console.log("Timeout runs: " + toastID);
             closeToast(id);
-        }, 6000);
+        }, store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000
+        );
     }
 }
 
@@ -169,6 +169,24 @@ function panelChange(to) {
     }
 }
 
+// Temporary option thing
+const notificationLength = dom("notificationLength");
+function saveOption() {
+    let value = notificationLength.value;
+    if(value >= 2 && value <= 15) {
+        console.log(`[Settings] Notification length set to: ${value}`);
+        store("notificationLength", value);
+        toast("Notification time set", `Notification will disappear after ${value} seconds`);
+    } else {
+        toast("Invalid Number", "Must be between 2 and 15 seconds", "red");
+    }
+}
+function resetOption() {
+    notificationLength.value = 5;
+    localStorage.removeItem("notificationLength");
+    toast("Notification time reset", `Notification will disappear after 5 seconds`);
+}
+
 // Click bonus popup
 function popupHandler() {
     // Create Element
@@ -234,6 +252,11 @@ function popupHandler() {
 })();
 
 
+
+// Runs on startup
+if(store("notificationLength") !== null) {
+    notificationLength.value = parseInt(store("notificationLength"));
+}
 
 
 // Tutorial things maybe
