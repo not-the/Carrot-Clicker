@@ -195,9 +195,12 @@ input {
     max-height: 100%;
     /* max-height: 400px; */
     overflow: auto;
+
+    pointer-events: none;
 }
 .toast {
     width: 300px;
+    pointer-events:initial;
 }
 .toast, #toasts_clear {
     margin: 16px;
@@ -210,9 +213,9 @@ input {
     position: relative;
     word-break: break-word;
 
-    animation: toast 0.5s;
+    animation: toast 0.4s;
 }
-.toast_out {animation: toast_out 0.5s forwards;}
+.toast_out {animation: toast_out 0.25s forwards;}
 @keyframes toast {
     from {
         transform: translateY(20px);
@@ -364,9 +367,7 @@ input {
 
 /* Right section */
 .character_column {
-    width: 400px;
     height: 100%;
-    margin: 0;
 }
 
 /* Characters */
@@ -378,6 +379,7 @@ input {
     width: 362px;
     margin: 0px;
     margin-bottom: 8px;
+    margin-right: 10px;
     z-index: 10;
 
     border-radius: 10px;
@@ -477,8 +479,10 @@ input {
     /* visibility: hidden; */
     width:100%;
     background-color: gray;
+    transition: 0.1s;
 }
 #Wooden_Hoe_Progress{
+    transition: 0.1s;
     width:1%;
     max-width: 100%;
     height:10px;
@@ -605,9 +609,9 @@ input {
 /* Media queries */
 /* Minimum supported width: 417px */
 @media only screen and (max-width: 848px) {
-    #Basic_Info {
-        visibility: hidden;
-        position: absolute;
+    .Basic_Info {
+        flex-direction: column;
+        text-align: center;
     }
     #Tip {
         margin-left: unset;
@@ -627,7 +631,6 @@ input {
     }
     #right-section {
         border: none;
-        border-top: 1px solid white;
     }
 }
 

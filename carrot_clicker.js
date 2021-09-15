@@ -324,7 +324,7 @@ setInterval(()=>{
     //providing updated information to the player
 
     //// Update numbers on page ////
-    
+
     // Top bar (Might bring back later - don't delete)
     // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
@@ -366,7 +366,7 @@ setInterval(()=>{
     let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
     let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
-    prestige_info.innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
+    prestige_info.innerText = DisplayRounded(player.prestige_potential,2);
 
     // Greg's Hoe Prices
     elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;

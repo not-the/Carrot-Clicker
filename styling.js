@@ -264,6 +264,7 @@ if(store("notificationLength") !== null) {
 // Initial Welcome
 if(store("tutorial_sample") == null) {
     store("tutorial_sample", "done");
+    toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
 } else if(store("tutorial_sample") == "done") {
     // Temporary two step until someone fixes the storage issue
     store("tutorial_sample", "really_done");

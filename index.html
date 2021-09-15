@@ -73,12 +73,16 @@
         <p id="Carrot_Count">Working...</p>
         <p id="cpc">Carrots per click:</p>
         <p id="cps">Carrots per second:</p>
-        <p id="golden_carrot_count" class="golden"></p>
+        <p id="golden_carrot_count"></p>
        
         <!-- Prestige Section -->
         <div id="prestige-section">
-          <button type="button" onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', prestigeButtons)" class="button_gold">Prestige</button>
-          <p id="Prestige" class="prestigetooltip"><p>
+          <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', prestigeButtons)" class="button_gold">
+            Prestige
+          </button>
+          <p class="prestigetooltip">
+            Prestiging now will result in <span id="Prestige">0</span> Golden Carrots
+          </p>
         </div>
 
       </div>
@@ -310,6 +314,8 @@
       <!-- Info Panel -->
       <div id="info-panel" class="panel">
         <div id="info-inner">
+          <h1>Statistics</h1>
+          <p>Lifetime statistics will go here</p>
           
           <!-- <div class="info-item">
             <img src="assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
@@ -317,9 +323,9 @@
               <h1>Achievement earned: Click the carrot</h1>
               <p>Click the carrot</p>
             </div>
-          </div>
-
-        </div> -->
+          </div>-->
+        
+        </div> 
       </div>
 
       <!-- Achievements Panel -->
