@@ -324,8 +324,9 @@ setInterval(()=>{
     //providing updated information to the player
 
     //// Update numbers on page ////
-    // Top bar
-    Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+    
+    // Top bar (Might bring back later - don't delete)
+    // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
     // New display
     elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;

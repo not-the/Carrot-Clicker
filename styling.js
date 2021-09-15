@@ -264,5 +264,8 @@ if(store("notificationLength") !== null) {
 // Initial Welcome
 if(store("tutorial_sample") == null) {
     store("tutorial_sample", "done");
+} else if(store("tutorial_sample") == "done") {
+    // Temporary two step until someone fixes the storage issue
+    store("tutorial_sample", "really_done");
     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
 }

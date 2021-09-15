@@ -23,6 +23,12 @@ body {
 p {
     margin: 0;
 }
+a {
+    color: rgb(137, 184, 255);
+}
+a:hover {
+    filter: brightness(120%);
+}
 .flex {
     display: flex;
 }
@@ -52,7 +58,7 @@ button:hover {
     background-color: white;
 
     transform: translateY(-1px);
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.219);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 input {
     padding: 4px 8px;
@@ -285,7 +291,7 @@ input {
 
 /* Informational */
 .Basic_Info {
-    background-color: rgb(36, 34, 34);
+    background-color: #4e3f34;
     background-image: url(./assets/Dirt-Background.jpg);
     padding: 8px 20px;
     border: 2px solid rgb(255, 255, 255);
@@ -364,12 +370,22 @@ input {
 }
 
 /* Characters */
-.characterbox{
+.characterbox {
+    background: #312e2e;
     position: relative;
-    border: 3px solid rgb(29, 248, 0);
+    border: 3px solid #312e2e;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     width: 362px;
     margin: 0px;
+    margin-bottom: 8px;
     z-index: 10;
+
+    border-radius: 10px;
+    overflow: hidden;
+}
+.bottom {
+    padding-top: 2px;
+    background: #242222;
 }
 /* Character tooltips */
 .tooltip {
@@ -411,7 +427,8 @@ input {
     transition: 0.25s;
     cursor: pointer;
 }
-.levelupimg {  
+.levelupimg {
+    margin-bottom: -6px;
     width: 48px;
     height: 40px;
     cursor: pointer;
@@ -437,9 +454,6 @@ input {
 }
 
 /* Greg */
-/* .Greg .levelupimg {
-    position: relative;
-} */
 .Greg .toolicon {
     height: 45px;
     margin-bottom: 20px;
@@ -454,6 +468,9 @@ input {
     transform: translateY(44px);
     width: 45px;
     text-align: center;
+}
+.Greg .levelupimg {
+    margin-bottom: 25px;
 }
 #Wooden_Hoe_Bar{
     /* Unhide when bar is active: */
