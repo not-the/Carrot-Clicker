@@ -10,6 +10,7 @@ var mouseY = 0;
 
 // Popup counters (unique IDs so that they are deleted after a set time)
 var toastID = 0;
+var activeToasts = [];
 var bonusID = 0;
 
 // Dialog Elements
@@ -21,6 +22,7 @@ const elDialog = {
     buttons: dom("dialog_buttons")
 };
 const toastContainer = dom("toast_container");
+const toastsClear = dom("toasts_clear");
 const clearDataButtons =
     `<button class="button_red" onclick="ClearLocalStorage()">
         Delete Save Data
@@ -76,6 +78,8 @@ function toast(title, desc, color, persistent) {
 
     toastContainer.prepend(toastElement);
 
+    
+
     // console.log("toast ID is " + toastID);
     let id = toastID
     if(!persistent) {
@@ -85,14 +89,20 @@ function toast(title, desc, color, persistent) {
         }, 6000);
     }
     
-
     // Increase Toast ID
     toastID++;
+    activeToasts.push(id);
+
+    // Clear all button
+    if(activeToasts > 2) {
+        toastsClear.classList.add("visible");
+    }
 }
 
 // Delete Toast Notification
 function closeToast(id) {
     // console.log(id + "toast removed");
+    activeToasts--;
     element = dom(`toast${id}`);
     
     // Dismiss Animation
@@ -102,6 +112,11 @@ function closeToast(id) {
     setTimeout(() => {
         if(element !== null) {element.remove();}
     }, 300);
+
+    // Clear all button
+    if(activeToasts <= 2) {
+        toastsClear.classList.remove("visible");
+    }
 }
 
 // Carrot animations
@@ -111,9 +126,9 @@ clickingArea.addEventListener("mouseup", () => {mainCarrot.style.transform = "sc
 // Panel handler
 var currentPanel = "info-panel";
 // Tab Panels
-const infoPanel = dom("info-panel");
+const infoPanel =       dom("info-panel");
 const achievementsPanel = dom("achievements-panel");
-const settingsPanel = dom("settings-panel");
+const settingsPanel =   dom("settings-panel");
 
 // Tab Buttons
 const infoTab =         dom("info-panel-button");
