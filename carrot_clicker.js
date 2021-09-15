@@ -73,7 +73,7 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
 
 // Character Defaults
 const Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-const Belle_Boomerette1 = new Character("Farmer",0,500,[0,0,0,0,0,0]);
+const Belle_Boomerette1 = new Character("Farmer",0,450,[0,0,0,0,0,0]);
 const Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
 Gregory1.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 const Charles1 = {
@@ -126,14 +126,16 @@ function onClick() {
 //level up characters 
 function LevelUp(character){
     if(player.Carrots>=character.lvlupPrice) {
-        if(character==Gregory){
-            character.lvl+=1;
-            player.Carrots-=character.lvlupPrice;
-            character.lvlupPrice=Math.floor(character.lvlupPrice*1.2);
-            return;
-        }
         character.lvl+=1;
         player.Carrots-=character.lvlupPrice;
+        if(character==Gregory){
+            character.lvlupPrice=Math.floor(character.lvlupPrice*1.195);
+            return;
+        }
+        if(character==Belle){
+            character.lvlupPrice=Math.floor(character.lvlupPrice*1.10109);
+            return;
+        }
         character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
     }
 }
@@ -144,7 +146,7 @@ function CreateHoe(type) {
         return;
     }
     //Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)&&Gregory.lvl<=1){
+    if(Gregory.lvl<=(type*25)){
         if(type>=1){
             toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: " + (type*25) + " to create this hoe");
             return;
@@ -352,7 +354,7 @@ setInterval(()=>{
     DisplayHoes(Gregory);
     //The Prestige Potential
     let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
-    let h = 0.005*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
+    let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
     prestige_info.innerText = "Prestiging now will result in "+DisplayRounded(player.prestige_potential,2)+" Golden Carrots";
     // Greg's Hoe Prices
