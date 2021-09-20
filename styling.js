@@ -1,17 +1,18 @@
 //// UI HANDLER ////
 const bonusVisualArea = dom("bonusVisualArea");
-const clickingArea = dom("clicking_area");
-const mainCarrot = dom("main_carrot");
-// var tooltipBill = dom("billtooltip").style.top;
-// var tooltipBelle = dom("belletooltip").style.top;
-// var tooltipGreg = dom("gregtooltip").style.top;
+const clickingArea =    dom("clicking_area");
+const mainCarrot =      dom("main_carrot");
+var tooltipBill = dom("billtooltip").style.top;
+var tooltipBelle = dom("belletooltip").style.top;
+var tooltipGreg = dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 
 // Popup counters (unique IDs so that they are deleted after a set time)
-var toastID = 0;
+var toastID =      0;
 var activeToasts = 0;
-var bonusID = 0;
+var toastsList =  {};
+var bonusID =      0;
 
 // Dialog Elements
 const overlay = dom("overlay");
@@ -21,8 +22,8 @@ const elDialog = {
     desc:    dom("dialog_desc"),
     buttons: dom("dialog_buttons")
 };
-const toastContainer = dom("toast_container");
-const toastsClear = dom("toasts_clear");
+const toastContainer =  dom("toast_container");
+const toastsClear =     dom("toasts_clear");
 const clearDataButtons =
     `<button class="button_red" onclick="ClearLocalStorage()">
         Delete Save Data
@@ -37,6 +38,8 @@ const prestigeButtons =
     <button onclick="closeDialog()">
         Cancel
     </button>`;
+
+
 
 // Popup Notifications
 function openDialog(title, desc, buttons) {
@@ -63,23 +66,24 @@ function closeDialog() {
     // elDialog.main.classList.remove("dialog_animate");
 }
 
+
+
 // Create Toast notification
 // For the COLOR parameter, options are:
 // gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt" 
 function toast(title, desc, color, persistent) {
+    // Create element with parameters filled in
     var toastElement = document.createElement("div");
-
     toastElement.innerHTML =
     `<div class="toast background_${color}" id="toast${toastID}">
         <h3>${title}</h3>
         <span class="toast_close" onclick="closeToast(${toastID})">X</span>
         <p>${desc}</p>
     </div>`;
-
-    let id = toastID
-
-    closeToast(id);
     toastContainer.prepend(toastElement);
+
+    let id = toastID;
+    toastsList[toastID] = id;
 
     // Increase Toast ID
     activeToasts++;
@@ -89,9 +93,10 @@ function toast(title, desc, color, persistent) {
         toastID = 0;
     }
 
+
+
     // Clear all button
     if(activeToasts > 2) {
-        console.log("Making clear all visible");
         toastsClear.classList.add("visible");
     }
 
@@ -106,14 +111,14 @@ function toast(title, desc, color, persistent) {
 
 // Delete Toast Notification
 function closeToast(id) {
-    // console.log(id + "toast removed");
+    // console.log(id + " - toast removed");
     activeToasts--;
+    delete toastsList[id];
     element = dom(`toast${id}`);
     
     // Dismiss Animation
     if(element !== null) {element.classList.add("toast_out");}
     
-
     // Delete Element after animation is done
     setTimeout(() => {
         if(element !== null) {element.remove();}
@@ -121,20 +126,18 @@ function closeToast(id) {
 
     // Clear all button
     if(activeToasts <= 2) {
-        console.log("Making clear all hidden");
         toastsClear.classList.remove("visible");
     }
 }
 
-// function clearToasts() {
-//     for(i = 0; i <= 100; i++) {
-//         closeToast(i);
-//     }
-// }
+function clearToasts() {
+    for(entry in toastsList) {
+        console.log(entry);
+        closeToast(entry);
+    }
+}
 
-// Carrot animations
-clickingArea.addEventListener("mousedown", () => {mainCarrot.style.transform = "scale(0.98,0.98)";});
-clickingArea.addEventListener("mouseup", () => {mainCarrot.style.transform = "scale(1,1)";});
+
 
 // Panel handler
 var currentPanel = "info-panel";
@@ -169,6 +172,9 @@ function panelChange(to) {
     }
 }
 
+
+
+
 // Temporary option thing
 const notificationLength = dom("notificationLength");
 function saveOption() {
@@ -181,11 +187,14 @@ function saveOption() {
         toast("Invalid Number", "Must be between 2 and 15 seconds", "red");
     }
 }
+// Reset notification time to default
 function resetOption() {
     notificationLength.value = 5;
     localStorage.removeItem("notificationLength");
     toast("Notification time reset", `Notification will disappear after 5 seconds`);
 }
+
+
 
 // Click bonus popup
 function popupHandler() {
