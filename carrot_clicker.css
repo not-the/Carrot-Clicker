@@ -486,19 +486,37 @@ input {
 .Greg .levelupimg {
     margin-bottom: 25px;
 }
-#Wooden_Hoe_Bar{
+#Greg_Bar{
     /* Unhide when bar is active: */
     /* visibility: hidden; */
     width: 100%;
-    background-color: gray;
-    transition: width 0.1s;
+    background: gray;
+    border-end-start-radius: 10px;
+    border-end-end-radius: 10px;
+    overflow: hidden;
 }
-#Wooden_Hoe_Progress{
+#Greg_Progress {
     transition: width 0.1s;
     width: 0%;
     max-width: 100%;
     height: 10px;
-    background-color: lightgreen;
+    background: lightgreen;
+    background-repeat: repeat-x;
+    background: repeating-linear-gradient(
+        45deg,
+        lightgreen,
+        lightgreen 14px,
+        rgb(94, 209, 94) 14px,
+        rgb(94, 209, 94) 28px
+        );
+    background-position: left;
+    animation: progress_animate 12s infinite linear;
+}
+@keyframes progress_animate {
+    to {
+        background-position: left;
+        background-position-x: -400px;
+    }
 }
 /* Charles */
 .Charles button {

@@ -30,7 +30,7 @@ const elCharacterLevel = {
     bill:  dom("Bill_lvl"),
     belle: dom("Belle_lvl"),
     greg:  dom("Greg_lvl") 
-}
+};
 const elHoePrices = {
     wooden:     dom("wooden_hoe_price"),
     stone:      dom("stone_hoe_price"),
@@ -38,8 +38,14 @@ const elHoePrices = {
     gold:       dom("gold_hoe_price"),
     diamond:    dom("diamond_hoe_price"),
     netherite:  dom("netherite_hoe_price")
+};
+const elGregProgress = dom("Greg_Progress");
+const elCharles = {
+    improveWorkingConditions: dom("ImproveWorkingConditions"),
+    betterHoes:               dom("BetterHoes"),
+    decreaseWages:            dom("DecreaseWages"),
+    charlesTooltip:           dom("charlestooltip")
 }
-
 
 /*-------------Local Storage and Characters-------------*/
 
@@ -250,7 +256,6 @@ function CreateHoe(type) {
         if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
             if (i == 0) {
                 i = 1;
-                var elem = dom("Wooden_Hoe_Progress");
                 var p = 0;
                 var id = setInterval(frame,100);
                 function frame() {
@@ -259,16 +264,16 @@ function CreateHoe(type) {
                         i = 0;
                         player.Carrots+=p-price;
                         p=0;
-                        elem.style.width = 0 + "%";
+                        elGregProgress.style.width = 0 + "%";
                         Gregory.Hoes[type]+=1;
                         Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
                         n=0;
-                    }else{
+                    } else {
                         p+=(0.01*player.Carrots);
                         player.Carrots-=(0.01*player.Carrots);
-                        elem. style.width = 100*(p/price) + "%";
+                        elGregProgress.style.width = 100*(p/price) + "%";
                     }
-                    
+
                 }
             } 
         } else {
@@ -420,21 +425,23 @@ setInterval(()=>{
         dom("prestige-section").style.visibility="visible";
     }
     //Charles Upgrades
-    dom("ImproveWorkingConditions").innerHTML=
-        `Improve Working Conditions
-        Costs: ${Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))} Golden Carrots`;
+    elCharles.improveWorkingConditions.innerHTML =
+       `Improve Working Conditions
+       Costs: ${Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))} Golden Carrots`;
 
-    dom("BetterHoes").innerHTML=
-        `Improve all Hoes
-        Costs: ${Math.floor(Math.pow(Charles.BetterHoes,1.25))} Golden Carrots`;
+    elCharles.betterHoes.innerHTML =
+       `Improve all Hoes
+       Costs: ${Math.floor(Math.pow(Charles.BetterHoes,1.25))} Golden Carrots`;
 
-    dom("DecreaseWages").innerHTML=
-        `Decrease Worker Wages
-        Costs: ${Math.floor(Math.pow(Charles.DecreaseWages,1.25))} Golden Carrots`;
+    elCharles.decreaseWages.innerHTML =
+      `Decrease Worker Wages
+      Costs: ${Math.floor(Math.pow(Charles.DecreaseWages,1.25))} Golden Carrots`;
 
-    dom("charlestooltip").innerHTML=
-        `IWC:${Math.floor(100*Charles.ImproveWorkingConditions)}% BH:${Math.floor(100*Charles.BetterHoes)}% DWW:${Math.floor(100*Charles.DecreaseWages)}%`;
-},100);
+    elCharles.charlesTooltip.innerHTML =
+       `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
+       BH: ${Math.floor(100*Charles.BetterHoes)}%\n
+       DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
+}, 100);
 
 /*---------Auto Saves----------*/
 setInterval(() => {
