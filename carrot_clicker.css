@@ -1,18 +1,20 @@
+/* Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* Variables */
 :root {
     --golden-carrot: rgb(250, 225, 0);
     --warning-red: rgb(255, 65, 65);
 }
 
 /* Scrollbar */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
     background-color: lawngreen;
     width: 100px;
-}
+} */
 
 /* Universal */
-* {
-    box-sizing: border-box;
-}
+* {box-sizing: border-box;}
 body {
     margin: 0;
     padding: 0;
@@ -20,17 +22,16 @@ body {
     color: white;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
-p {
-    margin: 0;
-}
-a {
-    color: rgb(137, 184, 255);
-}
-a:hover {
-    filter: brightness(120%);
-}
-.flex {
-    display: flex;
+
+p {margin: 0;}
+a {color: rgb(137, 184, 255);}
+a:hover {filter: brightness(120%);}
+
+.flex {display: flex;}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
 }
 #container {
     justify-content: center;
@@ -268,7 +269,8 @@ input {
 /* Number Popup */
 .clickvisual {
     font-size: 24pt;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    /* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+    font-family: 'Anton', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
