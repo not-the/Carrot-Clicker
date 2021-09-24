@@ -27,11 +27,11 @@
       </p>
       <!-- Dialog Options -->
       <div id="dialog_buttons">
-        <button class="button_red" onclick="closeDialog()">
-          Option 1
+        <button onclick="closeDialog()" id="dialog_button_accept">
+          OK
         </button>
-        <button onclick="closeDialog()">
-          Option 2
+        <button onclick="closeDialog()" id="dialog_button_cancel">
+          Cancel
         </button>
       </div>
     </div>
@@ -74,7 +74,7 @@
        
         <!-- Prestige Section -->
         <div id="prestige-section">
-          <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', prestigeButtons)" class="button_gold">
+          <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', Prestige)" class="button_gold">
             Prestige
           </button>
           <p class="prestigetooltip">
@@ -351,7 +351,7 @@
         </label><br>
           
         <!-- Options item -->
-        <button id="clear_save_data" class="button_red" onclick="openDialog('Are you sure?', 'Your progress will be lost forever!', clearDataButtons)">
+        <button id="clear_save_data" class="button_red" onclick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', ClearLocalStorage)">
           Delete Save Data
         </button>
       </div>

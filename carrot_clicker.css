@@ -388,6 +388,9 @@ input {
     position: relative;
     z-index: 10;
 }
+.characterbox:hover {
+    z-index: 11;
+}
 .bottom {
     padding-top: 2px;
     background: #242222;
@@ -660,6 +663,13 @@ input {
     }
     #right-section {
         border: none;
+    }
+    .charactertooltip {
+        bottom: 0;
+        transform: translate(0px, calc(100% + 10px));
+
+        background: black;
+        backdrop-filter: none;
     }
 }
 

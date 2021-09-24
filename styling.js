@@ -20,50 +20,50 @@ const elDialog = {
     main:    dom("dialog"),
     title:   dom("dialog_title"),
     desc:    dom("dialog_desc"),
-    buttons: dom("dialog_buttons")
+    buttons: {
+        container: dom("dialog_buttons"),
+        accept:    dom("dialog_button_accept"),
+        cancel:    dom("dialog_button_cancel")
+    }
 };
 const toastContainer =  dom("toast_container");
 const toastsClear =     dom("toasts_clear");
-const clearDataButtons =
-    `<button class="button_red" onclick="ClearLocalStorage()">
-        Delete Save Data
-    </button>
-    <button onclick="closeDialog()">
-        Cancel
-    </button>`;
-const prestigeButtons = 
-    `<button class="button_gold" onclick="Prestige()">
-        Prestige
-    </button>
-    <button onclick="closeDialog()">
-        Cancel
-    </button>`;
 
-
+function testFunction(param) {
+    console.log("testFunction runs");
+}
 
 // Popup Notifications
-function openDialog(title, desc, buttons) {
+function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     overlay.classList.add("visible");
     // elDialog.main.classList.add("dialog_animate");
 
     // Fill out dialog text, if applicable
-    if(title) {elDialog.title.innerText = title;}
-    if(desc) {elDialog.desc.innerText = desc;}
-
-    if(buttons) {elDialog.buttons.innerHTML = buttons;}
-    else {
-        elDialog.buttons.innerHTML =
-            `<button>
-                OK
-            </button>
-            <button>
-                Cancel
-            </button>`;
+    if(title)       {elDialog.title.innerText = title;}
+    if(desc)        {elDialog.desc.innerText = desc;}
+    if(buttonName)  {elDialog.buttons.accept.innerText = buttonName;}
+    if(buttonStyle) {
+        elDialog.buttons.accept.classList.add(buttonStyle);
+    }
+    if(buttonAction == Function) {
+        elDialog.buttons.accept.onclick = buttonAction;
     }
 }
-function closeDialog() {
+function closeDialog(action) {
+    elDialog.title.innerText = 'Dialog Title';
+    elDialog.desc.innerText = 'Dialog description';
+    // Reset Accept button
+    elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
+    elDialog.buttons.accept.onclick = closeDialog;
+    elDialog.buttons.accept.innerText = "OK";
+
     overlay.classList.remove("visible");
     // elDialog.main.classList.remove("dialog_animate");
+
+    // Run passed in function if applicable
+    if(action) {
+        action();
+    }
 }
 
 

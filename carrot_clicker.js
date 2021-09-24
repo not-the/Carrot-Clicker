@@ -168,7 +168,6 @@ function Prestige() {
     [Boomer_Bill.Hoes,Belle_Boomerette.hoes,Gregory.HoePrices] = [Boomer_Bill1.HoePrices,Belle_Boomerette.HoePrices,Gregory1.HoePrices];
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
-    closeDialog();
 }
 
 
