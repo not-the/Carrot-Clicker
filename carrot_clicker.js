@@ -9,7 +9,7 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 var n = 0;
 
 /*------------Page Setup---------------*/
-
+//#region
 // getElementById shorthand
 function dom(id) {return document.getElementById(id);}
 
@@ -98,9 +98,11 @@ const elCharles = {
     decreaseWages:            dom("DecreaseWages"),
     charlesTooltip:           dom("charlestooltip")
 }
+//#endregion
+
 
 /*-------------Local Storage and Characters-------------*/
-
+//#region
 
 
 // Local Storage shorthand (Strings only)
@@ -149,30 +151,33 @@ const player1 = {
 
 
 // Character Defaults
-const Boomer_Bill1 = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-const Belle_Boomerette1 = new Character("Farmer",0,450,[0,0,0,0,0,0]);
-const Gregory1 = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
-Gregory1.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
-const Charles1 = {
-    BetterHoes:1,
-    ImproveWorkingConditions:1,
-    DecreaseWages:1
+const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
+const Default_Belle_Boomerette = new Character("Farmer",0,450,[0,0,0,0,0,0]);
+const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
+Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+
+const Default_Charles = {
+    BetterHoes:0,
+    BetterHoesPrice:1,
+    ImproveWorkingConditions:0,
+    ImproveWorkingConditionsPrice:1,
+    DecreaseWages:0,
+    DecreaseWagesPrice:1
 }
 
 
-// Creates the Local storage
-const Charles =          localStorage.getObject("Charles");
-const player =           localStorage.getObject("player");
-const Boomer_Bill =      localStorage.getObject("Bill");
+//Asigns the Local storage
+const Charles          = localStorage.getObject("Charles");
+const player           = localStorage.getObject("player");
+const Boomer_Bill      = localStorage.getObject("Bill");
 const Belle_Boomerette = localStorage.getObject("Belle");
-const Gregory =          localStorage.getObject("Greg");
+const Gregory          = localStorage.getObject("Greg");
 
-
-
+//#endregion
 
 
 /* ----------------------Functions------------------------*/
-
+//#region
 //On Carrots Click
 function onClick() {
     player.Carrots+=player.cpc;
@@ -220,9 +225,9 @@ function Prestige() {
     clearInterval(cpsInterval);
     player.golden_carrots += player.prestige_potential;
     player.LifetimeGoldenCarrots += player.prestige_potential;
-    [Boomer_Bill.lvlupPrice,Belle_Boomerette.lvlupPrice, Gregory.lvlupPrice] = [Boomer_Bill1.lvlupPrice,Belle_Boomerette1.lvlupPrice,Gregory1.lvlupPrice];
-    [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [1,0,0];
-    [Boomer_Bill.Hoes,Belle_Boomerette.hoes,Gregory.HoePrices] = [Boomer_Bill1.HoePrices,Belle_Boomerette.HoePrices,Gregory1.HoePrices];
+    [Boomer_Bill.lvlupPrice,Belle_Boomerette.lvlupPrice, Gregory.lvlupPrice] = [Default_Boomer_Bill.lvlupPrice,Default_Belle_Boomerette.lvlupPrice,Default_Gregory.lvlupPrice];
+    [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [Default_Boomer_Bill.lvl,Default_Belle_Boomerette.lvl,Default_Gregory.lvl];
+    [Boomer_Bill.Hoes,Belle_Boomerette.hoes,Gregory.HoePrices] = [Default_Boomer_Bill.HoePrices,Default_Belle_Boomerette.HoePrices,Default_Gregory.HoePrices];
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
 }
@@ -230,48 +235,17 @@ function Prestige() {
 
 // Charles Functions
 
-function BetterHoes(){
-    if(Math.floor(Math.pow(Charles.BetterHoes,1.25))<=player.golden_carrots){
-        player.golden_carrots-=Math.floor(Math.pow(Charles.BetterHoes,1.25));
-        Charles.BetterHoes=(Charles.BetterHoes*1.1);
-        return;
-    }
-    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.BetterHoes,1.25)))+" golden carrots to purchase that.");
-}
 
 
-function DecreaseWages(){
-    if(Math.floor(Math.pow(Charles.DecreaseWages,1.25))<=player.golden_carrots){
-        player.golden_carrots-=Math.pow(Charles.DecreaseWages,1.25);
-        Charles.DecreaseWages=(Charles.DecreaseWages*1.1);
-        return;
-    }
-    toast("Cant Afford That Upgrade", "It costs "+(Math.floor(Math.pow(Charles.DecreaseWages,1.25))) + " golden carrots to purchase that.");
-}
 
 
-function ImproveWorkingConditions(){
-    console.log("f");
-    if(Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25)) <= player.golden_carrots) {
-        player.golden_carrots -= Math.pow(Charles.ImproveWorkingConditions, 1.25);
-        Charles.ImproveWorkingConditions = (Charles.ImproveWorkingConditions * 1.1);
-        return;
-    }
-    toast("Cant Afford That Upgrade", "It costs " + (Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))) + " golden carrots To purchase that.");
-}
 
 
-function DecreaseWagesEffects(){
-    for(i=0;i<Charles.DecreaseWages;i++){
-        
-    }
-}
-
-
+//#endregion
 
 
 /*-----------Hoe Functions--------------*/
-
+//#region
 function CreateHoe(type) {
     // Return if a hoe is already in progress
     if(n==1){
@@ -405,84 +379,12 @@ function DisplayHoe(character, type) {
     }
 }
 
-// JJ display hoes function
-//Displays Each Characters Hoes
-/*function DisplayHoes(character = Boomer_Bill){
-    let param = character;
-    // Update Hoe numbers
-    for (i=0; i<character.Hoes.length; i++) {  
-        if (character==Boomer_Bill){
-            var hoetypes = [
-                "Bill_Wooden_Hoe_Number",
-                "Bill_Stone_Hoe_Number",
-                "Bill_Iron_Hoe_Number",
-                "Bill_Gold_Hoe_Number",
-                "Bill_Diamond_Hoe_Number",
-                "Bill_Netherite_Hoe_Number"
-            ]
-        } else if(character==Belle_Boomerette){
-            var hoetypes = [
-                "Belle_Wooden_Hoe_Number",
-                "Belle_Stone_Hoe_Number",
-                "Belle_Iron_Hoe_Number",
-                "Belle_Gold_Hoe_Number",
-                "Belle_Diamond_Hoe_Number",
-                "Belle_Netherite_Hoe_Number"
-            ]
-        } else if(character==Gregory){
-            var hoetypes = ["Greg_Wooden_Hoe_Number","Greg_Stone_Hoe_Number","Greg_Iron_Hoe_Number","Greg_Gold_Hoe_Number","Greg_Diamond_Hoe_Number","Greg_Netherite_Hoe_Number"]
-        }
 
-        // Update Hoe numbers
-        if (typeof character.Hoes[i] == undefined || character.Hoes[i]==0) {
-            dom(hoetypes[i]).innerText="";
-        } else {
-            dom(hoetypes[i]).innerText = `x${character.Hoes[i]}`;
-        }
-        
-    }
-
-    // Update hoe icons
-    switch(character) {
-        case Boomer_Bill:
-            hoeStates(elHoes.bill);
-            break;
-        case Belle_Boomerette:
-            hoeStates(elHoes.belle);
-            break;
-        case Gregory:
-            hoeStates("greg");
-            break;
-        default:
-            break;
-    }
-
-    function hoeStates(character) {
-        // Grey out hoes when you have 0 or greg has none to give
-        if(character !== String) {
-            // Bill/Belle hoes
-            for(i = 0; i < character.length; i++) {
-                if(param.Hoes[i] < 1 || Gregory.Hoes[i] < 1) {
-                    character[i].classList.add("blackedout");
-                }
-            }
-        } else {
-            // Greg hoes
-            for(i = 0; i < character.length; i++) {
-                if(param.Hoes[i] < 1 || Gregory.Hoes[i] < 1) {
-                    character[i].classList.add("grayedout");
-                }
-            }
-        }
-
-    }
-}*/
+//#endregion
 
 
 /* ----------------Quality of Life Functions --------------*/
-
-// Displaying Roundced Numbers example"100m 140b
-
+//#region
 
 //Creates Bases to Display Large Numbers 
 const Bases=[];
@@ -490,7 +392,7 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
     Bases.push(i);
 }
 
-
+// Displaying Roundced Numbers example"100m 140b
 function DisplayRounded(Value,Fixedto=3){
     var units = ["k","m","b","t","q","Q","s","S"];
     for(i=0;i<units.length;i++){
@@ -508,7 +410,12 @@ function ClearLocalStorage(){
     localStorage.clear();
     location.reload();
 }
+//#endregion
+
+
 /*---------------Main Game Loop---------------- */
+//#region
+
 setInterval(() => {
     // Calculates the CPC
     var cpcHoes = 
@@ -617,8 +524,12 @@ setInterval(() => {
        BH: ${Math.floor(100*Charles.BetterHoes)}%\n
        DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
 }, 100);
+//#endregion
+
 
 /*---------Auto Saves----------*/
+//#region
+
 setInterval(() => {
     if(player){
         localStorage.setObject("player",player);
@@ -628,19 +539,19 @@ setInterval(() => {
         localStorage.setObject("Charles",Charles)
     }else{
         localStorage.setObject("player",player1);
-        localStorage.setObject("Bill",Boomer_Bill1);
-        localStorage.setObject("Belle",Belle_Boomerette1);
-        localStorage.setObject("Greg",Gregory1);
-        localStorage.setObject("Charles",Charles1);
+        localStorage.setObject("Bill",Default_Boomer_Bill);
+        localStorage.setObject("Belle",Default_Belle_Boomerette);
+        localStorage.setObject("Greg",Default_Gregory);
+        localStorage.setObject("Charles",Default_Charles);
         location.reload();
     }
 }, 2000);
 
-
+//#endregion
 
 
 /*-----------Tips----------- */
-
+//#region
 const tips = {
     tips_basic: [
         "Click The Lvl Up Arrow to Level Up Characters",
@@ -691,3 +602,4 @@ tipchange = function(){
 
 // Automatically change tips
 setInterval(tipchange(), 10000);
+//#endregion
