@@ -235,9 +235,40 @@ function Prestige() {
 
 // Charles Functions
 
+function IncreaseImproveWorkingConditions(){
+    if(player.golden_carrots<Charles.ImproveWorkingConditionsPrice){
+        toast(
+            'Cannot afford',
+            `You need ${Charles.ImproveWorkingConditionsPrice} Golden Carrots to level up Improve Working Conditions`
+        );
+        return;
+    }
+    player.golden_carrots-=Charles.ImproveWorkingConditionsPrice;
+    Charles.ImproveWorkingConditions+=1;
+}
+function IncreaseBetterHoes(){
+    if(player.golden_carrots<Charles.BetterHoesPrice){
+        toast(
+            'Cannot afford',
+            `You need ${Charles.BetterHoesPrice} carrots to level up Better Hoes`
+        );
+        return;
+    }
+    player.golden_carrots-=Charles.BetterHoesPrice;
+    Charles.BetterHoes+=1;
+}
 
-
-
+function IncreaseDecreaseWages(){
+    if(player.golden_carrots<Charles.DecreaseWagesPrice){
+        toast(
+            'Cannot afford',
+            `You need ${Charles.DecreaseWagesPrice} carrots to level up Decrease Wages`
+        );
+        return;
+    }
+    player.golden_carrots-=Charles.DecreaseWagesPrice;
+    Charles.DecreaseWages+=1;
+}
 
 
 
@@ -418,39 +449,61 @@ function ClearLocalStorage(){
 
 setInterval(() => {
     // Calculates the CPC
-    var cpcHoes = 
-        (Boomer_Bill.Hoes[0])
+    var cpcHoes;
+    var cpsHoes;
+    if(Charles.BetterHoes>0){
+    cpcHoes = 
+        (Charles.BetterHoes*1.15)*(Boomer_Bill.Hoes[0])
         + (10*Boomer_Bill.Hoes[1])
         + (100*Boomer_Bill.Hoes[2])
         + (1000*Boomer_Bill.Hoes[3])
         + (10000*Boomer_Bill.Hoes[4])
         + (100000*Boomer_Bill.Hoes[5]);
-    if(Boomer_Bill.Hoes[0]+cpcHoes>0) {
-        player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
-    } else {
-        player.cpc=Boomer_Bill.lvl;
-    }
-    var cpsHoes = 
-        (Belle_Boomerette.Hoes[0] 
+    
+    cpsHoes =
+        (Charles.BetterHoes*1.15)*(Belle_Boomerette.Hoes[0] 
         + (10*Belle_Boomerette.Hoes[1])
         + (100*Belle_Boomerette.Hoes[2])
         + (1000*Belle_Boomerette.Hoes[3])
         + (10000*Belle_Boomerette.Hoes[4])
         + (100000*Belle_Boomerette.Hoes[5])
         );
-
-    // Add golden carrot bonus to CPC
-    player.cpc = (0.1 * (player.golden_carrots + 10)) * player.cpc;
-
+    }else{
+        cpcHoes=
+            (Boomer_Bill.Hoes[0])
+            + (10*Boomer_Bill.Hoes[1])
+            + (100*Boomer_Bill.Hoes[2])
+            + (1000*Boomer_Bill.Hoes[3])
+            + (10000*Boomer_Bill.Hoes[4])
+            + (100000*Boomer_Bill.Hoes[5]);
+        cpsHoes=
+            (Belle_Boomerette.Hoes[0] 
+            + (10*Belle_Boomerette.Hoes[1])
+            + (100*Belle_Boomerette.Hoes[2])
+            + (1000*Belle_Boomerette.Hoes[3])
+            + (10000*Belle_Boomerette.Hoes[4])
+            + (100000*Belle_Boomerette.Hoes[5])
+            );
+    }
+    
+    if(Boomer_Bill.Hoes[0]+cpcHoes>0) {
+        player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
+    } else {
+        player.cpc=Boomer_Bill.lvl;
+    }
+   
     // Calculates the CPS
     if(Belle_Boomerette.Hoes[0]+cpsHoes>0) {
         player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(cpsHoes));
     } else {
         player.cps=Belle_Boomerette.lvl;
     }
-
-    // Add golden carrot bonus to CPS
-    player.cps=(0.1*(player.golden_carrots+10))*player.cps;
+    //Add improve working conditions bonus
+    if(Charles.ImproveWorkingConditions>0){
+        player.cpc = (player.cpc*(1.1*Charles.ImproveWorkingConditions));
+        player.cps=(player.cps*(1.1*Charles.ImproveWorkingConditions));
+    }
+    
 
     // Providing updated information to the player
 
@@ -509,15 +562,15 @@ setInterval(() => {
     //Charles Upgrades
     elCharles.improveWorkingConditions.innerHTML =
        `Improve Working Conditions
-       Costs: ${Math.floor(Math.pow(Charles.ImproveWorkingConditions,1.25))} Golden Carrots`;
+       Costs: ${Charles.ImproveWorkingConditionsPrice} Golden Carrots`;
 
     elCharles.betterHoes.innerHTML =
        `Improve all Hoes
-       Costs: ${Math.floor(Math.pow(Charles.BetterHoes,1.25))} Golden Carrots`;
+       Costs: ${Charles.BetterHoesPrice} Golden Carrots`;
 
     elCharles.decreaseWages.innerHTML =
       `Decrease Worker Wages
-      Costs: ${Math.floor(Math.pow(Charles.DecreaseWages,1.25))} Golden Carrots`;
+      Costs: ${Charles.DecreaseWagesPrice} Golden Carrots`;
 
     elCharles.charlesTooltip.innerHTML =
        `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
@@ -602,4 +655,5 @@ tipchange = function(){
 
 // Automatically change tips
 setInterval(tipchange(), 10000);
+
 //#endregion
