@@ -33,6 +33,12 @@ function testFunction(param) {
     console.log("testFunction runs");
 }
 
+// Capitalize first letter of string
+// https://stackoverflow.com/a/1026087
+function capitalizeFL(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     overlay.classList.add("visible");

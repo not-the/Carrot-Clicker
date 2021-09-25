@@ -326,6 +326,7 @@ input {
     color: gray;
 }
 #left-section {
+    width: 420px;
     /* margin-left: auto; */
     margin-right: 20px;
 }
@@ -387,13 +388,19 @@ input {
 
     position: relative;
     z-index: 10;
+
+    transition-property: box-shadow, border, background;
+    transition-duration: 0.15s;
 }
 .characterbox:hover {
+    /* border: 3px solid #6d6565; */
     z-index: 11;
 }
 .bottom {
     padding-top: 2px;
     background: #242222;
+    border-end-start-radius: 10px;
+    border-end-end-radius: 10px;
 }
 /* Character tooltips */
 .tooltip {
@@ -418,12 +425,16 @@ input {
 }
 .characterbox:hover .charactertooltip {
     visibility: visible;
-    opacity: 1;
-    animation: float_in 0.25s;
+    animation: float_in 2s forwards;
 }
 @keyframes float_in {
-    from {
+    80% {
         margin-left: -20px;
+        opacity: 0;
+    }
+    100% {
+        margin-left: 0px;
+        opacity: 1;
     }
 }
 
@@ -533,10 +544,18 @@ input {
 .grayedout {
     filter: brightness(90%) saturate(0%);
 }
+.blackedout {
+    filter: contrast(0%) brightness(20%);
+}
 .grayedout .levelupimg,
 .grayedout .toolicon,
 .grayedout.levelupimg,
-.grayedout.toolicon {
+.grayedout.toolicon,
+
+.blackedout .levelupimg,
+.blackedout .toolicon,
+.blackedout.levelupimg,
+.blackedout.toolicon{
     cursor: unset;
 }
 .grayedout .levelupimg:hover,
@@ -545,6 +564,14 @@ input {
 .grayedout.toolicon:hover {
     transform: none;
     filter: brightness(90%) saturate(0%);
+}
+
+.blackedout .levelupimg:hover,
+.blackedout .toolicon:hover,
+.blackedout.levelupimg:hover,
+.blackedout.toolicon:hover {
+    transform: none;
+    filter: contrast(0%) brightness(20%);
 }
 
 
