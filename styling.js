@@ -52,7 +52,7 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
         elDialog.buttons.accept.classList.add(buttonStyle);
     }
     if(buttonAction == Function) {
-        elDialog.buttons.accept.onclick = buttonAction;
+        elDialog.buttons.accept.onclick = closeDialog(buttonAction);
     }
 }
 function closeDialog(action) {
@@ -60,15 +60,21 @@ function closeDialog(action) {
     elDialog.desc.innerText = 'Dialog description';
     // Reset Accept button
     elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
-    elDialog.buttons.accept.onclick = closeDialog;
+    // elDialog.buttons.accept.onclick = closeDialog;
     elDialog.buttons.accept.innerText = "OK";
 
     overlay.classList.remove("visible");
     // elDialog.main.classList.remove("dialog_animate");
 
     // Run passed in function if applicable
-    if(action) {
-        action();
+    // if(action) {
+    //     action();
+    // }
+
+    if(action == 'prestige') {
+        Prestige();
+    } else if(action == 'clearsave') {
+        ClearLocalStorage();
     }
 }
 
