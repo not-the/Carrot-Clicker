@@ -217,6 +217,7 @@ function LevelUp(character) {
 
 // Prestige
 function Prestige() {
+    console.log("Prestiging...");
     clearInterval(cpsInterval);
     player.golden_carrots += player.prestige_potential;
     player.LifetimeGoldenCarrots += player.prestige_potential;
@@ -389,7 +390,7 @@ function DisplayHoe(character, type) {
         if(character.Hoes[type] >= 1 || Gregory.Hoes[type] >= 1) {
             img.classList.remove('blackedout');
         }
-    } 
+    }
     // Greg hoes
     else if(charString == 'greg') {
         if(Gregory.Hoes[type] >= 1) {
@@ -505,6 +506,8 @@ function DisplayRounded(Value,Fixedto=3){
 
 // delete save
 function ClearLocalStorage(){
+    console.log('Clearing local storage');
+    
     localStorage.clear();
     location.reload();
 }
