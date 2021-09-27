@@ -200,17 +200,17 @@ function LevelUp(character) {
         character.lvl+=1;
         player.Carrots-=character.lvlupPrice;
         if(character==Gregory){
-            character.lvlupPrice=Math.floor(character.lvlupPrice*1.195);
-            DecreaseWagesEffects();
+            let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.195));
+            character.lvlupPrice+=UpGregPercent;
             return;
         }
         if(character==Belle_Boomerette){
-            character.lvlupPrice=Math.floor(character.lvlupPrice*1.10109);
-            DecreaseWagesEffects();
+            let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.10109));
+            character.lvlupPrice+=UpBellePercent;
             return;
         }
-        character.lvlupPrice=Math.floor(character.lvlupPrice*1.102);
-        DecreaseWagesEffects();
+        let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.102));
+        character.lvlupPrice+=UpBillPercent;
     } else {
         toast(
             'Cannot afford',
@@ -269,6 +269,10 @@ function IncreaseDecreaseWages(){
     }
     player.golden_carrots-=Charles.DecreaseWagesPrice;
     Charles.DecreaseWages+=1;
+}
+
+function DecreaseWagesEffects(){
+    return (Math.sqrt(Charles.DecreaseWages)/100);
 }
 
 
