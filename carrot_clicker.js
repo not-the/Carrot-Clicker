@@ -214,7 +214,7 @@ function LevelUp(character) {
     } else {
         toast(
             'Cannot afford',
-            `You need ${character.lvlupPrice} carrots to level up ${ capitalizeFL(characterString(character)) }`
+            `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character)) }`
         );
     }
 }
@@ -397,6 +397,7 @@ function DisplayHoe(character, type) {
             if(store('tutorial_first_hoe') == null) {tutorialHoes();}
         } else {
             img.classList.remove('glowing');
+            img.classList.add('blackedout');
         }
 
         // Character has at least 1 and
@@ -405,7 +406,6 @@ function DisplayHoe(character, type) {
             img.classList.remove('blackedout');
         } else {
             count.innerText = '';
-            img.classList.add('blackedout');
         }
     }
     // Greg hoes
@@ -442,7 +442,7 @@ for(i=1000;i<99999999999999999999999999999;i=i*1000) {
 }
 
 // Displaying Roundced Numbers example"100m 140b
-function DisplayRounded(Value,Fixedto=3){
+function DisplayRounded(Value, Fixedto=3) {
     var units = ["k","m","b","t","q","Q","s","S"];
     for(i=0;i<units.length;i++){
         if(Value<Bases[i+1] && Value>Bases[0]){

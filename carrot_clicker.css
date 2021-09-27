@@ -468,7 +468,8 @@ input {
     height: 32px;
     width: auto;
 }
-.toolicon:hover, .levelupimg:hover {
+.toolicon:hover,
+.levelupimg:hover {
     transform: scale(1.2, 1.2);
     filter: brightness(150%);
 }
@@ -481,6 +482,8 @@ input {
     position: absolute;
     font-size: 11pt;
     transform: translateX(16px) translateY(20px);
+
+    pointer-events: none;
 }
 
 /* Greg */
@@ -576,6 +579,7 @@ input {
 
 .glowing {
     animation: glowing 3s infinite alternate linear;
+    cursor: pointer;
 }
 @keyframes glowing {
     from {
@@ -584,6 +588,14 @@ input {
     to {
         filter: drop-shadow(0px 0px 8px rgb(255, 255, 207)) brightness(115%);
     }
+}
+.glowing:hover {
+    transform: scale(1.2, 1.2);
+    filter: brightness(150%);
+}
+.glowing:active {
+    transform: scale(0.9, 0.9);
+    filter: brightness(70%);
 }
 
 
