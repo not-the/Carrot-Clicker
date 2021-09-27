@@ -51,9 +51,10 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     if(buttonStyle) {
         elDialog.buttons.accept.classList.add(buttonStyle);
     }
-    if(buttonAction == Function) {
-        elDialog.buttons.accept.onclick = closeDialog(buttonAction);
+    if(buttonAction) {
+        elDialog.buttons.accept.onclick = 'closeDialog(buttonAction)';
     }
+
 }
 function closeDialog(action) {
     elDialog.title.innerText = 'Dialog Title';
@@ -290,4 +291,10 @@ if(store("tutorial_sample") == null) {
     // Temporary two step until someone fixes the storage issue
     store("tutorial_sample", "really_done");
     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+}
+
+// After Greg crafts a hoe for the first time (Called in carrot_clicker.js)
+function tutorialHoes() {
+    store('tutorial_first_hoe', "done");
+    toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
 }

@@ -384,6 +384,18 @@ function DisplayHoe(character, type) {
     // Bill & Belle hoes
     if(charString == 'bill' || charString == 'belle') {
         // Remove blackout and set innertext
+        // Greg has a hoe to give
+        if(Gregory.Hoes[type] >= 1) {
+            img.classList.remove('blackedout');
+            img.classList.add('glowing');
+
+            // If first hoe send tutorial message
+            if(store('tutorial_first_hoe') == null) {tutorialHoes();}
+        } else {
+            img.classList.remove('glowing');
+        }
+
+        // Character has at least 1 and
         if(character.Hoes[type] >= 1) {
             count.innerText = `x${character.Hoes[type]}`;
             img.classList.remove('blackedout');
@@ -391,20 +403,21 @@ function DisplayHoe(character, type) {
             count.innerText = '';
             img.classList.add('blackedout');
         }
-        
-        if(character.Hoes[type] >= 1 || Gregory.Hoes[type] >= 1) {
-            img.classList.remove('blackedout');
-        }
     }
     // Greg hoes
     else if(charString == 'greg') {
+        // Greg has at least 1
         if(Gregory.Hoes[type] >= 1) {
             count.innerText = `x${Gregory.Hoes[type]}`;
             img.classList.remove('blackedout');
-        } else if(player.Carrots >= Gregory.HoePrices[type]) {
+        }
+        // Greg can afford one
+        else if(player.Carrots >= Gregory.HoePrices[type]) {
             img.classList.remove('blackedout');
             count.innerText = '';
-        } else {
+        }
+        // Blacked out
+        else {
             count.innerText = '';
             img.classList.add('blackedout');
         }

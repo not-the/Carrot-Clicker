@@ -540,7 +540,7 @@ input {
     margin: 5px;
 }
 
-/* Greyed out */
+/* Greyed out/Blacked out/Glowing effects */
 .grayedout {
     filter: brightness(90%) saturate(0%);
 }
@@ -572,6 +572,18 @@ input {
 .blackedout.toolicon:hover {
     transform: none;
     filter: contrast(0%) brightness(20%);
+}
+
+.glowing {
+    animation: glowing 3s infinite alternate linear;
+}
+@keyframes glowing {
+    from {
+        filter: drop-shadow(0px 0px 7px rgb(255, 235, 120, 0.5));
+    }
+    to {
+        filter: drop-shadow(0px 0px 8px rgb(255, 255, 207)) brightness(115%);
+    }
 }
 
 
