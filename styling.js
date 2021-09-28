@@ -1,3 +1,5 @@
+/*-------------Variables------------*/
+//#region
 //// UI HANDLER ////
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
@@ -28,7 +30,11 @@ const elDialog = {
 };
 const toastContainer =  dom("toast_container");
 const toastsClear =     dom("toasts_clear");
+//#endregion
 
+
+/*---------------FUNCTIONS-----------------*/
+//#region
 function testFunction(param) {
     console.log("testFunction runs");
 }
@@ -298,3 +304,4 @@ function tutorialHoes() {
     store('tutorial_first_hoe', "done");
     toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
 }
+//#endregion
