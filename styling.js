@@ -16,6 +16,9 @@ var activeToasts = 0;
 var toastsList =  {};
 var bonusID =      0;
 
+// Dialog button action
+var dialogButtonAction = 'none';
+
 // Dialog Elements
 const overlay = dom("overlay");
 const elDialog = {
@@ -57,12 +60,12 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     if(buttonStyle) {
         elDialog.buttons.accept.classList.add(buttonStyle);
     }
-    if(buttonAction) {
-        elDialog.buttons.accept.onclick = 'closeDialog(buttonAction)';
-    }
 
+    dialogButtonAction = buttonAction;
 }
-function closeDialog(action) {
+
+// Close dialog
+function closeDialog(doAction) {
     elDialog.title.innerText = 'Dialog Title';
     elDialog.desc.innerText = 'Dialog description';
     // Reset Accept button
@@ -78,13 +81,20 @@ function closeDialog(action) {
     //     action();
     // }
 
-    if(action == 'prestige') {
-        Prestige();
-    } else if(action == 'clearsave') {
-        ClearLocalStorage();
-    }
-}
+    // Run a function when accept is pressed
+    if(doAction) {
+        switch(dialogButtonAction) {
+            case 'prestige':
+                Prestige();
+                break;
+            case 'clearsave':
+                ClearLocalStorage();
+                break;
+        };
+    };
 
+    dialogButtonAction = 'none';
+}
 
 
 // Create Toast notification

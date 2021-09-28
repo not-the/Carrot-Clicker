@@ -224,14 +224,36 @@ function LevelUp(character) {
 function Prestige() {
     console.log("Prestiging...");
     clearInterval(cpsInterval);
+
+    // Give golden carrots
     player.golden_carrots += player.prestige_potential;
     player.LifetimeGoldenCarrots += player.prestige_potential;
-    [Boomer_Bill.lvlupPrice,Belle_Boomerette.lvlupPrice, Gregory.lvlupPrice] = [Default_Boomer_Bill.lvlupPrice,Default_Belle_Boomerette.lvlupPrice,Default_Gregory.lvlupPrice];
-    [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [Default_Boomer_Bill.lvl,Default_Belle_Boomerette.lvl,Default_Gregory.lvl];
+
+    // Reset characters to default
+    [
+        Boomer_Bill.lvlupPrice,
+        Belle_Boomerette.lvlupPrice,
+        Gregory.lvlupPrice
+    ] = [
+        Default_Boomer_Bill.lvlupPrice,
+        Default_Belle_Boomerette.lvlupPrice,
+        Default_Gregory.lvlupPrice
+    ];
+
+    [
+        Boomer_Bill.lvl,
+        Belle_Boomerette.lvl,
+        Gregory.lvl
+    ] = [
+        Default_Boomer_Bill.lvl,
+        Default_Belle_Boomerette.lvl,
+        Default_Gregory.lvl
+    ];
+    
     for(i=0;i>6;i++){
-        Boomer_Bill.HoePrices[i]=Default_Boomer_Bill.HoePrices[i];
-        Belle_Boomerette.HoePrices[i]=Default_Belle_Boomerette.HoePrices[i];
-        Gregory.HoePrices[i]=Default_Gregory.HoePrices[i];
+        Boomer_Bill.HoePrices[i] = Default_Boomer_Bill.HoePrices[i];
+        Belle_Boomerette.HoePrices[i] = Default_Belle_Boomerette.HoePrices[i];
+        Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
     }
 
     player.Carrots = 0;
