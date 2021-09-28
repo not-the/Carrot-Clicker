@@ -1,3 +1,5 @@
+<!----------Header---------->
+<!--#region -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +10,18 @@
 
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
-</head>
+</head>  
+<!--#endregion-->
+
 <body>
+
   <!-- On top -->
+<!-- #region -->
+
+
 
   <!-- Dialog Popup -->
+  <!-- #region -->
   <!-- Optional classes: dramatic -->
   <div id="overlay" class="dramatic">
     <!-- Backdrop -->
@@ -36,8 +45,11 @@
       </div>
     </div>
   </div>
+<!-- #endregion -->
+ 
 
-  <!-- Corner Toasts -->
+<!-- Corner Toasts -->
+  <!-- #region -->
   <div id="toast_container">
     <div id="toasts_clear" onclick="clearToasts()">
       Close All
@@ -48,8 +60,10 @@
       <p>Description</p>
     </div> -->
   </div>
+<!-- #endregion -->
+  
 
-  <!-- Number Popup -->
+<!-- Number Popup -->
   <div id="bonusVisualArea"></div>
 
 
@@ -84,12 +98,17 @@
 
       </div>
 
+<!-- #endregion -->
 
-  
+
+
       <!-- Right Section -->
+      <!-- #region -->
       <div id="right-section" class="character_column">
         <div class="character_column">
+
           <!--Boomer Bill Rendering-->
+          <!-- #region -->
           <div class="Bill characterbox">
             <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
             <!-- Top -->
@@ -133,8 +152,10 @@
             </div>
 
           </div>
-    
+          <!-- #endregion -->
+
           <!--Belle Boomerette Rendering-->
+          <!-- #region -->
           <div class="Belle characterbox">
             <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
 
@@ -178,7 +199,8 @@
             </div>
 
           </div>
-
+          <!-- #endregion -->
+          
           <!--Gregory Rendering-->
           <div class="Greg characterbox">
             <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
@@ -239,7 +261,12 @@
           
         </div>
       </div>
+      <!-- #endregion -->
+
+
+      
       <!-- End Right section -->
+      <!-- #region -->
       <div class="character_column">
         
         <!--Charles Rendering-->
@@ -280,16 +307,18 @@
             </button>
             
           </div>
-
+          
+      
           </div>
         </div>
       </div>
-
+      <!-- #endregion -->
 
 
   </div>
 
   <!-- Lower section -->
+  <!-- #region -->
   <div class="flex">
     <!-- Info section -->
     <!-- <div class="row-break"></div> -->
@@ -350,10 +379,15 @@
     </div>
     <!-- End Info section -->
   </div>
-
+<!-- #endregion -->
   
+
+
   <!-- Javascript -->
+  <!-- #region -->
   <script src="carrot_clicker.js"></script>
   <script src="styling.js"></script>
+  <!-- #endregion -->
+
 </body>
 </html>
