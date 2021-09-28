@@ -228,14 +228,18 @@ function Prestige() {
     player.LifetimeGoldenCarrots += player.prestige_potential;
     [Boomer_Bill.lvlupPrice,Belle_Boomerette.lvlupPrice, Gregory.lvlupPrice] = [Default_Boomer_Bill.lvlupPrice,Default_Belle_Boomerette.lvlupPrice,Default_Gregory.lvlupPrice];
     [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [Default_Boomer_Bill.lvl,Default_Belle_Boomerette.lvl,Default_Gregory.lvl];
-    [Boomer_Bill.Hoes,Belle_Boomerette.hoes,Gregory.HoePrices] = [Default_Boomer_Bill.HoePrices,Default_Belle_Boomerette.HoePrices,Default_Gregory.HoePrices];
+    for(i=0;i>6;i++){
+        Boomer_Bill.HoePrices[i]=Default_Boomer_Bill.HoePrices[i];
+        Belle_Boomerette.HoePrices[i]=Default_Belle_Boomerette.HoePrices[i];
+        Gregory.HoePrices[i]=Default_Gregory.HoePrices[i];
+    }
+
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
 }
 
 
 // Charles Functions
-
 function IncreaseImproveWorkingConditions(){
     if(player.golden_carrots<Charles.ImproveWorkingConditionsPrice){
         toast(
@@ -244,6 +248,7 @@ function IncreaseImproveWorkingConditions(){
         );
         return;
     }
+    Charles.ImproveWorkingConditionsPrice=Math.ceil(Charles.ImproveWorkingConditionsPrice*1.03);
     player.golden_carrots-=Charles.ImproveWorkingConditionsPrice;
     Charles.ImproveWorkingConditions+=1;
 }
@@ -255,6 +260,7 @@ function IncreaseBetterHoes(){
         );
         return;
     }
+    Charles.BetterHoesPrice=Math.ceil(Charles.BetterHoesPrice*1.03);
     player.golden_carrots-=Charles.BetterHoesPrice;
     Charles.BetterHoes+=1;
 }
@@ -267,6 +273,7 @@ function IncreaseDecreaseWages(){
         );
         return;
     }
+    Charles.DecreaseWagesPrice=Math.ceil(Charles.DecreaseWagesPrice*1.03);
     player.golden_carrots-=Charles.DecreaseWagesPrice;
     Charles.DecreaseWages+=1;
 }
