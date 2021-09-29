@@ -655,23 +655,47 @@ setInterval(() => {
 /*-----------Tips----------- */
 //#region
 const tips = {
-    tips_basic: [
-        "Click The Lvl Up Arrow to Level Up Characters",
-        "To Buy a Hoe, Go to Greg and Click The Correct Type",
-        "To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
-        "Click The Carrot",
+    basic: [
+        "Click the lvl up arrow to level up characters",
+        "To buy a Hoe, go to Greg and click the correct type",
+        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
+        "Click the carrot",
         "Long hover over a character to view their description"
     ],
-    tips_beginner: [
-        "Each Hoe Can only Be stacked up to Gregs Lvl",
-        
+    beginner: [
+        "Each character can only hold up to 1 hoe for every level Greg has reached"
     ],
-    tips_Advanced: [
-        "Golden Carrots Increase Your Characters by 10%",
+    advanced: [
+        "When you're ready, click the prestige button. You will lose your progress but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
+        "Golden carrots increase your characters by 10%"
     ],
-    tips_fun: [
-        "Carrots Can End World Hunger",
-        "Only You Can save the Carrots!"
+
+    fun: [
+        "Carrots can end world hunger",
+        "Only YOU can save the carrots!",
+        "Carrots have been proven to improve eyesight by 150%. It's true!",
+        "Carrots are your friend",
+        "JJ broke it"
+    ],
+    funIntermediate: [
+        "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
+        "Tired of eating carrots? Make carrot cake!",
+        "Carrots have been proven to improve eyesight by 1000%. It's true!",
+        "Carrots love you ♥",
+        "Studies are being done to determine if carrots can cure the common cold"
+    ],
+    funAdvanced: [
+        "World hunger has been cured, but there must be more we can do.",
+        "Carrots have never been found at a crime scene because they are the direct cause of peace and friendship.",
+        "Carrots have received 7,000,000,000 (★★★★★) 5-star ratings on ebay",
+        "Eating carrots cures cancer",
+        "Studies done on people eating only carrots for 90 days have proven that they are the only food required for human survival.",
+        "Report any anti-carrot propaganda you see on the internet to your local carrot police",
+        "Public Service Announcement: Reminder to eat more carrots. That is all.",
+        "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
+        "Carrots are people too",
+
+        "Carrots have been proven to improve eyesight by 9000%. It's true!"
     ]
 }
 
@@ -692,12 +716,12 @@ tipchange = function(){
         tipTracker = tipnumber;
         return;
     } 
-    tipnumber = Math.floor(Math.random()*tips.tips_fun.length);
+    tipnumber = Math.floor(Math.random()*tips.fun.length);
     if(tipnumber == tipTracker) {
         tipchange();
         return;
     }
-    dom("Tip").innerText=tips.tips_fun[tipnumber];
+    dom("Tip").innerText=tips.fun[tipnumber];
     tipTracker = tipnumber;
     return;
 }
