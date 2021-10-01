@@ -425,18 +425,17 @@ function CreateHoe(type=0,ammount=1) {
 
 
 //Equips A Hoe To a Character
-function EquipHoe(character=Boomer_Bill, type=0){
-    if(Gregory.Hoes[type]>=1){
-        if(character.Hoes[type]>=Gregory.lvl) {
+function EquipHoe(character=Boomer_Bill, type=0, ammount){
+    if(Gregory.Hoes[type]>=ammount){
+        if(character.Hoes[type]+ammount-1>=Gregory.lvl) {
             toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
             n=0;
             return;
         }
-        character.Hoes[type]+=1;
-        Gregory.Hoes[type]-=1;
+        character.Hoes[type]+=ammount;
+        Gregory.Hoes[type]-=ammount;
     }
 }
-
 
 // Temporary fix thing, going to just add their names to their objects probably
 function characterString(character) {
