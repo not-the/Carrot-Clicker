@@ -10,7 +10,7 @@ var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
-// getElementById shorthand
+// getElementById shorthandx
 function dom(id) {return document.getElementById(id);}
 
 
@@ -98,6 +98,14 @@ const elCharles = {
     decreaseWages:            dom("DecreaseWages"),
     charlesTooltip:           dom("charlestooltip")
 }
+
+//Keyboard Event listener
+window.addEventListener('keydown', (event)=>{
+    if(event.key == "Shift"){
+        multibuySpin();
+        dom("multibuy").innerText=(multibuy[multibuySelector]+"x");
+    }
+})
 //#endregion
 
 
@@ -195,22 +203,40 @@ var cpsInterval = setInterval(CarrotsPerSecond,100);
 
 
 //level up characters 
-function LevelUp(character) {
-    if(player.Carrots>=character.lvlupPrice) {
-        character.lvl+=1;
-        player.Carrots-=character.lvlupPrice;
+function CharacterLevelUpPrice(character=Boomer_Bill,ammount=1,mode="query"){
+    var r=character.lvlupPrice;
+    var r2=character.lvlupPrice;
+    for(i=0;i<ammount-1;i++){
         if(character==Gregory){
-            let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.195));
-            character.lvlupPrice+=UpGregPercent;
-            return;
-        }
-        if(character==Belle_Boomerette){
-            let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.10109));
-            character.lvlupPrice+=UpBellePercent;
-            return;
-        }
-        let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.102));
-        character.lvlupPrice+=UpBillPercent;
+                let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.195));
+                r+=UpGregPercent;
+                r2+=r;
+            }
+            if(character==Belle_Boomerette){
+                let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
+                r+=UpBellePercent;
+                r2+=r;
+
+            }
+            if(character==Boomer_Bill){
+                let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.102));
+                r+=UpBillPercent;
+                r2+=r;
+            }
+    }
+    if(mode=="query"){
+        return r2;
+    }
+    if(mode=="apply"){
+        character.lvlupPrice=r2;
+    }
+
+}
+function LevelUp(character=Boomer_Bill,ammount=1) {
+    if(player.Carrots>=CharacterLevelUpPrice(character,ammount,"query")) {
+            character.lvl+=ammount;
+            CharacterLevelUpPrice(character,ammount,"apply");
+            player.Carrots-=character.lvlupPrice;
     } else {
         toast(
             'Cannot afford',
@@ -224,14 +250,36 @@ function LevelUp(character) {
 function Prestige() {
     console.log("Prestiging...");
     clearInterval(cpsInterval);
+
+    // Give golden carrots
     player.golden_carrots += player.prestige_potential;
     player.LifetimeGoldenCarrots += player.prestige_potential;
-    [Boomer_Bill.lvlupPrice,Belle_Boomerette.lvlupPrice, Gregory.lvlupPrice] = [Default_Boomer_Bill.lvlupPrice,Default_Belle_Boomerette.lvlupPrice,Default_Gregory.lvlupPrice];
-    [Boomer_Bill.lvl, Belle_Boomerette.lvl, Gregory.lvl] = [Default_Boomer_Bill.lvl,Default_Belle_Boomerette.lvl,Default_Gregory.lvl];
+
+    // Reset characters to default
+    [
+        Boomer_Bill.lvlupPrice,
+        Belle_Boomerette.lvlupPrice,
+        Gregory.lvlupPrice
+    ] = [
+        Default_Boomer_Bill.lvlupPrice,
+        Default_Belle_Boomerette.lvlupPrice,
+        Default_Gregory.lvlupPrice
+    ];
+
+    [
+        Boomer_Bill.lvl,
+        Belle_Boomerette.lvl,
+        Gregory.lvl
+    ] = [
+        Default_Boomer_Bill.lvl,
+        Default_Belle_Boomerette.lvl,
+        Default_Gregory.lvl
+    ];
+    
     for(i=0;i>6;i++){
-        Boomer_Bill.HoePrices[i]=Default_Boomer_Bill.HoePrices[i];
-        Belle_Boomerette.HoePrices[i]=Default_Belle_Boomerette.HoePrices[i];
-        Gregory.HoePrices[i]=Default_Gregory.HoePrices[i];
+        Boomer_Bill.HoePrices[i] = Default_Boomer_Bill.HoePrices[i];
+        Belle_Boomerette.HoePrices[i] = Default_Belle_Boomerette.HoePrices[i];
+        Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
     }
 
     player.Carrots = 0;
@@ -284,20 +332,46 @@ function DecreaseWagesEffects(){
 
 
 
+
+
+
 //#endregion
 
 
 /*-----------Hoe Functions--------------*/
 //#region
-function CreateHoe(type) {
+
+//Stores The Correct Hoe Price
+    function HoeCost(type=0,ammount=1,mode="query"){
+        var r = Gregory.HoePrices[type];
+        var r2 = Gregory.HoePrices[type];
+        for(i=0;i<Gregory.HoePrices.length;i++){
+            if(type==i){
+                for(j=0;j<ammount-1;j++){
+                    r+=(0.05*r);
+                    r2+=r;
+                }
+                if(mode=="query"){
+                    return r2;
+                }
+                if(mode=="apply"){
+                    Gregory.HoePrices[type]=r2;
+                    console.log("f");
+                }
+                
+            }
+        }
+    }
+
+function CreateHoe(type=0,ammount=1) {
     // Return if a hoe is already in progress
     if(n==1){
-        toast("Greg is busy", "Wait until the current hoe is done crafting before crafting another")
+        toast("Greg is busy", "Wait until he is done crafting")
         return;
     }
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)){
+    if(Gregory.lvl<=(type*25)||Gregory.lvl==0){
         if(type>=1){
             toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`);
             return;
@@ -307,57 +381,46 @@ function CreateHoe(type) {
     }
 
     // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type] >= Gregory.lvl){
-        toast("Insufficient Upgrades", "You must upgrade greg to hold more hoes of that type");
+    if(Gregory.Hoes[type]+ammount-1>= Gregory.lvl){
+        toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type");
         return;
-    } 
-
-    //Stores The Correct Hoe Price
-    function HoeCost(){
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                return Gregory.HoePrices[i];
-            }
-        }
     }
-    let price = HoeCost();
+    
+    let price = HoeCost(type,ammount);
     //Checks if Hoe is Too expensive
     if(price>=(player.Carrots*2)){
         toast("Too Expensive!", "That hoe is currently too expensive.");
         return;
     }
     if(n==0){
-        n=1;   
+        n=1; 
+        HoeCost(type,ammount,"apply"); 
         //Creates Hoe And Displays Progress Bar
         var i = 0;
-        if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
-            if (i == 0) {
-                i = 1;
-                var p = 0;
-                var id = setInterval(frame,100);
-                function frame() {
-                    if (p >= price) {
-                        clearInterval(id);
-                        i = 0;
-                        player.Carrots+=p-price;
-                        p=0;
-                        elGregProgress.style.width = 0 + "%";
-                        Gregory.Hoes[type]+=1;
-                        Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
-                        n=0;
-                    } else {
-                        p+=(0.01*player.Carrots);
-                        player.Carrots-=(0.01*player.Carrots);
-                        elGregProgress.style.width = 100*(p/price) + "%";
-                    }
-
+        if (i == 0) {
+            i = 1;
+            var p = 0;
+            var id = setInterval(frame,100);
+            function frame() {
+                if (p >= price) {
+                    clearInterval(id);
+                    i = 0;
+                    player.Carrots+=p-price;
+                    p=0;
+                    elGregProgress.style.width = 0 + "%";
+                    Gregory.Hoes[type]+=ammount;
+                    n=0;
+                } else {
+                    p+=(0.01*player.Carrots);
+                    player.Carrots-=(0.01*player.Carrots);
+                    elGregProgress.style.width = 100*(p/price) + "%";
                 }
-            } 
-        } else {
-            n=0;
-        }
+
+            }
+        } 
     }
 }
+
 
 
 
@@ -373,6 +436,7 @@ function EquipHoe(character=Boomer_Bill, type=0){
         Gregory.Hoes[type]-=1;
     }
 }
+
 
 // Temporary fix thing, going to just add their names to their objects probably
 function characterString(character, type) {
@@ -459,6 +523,16 @@ function DisplayRounded(Value, Fixedto=3) {
     return Value;
 }
 
+//multibuy
+const multibuy = [1,10,100];
+var multibuySelector = 0;
+function multibuySpin(){
+  if(multibuy[multibuy.length-1]>multibuy[multibuySelector]){
+    multibuySelector++;
+  }else{
+    multibuySelector=0;
+  }
+}
 
 
 // delete save
@@ -553,9 +627,9 @@ setInterval(() => {
     }
 
     // Costs to level up characters
-    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(Boomer_Bill.lvlupPrice,1)}`;
-    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(Belle_Boomerette.lvlupPrice,1)}`;
-    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
+    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill,multibuy[multibuySelector],"query"),1)}`;
+    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette,multibuy[multibuySelector],"query"),1)}`;
+    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(CharacterLevelUpPrice(Gregory,multibuy[multibuySelector],"query"),1)+"";
 
     // Character levels
     elCharacterLevel.bill.innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
@@ -576,12 +650,12 @@ setInterval(() => {
     prestige_info.innerText = DisplayRounded(player.prestige_potential,2);
 
     // Greg's Hoe Prices
-    elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;
-    elHoePrices.stone.innerText     = `${DisplayRounded(Gregory.HoePrices[1],1)}`;
-    elHoePrices.iron.innerText      = `${DisplayRounded(Gregory.HoePrices[2],1)}`;
-    elHoePrices.gold.innerText      = `${DisplayRounded(Gregory.HoePrices[3],1)}`;
-    elHoePrices.diamond.innerText   = `${DisplayRounded(Gregory.HoePrices[4],1)}`;
-    elHoePrices.netherite.innerText = `${DisplayRounded(Gregory.HoePrices[5],1)}`;
+    elHoePrices.wooden.innerText    = `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`;
+    elHoePrices.stone.innerText     = `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`;
+    elHoePrices.iron.innerText      = `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`;
+    elHoePrices.gold.innerText      = `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`;
+    elHoePrices.diamond.innerText   = `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`;
+    elHoePrices.netherite.innerText = `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`;
 
     if(player.LifetimeGoldenCarrots>0 || player.prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
@@ -633,23 +707,47 @@ setInterval(() => {
 /*-----------Tips----------- */
 //#region
 const tips = {
-    tips_basic: [
-        "Click The Lvl Up Arrow to Level Up Characters",
-        "To Buy a Hoe, Go to Greg and Click The Correct Type",
-        "To Equip a Hoe, You Must First Buy a Hoe, Then Click The Hoe Type Under Bill or Belle",
-        "Click The Carrot",
+    basic: [
+        "Click the lvl up arrow to level up characters",
+        "To buy a Hoe, go to Greg and click the correct type",
+        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
+        "Click the carrot",
         "Long hover over a character to view their description"
     ],
-    tips_beginner: [
-        "Each Hoe Can only Be stacked up to Gregs Lvl",
-        
+    beginner: [
+        "Each character can only hold up to 1 hoe for every level Greg has reached"
     ],
-    tips_Advanced: [
-        "Golden Carrots Increase Your Characters by 10%",
+    advanced: [
+        "When you're ready, click the prestige button. You will lose your progress but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
+        "Golden carrots increase your characters by 10%"
     ],
-    tips_fun: [
-        "Carrots Can End World Hunger",
-        "Only You Can save the Carrots!"
+
+    fun: [
+        "Carrots can end world hunger",
+        "Only YOU can save the carrots!",
+        "Carrots have been proven to improve eyesight by 150%. It's true!",
+        "Carrots are your friend",
+        "JJ broke it"
+    ],
+    funIntermediate: [
+        "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
+        "Tired of eating carrots? Make carrot cake!",
+        "Carrots have been proven to improve eyesight by 1000%. It's true!",
+        "Carrots love you ♥",
+        "Studies are being done to determine if carrots can cure the common cold"
+    ],
+    funAdvanced: [
+        "World hunger has been cured, but there must be more we can do.",
+        "Carrots have never been found at a crime scene because they are the direct cause of peace and friendship.",
+        "Carrots have received 7,000,000,000 (★★★★★) 5-star ratings on ebay",
+        "Eating carrots cures cancer",
+        "Studies done on people eating only carrots for 90 days have proven that they are the only food required for human survival.",
+        "Report any anti-carrot propaganda you see on the internet to your local carrot police",
+        "Public Service Announcement: Reminder to eat more carrots. That is all.",
+        "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
+        "Carrots are people too",
+
+        "Carrots have been proven to improve eyesight by 9000%. It's true!"
     ]
 }
 
@@ -670,12 +768,12 @@ tipchange = function(){
         tipTracker = tipnumber;
         return;
     } 
-    tipnumber = Math.floor(Math.random()*tips.tips_fun.length);
+    tipnumber = Math.floor(Math.random()*tips.fun.length);
     if(tipnumber == tipTracker) {
         tipchange();
         return;
     }
-    dom("Tip").innerText=tips.tips_fun[tipnumber];
+    dom("Tip").innerText=tips.fun[tipnumber];
     tipTracker = tipnumber;
     return;
 }
