@@ -439,7 +439,7 @@ function EquipHoe(character=Boomer_Bill, type=0){
 
 
 // Temporary fix thing, going to just add their names to their objects probably
-function characterString(character, type) {
+function characterString(character) {
     switch(character) {
         case Boomer_Bill:
             return charString = 'bill';
