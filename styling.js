@@ -62,7 +62,21 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     }
 
     dialogButtonAction = buttonAction;
+    
+    //adds event listener to the dialog
+    window.addEventListener('keydown', DialogKeybinds);
+    
 }
+
+//Dialog Keybinds
+function DialogKeybinds(event){
+        if(event.key=="Escape"){
+            closeDialog();
+        }
+        if(event.key=="Enter"){
+            closeDialog(true);
+        }
+    }
 
 // Close dialog
 function closeDialog(doAction) {
@@ -94,6 +108,9 @@ function closeDialog(doAction) {
     };
 
     dialogButtonAction = 'none';
+
+    //removes the Dialog Event Listener
+    window.removeEventListener('keydown',DialogKeybinds);
 }
 
 
