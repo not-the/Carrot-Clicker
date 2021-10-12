@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker beta 1.2.1</title>
+    <title>Carrot Clicker dev beta 1.2.5</title>
 
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
@@ -81,9 +81,9 @@
         <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()">
 
         <!-- Numbers/Info Section -->
-        <p id="Carrot_Count">Working...</p>
-        <p id="cpc">Carrots per click:</p>
-        <p id="cps">Carrots per second:</p>
+        <p id="Carrot_Count">Error....</p>
+        <p id="cpc">Error....</p>
+        <p id="cps">Error....</p>
         <p id="golden_carrot_count"></p>
        
         <!-- Prestige Section -->
@@ -359,9 +359,9 @@
         <h1>Settings</h1>
         <p><i>Your game progress will always be saved.</i></p><br>
         <!-- Options item -->
-        <label for="option_placeholder">
-          <input type="checkbox" id="option_placeholder">
-          Enable things and stuff
+        <label for="disable_keybinds">
+          <input type="checkbox" id="disable_keybinds" onclick="KeyBinds()">
+          Disable keybinds
         </label><br><br>
 
         <!-- Notification Length -->
