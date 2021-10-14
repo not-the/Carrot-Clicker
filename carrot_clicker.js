@@ -10,7 +10,7 @@ var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
-// getElementById shorthand
+// getElementById shorthandx
 function dom(id) {return document.getElementById(id);}
 
 
@@ -101,6 +101,7 @@ const elCharles = {
 //#endregion
 
 
+
 /*-------------Local Storage and Characters-------------*/
 //#region
 
@@ -173,6 +174,23 @@ const Boomer_Bill      = localStorage.getObject("Bill");
 const Belle_Boomerette = localStorage.getObject("Belle");
 const Gregory          = localStorage.getObject("Greg");
 
+//autosaves
+setInterval(() => {
+    if(player){
+        localStorage.setObject("player",player);
+        localStorage.setObject("Bill",Boomer_Bill);
+        localStorage.setObject("Belle",Belle_Boomerette);
+        localStorage.setObject("Greg",Gregory);
+        localStorage.setObject("Charles",Charles)
+    }else{
+        localStorage.setObject("player",player1);
+        localStorage.setObject("Bill",Default_Boomer_Bill);
+        localStorage.setObject("Belle",Default_Belle_Boomerette);
+        localStorage.setObject("Greg",Default_Gregory);
+        localStorage.setObject("Charles",Default_Charles);
+        location.reload();
+    }
+}, 2000);
 //#endregion
 
 
@@ -195,22 +213,40 @@ var cpsInterval = setInterval(CarrotsPerSecond,100);
 
 
 //level up characters 
-function LevelUp(character) {
-    if(player.Carrots>=character.lvlupPrice) {
-        character.lvl+=1;
-        player.Carrots-=character.lvlupPrice;
+function CharacterLevelUpPrice(character=Boomer_Bill,ammount=1,mode="query"){
+    var r=character.lvlupPrice;
+    var r2=character.lvlupPrice;
+    for(i=0;i<ammount-1;i++){
         if(character==Gregory){
-            let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.195));
-            character.lvlupPrice+=UpGregPercent;
-            return;
-        }
-        if(character==Belle_Boomerette){
-            let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.10109));
-            character.lvlupPrice+=UpBellePercent;
-            return;
-        }
-        let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(character.lvlupPrice*0.102));
-        character.lvlupPrice+=UpBillPercent;
+                let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.195));
+                r+=UpGregPercent;
+                r2+=r;
+            }
+            if(character==Belle_Boomerette){
+                let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
+                r+=UpBellePercent;
+                r2+=r;
+
+            }
+            if(character==Boomer_Bill){
+                let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.102));
+                r+=UpBillPercent;
+                r2+=r;
+            }
+    }
+    if(mode=="query"){
+        return r2;
+    }
+    if(mode=="apply"){
+        character.lvlupPrice=r2;
+    }
+
+}
+function LevelUp(character=Boomer_Bill,ammount=1) {
+    if(player.Carrots>=CharacterLevelUpPrice(character,ammount,"query")) {
+            character.lvl+=ammount;
+            CharacterLevelUpPrice(character,ammount,"apply");
+            player.Carrots-=character.lvlupPrice;
     } else {
         toast(
             'Cannot afford',
@@ -304,22 +340,43 @@ function DecreaseWagesEffects(){
     return (Math.sqrt(Charles.DecreaseWages)/100);
 }
 
-
-
 //#endregion
 
 
 /*-----------Hoe Functions--------------*/
 //#region
-function CreateHoe(type) {
+
+//Stores The Correct Hoe Price
+    function HoeCost(type=0,ammount=1,mode="query"){
+        var r = Gregory.HoePrices[type];
+        var r2 = Gregory.HoePrices[type];
+        for(i=0;i<Gregory.HoePrices.length;i++){
+            if(type==i){
+                for(j=0;j<ammount-1;j++){
+                    r+=(0.05*r);
+                    r2+=r;
+                }
+                if(mode=="query"){
+                    return r2;
+                }
+                if(mode=="apply"){
+                    Gregory.HoePrices[type]=r2;
+                    console.log("f");
+                }
+                
+            }
+        }
+    }
+
+function CreateHoe(type=0,ammount=1) {
     // Return if a hoe is already in progress
     if(n==1){
-        toast("Greg is busy", "Wait until the current hoe is done crafting before crafting another")
+        toast("Greg is busy", "Wait until he is done crafting")
         return;
     }
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)){
+    if(Gregory.lvl<=(type*25)||Gregory.lvl==0){
         if(type>=1){
             toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`);
             return;
@@ -329,75 +386,64 @@ function CreateHoe(type) {
     }
 
     // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type] >= Gregory.lvl){
-        toast("Insufficient Upgrades", "You must upgrade greg to hold more hoes of that type");
+    if(Gregory.Hoes[type]+ammount-1>= Gregory.lvl){
+        toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type");
         return;
-    } 
-
-    //Stores The Correct Hoe Price
-    function HoeCost(){
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                return Gregory.HoePrices[i];
-            }
-        }
     }
-    let price = HoeCost();
+    
+    let price = HoeCost(type,ammount);
     //Checks if Hoe is Too expensive
     if(price>=(player.Carrots*2)){
         toast("Too Expensive!", "That hoe is currently too expensive.");
         return;
     }
     if(n==0){
-        n=1;   
+        n=1; 
+        HoeCost(type,ammount,"apply"); 
         //Creates Hoe And Displays Progress Bar
         var i = 0;
-        if(Gregory.lvl>=(type*10)&&Gregory.lvl>=1){
-            if (i == 0) {
-                i = 1;
-                var p = 0;
-                var id = setInterval(frame,100);
-                function frame() {
-                    if (p >= price) {
-                        clearInterval(id);
-                        i = 0;
-                        player.Carrots+=p-price;
-                        p=0;
-                        elGregProgress.style.width = 0 + "%";
-                        Gregory.Hoes[type]+=1;
-                        Gregory.HoePrices[type]+=(0.05*Gregory.HoePrices[type]);
-                        n=0;
-                    } else {
-                        p+=(0.01*player.Carrots);
-                        player.Carrots-=(0.01*player.Carrots);
-                        elGregProgress.style.width = 100*(p/price) + "%";
-                    }
-
+        if (i == 0) {
+            i = 1;
+            var p = 0;
+            var id = setInterval(frame,100);
+            function frame() {
+                if (p >= price) {
+                    clearInterval(id);
+                    i = 0;
+                    player.Carrots+=p-price;
+                    p=0;
+                    elGregProgress.style.width = 0 + "%";
+                    Gregory.Hoes[type]+=ammount;
+                    n=0;
+                } else {
+                    p+=(0.01*player.Carrots);
+                    player.Carrots-=(0.01*player.Carrots);
+                    elGregProgress.style.width = 100*(p/price) + "%";
                 }
-            } 
-        } else {
-            n=0;
-        }
+
+            }
+        } 
     }
 }
+
 
 
 
 //Equips A Hoe To a Character
-function EquipHoe(character=Boomer_Bill, type=0){
-    if(Gregory.Hoes[type]>=1){
-        if(character.Hoes[type]>=Gregory.lvl) {
+function EquipHoe(character=Boomer_Bill, type=0, ammount){
+    if(Gregory.Hoes[type]>=ammount){
+        if(character.Hoes[type]+ammount-1>=Gregory.lvl) {
             toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
             n=0;
             return;
         }
-        character.Hoes[type]+=1;
-        Gregory.Hoes[type]-=1;
+        character.Hoes[type]+=ammount;
+        Gregory.Hoes[type]-=ammount;
     }
 }
 
 // Temporary fix thing, going to just add their names to their objects probably
-function characterString(character, type) {
+function characterString(character) {
     switch(character) {
         case Boomer_Bill:
             return charString = 'bill';
@@ -481,6 +527,16 @@ function DisplayRounded(Value, Fixedto=3) {
     return Value;
 }
 
+//multibuy
+const multibuy = [1,10,100];
+var multibuySelector = 0;
+function multibuySpin(){
+  if(multibuy[multibuy.length-1]>multibuy[multibuySelector]){
+    multibuySelector++;
+  }else{
+    multibuySelector=0;
+  }
+}
 
 
 // delete save
@@ -575,9 +631,9 @@ setInterval(() => {
     }
 
     // Costs to level up characters
-    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(Boomer_Bill.lvlupPrice,1)}`;
-    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(Belle_Boomerette.lvlupPrice,1)}`;
-    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(Gregory.lvlupPrice,1)+"";
+    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill,multibuy[multibuySelector],"query"),1)}`;
+    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette,multibuy[multibuySelector],"query"),1)}`;
+    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(CharacterLevelUpPrice(Gregory,multibuy[multibuySelector],"query"),1)+"";
 
     // Character levels
     elCharacterLevel.bill.innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
@@ -598,12 +654,12 @@ setInterval(() => {
     prestige_info.innerText = DisplayRounded(player.prestige_potential,2);
 
     // Greg's Hoe Prices
-    elHoePrices.wooden.innerText    = `${DisplayRounded(Gregory.HoePrices[0],1)}`;
-    elHoePrices.stone.innerText     = `${DisplayRounded(Gregory.HoePrices[1],1)}`;
-    elHoePrices.iron.innerText      = `${DisplayRounded(Gregory.HoePrices[2],1)}`;
-    elHoePrices.gold.innerText      = `${DisplayRounded(Gregory.HoePrices[3],1)}`;
-    elHoePrices.diamond.innerText   = `${DisplayRounded(Gregory.HoePrices[4],1)}`;
-    elHoePrices.netherite.innerText = `${DisplayRounded(Gregory.HoePrices[5],1)}`;
+    elHoePrices.wooden.innerText    = `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`;
+    elHoePrices.stone.innerText     = `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`;
+    elHoePrices.iron.innerText      = `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`;
+    elHoePrices.gold.innerText      = `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`;
+    elHoePrices.diamond.innerText   = `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`;
+    elHoePrices.netherite.innerText = `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`;
 
     if(player.LifetimeGoldenCarrots>0 || player.prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
@@ -626,29 +682,6 @@ setInterval(() => {
        BH: ${Math.floor(100*Charles.BetterHoes)}%\n
        DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
 }, 100);
-//#endregion
-
-
-/*---------Auto Saves----------*/
-//#region
-
-setInterval(() => {
-    if(player){
-        localStorage.setObject("player",player);
-        localStorage.setObject("Bill",Boomer_Bill);
-        localStorage.setObject("Belle",Belle_Boomerette);
-        localStorage.setObject("Greg",Gregory);
-        localStorage.setObject("Charles",Charles)
-    }else{
-        localStorage.setObject("player",player1);
-        localStorage.setObject("Bill",Default_Boomer_Bill);
-        localStorage.setObject("Belle",Default_Belle_Boomerette);
-        localStorage.setObject("Greg",Default_Gregory);
-        localStorage.setObject("Charles",Default_Charles);
-        location.reload();
-    }
-}, 2000);
-
 //#endregion
 
 

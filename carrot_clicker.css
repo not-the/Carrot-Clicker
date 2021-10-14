@@ -564,7 +564,11 @@ input {
 .grayedout .levelupimg:hover,
 .grayedout .toolicon:hover,
 .grayedout.levelupimg:hover,
-.grayedout.toolicon:hover {
+.grayedout.toolicon:hover,
+.grayedout .levelupimg:active,
+.grayedout .toolicon:active,
+.grayedout.levelupimg:active,
+.grayedout.toolicon:active {
     transform: none;
     filter: brightness(90%) saturate(0%);
 }
@@ -572,7 +576,11 @@ input {
 .blackedout .levelupimg:hover,
 .blackedout .toolicon:hover,
 .blackedout.levelupimg:hover,
-.blackedout.toolicon:hover {
+.blackedout.toolicon:hover,
+.blackedout .levelupimg:active,
+.blackedout .toolicon:active,
+.blackedout.levelupimg:active,
+.blackedout.toolicon:active {
     transform: none;
     filter: contrast(0%) brightness(20%);
 }
