@@ -53,6 +53,18 @@ document.addEventListener('keydown', event => {
 
 });
 
+document.addEventListener('keyup', event => {
+    if(
+        store("disableKeybinds") == "true"
+        || dialogOpen == true
+        || document.activeElement.id == 'notificationLength') return;
+
+        
+    if(event.key == " "){
+        onClick();
+    }
+});
+
 
 /*-----------------------Keybinds-------------------*/
 //#region
@@ -72,7 +84,6 @@ function keybindHandler(event){
     }
     if(event.key == " "){
         event.preventDefault();
-        onClick();
     }
 
     //level up
