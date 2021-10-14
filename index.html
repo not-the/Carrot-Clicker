@@ -360,7 +360,7 @@
         <p><i>Your game progress will always be saved.</i></p><br>
         <!-- Options item -->
         <label for="disable_keybinds">
-          <input type="checkbox" id="disable_keybinds" onclick="KeyBinds()">
+          <input type="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
           Disable keybinds
         </label><br><br>
 
@@ -369,9 +369,10 @@
           <input type="number" id="notificationLength" value="5">
           <button onclick="saveOption('notificationLength')">Save</button>
           <button onclick="resetOption()">Reset</button>
-        </label><br>
+        </label><br><br>
           
         <!-- Options item -->
+        <p>Danger Zone:</p>
         <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
           Delete Save Data
         </button>
@@ -387,6 +388,7 @@
   <!-- #region -->
   <script src="carrot_clicker.js"></script>
   <script src="styling.js"></script>
+  <script src="user.js"></script>
   <!-- #endregion -->
 
 </body>

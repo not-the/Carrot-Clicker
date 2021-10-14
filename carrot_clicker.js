@@ -98,132 +98,8 @@ const elCharles = {
     decreaseWages:            dom("DecreaseWages"),
     charlesTooltip:           dom("charlestooltip")
 }
-
-
 //#endregion
 
-
-/*-----------------------Keybinds-------------------*/
-//#region
-
-
-//defining keybinds
-function keybinds(event){
-    if(event.key == "Shift"){
-        multibuySpin();
-        dom("multibuy").innerText=(multibuy[multibuySelector]+"x");
-    }
-    if(event.key == " "){
-        event.preventDefault();
-        onClick();
-    }
-
-    //level up
-    if(event.key=="1" && event.altKey==false && event.ctrlKey==false){
-        LevelUp(Boomer_Bill,multibuy[multibuySelector]);
-    }
-    if(event.key=="2" && event.altKey==false && event.ctrlKey==false){
-        LevelUp(Belle_Boomerette,multibuy[multibuySelector]);
-    }
-    if(event.key=="3" && event.altKey==false && event.ctrlKey==false){
-        LevelUp(Gregory,multibuy[multibuySelector]);
-    }
-
-    //hoes
-    if(event.key=="4" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(0,multibuy[multibuySelector]);
-    }
-    if(event.key=="5" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(1,multibuy[multibuySelector]);
-    }
-    if(event.key=="6" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(2,multibuy[multibuySelector]);
-    }
-    if(event.key=="7" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(3,multibuy[multibuySelector]);
-    }
-    if(event.key=="8" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(4,multibuy[multibuySelector]);
-    }
-    if(event.key=="9" && event.altKey==false && event.ctrlKey==false){
-        CreateHoe(5,multibuy[multibuySelector]);
-    }
-
-
-    if(event.key=="4" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,0,multibuy[multibuySelector]);
-    }
-    if(event.key=="5" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,1,multibuy[multibuySelector]);
-    }
-    if(event.key=="6" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,2,multibuy[multibuySelector]);
-    }
-    if(event.key=="7" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,3,multibuy[multibuySelector]);
-    }
-    if(event.key=="8" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,4,multibuy[multibuySelector]);
-    }
-    if(event.key=="9" && event.altKey==true && event.ctrlKey==false){
-        EquipHoe(Boomer_Bill,5,multibuy[multibuySelector]);
-    }
-
-    if(event.key=="4" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector]);
-    }
-    if(event.key=="5" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector]);
-    }
-    if(event.key=="6" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector]);
-    }
-    if(event.key=="7" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector]);
-    }
-    if(event.key=="8" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector]);
-    }
-    if(event.key=="9" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector]);
-    }
-    
-    //settings and prestige
-    if(event.key=="Backspace" && event.altKey==false && event.ctrlKey==true){
-        event.preventDefault();
-        openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave');
-    }
-    if(event.key=="p"){
-        openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
-    }
-} 
-var checkBox = dom("disable_keybinds");
-var keybindsLS = localStorage.getItem("keybinds")
-if(keybindsLS=="false"){
-    checkBox.checked=true;
-}
-//Keyboard Event listener and checkboxing
-function KeyBinds() {
-    //checkbox
-  
-    //checking checkbox
-    if (checkBox.checked == true){
-        toast("Settings","Keybinds are Disabled","red");
-        window.removeEventListener('keydown',keybinds);
-        localStorage.setItem("keybinds","false");
-        return;
-    }
-        window.addEventListener('keydown',keybinds);
-        localStorage.setItem("keybinds","true");
-}
-
-//#endregion
 
 
 /*-------------Local Storage and Characters-------------*/
@@ -315,9 +191,6 @@ setInterval(() => {
         location.reload();
     }
 }, 2000);
-
-
-KeyBinds();
 //#endregion
 
 

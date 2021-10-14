@@ -16,6 +16,8 @@ var activeToasts = 0;
 var toastsList =  {};
 var bonusID =      0;
 
+var dialogOpen = false;
+
 // Dialog button action
 var dialogButtonAction = 'none';
 
@@ -36,11 +38,12 @@ const toastsClear =     dom("toasts_clear");
 //#endregion
 
 
+
 /*---------------FUNCTIONS-----------------*/
 //#region
-function testFunction(param) {
-    console.log("testFunction runs");
-}
+// function testFunction(param) {
+//     console.log("testFunction runs");
+// }
 
 // Capitalize first letter of string
 // https://stackoverflow.com/a/1026087
@@ -50,6 +53,7 @@ function capitalizeFL(string) {
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
+    dialogOpen = true;
     overlay.classList.add("visible");
     // elDialog.main.classList.add("dialog_animate");
 
@@ -62,24 +66,11 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     }
 
     dialogButtonAction = buttonAction;
-    
-    //adds event listener to the dialog
-    window.addEventListener('keydown', DialogKeybinds);
-    
 }
-
-//Dialog Keybinds
-function DialogKeybinds(event){
-        if(event.key=="Escape"){
-            closeDialog();
-        }
-        if(event.key=="Enter"){
-            closeDialog(true);
-        }
-    }
 
 // Close dialog
 function closeDialog(doAction) {
+    dialogOpen = false;
     elDialog.title.innerText = 'Dialog Title';
     elDialog.desc.innerText = 'Dialog description';
     // Reset Accept button
@@ -108,9 +99,6 @@ function closeDialog(doAction) {
     };
 
     dialogButtonAction = 'none';
-
-    //removes the Dialog Event Listener
-    window.removeEventListener('keydown',DialogKeybinds);
 }
 
 
@@ -182,10 +170,12 @@ function clearToasts() {
         closeToast(entry);
     }
 }
+//#endregion
 
 
 
 // Panel handler
+//#region 
 var currentPanel = "info-panel";
 // Tab Panels
 const infoPanel =       dom("info-panel");
@@ -217,32 +207,12 @@ function panelChange(to) {
         currentPanel = to;
     }
 }
-
-
-
-
-// Temporary option thing
-const notificationLength = dom("notificationLength");
-function saveOption() {
-    let value = notificationLength.value;
-    if(value >= 2 && value <= 15) {
-        console.log(`[Settings] Notification length set to: ${value}`);
-        store("notificationLength", value);
-        toast("Notification time set", `Notification will disappear after ${value} seconds`);
-    } else {
-        toast("Invalid Number", "Must be between 2 and 15 seconds", "red");
-    }
-}
-// Reset notification time to default
-function resetOption() {
-    notificationLength.value = 5;
-    localStorage.removeItem("notificationLength");
-    toast("Notification time reset", `Notification will disappear after 5 seconds`);
-}
+//#endregion
 
 
 
 // Click bonus popup
+//#region 
 function popupHandler() {
     // Create Element
     var clickVisualElement = document.createElement("div");
@@ -305,30 +275,4 @@ function popupHandler() {
         mouseY = event.pageY;
     }
 })();
-
-
-
-// Runs on startup
-if(store("notificationLength") !== null) {
-    notificationLength.value = parseInt(store("notificationLength"));
-}
-
-
-// Tutorial things maybe
-
-// Initial Welcome
-if(store("tutorial_sample") == null) {
-    store("tutorial_sample", "done");
-    toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
-} else if(store("tutorial_sample") == "done") {
-    // Temporary two step until someone fixes the storage issue
-    store("tutorial_sample", "really_done");
-    toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
-}
-
-// After Greg crafts a hoe for the first time (Called in carrot_clicker.js)
-function tutorialHoes() {
-    store('tutorial_first_hoe', "done");
-    toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
-}
 //#endregion
