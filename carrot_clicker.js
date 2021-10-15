@@ -10,8 +10,6 @@ var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
-// getElementById shorthandx
-function dom(id) {return document.getElementById(id);}
 
 
 // Getting InnerHtml
@@ -104,26 +102,6 @@ const elCharles = {
 
 /*-------------Local Storage and Characters-------------*/
 //#region
-
-
-// Local Storage shorthand (Strings only)
-function store(key, data) {
-    if(data) {
-        localStorage.setItem(key, data);
-    } else {
-        return localStorage.getItem(key);
-    }
-}
-
-
-// Locally Store Objects
-Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
-}
-Storage.prototype.getObject = function(key) {
-    var value = this.getItem(key);
-    return value && JSON.parse(value);
-}
 
 
 
@@ -504,48 +482,6 @@ function DisplayHoe(character, type) {
 }
 
 
-//#endregion
-
-
-/* ----------------Quality of Life Functions --------------*/
-//#region
-
-//Creates Bases to Display Large Numbers 
-const Bases=[];
-for(i=1000;i<99999999999999999999999999999;i=i*1000) {
-    Bases.push(i);
-}
-
-// Displaying Roundced Numbers example"100m 140b
-function DisplayRounded(Value, Fixedto=3) {
-    var units = ["k","m","b","t","q","Q","s","S"];
-    for(i=0;i<units.length;i++){
-        if(Value<Bases[i+1] && Value>Bases[0]){
-            return (Value/Bases[i]).toFixed(Fixedto)+units[i];
-        }
-    }
-    return Value;
-}
-
-//multibuy
-const multibuy = [1,10,100];
-var multibuySelector = 0;
-function multibuySpin(){
-  if(multibuy[multibuy.length-1]>multibuy[multibuySelector]){
-    multibuySelector++;
-  }else{
-    multibuySelector=0;
-  }
-}
-
-
-// delete save
-function ClearLocalStorage(){
-    console.log('Clearing local storage');
-    
-    localStorage.clear();
-    location.reload();
-}
 //#endregion
 
 
