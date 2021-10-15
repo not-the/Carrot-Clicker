@@ -45,61 +45,7 @@ const toastsClear =     dom("toasts_clear");
 //     console.log("testFunction runs");
 // }
 
-// Capitalize first letter of string
-// https://stackoverflow.com/a/1026087
-function capitalizeFL(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
-// Popup Notifications
-function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
-    dialogOpen = true;
-    overlay.classList.add("visible");
-    // elDialog.main.classList.add("dialog_animate");
-
-    // Fill out dialog text, if applicable
-    if(title)       {elDialog.title.innerText = title;}
-    if(desc)        {elDialog.desc.innerText = desc;}
-    if(buttonName)  {elDialog.buttons.accept.innerText = buttonName;}
-    if(buttonStyle) {
-        elDialog.buttons.accept.classList.add(buttonStyle);
-    }
-
-    dialogButtonAction = buttonAction;
-}
-
-// Close dialog
-function closeDialog(doAction) {
-    dialogOpen = false;
-    elDialog.title.innerText = 'Dialog Title';
-    elDialog.desc.innerText = 'Dialog description';
-    // Reset Accept button
-    elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
-    // elDialog.buttons.accept.onclick = closeDialog;
-    elDialog.buttons.accept.innerText = "OK";
-
-    overlay.classList.remove("visible");
-    // elDialog.main.classList.remove("dialog_animate");
-
-    // Run passed in function if applicable
-    // if(action) {
-    //     action();
-    // }
-
-    // Run a function when accept is pressed
-    if(doAction) {
-        switch(dialogButtonAction) {
-            case 'prestige':
-                Prestige();
-                break;
-            case 'clearsave':
-                ClearLocalStorage();
-                break;
-        };
-    };
-
-    dialogButtonAction = 'none';
-}
 
 
 // Create Toast notification
