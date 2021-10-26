@@ -4,9 +4,9 @@
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
 const mainCarrot =      dom("main_carrot");
-var tooltipBill = dom("billtooltip").style.top;
-var tooltipBelle = dom("belletooltip").style.top;
-var tooltipGreg = dom("gregtooltip").style.top;
+var tooltipBill =       dom("billtooltip").style.top;
+var tooltipBelle =      dom("belletooltip").style.top;
+var tooltipGreg =       dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 
@@ -213,7 +213,7 @@ function panelChange(to) {
 
 // Click bonus popup
 //#region 
-function popupHandler() {
+function popupHandler(useMousePos = true) {
     // Create Element
     var clickVisualElement = document.createElement("div");
 
@@ -222,8 +222,20 @@ function popupHandler() {
     var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
     // var randomRot = Math.floor((Math.random() * 16) - 8);
 
-    clickVisualElement.style.left = randomX + "px";
-    clickVisualElement.style.top = randomY + "px";
+    // Get position of carrot image (used when useMousePos is false)
+    var mcPosition = mainCarrot.getBoundingClientRect();
+    var fixedX = Math.floor((Math.random() * 10) - 5) + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
+    // var fixedY = mcPosition.top + (mcPosition.bottom - mcPosition.top) / 2;
+    var fixedY = Math.floor((Math.random() * 10) - 5) + mcPosition.bottom - 12;
+
+    if(useMousePos == true) {
+        clickVisualElement.style.left = randomX + "px";
+        clickVisualElement.style.top =  randomY + "px";
+    } else {
+        clickVisualElement.style.left = fixedX + "px";
+        clickVisualElement.style.top =  fixedY + "px";
+    }
+
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
