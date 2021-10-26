@@ -36,6 +36,8 @@ img {
 #container {
     justify-content: center;
     flex-wrap: wrap;
+
+    margin-top: 24px;
 }
 .unbold {
     font-weight: unset;
@@ -297,7 +299,8 @@ input {
 }
 
 /* Informational */
-.Basic_Info {
+/* Old styling, don't delete, will have in a theme later */
+/* .Basic_Info {
     background-color: #4e3f34;
     background-image: url(./assets/Dirt-Background.jpg);
     padding: 8px 20px;
@@ -307,12 +310,23 @@ input {
     position: sticky;
     top: 0;
     z-index: 99;
+} */
+.Basic_Info {
+    background-color:#312e2e;
+    border: 1px solid #4b4747;
+    border-top: none;
+
+    padding: 8px 20px;
+
+    position: sticky;
+    top: 0;
+    z-index: 99;
 }
-#Tip{
+#Tip {
     margin-left: auto;
     cursor: pointer;
 }
-#Tip:hover{
+#Tip:hover {
     text-decoration: underline;
 }
 #Carrot_Count {
@@ -341,7 +355,7 @@ input {
 
     transition: transform 0.1s;
 }
-#main_carrot:active {
+#main_carrot:active, #main_carrot:focus {
     transform: scale(0.98,0.98)
 }
 /* Prestige */
@@ -610,11 +624,12 @@ input {
 
 /* Notifications section */
 #notifs-section {
+    max-width: 1150px;
     position: relative;
     width: 100%;
     height: 410px;
     min-width: 270px;
-    margin: 24px;
+    margin: 24px auto;
     padding: 0;
     background-color: rgb(78, 63, 52);
 }

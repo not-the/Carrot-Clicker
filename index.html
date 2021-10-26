@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrot Clicker dev beta 1.2.5</title>
 
+    <!-- Misc -->
+    <meta name="theme-color" content="#312e2e">
+
+    <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
 </head>  
@@ -78,7 +82,7 @@
       <!-- Left Section -->
       <div id="left-section">
         <!-- Carrot image-->
-        <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()">
+        <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()" role="button" tabindex="0">
 
         <!-- Numbers/Info Section -->
         <p id="Carrot_Count">Error....</p>
@@ -319,7 +323,7 @@
 
   <!-- Lower section -->
   <!-- #region -->
-  <div class="flex">
+  <div class="information-area flex">
     <!-- Info section -->
     <!-- <div class="row-break"></div> -->
     <div id="notifs-section">

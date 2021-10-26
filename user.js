@@ -1,4 +1,6 @@
-// Users settings, keybind handling, and tutorial handling
+/* -------------------------------------------------------------
+Users settings, keybind handling, and tutorial handling
+------------------------------------------------------------- */
 
 const notificationLength = dom("notificationLength");
 const elDisableKeybinds = dom("disable_keybinds");
@@ -57,11 +59,12 @@ document.addEventListener('keyup', event => {
     if(
         store("disableKeybinds") == "true"
         || dialogOpen == true
-        || document.activeElement.id == 'notificationLength') return;
+        || document.activeElement.id == 'notificationLength'
+    ) return;
 
         
     if(event.key == " "){
-        onClick();
+        onClick(false);
     }
 });
 

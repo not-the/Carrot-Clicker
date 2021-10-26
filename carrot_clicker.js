@@ -13,6 +13,9 @@ var n = 0;
 // getElementById shorthandx
 function dom(id) {return document.getElementById(id);}
 
+// Hacky solution to carrot not animating on mobile
+// https://stackoverflow.com/a/56140328/11039898
+document.addEventListener("touchstart", function() {}, true);
 
 // Getting InnerHtml
 const prestige_info = dom("Prestige");
@@ -197,10 +200,10 @@ setInterval(() => {
 /* ----------------------Functions------------------------*/
 //#region
 //On Carrots Click
-function onClick() {
+function onClick(useMousePos) {
     player.Carrots+=player.cpc;
     player.LifetimeCarrots+=player.cpc;
-    popupHandler();
+    popupHandler(useMousePos);
 }
 
 
@@ -213,26 +216,26 @@ var cpsInterval = setInterval(CarrotsPerSecond,100);
 
 
 //level up characters 
-function CharacterLevelUpPrice(character=Boomer_Bill,ammount=1,mode="query"){
+function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
     var r=character.lvlupPrice;
     var r2=character.lvlupPrice;
-    for(i=0;i<ammount-1;i++){
+    for(i=0; i<ammount-1; i++){
         if(character==Gregory){
-                let UpGregPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-                r+=UpGregPercent;
-                r2+=r;
-            }
-            if(character==Belle_Boomerette){
-                let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
-                r+=UpBellePercent;
-                r2+=r;
+            let UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
+            r+=UpGregPercent;
+            r2+=r;
+        }
+        if(character==Belle_Boomerette){
+            let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
+            r+=UpBellePercent;
+            r2+=r;
 
-            }
-            if(character==Boomer_Bill){
-                let UpBillPercent =((1-DecreaseWagesEffects())*Math.floor(r*0.102));
-                r+=UpBillPercent;
-                r2+=r;
-            }
+        }
+        if(character==Boomer_Bill){
+            let UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
+            r+=UpBillPercent;
+            r2+=r;
+        }
     }
     if(mode=="query"){
         return r2;
@@ -242,8 +245,8 @@ function CharacterLevelUpPrice(character=Boomer_Bill,ammount=1,mode="query"){
     }
 
 }
-function LevelUp(character=Boomer_Bill,ammount=1) {
-    if(player.Carrots>=CharacterLevelUpPrice(character,ammount,"query")) {
+function LevelUp(character=Boomer_Bill, ammount=1) {
+    if(player.Carrots >= CharacterLevelUpPrice(character, ammount, "query")) {
             character.lvl+=ammount;
             CharacterLevelUpPrice(character,ammount,"apply");
             player.Carrots-=character.lvlupPrice;
@@ -557,22 +560,22 @@ setInterval(() => {
     var cpcHoes;
     var cpsHoes;
     if(Charles.BetterHoes>0){
-    cpcHoes = 
-        (Charles.BetterHoes*1.15)*(Boomer_Bill.Hoes[0])
-        + (10*Boomer_Bill.Hoes[1])
-        + (100*Boomer_Bill.Hoes[2])
-        + (1000*Boomer_Bill.Hoes[3])
-        + (10000*Boomer_Bill.Hoes[4])
-        + (100000*Boomer_Bill.Hoes[5]);
-    
-    cpsHoes =
-        (Charles.BetterHoes*1.15)*(Belle_Boomerette.Hoes[0] 
-        + (10*Belle_Boomerette.Hoes[1])
-        + (100*Belle_Boomerette.Hoes[2])
-        + (1000*Belle_Boomerette.Hoes[3])
-        + (10000*Belle_Boomerette.Hoes[4])
-        + (100000*Belle_Boomerette.Hoes[5])
-        );
+        cpcHoes = 
+            (Charles.BetterHoes*1.15)*(Boomer_Bill.Hoes[0])
+            + (10*Boomer_Bill.Hoes[1])
+            + (100*Boomer_Bill.Hoes[2])
+            + (1000*Boomer_Bill.Hoes[3])
+            + (10000*Boomer_Bill.Hoes[4])
+            + (100000*Boomer_Bill.Hoes[5]);
+        
+        cpsHoes =
+            (Charles.BetterHoes*1.15)*(Belle_Boomerette.Hoes[0] 
+            + (10*Belle_Boomerette.Hoes[1])
+            + (100*Belle_Boomerette.Hoes[2])
+            + (1000*Belle_Boomerette.Hoes[3])
+            + (10000*Belle_Boomerette.Hoes[4])
+            + (100000*Belle_Boomerette.Hoes[5])
+            );
     }else{
         cpcHoes=
             (Boomer_Bill.Hoes[0])
@@ -624,21 +627,21 @@ setInterval(() => {
 
     //The Basic info for the player, Carrots; Cpc; Cps
     if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
-        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`
+        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`;
     }
     if(player.LifetimeGoldenCarrots>=1) {
         elGoldenCarrotCount.style.color = "white";
     }
 
     // Costs to level up characters
-    elCharacterUpCost.bill.innerText = `Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill,multibuy[multibuySelector],"query"),1)}`;
-    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette,multibuy[multibuySelector],"query"),1)}`;
-    elCharacterUpCost.greg.innerText="Cost to Upgrade Greg: "+DisplayRounded(CharacterLevelUpPrice(Gregory,multibuy[multibuySelector],"query"),1)+"";
+    elCharacterUpCost.bill.innerText =`Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
+    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`;
+    elCharacterUpCost.greg.innerText = `Cost to Upgrade Greg: ${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`;
 
     // Character levels
-    elCharacterLevel.bill.innerText ="Lvl: "+DisplayRounded(Boomer_Bill.lvl,1);
-    elCharacterLevel.belle.innerText="Lvl: "+DisplayRounded(Belle_Boomerette.lvl,1);
-    elCharacterLevel.greg.innerText="Lvl: "+DisplayRounded(Gregory.lvl);
+    elCharacterLevel.bill.innerText  = `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`;
+    elCharacterLevel.belle.innerText = `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`;
+    elCharacterLevel.greg.innerText  = `Lvl: ${DisplayRounded(Gregory.lvl)}`;
 
     // Update Hoes on page
     for(i = 0; i < 6; i++) {
@@ -736,30 +739,31 @@ var tipTracker = 1;
 var tipType = 0
 var TipTypeModifier = 1;
 
-
-tipchange = function(){
-    tipType=Math.random*TipTypeModifier;
-    if(tipType<0.9){
+function tipchange() {
+    console.log('Changing tip');
+    tipType = Math.random * TipTypeModifier;
+    if(tipType < 0.9) {
        tipnumber = Math.floor(Math.random()*tips_Basic.length);
         if(tipnumber == tipTracker) {
             tipchange();
             return;
         }
-        dom("Tip").innerText=tips_Basic[tipnumber];
+        dom("Tip").innerText = tips_Basic[tipnumber];
         tipTracker = tipnumber;
         return;
     } 
-    tipnumber = Math.floor(Math.random()*tips.fun.length);
+    tipnumber = Math.floor(Math.random() * tips.fun.length);
     if(tipnumber == tipTracker) {
         tipchange();
         return;
     }
-    dom("Tip").innerText=tips.fun[tipnumber];
+    dom("Tip").innerText = tips.fun[tipnumber];
     tipTracker = tipnumber;
     return;
 }
 
 // Automatically change tips
-setInterval(tipchange(), 10000);
+setInterval(tipchange(), 2000);
+
 
 //#endregion
