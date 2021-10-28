@@ -4,9 +4,9 @@
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
 const mainCarrot =      dom("main_carrot");
-var tooltipBill = dom("billtooltip").style.top;
-var tooltipBelle = dom("belletooltip").style.top;
-var tooltipGreg = dom("gregtooltip").style.top;
+var tooltipBill =       dom("billtooltip").style.top;
+var tooltipBelle =      dom("belletooltip").style.top;
+var tooltipGreg =       dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 
@@ -46,6 +46,56 @@ const toastsClear =     dom("toasts_clear");
 // }
 
 
+
+// Popup Notifications
+function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
+    dialogOpen = true;
+    overlay.classList.add("visible");
+    // elDialog.main.classList.add("dialog_animate");
+
+    // Fill out dialog text, if applicable
+    if(title)       {elDialog.title.innerText = title;}
+    if(desc)        {elDialog.desc.innerText = desc;}
+    if(buttonName)  {elDialog.buttons.accept.innerText = buttonName;}
+    if(buttonStyle) {
+        elDialog.buttons.accept.classList.add(buttonStyle);
+    }
+
+    dialogButtonAction = buttonAction;
+}
+
+// Close dialog
+function closeDialog(doAction) {
+    dialogOpen = false;
+    elDialog.title.innerText = 'Dialog Title';
+    elDialog.desc.innerText = 'Dialog description';
+    // Reset Accept button
+    elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
+    // elDialog.buttons.accept.onclick = closeDialog;
+    elDialog.buttons.accept.innerText = "OK";
+
+    overlay.classList.remove("visible");
+    // elDialog.main.classList.remove("dialog_animate");
+
+    // Run passed in function if applicable
+    // if(action) {
+    //     action();
+    // }
+
+    // Run a function when accept is pressed
+    if(doAction) {
+        switch(dialogButtonAction) {
+            case 'prestige':
+                Prestige();
+                break;
+            case 'clearsave':
+                ClearLocalStorage();
+                break;
+        };
+    };
+
+    dialogButtonAction = 'none';
+}
 
 
 // Create Toast notification
@@ -159,7 +209,7 @@ function panelChange(to) {
 
 // Click bonus popup
 //#region 
-function popupHandler() {
+function popupHandler(useMousePos = true) {
     // Create Element
     var clickVisualElement = document.createElement("div");
 
@@ -168,8 +218,20 @@ function popupHandler() {
     var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
     // var randomRot = Math.floor((Math.random() * 16) - 8);
 
-    clickVisualElement.style.left = randomX + "px";
-    clickVisualElement.style.top = randomY + "px";
+    // Get position of carrot image (used when useMousePos is false)
+    var mcPosition = mainCarrot.getBoundingClientRect();
+    var fixedX = Math.floor((Math.random() * 10) - 5) + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
+    // var fixedY = mcPosition.top + (mcPosition.bottom - mcPosition.top) / 2;
+    var fixedY = Math.floor((Math.random() * 10) - 5) + mcPosition.bottom - 12;
+
+    if(useMousePos == true) {
+        clickVisualElement.style.left = randomX + "px";
+        clickVisualElement.style.top =  randomY + "px";
+    } else {
+        clickVisualElement.style.left = fixedX + "px";
+        clickVisualElement.style.top =  fixedY + "px";
+    }
+
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
