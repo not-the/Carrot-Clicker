@@ -1,18 +1,26 @@
+/* Carrot Utilities */
 /* Created by JJCVIP and Not-The */
-/* Utility functions*/
+/* Utility functions */
 
 
- // getElementById shorthandx
+// getElementById shorthand
 function dom(id) {return document.getElementById(id);}
 
+// document.querySelector shorthand
+function $(sel) {return document.querySelector(sel);}
+
 // Local Storage shorthand (Strings only)
-function store(key, data) {
-    if(data) {
-        localStorage.setItem(key, data);
-    } else {
-        return localStorage.getItem(key);
-    }
+function store(key, value) {
+    if(value) {localStorage.setItem(key, value);}
+    else {return localStorage.getItem(key);}
 }
+
+// sessionStorage shorthand
+function sessionStorage(key, value) {
+    if(value) {sessionStorage.setItem(key, value);}
+    else {return sessionStorage.getItem(key);}
+}
+
 
 
 // Locally Store Objects
@@ -24,14 +32,14 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
-//Creates Bases to Display Large Numbers 
+// Creates Bases to Display Large Numbers 
 const Bases=[];
 for(i=1000;i<99999999999999999999999999999;i=i*1000) {
     Bases.push(i);
 }
 
-// Displaying Roundced Numbers example"100m 140b
-function DisplayRounded(Value, Fixedto=3) {
+// Displaying Rounded Numbers example"100m 140b
+function DisplayRounded(Value, Fixedto = 3) {
     var units = ["k","m","b","t","q","Q","s","S"];
     for(i=0;i<units.length;i++){
         if(Value<Bases[i+1] && Value>Bases[0]){
@@ -54,10 +62,11 @@ function multibuySpin(){
 
 
 // delete save
-function ClearLocalStorage(){
+function ClearLocalStorage(disableReload){
     console.log('Clearing local storage');
     
     localStorage.clear();
+    if(disableReload) {return;}
     location.reload();
 }
 
@@ -68,6 +77,7 @@ function capitalizeFL(string) {
 }
 
 
+/*
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
@@ -187,3 +197,4 @@ function clearToasts() {
         closeToast(entry);
     }
 }
+*/
