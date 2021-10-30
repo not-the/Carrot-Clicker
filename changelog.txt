@@ -1,0 +1,34 @@
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.0
+    10-29-2021
+// ----------------------------------------------------------- //
+
+CSS changes:
+- Top bar no longer pushes rest of page down when its size changes
+- Charles now stays in the same column as the other characters ~~(Assuming there isn't space for him on the right)~~ not added yet
+- General CSS cleanup
+
+Themes:
+- Theme dropdown in settings pane
+- New WIP light theme
+- WIP Classic theme (Original Carrot Clicker CSS, green outlines and all)
+- Themes are able to change mobile accent color to match
+- Theme is automatically stored and loaded using localStorage
+- More themes are planned
+
+Misc:
+- Statistics and achievements tabs have swapped places, achievements is open by default
+- Multibuy (1x) indicator in the top left can be clicked to change it
+- Fixed issue on mobile where touble tapping the carrot (or anything on the page) would zoom (needs to be tested, seems to work on my phone though)
+- A progress bar will appear directly below the status bar while Greg is crafting (unfinished)
+
+Still need to do:
+- Charles spills over to a 2nd column when there is enough room
+- Status bar progress bar needs to work
+- Make settings look nicer
+
+Lines of code:
+  Total HTML:  441
+  Total CSS :  873
+  Total JS:   1334
+  TOTAL:      2648

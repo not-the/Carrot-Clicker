@@ -8,6 +8,7 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 //variables to prevent spamclicking
 var n = 0;
 
+
 /*------------Page Setup---------------*/
 //#region
 // getElementById shorthandx
@@ -539,6 +540,7 @@ function multibuySpin(){
   }else{
     multibuySelector=0;
   }
+  dom("multibuy").innerText=(multibuy[multibuySelector]+"x");
 }
 
 

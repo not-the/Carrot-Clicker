@@ -1,0 +1,74 @@
+/* ---------------- Light theme ------------------- */
+/* Universal */
+.theme_light {
+    background-color: whitesmoke;
+    color: black;
+}
+.theme_light button {
+    color: black;
+    /* border: 1px solid var(--light-theme-border-color); */
+    background-color: whitesmoke;
+}
+
+/* Basic Info */
+.theme_light .Basic_Info {
+    background-color: white;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+    border-color: var(--light-theme-border-color);
+}
+
+/* Gamespace */
+.theme_light #left-section {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light .characterbox {
+    background-color: white;
+    border-color: white;
+
+    box-shadow: 0px 4px 6px rgba(145, 98, 98, 0.4);
+}
+.theme_light .characterbox:hover {
+    box-shadow: 0px 6px 12px rgba(145, 98, 98, 0.4);
+}
+.theme_light .characterbox .bottom {
+    background-color: var(--light-darker-bg-color);
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2) inset;
+}
+
+.theme_light .blackedout {
+    opacity: 0.2;
+}
+
+
+
+
+
+
+
+
+
+
+/* Classic theme */
+.theme_classic .Basic_Info {
+    background-color: #4e3f34;
+    background-image: url(./assets/Dirt-Background.jpg);
+}
+
+.theme_classic #left-section {
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.theme_classic .characterbox {
+    background-color: transparent;
+    overflow: unset;
+    border-radius: 0;
+    border: 2px solid rgb(29, 248, 0);
+}
+.theme_classic .characterimg {
+    border-radius: 0;
+}
+.theme_classic #Greg_Bar {
+    background-color: gray;
+    border-radius: 0;
+}
