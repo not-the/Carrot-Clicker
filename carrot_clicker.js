@@ -116,6 +116,9 @@ class Character{
         this.Hoes=Hoes;
     }
 }
+
+
+
 // Default Values Stored in a Player Object
 const player1 = {
     Carrots:0,
@@ -335,27 +338,27 @@ function DecreaseWagesEffects(){
 //#region
 
 //Stores The Correct Hoe Price
-    function HoeCost(type=0,ammount=1,mode="query"){
-        var r = Gregory.HoePrices[type];
-        var r2 = Gregory.HoePrices[type];
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                for(j=1;j<ammount;j++){
+function HoeCost(type=0,ammount=1,mode="query"){
+    var r = Gregory.HoePrices[type];
+    var r2 = Gregory.HoePrices[type];
+    for(i=0;i<Gregory.HoePrices.length;i++){
+        if(type==i){
+            for(j=1;j<ammount;j++){
+                r2+=(0.05*r);
+            }
+            if(mode=="query"){
+                return r2;
+            }
+            if(mode=="apply"){
+                if(ammount==1){
                     r2+=(0.05*r);
                 }
-                if(mode=="query"){
-                    return r2;
-                }
-                if(mode=="apply"){
-                    if(ammount==1){
-                        r2+=(0.05*r);
-                    }
-                    Gregory.HoePrices[type]=r2;
-                }
-                
+                Gregory.HoePrices[type]=r2;
             }
+            
         }
     }
+}
 
 function CreateHoe(type=0,ammount=1) {
     // Return if a hoe is already in progress

@@ -3,8 +3,23 @@
 
 /* Variables */
 :root {
-    --golden-carrot: rgb(250, 225, 0);
-    --warning-red: rgb(255, 65, 65);
+    /* CSS Variables */
+    --main-bg-color:    #242222;
+    --lighter-bg-color: #312e2e;
+    --darker-bg-color:  #1f1d1d;
+    --border-color:     #4b4747;
+
+    --golden-carrot:    rgb(250, 225, 0);
+    --warning-red:      rgb(255, 65, 65);
+
+    /* Theme colors */
+    --light-main-bg-color: whitesmoke;
+    --light-highlight-color: white;
+    --light-darker-bg-color: rgb(230, 230, 230);
+    --light-theme-border-color: rgb(185, 185, 185);
+
+    /* Dark scrollbar */
+    /* color-scheme: dark; */
 }
 
 /* Scrollbar */
@@ -18,7 +33,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: rgb(36, 34, 34);
+    background-color: var(--main-bg-color);
     color: white;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -32,12 +47,14 @@ a:hover {filter: brightness(120%);}
 img {
     user-select: none;
     -webkit-user-drag: none;
+
+    touch-action: manipulation;
 }
 #container {
     justify-content: center;
     flex-wrap: wrap;
 
-    margin-top: 24px;
+    margin-top: 80px;
 }
 .unbold {
     font-weight: unset;
@@ -68,6 +85,12 @@ button:hover {
 input {
     padding: 4px 8px;
     border-radius: 30px;
+}
+.link_styling {
+    cursor: pointer;
+}
+.link_styling:hover {
+    text-decoration: underline;
 }
 
 /* Text Colors */
@@ -130,6 +153,8 @@ input {
 #overlay {
     visibility: hidden;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 200;
     height: 100%;
     width: 100%;
@@ -298,36 +323,50 @@ input {
     }
 }
 
-/* Informational */
-/* Old styling, don't delete, will have in a theme later */
-/* .Basic_Info {
-    background-color: #4e3f34;
-    background-image: url(./assets/Dirt-Background.jpg);
-    padding: 8px 20px;
-    border: 2px solid rgb(255, 255, 255);
-    border-top: none;
-    margin-bottom: 20px;
-    position: sticky;
+/* Status Bar */
+.status_bar {
+    width: 100%;
+    position: fixed;
     top: 0;
     z-index: 99;
-} */
+
+    pointer-events: none;
+}
+.status_bar * {
+    pointer-events: all;
+}
 .Basic_Info {
-    background-color:#312e2e;
-    border: 1px solid #4b4747;
-    border-top: none;
+    background-color: var(--lighter-bg-color);
+    border-bottom: 1px solid var(--border-color);
+    width: 100%;
 
     padding: 8px 20px;
+}
+.status_progress_bar {
+    width: 100%;
+    max-width: 400px;
 
-    position: sticky;
-    top: 0;
-    z-index: 99;
+    background-color: var(--lighter-bg-color);
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+
+    margin: 0 auto;
+
+    /* Hidden by default */
+    visibility: hidden;
+}
+.main_progress_image {
+    float: left;
+    margin-right: 24px;
+}
+.status_progress {
+    height: 10px;
+    background-color: gray;
 }
 #Tip {
     margin-left: auto;
-    cursor: pointer;
-}
-#Tip:hover {
-    text-decoration: underline;
 }
 #Carrot_Count {
     font-size: 20pt;
@@ -340,9 +379,14 @@ input {
     color: gray;
 }
 #left-section {
-    width: 420px;
+    /* width: 420px; */
     /* margin-left: auto; */
     margin-right: 20px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5) inset;
+    border-radius: 24px;
+    height: fit-content;
+
+    background-color: var(--darker-bg-color);
 }
 #main_carrot {
     margin: 10px;
@@ -355,8 +399,11 @@ input {
 
     transition: transform 0.1s;
 }
-#main_carrot:active, #main_carrot:focus {
+#main_carrot:active {
     transform: scale(0.98,0.98)
+}
+#main_carrot:focus-visible {
+    outline: none;
 }
 /* Prestige */
 #prestige-section {
@@ -390,8 +437,8 @@ input {
 
 /* Characters */
 .characterbox {
-    background: #312e2e;
-    border: 3px solid #312e2e;
+    background: var(--lighter-bg-color);
+    border: 3px solid var(--lighter-bg-color);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
 
@@ -403,16 +450,18 @@ input {
     position: relative;
     z-index: 10;
 
-    transition-property: box-shadow, border, background;
+    outline: transparent;
+    transition-property: box-shadow, border, background, outline;
     transition-duration: 0.15s;
 }
 .characterbox:hover {
     /* border: 3px solid #6d6565; */
+    outline: 1px solid #4b4747;
     z-index: 11;
 }
 .bottom {
     padding-top: 2px;
-    background: #242222;
+    background: var(--main-bg-color);
     border-end-start-radius: 10px;
     border-end-end-radius: 10px;
 }
@@ -523,16 +572,19 @@ input {
     /* Unhide when bar is active: */
     /* visibility: hidden; */
     width: 100%;
-    background: gray;
+    height: 10px;
+    /* background: gray; */
+    background-color: gray;
     border-end-start-radius: 10px;
     border-end-end-radius: 10px;
     overflow: hidden;
 }
-#Greg_Progress {
+.progress {
     transition: width 0.1s;
     width: 0%;
     max-width: 100%;
-    height: 10px;
+    height: 100%;
+
     background: lightgreen;
     background-repeat: repeat-x;
     background: repeating-linear-gradient(
@@ -542,12 +594,11 @@ input {
         rgb(94, 209, 94) 14px,
         rgb(94, 209, 94) 28px
         );
-    background-position: left;
+    background-position: top;
     animation: progress_animate 12s infinite linear;
 }
 @keyframes progress_animate {
     to {
-        background-position: left;
         background-position-x: -400px;
     }
 }
@@ -671,10 +722,10 @@ input {
     padding: 0px 24px;
     padding-right: 0;
 }
-#info-panel {
+#achievements-panel {
     visibility: visible;
 }
-#achievements-panel {
+#info-panel {
     visibility: hidden;
 }
 #settings-panel {
@@ -734,6 +785,8 @@ input {
     #left-section {
         max-width: 100%;
         margin: 0 auto;
+        box-shadow: none;
+        background-color: transparent;
     }
     #right-section {
         border: none;

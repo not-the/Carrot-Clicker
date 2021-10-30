@@ -1,6 +1,7 @@
 /*-------------Variables------------*/
 //#region
 //// UI HANDLER ////
+const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
 const mainCarrot =      dom("main_carrot");
@@ -172,7 +173,7 @@ function clearToasts() {
 
 // Panel handler
 //#region 
-var currentPanel = "info-panel";
+var currentPanel = "achievements-panel";
 // Tab Panels
 const infoPanel =       dom("info-panel");
 const achievementsPanel = dom("achievements-panel");
@@ -252,6 +253,38 @@ function popupHandler(useMousePos = true) {
         bonusID = 0;
     }
 }
+
+
+/* ----- Themes ----- */
+// Theme dropdown eventListener
+const optionTheme = dom('theme_dropdown');
+optionTheme.addEventListener('change', () => {
+    setTheme(optionTheme.value);
+});
+
+// Set theme
+function setTheme(theme) {
+    // var theme = optionTheme.value;
+    var theme_color = '#312e2e';
+
+    elBody.className = '';
+    elBody.classList.add(theme);
+
+    // Mobile accent color
+    if(theme == 'theme_light') {theme_color = '#FFFFFF';}
+    else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
+    dom('theme_color').content = theme_color;
+    store('theme', theme);
+}
+
+// Set user theme on page load
+if(store('theme') !== null) {
+    let theme = store('theme');
+    console.log(`Theme setting found, switching to ${theme}`);
+    optionTheme.value = theme;
+    setTheme(theme);
+}
+
 
 // Mouse position handler
 // CREDIT:

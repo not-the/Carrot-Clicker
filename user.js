@@ -83,7 +83,6 @@ function keybindHandler(event){
 
     if(event.key == "Shift"){
         multibuySpin();
-        dom("multibuy").innerText=(multibuy[multibuySelector]+"x");
     }
     if(event.key == " "){
         event.preventDefault();
