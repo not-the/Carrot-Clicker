@@ -102,7 +102,6 @@ const elCharles = {
 //#endregion
 
 
-
 /*-------------Local Storage and Characters-------------*/
 //#region
 
@@ -116,9 +115,6 @@ class Character{
         this.Hoes=Hoes;
     }
 }
-
-
-
 // Default Values Stored in a Player Object
 const player1 = {
     Carrots:0,
@@ -133,7 +129,7 @@ const player1 = {
 
 // Character Defaults
 const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-const Default_Belle_Boomerette = new Character("Farmer",0,450,[0,0,0,0,0,0]);
+const Default_Belle_Boomerette = new Character("Farmer",0,250,[0,0,0,0,0,0]);
 const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 
@@ -186,59 +182,68 @@ function onClick(useMousePos) {
 
 // Carrots per second
 function CarrotsPerSecond() {
-    player.Carrots += player.cps / 10;
+    player.Carrots += player.cps;
 }
-var cpsInterval = setInterval(CarrotsPerSecond,100);
+var cpsInterval = setInterval(CarrotsPerSecond,1000);
 
 
 
 //level up characters 
 function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
     var r=character.lvlupPrice;
-    var r2=character.lvlupPrice;
-    for(i=1; i<ammount; i++){
+    var r2=0;
+    var UpBellePercent;
+    var UpGregPercent;
+    var UpBillPercent;
+    for(i=0; i<ammount; i++){
         if(character==Gregory){
-            let UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-            r2+=UpGregPercent;
+            UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
+            r+=UpGregPercent;
+            r2+=r;
         }
         if(character==Belle_Boomerette){
-            let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
-            r2+=UpBellePercent;
+            UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
+            r+=UpBellePercent
+            r2+=Math.floor(r);
 
         }
         if(character==Boomer_Bill){
-            let UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
-            r2+=UpBillPercent;
+            UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
+            r+=UpBillPercent;
+            r2+=Math.floor(r);
         }
     }
     if(mode=="query"){
+        if(ammount==1){return character.lvlupPrice}
         return r2;
     }
     if(mode=="apply"){
         if(ammount==1){
+            r2=character.lvlupPrice;
             if(character==Gregory){
-                let UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
+                UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
                 r2+=UpGregPercent;
             }
             if(character==Belle_Boomerette){
-                let UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
+                UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10009));
                 r2+=UpBellePercent;
     
             }
             if(character==Boomer_Bill){
-                let UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
+                UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.12));
                 r2+=UpBillPercent;
             }
         }
-        character.lvlupPrice=r2;
+        character.lvlupPrice=Math.floor(r);
     }
 
 }
 function LevelUp(character=Boomer_Bill, ammount=1) {
     if(player.Carrots >= CharacterLevelUpPrice(character, ammount, "query")) {
             character.lvl+=ammount;
+            player.Carrots-=CharacterLevelUpPrice(character,ammount,"query");
             CharacterLevelUpPrice(character,ammount,"apply");
-            player.Carrots-=character.lvlupPrice;
+            
     } else {
         toast(
             'Cannot afford',
@@ -338,27 +343,27 @@ function DecreaseWagesEffects(){
 //#region
 
 //Stores The Correct Hoe Price
-function HoeCost(type=0,ammount=1,mode="query"){
-    var r = Gregory.HoePrices[type];
-    var r2 = Gregory.HoePrices[type];
-    for(i=0;i<Gregory.HoePrices.length;i++){
-        if(type==i){
-            for(j=1;j<ammount;j++){
-                r2+=(0.05*r);
-            }
-            if(mode=="query"){
-                return r2;
-            }
-            if(mode=="apply"){
-                if(ammount==1){
+    function HoeCost(type=0,ammount=1,mode="query"){
+        var r = Gregory.HoePrices[type];
+        var r2 = Gregory.HoePrices[type];
+        for(i=0;i<Gregory.HoePrices.length;i++){
+            if(type==i){
+                for(j=1;j<ammount;j++){
                     r2+=(0.05*r);
                 }
-                Gregory.HoePrices[type]=r2;
+                if(mode=="query"){
+                    return r2;
+                }
+                if(mode=="apply"){
+                    if(ammount==1){
+                        r2+=(0.05*r);
+                    }
+                    Gregory.HoePrices[type]=r2;
+                }
+                
             }
-            
         }
     }
-}
 
 function CreateHoe(type=0,ammount=1) {
     // Return if a hoe is already in progress
@@ -495,12 +500,6 @@ function DisplayHoe(character, type) {
     }
 }
 
-
-//#endregion
-
-
-/* ----------------Quality of Life Functions --------------*/
-//#region
 
 //#endregion
 
