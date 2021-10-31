@@ -1,780 +1,448 @@
-/*
-The Base of the Game is the Objects used to easily store data. 
-The core Object is the player. The player object Stores Global Variables not Atributed to another character.
-The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
-The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
-*/
+<!----------Header---------->
+<!--#region -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrot Clicker dev beta v1.3.2</title>
 
-//variables to prevent spamclicking
-var n = 0;
+    <!-- Misc -->
+    <meta name="theme-color" content="#312e2e" id="theme_color">
 
-/*------------Page Setup---------------*/
-//#region
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
+    <link rel="stylesheet" type="text/css" href="themes.css">
 
-// Hacky solution to carrot not animating on mobile
-// https://stackoverflow.com/a/56140328/11039898
-document.addEventListener("touchstart", function() {}, true);
+    <!-- Page icon -->
+    <link rel="shortcut icon" type="image/png" href="./assets/Carrot Clicker.png"/>
+</head>  
+<!--#endregion-->
 
-// Getting InnerHtml
-const prestige_info = dom("Prestige");
-const Basic_Info = dom("Basic_Info");
-const elCarrotCount = dom("Carrot_Count");
-const elCPC = dom("cpc");
-const elCPS = dom("cps");
-const elGoldenCarrotCount = dom("golden_carrot_count");
-const elTips = dom("Tip");
-const elCharacterUpCost = {
-    bill:  dom("UpBillCost"),
-    belle: dom("UpBelleCost"),
-    greg:  dom("UpGregCost")
-};
-const elCharacterLevel = {
-    bill:  dom("Bill_lvl"),
-    belle: dom("Belle_lvl"),
-    greg:  dom("Greg_lvl") 
-};
-const elHoes = {
-    bill: [
-        dom("bill_wooden_hoe"),
-        dom("bill_stone_hoe"),
-        dom("bill_iron_hoe"),
-        dom("bill_gold_hoe"),
-        dom("bill_diamond_hoe"),
-        dom("bill_netherite_hoe")
-    ],
-    belle: [
-        dom("belle_wooden_hoe"),
-        dom("belle_stone_hoe"),
-        dom("belle_iron_hoe"),
-        dom("belle_gold_hoe"),
-        dom("belle_diamond_hoe"),
-        dom("belle_netherite_hoe")
-    ],
-    greg: [
-        dom("greg_wooden_hoe"),
-        dom("greg_stone_hoe"),
-        dom("greg_iron_hoe"),
-        dom("greg_gold_hoe"),
-        dom("greg_diamond_hoe"),
-        dom("greg_netherite_hoe")
-    ]
-}
-const elHoeCount = {
-    bill: [
-        dom("Bill_Wooden_Hoe_Number"),
-        dom("Bill_Stone_Hoe_Number"),
-        dom("Bill_Iron_Hoe_Number"),
-        dom("Bill_Gold_Hoe_Number"),
-        dom("Bill_Diamond_Hoe_Number"),
-        dom("Bill_Netherite_Hoe_Number")
-    ],
-    belle: [
-        dom("Belle_Wooden_Hoe_Number"),
-        dom("Belle_Stone_Hoe_Number"),
-        dom("Belle_Iron_Hoe_Number"),
-        dom("Belle_Gold_Hoe_Number"),
-        dom("Belle_Diamond_Hoe_Number"),
-        dom("Belle_Netherite_Hoe_Number")
-    ],
-    greg: [
-        dom("Greg_Wooden_Hoe_Number"),
-        dom("Greg_Stone_Hoe_Number"),
-        dom("Greg_Iron_Hoe_Number"),
-        dom("Greg_Gold_Hoe_Number"),
-        dom("Greg_Diamond_Hoe_Number"),
-        dom("Greg_Netherite_Hoe_Number")
-    ]
-}
-const elHoePrices = {
-    wooden:     dom("wooden_hoe_price"),
-    stone:      dom("stone_hoe_price"),
-    iron:       dom("iron_hoe_price"),
-    gold:       dom("gold_hoe_price"),
-    diamond:    dom("diamond_hoe_price"),
-    netherite:  dom("netherite_hoe_price")
-};
-const elGregProgress = dom("Greg_Progress");
-const elCharles = {
-    improveWorkingConditions: dom("ImproveWorkingConditions"),
-    betterHoes:               dom("BetterHoes"),
-    decreaseWages:            dom("DecreaseWages"),
-    charlesTooltip:           dom("charlestooltip")
-}
-//#endregion
+<body>
+
+    <!-- On top -->
+    <!-- #region -->
+
+    <!-- Dialog Popup -->
+    <!-- #region -->
+    <!-- Optional classes: dramatic -->
+    <div id="overlay" class="dramatic">
+    <!-- Backdrop -->
+    <div id="backdrop" onclick="closeDialog()"></div>
+
+    <!-- Dialog Box -->
+    <div id="dialog">
+        <!-- Dialog info -->
+        <h2 id="dialog_title">Dialog Title</h2>
+        <p id="dialog_desc">
+        Dialog description
+        </p>
+        <!-- Dialog Options -->
+        <div id="dialog_buttons">
+        <button onclick="closeDialog()" id="dialog_button_cancel">
+            Cancel
+        </button>
+        <button onclick="closeDialog(true)" id="dialog_button_accept">
+            OK
+            </button>
+        </div>
+    </div>
+    </div>
+    <!-- #endregion -->
+ 
+
+    <!-- Corner Toasts -->
+    <!-- #region -->
+    <div id="toast_container">
+    <div id="toasts_clear" onclick="clearToasts()">
+        Close All
+    </div>
+    <!-- <div class="toast background_red" id="toastID">
+        <h3>Title</h3>
+        <span class="toast_close" onclick="closeToast('ID')">X</span>
+        <p>Description</p>
+    </div> -->
+    </div>
+    <!-- #endregion -->
+  
+
+    <!-- Number Popup -->
+    <div id="bonusVisualArea"></div>
+
+    <!-- #endregion -->
 
 
-/*-------------Local Storage and Characters-------------*/
-//#region
+    <!--Basic Info Carrots; Cpc; Cps-->
+    <div class="status_bar">
 
+        <!-- Status bar -->
+        <div class="Basic_Info flex"> 
+            <p id="Basic_Info"><b>Carrot Clicker</b> - <a href="https://github.com/JJCVIP/Carrot-Clicker">Github</a> - <b id="multibuy" class="link_styling" onclick="multibuySpin()">1x</b><p>
+            <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click The Carrot</div>
+        </div>
 
-// Creates Characters 
-class Character{
-    constructor(Type,lvl,lvlupPrice,Hoes){
-        this.Type=Type;
-        this.lvl=lvl;
-        this.lvlupPrice=lvlupPrice;
-        this.Hoes=Hoes;
-    }
-}
-// Default Values Stored in a Player Object
-const player1 = {
-    Carrots:0,
-    cpc:0,
-    cps:0,
-    golden_carrots:0,
-    prestige_potential:0,
-    EquipedHoes:0,
-    LifetimeCarrots:0,
-    LifetimeGoldenCarrots:0,
-    LifetimeEquipedHoes:0
-}
+        <!-- Progress bar -->
+        <div class="status_progress_bar">
+            <div id="main_progress" class="status_progress">
+                <!-- Image -->
+                <img src="/assets/tools/wood_hoe.png" alt="" id="main_progress_image" class="main_progress_image">
+                <!-- Progress -->
+                <div id="main_progress_bar" class="progress" style="width: 50%"></div>
+            </div>
+        </div>
 
+    </div>
 
-// Character Defaults
-const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-const Default_Belle_Boomerette = new Character("Farmer",0,250,[0,0,0,0,0,0]);
-const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
-Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+  
+    <div id="container" class="flex">
+        <!-- Left Section -->
+        <!-- #region -->
+        <div id="left-section">
+            <!-- Carrot image-->
+            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()" role="button" tabindex="0">
 
-const Default_Charles = {
-    BetterHoes:0,
-    BetterHoesPrice:1,
-    ImproveWorkingConditions:0,
-    ImproveWorkingConditionsPrice:1,
-    DecreaseWages:0,
-    DecreaseWagesPrice:1
-}
-
-
-//Asigns the Local storage
-const Charles          = localStorage.getObject("Charles");
-const player           = localStorage.getObject("player");
-const Boomer_Bill      = localStorage.getObject("Bill");
-const Belle_Boomerette = localStorage.getObject("Belle");
-const Gregory          = localStorage.getObject("Greg");
-
-//autosaves
-setInterval(() => {
-    if(player){
-        localStorage.setObject("player",player);
-        localStorage.setObject("Bill",Boomer_Bill);
-        localStorage.setObject("Belle",Belle_Boomerette);
-        localStorage.setObject("Greg",Gregory);
-        localStorage.setObject("Charles",Charles)
-    }else{
-        localStorage.setObject("player",player1);
-        localStorage.setObject("Bill",Default_Boomer_Bill);
-        localStorage.setObject("Belle",Default_Belle_Boomerette);
-        localStorage.setObject("Greg",Default_Gregory);
-        localStorage.setObject("Charles",Default_Charles);
-        location.reload();
-    }
-}, 2000);
-//#endregion
-
-
-/* ----------------------Functions------------------------*/
-//#region
-//On Carrots Click
-function onClick(useMousePos) {
-    player.Carrots+=player.cpc;
-    player.LifetimeCarrots+=player.cpc;
-    popupHandler(useMousePos);
-}
-
-
-// Carrots per second
-function CarrotsPerSecond() {
-    player.Carrots += player.cps;
-}
-var cpsInterval = setInterval(CarrotsPerSecond,1000);
-
-
-
-//level up characters 
-function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
-    var r=character.lvlupPrice;
-    var r2=0;
-    var UpBellePercent;
-    var UpGregPercent;
-    var UpBillPercent;
-    for(i=0; i<ammount; i++){
-        if(character==Gregory){
-            UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-            r+=UpGregPercent;
-            r2+=r;
-        }
-        if(character==Belle_Boomerette){
-            UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
-            r+=UpBellePercent
-            r2+=Math.floor(r);
-
-        }
-        if(character==Boomer_Bill){
-            UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
-            r+=UpBillPercent;
-            r2+=Math.floor(r);
-        }
-    }
-    if(mode=="query"){
-        if(ammount==1){return character.lvlupPrice}
-        return r2;
-    }
-    if(mode=="apply"){
-        if(ammount==1){
-            r2=character.lvlupPrice;
-            if(character==Gregory){
-                UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-                r2+=UpGregPercent;
-            }
-            if(character==Belle_Boomerette){
-                UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10009));
-                r2+=UpBellePercent;
-    
-            }
-            if(character==Boomer_Bill){
-                UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.12));
-                r2+=UpBillPercent;
-            }
-        }
-        character.lvlupPrice=Math.floor(r);
-    }
-
-}
-function LevelUp(character=Boomer_Bill, ammount=1) {
-    if(player.Carrots >= CharacterLevelUpPrice(character, ammount, "query")) {
-            character.lvl+=ammount;
-            player.Carrots-=CharacterLevelUpPrice(character,ammount,"query");
-            CharacterLevelUpPrice(character,ammount,"apply");
+            <!-- Numbers/Info Section -->
+            <p id="Carrot_Count">Loading...</p>
+            <p id="cpc">Loading...</p>
+            <p id="cps">Loading...</p>
+            <p id="golden_carrot_count"></p>
             
-    } else {
-        toast(
-            'Cannot afford',
-            `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character)) }`
-        );
-    }
-}
+            <!-- Prestige Section -->
+            <div id="prestige-section">
+                <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige')" class="button_gold">
+                    Prestige
+                </button>
+                <p class="prestigetooltip">
+                    Prestiging now will result in <span id="Prestige">0</span> Golden Carrots
+                </p>
+            </div>
+
+        </div>
+        <!-- #endregion -->
 
 
-// Prestige
-function Prestige() {
-    console.log("Prestiging...");
-    clearInterval(cpsInterval);
 
-    // Give golden carrots
-    player.golden_carrots += player.prestige_potential;
-    player.LifetimeGoldenCarrots += player.prestige_potential;
+        <!-- Right Section -->
+        <!-- #region -->
+        <div id="right-section" class="character_column">
+            <!-- Character column 1 -->
+            <div class="character_column">
 
-    // Reset characters to default
-    [
-        Boomer_Bill.lvlupPrice,
-        Belle_Boomerette.lvlupPrice,
-        Gregory.lvlupPrice
-    ] = [
-        Default_Boomer_Bill.lvlupPrice,
-        Default_Belle_Boomerette.lvlupPrice,
-        Default_Gregory.lvlupPrice
-    ];
-    [
-        Boomer_Bill.lvl,
-        Belle_Boomerette.lvl,
-        Gregory.lvl
-    ] = [
-        Default_Boomer_Bill.lvl,
-        Default_Belle_Boomerette.lvl,
-        Default_Gregory.lvl
-    ];
-    for(i=0;i<6;i++){
-        Boomer_Bill.Hoes[i] = 0;
-        Belle_Boomerette.Hoes[i] = 0;
-        Gregory.Hoes[i]=0;
-        Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
-    }
-    player.EquipedHoes=0;
-    player.Carrots = 0;
-    cpsInterval = setInterval(CarrotsPerSecond,100);
-    tips.tracker=0;
-}
+                <!--Boomer Bill Rendering-->
+                <!-- #region -->
+                <div class="Bill characterbox">
+                <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
+                <!-- Top -->
+                <div class="top flex">
+                    <img
+                    src="./assets/characters/Boomer_Bill.png"
+                    alt="Boomer Bill"
+                    id="bill_avatar"
+                    class="characterimg"
+                    title="Boomer Bill">
+                    <div class="characterdesc">
+                    <b class="charactername">Bill</b>
+                    <p id="UpBillCost"></p>
+                    <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
+                    </div>
 
+                </div>
 
-// Charles Functions
-function IncreaseImproveWorkingConditions(){
-    if(player.golden_carrots<Charles.ImproveWorkingConditionsPrice){
-        toast(
-            'Cannot afford',
-            `You need ${Charles.ImproveWorkingConditionsPrice} Golden Carrots to level up Improve Working Conditions`
-        );
-        return;
-    }
-    Charles.ImproveWorkingConditionsPrice=Math.ceil(Charles.ImproveWorkingConditionsPrice*1.03);
-    player.golden_carrots-=Charles.ImproveWorkingConditionsPrice;
-    Charles.ImproveWorkingConditions+=1;
-}
-function IncreaseBetterHoes(){
-    if(player.golden_carrots<Charles.BetterHoesPrice){
-        toast(
-            'Cannot afford',
-            `You need ${Charles.BetterHoesPrice} carrots to level up Better Hoes`
-        );
-        return;
-    }
-    Charles.BetterHoesPrice=Math.ceil(Charles.BetterHoesPrice*1.03);
-    player.golden_carrots-=Charles.BetterHoesPrice;
-    Charles.BetterHoes+=1;
-}
+                <!-- Bottom -->
+                <div class="bottom hoecontainer">
 
-function IncreaseDecreaseWages(){
-    if(player.golden_carrots<Charles.DecreaseWagesPrice){
-        toast(
-            'Cannot afford',
-            `You need ${Charles.DecreaseWagesPrice} carrots to level up Decrease Wages`
-        );
-        return;
-    }
-    Charles.DecreaseWagesPrice=Math.ceil(Charles.DecreaseWagesPrice*1.03);
-    player.golden_carrots-=Charles.DecreaseWagesPrice;
-    Charles.DecreaseWages+=1;
-}
+                    <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Upgrade">
 
-function DecreaseWagesEffects(){
-    return (Math.sqrt(Charles.DecreaseWages)/100);
-}
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
+                    <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe">
 
-//#endregion
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
+                    <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1),multibuy[multibuySelector]" class="toolicon blackedout" id="bill_stone_hoe">
 
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
+                    <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_iron_hoe">
 
-/*-----------Hoe Functions--------------*/
-//#region
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number">err</p>
+                    <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_gold_hoe">
 
-//Stores The Correct Hoe Price
-    function HoeCost(type=0,ammount=1,mode="query"){
-        var r = Gregory.HoePrices[type];
-        var r2 = Gregory.HoePrices[type];
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                for(j=1;j<ammount;j++){
-                    r2+=(0.05*r);
-                }
-                if(mode=="query"){
-                    return r2;
-                }
-                if(mode=="apply"){
-                    if(ammount==1){
-                        r2+=(0.05*r);
-                    }
-                    Gregory.HoePrices[type]=r2;
-                }
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">err</p>
+                    <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_diamond_hoe">
+
+                    <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
+                    <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_netherite_hoe">
+                </div>
+
+                </div>
+                <!-- #endregion -->
+
+                <!--Belle Boomerette Rendering-->
+                <!-- #region -->
+                <div class="Belle characterbox">
+                <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
+
+                <!-- Top -->
+                <div class="top flex">
+                    <img
+                    src="./assets/characters/BelleBommerette.png"
+                    alt="Belle Boomerette"
+                    id="belle_avatar"
+                    class="characterimg"
+                    title="Boomer Belle">
+                    <div class="characterdesc">
+                    <b class="charactername">Belle</b>
+                    <p id="UpBelleCost"></p>
+                    <figcaption id="Belle_lvl" class="characterlevel"></figcaption>
+                    </div>
+                </div>
+
+                <!-- Bottom -->
+                <div class="bottom hoecontainer">
+
+                    <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
+                    <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
+                    <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_stone_hoe">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
+                    <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_iron_hoe">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
+                    <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_gold_hoe">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
+                    <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_diamond_hoe">
+
+                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
+                    <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_netherite_hoe">
+                </div>
+
+                </div>
+                <!-- #endregion -->
                 
-            }
-        }
-    }
+                <!--Gregory Rendering-->
+                <div class="Greg characterbox">
+                    <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
+                    <!-- Top -->
+                    <div class="top flex">
+                        <img
+                        src="./assets/characters/Gregory.png"
+                        alt="Gregory"
+                        id="Greg_avatar"
+                        class="characterimg"
+                        title="Gregory">
+                        <div class="characterdesc">
+                        <b class="charactername">Greg</b>
+                        <p id="UpGregCost">show</p>
+                        <figcaption id="Greg_lvl" class="characterlevel">lvl:0</figcaption>
+                        </div>
+                    </div>
 
-function CreateHoe(type=0,ammount=1) {
-    // Return if a hoe is already in progress
-    if(n==1){
-        toast("Greg is busy", "Wait until he is done crafting")
-        return;
-    }
+                    <!-- Bottom -->
+                    <div class="bottom">
+                        <div class="Greg_Hoe_Container hoecontainer">
+                        <span class="hoe_price">Prices:</span>
+                        <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        
+                        <span id="wooden_hoe_price" class="hoe_price">Wooden</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Wooden_Hoe_Number">err</p>
+                        <img src="./assets/tools/wood_hoe.png" class="toolicon blackedout" onclick="CreateHoe(0,multibuy[multibuySelector])" id="greg_wooden_hoe">
 
-    // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)||Gregory.lvl==0){
-        if(type>=1){
-            toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`);
-            return;
-        }
-        toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: 1 to create this hoe");
-        return;
-    }
+                        <span id="stone_hoe_price" class="hoe_price">Stone</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
+                        <img src="./assets/tools/stone_hoe.png" class="toolicon blackedout" onclick="CreateHoe(1,multibuy[multibuySelector])" id="greg_stone_hoe">
 
-    // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type]+ammount-1>= Gregory.lvl){
-        toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type");
-        return;
-    }
-    
-    let price = HoeCost(type,ammount);
-    //Checks if Hoe is Too expensive
-    if(price>=(player.Carrots*2)){
-        toast("Too Expensive!", "That hoe is currently too expensive.");
-        return;
-    }
-    if(n==0){
-        n=1; 
-        HoeCost(type,ammount,"apply"); 
-        //Creates Hoe And Displays Progress Bar
-        var i = 0;
-        if (i == 0) {
-            i = 1;
-            var p = 0;
-            var id = setInterval(frame,100);
-            function frame() {
-                if (p >= price) {
-                    clearInterval(id);
-                    i = 0;
-                    player.Carrots+=p-price;
-                    p=0;
-                    elGregProgress.style.width = 0 + "%";
-                    Gregory.Hoes[type]+=ammount;
-                    n=0;
-                } else {
-                    p+=(0.01*player.Carrots);
-                    player.Carrots-=(0.01*player.Carrots);
-                    elGregProgress.style.width = 100*(p/price) + "%";
-                }
+                        <span id="iron_hoe_price" class="hoe_price">Iron</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
+                        <img src="./assets/tools/iron_hoe.png" class="toolicon blackedout" onclick="CreateHoe(2,multibuy[multibuySelector])" id="greg_iron_hoe">
 
-            }
-        } 
-    }
-}
+                        <span id="gold_hoe_price" class="hoe_price">Gold</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
+                        <img src="./assets/tools/gold_hoe.png" class="toolicon blackedout" onclick="CreateHoe(3,multibuy[multibuySelector])" id="greg_gold_hoe">
+
+                        <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
+                        <img src="./assets/tools/diamond_hoe.png" class="toolicon blackedout" onclick="CreateHoe(4,multibuy[multibuySelector])" id="greg_diamond_hoe">
+
+                        <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
+                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
+                        <img src="./assets/tools/netherite_hoe.png" class="toolicon blackedout" onclick="CreateHoe(5,multibuy[multibuySelector])" id="greg_netherite_hoe">
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div id="Greg_Bar">
+                            <div id="Greg_Progress" class="progress"></div>
+                        </div>
+                    
+                    </div>
+                </div>
+
+            </div>
 
 
+            <!-- Character column 2 -->
+            <!-- #region -->
+            <div class="character_column">
+            
+                <!--Charles Rendering-->
+                <div class="Charles characterbox">
+                    <div class="charlestooltip charactertooltip tooltip" id="charlestooltip">
+                        Charles Tooltip
+                    </div>
+
+                    <!-- Top -->
+                    <div class="top flex">
+                        <img
+                            src="./assets/characters/Charles.png"
+                            alt="Belle Boomerette"
+                            id="belle_avatar"
+                            class="characterimg"
+                            title="Charles">
+                        <div class="characterdesc">
+                            <b class="charactername">Charles</b>
+                            <p>Charles description</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom -->
+                    <!-- Intentionally doesn't contain anything so it's just a line-->
+                    <div class="bottom"></div>
+
+                    <!-- Charles' buttons -->
+                    <button
+                    onclick="IncreaseImproveWorkingConditions()"
+                    id="ImproveWorkingConditions"
+                    class="unbold">
+                    </button>
+                    
+                    <button
+                    onclick="IncreaseBetterHoes()"
+                    id="BetterHoes"
+                    class="unbold">
+                    </button>
+
+                    <button
+                    onclick="IncreaseDecreaseWages()"
+                    id="DecreaseWages"
+                    class="unbold">
+                    </button>
+                        
+                </div>
+            
+            </div>
+            <!-- #endregion -->
+
+        </div>
+        <!-- #endregion -->
+        <!-- End Right section -->
 
 
-//Equips A Hoe To a Character
-function EquipHoe(character=Boomer_Bill, type=0, ammount){
-    if(Gregory.Hoes[type]>=ammount){
-        if(character.Hoes[type]+ammount-1>=Gregory.lvl) {
-            toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
-            n=0;
-            return;
-        }
-        player.EquipedHoes+=1;
-        player.LifetimeEquipedHoes+=1;
-        character.Hoes[type]+=ammount;
-        Gregory.Hoes[type]-=ammount;
-    }
-}
-
-// Temporary fix thing, going to just add their names to their objects probably
-function characterString(character) {
-    switch(character) {
-        case Boomer_Bill:
-            return charString = 'bill';
-        case Belle_Boomerette:
-            return charString = 'belle';
-        case Gregory:
-            return charString = 'greg';
-    }
-}
-
-// Update hoe on page
-function DisplayHoe(character, type) {
-    let charString = characterString(character);
-    let count = elHoeCount[charString][type];
-    let img = elHoes[charString][type];
-
-    // Bill & Belle hoes
-    if(charString == 'bill' || charString == 'belle') {
-        // Remove blackout and set innertext
-        // Greg has a hoe to give
-        if(Gregory.Hoes[type] >= 1) {
-            img.classList.remove('blackedout');
-            img.classList.add('glowing');
-
-            // If first hoe send tutorial message
-            if(store('tutorial_first_hoe') == null) {tutorialHoes();}
-        } else {
-            img.classList.remove('glowing');
-            img.classList.add('blackedout');
-        }
-
-        // Character has at least 1 and
-        if(character.Hoes[type] >= 1) {
-            count.innerText = `x${character.Hoes[type]}`;
-            img.classList.remove('blackedout');
-        } else {
-            count.innerText = '';
-        }
-    }
-    // Greg hoes
-    else if(charString == 'greg') {
-        // Greg has at least 1
-        if(Gregory.Hoes[type] >= 1) {
-            count.innerText = `x${Gregory.Hoes[type]}`;
-            img.classList.remove('blackedout');
-        }
-        // Greg can afford one
-        else if(player.Carrots >= Gregory.HoePrices[type]) {
-            img.classList.remove('blackedout');
-            count.innerText = '';
-        }
-        // Blacked out
-        else {
-            count.innerText = '';
-            img.classList.add('blackedout');
-        }
-    }
-}
+        </div>
+    </div>
+    <!-- #endregion -->
 
 
-//#endregion
+  </div>
+
+  <!-- Lower section -->
+  <!-- #region -->
+  <div class="information-area flex">
+    <!-- Info section -->
+    <!-- <div class="row-break"></div> -->
+    <div id="notifs-section">
+        <!-- Nav buttons -->
+        <nav id="notifs-nav">
+            <button class="activetab tab" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)">Achievements</button><button class="tab" id="info-panel-button" onclick="panelChange(`info-panel`)">Statistics</button><button class="tab" id="settings-panel-button" onclick="panelChange(`settings-panel`)">Settings</button>
+        </nav>
+
+        <!-- Achievements Panel -->
+        <div id="achievements-panel" class="panel">
+            <h1>Achievements</h1>
+            Achievements will go here (when they've been implemented)
+            <div id="achievements-inner">
+                
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div id="info-panel" class="panel">
+            <div id="info-inner">
+            <h1>Statistics</h1>
+            <p>Lifetime statistics will go here (when they've been implemented)</p>
+            
+            <!-- <div class="info-item">
+                <img src="assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
+                <div>
+                <h1>Achievement earned: Click the carrot</h1>
+                <p>Click the carrot</p>
+                </div>
+            </div>-->
+            
+            </div> 
+        </div>
 
 
-/*---------------Main Game Loop---------------- */
-//#region
 
-setInterval(() => {
-    // Calculates the CPC
-    var cpcHoes;
-    var cpsHoes;
-    if(Charles.BetterHoes>0){
-        cpcHoes = 
-            (Charles.BetterHoes*1.15)*(Boomer_Bill.Hoes[0])
-            + (10*Boomer_Bill.Hoes[1])
-            + (100*Boomer_Bill.Hoes[2])
-            + (1000*Boomer_Bill.Hoes[3])
-            + (10000*Boomer_Bill.Hoes[4])
-            + (100000*Boomer_Bill.Hoes[5]);
-        
-        cpsHoes =
-            (Charles.BetterHoes*1.15)*(Belle_Boomerette.Hoes[0] 
-            + (10*Belle_Boomerette.Hoes[1])
-            + (100*Belle_Boomerette.Hoes[2])
-            + (1000*Belle_Boomerette.Hoes[3])
-            + (10000*Belle_Boomerette.Hoes[4])
-            + (100000*Belle_Boomerette.Hoes[5])
-            );
-    }else{
-        cpcHoes=
-            (Boomer_Bill.Hoes[0])
-            + (10*Boomer_Bill.Hoes[1])
-            + (100*Boomer_Bill.Hoes[2])
-            + (1000*Boomer_Bill.Hoes[3])
-            + (10000*Boomer_Bill.Hoes[4])
-            + (100000*Boomer_Bill.Hoes[5]);
-        cpsHoes=
-            (Belle_Boomerette.Hoes[0] 
-            + (10*Belle_Boomerette.Hoes[1])
-            + (100*Belle_Boomerette.Hoes[2])
-            + (1000*Belle_Boomerette.Hoes[3])
-            + (10000*Belle_Boomerette.Hoes[4])
-            + (100000*Belle_Boomerette.Hoes[5])
-            );
-    }
-    
-    if(Boomer_Bill.Hoes[0]+cpcHoes>0) {
-        player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
-    } else {
-        player.cpc=Boomer_Bill.lvl;
-    }
-   
-    // Calculates the CPS
-    if(Belle_Boomerette.Hoes[0]+cpsHoes>0) {
-        player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(cpsHoes));
-    } else {
-        player.cps=Belle_Boomerette.lvl;
-    }
-    //Add improve working conditions bonus
-    if(Charles.ImproveWorkingConditions>0){
-        player.cpc = (player.cpc*(1.1*Charles.ImproveWorkingConditions));
-        player.cps=(player.cps*(1.1*Charles.ImproveWorkingConditions));
-    }
-    
+        <!-- Settings Panel -->
+        <div id="settings-panel" class="panel">
+            <h1>Settings</h1>
+            <p><i>Your game progress will always be saved.</i></p><br>
 
-    // Providing updated information to the player
-
-    //// Update numbers on page ////
-
-    // Top bar (Might bring back later - don't delete)
-    // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
-
-    // New display
-    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
-    elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
-    elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
-
-    //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
-        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`;
-    }
-    if(player.LifetimeGoldenCarrots>=1) {
-        elGoldenCarrotCount.style.color = "white";
-    }
-
-    // Costs to level up characters
-    elCharacterUpCost.bill.innerText =`Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.greg.innerText = `Cost to Upgrade Greg: ${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`;
-
-    // Character levels
-    elCharacterLevel.bill.innerText  = `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`;
-    elCharacterLevel.belle.innerText = `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`;
-    elCharacterLevel.greg.innerText  = `Lvl: ${DisplayRounded(Gregory.lvl)}`;
-
-    // Update Hoes on page
-    for(i = 0; i < 6; i++) {
-        DisplayHoe(Boomer_Bill, i);
-        DisplayHoe(Belle_Boomerette, i);
-        DisplayHoe(Gregory, i);
-    }
-
-    //The Prestige Potential
-    let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
-    let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
-    player.prestige_potential=Math.floor(l+h);
-    prestige_info.innerText = DisplayRounded(player.prestige_potential,2);
-
-    // Greg's Hoe Prices
-    elHoePrices.wooden.innerText    = `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`;
-    elHoePrices.stone.innerText     = `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`;
-    elHoePrices.iron.innerText      = `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`;
-    elHoePrices.gold.innerText      = `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`;
-    elHoePrices.diamond.innerText   = `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`;
-    elHoePrices.netherite.innerText = `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`;
-
-    if(player.LifetimeGoldenCarrots>0 || player.prestige_potential>=1){
-        dom("prestige-section").style.visibility="visible";
-    }
-    //Charles Upgrades
-    elCharles.improveWorkingConditions.innerHTML =
-       `Improve Working Conditions
-       Costs: ${Charles.ImproveWorkingConditionsPrice} Golden Carrots`;
-
-    elCharles.betterHoes.innerHTML =
-       `Improve all Hoes
-       Costs: ${Charles.BetterHoesPrice} Golden Carrots`;
-
-    elCharles.decreaseWages.innerHTML =
-      `Decrease Worker Wages
-      Costs: ${Charles.DecreaseWagesPrice} Golden Carrots`;
-
-    elCharles.charlesTooltip.innerHTML =
-       `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
-       BH: ${Math.floor(100*Charles.BetterHoes)}%\n
-       DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
-}, 100);
-//#endregion
+            <!-- Options item -->
+            <label for="theme_dropdown">
+                Theme<br>
+                <select name="theme_dropdown" id="theme_dropdown">
+                    <option value="theme_dark">Dark theme</option>
+                    <option value="theme_light">Light theme (WIP)</option>
+                    <option value="theme_classic">Carrot Clicker classic</option>
+                </select><br><br>
+            </label>
 
 
-/*-----------Tips----------- */
-//#region
-const default_tips = {
-    number:0,
-    random:0,
-    tracker:0,
-    Type:0,
-    TypeModifier:0.5,
-    basic: [
-        "Click the lvl up arrow to level up characters",
-        "To buy a Hoe, go to Greg and click the correct type",
-        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
-        "Click the carrot",
-        "Long hover over a character to view their description"
-    ],
-    beginner: [
-        "Each character can only hold up to 1 hoe for every level Greg has reached"
-    ],
-    advanced: [
-        "When you're ready, click the prestige button. You will lose your progress but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
-        "Golden carrots increase your characters by 10%"
-    ],
+            <!-- Options item -->
+            <label for="disable_keybinds">
+            <input type="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
+                Disable keybinds
+            </label><br><br>
 
-    fun: [
-        "Carrots can end world hunger",
-        "Only YOU can save the carrots!",
-        "Carrots have been proven to improve eyesight by 150%. It's true!",
-        "Carrots are your friend",
-        "JJ broke it"
-    ],
-    funIntermediate: [
-        "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
-        "Tired of eating carrots? Make carrot cake!",
-        "Carrots have been proven to improve eyesight by 1000%. It's true!",
-        "Carrots love you ♥",
-        "Studies are being done to determine if carrots can cure the common cold"
-    ],
-    funAdvanced: [
-        "World hunger has been cured, but there must be more we can do.",
-        "Carrots have never been found at a crime scene because they are the direct cause of peace and friendship.",
-        "Carrots have received 7,000,000,000 (★★★★★) 5-star ratings on ebay",
-        "Eating carrots cures cancer",
-        "Studies done on people eating only carrots for 90 days have proven that they are the only food required for human survival.",
-        "Report any anti-carrot propaganda you see on the internet to your local carrot police",
-        "Public Service Announcement: Reminder to eat more carrots. That is all.",
-        "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
-        "Carrots are people too",
-        "Carrots have been proven to improve eyesight by 9000%. It's true!"
-    ]
-}
-const tips= localStorage.getObject("tips");
-setInterval(()=>{
-    if(tips){
-        localStorage.setObject("tips",tips);
-    }else{
-        localStorage.setObject("tips",default_tips);
-        location.reload();
-    }
-},2000);
+            <!-- Notification Length -->
+            <label for="notificationLength">Time until notifications disappear (In seconds)<br>
+            <input type="number" id="notificationLength" value="5">
+            <button onclick="saveOption('notificationLength')">Save</button>
+            <button onclick="resetOption()">Reset</button>
+            </label><br><br>
 
-/*JJ's Slider stuffs (ripping off w3 again)*/
-document.getElementById("FunTipsSlider").value=100*tips.TypeModifier;
-var slider = document.getElementById("FunTipsSlider");
-var output = document.getElementById("FunTipsSliderLabel");
-output.innerHTML = slider.value; // Display the default slider value
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-    console.log('a');
-  output.innerHTML = this.value;
-  //tip modifer
-  tips.TypeModifier = parseInt(slider.value)/100;
-  console.log("a");
-  console.log(tips.TypeModifier);
-}
-
-function tipchange(){
-    
-    //Tracker
-    if(player.EquipedHoes>0 && tips.tracker==0){
-        tips.tracker=1;
-    }
-    if(player.Carrots>1000000 && tips.tracker==1){
-        tips.tracker=2;
-    }
-    
-    //decides if the tip wiull be real or fun.
-    tips.random=Math.random();
-    console.log(tips.random);
-    if(tips.random<tips.TypeModifier){
-        tips.Type="fun";
-    }else{tips.Type="real"}
-    
-    //displays the tip
-    if(tips.Type=="fun"){
-        switch (tips.tracker){
-            case 1:
-                tips.number = Math.floor(Math.random()*tips.beginner.length);
-                elTips.innerText=tips.beginner[tips.number];
-                break;
-            case 2:
-            case 3:
-                tips.number = Math.floor(Math.random()*tips.funAdvanced.length);
-                elTips.innerText=tips.funAdvanced[tips.number];
-                break;
-            default:
-                tips.number = Math.floor(Math.random()*tips.fun.length);
-                elTips.innerText=tips.fun[tips.number];
-        }
-    }else{
-        switch (tips.tracker){
-            case 1:
-                tips.number = Math.floor(Math.random()*tips.funIntermediate.length);
-                elTips.innerText=tips.funIntermediate[tips.number];
-                break;
-            case 2:
-            case 3:
-                tips.number = Math.floor(Math.random()*tips.advanced.length);
-                elTips.innerText=tips.advanced[tips.number];
-                break;
-            default:
-                tips.number = Math.floor(Math.random()*tips.basic.length);
-                elTips.innerText=tips.basic[tips.number];
-        }
-    }
-}
-
-// Automatically change tips
-setInterval(tipchange(), 1000);
+            <!-- Fun Tip Percentage-->
+            <div class="slidecontainer">
+                <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
+                    <input type="range" min="1" max="100" value="50" class="slider" id="FunTipsSlider">
+                </label><br><br>
+            </div>
+            
+            <!-- Options item -->
+            <p>Danger Zone:</p>
+            <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
+                Delete Save Data
+            </button>
+        </div>
+    </div>
+    <!-- End Info section -->
+  </div>
+<!-- #endregion -->
+  
 
 
-//#endregion
+  <!-- Javascript -->
+  <!-- #region -->
+  <script src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
+  <script src="carrot_clicker.js"></script>
+  <script src="styling.js"></script>
+  <script src="user.js"></script>
+  <!-- #endregion -->
+
+</body>
+</html>
