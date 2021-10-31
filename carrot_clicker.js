@@ -22,6 +22,7 @@ const elCarrotCount = dom("Carrot_Count");
 const elCPC = dom("cpc");
 const elCPS = dom("cps");
 const elGoldenCarrotCount = dom("golden_carrot_count");
+const elTips = dom("Tip");
 const elCharacterUpCost = {
     bill:  dom("UpBillCost"),
     belle: dom("UpBelleCost"),
@@ -122,8 +123,10 @@ const player1 = {
     cps:0,
     golden_carrots:0,
     prestige_potential:0,
+    EquipedHoes:0,
     LifetimeCarrots:0,
-    LifetimeGoldenCarrots:0
+    LifetimeGoldenCarrots:0,
+    LifetimeEquipedHoes:0
 }
 
 
@@ -287,9 +290,10 @@ function Prestige() {
         Gregory.Hoes[i]=0;
         Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
     }
-
+    player.EquipedHoes=0;
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
+    tips.tracker=0;
 }
 
 
@@ -434,6 +438,8 @@ function EquipHoe(character=Boomer_Bill, type=0, ammount){
             n=0;
             return;
         }
+        player.EquipedHoes+=1;
+        player.LifetimeEquipedHoes+=1;
         character.Hoes[type]+=ammount;
         Gregory.Hoes[type]-=ammount;
     }
@@ -642,7 +648,12 @@ setInterval(() => {
 
 /*-----------Tips----------- */
 //#region
-const tips = {
+const default_tips = {
+    number:0,
+    random:0,
+    tracker:0,
+    Type:0,
+    TypeModifier:0.5,
     basic: [
         "Click the lvl up arrow to level up characters",
         "To buy a Hoe, go to Greg and click the correct type",
@@ -682,40 +693,88 @@ const tips = {
         "Public Service Announcement: Reminder to eat more carrots. That is all.",
         "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
         "Carrots are people too",
-
         "Carrots have been proven to improve eyesight by 9000%. It's true!"
     ]
 }
-
-var tipTracker = 1;
-var tipType = 0
-var TipTypeModifier = 1;
-
-function tipchange() {
-    console.log('Changing tip');
-    tipType = Math.random * TipTypeModifier;
-    if(tipType < 0.9) {
-       tipnumber = Math.floor(Math.random()*tips_Basic.length);
-        if(tipnumber == tipTracker) {
-            tipchange();
-            return;
-        }
-        dom("Tip").innerText = tips_Basic[tipnumber];
-        tipTracker = tipnumber;
-        return;
-    } 
-    tipnumber = Math.floor(Math.random() * tips.fun.length);
-    if(tipnumber == tipTracker) {
-        tipchange();
-        return;
+const tips= localStorage.getObject("tips");
+setInterval(()=>{
+    if(tips){
+        localStorage.setObject("tips",tips);
+    }else{
+        localStorage.setObject("tips",default_tips);
+        location.reload();
     }
-    dom("Tip").innerText = tips.fun[tipnumber];
-    tipTracker = tipnumber;
-    return;
+},2000);
+
+/*JJ's Slider stuffs (ripping off w3 again)*/
+document.getElementById("FunTipsSlider").value=100*tips.TypeModifier;
+var slider = document.getElementById("FunTipsSlider");
+var output = document.getElementById("FunTipsSliderLabel");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    console.log('a');
+  output.innerHTML = this.value;
+  //tip modifer
+  tips.TypeModifier = parseInt(slider.value)/100;
+  console.log("a");
+  console.log(tips.TypeModifier);
+}
+
+function tipchange(){
+    
+    //Tracker
+    if(player.EquipedHoes>0 && tips.tracker==0){
+        tips.tracker=1;
+    }
+    if(player.Carrots>1000000 && tips.tracker==1){
+        tips.tracker=2;
+    }
+    
+    //decides if the tip wiull be real or fun.
+    tips.random=Math.random();
+    console.log(tips.random);
+    if(tips.random<tips.TypeModifier){
+        tips.Type="fun";
+    }else{tips.Type="real"}
+    
+    //displays the tip
+    if(tips.Type=="fun"){
+        switch (tips.tracker){
+            case 1:
+                tips.number = Math.floor(Math.random()*tips.beginner.length);
+                elTips.innerText=tips.beginner[tips.number];
+                break;
+            case 2:
+            case 3:
+                tips.number = Math.floor(Math.random()*tips.funAdvanced.length);
+                elTips.innerText=tips.funAdvanced[tips.number];
+                break;
+            default:
+                tips.number = Math.floor(Math.random()*tips.fun.length);
+                elTips.innerText=tips.fun[tips.number];
+        }
+    }else{
+        switch (tips.tracker){
+            case 1:
+                tips.number = Math.floor(Math.random()*tips.funIntermediate.length);
+                elTips.innerText=tips.funIntermediate[tips.number];
+                break;
+            case 2:
+            case 3:
+                tips.number = Math.floor(Math.random()*tips.advanced.length);
+                elTips.innerText=tips.advanced[tips.number];
+                break;
+            default:
+                tips.number = Math.floor(Math.random()*tips.basic.length);
+                elTips.innerText=tips.basic[tips.number];
+        }
+    }
 }
 
 // Automatically change tips
-setInterval(tipchange(), 2000);
+setInterval(tipchange(), 1000);
 
 
 //#endregion
