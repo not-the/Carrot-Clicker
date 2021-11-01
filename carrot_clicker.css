@@ -9,6 +9,12 @@
     --darker-bg-color:  #1f1d1d;
     --border-color:     #4b4747;
 
+    /* Tri-pane colors */
+    --brown-bg-color: #4e3f34;
+    --brown-darker-color: #42362d;
+    --brown-lighter-color: #635145;
+
+    /* Misc */
     --golden-carrot:    rgb(250, 225, 0);
     --warning-red:      rgb(255, 65, 65);
 
@@ -18,7 +24,7 @@
     --light-darker-bg-color: rgb(230, 230, 230);
     --light-theme-border-color: rgb(185, 185, 185);
 
-    /* Dark scrollbar */
+    /* Dark scrollbar (also changes other unstyled elements */
     /* color-scheme: dark; */
 }
 
@@ -27,6 +33,38 @@
     background-color: lawngreen;
     width: 100px;
 } */
+::-webkit-scrollbar {
+	width: 16px;
+}
+::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: var(--main-bg-color);
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: var(--border-color);
+
+    /* Fake margins from https://stackoverflow.com/a/45420691/11039898 */
+    box-shadow: inset 0 0 10px 10px var(--border-color);
+    border: 3px solid var(--main-bg-color);
+}
+/* Tri-pane section scrollbar */
+.information-area ::-webkit-scrollbar {
+	width: 16px;
+}
+.information-area ::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: var(--brown-darker-color);
+}
+.information-area ::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: var(--brown-bg-color);
+
+    /* Fake margins from https://stackoverflow.com/a/45420691/11039898 */
+    box-shadow: inset 0 0 10px 10px var(--brown-lighter-color);
+    border: 3px solid var(--brown-darker-color);
+}
+
 
 /* Universal */
 * {box-sizing: border-box;}
@@ -36,6 +74,8 @@ body {
     background-color: var(--main-bg-color);
     color: white;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+    scroll-behavior: smooth;
 }
 
 p {margin: 0;}
@@ -396,20 +436,27 @@ input {
     z-index: 0;
     cursor: pointer;
 
-    transition: transform 0.1s;
+    filter: drop-shadow(12px 12px 5px rgba(0, 0, 0, 0.3));
+
+    transition: transform 0.1s linear;
+    transition: filter, 0.1s linear; /* Comma is here on purpose, removing it breaks this for some reason*/
 }
 #main_carrot:active {
-    transform: scale(0.98,0.98)
+    transform: scale(0.98,0.98);
+    filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.3))
+            brightness(85%)
+            saturate(110%);
 }
 #main_carrot:focus-visible {
     outline: none;
 }
 /* Prestige */
 #prestige-section {
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: inline-flex;
+    margin: 20px auto 20px;
+    width: 290px;
+
+
+    display: flex;
     visibility: hidden;
 }
 .button_gold {
@@ -424,7 +471,6 @@ input {
 }
 .prestigetooltip {
     margin-left: 8px;
-    margin-top: 4px;
 }
 
 
@@ -677,16 +723,17 @@ input {
     max-width: 1150px;
     position: relative;
     width: 100%;
-    height: 410px;
+    height: 500px;
     min-width: 270px;
-    margin: 24px auto;
+    margin: 24px auto 80px;
     padding: 0;
-    background-color: rgb(78, 63, 52);
-    overflow: auto;
+    background-color: var(--brown-bg-color);
+
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
 }
 #notifs-section nav {
     margin: 0 auto;
-    background-color: rgb(78, 63, 52);;
+    background-color: var(--brown-bg-color);
 }
 #notifs-section nav .tab {
     width: 33.33%;
@@ -703,7 +750,7 @@ input {
     transform: translateY(-2px);
 }
 #notifs-section nav .activetab {
-    background-color: rgb(78, 63, 52);
+    background-color: var(--brown-bg-color);
     border: none;
     border-bottom: none;
 }
@@ -717,10 +764,11 @@ input {
 /* Info panel */
 .panel {
     position: absolute;
-    height: 100%;
+    height: 462px;
     width: 100%;
-    padding: 0px 24px;
-    padding-right: 0;
+    padding: 0px 24px 16px;
+
+    overflow: auto;
 }
 #achievements-panel {
     visibility: visible;
@@ -738,7 +786,7 @@ input {
     /* width: calc(90% - 40px); */
     /* max-width: 500px; */
     padding: 4px;
-    background-color: #42362d;
+    background-color: var(--brown-darker-color);
     border: 1px solid goldenrod;
     border-radius: 4px;
     display: flex;
@@ -764,15 +812,15 @@ input {
 
 /* 
 JJ's Slider for Tips
-Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp 
+Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 */
 
 .slidecontainer {
     width: 100%; /* Width of the outside container */
   }
   
-  /* The slider itself */
-  .slider {
+/* The slider itself */
+.slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: 10%; /* Full-width */
@@ -783,15 +831,15 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
-  }
+}
   
-  /* Mouse-over effects */
-  .slider:hover {
+/* Mouse-over effects */
+.slider:hover {
     opacity: 1; /* Fully shown on mouse-over */
-  }
+}
   
-  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
-  .slider::-webkit-slider-thumb {
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
     width: 10px; /* Set a specific slider handle width */
@@ -799,14 +847,14 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     border-radius: 50%;
     background: #ff4800; /* Green background */
     cursor: pointer; /* Cursor on hover */
-  }
+}
   
-  .slider::-moz-range-thumb {
+.slider::-moz-range-thumb {
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
     background: #ff4800; /* Green background */
     cursor: pointer; /* Cursor on hover */
-  }
+}
 
 /* Media queries */
 /* Minimum supported width: 417px */
@@ -828,6 +876,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
         max-width: 100%;
     }
     #left-section {
+        width: 430px;
         max-width: 100%;
         margin: 0 auto;
         box-shadow: none;

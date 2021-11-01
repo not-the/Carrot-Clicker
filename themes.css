@@ -39,6 +39,31 @@
     opacity: 0.2;
 }
 
+/* Dialog box/toasts */
+.theme_light .toast {
+    color: white;
+}
+.theme_light #dialog {
+    background-color: white;
+}
+
+/* Tri-pane */
+.theme_light #notifs-section {
+    background-color: white;
+}
+.theme_light #notifs-section nav {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light #notifs-section nav .tab {
+    background-color: var(--light-darker-bg-color);
+    color: gray;
+}
+.theme_light #notifs-section nav .activetab {
+    background-color: white;
+}
+
+
+
 
 
 
@@ -58,12 +83,19 @@
     box-shadow: none;
     background-color: transparent;
 }
+.theme_classic #main_carrot {
+    filter: none;
+}
+.theme_classic #main_carrot:active {
+    filter: none;
+}
 
 .theme_classic .characterbox {
     background-color: transparent;
     overflow: unset;
     border-radius: 0;
     border: 2px solid rgb(29, 248, 0);
+    box-shadow: none;
 }
 .theme_classic .characterimg {
     border-radius: 0;
@@ -71,4 +103,102 @@
 .theme_classic #Greg_Bar {
     background-color: gray;
     border-radius: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Red theme */
+.theme_red {
+    background-color: rgb(63, 20, 20);
+}
+.theme_red .Basic_Info {
+    background-color: rgb(145, 53, 53);
+}
+.theme_red #left-section {
+    background-color: rgb(112, 37, 37);
+}
+.theme_red .characterbox {
+    background-color: rgb(145, 53, 53);
+    border-color: rgb(112, 37, 37);
+}
+.theme_red .bottom {
+    background-color: rgb(112, 37, 37);
+}
+/* Tri-pane */
+.theme_red #notifs-section {
+    background-color: var(--lighter-bg-color);
+}
+.theme_red #notifs-section nav {
+    background-color: var(--main-bg-color);
+}
+.theme_red #notifs-section nav .tab {
+    background-color: var(--main-bg-color);
+    color: gray;
+}
+.theme_red #notifs-section nav .activetab {
+    background-color: var(--lighter-bg-color);
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+/* OLED Dark theme */
+.theme_oled {
+    background-color: black;
+}
+.theme_oled .Basic_Info {
+    background-color: black;
+}
+.theme_oled #left-section,
+.theme_oled #main_carrot,
+.theme_oled .characterbox,
+.theme_oled #notifs-section {
+    box-shadow: none;
+}
+
+.theme_oled #left-section {
+    background-color: unset;
+}
+
+.theme_oled .characterbox {
+    background-color: black;
+}
+.theme_oled .bottom {
+    background-color: black;
+}
+.theme_oled .blackedout {
+    filter: contrast(0%) brightness(30%);
+}
+
+/* Tri-pane */
+.theme_oled #notifs-section {
+    background-color: black;
+}
+.theme_oled #notifs-section nav {
+    background-color: black;
+}
+.theme_oled #notifs-section nav .tab {
+    background-color: rgb(24, 24, 24);
+    color: gray;
+}
+.theme_oled #notifs-section nav .activetab {
+    background-color: black;
+    border: 1px solid white;
+    border-bottom: none;
+    color: white;
 }

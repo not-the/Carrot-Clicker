@@ -201,6 +201,7 @@ function panelChange(to) {
         dom(to + "-button").classList.add("activetab");
         dom(to).style.visibility = "visible";
         
+        store('openpanel', to);
         currentPanel = to;
     }
 }
@@ -283,6 +284,12 @@ if(store('theme') !== null) {
     console.log(`Theme setting found, switching to ${theme}`);
     optionTheme.value = theme;
     setTheme(theme);
+}
+
+// Switch to previously open panel on page load
+if(store('openpanel') !==null) {
+    console.log('openpanel found, switching to: ' + store('openpanel'));
+    panelChange(store('openpanel'));
 }
 
 
