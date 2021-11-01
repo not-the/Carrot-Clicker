@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker dev beta v1.3.1</title>
+    <title>Carrot Clicker dev beta v1.3.2</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -415,6 +415,13 @@
             <button onclick="saveOption('notificationLength')">Save</button>
             <button onclick="resetOption()">Reset</button>
             </label><br><br>
+
+            <!-- Fun Tip Percentage-->
+            <div class="slidecontainer">
+                <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
+                    <input type="range" min="1" max="100" value="50" class="slider" id="FunTipsSlider">
+                </label><br><br>
+            </div>
             
             <!-- Options item -->
             <p>Danger Zone:</p>
