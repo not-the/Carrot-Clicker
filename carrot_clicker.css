@@ -1,6 +1,19 @@
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
+/* @font-face kit by Fonts2u (https://fonts2u.com) */
+/* From https://fonts2u.com/minecraft-regular.font */
+@font-face {
+    font-family: "Minecraft Regular";
+    src: url("./assets/fonts/1_Minecraft-Regular.eot?") format("eot"),
+         url("./assets/fonts/1_Minecraft-Regular.woff") format("woff"),
+         url("./assets/fonts/1_Minecraft-Regular.ttf") format("truetype"),
+         url("./assets/fonts/1_Minecraft-Regular.svg#Minecraft-Regular") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 /* Variables */
 :root {
     /* CSS Variables */
@@ -122,9 +135,15 @@ button:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
-input {
-    padding: 4px 8px;
+input:not(.checkbox),
+select {
+    padding: 6px 10px;
     border-radius: 30px;
+    border: none;
+    font-size: 11pt;
+
+    width: 100%;
+    max-width: 200px;
 }
 .link_styling {
     cursor: pointer;
@@ -203,17 +222,21 @@ input {
     height: 100%;
     width: 100%;
     background: rgba(0, 0, 0, 0.514);
-    backdrop-filter: blur(20px);
-    animation: backdrop 1.5s forwards;
+    backdrop-filter: blur(30px);
 }
+.backdrop-in {animation: backdrop 1s forwards;}
+.backdrop-out {animation: backdrop 0.5s forwards reverse;}
 @keyframes backdrop {
     from {
         opacity: 0;
         backdrop-filter: blur(0px);
     }
+    to {
+        opacity: 1;
+    }
 }
 #overlay.dramatic {
-    backdrop-filter: blur(20px) saturate(20%);
+    backdrop-filter: blur(30px) saturate(20%);
 }
 #dialog {
     width: 420px;
@@ -407,11 +430,11 @@ input {
 #Tip {
     margin-left: auto;
 }
-#Carrot_Count {
+.Carrot_Count {
     font-size: 20pt;
     text-align: center;
 }
-#cpc, #cps, #golden_carrot_count {
+.mini_stats p {
     text-align: center;
 }
 #golden_carrot_count {
@@ -440,6 +463,8 @@ input {
 
     transition: transform 0.1s linear;
     transition: filter, 0.1s linear; /* Comma is here on purpose, removing it breaks this for some reason*/
+
+    image-rendering: pixelated;
 }
 #main_carrot:active {
     transform: scale(0.98,0.98);
@@ -817,7 +842,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
 .slidecontainer {
     width: 100%; /* Width of the outside container */
-  }
+}
   
 /* The slider itself */
 .slider {
@@ -826,38 +851,39 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     width: 10%; /* Full-width */
     height: 2px; /* Specified height */
     border-radius: 5px;
-    background: #d3d3d3; /* Grey background */
+    background: rgba(255, 255, 255, 0.5);
     outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-    transition: opacity .2s;
+    transition: background-color .2s;
 }
   
 /* Mouse-over effects */
 .slider:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+    background: rgba(255, 255, 255, 0.7);
 }
   
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    width: 10px; /* Set a specific slider handle width */
-    height: 10px; /* Slider handle height */
+    width: 16px; /* Set a specific slider handle width */
+    height: 16px; /* Slider handle height */
     border-radius: 50%;
-    background: #ff4800; /* Green background */
+    background: #ffffff; /* Green background */
     cursor: pointer; /* Cursor on hover */
+
+    box-shadow: 0 1px 6px black;
 }
   
 .slider::-moz-range-thumb {
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #ff4800; /* Green background */
+    background: #ffffff; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
 /* Media queries */
-/* Minimum supported width: 417px */
+/* Minimum supported width: 362px */
 @media only screen and (max-width: 848px) {
     .Basic_Info {
         flex-direction: column;

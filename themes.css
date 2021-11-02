@@ -9,6 +9,10 @@
     /* border: 1px solid var(--light-theme-border-color); */
     background-color: whitesmoke;
 }
+.theme_light input,
+.theme_light select {
+    border: 1px solid var(--border-color);
+}
 
 /* Basic Info */
 .theme_light .Basic_Info {
@@ -33,6 +37,9 @@
 .theme_light .characterbox .bottom {
     background-color: var(--light-darker-bg-color);
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2) inset;
+}
+.theme_light .tooltip {
+    color: white;
 }
 
 .theme_light .blackedout {
@@ -92,7 +99,6 @@
 
 .theme_classic .characterbox {
     background-color: transparent;
-    overflow: unset;
     border-radius: 0;
     border: 2px solid rgb(29, 248, 0);
     box-shadow: none;
@@ -201,4 +207,262 @@
     border: 1px solid white;
     border-bottom: none;
     color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Retro theme */
+.theme_retro * {
+    transition: none;
+    font-family: monospace;
+}
+.theme_retro {
+    background-color: #0f380e;
+    color: #cadca0;
+}
+.theme_retro a {
+    color: #cadca0;
+}
+.theme_retro a:hover,
+.theme_retro .link_styling:hover {
+    color: white;
+}
+.theme_retro img,
+.theme_retro #main_carrot {
+    image-rendering: pixelated;
+    filter: saturate(0%)
+            brightness(85%)
+            sepia(100%)
+            hue-rotate(54deg)
+            saturate(120%);
+    border-radius: 0;
+}
+.theme_retro button {
+    border-color: #cadca0;
+    color: #cadca0;
+    border-radius: 0;
+}
+.theme_retro input,
+.theme_retro select {
+    background-color: #0f2c0e;
+    color: #cadca0;
+    border-radius: 0;
+}
+.theme_retro .clickvisual {
+    color: #cadca0;
+    font-weight: bolder;
+    letter-spacing: -2px;
+}
+.theme_retro .toast {
+    border-radius: 0;
+    background-color: #0f2c0e;
+    border-color: #30622f;
+}
+
+
+
+.theme_retro .Basic_Info {
+    background-color: #30622f;
+}
+.theme_retro #left-section {
+    background-color: #0f2c0e;
+    box-shadow: none;
+    border-radius: 0;
+}
+.theme_retro .characterbox {
+    background-color: #30622f;
+    border-color: #30622f;
+    border-radius: 0;
+    box-shadow: 8px 8px 0 #0f380e;
+}
+.theme_retro .bottom {
+    background-color: #0f380e;
+    border-radius: 0;
+}
+.theme_retro #Greg_Bar {
+    background-color: red;
+    border: 0;
+}
+.theme_retro #Greg .toolicon {
+    background-color: red;
+}
+
+
+/* Tri-pane */
+.theme_retro #notifs-section {
+    background-color: #30622f;
+}
+.theme_retro #notifs-section nav {
+    background-color: #0f380e;
+}
+.theme_retro #notifs-section .tab {
+    background-color: #0f380e;
+}
+.theme_retro #notifs-section .activetab {
+    background-color: #30622f;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Minecraft theme */
+.theme_blockgame * {
+    font-family: 'Minecraft Regular', 'Courier New', Courier, monospace;
+    text-shadow: 0.1rem 0.1rem black;
+}
+.theme_blockgame {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url(./assets/theme/blockgame/dirt.png);
+    background-size: 64px;
+    background-position: center;
+    image-rendering: pixelated;
+}
+.theme_blockgame button,
+.theme_blockgame select,
+.theme_blockgame .slider::-webkit-slider-thumb {
+    background: #777777 url(./assets/theme/blockgame/button.png);
+    background-size: 100%;
+    background-position: center;
+    image-rendering: pixelated;
+
+    color: white;
+    border-radius: 0;
+    border-style: solid;
+    border-top-color: #aaaaaa;
+    border-left-color: #aaaaaa;
+    border-bottom: 4px solid rgba(0, 0, 0, 0.3);
+    border-right-color: rgba(0, 0, 0, 0.3);
+    outline: 2px solid black;
+
+    transition: none;
+    transform: none;
+}
+.theme_blockgame button:hover {
+    background: url(./assets/theme/blockgame/button_active.png);
+    color: white;
+}
+.theme_blockgame input:not(.checkbox) {
+    background-color: black;
+    border-radius: 0;
+    color: white;
+}
+.theme_blockgame .slider {
+    height: 29px;
+
+    background: #777777 url(./assets/theme/blockgame/button_disabled.png);
+    background-size: 100%;
+    background-position: center;
+    image-rendering: pixelated;
+
+    border: 2px solid black;
+}
+.theme_blockgame .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 29px;
+    border-radius: 0;
+
+    cursor: pointer;
+
+    box-shadow: 0 1px 6px black;
+}
+.theme_blockgame .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/* Overlays */
+.theme_blockgame #backdrop {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url(./assets/theme/blockgame/dirt.png);
+    background-size: 64px;
+    background-position: center;
+    image-rendering: pixelated;
+    backdrop-filter: none;
+}
+.theme_blockgame #dialog {
+    background-color: unset;
+    width: 500px;
+}
+
+/* Gamespace */
+.theme_blockgame .Basic_Info {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url(./assets/theme/blockgame/grass_block_side.png);
+    background-size: 64px;
+    background-position: top;
+    image-rendering: pixelated;
+}
+.theme_blockgame #left-section {
+    box-shadow: none;
+    /* background-color: unset; */
+    background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                url(./assets/theme/blockgame/dirt.png);
+    background-size: 64px;
+    background-position: top;
+    image-rendering: pixelated;
+
+    border-radius: 0;
+    border: 4px solid black;
+}
+.theme_blockgame .toolicon {
+    background-color: #8b8b8b;
+    border-width: 4px;
+    border-style: solid;
+
+    border-top-color: #373737;
+    border-left-color: #373737;
+    border-right-color: white;
+    border-bottom-color: white;
+
+}
+
+/* .theme_blockgame #Greg .lvlupimg {
+    margin-right: -2px;
+} */
+
+
+
+/* Scrollbar */
+.theme_blockgame::-webkit-scrollbar {
+	width: 12px;
+}
+.theme_blockgame::-webkit-scrollbar-track {
+	border-radius: 0;
+	background-color: black;
+}
+.theme_blockgame::-webkit-scrollbar-thumb {
+	border-radius: 0;
+	background-color: #c0c0c0;
+
+    border-width: 2px;
+    border-style: solid;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-right-color: #808080;
+    border-bottom-color: #808080;
 }

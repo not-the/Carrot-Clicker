@@ -66,7 +66,10 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
 }
 
 // Close dialog
-function closeDialog(doAction) {
+function closeDialog(doAction, backdrop = false) {
+    // 
+    if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
+
     dialogOpen = false;
     elDialog.title.innerText = 'Dialog Title';
     elDialog.desc.innerText = 'Dialog description';
@@ -255,8 +258,74 @@ function popupHandler(useMousePos = true) {
     }
 }
 
+/* ----- Cosmetics ----- */
+//#region
+const cosmetics = {
+    // Default
+    'default': {
+        'image': './assets/Carrot Clicker.png',
+        'name': 'Carrot'
+    },
+    // Golden Carrot
+    'golden_carrot': {
+        'image': './assets/golden carrot.png',
+        'name': 'Golden Carrot'
+    },
+    // Minecraft
+    'blockgame': {
+        'image': './assets/theme/blockgame/carrot.png',
+        'name': false
+    },
+    'blockgame_potato': {
+        'image': './assets/theme/blockgame/potato.png',
+        'name': 'Potatoe'
+    },
+    // Pineapple
+    'pineapple': {
+        'image': './assets/theme/pineapple/pineapple.png',
+        'name': 'Pineapple'
+    },
+    // Bill clicker
+    'bill': {
+        'image': './assets/characters/Boomer_Bill.png',
+        'name': 'Bill'
+    },
+    // Netherite hoe
+    "netherite_hoe": {
+        'image': './assets/tools/netherite_hoe.png',
+        'name': 'Netherite hoe'
+    }
+}
+const farmableNames = [
+    dom('cc_name'),
+    dom('cpc_name'),
+    dom('cps_name')
+]
+function setCosmetic(set) {
+    let cosmetic = cosmetics[set];
+    if(cosmetic.image !== false) {
+        mainCarrot.src = cosmetic.image;
+    }
+    if(cosmetic.name !== false) {
+        nameLoop(cosmetic.name)
+    } else {
+        nameLoop('Carrot')
+    }
+
+    // Loop through page elements containing farmable item name and set accordingly
+    function nameLoop(name) {
+        for(i = 0; i < farmableNames.length; i++) {
+            farmableNames[i].innerText = name + 's';
+        }
+    }
+
+    store('cosmetic', set);
+}
+//#endregion
+
 
 /* ----- Themes ----- */
+//#region 
 // Theme dropdown eventListener
 const optionTheme = dom('theme_dropdown');
 optionTheme.addEventListener('change', () => {
@@ -271,27 +340,45 @@ function setTheme(theme) {
     elBody.className = '';
     elBody.classList.add(theme);
 
+    // Temporary cosmetic activator 
+    if(theme == 'theme_blockgame') {
+        setCosmetic('blockgame');
+    } else {
+        setCosmetic('default');
+    }
+
     // Mobile accent color
     if(theme == 'theme_light') {theme_color = '#FFFFFF';}
     else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
     dom('theme_color').content = theme_color;
+
+    // Save to localStorage
     store('theme', theme);
 }
+//#endregion
 
+/* ----- On page load ----- */
+//#region 
 // Set user theme on page load
 if(store('theme') !== null) {
     let theme = store('theme');
-    console.log(`Theme setting found, switching to ${theme}`);
+    console.log(`Theme setting found, switching to: ${theme}`);
     optionTheme.value = theme;
     setTheme(theme);
 }
-
 // Switch to previously open panel on page load
 if(store('openpanel') !==null) {
     console.log('openpanel found, switching to: ' + store('openpanel'));
     panelChange(store('openpanel'));
 }
-
+// Set user cosmetic on page load
+if(store('cosmetic') !== null) {
+    let cosmetic = store('cosmetic');
+    console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
+    // optionCosmetic.value = cosmetic;
+    setCosmetic(cosmetic);
+}
+//#endregion
 
 // Mouse position handler
 // CREDIT:

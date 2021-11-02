@@ -30,7 +30,7 @@
     <!-- Optional classes: dramatic -->
     <div id="overlay" class="dramatic">
     <!-- Backdrop -->
-    <div id="backdrop" onclick="closeDialog()"></div>
+    <div id="backdrop" onclick="closeDialog(false, true)"></div>
 
     <!-- Dialog Box -->
     <div id="dialog">
@@ -104,10 +104,18 @@
             <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()" role="button" tabindex="0">
 
             <!-- Numbers/Info Section -->
-            <p id="Carrot_Count">Loading...</p>
-            <p id="cpc">Loading...</p>
-            <p id="cps">Loading...</p>
-            <p id="golden_carrot_count"></p>
+            <div class="mini_stats">
+                <p class="Carrot_Count">
+                    <span id="Carrot_Count"></span> <span id="cc_name">Carrots</span>
+                </p>
+                <p>
+                    <span id="cpc_name">Carrots</span> per click: <span id="cpc">Loading...</span>
+                </p>
+                <p>
+                    <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
+                </p>
+                <p id="golden_carrot_count"></p>
+            </div>
             
             <!-- Prestige Section -->
             <div id="prestige-section">
@@ -160,7 +168,7 @@
                     <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe">
 
                     <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
-                    <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1),multibuy[multibuySelector]" class="toolicon blackedout" id="bill_stone_hoe">
+                    <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_stone_hoe">
 
                     <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
                     <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_iron_hoe">
@@ -310,28 +318,28 @@
                     </div>
 
                     <!-- Bottom -->
-                    <!-- Intentionally doesn't contain anything so it's just a line-->
-                    <div class="bottom"></div>
+                    <div class="bottom">
 
-                    <!-- Charles' buttons -->
-                    <button
-                    onclick="IncreaseImproveWorkingConditions()"
-                    id="ImproveWorkingConditions"
-                    class="unbold">
-                    </button>
-                    
-                    <button
-                    onclick="IncreaseBetterHoes()"
-                    id="BetterHoes"
-                    class="unbold">
-                    </button>
-
-                    <button
-                    onclick="IncreaseDecreaseWages()"
-                    id="DecreaseWages"
-                    class="unbold">
-                    </button>
+                        <!-- Charles' buttons -->
+                        <button
+                        onclick="IncreaseImproveWorkingConditions()"
+                        id="ImproveWorkingConditions"
+                        class="unbold">
+                        </button>
                         
+                        <button
+                        onclick="IncreaseBetterHoes()"
+                        id="BetterHoes"
+                        class="unbold">
+                        </button>
+
+                        <button
+                        onclick="IncreaseDecreaseWages()"
+                        id="DecreaseWages"
+                        class="unbold">
+                        </button>
+
+                    </div>
                 </div>
             
             </div>
@@ -395,20 +403,22 @@
 
             <!-- Options item -->
             <label for="theme_dropdown">
-                Theme<br>
+                Themes (Work In Progress)<br>
                 <select name="theme_dropdown" id="theme_dropdown">
                     <option value="theme_dark">Dark theme</option>
                     <option value="theme_light">Light theme</option>
                     <option value="theme_classic">Carrot Clicker classic</option>
-                    <option value="theme_oled">OLED Dark theme</option>
-                    <option value="theme_red">Red theme (WIP)</option>
+                    <option value="theme_oled">OLED Dark</option>
+                    <option value="theme_red">Red</option>
+                    <option value="theme_retro">Retro green</option>
+                    <option value="theme_blockgame">Minecraft</option>
                 </select><br><br>
             </label>
 
 
             <!-- Options item -->
             <label for="disable_keybinds">
-            <input type="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
+            <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
                 Disable keybinds
             </label><br><br>
 
@@ -422,7 +432,7 @@
             <!-- Fun Tip Percentage-->
             <div class="slidecontainer">
                 <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
-                    <input type="range" min="1" max="100" value="50" class="slider" id="FunTipsSlider">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
                 </label><br><br>
             </div>
             

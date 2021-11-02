@@ -192,13 +192,13 @@ var cpsInterval = setInterval(CarrotsPerSecond,1000);
 
 
 //level up characters 
-function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
+function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     var r=character.lvlupPrice;
     var r2=0;
     var UpBellePercent;
     var UpGregPercent;
     var UpBillPercent;
-    for(i=0; i<ammount; i++){
+    for(i=0; i<amount; i++){
         if(character==Gregory){
             UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
             r+=UpGregPercent;
@@ -217,11 +217,11 @@ function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
         }
     }
     if(mode=="query"){
-        if(ammount==1){return character.lvlupPrice}
+        if(amount==1){return character.lvlupPrice}
         return r2;
     }
     if(mode=="apply"){
-        if(ammount==1){
+        if(amount==1){
             r2=character.lvlupPrice;
             if(character==Gregory){
                 UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
@@ -241,11 +241,11 @@ function CharacterLevelUpPrice(character=Boomer_Bill, ammount=1, mode="query"){
     }
 
 }
-function LevelUp(character=Boomer_Bill, ammount=1) {
-    if(player.Carrots >= CharacterLevelUpPrice(character, ammount, "query")) {
-            character.lvl+=ammount;
-            player.Carrots-=CharacterLevelUpPrice(character,ammount,"query");
-            CharacterLevelUpPrice(character,ammount,"apply");
+function LevelUp(character=Boomer_Bill, amount=1) {
+    if(player.Carrots >= CharacterLevelUpPrice(character, amount, "query")) {
+            character.lvl+=amount;
+            player.Carrots-=CharacterLevelUpPrice(character,amount,"query");
+            CharacterLevelUpPrice(character,amount,"apply");
             
     } else {
         toast(
@@ -347,19 +347,19 @@ function DecreaseWagesEffects(){
 //#region
 
 //Stores The Correct Hoe Price
-    function HoeCost(type=0,ammount=1,mode="query"){
+    function HoeCost(type=0,amount=1,mode="query"){
         var r = Gregory.HoePrices[type];
         var r2 = Gregory.HoePrices[type];
         for(i=0;i<Gregory.HoePrices.length;i++){
             if(type==i){
-                for(j=1;j<ammount;j++){
+                for(j=1;j<amount;j++){
                     r2+=(0.05*r);
                 }
                 if(mode=="query"){
                     return r2;
                 }
                 if(mode=="apply"){
-                    if(ammount==1){
+                    if(amount==1){
                         r2+=(0.05*r);
                     }
                     Gregory.HoePrices[type]=r2;
@@ -369,7 +369,7 @@ function DecreaseWagesEffects(){
         }
     }
 
-function CreateHoe(type=0,ammount=1) {
+function CreateHoe(type=0,amount=1) {
     // Return if a hoe is already in progress
     if(n==1){
         toast("Greg is busy", "Wait until he is done crafting")
@@ -387,12 +387,12 @@ function CreateHoe(type=0,ammount=1) {
     }
 
     // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type]+ammount-1>= Gregory.lvl){
+    if(Gregory.Hoes[type]+amount-1>= Gregory.lvl){
         toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type");
         return;
     }
     
-    let price = HoeCost(type,ammount);
+    let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
     if(price>=(player.Carrots*2)){
         toast("Too Expensive!", "That hoe is currently too expensive.");
@@ -400,7 +400,7 @@ function CreateHoe(type=0,ammount=1) {
     }
     if(n==0){
         n=1; 
-        HoeCost(type,ammount,"apply"); 
+        HoeCost(type,amount,"apply"); 
         //Creates Hoe And Displays Progress Bar
         var i = 0;
         if (i == 0) {
@@ -414,7 +414,7 @@ function CreateHoe(type=0,ammount=1) {
                     player.Carrots+=p-price;
                     p=0;
                     elGregProgress.style.width = 0 + "%";
-                    Gregory.Hoes[type]+=ammount;
+                    Gregory.Hoes[type]+=amount;
                     n=0;
                 } else {
                     p+=(0.01*player.Carrots);
@@ -431,17 +431,17 @@ function CreateHoe(type=0,ammount=1) {
 
 
 //Equips A Hoe To a Character
-function EquipHoe(character=Boomer_Bill, type=0, ammount){
-    if(Gregory.Hoes[type]>=ammount){
-        if(character.Hoes[type]+ammount-1>=Gregory.lvl) {
+function EquipHoe(character=Boomer_Bill, type=0, amount){
+    if(Gregory.Hoes[type]>=amount){
+        if(character.Hoes[type]+amount-1>=Gregory.lvl) {
             toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
             n=0;
             return;
         }
         player.EquipedHoes+=1;
         player.LifetimeEquipedHoes+=1;
-        character.Hoes[type]+=ammount;
-        Gregory.Hoes[type]-=ammount;
+        character.Hoes[type]+=amount;
+        Gregory.Hoes[type]-=amount;
     }
 }
 
@@ -579,9 +579,9 @@ setInterval(() => {
     // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
     // New display
-    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))} Carrots`;
-    elCPC.innerText = `Carrots per click: ${DisplayRounded(Math.floor(player.cpc),2)}`;
-    elCPS.innerText = `Carrots per second: ${DisplayRounded(Math.floor(player.cps),2)}`;
+    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))}`;
+    elCPC.innerText = `${DisplayRounded(Math.floor(player.cpc),2)}`;
+    elCPS.innerText = `${DisplayRounded(Math.floor(player.cps),2)}`;
 
     //The Basic info for the player, Carrots; Cpc; Cps
     if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
@@ -666,7 +666,7 @@ const default_tips = {
         "Each character can only hold up to 1 hoe for every level Greg has reached"
     ],
     advanced: [
-        "When you're ready, click the prestige button. You will lose your progress but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
+        "When you're ready, click the prestige button. You will start over but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
         "Golden carrots increase your characters by 10%"
     ],
 
@@ -715,15 +715,15 @@ output.innerHTML = slider.value; // Display the default slider value
 
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
-    console.log('a');
-  output.innerHTML = this.value;
-  //tip modifer
-  tips.TypeModifier = parseInt(slider.value)/100;
-  console.log("a");
-  console.log(tips.TypeModifier);
+    // console.log('a');
+    output.innerHTML = this.value;
+    //tip modifer
+    tips.TypeModifier = parseInt(slider.value)/100;
+    // console.log("a");
+    // console.log(tips.TypeModifier);
 }
 
-function tipchange(){
+function tipchange() {
     
     //Tracker
     if(player.EquipedHoes>0 && tips.tracker==0){

@@ -1,6 +1,29 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.3.4
+    11-1-2021
+// ----------------------------------------------------------- //
+
+JS changes:
+- Bill can once again equip stone hoes (Issue #27)
+- Added functions and infrastructure for cosmetics
+- Game will remember what cosmetic was in use and will reenable it on page load
+
+CSS changes:
+- Made the inputs in settings look a little nicer and made them all the same width
+
+New themes (subject to change):
+- Added a gameboy-esque retro green theme
+- Added a Minecraft theme (also enables a relevant cosmetic)
+Note: most of these themes will not be unlocked by default
+
+Known issues:
+- Retro and Minecraft themes make it so that Greg's netherite hoe doesn't fit
+- Themes not being complete
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.3.3
-    10-30-2021
+    10-31-2021
 // ----------------------------------------------------------- //
 
 JS changes:
