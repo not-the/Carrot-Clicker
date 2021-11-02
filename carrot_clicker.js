@@ -659,7 +659,8 @@ const default_tips = {
         "To buy a Hoe, go to Greg and click the correct type",
         "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
         "Click the carrot",
-        "Long hover over a character to view their description"
+        "Long hover over a character to view their description",
+        "Click here to cycle through available tips!"
     ],
     beginner: [
         "Each character can only hold up to 1 hoe for every level Greg has reached"
@@ -774,7 +775,7 @@ function tipchange() {
 }
 
 // Automatically change tips
-setInterval(tipchange(), 1000);
+setInterval(tipchange(), 10000);
 
 
 //#endregion
