@@ -112,7 +112,9 @@ Still need to do:
 - Charles spills over to a 2nd column when there is enough room
 - Status bar progress bar needs to work
 - Make settings look nicer
-
+- Fix the hoes again again
+- Tip slider needs to actually work
+- A general clean up of code
 Lines of code:
   Total HTML:  441
   Total CSS :  873
