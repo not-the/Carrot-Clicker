@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.3.5
+    11-2-2021
+// ----------------------------------------------------------- //
+
+- General HTML changes to better support cosmetics
+- Charles's HTML no longers says Belle
+- Fixed a typo in Greg's tooltip
+- Cosmetics can now change character avatars and names
+- Started to add infrastructure for achievements (user.js)
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.3.4
     11-1-2021
 // ----------------------------------------------------------- //

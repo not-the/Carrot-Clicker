@@ -264,7 +264,17 @@ const cosmetics = {
     // Default
     'default': {
         'image': './assets/Carrot Clicker.png',
-        'name': 'Carrot'
+        'name': 'Carrot',
+
+        'bill_image':    '/assets/characters/Boomer_Bill.png',
+        'belle_image':   '/assets/characters/BelleBommerette.png',
+        'greg_image':    '/assets/characters/Gregory.png',
+        'charles_image': '/assets/characters/Charles.png',
+
+        'bill_name':    'Bill',
+        'belle_name':   'Belle',
+        'greg_name':    'Greg',
+        'charles_name': 'Charles',
     },
     // Golden Carrot
     'golden_carrot': {
@@ -274,7 +284,7 @@ const cosmetics = {
     // Minecraft
     'blockgame': {
         'image': './assets/theme/blockgame/carrot.png',
-        'name': false
+        // 'name': 'Carrots'
     },
     'blockgame_potato': {
         'image': './assets/theme/blockgame/potato.png',
@@ -288,7 +298,18 @@ const cosmetics = {
     // Bill clicker
     'bill': {
         'image': './assets/characters/Boomer_Bill.png',
-        'name': 'Bill'
+        'name': 'Bill',
+
+        'bill_image':    '/assets/characters/Boomer_Bill.png',
+        'belle_image':   '/assets/characters/Boomer_Bill.png',
+        'greg_image':    '/assets/characters/Boomer_Bill.png',
+        'charles_image': '/assets/characters/Boomer_Bill.png',
+
+    
+        'bill_name':    'Bill',
+        'belle_name':   'Bill',
+        'greg_name':    'Bill',
+        'charles_name': 'Bill',
     },
     // Netherite hoe
     "netherite_hoe": {
@@ -299,18 +320,53 @@ const cosmetics = {
 const farmableNames = [
     dom('cc_name'),
     dom('cpc_name'),
-    dom('cps_name')
+    dom('cps_name'),
 ]
-function setCosmetic(set) {
+const characterAvatars = {
+    'bill':     dom('bill_avatar'),
+    'belle':    dom('belle_avatar'),
+    'greg':     dom('greg_avatar'),
+    'charles':  dom('charles_avatar'),
+}
+const characterNames = {
+    // Nametag
+    'bill':     dom('bill_name'),
+    'belle':    dom('belle_name'),
+    'greg':     dom('greg_name'),
+    'charles':  dom('charles_name'),
+
+    // Cost to upgrade:
+    // ...
+}
+function setCosmetic(set, resetState = false) {
+    // Reset to default first
+    if(resetState == false && set !== 'default') {setCosmetic('default', true);}
+    console.log('Switching to cosmetic: ' + set);
+
     let cosmetic = cosmetics[set];
-    if(cosmetic.image !== false) {
-        mainCarrot.src = cosmetic.image;
-    }
-    if(cosmetic.name !== false) {
+
+    // Image
+    if(cosmetic.hasOwnProperty('image')) {mainCarrot.src = cosmetic.image;}
+
+    // Name
+    if(cosmetic.hasOwnProperty('name')) {
         nameLoop(cosmetic.name)
     } else {
-        nameLoop('Carrot')
+        nameLoop('Carrot');
     }
+
+    // Character Avatars
+    if(cosmetic.hasOwnProperty('bill_image'))     {characterAvatars.bill.src = cosmetic.bill_image;}
+    if(cosmetic.hasOwnProperty('belle_image'))    {characterAvatars.belle.src = cosmetic.belle_image;}
+    if(cosmetic.hasOwnProperty('greg_image'))     {characterAvatars.greg.src = cosmetic.greg_image;}
+    if(cosmetic.hasOwnProperty('charles_image'))  {characterAvatars.charles.src = cosmetic.charles_image;}
+
+    // Character Names
+    if(cosmetic.hasOwnProperty('bill_name'))     {characterNames.bill.innerText = cosmetic.bill_name;}
+    if(cosmetic.hasOwnProperty('belle_name'))    {characterNames.belle.innerText = cosmetic.belle_name;}
+    if(cosmetic.hasOwnProperty('greg_name'))     {characterNames.greg.innerText = cosmetic.greg_name;}
+    if(cosmetic.hasOwnProperty('charles_name'))  {characterNames.charles.innerText = cosmetic.charles_name;}
+
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(name) {
@@ -372,12 +428,12 @@ if(store('openpanel') !==null) {
     panelChange(store('openpanel'));
 }
 // Set user cosmetic on page load
-if(store('cosmetic') !== null) {
-    let cosmetic = store('cosmetic');
-    console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
-    // optionCosmetic.value = cosmetic;
-    setCosmetic(cosmetic);
-}
+// if(store('cosmetic') !== null) {
+//     let cosmetic = store('cosmetic');
+//     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
+//     // optionCosmetic.value = cosmetic;
+//     setCosmetic(cosmetic);
+// }
 //#endregion
 
 // Mouse position handler

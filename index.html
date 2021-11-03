@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker dev beta v1.3.2</title>
+    <title>Carrot Clicker dev beta v1.3.5</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -152,8 +152,10 @@
                     class="characterimg"
                     title="Boomer Bill">
                     <div class="characterdesc">
-                    <b class="charactername">Bill</b>
-                    <p id="UpBillCost"></p>
+                    <b id="bill_name" class="charactername">Bill</b>
+                    <p>
+                        Cost to upgrade Bill: <span id="UpBillCost"></span>
+                    </p>
                     <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
                     </div>
 
@@ -200,8 +202,12 @@
                     class="characterimg"
                     title="Boomer Belle">
                     <div class="characterdesc">
-                    <b class="charactername">Belle</b>
-                    <p id="UpBelleCost"></p>
+                    <b id="belle_name" class="charactername">
+                        Belle
+                    </b>
+                    <p>
+                        Cost to upgrade Belle: <span id="UpBelleCost"></span>
+                    </p>
                     <figcaption id="Belle_lvl" class="characterlevel"></figcaption>
                     </div>
                 </div>
@@ -235,19 +241,25 @@
                 
                 <!--Gregory Rendering-->
                 <div class="Greg characterbox">
-                    <div class="billtooltip charactertooltip tooltip" id="gregtooltip">Upgrading Greg To Create and Store Hoes.</div>
+                    <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
+                        Upgrade Greg To Create and Store Hoes.
+                    </div>
                     <!-- Top -->
                     <div class="top flex">
                         <img
                         src="./assets/characters/Gregory.png"
                         alt="Gregory"
-                        id="Greg_avatar"
+                        id="greg_avatar"
                         class="characterimg"
                         title="Gregory">
                         <div class="characterdesc">
-                        <b class="charactername">Greg</b>
-                        <p id="UpGregCost">show</p>
-                        <figcaption id="Greg_lvl" class="characterlevel">lvl:0</figcaption>
+                            <b id="greg_name" class="charactername">Greg</b>
+                            <p>
+                                Cost to Upgrade Greg: <span id="UpGregCost"></span>
+                            </p>
+                            <figcaption id="Greg_lvl" class="characterlevel">
+                                Lvl: 0
+                            </figcaption>
                         </div>
                     </div>
 
@@ -307,12 +319,12 @@
                     <div class="top flex">
                         <img
                             src="./assets/characters/Charles.png"
-                            alt="Belle Boomerette"
-                            id="belle_avatar"
+                            alt="Charles"
+                            id="charles_avatar"
                             class="characterimg"
                             title="Charles">
                         <div class="characterdesc">
-                            <b class="charactername">Charles</b>
+                            <b id="charles_name" class="charactername">Charles</b>
                             <p>Charles description</p>
                         </div>
                     </div>

@@ -219,7 +219,7 @@ if(store("disableKeybinds") == null) {
 }
 
 
-/*---------------TUTORIAL---------------*/
+/* --------------- TUTORIAL --------------- */
 // Initial Welcome
 if(store("tutorial_sample") == null) {
     store("tutorial_sample", "done");
@@ -236,3 +236,88 @@ function tutorialHoes() {
     toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
 }
 //#endregion
+
+
+
+
+
+
+
+/* --------------- ACHIEVEMENTS --------------- */
+// class achievement {
+//     constructor(name, desc, image, reward, requirement) {
+//         this.name = name;
+//         this.desc = desc;
+//         this.requirement = requirement;
+//     }
+// }
+
+// Loop through achievements
+// for(let entry in achievements) {
+//     console.log(`${entry}:${achievements[entry]}`);
+// }
+
+// Test achievement conditions
+setInterval(() => {
+    
+}, 2500);
+
+function grantAchievement(param) {
+    let achieve = achievements[param];
+    console.log(`Earned achievement: ${achieve} (${param})`);
+
+    // Evaluate achievement conditions
+    if(achieve.hasOwnProperty('conditions') || achieve.conditions !== false) {
+        console.log( achieve.conditions.split('/') );
+    }
+
+    toast(`Achievement earned: ${achieve.name}`, achieve.desc);
+}
+
+const achievements = {
+
+    // Template
+    // 'template': {
+    //     'name': 'Achievement',
+    //     'desc': 'Description',
+    //     'image': './assets/achievements/generic.png',
+    //     'reward': 'Reward',
+    //     'conditions': '',
+    //     'rarity': '0'
+    // },
+
+    // Carrots
+    '1_carrot': {
+        'name': 'First Carrot',
+        'desc': 'Farming is hard',
+        'image': '',
+        'reward': false,
+    },
+    // Golden Carrots
+    '50_golden_carrots': {
+        'name': 'Golden',
+        'desc': 'Earn at least 50 golden carrots',
+        'image': '',
+        'reward': 'cosmetic:golden_carrot',
+    },
+    // Characters
+    'upgrade_all_characters_once': {
+        'name': '3 heads are better than one',
+        'desc': 'Upgrade every (upgradeable) character at least once',
+        'image': '',
+        'reward': 'theme:theme_red, theme:theme_green, theme:theme_blue',
+    },
+    'bill_lvl_100': {
+        'name': 'Bill of the Century',
+        'desc': 'Upgrade Bill 100 times',
+        'image': '',
+        'reward': false,
+    },
+    'greg_lvl_64': {
+        'name': 'Professional Crafter',
+        'desc': 'Upgrade Greg 64 Times',
+        'image': './assets/tools/diamond_hoe.png',
+        'reward': 'theme:theme_blockgame',
+        'conditions': 'character:greg/lvl/64'
+    }
+}

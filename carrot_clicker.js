@@ -446,16 +446,29 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
 }
 
 // Temporary fix thing, going to just add their names to their objects probably
-function characterString(character) {
-    switch(character) {
-        case Boomer_Bill:
-            return charString = 'bill';
-        case Belle_Boomerette:
-            return charString = 'belle';
-        case Gregory:
-            return charString = 'greg';
+function characterString(character, reverse = false) {
+    if(reverse == false) {
+        switch(character) {
+            case Boomer_Bill:
+                return charString = 'bill';
+            case Belle_Boomerette:
+                return charString = 'belle';
+            case Gregory:
+                return charString = 'greg';
+        }
+    }
+    else {
+        switch(character) {
+            case 'bill':
+                return charString = 'Boomer_Bill';
+            case 'belle':
+                return charString = 'Belle_Boomerette';
+            case 'greg':
+                return charString = 'Gregory';
+        }
     }
 }
+
 
 // Update hoe on page
 function DisplayHoe(character, type) {
@@ -592,9 +605,9 @@ setInterval(() => {
     }
 
     // Costs to level up characters
-    elCharacterUpCost.bill.innerText =`Cost to upgrade Bill: ${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.belle.innerText = `Cost to upgrade Belle: ${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.greg.innerText = `Cost to Upgrade Greg: ${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`;
+    elCharacterUpCost.bill.innerText = `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
+    elCharacterUpCost.belle.innerText = `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`;
+    elCharacterUpCost.greg.innerText = `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`;
 
     // Character levels
     elCharacterLevel.bill.innerText  = `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`;
