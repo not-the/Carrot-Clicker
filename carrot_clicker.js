@@ -6,7 +6,6 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 */
 
 //variables to prevent spamclicking
-var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
@@ -195,51 +194,41 @@ var cpsInterval = setInterval(CarrotsPerSecond,1000);
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     var r=character.lvlupPrice;
     var r2=0;
-    var UpBellePercent;
-    var UpGregPercent;
-    var UpBillPercent;
+
+    function multibuyPrice(PriceIncrease){
+        r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
+        r2+=r;
+    }
     for(i=0; i<amount; i++){
         if(character==Gregory){
-            UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-            r+=UpGregPercent;
-            r2+=r;
+            multibuyPrice(0.19);
+
         }
         if(character==Belle_Boomerette){
-            UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10109));
-            r+=UpBellePercent
-            r2+=Math.floor(r);
-
+            multibuyPrice(0.1);
         }
         if(character==Boomer_Bill){
-            UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.102));
-            r+=UpBillPercent;
-            r2+=Math.floor(r);
+            multibuyPrice(0.102);
         }
-    }
-    if(mode=="query"){
-        if(amount==1){return character.lvlupPrice}
-        return r2;
-    }
-    if(mode=="apply"){
-        if(amount==1){
-            r2=character.lvlupPrice;
-            if(character==Gregory){
-                UpGregPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.195));
-                r2+=UpGregPercent;
-            }
-            if(character==Belle_Boomerette){
-                UpBellePercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.10009));
-                r2+=UpBellePercent;
-    
-            }
-            if(character==Boomer_Bill){
-                UpBillPercent = ((1-DecreaseWagesEffects())*Math.floor(r*0.12));
-                r2+=UpBillPercent;
-            }
-        }
-        character.lvlupPrice=Math.floor(r);
     }
 
+    if(mode=="apply"){
+        if(amount==1){
+            if(character==Gregory){
+                multibuyPrice(0.19);
+            }
+            if(character==Belle_Boomerette){
+                multibuyPrice(0.1);
+            }
+            if(character==Boomer_Bill){
+                multibuyPrice(0.102);
+            }
+            character.lvlupPrice=Math.floor(r);
+        }
+    character.lvlupPrice=Math.floor(r2);
+    }
+    if(amount==1){return character.lvlupPrice}
+    return r2;
 }
 function LevelUp(character=Boomer_Bill, amount=1) {
     if(player.Carrots >= CharacterLevelUpPrice(character, amount, "query")) {
@@ -347,27 +336,25 @@ function DecreaseWagesEffects(){
 //#region
 
 //Stores The Correct Hoe Price
-    function HoeCost(type=0,amount=1,mode="query"){
-        var r = Gregory.HoePrices[type];
-        var r2 = Gregory.HoePrices[type];
-        for(i=0;i<Gregory.HoePrices.length;i++){
-            if(type==i){
-                for(j=1;j<amount;j++){
-                    r2+=(0.05*r);
-                }
-                if(mode=="query"){
-                    return r2;
-                }
-                if(mode=="apply"){
-                    if(amount==1){
-                        r2+=(0.05*r);
-                    }
-                    Gregory.HoePrices[type]=r2;
-                }
-                
-            }
+function HoeCost(type=0,amount=1,mode="query"){
+    var p = Gregory.HoePrices[type];
+    var p2 = 0;
+    if(amount==1){
+        if(mode=="apply"){
+            Gregory.HoePrices[type]+=(0.02*p);
         }
+        return p;
     }
+    for(j=0;j<amount;j++){
+        p+=(0.019*p);
+        p2+=p;     
+    }
+
+    if(mode=="apply"){
+        Gregory.HoePrices[type]=p2;
+    }
+    return p2;
+}
 
 function CreateHoe(type=0,amount=1) {
     // Return if a hoe is already in progress
@@ -377,7 +364,7 @@ function CreateHoe(type=0,amount=1) {
     }
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)||Gregory.lvl==0){
+    if(Gregory.lvl<=(type*25)-1||Gregory.lvl==0){
         if(type>=1){
             toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`);
             return;
@@ -603,6 +590,7 @@ setInterval(() => {
     if(player.LifetimeGoldenCarrots>=1) {
         elGoldenCarrotCount.style.color = "white";
     }
+    document.getElementById("multibuy").innerText=multibuy[multibuySelector]+"x";
 
     // Costs to level up characters
     elCharacterUpCost.bill.innerText = `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
@@ -746,7 +734,7 @@ function tipchange() {
         tips.tracker=2;
     }
     
-    //decides if the tip wiull be real or fun.
+    //decides if the tip will be real or fun.
     tips.random=Math.random();
     console.log(tips.random);
     if(tips.random<tips.TypeModifier){
