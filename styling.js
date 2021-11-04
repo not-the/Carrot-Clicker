@@ -18,6 +18,7 @@ var toastsList =  {};
 var bonusID =      0;
 
 var dialogOpen = false;
+var themeSwitcherOpen = false;
 
 // Dialog button action
 var dialogButtonAction = 'none';
@@ -36,6 +37,7 @@ const elDialog = {
 };
 const toastContainer =  dom("toast_container");
 const toastsClear =     dom("toasts_clear");
+const themeMenu =       dom("theme_menu");
 //#endregion
 
 
@@ -47,11 +49,28 @@ const toastsClear =     dom("toasts_clear");
 // }
 
 
+// Confetti
+const elConfetti = dom('confetti')
+function confetti(type = 1) {
+    let duration = 6760;
+    elConfetti.src = `/assets/confetti${type}.gif`;
+
+    setTimeout(() => {
+        elConfetti.classList.add('fade_out');
+    }, duration - 2000);
+
+    setTimeout(() => {
+        elConfetti.src = '/assets/blank.png';
+        elConfetti.classList.remove('fade_out');
+    }, duration);
+}
+
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     dialogOpen = true;
-    overlay.classList.add("visible");
+    overlay.classList.add('visible');
+    elDialog.main.classList.add('visible');
     // elDialog.main.classList.add("dialog_animate");
 
     // Fill out dialog text, if applicable
@@ -67,7 +86,7 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
 
 // Close dialog
 function closeDialog(doAction, backdrop = false) {
-    // 
+    // Cancel if specific theme is chosen
     if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
 
     dialogOpen = false;
@@ -79,6 +98,7 @@ function closeDialog(doAction, backdrop = false) {
     elDialog.buttons.accept.innerText = "OK";
 
     overlay.classList.remove("visible");
+    elDialog.main.classList.remove('visible');
     // elDialog.main.classList.remove("dialog_animate");
 
     // Run passed in function if applicable
@@ -99,6 +119,10 @@ function closeDialog(doAction, backdrop = false) {
     };
 
     dialogButtonAction = 'none';
+
+    // Hide Theme Switcher
+    themeMenu.classList.remove('visible');
+    themeSwitcherOpen = false;
 }
 
 
@@ -108,8 +132,9 @@ function closeDialog(doAction, backdrop = false) {
 function toast(title, desc, color, persistent) {
     // Create element with parameters filled in
     var toastElement = document.createElement("div");
+    toastElement.id = `toast${toastID}`;
     toastElement.innerHTML =
-    `<div class="toast background_${color}" id="toast${toastID}">
+    `<div class="toast background_${color}">
         <h3>${title}</h3>
         <span class="toast_close" onclick="closeToast(${toastID})">X</span>
         <p>${desc}</p>
@@ -126,8 +151,6 @@ function toast(title, desc, color, persistent) {
     } else {
         toastID = 0;
     }
-
-
 
     // Clear all button
     if(activeToasts > 2) {
@@ -207,6 +230,11 @@ function panelChange(to) {
         store('openpanel', to);
         currentPanel = to;
     }
+
+    // Reset Statistics Panel
+    if(to !== "info-panel") {
+        elStatistics.innerHTML = statLoading;
+    }
 }
 //#endregion
 
@@ -257,6 +285,20 @@ function popupHandler(useMousePos = true) {
         bonusID = 0;
     }
 }
+
+/* ----- Fancy Theme Switcher ----- */
+function themeSwitcher() {
+    themeSwitcherOpen = true;
+    themeMenu.classList.add('visible');
+    overlay.classList.add("visible");
+}
+
+function closeThemeSwitcher() {
+    themeMenu.classList.remove('visible');
+    overlay.classList.remove("visible");
+}
+
+
 
 /* ----- Cosmetics ----- */
 //#region

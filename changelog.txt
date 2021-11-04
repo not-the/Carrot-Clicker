@@ -1,4 +1,26 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.3.7
+    11-3-2021
+// ----------------------------------------------------------- //
+
+JS Changes
+- Added loading icon & basic handler for putting statistics in the statistics tab (doesn't currently put statistics there since I don't know how we are going to store lifetime stats)
+- Slightly improved efficiency of keybindHandler() function
+- Added a keybind for closing all toast notifications (x key)
+- Toast elements were not being deleted properly (ID being used to delete them was on a child element intstead of the element itself)
+- Basic support for unlockable themes (until they are available through in-game means they will still be available)
+- confetti() function
+
+Themes:
+- Started working on a fancy theme switcher, just need to make the interface (HTML) itself
+- Themes can now be locked/unlocked (For now they are all available by default, at least until they can be obtained through gameplay)
+- Added Green Theme
+- Added Blue Theme
+- White theme fixes
+- Minecraft theme is closer to being "complete"
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.3.6
     11-3-2021
 // ----------------------------------------------------------- //

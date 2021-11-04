@@ -25,30 +25,39 @@
     <!-- On top -->
     <!-- #region -->
 
+    <!-- Gif overlay -->
+    <img src="/assets/blank.png" alt="" id="confetti" class="hidden">
+
     <!-- Dialog Popup -->
     <!-- #region -->
     <!-- Optional classes: dramatic -->
     <div id="overlay" class="dramatic">
-    <!-- Backdrop -->
-    <div id="backdrop" onclick="closeDialog(false, true)"></div>
+        <!-- Backdrop -->
+        <div id="backdrop" onclick="closeDialog(false, true)"></div>
 
-    <!-- Dialog Box -->
-    <div id="dialog">
-        <!-- Dialog info -->
-        <h2 id="dialog_title">Dialog Title</h2>
-        <p id="dialog_desc">
-        Dialog description
-        </p>
-        <!-- Dialog Options -->
-        <div id="dialog_buttons">
-        <button onclick="closeDialog()" id="dialog_button_cancel">
-            Cancel
-        </button>
-        <button onclick="closeDialog(true)" id="dialog_button_accept">
-            OK
-            </button>
+        <!-- Dialog Box -->
+        <div id="dialog" class="popup_box">
+            <!-- Dialog info -->
+            <h2 id="dialog_title">Dialog Title</h2>
+            <p id="dialog_desc">
+                Dialog description
+            </p>
+            <!-- Dialog Options -->
+            <div id="dialog_buttons">
+                <button onclick="closeDialog()" id="dialog_button_cancel">
+                    Cancel
+                </button>
+                <button onclick="closeDialog(true)" id="dialog_button_accept">
+                    OK
+                </button>
+            </div>
         </div>
-    </div>
+
+        <!-- Fancy Theme Switcher -->
+        <div id="theme_menu" class="popup_box">
+            <h2>Themes</h2>
+            <p>Description</p>
+        </div>
     </div>
     <!-- #endregion -->
  
@@ -383,26 +392,31 @@
         <!-- Achievements Panel -->
         <div id="achievements-panel" class="panel">
             <h1>Achievements</h1>
-            Achievements will go here (when they've been implemented)
+            <p>Achievements will go here (when they've been implemented)</p>
+            
             <div id="achievements-inner">
-                
+
+                <!-- <div class="info-item">
+                    <img src="assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
+                    <div>
+                    <h1>Achievement earned: Click the carrot</h1>
+                    <p>Click the carrot</p>
+                    </div>
+                </div>-->
+
             </div>
         </div>
 
         <!-- Info Panel -->
         <div id="info-panel" class="panel">
             <div id="info-inner">
-            <h1>Statistics</h1>
-            <p>Lifetime statistics will go here (when they've been implemented)</p>
-            
-            <!-- <div class="info-item">
-                <img src="assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
-                <div>
-                <h1>Achievement earned: Click the carrot</h1>
-                <p>Click the carrot</p>
+                <h1>Statistics</h1>
+                <p>Lifetime statistics will go here (when they've been implemented)</p><br>
+                
+                <div id="statistics">
+                    <img src="/assets//Carrot Clicker.png" alt="Loading..." class="loading_carrot">
                 </div>
-            </div>-->
-            
+
             </div> 
         </div>
 
@@ -413,19 +427,24 @@
             <h1>Settings</h1>
             <p><i>Your game progress will always be saved.</i></p><br>
 
-            <!-- Options item -->
+            <!-- Themes -->
             <label for="theme_dropdown">
                 Themes (Work In Progress)<br>
                 <select name="theme_dropdown" id="theme_dropdown">
-                    <option value="theme_dark">Dark theme</option>
-                    <option value="theme_light">Light theme</option>
-                    <option value="theme_classic">Carrot Clicker classic</option>
-                    <option value="theme_oled">OLED Dark</option>
-                    <option value="theme_red">Red</option>
-                    <option value="theme_retro">Retro green</option>
-                    <option value="theme_blockgame">Minecraft</option>
-                </select><br><br>
+                    <option value="theme_dark" id="theme_dark">Dark Theme</option>
+                    <option value="theme_light" id="theme_light">Light Theme</option>
+                    <option value="theme_oled" id="theme_oled">OLED Dark</option>
+                    <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
+                    <option value="theme_red" id="theme_red">Red Theme</option>
+                    <option value="theme_green" id="theme_green">Green Theme)</option>
+                    <option value="theme_blue" id="theme_blue">Blue Theme</option>
+                    <option value="theme_retro" id="theme_retro">Retro green</option>
+                    <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
+                </select><br>
             </label>
+            <button id="theme_button" onclick="themeSwitcher()">
+                Change Theme
+            </button><br><br>
 
 
             <!-- Options item -->

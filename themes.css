@@ -9,9 +9,29 @@
     /* border: 1px solid var(--light-theme-border-color); */
     background-color: whitesmoke;
 }
+.theme_light button:hover {
+    border-color: var(--border-color);
+}
 .theme_light input,
 .theme_light select {
     border: 1px solid var(--border-color);
+}
+
+/* Scrollbar */
+.theme_light ::-webkit-scrollbar {
+	width: 16px;
+}
+.theme_light ::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: var(--light-main-bg-color);
+}
+.theme_light ::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: var(--border-color);
+
+    /* Fake margins from https://stackoverflow.com/a/45420691/11039898 */
+    box-shadow: inset 0 0 10px 10px var(--border-color);
+    border: 3px solid var(--main-bg-color);
 }
 
 /* Basic Info */
@@ -50,7 +70,7 @@
 .theme_light .toast {
     color: white;
 }
-.theme_light #dialog {
+.theme_light .popup_box {
     background-color: white;
 }
 
@@ -68,6 +88,64 @@
 .theme_light #notifs-section nav .activetab {
     background-color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* OLED Dark theme */
+.theme_oled {
+    background-color: black;
+}
+.theme_oled .Basic_Info {
+    background-color: black;
+}
+.theme_oled #left-section,
+.theme_oled #main_carrot,
+.theme_oled .characterbox,
+.theme_oled #notifs-section {
+    box-shadow: none;
+}
+
+.theme_oled #left-section {
+    background-color: unset;
+}
+
+.theme_oled .characterbox {
+    background-color: black;
+}
+.theme_oled .bottom {
+    background-color: black;
+}
+.theme_oled .blackedout {
+    filter: contrast(0%) brightness(30%);
+}
+
+/* Tri-pane */
+.theme_oled #notifs-section {
+    background-color: black;
+}
+.theme_oled #notifs-section nav {
+    background-color: black;
+}
+.theme_oled #notifs-section nav .tab {
+    background-color: rgb(24, 24, 24);
+    color: gray;
+}
+.theme_oled #notifs-section nav .activetab {
+    background-color: black;
+    border: 1px solid white;
+    border-bottom: none;
+    color: white;
+}
+
+
 
 
 
@@ -163,51 +241,85 @@
 
 
 
-/* OLED Dark theme */
-.theme_oled {
-    background-color: black;
-}
-.theme_oled .Basic_Info {
-    background-color: black;
-}
-.theme_oled #left-section,
-.theme_oled #main_carrot,
-.theme_oled .characterbox,
-.theme_oled #notifs-section {
-    box-shadow: none;
-}
 
-.theme_oled #left-section {
-    background-color: unset;
-}
 
-.theme_oled .characterbox {
-    background-color: black;
+/* Green theme */
+.theme_green {
+    background-color: rgb(37, 49, 34);
 }
-.theme_oled .bottom {
-    background-color: black;
+.theme_green .Basic_Info {
+    background-color: rgb(76, 105, 73);
 }
-.theme_oled .blackedout {
-    filter: contrast(0%) brightness(30%);
+.theme_green #left-section {
+    background-color: rgb(25, 34, 22);
 }
-
+.theme_green .characterbox {
+    background-color: rgb(76, 105, 73);
+    border-color: rgb(76, 105, 73);
+}
+.theme_green .bottom {
+    background-color: rgb(37, 49, 34);
+}
 /* Tri-pane */
-.theme_oled #notifs-section {
-    background-color: black;
+.theme_green #notifs-section {
+    background-color: var(--lighter-bg-color);
 }
-.theme_oled #notifs-section nav {
-    background-color: black;
+.theme_green #notifs-section nav {
+    background-color: var(--main-bg-color);
 }
-.theme_oled #notifs-section nav .tab {
-    background-color: rgb(24, 24, 24);
+.theme_green #notifs-section nav .tab {
+    background-color: var(--main-bg-color);
     color: gray;
 }
-.theme_oled #notifs-section nav .activetab {
-    background-color: black;
-    border: 1px solid white;
-    border-bottom: none;
+.theme_green #notifs-section nav .activetab {
+    background-color: var(--lighter-bg-color);
     color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Blue theme */
+.theme_blue {
+    background-color: rgb(40, 50, 70);
+}
+.theme_blue .Basic_Info {
+    background-color: rgb(69, 87, 121);
+}
+.theme_blue #left-section {
+    background-color: rgb(24, 30, 48);
+}
+.theme_blue .characterbox {
+    background-color: rgb(69, 87, 121);
+    border-color: rgb(69, 87, 121);
+}
+.theme_blue .bottom {
+    background-color:rgb(40, 50, 70);
+}
+/* Tri-pane */
+.theme_blue #notifs-section {
+    background-color: var(--lighter-bg-color);
+}
+.theme_blue #notifs-section nav {
+    background-color: var(--main-bg-color);
+}
+.theme_blue #notifs-section nav .tab {
+    background-color: var(--main-bg-color);
+    color: gray;
+}
+.theme_blue #notifs-section nav .activetab {
+    background-color: var(--lighter-bg-color);
+    color: white;
+}
+
 
 
 
@@ -329,7 +441,7 @@
 /* Minecraft theme */
 .theme_blockgame * {
     font-family: 'Minecraft Regular', 'Courier New', Courier, monospace;
-    text-shadow: 0.1rem 0.1rem black;
+    text-shadow: 0.1em 0.1em black;
 }
 .theme_blockgame {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
@@ -340,9 +452,10 @@
 }
 .theme_blockgame button,
 .theme_blockgame select,
+.theme_blockgame #notifs-section nav .tab,
 .theme_blockgame .slider::-webkit-slider-thumb {
-    background: #777777 url(./assets/theme/blockgame/button.png);
-    background-size: 100%;
+    background: #2a2a2a url(./assets/theme/blockgame/button.png);
+    background-size: 250%;
     background-position: center;
     image-rendering: pixelated;
 
@@ -358,15 +471,28 @@
     transition: none;
     transform: none;
 }
-.theme_blockgame button:hover {
-    background: url(./assets/theme/blockgame/button_active.png);
+.theme_blockgame button:hover,
+.theme_blockgame select:hover,
+.theme_blockgame #notifs-section nav .tab:hover {
+    background-image: url(./assets/theme/blockgame/button_active.png);
     color: white;
+}
+.theme_blockgame .button_red {
+    color: #FF5555;
+}
+.theme_blockgame .button_red:hover {
+    outline-color: #FF5555;
 }
 .theme_blockgame input:not(.checkbox) {
     background-color: black;
     border-radius: 0;
     color: white;
 }
+/* .theme_blockgame .checkbox {
+    width: 30px;
+    height: 30px;
+    background-image: url(/assets/theme/blockgame/checkbox_background.png);
+} */
 .theme_blockgame .slider {
     height: 29px;
 
@@ -404,9 +530,15 @@
     image-rendering: pixelated;
     backdrop-filter: none;
 }
-.theme_blockgame #dialog {
+.theme_blockgame .popup_box {
     background-color: unset;
     width: 500px;
+}
+.theme_blockgame .toast {
+    background-color: #212121;
+    border-color: #555555;
+    border-width: 4px;
+    outline: 2px solid black;
 }
 
 /* Gamespace */
@@ -429,16 +561,34 @@
     border-radius: 0;
     border: 4px solid black;
 }
+.theme_blockgame #main_carrot {
+    filter: drop-shadow(24px 24px 0 rgba(0, 0, 0, 0.4));
+}
+.theme_blockgame #main_carrot:active {
+    filter: drop-shadow(12px 12px 0 rgba(0, 0, 0, 0.4)); 
+}
+.theme_blockgame .characterbox,
+.theme_blockgame .characterbox img,
+.theme_blockgame .bottom,
+.theme_blockgame .toast,
+.theme_blockgame #Greg_Bar {
+    border-radius: 0;
+}
+.theme_blockgame .characterbox {
+    background-color: #8b8b8b;
+}
+.theme_blockgame .bottom {
+    background-color: #c6c6c6;
+}
 .theme_blockgame .toolicon {
     background-color: #8b8b8b;
-    border-width: 4px;
+    border-width: 3px;
     border-style: solid;
 
     border-top-color: #373737;
     border-left-color: #373737;
     border-right-color: white;
     border-bottom-color: white;
-
 }
 
 /* .theme_blockgame #Greg .lvlupimg {
@@ -465,4 +615,23 @@
     border-left-color: transparent;
     border-right-color: #808080;
     border-bottom-color: #808080;
+}
+
+/* Tri-pane */
+.theme_blockgame #notifs-section nav .tab {
+    color: rgb(163, 163, 163);
+    padding-bottom: 20px;
+}
+.theme_blockgame #notifs-section nav .activetab {
+    color: white;
+    filter: none;
+    outline-color: white;
+}
+.theme_blockgame .panel {
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+                url(./assets/theme/blockgame/stone.png);
+    background-size: 64px;
+    background-position: center;
+    background-attachment: local;
+    image-rendering: pixelated;
 }

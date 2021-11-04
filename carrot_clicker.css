@@ -19,6 +19,7 @@
     /* CSS Variables */
     --main-bg-color:    #242222;
     --lighter-bg-color: #312e2e;
+    --main-popup-color: #353535;
     --darker-bg-color:  #1f1d1d;
     --border-color:     #4b4747;
 
@@ -145,11 +146,57 @@ select {
     width: 100%;
     max-width: 200px;
 }
+select {
+    cursor: pointer;
+}
 .link_styling {
     cursor: pointer;
 }
 .link_styling:hover {
     text-decoration: underline;
+}
+.popup_box {
+    background: var(--main-popup-color);
+    padding: 20px;
+    border-radius: 4px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    visibility: hidden;
+}
+.loading_carrot {
+    height: 80px;
+    width: 80px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    filter: contrast(0%) brightness(0%);
+    opacity: 0.5;
+    animation: spin 3s infinite linear;
+}
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%)rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+.fade_out {animation: opacity 2s forwards}
+.fade_in {animation: opacity 2s forwards reverse}
+@keyframes opacity {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Text Colors */
@@ -207,6 +254,16 @@ select {
 }
 
 /* Always on top elements */
+#confetti {
+    z-index: 300;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
 
 /* Dialog Popup */
 #overlay {
@@ -223,9 +280,10 @@ select {
     width: 100%;
     background: rgba(0, 0, 0, 0.514);
     backdrop-filter: blur(30px);
+    z-index: 190;
 }
 .backdrop-in {animation: backdrop 1s forwards;}
-.backdrop-out {animation: backdrop 0.5s forwards reverse;}
+.backdrop-out {animation: backdrop 0.5s forwards;}
 @keyframes backdrop {
     from {
         opacity: 0;
@@ -240,14 +298,6 @@ select {
 }
 #dialog {
     width: 420px;
-    background: rgb(53, 53, 53);
-    padding: 20px;
-    border-radius: 4px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     /* animation: dialog 0.5s cubic-bezier(0.39, 0.575, 0.565, 1); */
 }
@@ -297,7 +347,7 @@ select {
     margin: 16px;
     margin-top: 0;
     padding: 12px 16px;
-    background: #353535;
+    background: var(--main-popup-color);
     border: 2px solid gray;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
@@ -353,6 +403,16 @@ select {
 }
 #toasts_clear:hover {
     filter: brightness(125%);
+}
+
+/* Fancy Theme Switcher */
+#theme_menu {
+    width: 100%;
+    max-width: 700px;
+
+    z-index: 200;
+
+    visibility: hidden;
 }
 
 /* Number Popup */
@@ -795,6 +855,9 @@ select {
 
     overflow: auto;
 }
+/* .panel button {
+    width: 200px;
+} */
 #achievements-panel {
     visibility: visible;
 }

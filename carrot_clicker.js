@@ -117,15 +117,18 @@ class Character{
 }
 // Default Values Stored in a Player Object
 const player1 = {
+    // Progress
     Carrots:0,
     cpc:0,
     cps:0,
     golden_carrots:0,
     prestige_potential:0,
     EquipedHoes:0,
+
+    // Lifetime stats
     LifetimeCarrots:0,
     LifetimeGoldenCarrots:0,
-    LifetimeEquipedHoes:0
+    LifetimeEquipedHoes:0,
 }
 
 
@@ -645,6 +648,18 @@ setInterval(() => {
        DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
 }, 100);
 //#endregion
+
+// Lifetime Statistics Panel
+const elStatistics = dom('statistics');
+const statLoading = elStatistics.innerHTML;
+function loadStatistics() {
+    if(currentPanel !== "info-panel") return;
+    elStatistics.innerText = 'Lifetime carrots: a whole lot\nLifetime Golden Carrots: not so much';
+}
+
+setInterval(() => {
+    loadStatistics()
+}, 2000);
 
 
 /*-----------Tips----------- */
