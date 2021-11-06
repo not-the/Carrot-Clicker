@@ -1,4 +1,12 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.4.1.1 hotfix
+    11-5-2021
+// ----------------------------------------------------------- //
+
+- "Compatibility for old save files" mentioned in 1.4 should now work properly- previously, players with old save files would not be given the default themes and the theme switcher would be useless.
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.4.1
     11-5-2021
 // ----------------------------------------------------------- //

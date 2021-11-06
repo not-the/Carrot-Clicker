@@ -521,11 +521,24 @@ if(player.hasOwnProperty('achievements') == false) {
     console.log('player.achievements check failed, creating property...');
     player.achievements = {};
 }
-if(player.hasOwnProperty('themes') == false) {
+if(
+player.hasOwnProperty('themes') == false
+|| player.themes == []
+|| player.themes.length == 0
+) {
     console.log('player.themes check failed, creating property...');
-    player.themes = [];
+    player.themes = [
+        'theme_dark',
+        'theme_light',
+        'theme_oled'
+    ];
 }
-if(player.hasOwnProperty('cosmetics') == false) {
+if(player.hasOwnProperty('cosmetics') == false
+|| player.cosmetics == []
+|| player.cosmetics.length == 0
+) {
     console.log('player.cosmetics check failed, creating property...');
-    player.cosmetics = [];
+    player.cosmetics = [
+        'default'
+    ];
 }
