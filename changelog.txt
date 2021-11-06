@@ -10,6 +10,7 @@ What's new:
 - unlock() function now works (for themes, since there is no cosmetic switcher at the moment)
 - Achievements:
     + Not quite complete, but in terms of JS they're basically done
+    + Some achievements may not work properly (specifically ones with multiple conditions)
     + Still need to have them appear in the achievements tab
     + Still need to give them a unique style of toast that can display an image and tell you what unlocks come with
 - Compatibility for old save files:
