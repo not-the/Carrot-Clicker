@@ -34,6 +34,16 @@
     border: 3px solid var(--main-bg-color);
 }
 
+/* On top */
+.theme_light .theme_item {
+    background-color: whitesmoke;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+.theme_light .theme_item:hover {
+    outline-color: var(--light-theme-border-color);
+}
+.theme_light .theme_checkbox {border-color: rgba(0, 0, 0, 0.5);}
+
 /* Basic Info */
 .theme_light .Basic_Info {
     background-color: white;

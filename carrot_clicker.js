@@ -6,6 +6,7 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 */
 
 //variables to prevent spamclicking
+var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
@@ -118,17 +119,30 @@ class Character{
 // Default Values Stored in a Player Object
 const player1 = {
     // Progress
-    Carrots:0,
-    cpc:0,
-    cps:0,
-    golden_carrots:0,
-    prestige_potential:0,
-    EquipedHoes:0,
+    Carrots: 0,
+    cpc: 0,
+    cps: 0,
+    golden_carrots: 0,
+    prestige_potential: 0,
+    EquipedHoes: 0,
 
     // Lifetime stats
-    LifetimeCarrots:0,
-    LifetimeGoldenCarrots:0,
-    LifetimeEquipedHoes:0,
+    LifetimeCarrots: 0,
+    LifetimeGoldenCarrots: 0,
+    LifetimeEquipedHoes: 0,
+
+    // Achievements
+    achievements: {},
+
+    // Unlockables
+    themes: [
+        'theme_dark',
+        'theme_light',
+        'theme_oled'
+    ],
+    cosmetics: [
+        'default'
+    ]
 }
 
 
@@ -654,12 +668,14 @@ const elStatistics = dom('statistics');
 const statLoading = elStatistics.innerHTML;
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
-    elStatistics.innerText = 'Lifetime carrots: a whole lot\nLifetime Golden Carrots: not so much';
+    elStatistics.innerHTML =
+    `<h3>Lifetime:</h3>Carrots earned: <b>${DisplayRounded(player.LifetimeCarrots)}</b><br/>Golden Carrots earned: <b>${DisplayRounded(player.LifetimeGoldenCarrots)}</b>`;
 }
 
+// Refresh statistics
 setInterval(() => {
-    loadStatistics()
-}, 2000);
+    loadStatistics();
+}, 2500);
 
 
 /*-----------Tips----------- */

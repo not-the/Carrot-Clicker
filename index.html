@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker dev beta v1.3.5</title>
+    <title>Carrot Clicker dev beta v1.4.0</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -55,8 +55,25 @@
 
         <!-- Fancy Theme Switcher -->
         <div id="theme_menu" class="popup_box">
+            <!-- Title -->
             <h2>Themes</h2>
             <p>Description</p>
+
+            <!-- Theme items -->
+            <div id="themes_list">
+                <!-- Javascript will do all the work -->
+                <div class="theme_item theme_selected flex">
+                    <img src="/assets/Carrot Clicker.png" alt="" class="theme_preview" onclick="setTheme('theme_dark')" id="theme_dark">
+                    <div>
+                        <h3>Dark Theme (Default)</h3>
+                        <p>Description goes here. Or does it? Yes, it does.</p>
+                    </div>
+                    <div class="theme_checkbox">
+                        <img src="/assets/checkmark.svg" alt="Selected" class="theme_checkmark">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <!-- #endregion -->
@@ -411,7 +428,8 @@
         <div id="info-panel" class="panel">
             <div id="info-inner">
                 <h1>Statistics</h1>
-                <p>Lifetime statistics will go here (when they've been implemented)</p><br>
+                <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
+                <p>Updates every 2.5 seconds</p><br/>
                 
                 <div id="statistics">
                     <img src="/assets//Carrot Clicker.png" alt="Loading..." class="loading_carrot">
@@ -430,7 +448,7 @@
             <!-- Themes -->
             <label for="theme_dropdown">
                 Themes (Work In Progress)<br>
-                <select name="theme_dropdown" id="theme_dropdown">
+                <!-- <select name="theme_dropdown" id="theme_dropdown">
                     <option value="theme_dark" id="theme_dark">Dark Theme</option>
                     <option value="theme_light" id="theme_light">Light Theme</option>
                     <option value="theme_oled" id="theme_oled">OLED Dark</option>
@@ -440,7 +458,7 @@
                     <option value="theme_blue" id="theme_blue">Blue Theme</option>
                     <option value="theme_retro" id="theme_retro">Retro green</option>
                     <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
-                </select><br>
+                </select><br> -->
             </label>
             <button id="theme_button" onclick="themeSwitcher()">
                 Change Theme
@@ -482,7 +500,7 @@
 
   <!-- Javascript -->
   <!-- #region -->
-  <script src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
+  <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
   <script src="carrot_clicker.js"></script>
   <script src="styling.js"></script>
   <script src="user.js"></script>

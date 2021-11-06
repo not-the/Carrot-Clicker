@@ -274,49 +274,6 @@ function tutorialHoes() {
 //     console.log(`${entry}:${achievements[entry]}`);
 // }
 
-// Test achievement conditions
-setInterval(() => {
-    
-}, 2500);
-
-// Achievement Conditions converter
-// function convertConditions() {
-    
-// }
-
-// Grant Achievement
-function grantAchievement(param) {
-    let achieve = achievements[param];
-    console.log(`Earned achievement: ${achieve} (${param})`);
-
-    // Evaluate achievement conditions
-    if(achieve.hasOwnProperty('conditions') || achieve.conditions !== false) {
-        console.log( achieve.conditions.split('/') );
-    }
-
-    toast(`Achievement earned: ${achieve.name}`, achieve.desc);
-}
-
-// Unlock themes/cosmetics
-var playerThemes =    [];
-var playerCosmetics = [];
-function unlock(type, thingToUnlock) {
-    console.log('unlock(): ' + type + ':' + thingToUnlock);
-
-    if(type == 'theme') {
-        playerThemes.push(thingToUnlock);
-    } else if(type == 'cosmetic') {
-        playerCosmetics.push(thingToUnlock);
-    }
-}
-
-// Unlock on page load
-for(i = 0; i < player.unlockables.length; i++) {
-    console.log(player[unlockables][i]);
-}
-
-
-
 const achievements = {
 
     // Template
@@ -342,7 +299,7 @@ const achievements = {
         'name': 'Golden',
         'desc': 'Earn at least 50 golden carrots',
         'image': false,
-        'reward': 'cosmetic:golden_carrot',
+        'reward': ['cosmetic:golden_carrot', 'function:confetti'],
         'conditions': ['player.LifetimeGoldenCarrots', 50]
     },
     // Characters
@@ -352,7 +309,7 @@ const achievements = {
         'image': false,
         'reward': 'theme:theme_red, theme:theme_green, theme:theme_blue',
         'conditions': [
-            ['Boomer_Bill.lvl',      1],
+            ['Boomer_Bill.lvl',      2],
             ['Gregory.lvl',          1],
             ['Belle_Boomerette.lvl', 1],
         ]
@@ -378,4 +335,180 @@ const achievements = {
         'reward': false,
         'conditions': ['external.charles_uses', 1]
     }
+}
+const achievementsKeys = Object.keys(achievements);
+
+// Test achievement conditions every 5 seconds
+setInterval(() => {
+    // if(achieve.hasOwnProperty('conditions') || achieve.conditions !== false) {
+    //     console.log( achieve.conditions.split('/') );
+    // }
+
+    // Loop through achievements test if player has earned them
+    for(let i = 0; i < achievementsKeys.length; i++) {
+        let key = achievementsKeys[i];
+        let achievement = achievements[key];
+
+        // console.log(achievement.name);
+        evaluateConditions(key, achievement);
+    }
+}, 5000);
+
+// Achievement Conditions converter
+function evaluateConditions(key, achievement) {
+    let multicondition = false;
+    var multiamount = 0;
+    var multifulfilled = 0;
+
+    // Run tests
+    function tests(key, conditions) {
+        // console.log(`Running tests on [${key}]`)
+        let getVar =        Function(`return ${conditions[0]}`);
+        let variable =      getVar();
+        let requirement =   conditions[1];
+        // let operator =    achievement.conditions[2];
+        let alreadyEarned = achieveQuery(key);
+
+        // Grant achievement if reached requirement
+        // console.log(`${key}: ${variable} >= ${requirement}`);
+        if(variable >= requirement && alreadyEarned == false) {
+            // console.log(key + ' passed tests!');
+            multifulfilled++;
+
+            if(multicondition == true && multiamount == multifulfilled) {
+                grantAchievement(key);
+            } else if(multicondition == false) {
+                grantAchievement(key);
+            }
+        }
+    }
+
+    // Check if there are multiple conditions
+    if(Array.isArray(achievement.conditions[0])) {
+        // console.log('Multicondition: ' + key);
+        multicondition = true;
+    }
+    
+    // 1 condition
+    if(multicondition == false) {
+        tests(key, achievement.conditions);
+    }
+
+    // Multiple conditions
+    else if(multicondition == true) {
+        for(let i = 0; i < achievement.conditions.length; i++) {
+            // console.log(achievement.conditions[i]);
+            multiamount++;
+            tests(key, achievement.conditions[i]);
+        }
+        // console.log(`${key}: ${multifulfilled}/${multiamount}`);
+    }
+}
+
+// Reward user
+function giveReward(reward) {
+    // console.log('Unlocked: ' + reward);
+    let rewardType = reward.split(':')[0];
+    let rewardName = reward.split(':')[1];
+    // console.log(rewardType, rewardName);
+
+    // Theme or Cosmetic reward
+    if(rewardType == 'theme' || rewardType == 'cosmetic') {
+        unlock(rewardType, rewardName);
+    }
+    // Function reward
+    else if(rewardType == 'function') {
+        // Run specified function
+        var rewardFunction = Function(`${rewardName}()`);
+        rewardFunction();
+    }
+}
+
+// Grant Achievement (Takes in object key)
+function grantAchievement(key) {
+    let achieve = achievements[key];
+
+    // Notification
+    console.log(`Achievement earned: ${achieve.name} (${key})`);
+    if(achieve.noToast !== true) {
+        toast(`Achievement earned: ${achieve.name}`, achieve.desc);
+    }
+
+    // Add achievement to player.achievements
+    player.achievements[key] = true;
+
+    // Check if there is an award to give
+    if(achieve.hasOwnProperty('reward')) {
+        let reward = achieve.reward;
+
+        // Check if there are multiple rewards
+        if(Array.isArray(achieve.reward) == true) {
+            for(let i = 0; i < achieve.reward.length; i++) {
+                giveReward(achieve.reward[i]);
+            }
+        } else {
+            giveReward(reward);
+        }
+    }
+
+}
+
+// Unlock themes/cosmetics
+// var playerThemes =    [];
+// var playerCosmetics = [];
+function unlock(type, thingToUnlock) {
+    console.log('unlock(): ' + type + ':' + thingToUnlock);
+
+    // isUnlocked() goes here
+
+    if(type == 'theme') {
+        player.themes.push(thingToUnlock);
+
+        populateThemeList();
+    } else if(type == 'cosmetic') {
+        player.cosmetics.push(thingToUnlock);
+    }
+}
+
+// Test if player has an achievement - True = yes, False = no
+function achieveQuery(key) {
+    if(player.achievements[key] == true) {
+        return true
+    } else return false;
+}
+
+// Test if theme is unlocked or not
+function isUnlocked(testfor) {
+    for(let i = 0; i < player.themes.length; i++) {
+        if(testfor == player.themes[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Unlock on page load
+// for(i = 0; i < player.unlockables.length; i++) {
+//     console.log(player[unlockables][i]);
+// }
+
+
+
+// On page load
+populateThemeList();
+themeSwitcherCheckmark(store('theme'));
+
+
+// player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
+if(player.hasOwnProperty('achievements') == false) {
+    console.log('player.achievements check failed, creating property...');
+    player.achievements = {};
+}
+if(player.hasOwnProperty('themes') == false) {
+    console.log('player.themes check failed, creating property...');
+    player.themes = [];
+}
+if(player.hasOwnProperty('cosmetics') == false) {
+    console.log('player.cosmetics check failed, creating property...');
+    player.cosmetics = [];
 }

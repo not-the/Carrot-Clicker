@@ -52,8 +52,10 @@ const themeMenu =       dom("theme_menu");
 // Confetti
 const elConfetti = dom('confetti')
 function confetti(type = 1) {
+    console.log('Confetti!');
     let duration = 6760;
     elConfetti.src = `/assets/confetti${type}.gif`;
+    elConfetti.classList.add('visible');
 
     setTimeout(() => {
         elConfetti.classList.add('fade_out');
@@ -62,6 +64,7 @@ function confetti(type = 1) {
     setTimeout(() => {
         elConfetti.src = '/assets/blank.png';
         elConfetti.classList.remove('fade_out');
+        elConfetti.classList.remove('visible');
     }, duration);
 }
 
@@ -292,6 +295,7 @@ function themeSwitcher() {
     themeMenu.classList.add('visible');
     overlay.classList.add("visible");
 }
+// themeSwitcher();
 
 function closeThemeSwitcher() {
     themeMenu.classList.remove('visible');
@@ -425,15 +429,140 @@ function setCosmetic(set, resetState = false) {
 /* ----- Themes ----- */
 //#region 
 // Theme dropdown eventListener
-const optionTheme = dom('theme_dropdown');
-optionTheme.addEventListener('change', () => {
-    setTheme(optionTheme.value);
-});
+// const optionTheme = dom('theme_dropdown');
+// optionTheme.addEventListener('change', () => {
+//     setTheme(optionTheme.value);
+// });
+
+// Theme class
+// class theme {
+//     constructor(name, image, desc, cosmetic) {
+//         this.name = name;
+//         this.image = image;
+//         this.desc = desc;
+//         this.cosmetic = cosmetic;
+//     }
+// }
+
+const themesList = dom('themes_list');
+
+// Theme data
+const themes = {
+    // Default
+    'theme_dark': {
+        name:     'Dark Theme',
+        image:    false,
+        desc:     'Default dark',
+        cosmetic: false
+    },
+    'theme_light': {
+        name:     'Light Theme',
+        image:    false,
+        desc:     'Default light',
+        cosmetic: false
+    },
+    'theme_oled': {
+        name:     'OLED Dark Theme',
+        image:    false,
+        desc:     'Dark theme compatible with OLED screens',
+        cosmetic: false
+    },
+    'theme_classic': {
+        name:     'Carrot Clicker classic',
+        image:    false,
+        desc:     'The original look of carrot clicker',
+        cosmetic: false
+    },
+    'theme_red': {
+        name:     'Red Theme',
+        image:    false,
+        desc:     'Town painted.',
+        cosmetic: false
+    },
+    'theme_green': {
+        name:     'Green Theme',
+        image:    false,
+        desc:     'Green',
+        cosmetic: false
+    },
+    'theme_blue': {
+        name:     'Blue Theme',
+        image:    false,
+        desc:     'For when you get tired of gray',
+        cosmetic: false
+    },
+    'theme_retro': {
+        name:     'Retro Green',
+        image:    false,
+        desc:     ':D',
+        cosmetic: false
+    },
+    'theme_blockgame': {
+        name:     'Minecraft',
+        image:    false,
+        desc:     'Does it violate copyright if this is just a hobby project with no ads?',
+        cosmetic: false
+    },
+};
+const themesKeys = Object.keys(themes);
+
+// Populate theme switcher list on page load
+function populateThemeList() {
+    var themeHTML = '';
+    var stillLocked = 0;
+
+    for(let i = 0; i < themesKeys.length; i++) {
+        let key = themesKeys[i];
+        let theme = themes[key];
+  
+        // Test if unlocked
+        if(isUnlocked(key) == false) {
+            // console.log(key + ' is not unlocked!');
+            stillLocked++;
+            continue;
+        }
+    
+        themeHTML += /* html */
+        `
+        <div class="theme_item flex" onclick="setTheme('${key}')">
+            <img src="${theme.image == false ? '/assets/Carrot Clicker.png' : theme.image}" alt="" class="theme_preview" id="theme">
+            <div>
+                <h3>${theme.name}</h3>
+                <p>${theme.desc}</p>
+            </div>
+            <div class="theme_checkbox">
+                <img src="/assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="${key + '_checkmark'}">
+            </div>
+        </div>
+        `;
+    }
+
+    if(stillLocked > 0) {
+        themeHTML += /* html */
+        `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`
+    }
+
+    themesList.innerHTML = themeHTML;
+}
+
+// Theme switcher checkmark fix
+function themeSwitcherCheckmark(theme, from) {
+    var elTheme = dom(`${theme}_checkmark`);
+    if(!elTheme) return;
+    elTheme.classList.remove('opacity0');
+    if(!from) return;
+    dom(`${from}_checkmark`).classList.add('opacity0');
+}
+
+
+
+
 
 // Set theme
 function setTheme(theme) {
     // var theme = optionTheme.value;
     var theme_color = '#312e2e';
+    var from = store('theme');
 
     elBody.className = '';
     elBody.classList.add(theme);
@@ -442,7 +571,9 @@ function setTheme(theme) {
     if(theme == 'theme_blockgame') {
         setCosmetic('blockgame');
     } else {
-        setCosmetic('default');
+        if(store('cosmetic') !== 'default') {
+            setCosmetic('default');
+        }
     }
 
     // Mobile accent color
@@ -452,6 +583,9 @@ function setTheme(theme) {
 
     // Save to localStorage
     store('theme', theme);
+
+    // Fancy Switcher fix
+    themeSwitcherCheckmark(theme, from);
 }
 //#endregion
 
@@ -461,11 +595,11 @@ function setTheme(theme) {
 if(store('theme') !== null) {
     let theme = store('theme');
     console.log(`Theme setting found, switching to: ${theme}`);
-    optionTheme.value = theme;
+    // optionTheme.value = theme;
     setTheme(theme);
 }
 // Switch to previously open panel on page load
-if(store('openpanel') !==null) {
+if(store('openpanel') !== null) {
     console.log('openpanel found, switching to: ' + store('openpanel'));
     panelChange(store('openpanel'));
 }

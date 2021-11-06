@@ -24,18 +24,19 @@
     --border-color:     #4b4747;
 
     /* Tri-pane colors */
-    --brown-bg-color: #4e3f34;
-    --brown-darker-color: #42362d;
+    --brown-bg-color:      #4e3f34;
+    --brown-darker-color:  #42362d;
     --brown-lighter-color: #635145;
 
     /* Misc */
+    --generic-blue:     #518ed4;
     --golden-carrot:    rgb(250, 225, 0);
     --warning-red:      rgb(255, 65, 65);
 
     /* Theme colors */
-    --light-main-bg-color: whitesmoke;
-    --light-highlight-color: white;
-    --light-darker-bg-color: rgb(230, 230, 230);
+    --light-main-bg-color:      whitesmoke;
+    --light-highlight-color:    white;
+    --light-darker-bg-color:    rgb(230, 230, 230);
     --light-theme-border-color: rgb(185, 185, 185);
 
     /* Dark scrollbar (also changes other unstyled elements */
@@ -317,10 +318,13 @@ select {
 #dialog button {
     width: 49%;
 }
-
+.hidden {
+    visibility: hidden !important;
+}
 .visible {
     visibility: visible !important;
 }
+.opacity0 {opacity: 0 !important;}
 
 /* Toasts */
 #toast_container {
@@ -408,11 +412,70 @@ select {
 /* Fancy Theme Switcher */
 #theme_menu {
     width: 100%;
-    max-width: 700px;
+    max-width: 540px;
+    max-height: 90%;
+    overflow: auto;
 
     z-index: 200;
 
     visibility: hidden;
+}
+.theme_menu h2 {
+    margin: 0;
+}
+.theme_menu h3 {
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
+.theme_menu p {
+    margin: 0;
+}
+.theme_item {
+    height: 90px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: var(--darker-bg-color);
+    margin-bottom: 14px;
+
+    /* Leave room for checkbox */
+    padding-right: 84px;
+
+    position: relative;
+
+    cursor: pointer;
+}
+.theme_selected {
+    outline: 2px solid var(--generic-blue);
+    background-color: var(--main-bg-color);
+}
+.theme_item:hover {
+    filter: brightness(120%);
+    outline: 2px solid white;
+}
+.theme_preview {
+    height: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+.theme_checkbox {
+    width: 60px;
+    height: 60px;
+    
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+.theme_checkmark {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+}
+body:not(.theme_light) .theme_checkmark {
+    filter: invert();
 }
 
 /* Number Popup */
