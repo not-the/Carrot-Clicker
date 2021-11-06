@@ -4,19 +4,21 @@
 // ----------------------------------------------------------- //
 
 What's new:
-- Fancy theme switcher
+- Fancy theme switcher:
     + Hides themes that have not been unlocked
     + Tells you how many remaining themes you have to unlock
 - unlock() function now works (for themes, since there is no cosmetic switcher at the moment)
-- Achievements
+- Achievements:
     + Not quite complete, but in terms of JS they're basically done
     + Still need to have them appear in the achievements tab
     + Still need to give them a unique style of toast that can display an image and tell you what unlocks come with
+- Compatibility for old save files:
+    + Achievements and unlockables have been added to the player object, and because of the way the game stores said object I've had to add some checks to make sure that the required properties are added. I don't know if this will stay, but for now you can continue playing without losing your save.
 
 Fixes:
 - Fixed the confetti element always being visible and causing a white border around the screen
 - Hoes are now craftable again (n variable was missing)
-- Statistics now displays actual data (only 2 statistics display at the moment)
+- Statistics now displays actual data (only 2 numbers actually show up at the moment)
 
 
 // ----------------------------------------------------------- //
