@@ -489,7 +489,8 @@ function DisplayHoe(character, type) {
             img.classList.add('glowing');
 
             // If first hoe send tutorial message
-            if(store('tutorial_first_hoe') == null) {tutorialHoes();}
+            // Replace with achievements system, didn't delete because I might still revert
+            // if(store('tutorial_first_hoe') == null) {tutorialHoes();}
         } else {
             img.classList.remove('glowing');
             img.classList.add('blackedout');
@@ -669,13 +670,20 @@ const statLoading = elStatistics.innerHTML;
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
     elStatistics.innerHTML =
-    `<h3>Lifetime:</h3>Carrots earned: <b>${DisplayRounded(player.LifetimeCarrots)}</b><br/>Golden Carrots earned: <b>${DisplayRounded(player.LifetimeGoldenCarrots)}</b>`;
+    `<h3>Lifetime:</h3>
+    Carrots earned: <b>${DisplayRounded(player.LifetimeCarrots)}</b><br/>
+    Golden Carrots earned: <b>${DisplayRounded(player.LifetimeGoldenCarrots)}</b><br/><br/>
+
+    Themes:       ${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}<br/>
+    Cosmetics:    ${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}<br/><br/>
+
+    Achievements: ${Object.keys(player.achievements).length}/${Object.keys(achievements).length}<br/>`;
 }
 
 // Refresh statistics
 setInterval(() => {
     loadStatistics();
-}, 2500);
+}, 2000);
 
 
 /*-----------Tips----------- */

@@ -54,7 +54,7 @@ const elConfetti = dom('confetti')
 function confetti(type = 1) {
     console.log('Confetti!');
     let duration = 6760;
-    elConfetti.src = `/assets/confetti${type}.gif`;
+    elConfetti.src = `./assets/confetti${type}.gif`;
     elConfetti.classList.add('visible');
 
     setTimeout(() => {
@@ -62,7 +62,7 @@ function confetti(type = 1) {
     }, duration - 2000);
 
     setTimeout(() => {
-        elConfetti.src = '/assets/blank.png';
+        elConfetti.src = './assets/blank.png';
         elConfetti.classList.remove('fade_out');
         elConfetti.classList.remove('visible');
     }, duration);
@@ -312,10 +312,10 @@ const cosmetics = {
         'image': './assets/Carrot Clicker.png',
         'name': 'Carrot',
 
-        'bill_image':    '/assets/characters/Boomer_Bill.png',
-        'belle_image':   '/assets/characters/BelleBommerette.png',
-        'greg_image':    '/assets/characters/Gregory.png',
-        'charles_image': '/assets/characters/Charles.png',
+        'bill_image':    './assets/characters/Boomer_Bill.png',
+        'belle_image':   './assets/characters/BelleBommerette.png',
+        'greg_image':    './assets/characters/Gregory.png',
+        'charles_image': './assets/characters/Charles.png',
 
         'bill_name':    'Bill',
         'belle_name':   'Belle',
@@ -346,10 +346,10 @@ const cosmetics = {
         'image': './assets/characters/Boomer_Bill.png',
         'name': 'Bill',
 
-        'bill_image':    '/assets/characters/Boomer_Bill.png',
-        'belle_image':   '/assets/characters/Boomer_Bill.png',
-        'greg_image':    '/assets/characters/Boomer_Bill.png',
-        'charles_image': '/assets/characters/Boomer_Bill.png',
+        'bill_image':    './assets/characters/Boomer_Bill.png',
+        'belle_image':   './assets/characters/Boomer_Bill.png',
+        'greg_image':    './assets/characters/Boomer_Bill.png',
+        'charles_image': './assets/characters/Boomer_Bill.png',
 
     
         'bill_name':    'Bill',
@@ -525,13 +525,13 @@ function populateThemeList() {
         themeHTML += /* html */
         `
         <div class="theme_item flex" onclick="setTheme('${key}')">
-            <img src="${theme.image == false ? '/assets/Carrot Clicker.png' : theme.image}" alt="" class="theme_preview" id="theme">
+            <img src="${theme.image == false ? './assets/Carrot Clicker.png' : theme.image}" alt="" class="theme_preview" id="theme">
             <div>
                 <h3>${theme.name}</h3>
                 <p>${theme.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="/assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="${key + '_checkmark'}">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="${key + '_checkmark'}">
             </div>
         </div>
         `;

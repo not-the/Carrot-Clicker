@@ -302,12 +302,12 @@ const achievements = {
         'reward': ['cosmetic:golden_carrot', 'function:confetti'],
         'conditions': ['player.LifetimeGoldenCarrots', 50]
     },
-    // Characters
+    // Character usage
     'upgrade_all_characters_once': {
         'name': '3 heads are better than one',
         'desc': 'Upgrade every (upgradeable) character at least once',
         'image': false,
-        'reward': 'theme:theme_red, theme:theme_green, theme:theme_blue',
+        'reward': ['theme:theme_red', 'theme:theme_green', 'theme:theme_blue'],
         'conditions': [
             ['Boomer_Bill.lvl',      2],
             ['Gregory.lvl',          1],
@@ -334,6 +334,23 @@ const achievements = {
         'image': './assets/characters/Charles.png',
         'reward': false,
         'conditions': ['external.charles_uses', 1]
+    },
+
+    // Tutorial
+    'first_hoe': {
+        'name': 'First Hoe',
+        'desc': 'Tutorial',
+        'image': false,
+        'reward': 'function:tutorialHoes',
+        'conditions': ['Gregory.Hoes[0]', 1],
+        'noToast': true
+    },
+    '1_netherite_hoe': {
+        'name': '1_netherite_hoe',
+        'desc': 'Netherite',
+        'image': './assets/tools/netherite_hoe.png',
+        'reward': false,
+        'conditions': ['Gregory.Hoes[5]', 1],
     }
 }
 const achievementsKeys = Object.keys(achievements);

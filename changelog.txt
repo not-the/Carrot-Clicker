@@ -1,4 +1,19 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.4.1
+    11-5-2021
+// ----------------------------------------------------------- //
+
+- Statistics now tells you how many achievements, themes, and cosmetics out of the total you have
+- Added two achievements:
+    + First Hoe (Triggers tutorial message same as before)
+    + First Netherite Hoe
+- Reduced statistics refresh time to 2 seconds
+
+Fixes:
+- Fixed certain images not appearing (their src attribute didn't have a "." at the start). I think this might also be why the character avatars were disappearing but we'll have to see if that goes away or not.
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.4.0
     11-5-2021
 // ----------------------------------------------------------- //
