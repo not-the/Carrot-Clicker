@@ -55,7 +55,7 @@
 
         <!-- Fancy Theme Switcher -->
         <div id="theme_menu" class="popup_box">
-            <h2 class="toast_close dialog_close" onclick="closeDialog(false)">x</h2>
+            <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
             <!-- Title -->
             <h2>Themes</h2>
             <p>Description</p>
@@ -66,8 +66,8 @@
                 <div class="theme_item theme_selected flex">
                     <img src="./assets/Carrot Clicker.png" alt="" class="theme_preview" onclick="setTheme('theme_dark')" id="theme_dark">
                     <div>
-                        <h3>Dark Theme (Default)</h3>
-                        <p>Description goes here. Or does it? Yes, it does.</p>
+                        <h3>Error - if you're seeing this, please let us know.</h3>
+                        <p>You may have to delete your save for themes to work. Description goes here. Or does it? Yes, it does.</p>
                     </div>
                     <div class="theme_checkbox">
                         <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark">
@@ -512,6 +512,11 @@
             <label for="enable_sounds">
                 <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
                     Sounds
+            </label><br>
+            <!-- Music toggle -->
+            <label for="enable_music">
+                <input type="checkbox" class="checkbox" id="enable_music" checked onclick="settingMusic()">
+                    Music
             </label><br>
             <!-- Carrot sounds -->
             <label for="enable_carrot_sounds">

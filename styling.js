@@ -93,10 +93,17 @@ function playSound(file) {
     audio.play();
 }
 // Play Music
-function playMusic(file) {
-    if(store('enableSounds') == 'false') return;
-    var audio = new Audio(`./assets/music/${file}`);
-    audio.play();
+var music;
+function playMusic(file = 'music.m4a', loop = false) {
+    if(store('enableSounds') == 'false' || store('enableMusic') == 'false') return;
+    music = new Audio(`./assets/music/${file}`);
+    music.loop = loop;
+    console.log('playMusic() - Playing track 1...');
+    music.play();
+}
+function stopMusic() {
+    music.pause();
+    music.currentTime = 0;
 }
 
 // Popup Notifications
@@ -488,49 +495,49 @@ const themes = {
     // Default
     'theme_dark': {
         name:     'Dark Theme',
-        image:    false,
+        image:    './assets/theme/theme_dark.png',
         desc:     'Default dark',
         cosmetic: false
     },
     'theme_light': {
         name:     'Light Theme',
-        image:    false,
+        image:    './assets/theme/theme_light.png',
         desc:     'Default light',
         cosmetic: false
     },
     'theme_oled': {
         name:     'OLED Dark Theme',
-        image:    false,
+        image:    './assets/theme/theme_oled.png',
         desc:     'Don\'t play Carrot Clicker after midnight',
         cosmetic: false
     },
     'theme_classic': {
         name:     'Carrot Clicker classic',
-        image:    './assets/Carrot Clicker.png',
+        image:    './assets/theme/theme_classic.png',
         desc:     'The original look of carrot clicker',
         cosmetic: false
     },
     'theme_red': {
         name:     'Red Theme',
-        image:    false,
+        image:    './assets/theme/theme_red.png',
         desc:     'Town painted.',
         cosmetic: false
     },
     'theme_green': {
         name:     'Green Theme',
-        image:    false,
+        image:    './assets/theme/theme_green.png',
         desc:     'Green',
         cosmetic: false
     },
     'theme_blue': {
         name:     'Blue Theme',
-        image:    false,
+        image:    './assets/theme/theme_blue.png',
         desc:     'For when you get tired of gray',
         cosmetic: false
     },
     'theme_retro': {
         name:     'Retro Green Theme',
-        image:    './assets/theme/retro/theme_retro.png',
+        image:    './assets/theme/theme_retro.png',
         desc:     ':D',
         cosmetic: false
     },
@@ -563,7 +570,7 @@ function populateThemeList() {
     
         themeHTML += /* html */
         `
-        <div class="theme_item flex" onclick="setTheme('${key}')">
+        <div class="theme_item flex" title="${theme.name}" onclick="setTheme('${key}')">
             <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
             <div>
                 <h3>${theme.name}</h3>
@@ -578,7 +585,10 @@ function populateThemeList() {
 
     if(stillLocked > 0) {
         themeHTML += /* html */
-        `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`
+        `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`;
+    } else {
+        themeHTML += /* html */
+        `<br><center><p>You've unlocked every theme!</p></center>`;
     }
 
     themesList.innerHTML = themeHTML;

@@ -3,6 +3,13 @@ Users settings, keybind handling, and tutorial handling
 ------------------------------------------------------------- */
 
 /*---------------OPTIONS-------------------*/
+
+// Page variables
+const elDisableKeybinds = dom('disable_keybinds')
+const elEnableSounds = dom('enable_sounds');
+const elEnableMusic = dom('enable_music');
+const elEnableCarrotSounds = dom('enable_carrot_sounds');
+
 // Temporary option thing
 function saveOption() {
     let value = notificationLength.value;
@@ -22,7 +29,7 @@ function resetOption() {
 }
 
 // Disable keybinds setting
-const elDisableKeybinds = dom('disable_keybinds')
+
 function settingDisableKeybinds() {
     let state = elDisableKeybinds.checked;
     console.log(`disableKeybinds set to ${state}`);
@@ -36,9 +43,10 @@ function settingDisableKeybinds() {
     }
 }
 
+// Enable music
+
+
 // Enable sounds
-const elEnableSounds = dom('enable_sounds');
-const elEnableCarrotSounds = dom('enable_carrot_sounds');
 function settingSounds() {
     let state = elEnableSounds.checked;
     console.log(`enableSounds set to ${state}`);
@@ -52,15 +60,36 @@ function settingSounds() {
     }
 
     optionSoundsDisable(state);
+    settingMusic(true);
 }
 
-// Disable indiviual options
+// Disable individual sound options
 function optionSoundsDisable(state) {
-    // Disable individual sound options
+    // Carrot sounds
     if(state == false) {
+        elEnableMusic.disabled = true;
         elEnableCarrotSounds.disabled = true;
+        stopMusic();
     } else {
+        elEnableMusic.disabled = false;
         elEnableCarrotSounds.disabled = false;
+    }
+}
+
+function settingMusic(noToast = false) {
+    let state = elEnableMusic.checked;
+    console.log(`enableMusic set to ${state}`);
+    if(noToast == false) {
+        toast("Settings", `Music is now ${state == true ? 'enabled' : 'disabled'}`);
+    }
+
+    // localStorage
+    if(state == true) {
+        store('enableMusic', 'true');
+        playMusic();
+    } else {
+        store('enableMusic', 'false');
+        stopMusic();
     }
 }
 
@@ -382,11 +411,12 @@ setInterval(() => {
 // Achievement Conditions converter
 function evaluateConditions(key, achievement) {
     let multicondition = false;
-    var multiamount = 0;
+    var multiamount = 1;
     var multifulfilled = 0;
 
     // Run tests
     function tests(key, conditions) {
+
         // console.log(`Running tests on [${key}]`)
         let getVar =        Function(`return ${conditions[0]}`);
         let variable =      getVar();
@@ -401,11 +431,14 @@ function evaluateConditions(key, achievement) {
             multifulfilled++;
 
             if(multicondition == true && multiamount == multifulfilled) {
+                console.log('Multicondition: ' + multifulfilled + ' / ' + multiamount);
                 grantAchievement(key);
             } else if(multicondition == false) {
+                console.log(`${key}: not multi - ${multifulfilled} / ${multiamount}`);
                 grantAchievement(key);
             }
         }
+
     }
 
     // Check if there are multiple conditions
@@ -421,9 +454,9 @@ function evaluateConditions(key, achievement) {
 
     // Multiple conditions
     else if(multicondition == true) {
+        multiamount = achievement.conditions.length;
         for(let i = 0; i < achievement.conditions.length; i++) {
             // console.log(achievement.conditions[i]);
-            multiamount++;
             tests(key, achievement.conditions[i]);
         }
         // console.log(`${key}: ${multifulfilled}/${multiamount}`);
@@ -539,9 +572,12 @@ function ex_charlesUses() {
 // Runs on startup, after JS is loaded
 function onLoad() {
     console.log('Running onLoad()');
+    // Start music
+    playMusic('music.m4a');
 
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
+    //#region 
     if(player.hasOwnProperty('achievements') == false) {
         console.log('player.achievements check failed, creating property...');
         player.achievements = {};
@@ -567,6 +603,7 @@ function onLoad() {
             'default'
         ];
     }
+    //#endregion
 
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
@@ -598,6 +635,19 @@ function onLoad() {
     }
     // Disable
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+
+    // Enable Music
+    if(store('enableMusic') == null) {
+        console.log('enableMusic not found in localStorage, creating...')
+        store('enableMusic', 'true');
+    } else {
+        console.log('enableMusic: ' + store("enableMusic"));
+        if(store("enableMusic") == "true") {
+            elEnableMusic.checked = true;
+        } else {
+            elEnableMusic.checked = false;
+        }
+    }
     // Enable Carrot Sounds
     if(store('enableCarrotSounds') == null) {
         console.log('enableCarrotSounds not found in localStorage, creating...')
@@ -610,6 +660,7 @@ function onLoad() {
             elEnableCarrotSounds.checked = false;
         }
     }
+
 
     //#region 
     // Set user theme on page load

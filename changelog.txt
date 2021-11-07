@@ -1,9 +1,27 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.4.4
+    11-7-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Improved playMusic() function, will now loop on its own
+- Added a music toggle to settings
+- Added a stopMusic() function
+- All of the currently available themes now have pixel art icons
+
+Fixes:
+- Achievements with multiple conditions now work! ("3 heads are better than one" is currently the only multi condition achievement)
+- Fixed issue where statistics wouldn't load (Not having the load statistics function inside another anonymous function broke it for some reason)
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.4.3
     11-7-2021
 // ----------------------------------------------------------- //
+
 Whats new:
 -Added Bad music
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.4.2
