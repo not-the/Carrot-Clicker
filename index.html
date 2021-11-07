@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker dev beta v1.4.0</title>
+    <title>Carrot Clicker dev beta v1.4.2</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -55,6 +55,7 @@
 
         <!-- Fancy Theme Switcher -->
         <div id="theme_menu" class="popup_box">
+            <h2 class="toast_close dialog_close" onclick="closeDialog(false)">x</h2>
             <!-- Title -->
             <h2>Themes</h2>
             <p>Description</p>
@@ -134,10 +135,10 @@
                 <p class="Carrot_Count">
                     <span id="Carrot_Count"></span> <span id="cc_name">Carrots</span>
                 </p>
-                <p>
+                <p class="secondary_text">
                     <span id="cpc_name">Carrots</span> per click: <span id="cpc">Loading...</span>
                 </p>
-                <p>
+                <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p>
                 <p id="golden_carrot_count"></p>
@@ -179,10 +180,10 @@
                     title="Boomer Bill">
                     <div class="characterdesc">
                     <b id="bill_name" class="charactername">Bill</b>
-                    <p>
+                    <p class="secondary_text">
                         Cost to upgrade Bill: <span id="UpBillCost"></span>
                     </p>
-                    <figcaption id="Bill_lvl" class="characterlevel"></figcaption>
+                    <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
                     </div>
 
                 </div>
@@ -231,10 +232,10 @@
                     <b id="belle_name" class="charactername">
                         Belle
                     </b>
-                    <p>
+                    <p class="secondary_text">
                         Cost to upgrade Belle: <span id="UpBelleCost"></span>
                     </p>
-                    <figcaption id="Belle_lvl" class="characterlevel"></figcaption>
+                    <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
                     </div>
                 </div>
 
@@ -280,17 +281,17 @@
                         title="Gregory">
                         <div class="characterdesc">
                             <b id="greg_name" class="charactername">Greg</b>
-                            <p>
+                            <p class="secondary_text">
                                 Cost to Upgrade Greg: <span id="UpGregCost"></span>
                             </p>
-                            <figcaption id="Greg_lvl" class="characterlevel">
+                            <figcaption id="Greg_lvl" class="characterlevel secondary_text">
                                 Lvl: 0
                             </figcaption>
                         </div>
                     </div>
 
                     <!-- Bottom -->
-                    <div class="bottom">
+                    <div class="bottom secondary_text">
                         <div class="Greg_Hoe_Container hoecontainer">
                         <span class="hoe_price">Prices:</span>
                         <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
@@ -351,7 +352,7 @@
                             title="Charles">
                         <div class="characterdesc">
                             <b id="charles_name" class="charactername">Charles</b>
-                            <p>Charles description</p>
+                            <p class="secondary_text">Charles description</p>
                         </div>
                     </div>
 
@@ -409,10 +410,11 @@
         <!-- Achievements Panel -->
         <div id="achievements-panel" class="panel">
             <h1>Achievements</h1>
-            <p>Achievements will go here (when they've been implemented)</p>
+            <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
+            <p class="secondary_text">Progress: <span id="achievement_progress">-/- (0%)</span></p><br>
             
-            <div id="achievements-inner">
-
+            <div id="achievements_list">
+                <!-- Old achievement notification -->
                 <!-- <div class="info-item">
                     <img src="./assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
                     <div>
@@ -420,6 +422,30 @@
                     <p>Click the carrot</p>
                     </div>
                 </div>-->
+
+                <!-- Loading carrot -->
+                <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
+
+                <!-- Achievement Item -->
+                <div id="1_carrot" class="achievement_item">
+                    <!-- Details -->
+                    <div class="achievement_details flex">
+                        <img src="./assets/Carrot Clicker.png" alt="" id="1_carrot_img" class="achievement_img">
+                        <div>
+                            <h2>1 Carrot</h2>
+                            <p>Farming is hard</p>
+                        </div>
+                    </div>
+
+                    <!-- Rewards -->
+                    <div class="rewards_list">
+                        <div class="reward flex">
+                            <img src="./assets/characters/Boomer_Bill.png" alt="">
+                            <p>Bill Cosmetic</p>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </div>
@@ -429,10 +455,10 @@
             <div id="info-inner">
                 <h1>Statistics</h1>
                 <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
-                <p>Updates every 2 seconds</p><br/>
+                <i class="secondary_text">Updates every 2 seconds</i><br/>
                 
                 <div id="statistics">
-                    <img src="./assets//Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+                    <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
                 </div>
 
             </div> 
@@ -443,7 +469,7 @@
         <!-- Settings Panel -->
         <div id="settings-panel" class="panel">
             <h1>Settings</h1>
-            <p><i>Your game progress will always be saved.</i></p><br>
+            <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
             <!-- Themes -->
             <label for="theme_dropdown">
@@ -459,16 +485,38 @@
                     <option value="theme_retro" id="theme_retro">Retro green</option>
                     <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
                 </select><br> -->
+                <button id="theme_button" onclick="themeSwitcher()">
+                    Change Theme
+                </button><br><br>
             </label>
-            <button id="theme_button" onclick="themeSwitcher()">
-                Change Theme
-            </button><br><br>
+
+            <!-- Fun Tip Percentage-->
+            <div class="slidecontainer">
+                <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
+                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
+                </label><br><br>
+            </div>
 
 
             <!-- Options item -->
+            <b>Keybinds:</b><br>
             <label for="disable_keybinds">
             <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
                 Disable keybinds
+            </label><br><br>
+            <!-- <button id="edit_keybinds" disabled>Edit keybinds</button><br><br> -->
+
+            <!-- Sounds options -->
+            <b>Sounds:</b><br>
+            <!-- All sounds -->
+            <label for="enable_sounds">
+                <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
+                    Sounds
+            </label><br>
+            <!-- Carrot sounds -->
+            <label for="enable_carrot_sounds">
+                <input type="checkbox" class="checkbox" id="enable_carrot_sounds" checked onclick="settingCarrotSounds()">
+                    Carrot sound effects
             </label><br><br>
 
             <!-- Notification Length -->
@@ -477,13 +525,6 @@
             <button onclick="saveOption('notificationLength')">Save</button>
             <button onclick="resetOption()">Reset</button>
             </label><br><br>
-
-            <!-- Fun Tip Percentage-->
-            <div class="slidecontainer">
-                <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
-                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
-                </label><br><br>
-            </div>
             
             <!-- Options item -->
             <p>Danger Zone:</p>

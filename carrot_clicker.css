@@ -23,9 +23,13 @@
     --darker-bg-color:  #1f1d1d;
     --border-color:     #4b4747;
 
+    /* Text */
+    --secondary-text: rgb(196, 196, 196);
+
     /* Tri-pane colors */
     --brown-bg-color:      #4e3f34;
     --brown-darker-color:  #42362d;
+    --brown-darkest-color: #352a22;
     --brown-lighter-color: #635145;
 
     /* Misc */
@@ -201,6 +205,9 @@ select {
 }
 
 /* Text Colors */
+.secondary_text {
+    color: var(--secondary-text);
+}
 .colorwhite {
     color: white !important;
 }
@@ -390,6 +397,11 @@ select {
     color: white;
     text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.5);
 }
+.dialog_close {
+    font-size: 24pt;
+    top: 10px;
+    right: 10px;
+}
 .toast h3, .toast p {
     margin: 0;
     padding: 0;
@@ -420,13 +432,14 @@ select {
 
     visibility: hidden;
 }
+.theme_preview {image-rendering: pixelated;}
 .theme_menu h2 {
     margin: 0;
 }
-.theme_menu h3 {
+.theme_item h3 {
     margin: 0;
     margin-top: 20px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .theme_menu p {
     margin: 0;
@@ -932,11 +945,12 @@ body:not(.theme_light) .theme_checkmark {
 }
 
 /* Achievements */
-.info-item {
-    width: 10%;
+/* Old */
+/* .info-item {
+    width: 10%; */
     /* width: calc(90% - 40px); */
     /* max-width: 500px; */
-    padding: 4px;
+    /* padding: 4px;
     background-color: var(--brown-darker-color);
     border: 1px solid goldenrod;
     border-radius: 4px;
@@ -950,7 +964,33 @@ body:not(.theme_light) .theme_checkmark {
     height: 64px;
     width: 64px;
     margin-right: 8px;
+} */
+
+.achievement_item {
+    width: 100%;
 }
+.achievement_item .achievement_img {
+    height: 100px;
+    width: 100px;
+    padding: 8px;
+}
+.achievement_details {
+    height: 100px;
+    background-color: var(--brown-darkest-color);
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.45) inset;
+    border-radius: 10px 10px 0 0;
+}
+.achievement_item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.rewards_list {
+    background-color: var(--brown-darkest-color);
+}
+
+/* Statistics */
+/* Nothing here */
+
 /* Settings */
 .button_red {
     color: var(--warning-red);
@@ -981,6 +1021,8 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     outline: none; /* Remove outline */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: background-color .2s;
+
+    margin-top: 6px;
 }
   
 /* Mouse-over effects */
@@ -992,8 +1034,9 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    width: 16px; /* Set a specific slider handle width */
-    height: 16px; /* Slider handle height */
+    width: 4px; /* Set a specific slider handle width */
+    height: 4px; /* Slider handle height */
+    transform: scale(6, 6);
     border-radius: 50%;
     background: #ffffff; /* Green background */
     cursor: pointer; /* Cursor on hover */

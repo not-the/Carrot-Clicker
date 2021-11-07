@@ -2,9 +2,6 @@
 Users settings, keybind handling, and tutorial handling
 ------------------------------------------------------------- */
 
-const notificationLength = dom("notificationLength");
-const elDisableKeybinds = dom("disable_keybinds");
-
 /*---------------OPTIONS-------------------*/
 // Temporary option thing
 function saveOption() {
@@ -12,7 +9,7 @@ function saveOption() {
     if(value >= 2 && value <= 15) {
         console.log(`[Settings] Notification length set to: ${value}`);
         store("notificationLength", value);
-        toast("Notification time set", `Notification will disappear after ${value} seconds`);
+        toast("Notification time set", `Notifications will disappear after ${value} seconds`);
     } else {
         toast("Invalid Number", "Must be between 2 and 15 seconds", "red");
     }
@@ -25,6 +22,7 @@ function resetOption() {
 }
 
 // Disable keybinds setting
+const elDisableKeybinds = dom('disable_keybinds')
 function settingDisableKeybinds() {
     let state = elDisableKeybinds.checked;
     console.log(`disableKeybinds set to ${state}`);
@@ -35,6 +33,48 @@ function settingDisableKeybinds() {
         store('disableKeybinds', 'true');
     } else {
         store('disableKeybinds', 'false');
+    }
+}
+
+// Enable sounds
+const elEnableSounds = dom('enable_sounds');
+const elEnableCarrotSounds = dom('enable_carrot_sounds');
+function settingSounds() {
+    let state = elEnableSounds.checked;
+    console.log(`enableSounds set to ${state}`);
+    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`);
+
+    // localStorage
+    if(state == true) {
+        store('enableSounds', 'true');
+    } else {
+        store('enableSounds', 'false');
+    }
+
+    optionSoundsDisable(state);
+}
+
+// Disable indiviual options
+function optionSoundsDisable(state) {
+    // Disable individual sound options
+    if(state == false) {
+        elEnableCarrotSounds.disabled = true;
+    } else {
+        elEnableCarrotSounds.disabled = false;
+    }
+}
+
+// Carrot sounds
+function settingCarrotSounds() {
+    let state = elEnableCarrotSounds.checked;
+    console.log(`enableCarrotSounds set to ${state}`);
+    toast("Settings", `Carrot sounds are now ${state == true ? 'enabled' : 'disabled'}`);
+
+    // localStorage
+    if(state == true) {
+        store('enableCarrotSounds', 'true');
+    } else {
+        store('enableCarrotSounds', 'false');
     }
 }
 
@@ -217,49 +257,6 @@ function keybindHandler(event){
 
 
 
-
-// Runs on startup
-//#region
-// Set default settings if not found in localstorage
-if(store("notificationLength") !== null) {
-    notificationLength.value = parseInt(store("notificationLength"));
-}
-
-if(store("disableKeybinds") == null) {
-    store("disableKeybinds", "false");
-} else {
-    if(store("disableKeybinds") == "false") {
-        elDisableKeybinds.checked = false;
-    } else {
-        elDisableKeybinds.checked = true;
-    }
-}
-
-
-/* --------------- TUTORIAL --------------- */
-// Initial Welcome
-if(store("tutorial_sample") == null) {
-    store("tutorial_sample", "done");
-    toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
-} else if(store("tutorial_sample") == "done") {
-    // Temporary two step until someone fixes the storage issue
-    store("tutorial_sample", "really_done");
-    toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
-}
-
-// After Greg crafts a hoe for the first time (Called in carrot_clicker.js)
-function tutorialHoes() {
-    store('tutorial_first_hoe', "done");
-    toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
-}
-//#endregion
-
-
-
-
-
-
-
 /* --------------- ACHIEVEMENTS --------------- */
 // class achievement {
 //     constructor(name, desc, image, reward, requirement) {
@@ -274,6 +271,10 @@ function tutorialHoes() {
 //     console.log(`${entry}:${achievements[entry]}`);
 // }
 
+// For the conditions parameter:
+// - First (0) value is the variable you want to test- will also accept a function
+// - Second (1) value is the minimum required for the achievement (at the moment it will only test if the FIRST is greater than or equal to the SECOND)
+// If you need to test for anything other than if FIRST >= SECOND you can simple use a function and only return a passing number if it comes out to true
 const achievements = {
 
     // Template
@@ -290,15 +291,22 @@ const achievements = {
     '1_carrot': {
         'name': 'First Carrot',
         'desc': 'Farming is hard',
-        'image': '',
-        'reward': 'function:confetti',
+        'image': './assets/Carrot Clicker.png',
+        'reward': false,
         'conditions': ['player.LifetimeCarrots', 1]
+    },
+    '1989_carrots': {
+        'name': 'Retro',
+        'desc': 'Earn 1989 carrots',
+        'image': './assets/Carrot Clicker.png',
+        'reward': 'theme:theme_retro',
+        'conditions': ['player.LifetimeCarrots', 1989]
     },
     // Golden Carrots
     '50_golden_carrots': {
         'name': 'Golden',
         'desc': 'Earn at least 50 golden carrots',
-        'image': false,
+        'image': './assets/golden carrot.png',
         'reward': ['cosmetic:golden_carrot', 'function:confetti'],
         'conditions': ['player.LifetimeGoldenCarrots', 50]
     },
@@ -306,7 +314,7 @@ const achievements = {
     'upgrade_all_characters_once': {
         'name': '3 heads are better than one',
         'desc': 'Upgrade every (upgradeable) character at least once',
-        'image': false,
+        'image': './assets/achievements/3_heads.png',
         'reward': ['theme:theme_red', 'theme:theme_green', 'theme:theme_blue'],
         'conditions': [
             ['Boomer_Bill.lvl',      2],
@@ -318,7 +326,7 @@ const achievements = {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill 100 times',
         'image': '',
-        'reward': false,
+        'reward': 'cosmetic:bill',
         'conditions': ['Boomer_Bill.lvl', 100]
     },
     'greg_lvl_64': {
@@ -333,7 +341,7 @@ const achievements = {
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/characters/Charles.png',
         'reward': false,
-        'conditions': ['external.charles_uses', 1]
+        'conditions': ['ex_charlesUses()', 1]
     },
 
     // Tutorial
@@ -448,7 +456,7 @@ function grantAchievement(key) {
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
     if(achieve.noToast !== true) {
-        toast(`Achievement earned: ${achieve.name}`, achieve.desc);
+        toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
     }
 
     // Add achievement to player.achievements
@@ -504,41 +512,154 @@ function isUnlocked(testfor) {
     return false;
 }
 
+
+// External achievement checks
+// use_charles
+function ex_charlesUses() {
+    let value = 0;
+
+    if(
+    Charles.ImproveWorkingConditions > 0
+    || Charles.BetterHoes > 0
+    || Charles.DecreaseWages > 0
+    ) {
+        value = 1;
+    }
+
+    return value;
+}
+
 // Unlock on page load
 // for(i = 0; i < player.unlockables.length; i++) {
 //     console.log(player[unlockables][i]);
 // }
 
 
+/* --------------- On page load --------------- */
+// Runs on startup, after JS is loaded
+function onLoad() {
+    console.log('Running onLoad()');
 
-// On page load
-populateThemeList();
-themeSwitcherCheckmark(store('theme'));
+    /* --------------- PLAYER OBJECT --------------- */
+    // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
+    if(player.hasOwnProperty('achievements') == false) {
+        console.log('player.achievements check failed, creating property...');
+        player.achievements = {};
+    }
+    if(
+    player.hasOwnProperty('themes') == false
+    || player.themes == []
+    || player.themes.length == 0
+    ) {
+        console.log('player.themes check failed, creating property...');
+        player.themes = [
+            'theme_dark',
+            'theme_light',
+            'theme_oled'
+        ];
+    }
+    if(player.hasOwnProperty('cosmetics') == false
+    || player.cosmetics == []
+    || player.cosmetics.length == 0
+    ) {
+        console.log('player.cosmetics check failed, creating property...');
+        player.cosmetics = [
+            'default'
+        ];
+    }
+
+    /* --------------- SETTINGS --------------- */
+    // Set default settings if not found in localstorage
+    if(store("notificationLength") !== null) {
+        notificationLength.value = parseInt(store("notificationLength"));
+    }
+
+    if(store("disableKeybinds") == null) {
+        store("disableKeybinds", "false");
+    } else {
+        if(store("disableKeybinds") == "false") {
+            elDisableKeybinds.checked = false;
+        } else {
+            elDisableKeybinds.checked = true;
+        }
+    }
+
+    // Enable Sounds
+    if(store('enableSounds') == null) {
+        console.log('enableSounds not found in localStorage, creating...')
+        store('enableSounds', 'true');
+    } else {
+        console.log('enableSounds: ' + store("enableSounds"));
+        if(store("enableSounds") == "true") {
+            elEnableSounds.checked = true;
+        } else {
+            elEnableSounds.checked = false;
+        }
+    }
+    // Disable
+    optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+    // Enable Carrot Sounds
+    if(store('enableCarrotSounds') == null) {
+        console.log('enableCarrotSounds not found in localStorage, creating...')
+        store('enableCarrotSounds', 'true');
+    } else {
+        console.log('enableCarrotSounds: ' + store("enableCarrotSounds"));
+        if(store("enableCarrotSounds") == "true") {
+            elEnableCarrotSounds.checked = true;
+        } else {
+            elEnableCarrotSounds.checked = false;
+        }
+    }
+
+    //#region 
+    // Set user theme on page load
+    if(store('theme') !== null) {
+        let theme = store('theme');
+        console.log(`Theme setting found, switching to: ${theme}`);
+        // optionTheme.value = theme;
+        setTheme(theme);
+    }
+    // Switch to previously open panel on page load
+    if(store('openpanel') !== null) {
+        console.log('openpanel found, switching to: ' + store('openpanel'));
+        panelChange(store('openpanel'), true);
+    }
+    // Set user cosmetic on page load
+    // if(store('cosmetic') !== null) {
+    //     let cosmetic = store('cosmetic');
+    //     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
+    //     // optionCosmetic.value = cosmetic;
+    //     setCosmetic(cosmetic);
+    // }
+    //#endregion
+    
 
 
-// player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
-if(player.hasOwnProperty('achievements') == false) {
-    console.log('player.achievements check failed, creating property...');
-    player.achievements = {};
+    /* --------------- TUTORIAL --------------- */
+    // Initial Welcome
+    if(store("tutorial_sample") == null) {
+        store("tutorial_sample", "done");
+        toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
+    } else if(store("tutorial_sample") == "done") {
+        // Temporary two step until someone fixes the storage issue
+        store("tutorial_sample", "really_done");
+        toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+    }
+
+    // After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
+    function tutorialHoes() {
+        store('tutorial_first_hoe', "done");
+        toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
+    }
+
+
+
+
+
+
+    // Theme Switcher
+    populateThemeList();
+    themeSwitcherCheckmark(store('theme'));
 }
-if(
-player.hasOwnProperty('themes') == false
-|| player.themes == []
-|| player.themes.length == 0
-) {
-    console.log('player.themes check failed, creating property...');
-    player.themes = [
-        'theme_dark',
-        'theme_light',
-        'theme_oled'
-    ];
-}
-if(player.hasOwnProperty('cosmetics') == false
-|| player.cosmetics == []
-|| player.cosmetics.length == 0
-) {
-    console.log('player.cosmetics check failed, creating property...');
-    player.cosmetics = [
-        'default'
-    ];
-}
+
+onLoad();

@@ -50,7 +50,7 @@ const themeMenu =       dom("theme_menu");
 
 
 // Confetti
-const elConfetti = dom('confetti')
+const elConfetti = dom('confetti');
 function confetti(type = 1) {
     console.log('Confetti!');
     let duration = 6760;
@@ -69,8 +69,35 @@ function confetti(type = 1) {
 }
 
 
+// const sounds = [
+    
+// ];
+// Picks random sound from sounds array
+// Ignore chance is a % out of 100
+function randomSound(type, ignoreChance = 0) {
+    // Calculate ignore chance
+    var ignore = Math.floor(Math.random() * 100);
+    if(ignore < ignoreChance) return;
+
+    var randomNum = Math.floor(Math.random() * 7) + 1;
+    playSound(`crunch${randomNum}.flac`)
+}
+function buttonSound() {
+    if(store('enableSounds') == false) return;
+    playSound('click.flac');
+}
+// Play sound
+function playSound(file) {
+    if(store('enableSounds') == 'false') return;
+    var audio = new Audio(`./assets/sounds/${file}`);
+    audio.play();
+}
+
+
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
+    buttonSound();
+
     dialogOpen = true;
     overlay.classList.add('visible');
     elDialog.main.classList.add('visible');
@@ -89,6 +116,8 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
 
 // Close dialog
 function closeDialog(doAction, backdrop = false) {
+    buttonSound();
+
     // Cancel if specific theme is chosen
     if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
 
@@ -212,10 +241,13 @@ const settingsPanel =   dom("settings-panel");
 const infoTab =         dom("info-panel-button");
 const achievementsTab = dom("achievements-panel-button");
 const settingsTab =     dom("settings-panel-button");
-function panelChange(to) {
+function panelChange(to, noSound = false) {
     if(currentPanel == to) {
         return;
     } else {
+        // Sound effect
+        if(noSound == false) {buttonSound();}
+
         // Tab reset
         infoTab.classList.remove("activetab");
         achievementsTab.classList.remove("activetab");
@@ -464,12 +496,12 @@ const themes = {
     'theme_oled': {
         name:     'OLED Dark Theme',
         image:    false,
-        desc:     'Dark theme compatible with OLED screens',
+        desc:     'Don\'t play Carrot Clicker after midnight',
         cosmetic: false
     },
     'theme_classic': {
         name:     'Carrot Clicker classic',
-        image:    false,
+        image:    './assets/Carrot Clicker.png',
         desc:     'The original look of carrot clicker',
         cosmetic: false
     },
@@ -492,15 +524,15 @@ const themes = {
         cosmetic: false
     },
     'theme_retro': {
-        name:     'Retro Green',
-        image:    false,
+        name:     'Retro Green Theme',
+        image:    './assets/theme/retro/theme_retro.png',
         desc:     ':D',
         cosmetic: false
     },
     'theme_blockgame': {
         name:     'Minecraft',
-        image:    false,
-        desc:     'Does it violate copyright if this is just a hobby project with no ads?',
+        image:    './assets/theme/blockgame/grass_block_side.png',
+        desc:     'Does it violate copyright if this is just a hobby project with no ads? Genuine question',
         cosmetic: false
     },
 };
@@ -521,11 +553,13 @@ function populateThemeList() {
             stillLocked++;
             continue;
         }
+
+        let imgsrc = theme.image !== false ? theme.image : './assets/Carrot Clicker.png'
     
         themeHTML += /* html */
         `
         <div class="theme_item flex" onclick="setTheme('${key}')">
-            <img src="${theme.image == false ? './assets/Carrot Clicker.png' : theme.image}" alt="" class="theme_preview" id="theme">
+            <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
             <div>
                 <h3>${theme.name}</h3>
                 <p>${theme.desc}</p>
@@ -546,14 +580,52 @@ function populateThemeList() {
 }
 
 // Theme switcher checkmark fix
-function themeSwitcherCheckmark(theme, from) {
+function themeSwitcherCheckmark(theme, from = false) {
     var elTheme = dom(`${theme}_checkmark`);
+
+    // Uncheck previous
+    if(from == false || !dom(`${from}_checkmark`)) return;
+    dom(`${from}_checkmark`).classList.add('opacity0');
+
+    // Check new
     if(!elTheme) return;
     elTheme.classList.remove('opacity0');
-    if(!from) return;
-    dom(`${from}_checkmark`).classList.add('opacity0');
 }
 
+// Populate achievements list
+const elAchievementsList = dom('achievements_list');
+function populateAchievements() {
+    var achievementHTML = '';
+
+    for(let i = 0; i < achievementsKeys.length; i++) {
+        let key = achievementsKeys[i];
+        let achieve = achievements[key];
+  
+        // Test if unlocked
+        let unlocked = achieveQuery(key);
+
+        let img = achieve.image !== false ? achieve.image : './assets/Carrot Clicker.png'
+    
+        if(unlocked == true) {
+            achievementHTML += /* html */
+            `
+                <b>Unlocked: ${achieve.name}</b><br>
+            `;
+        } else {
+            achievementHTML += /* html */
+            `
+                Not unlocked: ${achieve.name}<br>
+            `;
+        }
+    }
+
+    // if(stillLocked > 0) {
+    //     achievementHTML += /* html */
+    //     `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`
+    // }
+
+    elAchievementsList.innerHTML = achievementHTML;
+}
 
 
 
@@ -589,28 +661,7 @@ function setTheme(theme) {
 }
 //#endregion
 
-/* ----- On page load ----- */
-//#region 
-// Set user theme on page load
-if(store('theme') !== null) {
-    let theme = store('theme');
-    console.log(`Theme setting found, switching to: ${theme}`);
-    // optionTheme.value = theme;
-    setTheme(theme);
-}
-// Switch to previously open panel on page load
-if(store('openpanel') !== null) {
-    console.log('openpanel found, switching to: ' + store('openpanel'));
-    panelChange(store('openpanel'));
-}
-// Set user cosmetic on page load
-// if(store('cosmetic') !== null) {
-//     let cosmetic = store('cosmetic');
-//     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
-//     // optionCosmetic.value = cosmetic;
-//     setCosmetic(cosmetic);
-// }
-//#endregion
+
 
 // Mouse position handler
 // CREDIT:

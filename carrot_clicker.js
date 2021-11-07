@@ -16,13 +16,13 @@ var n = 0;
 document.addEventListener("touchstart", function() {}, true);
 
 // Getting InnerHtml
-const prestige_info = dom("Prestige");
-const Basic_Info = dom("Basic_Info");
-const elCarrotCount = dom("Carrot_Count");
-const elCPC = dom("cpc");
-const elCPS = dom("cps");
+const prestige_info =       dom("Prestige");
+const Basic_Info =          dom("Basic_Info");
+const elCarrotCount =       dom("Carrot_Count");
+const elCPC =               dom("cpc");
+const elCPS =               dom("cps");
 const elGoldenCarrotCount = dom("golden_carrot_count");
-const elTips = dom("Tip");
+const elTips =              dom("Tip");
 const elCharacterUpCost = {
     bill:  dom("UpBillCost"),
     belle: dom("UpBelleCost"),
@@ -196,6 +196,10 @@ function onClick(useMousePos) {
     player.Carrots+=player.cpc;
     player.LifetimeCarrots+=player.cpc;
     popupHandler(useMousePos);
+
+    // Sound effect
+    if(store('enableSounds') == 'false' || store('enableCarrotSounds') == 'false') return;
+    randomSound('crunch', 95);
 }
 
 
@@ -582,10 +586,10 @@ setInterval(() => {
     } else {
         player.cps=Belle_Boomerette.lvl;
     }
-    //Add improve working conditions bonus
+    // Add improve working conditions bonus
     if(Charles.ImproveWorkingConditions>0){
         player.cpc = (player.cpc*(1.1*Charles.ImproveWorkingConditions));
-        player.cps=(player.cps*(1.1*Charles.ImproveWorkingConditions));
+        player.cps = (player.cps*(1.1*Charles.ImproveWorkingConditions));
     }
     
 

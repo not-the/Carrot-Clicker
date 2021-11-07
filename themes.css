@@ -413,12 +413,12 @@
     border-radius: 0;
 }
 .theme_retro #Greg_Bar {
-    background-color: red;
-    border: 0;
+    background-color: #0f2c0e;
+    border-radius: 0;
 }
-.theme_retro #Greg .toolicon {
+/* .theme_retro #Greg .toolicon {
     background-color: red;
-}
+} */
 
 
 /* Tri-pane */
