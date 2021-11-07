@@ -92,7 +92,12 @@ function playSound(file) {
     var audio = new Audio(`./assets/sounds/${file}`);
     audio.play();
 }
-
+// Play Music
+function playMusic(file) {
+    if(store('enableSounds') == 'false') return;
+    var audio = new Audio(`./assets/music/${file}`);
+    audio.play();
+}
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
