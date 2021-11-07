@@ -230,6 +230,9 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     function multibuyPrice(PriceIncrease){
         r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
         r2+=r;
+        if(amount==1){
+            r2=r;
+        }
     }
     for(i=0; i<amount; i++){
         if(character==Gregory){
