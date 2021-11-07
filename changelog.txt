@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.4.5
+    11-7-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Lifetime stats now have their own object inside of the player object
+  + This will almost definitely break old save files
+- Game now keeps track of your prestige count, and this number is also available in the statistics tab
+- Added HTML for a 5th character
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.4.4
     11-7-2021
 // ----------------------------------------------------------- //

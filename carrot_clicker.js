@@ -126,10 +126,21 @@ const player1 = {
     prestige_potential: 0,
     EquipedHoes: 0,
 
+    // Lifetime stats (old)
+    // LifetimeCarrots: 0,
+    // LifetimeGoldenCarrots: 0,
+    // LifetimeEquipedHoes: 0,
+
     // Lifetime stats
-    LifetimeCarrots: 0,
-    LifetimeGoldenCarrots: 0,
-    LifetimeEquipedHoes: 0,
+    lifetime: {
+        carrots: 0,
+        golden_carrots: 0,
+        prestige_count: 0,
+        hoes: {
+            crafted: [0, 0, 0, 0, 0, 0],
+            equipped: [0, 0, 0, 0, 0, 0],
+        },
+    },
 
     // Achievements
     achievements: {},
@@ -193,8 +204,8 @@ setInterval(() => {
 //#region
 //On Carrots Click
 function onClick(useMousePos) {
-    player.Carrots+=player.cpc;
-    player.LifetimeCarrots+=player.cpc;
+    player.Carrots += player.cpc;
+    player.lifetime.carrots += player.cpc;
     popupHandler(useMousePos);
 
     // Sound effect
@@ -273,7 +284,7 @@ function Prestige() {
 
     // Give golden carrots
     player.golden_carrots += player.prestige_potential;
-    player.LifetimeGoldenCarrots += player.prestige_potential;
+    player.lifetime.golden_carrots += player.prestige_potential;
 
     // Reset characters to default
     [
@@ -447,7 +458,7 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
             return;
         }
         player.EquipedHoes+=1;
-        player.LifetimeEquipedHoes+=1;
+        player.lifetime.hoes.equipped+=1;
         character.Hoes[type]+=amount;
         Gregory.Hoes[type]-=amount;
     }
@@ -606,10 +617,10 @@ setInterval(() => {
     elCPS.innerText = `${DisplayRounded(Math.floor(player.cps),2)}`;
 
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.LifetimeGoldenCarrots>=1 || player.prestige_potential>=1){
+    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1){
         elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`;
     }
-    if(player.LifetimeGoldenCarrots>=1) {
+    if(player.lifetime.golden_carrots>=1) {
         elGoldenCarrotCount.style.color = "white";
     }
     document.getElementById("multibuy").innerText=multibuy[multibuySelector]+"x";
@@ -645,7 +656,7 @@ setInterval(() => {
     elHoePrices.diamond.innerText   = `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`;
     elHoePrices.netherite.innerText = `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`;
 
-    if(player.LifetimeGoldenCarrots>0 || player.prestige_potential>=1){
+    if(player.lifetime.golden_carrots>0 || player.prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
     }
     //Charles Upgrades
@@ -675,8 +686,9 @@ function loadStatistics() {
     if(currentPanel !== "info-panel") return;
     elStatistics.innerHTML =
     `<h3>Lifetime:</h3>
-    Carrots earned: <b>${DisplayRounded(player.LifetimeCarrots)}</b><br/>
-    Golden Carrots earned: <b>${DisplayRounded(player.LifetimeGoldenCarrots)}</b><br/><br/>
+    Carrots earned: <b>${DisplayRounded(player.lifetime.carrots)}</b><br/>
+    Golden Carrots earned: <b>${DisplayRounded(player.lifetime.golden_carrots)}</b><br/>
+    Prestiges: <b>${DisplayRounded(player.lifetime.prestige_count)}</b><br/><br/>
 
     Themes:       ${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}<br/>
     Cosmetics:    ${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}<br/><br/>
