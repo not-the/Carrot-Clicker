@@ -100,6 +100,10 @@ const elCharles = {
     decreaseWages:            dom("DecreaseWages"),
     charlesTooltip:           dom("charlestooltip")
 }
+
+setTimeout(()=>{
+    playMusic('music.m4a');
+},1000);
 //#endregion
 
 
@@ -685,10 +689,12 @@ function loadStatistics() {
 }
 
 // Refresh statistics
-setInterval(() => {
-    loadStatistics();
-}, 2000);
+setInterval(loadStatistics(),2000);
 
+//Music
+setInterval(()=>{
+    playMusic('music.m4a');
+},80000);
 
 /*-----------Tips----------- */
 //#region
