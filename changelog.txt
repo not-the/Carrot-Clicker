@@ -12,6 +12,18 @@
 - Change Theme button now plays the button sound effect
 - Character 5 now has a name (Carl) and can be changed by cosmetics
 
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.5.1 hotfix
+    11-7-2021
+// ----------------------------------------------------------- //
+
+- Hotfix for upgrade prices going up too fast (Issue #32)
+
+~ JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.4.5
@@ -23,6 +35,8 @@ What's new:
   + This will almost definitely break old save files
 - Game now keeps track of your prestige count, and this number is also available in the statistics tab
 - Added HTML for a 5th character
+
+~ Kal
 
 
 // ----------------------------------------------------------- //
@@ -40,6 +54,8 @@ Fixes:
 - Achievements with multiple conditions now work! ("3 heads are better than one" is currently the only multi condition achievement)
 - Fixed issue where statistics wouldn't load (Not having the load statistics function inside another anonymous function broke it for some reason)
 
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.4.3
@@ -48,6 +64,8 @@ Fixes:
 
 Whats new:
 -Added Bad music
+
+~ JJ
 
 
 // ----------------------------------------------------------- //
@@ -80,6 +98,8 @@ Known issues:
 - Achievements tab not actually doing anything
 - Carrot sound effects being bad
 
+~ Kal
+
 
 
 // ----------------------------------------------------------- //
@@ -88,6 +108,8 @@ Known issues:
 // ----------------------------------------------------------- //
 
 - "Compatibility for old save files" mentioned in 1.4 should now work properly- previously, players with old save files would not be given the default themes and the theme switcher would be useless.
+
+~ Kal
 
 
 // ----------------------------------------------------------- //
@@ -103,6 +125,8 @@ Known issues:
 
 Fixes:
 - Fixed certain images not appearing (their src attribute didn't have a "." at the start). I think this might also be why the character avatars were disappearing but we'll have to see if that goes away or not.
+
+~ Kal
 
 
 // ----------------------------------------------------------- //
@@ -128,6 +152,8 @@ Fixes:
 - Hoes are now craftable again (n variable was missing)
 - Statistics now displays actual data (only 2 numbers actually show up at the moment)
 
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.7
@@ -150,6 +176,8 @@ Themes:
 - White theme fixes
 - Minecraft theme is closer to being "complete"
 
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.6
@@ -159,6 +187,9 @@ Themes:
 - Fixed wrong hoe behavior
 - Cleaned up some Code
 - Multibuy display was broken; now fixed
+
+~ JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.5
@@ -170,6 +201,9 @@ Themes:
 - Fixed a typo in Greg's tooltip
 - Cosmetics can now change character avatars and names
 - Started to add infrastructure for achievements (user.js)
+
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.4
@@ -192,6 +226,8 @@ Note: most of these themes will not be unlocked by default
 Known issues:
 - Retro and Minecraft themes make it so that Greg's netherite hoe doesn't fit
 - Themes not being complete
+
+~ Kal
 
 
 // ----------------------------------------------------------- //
@@ -219,6 +255,8 @@ New themes:
 - OLED Dark theme
 - WIP Red theme
 
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.2.1 hotfix
@@ -226,6 +264,8 @@ New themes:
 // ----------------------------------------------------------- //
 
 - Reverted carrot_clicker.js to previous version
+
+~ Kal
 
 
 // ----------------------------------------------------------- //
@@ -235,6 +275,8 @@ New themes:
 
 - Fun tips percentage slider added to settings
 
+~ JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.3.1
@@ -242,7 +284,12 @@ New themes:
 // ----------------------------------------------------------- //
 
 - Removed carrot_utilities.js and linked to external (forked) copy
+
+~ Kal
+
 - Fixed leveling up charcters to actually work. (should be cleaned up in the code
+
+~ JJ
 
 
 // ----------------------------------------------------------- //
@@ -276,8 +323,12 @@ Still need to do:
 - Fix the hoes again again
 - Tip slider needs to actually work
 - A general clean up of code
+
 Lines of code:
   Total HTML:  441
   Total CSS :  873
   Total JS:   1334
   TOTAL:      2648
+
+
+~ Kal
