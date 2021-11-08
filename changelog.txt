@@ -4,7 +4,7 @@
 // ----------------------------------------------------------- //
 
 - Volume slider in settings
-- Moved fun tips code to user.js
+- Moved fun tips slider code to user.js
 - Theme switcher X button is no longer the same color as the background in the white theme
 - Achievements work again (they have been updated to use the new player object format)
 - playSound() and playMusic() have been moved to Carrot Utilities
