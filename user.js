@@ -5,12 +5,30 @@ Users settings, keybind handling, and tutorial handling
 /*---------------OPTIONS-------------------*/
 
 // Page variables
-const elDisableKeybinds = dom('disable_keybinds')
+const elFunTipsSlider = dom("FunTipsSlider");
+const elFunTipsSlider_label = dom("FunTipsSliderLabel");
+
+const elDisableKeybinds = dom('disable_keybinds');
 const elEnableSounds = dom('enable_sounds');
 const elEnableMusic = dom('enable_music');
 const elEnableCarrotSounds = dom('enable_carrot_sounds');
 
-// Temporary option thing
+const elVolumeMaster = dom('volume_master');
+const elVolumeMaster_label = dom('volume_master_percent');
+
+// Percentage of fun tips
+// JJ's Slider stuffs (ripping off w3 again)
+
+// Update the current slider value (each time you drag the slider handle)
+elFunTipsSlider.oninput = () => {
+    // Update percentage
+    elFunTipsSlider_label.innerText = elFunTipsSlider.value;
+
+    // Set modifier
+    tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
+}
+
+// Notification length
 function saveOption() {
     let value = notificationLength.value;
     if(value >= 2 && value <= 15) {
@@ -106,6 +124,29 @@ function settingCarrotSounds() {
         store('enableCarrotSounds', 'false');
     }
 }
+
+// Volume slider
+elVolumeMaster.oninput = () => {
+    let value = elVolumeMaster.value;
+
+    volume = value / 100;
+
+    if(music !== undefined) {
+        music.volume = volume;
+    }
+
+    // Update percentage
+    if(value > 0) {
+        elVolumeMaster_label.innerText = `${value}%`;
+    } else {
+        elVolumeMaster_label.innerText = 'OFF';
+    }
+
+    store('master_volume', value / 100);
+    // Set modifier
+    // tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
+}
+
 
 
 /*------------EVENT LISTENERS--------------*/
@@ -322,14 +363,21 @@ const achievements = {
         'desc': 'Farming is hard',
         'image': './assets/Carrot Clicker.png',
         'reward': false,
-        'conditions': ['player.LifetimeCarrots', 1]
+        'conditions': ['player.lifetime.carrots', 1]
     },
     '1989_carrots': {
         'name': 'Retro',
         'desc': 'Earn 1989 carrots',
         'image': './assets/Carrot Clicker.png',
         'reward': 'theme:theme_retro',
-        'conditions': ['player.LifetimeCarrots', 1989]
+        'conditions': ['player.lifetime.carrots', 1989]
+    },
+    '1_million_carrots': {
+        'name': 'Me Millionth Carrot',
+        'desc': 'Earn your 1 millionth carrot',
+        'image': './assets/Carrot Clicker.png',
+        'reward': 'function:confetti',
+        'conditions': ['player.lifetime.carrots', 1000000]
     },
     // Golden Carrots
     '50_golden_carrots': {
@@ -337,7 +385,7 @@ const achievements = {
         'desc': 'Earn at least 50 golden carrots',
         'image': './assets/golden carrot.png',
         'reward': ['cosmetic:golden_carrot', 'function:confetti'],
-        'conditions': ['player.LifetimeGoldenCarrots', 50]
+        'conditions': ['player.lifetime.golden_carrots', 50]
     },
     // Character usage
     'upgrade_all_characters_once': {
@@ -354,7 +402,7 @@ const achievements = {
     'bill_lvl_100': {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill 100 times',
-        'image': '',
+        'image': './assets/characters/bill.png',
         'reward': 'cosmetic:bill',
         'conditions': ['Boomer_Bill.lvl', 100]
     },
@@ -380,10 +428,13 @@ const achievements = {
         'image': false,
         'reward': 'function:tutorialHoes',
         'conditions': ['Gregory.Hoes[0]', 1],
-        'noToast': true
+        'noToast': true,
+        'mystery': {
+            'noToast': true, 
+        }
     },
     '1_netherite_hoe': {
-        'name': '1_netherite_hoe',
+        'name': 'Extreme Farming',
         'desc': 'Netherite',
         'image': './assets/tools/netherite_hoe.png',
         'reward': false,
@@ -603,14 +654,41 @@ function onLoad() {
             'default'
         ];
     }
+
+    // Old lifetime stats
+    // LifetimeCarrots: 0,
+    // LifetimeGoldenCarrots: 0,
+    // LifetimeEquipedHoes: 0,
+
+    if(
+    player.hasOwnProperty('LifetimeCarrots') == true
+    || player.hasOwnProperty('LifetimeGoldenCarrots') == true
+    || player.hasOwnProperty('LifetimeEquipedHoes') == true
+    ) {
+        if(store('old_player_object_fix') !== 'true' || store('old_player_object_fix') == null) {
+            toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
+            player.lifetime.carrots = player.LifetimeCarrots;
+            player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
+            player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
+            
+            store('old_player_object_fix', 'true');
+        }
+    }
     //#endregion
 
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
+
+    // Fun tips
+    elFunTipsSlider.value = 100 * tips.TypeModifier;
+    elFunTipsSlider_label.innerText = elFunTipsSlider.value;
+
+    // Notification length
     if(store("notificationLength") !== null) {
         notificationLength.value = parseInt(store("notificationLength"));
     }
 
+    // Disable keybinds
     if(store("disableKeybinds") == null) {
         store("disableKeybinds", "false");
     } else {
@@ -635,6 +713,11 @@ function onLoad() {
     }
     // Disable
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+
+    // Volume slider
+    elVolumeMaster.value = store('master_volume') * 100;
+    elVolumeMaster_label.innerText = `${store('master_volume') * 100}%`;
+    volume = store('master_volume');
 
     // Enable Music
     if(store('enableMusic') == null) {

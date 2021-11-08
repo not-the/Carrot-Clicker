@@ -74,6 +74,10 @@ function confetti(type = 1) {
 // ];
 // Picks random sound from sounds array
 // Ignore chance is a % out of 100
+
+// Volume variable
+var volume = 100;
+
 function randomSound(type, ignoreChance = 0) {
     // Calculate ignore chance
     var ignore = Math.floor(Math.random() * 100);
@@ -86,25 +90,7 @@ function buttonSound() {
     if(store('enableSounds') == false) return;
     playSound('click.flac');
 }
-// Play sound
-function playSound(file) {
-    if(store('enableSounds') == 'false') return;
-    var audio = new Audio(`./assets/sounds/${file}`);
-    audio.play();
-}
-// Play Music
-var music;
-function playMusic(file = 'music.m4a', loop = false) {
-    if(store('enableSounds') == 'false' || store('enableMusic') == 'false') return;
-    music = new Audio(`./assets/music/${file}`);
-    music.loop = loop;
-    console.log('playMusic() - Playing track 1...');
-    music.play();
-}
-function stopMusic() {
-    music.pause();
-    music.currentTime = 0;
-}
+
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
@@ -338,6 +324,8 @@ function themeSwitcher() {
     themeSwitcherOpen = true;
     themeMenu.classList.add('visible');
     overlay.classList.add("visible");
+
+    buttonSound();
 }
 // themeSwitcher();
 
@@ -360,11 +348,13 @@ const cosmetics = {
         'belle_image':   './assets/characters/BelleBommerette.png',
         'greg_image':    './assets/characters/Gregory.png',
         'charles_image': './assets/characters/Charles.png',
+        'carl_image':    './assets/characters/Carl.png',
 
         'bill_name':    'Bill',
         'belle_name':   'Belle',
         'greg_name':    'Greg',
         'charles_name': 'Charles',
+        'carl_name':    'Carl',
     },
     // Golden Carrot
     'golden_carrot': {
@@ -394,12 +384,14 @@ const cosmetics = {
         'belle_image':   './assets/characters/Boomer_Bill.png',
         'greg_image':    './assets/characters/Boomer_Bill.png',
         'charles_image': './assets/characters/Boomer_Bill.png',
+        'carl_image':    './assets/characters/Boomer_Bill.png',
 
     
         'bill_name':    'Bill',
         'belle_name':   'Bill',
         'greg_name':    'Bill',
         'charles_name': 'Bill',
+        'carl_name':    'Bill',
     },
     // Netherite hoe
     "netherite_hoe": {
@@ -417,6 +409,7 @@ const characterAvatars = {
     'belle':    dom('belle_avatar'),
     'greg':     dom('greg_avatar'),
     'charles':  dom('charles_avatar'),
+    'carl':     dom('carl_avatar'),
 }
 const characterNames = {
     // Nametag
@@ -424,6 +417,7 @@ const characterNames = {
     'belle':    dom('belle_name'),
     'greg':     dom('greg_name'),
     'charles':  dom('charles_name'),
+    'carl':     dom('carl_name'),
 
     // Cost to upgrade:
     // ...
@@ -450,12 +444,14 @@ function setCosmetic(set, resetState = false) {
     if(cosmetic.hasOwnProperty('belle_image'))    {characterAvatars.belle.src = cosmetic.belle_image;}
     if(cosmetic.hasOwnProperty('greg_image'))     {characterAvatars.greg.src = cosmetic.greg_image;}
     if(cosmetic.hasOwnProperty('charles_image'))  {characterAvatars.charles.src = cosmetic.charles_image;}
+    if(cosmetic.hasOwnProperty('carl_image'))     {characterAvatars.carl.src = cosmetic.carl_image;}
 
     // Character Names
     if(cosmetic.hasOwnProperty('bill_name'))     {characterNames.bill.innerText = cosmetic.bill_name;}
     if(cosmetic.hasOwnProperty('belle_name'))    {characterNames.belle.innerText = cosmetic.belle_name;}
     if(cosmetic.hasOwnProperty('greg_name'))     {characterNames.greg.innerText = cosmetic.greg_name;}
     if(cosmetic.hasOwnProperty('charles_name'))  {characterNames.charles.innerText = cosmetic.charles_name;}
+    if(cosmetic.hasOwnProperty('carl_name'))     {characterNames.carl.innerText = cosmetic.carl_name;}
 
 
     // Loop through page elements containing farmable item name and set accordingly
@@ -533,6 +529,12 @@ const themes = {
         name:     'Blue Theme',
         image:    './assets/theme/theme_blue.png',
         desc:     'For when you get tired of gray',
+        cosmetic: false
+    },
+    'theme_camo': {
+        name:     'Camo Theme',
+        image:    './assets/theme/theme_camo.png',
+        desc:     'In the trees',
         cosmetic: false
     },
     'theme_retro': {

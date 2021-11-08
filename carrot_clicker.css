@@ -102,6 +102,14 @@ a {color: rgb(137, 184, 255);}
 a:hover {filter: brightness(120%);}
 
 .flex {display: flex;}
+/* .fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+} */
+.center {
+    text-align: center;
+}
 
 img {
     user-select: none;
@@ -117,6 +125,9 @@ img {
 }
 .unbold {
     font-weight: unset;
+}
+.underline {
+    text-decoration: underline !important;
 }
 button {
     color: white;
@@ -401,6 +412,7 @@ select {
     font-size: 24pt;
     top: 10px;
     right: 10px;
+    position: absolute;
 }
 .toast h3, .toast p {
     margin: 0;
@@ -428,9 +440,17 @@ select {
     max-height: 90%;
     overflow: auto;
 
+    /* position: relative; */
     z-index: 200;
 
     visibility: hidden;
+}
+h2.theme_menu_title {
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+p.theme_menu_title {
+    margin-bottom: 12px;
 }
 .theme_preview {image-rendering: pixelated;}
 .theme_menu h2 {
@@ -462,7 +482,7 @@ select {
     outline: 2px solid var(--generic-blue);
     background-color: var(--main-bg-color);
 }
-.theme_item:hover {
+.theme_item:hover, .shop_item:hover {
     filter: brightness(120%);
     outline: 2px solid white;
 }
@@ -711,9 +731,6 @@ body:not(.theme_light) .theme_checkmark {
 .characterdesc {
     margin-left: 4px;
 }
-.charactername {
-    text-decoration: underline;
-}
 .characterimg {
     height: 64px;
     width: 64px;
@@ -812,6 +829,27 @@ body:not(.theme_light) .theme_checkmark {
 .Charles button {
     width: calc(100% - 10px);
     margin: 5px;
+}
+
+/* Carl */
+/* Temporaryily hide since not done */
+/* .carl {
+    display: none;
+} */
+.shop_item {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background: var(--lighter-bg-color);
+}
+.shop_img {
+    width: 57px;
+    height: 57px;
+    margin-right: 8px;
+    object-fit: cover;
+}
+.padding-5px {
+    padding: 5px;
 }
 
 /* Greyed out/Blacked out/Glowing effects */

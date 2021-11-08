@@ -80,6 +80,9 @@
 .theme_light .toast {
     color: white;
 }
+.theme_light .dialog_close {
+    color: black;
+}
 .theme_light .popup_box {
     background-color: white;
 }
@@ -644,4 +647,41 @@
     background-position: center;
     background-attachment: local;
     image-rendering: pixelated;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Camo theme */
+.theme_camo {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('./assets/theme/camo/camo.png');
+    background-size: 900px;
+}
+.theme_camo #left-section {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(7px);
+}
+.theme_camo .characterbox {
+    background-color: var(--brown-bg-color);
+    border-color:  var(--brown-bg-color);
+}
+.theme_camo .bottom {
+    background-color: var(--brown-darkest-color);   
 }

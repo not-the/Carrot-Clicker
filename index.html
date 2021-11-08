@@ -55,10 +55,13 @@
 
         <!-- Fancy Theme Switcher -->
         <div id="theme_menu" class="popup_box">
-            <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
-            <!-- Title -->
-            <h2>Themes</h2>
-            <p>Description</p>
+            <div>
+                <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
+                <!-- Title -->
+                <h2 class="theme_menu_title">Themes</h2>
+                <p class="theme_menu_title">Description</p>
+            </div>
+
 
             <!-- Theme items -->
             <div id="themes_list">
@@ -83,14 +86,14 @@
     <!-- Corner Toasts -->
     <!-- #region -->
     <div id="toast_container">
-    <div id="toasts_clear" onclick="clearToasts()">
-        Close All
-    </div>
-    <!-- <div class="toast background_red" id="toastID">
-        <h3>Title</h3>
-        <span class="toast_close" onclick="closeToast('ID')">X</span>
-        <p>Description</p>
-    </div> -->
+        <div id="toasts_clear" onclick="clearToasts()">
+            Close All
+        </div>
+        <!-- <div class="toast background_red" id="toastID">
+            <h3>Title</h3>
+            <span class="toast_close" onclick="closeToast('ID')">X</span>
+            <p>Description</p>
+        </div> -->
     </div>
     <!-- #endregion -->
   
@@ -179,7 +182,7 @@
                     class="characterimg"
                     title="Boomer Bill">
                     <div class="characterdesc">
-                    <b id="bill_name" class="charactername">Bill</b>
+                    <b id="bill_name" class="underline">Bill</b>
                     <p class="secondary_text">
                         Cost to upgrade Bill: <span id="UpBillCost"></span>
                     </p>
@@ -229,7 +232,7 @@
                     class="characterimg"
                     title="Boomer Belle">
                     <div class="characterdesc">
-                    <b id="belle_name" class="charactername">
+                    <b id="belle_name" class="underline">
                         Belle
                     </b>
                     <p class="secondary_text">
@@ -280,7 +283,7 @@
                         class="characterimg"
                         title="Gregory">
                         <div class="characterdesc">
-                            <b id="greg_name" class="charactername">Greg</b>
+                            <b id="greg_name" class="underline">Greg</b>
                             <p class="secondary_text">
                                 Cost to Upgrade Greg: <span id="UpGregCost"></span>
                             </p>
@@ -351,7 +354,7 @@
                             class="characterimg"
                             title="Charles">
                         <div class="characterdesc">
-                            <b id="charles_name" class="charactername">Charles</b>
+                            <b id="charles_name" class="underline">Charles</b>
                             <p class="secondary_text">Charles description</p>
                         </div>
                     </div>
@@ -381,30 +384,45 @@
                     </div>
                 </div>
 
-                <!--??? Rendering-->
-                <div class="char5 characterbox">
-                    <div class="char5stooltip charactertooltip tooltip" id="char5">
+                <!--Carl Rendering-->
+                <div class="carl characterbox">
+                    <div class="carltooltip charactertooltip tooltip" id="carl">
                         The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
                     </div>
 
                     <!-- Top -->
                     <div class="top flex">
                         <img
-                            src="./assets/characters/char5.png"
-                            alt="char5"
-                            id="char5_avatar"
+                            src="./assets/characters/Carl.png"
+                            alt="carl"
+                            id="carl_avatar"
                             class="characterimg"
-                            title="char5">
+                            title="carl">
                         <div class="characterdesc">
-                            <b id="char5_name" class="charactername">char5</b>
-                            <p class="secondary_text">char5 description</p>
+                            <b id="carl_name" class="underline">Carl</b>
+                            <p class="secondary_text">&gt; IN DEVELOPMENT &lt;<br>Purchase Cosmetics</p>
                         </div>
                     </div>
 
                     <!-- Bottom -->
-                    <div class="bottom">
+                    <div class="bottom" id="cosmetic_shop">
 
-                        <p>Stuff goes here</p>
+
+                        <!-- Shop item -->
+                        <div class="shop_item">
+                            <div class="flex">
+                                <img src="./assets/theme/theme_classic.png" alt="" class="shop_img">
+                                <div class="info">
+                                    <b class="underline">Carrot Clicker Classic</b>
+                                    <p class="secondary_text">Theme</p>
+                                </div>
+                            </div>
+                            <div class="shop_price">
+                                1 Golden Carrot
+                            </div>
+                        </div>
+                        <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p>
+
 
                     </div>
                 </div>
@@ -437,7 +455,7 @@
 
         <!-- Achievements Panel -->
         <div id="achievements-panel" class="panel">
-            <h1>Achievements</h1>
+            <h1>Achievements (WIP)</h1>
             <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
             <p class="secondary_text">Progress: <span id="achievement_progress">-/- (0%)</span></p><br>
             
@@ -520,8 +538,8 @@
 
             <!-- Fun Tip Percentage-->
             <div class="slidecontainer">
-                <label for="FunTipPercentage" >Percentage of fun tips: <span id="FunTipsSliderLabel">50</span>% <br>
-                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
+                <label for="FunTipPercentage" ><b>Percentage of fun tips</b><br>
+                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><span id="FunTipsSliderLabel">50</span>%<br>
                 </label><br><br>
             </div>
 
@@ -550,7 +568,64 @@
             <label for="enable_carrot_sounds">
                 <input type="checkbox" class="checkbox" id="enable_carrot_sounds" checked onclick="settingCarrotSounds()">
                     Carrot sound effects
-            </label><br><br>
+            </label><br>
+
+            <!-- Volume sliders -->
+            <!-- <b>Sound Volume:</b> -->
+            <table>
+                <!-- Master Volume -->
+                <tr>
+                    <td>
+                        <label for="volume_master">
+                            Volume:
+                        </label>
+                    </td>
+                    <td>
+                        <div class="slidecontainer">
+                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_master">
+                        </div>
+                    </td>
+                    <td>
+                        <span id="volume_master_percent">100%</span>
+                    </td>
+                </tr>
+                
+                <!-- Music Volume -->
+                <!-- <tr>
+                    <td>
+                        <label for="volume_music" >
+                            Music:
+                        </label>
+                    </td>
+                    <td>
+                        <div class="slidecontainer">
+                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_music">
+                        </div>
+                    </td>
+                    <td>
+                        <span id="volume_music_percent">100%</span>
+                    </td>
+                </tr> -->
+
+                <!-- Other Volume -->
+                <!-- <tr>
+                    <td>
+                        <label for="volume_misc" >
+                            Other:
+                        </label>
+                    </td>
+                    <td>
+                        <div class="slidecontainer">
+                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_misc">
+                        </div>
+                    </td>
+                    <td>
+                        <span id="volume_misc_percent">100%</span>
+                    </td>
+                </tr> -->
+            </table><br>
+
+            
 
             <!-- Notification Length -->
             <label for="notificationLength">Time until notifications disappear (In seconds)<br>

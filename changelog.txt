@@ -1,4 +1,19 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.4.6
+    11-7-2021
+// ----------------------------------------------------------- //
+
+- Volume slider in settings
+- Moved fun tips code to user.js
+- Theme switcher X button is no longer the same color as the background in the white theme
+- Achievements work again (they have been updated to use the new player object format)
+- playSound() and playMusic() have been moved to Carrot Utilities
+- Added some new achievements
+- Change Theme button now plays the button sound effect
+- Character 5 now has a name (Carl) and can be changed by cosmetics
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.4.5
     11-7-2021
 // ----------------------------------------------------------- //

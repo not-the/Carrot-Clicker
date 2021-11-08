@@ -230,6 +230,9 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     function multibuyPrice(PriceIncrease){
         r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
         r2+=r;
+        if(amount==1){
+            r2=r;
+        }
     }
     for(i=0; i<amount; i++){
         if(character==Gregory){
@@ -764,22 +767,6 @@ setInterval(()=>{
         location.reload();
     }
 },2000);
-
-/*JJ's Slider stuffs (ripping off w3 again)*/
-document.getElementById("FunTipsSlider").value=100*tips.TypeModifier;
-var slider = document.getElementById("FunTipsSlider");
-var output = document.getElementById("FunTipsSliderLabel");
-output.innerHTML = slider.value; // Display the default slider value
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-    // console.log('a');
-    output.innerHTML = this.value;
-    //tip modifer
-    tips.TypeModifier = parseInt(slider.value)/100;
-    // console.log("a");
-    // console.log(tips.TypeModifier);
-}
 
 function tipchange() {
     
