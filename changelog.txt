@@ -12,6 +12,7 @@
   + Depending on if I feel like doing the work I'll also make this change for the other page elements in the future
 - Achievements tab is pretty much complete! You can now view a list of achievements and read their descriptions if you need something to do.
 - Increased the size of the tri-panel section at the bottom of the page (this may change again in the future)
+- Progress information in the achievements tab works and shows you your percentage to completion
 
 Known issues:
 - Achievement rewards display on achievements they don't belong to
