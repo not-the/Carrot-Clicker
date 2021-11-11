@@ -116,6 +116,8 @@ img {
     -webkit-user-drag: none;
 
     touch-action: manipulation;
+
+    image-rendering: pixelated;
 }
 #container {
     justify-content: center;
@@ -922,7 +924,7 @@ body:not(.theme_light) .theme_checkmark {
     max-width: 1150px;
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 700px;
     min-width: 270px;
     margin: 24px auto 80px;
     padding: 0;
@@ -963,7 +965,7 @@ body:not(.theme_light) .theme_checkmark {
 /* Info panel */
 .panel {
     position: absolute;
-    height: 462px;
+    height: 662px;
     width: 100%;
     padding: 0px 24px 16px;
 
@@ -1004,13 +1006,28 @@ body:not(.theme_light) .theme_checkmark {
     margin-right: 8px;
 } */
 
+/* Filter dropdown */
+#achievement_filter {
+    position: absolute;
+    top: 30px;
+    right: 24px;
+}
+
 .achievement_item {
     width: 100%;
+    margin-bottom: 10px;
 }
 .achievement_item .achievement_img {
     height: 100px;
     width: 100px;
     padding: 8px;
+    margin-right: 16px;
+    
+    border-radius: 10px;
+}
+.achievement_locked .achievement_img {
+    opacity: 0.7;
+    filter: saturate(0%);
 }
 .achievement_details {
     height: 100px;
@@ -1018,12 +1035,39 @@ body:not(.theme_light) .theme_checkmark {
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.45) inset;
     border-radius: 10px 10px 0 0;
 }
+.achievement_details h2 {
+    margin: 16px 0 10px 0;
+    font-size: 20pt;
+}
+.achievement_item h4 {
+    margin: 0;
+}
 .achievement_item:last-child {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
 }
 .rewards_list {
-    background-color: var(--brown-darkest-color);
+    background-color: var(--brown-darker-color);
+    display: flex;
+}
+.reward {
+    background-color: var(--brown-darker-color);
+    padding: 10px;
+    border-right: 1px solid var(--brown-darkest-color);
+    flex: 1;
+}
+.reward:last-of-type {
+    border: none;
+}
+.reward_img {
+    height: 48px;
+    width: 48px;
+    margin-right: 10px;
+}
+
+/* Still locked */
+.achievement_locked {
+    filter: brightness(70%);
 }
 
 /* Statistics */
@@ -1124,6 +1168,13 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
         background: black;
         backdrop-filter: none;
+    }
+    .rewards_list {
+        display: unset;
+    }
+    .reward {
+        border-right: none;
+        border-bottom: 1px solid var(--brown-darkest-color);
     }
 }
 

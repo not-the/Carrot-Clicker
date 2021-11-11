@@ -125,6 +125,7 @@ const player1 = {
     golden_carrots: 0,
     prestige_potential: 0,
     EquipedHoes: 0,
+    clickSpeedRecord: 0,
 
     // Lifetime stats (old)
     // LifetimeCarrots: 0,
@@ -202,21 +203,76 @@ setInterval(() => {
 
 /* ----------------------Functions------------------------*/
 //#region
+
+// Store click speed
+var clickSpeed = 0;
+var clickSpeedBest = 0;
+var clickArray = [];
+
 //On Carrots Click
 function onClick(useMousePos) {
     player.Carrots += player.cpc;
     player.lifetime.carrots += player.cpc;
+
+    // Page stuff
+    carrotCount();
     popupHandler(useMousePos);
+
+    // Click speed
+    clickSpeedHandler(true);
 
     // Sound effect
     if(store('enableSounds') == 'false' || store('enableCarrotSounds') == 'false') return;
     randomSound('crunch', 95);
 }
 
+// Update carrot count on page
+function carrotCount() {
+    eInnerText(elCarrotCount, `${DisplayRounded(Math.floor(player.Carrots))}`);
+}
+
+// Click speed handler
+setInterval(() => {
+    clickSpeedHandler(false);
+}, 1000);
+function clickSpeedHandler(clicked = false) {
+    if(clicked == true) {
+        clickArray.push(Date.now());
+    }
+
+    // Purge clicks older than 1 second
+    for(let i = 0; i < clickArray.length; i++) {
+        if(clickArray[i] < Date.now() - 1000) {
+            // Check if there is only 1 left or not because splice doesn't work with arrays with 1 value
+            if(clickArray.length !== 1) {
+                clickArray.splice(i, i);
+            } else {
+                clickArray = [];
+            }
+        };
+    }
+
+    // Update click speed
+    clickSpeed = clickArray.length;
+    if(clickSpeedBest < clickSpeed) {
+        clickSpeedBest = clickSpeed;
+        player.clickSpeedRecord = clickSpeed;
+    }
+
+    // Reset best on 0
+    if(clickSpeed == 0) {
+        clickSpeedBest = 0;
+    }
+
+    // Update page
+    eInnerText(dom('click_speed'), clickSpeed + '/' + clickSpeedBest);
+}
+
 
 // Carrots per second
 function CarrotsPerSecond() {
     player.Carrots += player.cps;
+    carrotCount();
 }
 var cpsInterval = setInterval(CarrotsPerSecond,1000);
 
@@ -282,12 +338,18 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 // Prestige
 function Prestige() {
+    if(player.prestige_potential <= 1) {
+        toast('Insufficient prestige potential', 'Try playing the game some more and then try again', 'red')
+        return;
+    }
+
     console.log("Prestiging...");
     clearInterval(cpsInterval);
 
     // Give golden carrots
     player.golden_carrots += player.prestige_potential;
     player.lifetime.golden_carrots += player.prestige_potential;
+    player.lifetime.prestige_count += 1;
 
     // Reset characters to default
     [
@@ -516,27 +578,27 @@ function DisplayHoe(character, type) {
 
         // Character has at least 1 and
         if(character.Hoes[type] >= 1) {
-            count.innerText = `x${character.Hoes[type]}`;
+            eInnerText(count, `x${character.Hoes[type]}`);
             img.classList.remove('blackedout');
         } else {
-            count.innerText = '';
+            eInnerText(count, '');
         }
     }
     // Greg hoes
     else if(charString == 'greg') {
         // Greg has at least 1
         if(Gregory.Hoes[type] >= 1) {
-            count.innerText = `x${Gregory.Hoes[type]}`;
+            eInnerText(count, `x${Gregory.Hoes[type]}`);
             img.classList.remove('blackedout');
         }
         // Greg can afford one
         else if(player.Carrots >= Gregory.HoePrices[type]) {
             img.classList.remove('blackedout');
-            count.innerText = '';
+            eInnerText(count, '');
         }
         // Blacked out
         else {
-            count.innerText = '';
+            eInnerText(count, '');
             img.classList.add('blackedout');
         }
     }
@@ -601,9 +663,9 @@ setInterval(() => {
         player.cps=Belle_Boomerette.lvl;
     }
     // Add improve working conditions bonus
-    if(Charles.ImproveWorkingConditions>0){
-        player.cpc = (player.cpc*(1.1*Charles.ImproveWorkingConditions));
-        player.cps = (player.cps*(1.1*Charles.ImproveWorkingConditions));
+    if(Charles.ImproveWorkingConditions>0) {
+        player.cpc = (player.cpc * (1.1 * Charles.ImproveWorkingConditions));
+        player.cps = (player.cps * (1.1 * Charles.ImproveWorkingConditions));
     }
     
 
@@ -615,28 +677,28 @@ setInterval(() => {
     // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
     // New display
-    elCarrotCount.innerText = `${DisplayRounded(Math.floor(player.Carrots))}`;
-    elCPC.innerText = `${DisplayRounded(Math.floor(player.cpc),2)}`;
-    elCPS.innerText = `${DisplayRounded(Math.floor(player.cps),2)}`;
+    // Carrot counter moved to functions that update it
+    eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
+    eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
 
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1){
-        elGoldenCarrotCount.innerText = `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`;
+    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1) {
+        eInnerText(elGoldenCarrotCount, `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`);
     }
     if(player.lifetime.golden_carrots>=1) {
         elGoldenCarrotCount.style.color = "white";
     }
-    document.getElementById("multibuy").innerText=multibuy[multibuySelector]+"x";
+    eInnerText(dom("multibuy"), multibuy[multibuySelector] + "x");
 
     // Costs to level up characters
-    elCharacterUpCost.bill.innerText = `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.belle.innerText = `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`;
-    elCharacterUpCost.greg.innerText = `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`;
+    eInnerText(elCharacterUpCost.bill, `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`);
+    eInnerText(elCharacterUpCost.belle, `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`);
+    eInnerText(elCharacterUpCost.greg, `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`);
 
     // Character levels
-    elCharacterLevel.bill.innerText  = `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`;
-    elCharacterLevel.belle.innerText = `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`;
-    elCharacterLevel.greg.innerText  = `Lvl: ${DisplayRounded(Gregory.lvl)}`;
+    eInnerText(elCharacterLevel.bill, `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`);
+    eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
+    eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
 
     // Update Hoes on page
     for(i = 0; i < 6; i++) {
@@ -649,15 +711,15 @@ setInterval(() => {
     let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
     let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
     player.prestige_potential=Math.floor(l+h);
-    prestige_info.innerText = DisplayRounded(player.prestige_potential,2);
+    eInnerText(prestige_info, DisplayRounded(player.prestige_potential,2));
 
     // Greg's Hoe Prices
-    elHoePrices.wooden.innerText    = `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`;
-    elHoePrices.stone.innerText     = `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`;
-    elHoePrices.iron.innerText      = `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`;
-    elHoePrices.gold.innerText      = `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`;
-    elHoePrices.diamond.innerText   = `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`;
-    elHoePrices.netherite.innerText = `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`;
+    eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.stone, `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.iron, `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.gold, `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`);
 
     if(player.lifetime.golden_carrots>0 || player.prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
@@ -693,6 +755,8 @@ function loadStatistics() {
     Golden Carrots earned: <b>${DisplayRounded(player.lifetime.golden_carrots)}</b><br/>
     Prestiges: <b>${DisplayRounded(player.lifetime.prestige_count)}</b><br/><br/>
 
+    Clicks per second (Best): <b>${player.clickSpeedRecord}</b><br/><br/>
+
     Themes:       ${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}<br/>
     Cosmetics:    ${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}<br/><br/>
 
@@ -700,12 +764,12 @@ function loadStatistics() {
 }
 
 // Refresh statistics
-setInterval(() => {loadStatistics()},2000);
+setInterval(() => {loadStatistics()}, 2000);
 
 //Music
-setInterval(()=>{
-    playMusic('music.m4a');
-},80000);
+// setInterval(()=>{
+//     playMusic('music.m4a');
+// },80000);
 
 /*-----------Tips----------- */
 //#region
@@ -790,31 +854,31 @@ function tipchange() {
         switch (tips.tracker){
             case 1:
                 tips.number = Math.floor(Math.random()*tips.beginner.length);
-                elTips.innerText=tips.beginner[tips.number];
+                eInnerText(elTips, tips.beginner[tips.number]);
                 break;
             case 2:
             case 3:
                 tips.number = Math.floor(Math.random()*tips.funAdvanced.length);
-                elTips.innerText=tips.funAdvanced[tips.number];
+                eInnerText(elTips, tips.funAdvanced[tips.number]);
                 break;
             default:
                 tips.number = Math.floor(Math.random()*tips.fun.length);
-                elTips.innerText=tips.fun[tips.number];
+                eInnerText(elTips, tips.fun[tips.number]);
         }
     }else{
         switch (tips.tracker){
             case 1:
                 tips.number = Math.floor(Math.random()*tips.funIntermediate.length);
-                elTips.innerText=tips.funIntermediate[tips.number];
+                eInnerText(elTips, tips.funIntermediate[tips.number]);
                 break;
             case 2:
             case 3:
                 tips.number = Math.floor(Math.random()*tips.advanced.length);
-                elTips.innerText=tips.advanced[tips.number];
+                eInnerText(elTips, tips.advanced[tips.number]);
                 break;
             default:
                 tips.number = Math.floor(Math.random()*tips.basic.length);
-                elTips.innerText=tips.basic[tips.number];
+                eInnerText(elTips, tips.basic[tips.number]);
         }
     }
 }

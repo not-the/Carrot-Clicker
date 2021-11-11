@@ -74,10 +74,6 @@ function confetti(type = 1) {
 // ];
 // Picks random sound from sounds array
 // Ignore chance is a % out of 100
-
-// Volume variable
-var volume = 100;
-
 function randomSound(type, ignoreChance = 0) {
     // Calculate ignore chance
     var ignore = Math.floor(Math.random() * 100);
@@ -102,9 +98,10 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     // elDialog.main.classList.add("dialog_animate");
 
     // Fill out dialog text, if applicable
-    if(title)       {elDialog.title.innerText = title;}
-    if(desc)        {elDialog.desc.innerText = desc;}
-    if(buttonName)  {elDialog.buttons.accept.innerText = buttonName;}
+    if(title)       {eInnerText(elDialog.title, title);}
+    if(desc)        {eInnerText(elDialog.desc, desc);}
+    if(buttonName)  {eInnerText(elDialog.buttons.accept, buttonName);}
+    
     if(buttonStyle) {
         elDialog.buttons.accept.classList.add(buttonStyle);
     }
@@ -120,12 +117,12 @@ function closeDialog(doAction, backdrop = false) {
     if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
 
     dialogOpen = false;
-    elDialog.title.innerText = 'Dialog Title';
-    elDialog.desc.innerText = 'Dialog description';
+    eInnerText(elDialog.title, 'Dialog Title');
+    eInnerText(elDialog.desc, 'Dialog description');
     // Reset Accept button
     elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
     // elDialog.buttons.accept.onclick = closeDialog;
-    elDialog.buttons.accept.innerText = "OK";
+    eInnerText(elDialog.buttons.accept, "OK");
 
     overlay.classList.remove("visible");
     elDialog.main.classList.remove('visible');
@@ -268,6 +265,11 @@ function panelChange(to, noSound = false) {
     if(to !== "info-panel") {
         elStatistics.innerHTML = statLoading;
     }
+
+    // Update achievements list
+    if(to == 'achievements-panel') {
+        populateAchievements();
+    }
 }
 //#endregion
 
@@ -301,7 +303,7 @@ function popupHandler(useMousePos = true) {
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
-    clickVisualElement.innerText = `+${DisplayRounded(Math.floor(player.cpc,2))}`;
+    eInnerText(clickVisualElement, `+${DisplayRounded(Math.floor(player.cpc,2))}`);
 
     bonusVisualArea.append(clickVisualElement);
 
@@ -397,7 +399,13 @@ const cosmetics = {
     "netherite_hoe": {
         'image': './assets/tools/netherite_hoe.png',
         'name': 'Netherite hoe'
-    }
+    },
+    // Cursor
+    "cursor": {
+        'image': './assets/theme/cursor/cursor.png',
+        'image_hover': './assets/theme/cursor/pointer.png',
+        'name': 'Cursor'
+    },
 }
 const farmableNames = [
     dom('cc_name'),
@@ -447,17 +455,17 @@ function setCosmetic(set, resetState = false) {
     if(cosmetic.hasOwnProperty('carl_image'))     {characterAvatars.carl.src = cosmetic.carl_image;}
 
     // Character Names
-    if(cosmetic.hasOwnProperty('bill_name'))     {characterNames.bill.innerText = cosmetic.bill_name;}
-    if(cosmetic.hasOwnProperty('belle_name'))    {characterNames.belle.innerText = cosmetic.belle_name;}
-    if(cosmetic.hasOwnProperty('greg_name'))     {characterNames.greg.innerText = cosmetic.greg_name;}
-    if(cosmetic.hasOwnProperty('charles_name'))  {characterNames.charles.innerText = cosmetic.charles_name;}
-    if(cosmetic.hasOwnProperty('carl_name'))     {characterNames.carl.innerText = cosmetic.carl_name;}
+    if(cosmetic.hasOwnProperty('bill_name'))     {eInnerText(characterNames.bill, cosmetic.bill_name);}
+    if(cosmetic.hasOwnProperty('belle_name'))    {eInnerText(characterNames.belle, cosmetic.belle_name);}
+    if(cosmetic.hasOwnProperty('greg_name'))     {eInnerText(characterNames.greg, cosmetic.greg_name);}
+    if(cosmetic.hasOwnProperty('charles_name'))  {eInnerText(characterNames.charles, cosmetic.charles_name);}
+    if(cosmetic.hasOwnProperty('carl_name'))     {eInnerText(characterNames.carl, cosmetic.carl_name);}
 
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(name) {
         for(i = 0; i < farmableNames.length; i++) {
-            farmableNames[i].innerText = name + 's';
+            eInnerText(farmableNames[i], name + 's');
         }
     }
 
@@ -611,8 +619,10 @@ function themeSwitcherCheckmark(theme, from = false) {
 
 // Populate achievements list
 const elAchievementsList = dom('achievements_list');
+const elAchievementFilter = dom('achievement_filter');
 function populateAchievements() {
     var achievementHTML = '';
+    var rewardHTML = '';
 
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
@@ -621,17 +631,117 @@ function populateAchievements() {
         // Test if unlocked
         let unlocked = achieveQuery(key);
 
-        let img = achieve.image !== false ? achieve.image : './assets/Carrot Clicker.png'
+        if(dom('achievement_filter').value == 'unlocked' && unlocked == false) continue;
+        if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
+
+        let img = achieve.image != false ? achieve.image : './assets/achievements/locked.png';
+
+        // Plain text list w/ achievement names
+        //#region 
+        // if(unlocked == true) {
+        //     achievementHTML += /* html */
+        //     `
+        //         <b>Unlocked: ${achieve.name}</b><br>
+        //     `;
+        // } else {
+        //     achievementHTML += /* html */
+        //     `
+        //         Not unlocked: ${achieve.name}<br>
+        //     `;
+        // }
+        //#endregion
+
+        // Rewards info
+        if(achieve.reward !== false && unlocked == true) {
+            let inner = '';
+            // Multiple rewards
+            if(Array.isArray(achieve.reward) == true) {
+                for(let i = 0; i < achieve.reward.length; i++) {
+                    let rewardType = achieve.reward[i].split(':')[0];
+                    let rewardName = achieve.reward[i].split(':')[1];
+                    if(rewardType == 'function') continue;
     
+                    let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                    let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+
+                    inner += 
+                    `
+                    <div class="reward flex">
+                        <img src="${icon}" alt="${informalName}" class="reward_img">
+                        <div>
+                            <h4>${informalName}</h4>
+                            <p class="secondary_text">
+                                ${capitalizeFL(rewardType)}
+                            </p>
+                        </div>
+                    </div>
+                    `;
+                }
+                console.log(achieve);
+                console.log(inner);
+            }
+
+            // Single reward
+            else if(achieve.reward.split(':')[0] != 'function') {
+                let rewardType = achieve.reward.split(':')[0];
+                let rewardName = achieve.reward.split(':')[1];
+
+                let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+
+                inner = 
+                `<div class="reward flex">
+                    <img src="${icon}" alt="${informalName}" class="reward_img">
+                    <div>
+                        <h4>${informalName}</h4>
+                        <p class="secondary_text">
+                            ${capitalizeFL(rewardType)}
+                        </p>
+                    </div>
+                </div>
+                `;
+            }
+            
+            rewardHTML =
+            `<!-- Rewards -->
+            <div class="rewards_list">
+                ${inner}
+            </div>`;
+            inner = '';
+
+            console.log(achieve);
+            console.log(inner);
+        }
+
+        // Achievement info
         if(unlocked == true) {
-            achievementHTML += /* html */
+            achievementHTML += /* htmla */
             `
-                <b>Unlocked: ${achieve.name}</b><br>
+            <div id="${key}" class="achievement_item">
+                <!-- Details -->
+                <div class="achievement_details flex">
+                    <img src="${img}" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">
+                    <div>
+                        <h2>${achieve.name}</h2>
+                        <p class="secondary_text">${achieve.desc}</p>
+                    </div>
+                </div>
+                ${rewardHTML}
+            </div>
             `;
         } else {
-            achievementHTML += /* html */
+            achievementHTML += /* htmla */
             `
-                Not unlocked: ${achieve.name}<br>
+            <div id="${key}" class="achievement_item achievement_locked">
+                <!-- Details -->
+                <div class="achievement_details flex">
+                    <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
+                    <div>
+                        <h2>${achieve.mystery.name == true ? '???' : achieve.name}</h2>
+                        <p class="secondary_text">${achieve.mystery.desc == true ? '?' : achieve.desc}</p>
+                    </div>
+                </div>
+            </div>
             `;
         }
     }
@@ -642,9 +752,17 @@ function populateAchievements() {
     // }
 
     elAchievementsList.innerHTML = achievementHTML;
+    // eInnerHTML(elAchievementsList, achievementHTML);
 }
 
+function achievementProgress() {
+    eInnerText(
+        dom('achievement_progress'),
+        `${Object.keys(player.achievements).length}/${Object.keys(achievements).length} (${Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length))}%)`
+    );
+}
 
+elAchievementFilter.addEventListener('change', () => {populateAchievements()});
 
 
 // Set theme

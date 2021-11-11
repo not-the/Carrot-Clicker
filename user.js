@@ -22,8 +22,8 @@ const elVolumeMaster_label = dom('volume_master_percent');
 // Update the current slider value (each time you drag the slider handle)
 elFunTipsSlider.oninput = () => {
     // Update percentage
-    elFunTipsSlider_label.innerText = elFunTipsSlider.value;
-
+    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
+    
     // Set modifier
     tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
 }
@@ -136,11 +136,7 @@ elVolumeMaster.oninput = () => {
     }
 
     // Update percentage
-    if(value > 0) {
-        elVolumeMaster_label.innerText = `${value}%`;
-    } else {
-        elVolumeMaster_label.innerText = 'OFF';
-    }
+    eInnerText(elVolumeMaster_label, value > 0 ? `${value}%` : 'OFF');
 
     store('master_volume', value / 100);
     // Set modifier
@@ -344,7 +340,7 @@ function keybindHandler(event){
 // For the conditions parameter:
 // - First (0) value is the variable you want to test- will also accept a function
 // - Second (1) value is the minimum required for the achievement (at the moment it will only test if the FIRST is greater than or equal to the SECOND)
-// If you need to test for anything other than if FIRST >= SECOND you can simple use a function and only return a passing number if it comes out to true
+// If you need to test for anything other than if FIRST >= SECOND you can simply use a function and only return a passing number if it comes out to true
 const achievements = {
 
     // Template
@@ -361,31 +357,82 @@ const achievements = {
     '1_carrot': {
         'name': 'First Carrot',
         'desc': 'Farming is hard',
-        'image': './assets/Carrot Clicker.png',
+        'image': './assets/achievements/1_carrot.png',
         'reward': false,
-        'conditions': ['player.lifetime.carrots', 1]
+        'conditions': ['player.lifetime.carrots', 1],
+        'mystery': {
+            'name': false,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
     },
     '1989_carrots': {
         'name': 'Retro',
         'desc': 'Earn 1989 carrots',
-        'image': './assets/Carrot Clicker.png',
+        'image': './assets/theme/theme_retro.png',
         'reward': 'theme:theme_retro',
-        'conditions': ['player.lifetime.carrots', 1989]
+        'conditions': ['player.lifetime.carrots', 1989],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
     },
     '1_million_carrots': {
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
-        'image': './assets/Carrot Clicker.png',
+        'image': false,
         'reward': 'function:confetti',
-        'conditions': ['player.lifetime.carrots', 1000000]
+        'conditions': ['player.lifetime.carrots', 1000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
     },
+    '1_billion_carrots': {
+        'name': 'Boomer Bill Gates',
+        'desc': 'Earn your 1 billionth carrot',
+        'image': false,
+        'reward': 'function:confetti',
+        'conditions': ['player.lifetime.carrots', 1000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+
     // Golden Carrots
+    '1_prestige': {
+        'name': 'Prestigious',
+        'desc': 'Prestige for the first time',
+        'image': './assets/achievements/prestige.png',
+        'reward': false,
+        'conditions': ['player.lifetime.prestige_count', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
     '50_golden_carrots': {
         'name': 'Golden',
         'desc': 'Earn at least 50 golden carrots',
-        'image': './assets/golden carrot.png',
+        'image': './assets/achievements/golden.png',
         'reward': ['cosmetic:golden_carrot', 'function:confetti'],
-        'conditions': ['player.lifetime.golden_carrots', 50]
+        'conditions': ['player.lifetime.golden_carrots', 50],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
     },
     // Character usage
     'upgrade_all_characters_once': {
@@ -397,48 +444,120 @@ const achievements = {
             ['Boomer_Bill.lvl',      2],
             ['Gregory.lvl',          1],
             ['Belle_Boomerette.lvl', 1],
-        ]
+        ],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
     },
     'bill_lvl_100': {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill 100 times',
-        'image': './assets/characters/bill.png',
+        'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
         'reward': 'cosmetic:bill',
-        'conditions': ['Boomer_Bill.lvl', 100]
+        'conditions': ['Boomer_Bill.lvl', 100],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
     },
     'greg_lvl_64': {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Greg 64 Times',
         'image': './assets/tools/diamond_hoe.png',
         'reward': 'theme:theme_blockgame',
-        'conditions': ['Gregory.lvl', 64]
+        'conditions': ['Gregory.lvl', 64],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
     },
     'use_charles': {
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/characters/Charles.png',
         'reward': false,
-        'conditions': ['ex_charlesUses()', 1]
+        'conditions': ['ex_charlesUses()', 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    // Misc
+    '12_clicks_per_second': {
+        'name': 'Gotta Grow Fast',
+        'desc': 'Click 12 times in one second',
+        'image': './assets/achievements/12_clicks_per_second.png',
+        'reward': 'cosmetic:cursor',
+        'conditions': ['player.clickSpeedRecord', 12],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '16_clicks_per_second': {
+        'name': 'Olympic Clicking Games',
+        'desc': 'Click 16 times in one second',
+        'image': './assets/achievements/16_clicks_per_second.png',
+        'reward': false,
+        'conditions': ['player.clickSpeedRecord', 16],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '21_clicks_per_second': {
+        'name': 'I am Seed',
+        'desc': 'Click 21 times in one second',
+        'image': './assets/achievements/21_clicks_per_second.gif',
+        'reward': false,
+        'conditions': ['player.clickSpeedRecord', 21],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+        }
     },
 
     // Tutorial
     'first_hoe': {
         'name': 'First Hoe',
-        'desc': 'Tutorial',
-        'image': false,
+        'desc': 'Tutorial milestone',
+        'image': './assets/tools/wood_hoe.png',
         'reward': 'function:tutorialHoes',
         'conditions': ['Gregory.Hoes[0]', 1],
-        'noToast': true,
         'mystery': {
-            'noToast': true, 
+            'name': false,
+            'desc': false,
+            'image': true,
+            'noToast': true,
         }
     },
     '1_netherite_hoe': {
         'name': 'Extreme Farming',
         'desc': 'Netherite',
         'image': './assets/tools/netherite_hoe.png',
-        'reward': false,
+        'reward': 'cosmetic:netherite_hoe',
         'conditions': ['Gregory.Hoes[5]', 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+        }
     }
 }
 const achievementsKeys = Object.keys(achievements);
@@ -516,7 +635,9 @@ function evaluateConditions(key, achievement) {
 
 // Reward user
 function giveReward(reward) {
+    if(reward == false) return;
     // console.log('Unlocked: ' + reward);
+    console.log(reward);
     let rewardType = reward.split(':')[0];
     let rewardName = reward.split(':')[1];
     // console.log(rewardType, rewardName);
@@ -539,7 +660,7 @@ function grantAchievement(key) {
 
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
-    if(achieve.noToast !== true) {
+    if(achieve.mystery.noToast !== true) {
         toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
     }
 
@@ -560,6 +681,12 @@ function grantAchievement(key) {
         }
     }
 
+    // Update achievement list
+    if(currentPanel == "achievements-panel") {
+        populateAchievements();
+    }
+
+    achievementProgress();
 }
 
 // Unlock themes/cosmetics
@@ -626,6 +753,9 @@ function onLoad() {
     // Start music
     playMusic('music.m4a');
 
+    // Put things on page
+    carrotCount();
+
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
     //#region 
@@ -681,7 +811,7 @@ function onLoad() {
 
     // Fun tips
     elFunTipsSlider.value = 100 * tips.TypeModifier;
-    elFunTipsSlider_label.innerText = elFunTipsSlider.value;
+    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
 
     // Notification length
     if(store("notificationLength") !== null) {
@@ -715,9 +845,11 @@ function onLoad() {
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
 
     // Volume slider
-    elVolumeMaster.value = store('master_volume') * 100;
-    elVolumeMaster_label.innerText = `${store('master_volume') * 100}%`;
-    volume = store('master_volume');
+    if(store('master_volume') !== null) {
+        elVolumeMaster.value = store('master_volume') * 100;
+        eInnerText(elVolumeMaster_label, `${store('master_volume') * 100}%`);
+        volume = store('master_volume');
+    }
 
     // Enable Music
     if(store('enableMusic') == null) {
@@ -766,17 +898,28 @@ function onLoad() {
     //     setCosmetic(cosmetic);
     // }
     //#endregion
+
+
+    // Populate achievements if said tab is open
+    if(currentPanel == "achievements-panel") {
+        populateAchievements();
+    }
+    achievementProgress();
     
 
 
     /* --------------- TUTORIAL --------------- */
     // Initial Welcome
+    // if(store("tutorial_sample") == null) {
+    //     store("tutorial_sample", "done");
+    //     toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
+    // } else if(store("tutorial_sample") == "done") {
+    //     // Temporary two step until someone fixes the storage issue
+    //     store("tutorial_sample", "really_done");
+    //     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+    // }
     if(store("tutorial_sample") == null) {
         store("tutorial_sample", "done");
-        toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
-    } else if(store("tutorial_sample") == "done") {
-        // Temporary two step until someone fixes the storage issue
-        store("tutorial_sample", "really_done");
         toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
     }
 
