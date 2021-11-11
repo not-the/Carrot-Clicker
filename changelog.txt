@@ -7,7 +7,7 @@
 - Changed all images to be rendered pixelated
 - Game now keeps track of how fast you are clicking and displays it (there is also a related achievement)
 - Fixed issue where the welcome message and temporary fix messages wouldn't appear when intended (temporary fix message is now gone)
-- DOM Manipulation doesn't take place unless necessary: Swapped out the usage of .innerText for eInnerText() which doesn't update the page if the intended output is the same as what is already there (hopefully this will improve performance, I'm not able to test if there's a difference)
+- DOM Manipulation doesn't take place unless necessary: Swapped out the usage of .innerText for eInnerText() and innerHTML for eInnerHTML() which doesn't update the page if the intended output is the same as what is already there (hopefully this will improve performance, I'm not able to test if there's a difference)
 - The carrot counter also now updates instantly, instead of on a timer with everything elements
   + Depending on if I feel like doing the work I'll also make this change for the other page elements in the future
 - Achievements tab is pretty much complete! You can now view a list of achievements and read their descriptions if you need something to do.
