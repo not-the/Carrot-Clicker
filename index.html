@@ -61,7 +61,7 @@
                 <h2 class="theme_menu_title">Themes</h2>
                 <p class="theme_menu_title">Description</p>
             </div>
-
+        
 
             <!-- Theme items -->
             <div id="themes_list">
@@ -78,6 +78,10 @@
                 </div>
             </div>
 
+        </div>
+        <!--Fancy Cosmect Changer-->
+        <div id="cosmetic_switcher" class="popup_box">
+            <h4>Kal Do This Thxs :)</h4>
         </div>
     </div>
     <!-- #endregion -->
@@ -443,14 +447,30 @@
                         <!-- Shop item -->
                         <div class="shop_item">
                             <div class="flex">
-                                <img src="./assets/theme/theme_classic.png" alt="" class="shop_img">
-                                <div class="info">
-                                    <b class="underline">Carrot Clicker Classic</b>
-                                    <p class="secondary_text">Theme</p>
+                                <div>
+                                    Cosmetics(WIP)
+                                    <button id="theme_button" onclick="themeSwitcher()">
+                                        Change Cosmetics
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="shop_price">
-                                1 Golden Carrot
+                                <!-- Themes -->
+                                <label for="theme_dropdown">
+                                    Themes (Work In Progress)<br>
+                                    <!-- <select name="theme_dropdown" id="theme_dropdown">
+                                        <option value="theme_dark" id="theme_dark">Dark Theme</option>
+                                        <option value="theme_light" id="theme_light">Light Theme</option>
+                                        <option value="theme_oled" id="theme_oled">OLED Dark</option>
+                                        <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
+                                        <option value="theme_red" id="theme_red">Red Theme</option>
+                                        <option value="theme_green" id="theme_green">Green Theme)</option>
+                                        <option value="theme_blue" id="theme_blue">Blue Theme</option>
+                                        <option value="theme_retro" id="theme_retro">Retro green</option>
+                                        <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
+                                    </select><br> -->
+                                    <button id="theme_button" onclick="themeSwitcher()">
+                                        Change Theme
+                                    </button><br><br>
+                                </label>
                             </div>
                         </div>
                         <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p>
@@ -539,24 +559,7 @@
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
-            <!-- Themes -->
-            <label for="theme_dropdown">
-                Themes (Work In Progress)<br>
-                <!-- <select name="theme_dropdown" id="theme_dropdown">
-                    <option value="theme_dark" id="theme_dark">Dark Theme</option>
-                    <option value="theme_light" id="theme_light">Light Theme</option>
-                    <option value="theme_oled" id="theme_oled">OLED Dark</option>
-                    <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
-                    <option value="theme_red" id="theme_red">Red Theme</option>
-                    <option value="theme_green" id="theme_green">Green Theme)</option>
-                    <option value="theme_blue" id="theme_blue">Blue Theme</option>
-                    <option value="theme_retro" id="theme_retro">Retro green</option>
-                    <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
-                </select><br> -->
-                <button id="theme_button" onclick="themeSwitcher()">
-                    Change Theme
-                </button><br><br>
-            </label>
+
 
             <!-- Fun Tip Percentage-->
             <div class="slidecontainer">
