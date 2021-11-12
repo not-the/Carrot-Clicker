@@ -383,7 +383,7 @@ const achievements = {
     '1_million_carrots': {
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
-        'image': false,
+        'image': './assets/achievements/1_million_carrots.png',
         'reward': 'function:confetti',
         'conditions': ['player.lifetime.carrots', 1000000],
         'mystery': {
@@ -396,7 +396,7 @@ const achievements = {
     '1_billion_carrots': {
         'name': 'Boomer Bill Gates',
         'desc': 'Earn your 1 billionth carrot',
-        'image': false,
+        'image': './assets/achievements/boomer_bill_gates.png',
         'reward': 'function:confetti',
         'conditions': ['player.lifetime.carrots', 1000000000],
         'mystery': {
@@ -406,18 +406,73 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1_trillion_carrots': {
+        'name': 'Trillionare',
+        'desc': 'Earn your 1 trillionth carrot. Phew!',
+        'image': false,
+        'reward': 'function:confetti',
+        'conditions': ['player.lifetime.carrots', 1000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+
+    // Misc
+    '9000_cpc': {
+        'name': 'There\'s a Joke Here Somewhere',
+        'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
+        'image': './assets/achievements/9000.png',
+        'reward': false,
+        'conditions': ['player.cpc', 9000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '1000_cps': {
+        'name': 'Time is Hungry',
+        'desc': 'Produce 1000 carrots every second',
+        'image': false,
+        'reward': false,
+        'conditions': ['player.cps', 100000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '100000_cps': {
+        'name': 'Six Figures',
+        'desc': 'Get your Carrots Per Second above 100,000',
+        'image': false,
+        'reward': false,
+        'conditions': ['player.cps', 100000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
 
     // Golden Carrots
     '1_prestige': {
         'name': 'Prestigious',
         'desc': 'Prestige for the first time',
-        'image': './assets/achievements/prestige.png',
+        'image': './assets/achievements/prestige_once.gif',
         'reward': false,
         'conditions': ['player.lifetime.prestige_count', 1],
         'mystery': {
             'name': true,
             'desc': false,
-            'image': false,
+            'image': true,
             'noToast': false,
         }
     },
@@ -436,7 +491,7 @@ const achievements = {
     },
     // Character usage
     'upgrade_all_characters_once': {
-        'name': '3 heads are better than one',
+        'name': '3 Heads Are Better Than One',
         'desc': 'Upgrade every (upgradeable) character at least once',
         'image': './assets/achievements/3_heads.png',
         'reward': ['theme:theme_red', 'theme:theme_green', 'theme:theme_blue'],
@@ -445,6 +500,19 @@ const achievements = {
             ['Gregory.lvl',          1],
             ['Belle_Boomerette.lvl', 1],
         ],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'bill_lvl_10': {
+        'name': 'Here\s the Bill',
+        'desc': 'Upgrade Bill 10 times',
+        'image': false,
+        'reward': 'function:doNothing',
+        'conditions': ['Boomer_Bill.lvl', 10],
         'mystery': {
             'name': true,
             'desc': false,
@@ -468,7 +536,7 @@ const achievements = {
     'greg_lvl_64': {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Greg 64 Times',
-        'image': './assets/tools/diamond_hoe.png',
+        'image': './assets/achievements/pixel_block.png',
         'reward': 'theme:theme_blockgame',
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
@@ -482,7 +550,7 @@ const achievements = {
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/characters/Charles.png',
-        'reward': false,
+        'reward': 'function:doNothing',
         'conditions': ['ex_charlesUses()', 1],
         'mystery': {
             'name': true,
@@ -509,7 +577,7 @@ const achievements = {
         'name': 'Olympic Clicking Games',
         'desc': 'Click 16 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
-        'reward': false,
+        'reward': 'function:doNothing',
         'conditions': ['player.clickSpeedRecord', 16],
         'mystery': {
             'name': true,
@@ -522,7 +590,7 @@ const achievements = {
         'name': 'I am Seed',
         'desc': 'Click 21 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
-        'reward': false,
+        'reward': 'function:doNothing',
         'conditions': ['player.clickSpeedRecord', 21],
         'mystery': {
             'name': true,
@@ -538,12 +606,12 @@ const achievements = {
         'desc': 'Tutorial milestone',
         'image': './assets/tools/wood_hoe.png',
         'reward': 'function:tutorialHoes',
-        'conditions': ['Gregory.Hoes[0]', 1],
+        'conditions': ['player.lifetime.hoes.craftedTotal', 1],
         'mystery': {
             'name': false,
             'desc': false,
             'image': true,
-            'noToast': true,
+            'noToast': false,
         }
     },
     '1_netherite_hoe': {
@@ -551,7 +619,7 @@ const achievements = {
         'desc': 'Netherite',
         'image': './assets/tools/netherite_hoe.png',
         'reward': 'cosmetic:netherite_hoe',
-        'conditions': ['Gregory.Hoes[5]', 1],
+        'conditions': ['player.lifetime.hoes.crafted[5]', 1],
         'mystery': {
             'name': true,
             'desc': true,
@@ -601,10 +669,10 @@ function evaluateConditions(key, achievement) {
             multifulfilled++;
 
             if(multicondition == true && multiamount == multifulfilled) {
-                console.log('Multicondition: ' + multifulfilled + ' / ' + multiamount);
+                // console.log('Multicondition: ' + multifulfilled + ' / ' + multiamount);
                 grantAchievement(key);
             } else if(multicondition == false) {
-                console.log(`${key}: not multi - ${multifulfilled} / ${multiamount}`);
+                // console.log(`${key}: not multi - ${multifulfilled} / ${multiamount}`);
                 grantAchievement(key);
             }
         }
@@ -656,12 +724,17 @@ function giveReward(reward) {
 
 // Grant Achievement (Takes in object key)
 function grantAchievement(key) {
+    console.log('grant: ' + key);
     let achieve = achievements[key];
 
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
     if(achieve.mystery.noToast !== true) {
-        toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
+        // Normal toast
+        // toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
+
+        // New toast
+        toast('', '', '', false, key);
     }
 
     // Add achievement to player.achievements
@@ -725,6 +798,15 @@ function isUnlocked(testfor) {
 
 
 // External achievement checks
+// After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
+function doNothing() {
+    // Temporary fix because I can't figure out an achievement related bug
+    console.log('doNothing runs');
+}
+function tutorialHoes() {
+    // store('tutorial_first_hoe', "done");
+    toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
+}
 // use_charles
 function ex_charlesUses() {
     let value = 0;
@@ -922,14 +1004,6 @@ function onLoad() {
         store("tutorial_sample", "done");
         toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
     }
-
-    // After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
-    function tutorialHoes() {
-        store('tutorial_first_hoe', "done");
-        toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
-    }
-
-
 
 
 

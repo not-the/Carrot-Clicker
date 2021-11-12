@@ -1,4 +1,25 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.5.1
+    11-11-2021
+// ----------------------------------------------------------- //
+
+Achievements:
+- More achievements now have pixel art
+- Added some achievements
+- Tweaked some achievements
+- Achievement notifications have been overhauled, no longer uses a generic toast notification
+  + These still need some work
+
+Random:
+- Added crafted hoes to statistics
+- Edited the player object once again so that it can keep track of lifetime hoes crafted
+  + if you run into issues with the statistics menu you will need to reset your game
+- Switched over some usage of .innerHTML to eInnerHTML()
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.5.0
     11-10-2021
 // ----------------------------------------------------------- //

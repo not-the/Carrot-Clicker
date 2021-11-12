@@ -435,6 +435,25 @@ select {
     filter: brightness(125%);
 }
 
+/* Achievement toast */
+.toast.achievement_item {
+    width: 400px;
+    padding: 0;
+    border-color: goldenrod;
+    border-radius: 10px !important;
+    max-width: 100%;
+    margin-bottom: 0;
+}
+.toast.achievement_item .achievement_details {
+    box-shadow: none;
+}
+.toast.achievement_item .rewards_list {
+    display: unset;
+}
+.toast.achievement_item .reward:not(:last-of-type) {
+    border-bottom: 1px solid var(--brown-darkest-color);
+}
+
 /* Fancy Theme Switcher */
 #theme_menu {
     width: 100%;
@@ -1023,7 +1042,7 @@ body:not(.theme_light) .theme_checkmark {
     padding: 8px;
     margin-right: 16px;
     
-    border-radius: 10px;
+    border-radius: 16px;
 }
 .achievement_locked .achievement_img {
     opacity: 0.7;

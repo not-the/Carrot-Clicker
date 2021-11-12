@@ -139,7 +139,9 @@ const player1 = {
         prestige_count: 0,
         hoes: {
             crafted: [0, 0, 0, 0, 0, 0],
+            craftedTotal: 0,
             equipped: [0, 0, 0, 0, 0, 0],
+            equippedTotal: 0,
         },
     },
 
@@ -507,7 +509,11 @@ function CreateHoe(type=0,amount=1) {
                 }
 
             }
-        } 
+        }
+
+        // Statistics
+        player.lifetime.hoes.crafted[type] += amount;
+        player.lifetime.hoes.craftedTotal += amount;
     }
 }
 
@@ -749,18 +755,28 @@ const elStatistics = dom('statistics');
 const statLoading = elStatistics.innerHTML;
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
-    elStatistics.innerHTML =
+    eInnerHTML(elStatistics, 
     `<h3>Lifetime:</h3>
     Carrots earned: <b>${DisplayRounded(player.lifetime.carrots)}</b><br/>
     Golden Carrots earned: <b>${DisplayRounded(player.lifetime.golden_carrots)}</b><br/>
     Prestiges: <b>${DisplayRounded(player.lifetime.prestige_count)}</b><br/><br/>
+
+    <b><u>Hoes crafted</u></b><br/>
+    Total:  <b>${player.lifetime.hoes.craftedTotal}</b><br/>
+    Wooden: <b>${player.lifetime.hoes.crafted[0]}</b><br/>
+    Stone:  <b>${player.lifetime.hoes.crafted[1]}</b><br/>
+    Iron:   <b>${player.lifetime.hoes.crafted[2]}</b><br/>
+    Golden: <b>${player.lifetime.hoes.crafted[3]}</b><br/>
+    Diamond: <b>${player.lifetime.hoes.crafted[4]}</b><br/>
+    Netherite: <b>${player.lifetime.hoes.crafted[5]}</b><br/>
+    <br/>
 
     Clicks per second (Best): <b>${player.clickSpeedRecord}</b><br/><br/>
 
     Themes:       ${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}<br/>
     Cosmetics:    ${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}<br/><br/>
 
-    Achievements: ${Object.keys(player.achievements).length}/${Object.keys(achievements).length}<br/>`;
+    Achievements: ${Object.keys(player.achievements).length}/${Object.keys(achievements).length}<br/>`);
 }
 
 // Refresh statistics

@@ -156,16 +156,49 @@ function closeDialog(doAction, backdrop = false) {
 // Create Toast notification
 // For the COLOR parameter, options are:
 // gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt" 
-function toast(title, desc, color, persistent) {
+function toast(title, desc, color, persistent, achievement) {
     // Create element with parameters filled in
     var toastElement = document.createElement("div");
     toastElement.id = `toast${toastID}`;
-    toastElement.innerHTML =
-    `<div class="toast background_${color}">
-        <h3>${title}</h3>
+
+    // Normal toast
+    if(!achievement) {
+        toastElement.innerHTML =
+        `<div class="toast background_${color}">
+            <h3>${title}</h3>
+            <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+            <p>${desc}</p>
+        </div>`;
+    }
+    // Achievement toast
+    else {
+        let achieve = achievements[achievement];
+        let rewardHTMLstring = '';
+
+        if(achieve.reward != false) {
+            rewardHTMLstring =
+            `<div class="rewards_list">
+                ${ rewardHTML(achieve) } }
+            </div>
+            `;
+        }
+
+        toastElement.innerHTML =
+        `<div class="toast achievement_item">
+        <!-- Close button -->
         <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-        <p>${desc}</p>
+        <!-- Details -->
+        <div class="achievement_details flex">
+            <img src="${achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
+            <div>
+                <h2>${achieve.name}</h2>
+                <p class="secondary_text">${achieve.desc}</p>
+            </div>
+        </div>
+        ${rewardHTMLstring}
     </div>`;
+    }
+
     toastContainer.prepend(toastElement);
 
     let id = toastID;
@@ -188,7 +221,9 @@ function toast(title, desc, color, persistent) {
         setTimeout(() => {
             // console.log("Timeout runs: " + toastID);
             closeToast(id);
-        }, store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000
+        }, achievement ?
+        store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 2000 :
+        store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000
         );
     }
 }
@@ -652,7 +687,7 @@ function populateAchievements() {
         //#endregion
 
         // Rewards info
-        if(achieve.reward !== false && unlocked == true) {
+        if(achieve.reward != false && unlocked == true) {
             let inner = '';
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
@@ -700,6 +735,8 @@ function populateAchievements() {
                     </div>
                 </div>
                 `;
+            } else {
+                console.log('Function award: ' + achieve.reward);
             }
             
             rewardHTML =
@@ -753,6 +790,69 @@ function populateAchievements() {
 
     elAchievementsList.innerHTML = achievementHTML;
     // eInnerHTML(elAchievementsList, achievementHTML);
+}
+
+function rewardHTML(achieve) {
+    // Rewards info
+    if(achieve.reward != false) {
+        let rewardHTML = '';
+        let inner = '';
+        // Multiple rewards
+        if(Array.isArray(achieve.reward) == true) {
+            for(let i = 0; i < achieve.reward.length; i++) {
+                let rewardType = achieve.reward[i].split(':')[0];
+                let rewardName = achieve.reward[i].split(':')[1];
+                if(rewardType == 'function') continue;
+
+                let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+
+                inner += 
+                `
+                <div class="reward flex">
+                    <img src="${icon}" alt="${informalName}" class="reward_img">
+                    <div>
+                        <h4>${informalName}</h4>
+                        <p class="secondary_text">
+                            ${capitalizeFL(rewardType)}
+                        </p>
+                    </div>
+                </div>
+                `;
+            }
+            console.log(achieve);
+            console.log(inner);
+        }
+
+        // Single reward
+        else if(achieve.reward.split(':')[0] != 'function') {
+            let rewardType = achieve.reward.split(':')[0];
+            let rewardName = achieve.reward.split(':')[1];
+
+            let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+            let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+
+            inner = 
+            `<div class="reward flex">
+                <img src="${icon}" alt="${informalName}" class="reward_img">
+                <div>
+                    <h4>${informalName}</h4>
+                    <p class="secondary_text">
+                        ${capitalizeFL(rewardType)}
+                    </p>
+                </div>
+            </div>
+            `;
+        }
+        
+        rewardHTML =
+        `<!-- Rewards -->
+        <div class="rewards_list">
+            ${inner}
+        </div>`;
+
+        return rewardHTML;
+    }
 }
 
 function achievementProgress() {
