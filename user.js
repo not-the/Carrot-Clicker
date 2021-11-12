@@ -533,6 +533,32 @@ const achievements = {
             'noToast': false,
         }
     },
+    'belle_lvl_15': {
+        'name': 'Saved by the Belle',
+        'desc': 'Upgrade Belle 15 times',
+        'image': './assets/achievements/bill_pointer.png',
+        'reward': false,
+        'conditions': ['Belle_Boomerette.lvl', 15],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'greg_lvl_20': {
+        'name': 'The Gregs of Defeat',
+        'desc': 'Upgrade Gregory 20 times',
+        'image': './assets/achievements/bill_pointer.png',
+        'reward': false,
+        'conditions': ['Gregory.lvl', 15],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     'greg_lvl_64': {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Greg 64 Times',
