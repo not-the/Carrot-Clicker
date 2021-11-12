@@ -367,19 +367,6 @@ const achievements = {
             'noToast': false,
         }
     },
-    '1989_carrots': {
-        'name': 'Retro',
-        'desc': 'Earn 1989 carrots',
-        'image': './assets/theme/theme_retro.png',
-        'reward': 'theme:theme_retro',
-        'conditions': ['player.lifetime.carrots', 1989],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
     '1_million_carrots': {
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
@@ -448,7 +435,7 @@ const achievements = {
         }
     },
     '100000_cps': {
-        'name': 'Six Figures',
+        'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
         'image': false,
         'reward': false,
@@ -482,6 +469,19 @@ const achievements = {
         'image': './assets/achievements/golden.png',
         'reward': ['cosmetic:golden_carrot', 'function:confetti'],
         'conditions': ['player.lifetime.golden_carrots', 50],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '1989_golden_carrots': {
+        'name': 'Retro',
+        'desc': 'Earn 1989 golden carrots',
+        'image': './assets/theme/theme_retro.png',
+        'reward': 'theme:theme_retro',
+        'conditions': ['player.lifetime.golden_carrots', 1989],
         'mystery': {
             'name': true,
             'desc': false,
