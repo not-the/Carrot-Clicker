@@ -355,7 +355,7 @@ function popupHandler(useMousePos = true) {
         bonusID = 0;
     }
 }
-
+//#endregion
 /* ----- Fancy Theme Switcher ----- */
 function themeSwitcher() {
     themeSwitcherOpen = true;
