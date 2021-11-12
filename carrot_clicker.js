@@ -273,10 +273,10 @@ function clickSpeedHandler(clicked = false) {
 
 // Carrots per second
 function CarrotsPerSecond() {
-    player.Carrots += player.cps;
+    player.Carrots += player.cps/20;
     carrotCount();
 }
-var cpsInterval = setInterval(CarrotsPerSecond,1000);
+var cpsInterval = setInterval(CarrotsPerSecond,50);
 
 
 
@@ -298,7 +298,7 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
 
         }
         if(character==Belle_Boomerette){
-            multibuyPrice(0.1);
+            multibuyPrice(0.09);
         }
         if(character==Boomer_Bill){
             multibuyPrice(0.102);
@@ -308,10 +308,10 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     if(mode=="apply"){
         if(amount==1){
             if(character==Gregory){
-                multibuyPrice(0.19);
+                multibuyPrice(0.18);
             }
             if(character==Belle_Boomerette){
-                multibuyPrice(0.1);
+                multibuyPrice(0.09);
             }
             if(character==Boomer_Bill){
                 multibuyPrice(0.102);
@@ -340,7 +340,7 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 // Prestige
 function Prestige() {
-    if(player.prestige_potential <= 1) {
+    if(prestige_potential <= 1) {
         toast('Insufficient prestige potential', 'Try playing the game some more and then try again', 'red')
         return;
     }
@@ -349,8 +349,8 @@ function Prestige() {
     clearInterval(cpsInterval);
 
     // Give golden carrots
-    player.golden_carrots += player.prestige_potential;
-    player.lifetime.golden_carrots += player.prestige_potential;
+    player.golden_carrots += prestige_potential;
+    player.lifetime.golden_carrots += prestige_potential;
     player.lifetime.prestige_count += 1;
 
     // Reset characters to default
@@ -394,7 +394,12 @@ function IncreaseImproveWorkingConditions(){
         );
         return;
     }
-    Charles.ImproveWorkingConditionsPrice=Math.ceil(Charles.ImproveWorkingConditionsPrice*1.03);
+    if(Charles.ImproveWorkingConditionsPrice*1.02==Charles.ImproveWorkingConditionsPrice){
+        Charles.ImproveWorkingConditionsPrice=Math.ceil(Charles.ImproveWorkingConditionsPrice*1.02);
+    }else{
+            Charles.ImproveWorkingConditionsPrice=Math.floor(Charles.ImproveWorkingConditionsPrice*1.02);
+    }
+
     player.golden_carrots-=Charles.ImproveWorkingConditionsPrice;
     Charles.ImproveWorkingConditions+=1;
 }
@@ -714,10 +719,9 @@ setInterval(() => {
     }
 
     //The Prestige Potential
-    let l = 0.02*(Boomer_Bill.lvl + Belle_Boomerette.lvl + Gregory.lvl);
-    let h = 0.01*((Boomer_Bill.Hoes[0])+(2*Boomer_Bill.Hoes[1])+(3*Boomer_Bill.Hoes[2])+(4*Boomer_Bill.Hoes[3])+(5*Boomer_Bill.Hoes[4])+(6*Boomer_Bill.Hoes[5])+(Belle_Boomerette.Hoes[0])+(2*Belle_Boomerette.Hoes[1])+(3*Belle_Boomerette.Hoes[2])+(4*Belle_Boomerette.Hoes[3])+(5*Belle_Boomerette.Hoes[4])+(6*Belle_Boomerette.Hoes[5])+(Gregory.Hoes[0])+(2*Gregory.Hoes[1])+(3*Gregory.Hoes[2])+(4*Gregory.Hoes[3])+(5*Gregory.Hoes[4])+(6*Gregory.Hoes[5]));
-    player.prestige_potential=Math.floor(l+h);
-    eInnerText(prestige_info, DisplayRounded(player.prestige_potential,2));
+    let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
+    prestige_potential=Math.pow(0.0000001*player.Carrots,0.233)*(1+(achieve_percent/100));
+    eInnerText(prestige_info, DisplayRounded(prestige_potential,2));
 
     // Greg's Hoe Prices
     eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`);
@@ -727,7 +731,7 @@ setInterval(() => {
     eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`);
     eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`);
 
-    if(player.lifetime.golden_carrots>0 || player.prestige_potential>=1){
+    if(player.lifetime.golden_carrots>0 || prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
     }
     //Charles Upgrades
@@ -807,7 +811,7 @@ const default_tips = {
         "Each character can only hold up to 1 hoe for every level Greg has reached"
     ],
     advanced: [
-        "When you're ready, click the prestige button. You will start over but gain a permanent boost", // I swear I wrote a tip for prestiging already, did it get deleted?
+        "When you're ready, click the prestige button. You will start over but gain a permanent boost", 
         "Golden carrots increase your characters by 10%"
     ],
 
