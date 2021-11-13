@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrot Clicker dev beta v1.5.2</title>
+    <title id="page_title">Carrot Clicker dev beta v1.5.4</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -59,7 +59,7 @@
                 <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
                 <!-- Title -->
                 <h2 class="theme_menu_title">Themes</h2>
-                <p class="theme_menu_title">Description</p>
+                <p class="theme_menu_title">A new coat of paint</p>
             </div>
         
 
@@ -70,7 +70,7 @@
                     <img src="./assets/Carrot Clicker.png" alt="" class="theme_preview" onclick="setTheme('theme_dark')" id="theme_dark">
                     <div>
                         <h3>Error - if you're seeing this, please let us know.</h3>
-                        <p>You may have to delete your save for themes to work. Description goes here. Or does it? Yes, it does.</p>
+                        <p>You may have to delete your save for themes to work.</p>
                     </div>
                     <div class="theme_checkbox">
                         <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark">
@@ -79,10 +79,85 @@
             </div>
 
         </div>
-        <!--Fancy Cosmect Changer-->
-        <div id="cosmetic_switcher" class="popup_box">
-            <h4>Kal Do This Thxs :)</h4>
+
+        <!-- Fancy Cosmetic Switcher -->
+        <div id="cosmetic_menu" class="popup_box">
+            <div>
+                <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
+                <!-- Title -->
+                <h2 class="theme_menu_title">Cosmetics</h2>
+                <p class="theme_menu_title">Switch it up</p>
+            </div>
+        
+
+            <!-- Theme items -->
+            <div id="cosmetics_list">
+                <!-- Javascript will do all the work -->
+                <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+            </div>
         </div>
+
+        <!-- Credits scroll -->
+        <div id="credits" class="center">
+            <h1>Credits</h1>
+
+            Original Concept:
+            not-the
+
+            Gameplay concept:
+            JJCVIP
+
+            Game balance:
+            JJCVIP
+
+
+
+            Easier to read credits because it's just 2 people:
+
+            not-the (https://github.com/not-the):
+
+            General page layout/CSS
+            Original concept
+            UI Code
+            Notifications (toasts) system
+            Achievements system
+            Theme & cosmetics systems
+            Achievement, theme, and cosmetic icons and descriptions/"Flavortext"
+            Sound & music code
+            Statistics
+            Tips
+            Character descriptions
+            Visual design
+            General code cleanup
+
+
+            JJCVIP (https://github.com/JJCVIP)
+
+            Main game code
+            Game balance and math
+            Gameplay concepts
+            Game/universe lore
+            Character art/designs
+            Iconography
+            Save file system
+            Music & Sound effects
+            Statistics
+            Tips
+            Achievement concepts & balance
+            Hoes system
+            Prestige system
+
+
+            Additional Thanks:
+            - W3Schools
+            
+
+
+
+            <h1>Carrot Clicker</h1>
+        </div>
+
+        
     </div>
     <!-- #endregion -->
  
@@ -142,15 +217,49 @@
 
         <!-- Status bar -->
         <div class="Basic_Info flex"> 
-            <p id="Basic_Info"><b>Carrot Clicker</b> - <a href="https://github.com/JJCVIP/Carrot-Clicker">Github</a> - <b id="multibuy" class="link_styling" onclick="multibuySpin()">1x</b><p>
+            <p id="Basic_Info"><b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" onclick="multibuySpin()">1x</b><p>
             <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click The Carrot</div>
+
+            <div id="info_dropdown">
+                <!-- <svg height="20" width="25">
+                    <polygon points="0,0 25,0 12.5,10" style="fill:white;" />
+                </svg> -->
+                ▼
+                <div class="hover_menu">
+                    <!-- Settings -->
+                    <a href="#settings-panel" onclick="panelChange(`settings-panel`)">
+                        <div class="menu_item link_styling secondary_text">
+                            <img src="./assets/iconography/settings.svg" alt="" class="dropdown_img invert">
+                            Settings
+                        </div>
+                    </a>
+
+                    <!-- View credits -->
+                    <a>
+                        <div class="menu_item link_styling secondary_text">
+                            <img src="./assets/blank.png" alt="" class="dropdown_img">
+                            Credits (Coming soon)
+                        </div>
+                    </a>
+
+                    <!-- Github -->
+                    <a href="https://github.com/JJCVIP/Carrot-Clicker" target="_blank" rel="noopener noreferrer">
+                        <div class="menu_item link_styling secondary_text">
+                            <img src="./assets/iconography/github.png" alt="" class="dropdown_img">
+                            Github
+                            <img src="./assets/iconography/external.png" alt="(External)" class="dropdown_img right_img">
+                        </div>
+                    </a>
+
+                </div>
+            </div>
         </div>
 
         <!-- Progress bar -->
-        <div class="status_progress_bar">
+        <div id="main_progress_container" class="status_progress_bar">
+            <!-- Image -->
+            <img src="./assets/tools/wood_hoe.png" alt="" id="main_progress_image" class="main_progress_image">
             <div id="main_progress" class="status_progress">
-                <!-- Image -->
-                <img src="./assets/tools/wood_hoe.png" alt="" id="main_progress_image" class="main_progress_image">
                 <!-- Progress -->
                 <div id="main_progress_bar" class="progress" style="width: 50%"></div>
             </div>
@@ -308,7 +417,7 @@
                 <!--Gregory Rendering-->
                 <div class="Greg characterbox">
                     <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                        Upgrade Greg To Create and Store Hoes.
+                        Upgrade Greg to create and store hoes.
                     </div>
                     <!-- Top -->
                     <div class="top flex">
@@ -401,20 +510,23 @@
                         <!-- Charles' buttons -->
                         <button
                         onclick="IncreaseImproveWorkingConditions()"
-                        id="ImproveWorkingConditions"
+                        id="ImproveWorkingConditions_button"
                         class="unbold">
+                        Improve working conditions: <span id="ImproveWorkingConditions">---</span>
                         </button>
                         
                         <button
                         onclick="IncreaseBetterHoes()"
-                        id="BetterHoes"
+                        id="BetterHoes_button"
                         class="unbold">
+                            Improve hoe costs: <span id="BetterHoes">---</span>
                         </button>
 
                         <button
                         onclick="IncreaseDecreaseWages()"
-                        id="DecreaseWages"
+                        id="DecreaseWages_button"
                         class="unbold">
+                        Decrease worker wages: <span id="DecreaseWages">---</span>
                         </button>
 
                     </div>
@@ -430,10 +542,10 @@
                     <div class="top flex">
                         <img
                             src="./assets/characters/Carl.png"
-                            alt="carl"
+                            alt="Carl"
                             id="carl_avatar"
                             class="characterimg"
-                            title="carl">
+                            title="Carl">
                         <div class="characterdesc">
                             <b id="carl_name" class="underline">Carl</b>
                             <p class="secondary_text">&gt; IN DEVELOPMENT &lt;<br>Purchase Cosmetics</p>
@@ -442,35 +554,29 @@
 
                     <!-- Bottom -->
                     <div class="bottom" id="cosmetic_shop">
+                        <div class="flex">
+                            <!-- Themes -->
+                            <button id="carl_theme_button" class="half_width" onclick="themeSwitcher()">
+                                Change Theme
+                            </button>
+                            <button id="carl_cosmetic_button" class="half_width" onclick="themeSwitcher()">
+                                Change Cosmetic
+                            </button><br>
+
+                        </div>
 
 
                         <!-- Shop item -->
                         <div class="shop_item">
                             <div class="flex">
-                                <div>
-                                    Cosmetics(WIP)
-                                    <button id="theme_button" onclick="themeSwitcher()">
-                                        Change Cosmetics
-                                    </button>
+                                <img src="./assets/theme/theme_classic.png" alt="" class="shop_img">
+                                <div class="info">
+                                    <b class="underline">Carrot Clicker Classic</b>
+                                    <p class="secondary_text">Theme</p>
                                 </div>
-                                <!-- Themes -->
-                                <label for="theme_dropdown">
-                                    Themes (Work In Progress)<br>
-                                    <!-- <select name="theme_dropdown" id="theme_dropdown">
-                                        <option value="theme_dark" id="theme_dark">Dark Theme</option>
-                                        <option value="theme_light" id="theme_light">Light Theme</option>
-                                        <option value="theme_oled" id="theme_oled">OLED Dark</option>
-                                        <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
-                                        <option value="theme_red" id="theme_red">Red Theme</option>
-                                        <option value="theme_green" id="theme_green">Green Theme)</option>
-                                        <option value="theme_blue" id="theme_blue">Blue Theme</option>
-                                        <option value="theme_retro" id="theme_retro">Retro green</option>
-                                        <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
-                                    </select><br> -->
-                                    <button id="theme_button" onclick="themeSwitcher()">
-                                        Change Theme
-                                    </button><br><br>
-                                </label>
+                            </div>
+                            <div class="shop_price">
+                                1 Golden Carrot
                             </div>
                         </div>
                         <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p>
@@ -559,7 +665,24 @@
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
-
+            <!-- Themes -->
+            <label for="theme_dropdown">
+                Themes<br>
+                <!-- <select name="theme_dropdown" id="theme_dropdown">
+                    <option value="theme_dark" id="theme_dark">Dark Theme</option>
+                    <option value="theme_light" id="theme_light">Light Theme</option>
+                    <option value="theme_oled" id="theme_oled">OLED Dark</option>
+                    <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
+                    <option value="theme_red" id="theme_red">Red Theme</option>
+                    <option value="theme_green" id="theme_green">Green Theme)</option>
+                    <option value="theme_blue" id="theme_blue">Blue Theme</option>
+                    <option value="theme_retro" id="theme_retro">Retro green</option>
+                    <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
+                </select><br> -->
+                <button id="theme_button" onclick="themeSwitcher()">
+                    Change Theme
+                </button><br><br>
+            </label>
 
             <!-- Fun Tip Percentage-->
             <div class="slidecontainer">
@@ -576,6 +699,13 @@
                 Disable keybinds
             </label><br><br>
             <!-- <button id="edit_keybinds" disabled>Edit keybinds</button><br><br> -->
+
+            <!-- Disable main progress bar -->
+            <b>Interface:</b><br>
+            <label for="enable_main_progress">
+                <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
+                    Always-on-top progress bar
+            </label><br><br>
 
             <!-- Sounds options -->
             <b>Sounds:</b><br>
@@ -653,10 +783,11 @@
             
 
             <!-- Notification Length -->
-            <label for="notificationLength">Time until notifications disappear (In seconds)<br>
-            <input type="number" id="notificationLength" value="5">
-            <button onclick="saveOption('notificationLength')">Save</button>
-            <button onclick="resetOption()">Reset</button>
+            <label for="notificationLength">Time until notifications disappear (In seconds):<br>
+                <p class="secondary_text">Note: Achievements will use double this number</p>
+                <input type="number" id="notificationLength" value="5"/>
+                <button onclick="saveOption('notificationLength')">Save</button>
+                <button onclick="resetOption()">Reset</button>
             </label><br><br>
             
             <!-- Options item -->

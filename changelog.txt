@@ -1,7 +1,33 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.5.4
+    11-12-2021
+// ----------------------------------------------------------- //
+
+- Cleaned up HTML and reverted a couple changes
+  + Theme switcher is available from Carl but it's also in settings
+- General tweaks/improvements
+- Carl's theme/cosmetic buttons look a little cleaner
+- // Charles' buttons now have icons and are consistent with Carl's shop items
+- Prestige potential now only shows down to the tenths place
+- Restored the tri-panel's tab buttons to their intended CSS (more or less)
+- When Greg is crafting there will also be a progress bar at the top of the page
+  + This can be disabled in settings
+- Added a dropdown menu to the status bar
+
+Achievement toasts:
+- Fixed issue where toasts would appear farther than the left than they should if an achievement toast was also on the screen
+- Fixed issue where they would cover other toasts below them
+- Fixed issue where they would have a } and extra gray space at the bottom
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.5.3
     11-12-2021
 // ----------------------------------------------------------- //
+
 -Prestige change(complicated Equation Here
 -added a Carl.png
 -changed name 'Six Figure Income'
@@ -9,6 +35,7 @@
 -Moved theme Changer to Carl
 
 ~JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.5.2

@@ -178,7 +178,7 @@ function toast(title, desc, color, persistent, achievement) {
         if(achieve.reward != false) {
             rewardHTMLstring =
             `<div class="rewards_list">
-                ${ rewardHTML(achieve) } }
+                ${ rewardHTML(achieve) }
             </div>
             `;
         }
@@ -668,6 +668,7 @@ function populateAchievements() {
 
         if(dom('achievement_filter').value == 'unlocked' && unlocked == false) continue;
         if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
+        if(achieve.mystery.list == true && unlocked == false) continue;
 
         let img = achieve.image != false ? achieve.image : './assets/achievements/locked.png';
 
@@ -856,9 +857,10 @@ function rewardHTML(achieve) {
 }
 
 function achievementProgress() {
+    let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
         dom('achievement_progress'),
-        `${Object.keys(player.achievements).length}/${Object.keys(achievements).length} (${Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length))}%)`
+        `${unlockedAchievements.length}/${achievementsKeys.length} (${Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length))}%)`
     );
 }
 
@@ -895,6 +897,14 @@ function setTheme(theme) {
     themeSwitcherCheckmark(theme, from);
 }
 //#endregion
+
+
+
+
+// Title changer
+// setInterval(() => {
+//     dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.Carrots)} carrots`;
+// }, 15000);
 
 
 

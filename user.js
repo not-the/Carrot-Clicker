@@ -61,7 +61,22 @@ function settingDisableKeybinds() {
     }
 }
 
-// Enable music
+// Interface settings
+const elEnableMainProgress = dom('enable_main_progress');
+function settingMainProgress() {
+    let state = elEnableMainProgress.value;
+    console.log(`enableMainProgress set to ${state}`);
+    toast("Settings", `Status bar progress is now ${state == true ? 'enabled' : 'disabled'}`);
+
+    // localStorage
+    if(state == true) {
+        store('enableMainProgress', 'true');
+    } else {
+        store('enableMainProgress', 'false');
+    }
+
+    elMainProgressContainer.classList.remove('status_tidbit_in');
+}
 
 
 // Enable sounds
@@ -394,7 +409,7 @@ const achievements = {
         }
     },
     '1_trillion_carrots': {
-        'name': 'Trillionare',
+        'name': 'A World Fed',
         'desc': 'Earn your 1 trillionth carrot. Phew!',
         'image': false,
         'reward': 'function:confetti',
@@ -417,7 +432,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': false,
+            'image': true,
             'noToast': false,
         }
     },
@@ -536,7 +551,7 @@ const achievements = {
     'belle_lvl_15': {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': false,
         'reward': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
@@ -549,7 +564,7 @@ const achievements = {
     'greg_lvl_20': {
         'name': 'The Gregs of Defeat',
         'desc': 'Upgrade Gregory 20 times',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': false,
         'reward': false,
         'conditions': ['Gregory.lvl', 15],
         'mystery': {
@@ -628,8 +643,8 @@ const achievements = {
 
     // Tutorial
     'first_hoe': {
-        'name': 'First Hoe',
-        'desc': 'Tutorial milestone',
+        'name': 'The Tools to Victory',
+        'desc': 'Craft your first hoe (Tutorial milestone)',
         'image': './assets/tools/wood_hoe.png',
         'reward': 'function:tutorialHoes',
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
@@ -652,6 +667,22 @@ const achievements = {
             'image': true,
             'noToast': false,
         }
+    },
+
+    // Secret Achievements
+    'not_funny': {
+        'name': 'Not Funny',
+        'desc': 'Get all 3 characters to level 69 (Hidden achievement)',
+        'image': false,
+        'reward': 'function:confetti',
+        'conditions': ['ex_notFunny', 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
     }
 }
 const achievementsKeys = Object.keys(achievements);
@@ -666,6 +697,9 @@ setInterval(() => {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
+
+        // Skip if already unlocked
+        if(achieveQuery(key) == true) continue;
 
         // console.log(achievement.name);
         evaluateConditions(key, achievement);
@@ -848,6 +882,13 @@ function ex_charlesUses() {
     return value;
 }
 
+// Not funny
+function ex_notFunny() {
+    console.log('ex_notFunny() runs');
+    if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
+    return 0;
+}
+
 // Unlock on page load
 // for(i = 0; i < player.unlockables.length; i++) {
 //     console.log(player[unlockables][i]);
@@ -858,6 +899,7 @@ function ex_charlesUses() {
 // Runs on startup, after JS is loaded
 function onLoad() {
     console.log('Running onLoad()');
+    
     // Start music
     playMusic('music.m4a');
 
@@ -1013,6 +1055,12 @@ function onLoad() {
         populateAchievements();
     }
     achievementProgress();
+
+    // Automute in URL
+    if(location.hash == '#automute') {
+        elEnableSounds.checked = false;
+        settingSounds();
+    }
     
 
 

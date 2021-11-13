@@ -22,6 +22,7 @@
     --main-popup-color: #353535;
     --darker-bg-color:  #1f1d1d;
     --border-color:     #4b4747;
+    --highlight-color:  #5a5858;
 
     /* Text */
     --secondary-text: rgb(196, 196, 196);
@@ -94,7 +95,7 @@ body {
     color: white;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
 }
 
 p {margin: 0;}
@@ -102,6 +103,7 @@ a {color: rgb(137, 184, 255);}
 a:hover {filter: brightness(120%);}
 
 .flex {display: flex;}
+.half_width {width: 50% !important;}
 /* .fixed {
     position: fixed;
     top: 0;
@@ -118,6 +120,7 @@ img {
     touch-action: manipulation;
 
     image-rendering: pixelated;
+    object-fit: cover;
 }
 #container {
     justify-content: center;
@@ -172,6 +175,7 @@ select {
 }
 .link_styling:hover {
     text-decoration: underline;
+    color: white;
 }
 .popup_box {
     background: var(--main-popup-color);
@@ -367,9 +371,11 @@ select {
 .toast {
     width: 300px;
 }
-.toast, #toasts_clear {
+.toast,
+#toasts_clear {
     margin: 16px;
     margin-top: 0;
+    margin-left: auto;
     padding: 12px 16px;
     background: var(--main-popup-color);
     border: 2px solid gray;
@@ -442,7 +448,7 @@ select {
     padding: 0;
     border-color: goldenrod;
     border-radius: 10px !important;
-    margin-bottom: 0;
+    margin-bottom: 16px;
 }
 .toast.achievement_item .achievement_details {
     box-shadow: none;
@@ -579,8 +585,73 @@ body:not(.theme_light) .theme_checkmark {
     border-bottom: 1px solid var(--border-color);
     width: 100%;
 
+    z-index: 99;
+
     padding: 8px 20px;
+    padding-right: 50px;
 }
+
+/* Dropdown */
+#info_dropdown {
+    cursor: pointer;
+    padding: 10px 16px 0 16px;
+    height: 36px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+#info_dropdown:hover {
+    background-color: var(--highlight-color);
+}
+#info_dropdown svg {
+    max-height: 36px;
+}
+.hover_menu {
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 0;
+    visibility: hidden;
+
+    background-color: var(--lighter-bg-color);
+    border: 1px solid var(--border-color);
+    border-top: none;
+
+    min-width: 240px;
+}
+#info_dropdown:hover .hover_menu {
+    visibility: visible;
+}
+.menu_item {
+    padding: 8px 12px 8px 36px;
+    position: relative;
+}
+.hover_menu a {
+    text-decoration: none;
+    color: white;
+}
+.menu_item:hover {background-color: var(--highlight-color);}
+.dropdown_img {
+    image-rendering: unset;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    
+    opacity: 0.6;
+
+    width: 20px;
+}
+.menu_item:hover .dropdown_img {
+    opacity: 1;
+}
+
+.right_img {
+    left: unset;
+    right: 8px;
+}
+.invert {filter: invert();}
+
+
 .status_progress_bar {
     width: 100%;
     max-width: 400px;
@@ -592,20 +663,41 @@ body:not(.theme_light) .theme_checkmark {
     border-radius: 0 0 10px 10px;
 
     margin: 0 auto;
+    position: relative;
+    z-index: 98;
 
     /* Hidden by default */
     visibility: hidden;
+
+    /* animation: main_progress_bar 0.25s forwards reverse ease-out; */
+}
+.status_tidbit_in {
+    visibility: visible !important;
+    animation: main_progress_bar 0.25s forwards ease-out;
+}
+@keyframes main_progress_bar {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
 }
 .main_progress_image {
-    float: left;
-    margin-right: 24px;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 24px;
 }
 .status_progress {
     height: 10px;
+    width: calc(100% - 24px);
+    margin-left: auto;
     background-color: gray;
 }
 #Tip {
     margin-left: auto;
+    white-space: pre;
 }
 .Carrot_Count {
     font-size: 20pt;
@@ -756,7 +848,7 @@ body:not(.theme_light) .theme_checkmark {
     height: 64px;
     width: 64px;
     image-rendering: pixelated;
-    border-top-left-radius: 10px;
+    border-top-left-radius: 9px;
 }
 /* Tools/upgrades */
 .levelupimg, .toolicon {
@@ -849,7 +941,10 @@ body:not(.theme_light) .theme_checkmark {
 /* Charles */
 .Charles button {
     width: calc(100% - 10px);
-    margin: 5px;
+}
+.Charles .bottom,
+.carl .bottom {
+    padding: 5px;
 }
 
 /* Carl */
@@ -858,7 +953,6 @@ body:not(.theme_light) .theme_checkmark {
     display: none;
 } */
 .shop_item {
-    margin: 5px;
     padding: 5px;
     border-radius: 5px;
     background: var(--lighter-bg-color);
@@ -964,10 +1058,12 @@ body:not(.theme_light) .theme_checkmark {
     border: none;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
+    margin-top: 0;
 }
 
 .tab:hover {
     transform: translateY(-2px);
+    box-shadow: none;
 }
 #notifs-section nav .activetab {
     background-color: var(--brown-bg-color);
@@ -975,16 +1071,13 @@ body:not(.theme_light) .theme_checkmark {
     border-bottom: none;
 }
 .inactivetab:hover {
-    filter: brightness(120%);
-}
-.activetab#info-tab-button {
-    background-color: teal;
+    filter: brightness(120%)
 }
 
 /* Info panel */
 .panel {
     position: absolute;
-    height: 662px;
+    height: 667px;
     width: 100%;
     padding: 0px 24px 16px;
 
@@ -1034,7 +1127,8 @@ body:not(.theme_light) .theme_checkmark {
 
 .achievement_item {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 .achievement_item .achievement_img {
     height: 100px;
@@ -1063,7 +1157,6 @@ body:not(.theme_light) .theme_checkmark {
 }
 .achievement_item:last-child {
     border-radius: 0 0 10px 10px;
-    overflow: hidden;
 }
 .rewards_list {
     background-color: var(--brown-darker-color);
@@ -1158,6 +1251,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     .Basic_Info {
         flex-direction: column;
         text-align: center;
+        padding-right: 20px;
     }
     #Tip {
         margin-left: unset;
@@ -1200,5 +1294,10 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 @media only screen and (max-width: 400px) {
     #right-section {
         width: 100%;
+    }
+    .status_progress_bar {
+        border-radius: 0;
+        border-right: none;
+        border-left: none;
     }
 }

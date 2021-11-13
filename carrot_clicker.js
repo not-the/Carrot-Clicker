@@ -93,6 +93,8 @@ const elHoePrices = {
     diamond:    dom("diamond_hoe_price"),
     netherite:  dom("netherite_hoe_price")
 };
+const elMainProgressContainer = dom('main_progress_container');
+const elMainProgressBar = dom('main_progress_bar');
 const elGregProgress = dom("Greg_Progress");
 const elCharles = {
     improveWorkingConditions: dom("ImproveWorkingConditions"),
@@ -489,6 +491,8 @@ function CreateHoe(type=0,amount=1) {
         toast("Too Expensive!", "That hoe is currently too expensive.");
         return;
     }
+
+    // Craft hoe
     if(n==0){
         n=1; 
         HoeCost(type,amount,"apply"); 
@@ -498,6 +502,7 @@ function CreateHoe(type=0,amount=1) {
             i = 1;
             var p = 0;
             var id = setInterval(frame,100);
+            elMainProgressContainer.classList.add('status_tidbit_in');
             function frame() {
                 if (p >= price) {
                     clearInterval(id);
@@ -505,12 +510,23 @@ function CreateHoe(type=0,amount=1) {
                     player.Carrots+=p-price;
                     p=0;
                     elGregProgress.style.width = 0 + "%";
+                    if(store('enableMainProgress') !== 'false') {
+                        elMainProgressBar.style.width = 0 + "%";
+                        elMainProgressContainer.classList.remove('status_tidbit_in');
+                    }
+
                     Gregory.Hoes[type]+=amount;
                     n=0;
                 } else {
                     p+=(0.01*player.Carrots);
                     player.Carrots-=(0.01*player.Carrots);
-                    elGregProgress.style.width = 100*(p/price) + "%";
+
+                    // Progress bar
+                    if(store('enableMainProgress') !== 'false') {
+                        elGregProgress.style.width = `${100*(p/price)}%`;
+                        elMainProgressBar.style.width  = `${100*(p/price)}%`;
+                    }
+
                 }
 
             }
@@ -721,7 +737,7 @@ setInterval(() => {
     //The Prestige Potential
     let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
     prestige_potential=Math.pow(0.0000001*player.Carrots,0.233)*(1+(achieve_percent/100));
-    eInnerText(prestige_info, DisplayRounded(prestige_potential,2));
+    eInnerText(prestige_info, DisplayRounded(prestige_potential.toFixed(1),2));
 
     // Greg's Hoe Prices
     eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`);
@@ -735,17 +751,9 @@ setInterval(() => {
         dom("prestige-section").style.visibility="visible";
     }
     //Charles Upgrades
-    elCharles.improveWorkingConditions.innerHTML =
-       `Improve Working Conditions
-       Costs: ${Charles.ImproveWorkingConditionsPrice} Golden Carrots`;
-
-    elCharles.betterHoes.innerHTML =
-       `Improve all Hoes
-       Costs: ${Charles.BetterHoesPrice} Golden Carrots`;
-
-    elCharles.decreaseWages.innerHTML =
-      `Decrease Worker Wages
-      Costs: ${Charles.DecreaseWagesPrice} Golden Carrots`;
+    elCharles.improveWorkingConditions.innerHTML = `${Charles.ImproveWorkingConditionsPrice} Golden Carrots`;
+    elCharles.betterHoes.innerHTML = `${Charles.BetterHoesPrice} Golden Carrots`;
+    elCharles.decreaseWages.innerHTML = `${Charles.DecreaseWagesPrice} Golden Carrots`;
 
     elCharles.charlesTooltip.innerHTML =
        `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
@@ -840,6 +848,175 @@ const default_tips = {
         "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
         "Carrots are people too",
         "Carrots have been proven to improve eyesight by 9000%. It's true!"
+    ],
+    cheater: [
+`We're no strangers to love
+You know the rules and so do I
+A full commitment's what I'm thinking of
+You wouldn't get this from any other guy
+I just wanna tell you how I'm feeling
+Gotta make you understand
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye
+Never gonna tell a lie and hurt you
+We've known each other for so long
+Your heart's been aching but you're too shy to say it
+Inside we both know what's been going on
+We know the game and we're gonna play it
+And if you ask me how I'm feeling
+Don't tell me you're too blind to see
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye
+Never gonna tell a lie and hurt you
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye
+Never gonna tell a lie and hurt you
+Never gonna give, never gonna give
+(Give you up)
+We've known each other for so long
+Your heart's been aching but you're too shy to say it
+Inside we both know what's been going on
+We know the game and we're gonna play it
+I just wanna tell you how I'm feeling
+Gotta make you understand
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye
+Never gonna tell a lie and hurt you
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye
+Never gonna tell a lie and hurt you
+Never gonna give you up
+Never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry
+Never gonna say goodbye`,
+`Somebody once told me the world is gonna roll me
+I ain't the sharpest tool in the shed
+She was looking kind of dumb with her finger and her thumb
+In the shape of an "L" on her forehead
+Well the years start coming and they don't stop coming
+Fed to the rules and I hit the ground running
+Didn't make sense not to live for fun
+Your brain gets smart but your head gets dumb
+So much to do, so much to see
+So what's wrong with taking the back streets?
+You'll never know if you don't go
+You'll never shine if you don't glow
+Hey now, you're an all-star, get your game on, go play
+Hey now, you're a rock star, get the show on, get paid
+And all that glitters is gold
+Only shooting stars break the mold
+It's a cool place and they say it gets colder
+You're bundled up now, wait 'til you get older
+But the meteor men beg to differ
+Judging by the hole in the satellite picture
+The ice we skate is getting pretty thin
+The water's getting warm so you might as well swim
+My world's on fire, how about yours?
+That's the way I like it and I'll never get bored
+Hey now, you're an all-star, get your game on, go play
+Hey now, you're a rock star, get the show on, get paid
+All that glitters is gold
+Only shooting stars break the mold
+Hey now, you're an all-star, get your game on, go play
+Hey now, you're a rock star, get the show, on get paid
+And all that glitters is gold
+Only shooting stars
+Somebody once asked could I spare some change for gas?
+I need to get myself away from this place
+I said, "Yup" what a concept
+I could use a little fuel myself
+And we could all use a little change
+Well, the years start coming and they don't stop coming
+Fed to the rules and I hit the ground running
+Didn't make sense not to live for fun
+Your brain gets smart but your head gets dumb
+So much to do, so much to see
+So what's wrong with taking the back streets?
+You'll never know if you don't go (go!)
+You'll never shine if you don't glow
+Hey now, you're an all-star, get your game on, go play
+Hey now, you're a rock star, get the show on, get paid
+And all that glitters is gold
+Only shooting stars break the mold
+And all that glitters is gold
+Only shooting stars break the mold`,
+`Incoming ROFLCOPTER!
+
+ROFL:ROFL:ROFL:ROFL
+        ___^___ _
+L    __/      [] \    
+LOL===__           \ 
+L      \___ ___ ___]
+            I   I
+        ----------/`,
+`My ROFLCopter goes soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi `,
+`⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌
+⠀⠀⠀⠟⠝⠈⠀⠀⠀⠡⠀⠠⢈⠠⢐⢠⢂⢔⣐⢄⡂⢔⠀⡁⢉⠸⢨⢑⠕⡌
+⠀⠀⡀⠁⠀⠀⠀⡀⢂⠡⠈⡔⣕⢮⣳⢯⣿⣻⣟⣯⣯⢷⣫⣆⡂⠀⠀⢐⠑⡌
+⢀⠠⠐⠈⠀⢀⢂⠢⡂⠕⡁⣝⢮⣳⢽⡽⣾⣻⣿⣯⡯⣟⣞⢾⢜⢆⠀⡀⠀⠪
+⣬⠂⠀⠀⢀⢂⢪⠨⢂⠥⣺⡪⣗⢗⣽⢽⡯⣿⣽⣷⢿⡽⡾⡽⣝⢎⠀⠀⠀⢡
+⣿⠀⠀⠀⢂⠢⢂⢥⢱⡹⣪⢞⡵⣻⡪⡯⡯⣟⡾⣿⣻⡽⣯⡻⣪⠧⠑⠀⠁⢐
+⣿⠀⠀⠀⠢⢑⠠⠑⠕⡝⡎⡗⡝⡎⣞⢽⡹⣕⢯⢻⠹⡹⢚⠝⡷⡽⡨⠀⠀⢔
+⣿⡯⠀⢈⠈⢄⠂⠂⠐⠀⠌⠠⢑⠱⡱⡱⡑⢔⠁⠀⡀⠐⠐⠐⡡⡹⣪⠀⠀⢘
+⣿⣽⠀⡀⡊⠀⠐⠨⠈⡁⠂⢈⠠⡱⡽⣷⡑⠁⠠⠑⠀⢉⢇⣤⢘⣪⢽⠀⢌⢎
+⣿⢾⠀⢌⠌⠀⡁⠢⠂⠐⡀⠀⢀⢳⢽⣽⡺⣨⢄⣑⢉⢃⢭⡲⣕⡭⣹⠠⢐⢗
+⣿⡗⠀⠢⠡⡱⡸⣔⢵⢱⢸⠈⠀⡪⣳⣳⢹⢜⡵⣱⢱⡱⣳⡹⣵⣻⢔⢅⢬⡷
+⣷⡇⡂⠡⡑⢕⢕⠕⡑⠡⢂⢊⢐⢕⡝⡮⡧⡳⣝⢴⡐⣁⠃⡫⡒⣕⢏⡮⣷⡟
+⣷⣻⣅⠑⢌⠢⠁⢐⠠⠑⡐⠐⠌⡪⠮⡫⠪⡪⡪⣺⢸⠰⠡⠠⠐⢱⠨⡪⡪⡰
+⣯⢷⣟⣇⡂⡂⡌⡀⠀⠁⡂⠅⠂⠀⡑⡄⢇⠇⢝⡨⡠⡁⢐⠠⢀⢪⡐⡜⡪⡊
+⣿⢽⡾⢹⡄⠕⡅⢇⠂⠑⣴⡬⣬⣬⣆⢮⣦⣷⣵⣷⡗⢃⢮⠱⡸⢰⢱⢸⢨⢌
+⣯⢯⣟⠸⣳⡅⠜⠔⡌⡐⠈⠻⠟⣿⢿⣿⣿⠿⡻⣃⠢⣱⡳⡱⡩⢢⠣⡃⠢⠁
+⡯⣟⣞⡇⡿⣽⡪⡘⡰⠨⢐⢀⠢⢢⢄⢤⣰⠼⡾⢕⢕⡵⣝⠎⢌⢪⠪⡘⡌⠀
+⡯⣳⠯⠚⢊⠡⡂⢂⠨⠊⠔⡑⠬⡸⣘⢬⢪⣪⡺⡼⣕⢯⢞⢕⢝⠎⢻⢼⣀⠀
+⠁⡂⠔⡁⡢⠣⢀⠢⠀⠅⠱⡐⡱⡘⡔⡕⡕⣲⡹⣎⡮⡏⡑⢜⢼⡱⢩⣗⣯⣟
+⢀⢂⢑⠀⡂⡃⠅⠊⢄⢑⠠⠑⢕⢕⢝⢮⢺⢕⢟⢮⢊⢢⢱⢄⠃⣇⣞⢞⣞⢾
+⢀⠢⡑⡀⢂⢊⠠⠁⡂⡐⠀⠅⡈⠪⠪⠪⠣⠫⠑⡁⢔⠕⣜⣜⢦⡰⡎⡯⡾⡽`,
+`⠀⠀⠘⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀⠀ ⠀⠀⠀
+⠑⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⠁⠀⠀⠀ ⠀⠀⠀⠀
+ ⠈⠢⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠴⠊⠀⠀⠀⠀⠀ ⠀⠀
+⠀⠀ ⠀ ⠀⠀⢸⠀⠀⠀⢀⣀⣀⣀⣀⣀⡀⠤⠄⠒⠈⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⠀
+⠀⠀⠀⠀  ⠀⠘⣀⠄⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠛⠋⠉⠈⠉⠉⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠉⠛⢿⣿⣿⣿⣿
+⣿⣿⣿⣿⡏⣀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣄⡀⠀⠀⠀  ⠀⠀ ⠀⠀⠙⢿⣿⣿
+⣿⣿⣿⢏⣴⣿⣷⠀⠀⠀⠀⠀⢾⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀ ⠀  ⠀⠀⠀⠈⣿⣿
+⣿⣿⣟⣾⣿⡟⠁⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣷⢢⠀⠀⠀⠀   ⠀⠀⠀⢸⣿ 
+⣿⣿⣿⣿⣟⠀⡴⠄⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀   ⠀⠀⣿ 
+⣿⣿⣿⠟⠻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠶⢴⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀   ⠀⣿ 
+⣿⣁⡀⠀⠀⢰⢠⣦⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣿⡄⠀⣴⣶⣿⡄⣿ 
+⣿⡋⠀⠀⠀⠎⢸⣿⡆⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠗⢘⣿⣟⠛⠿⣼ 
+⣿⣿⠋⢀⡌⢰⣿⡿⢿⡀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣧⢀⣼ 
+⣿⣿⣷⢻⠄⠘⠛⠋⠛⠃⠀⠀⠀⠀⠀⢿⣧⠈⠉⠙⠛⠋⠀⠀⠀⣿⣿⣿⣿⣿ 
+⣿⣿⣧⠀⠈⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠟⠀⠀⠀⠀⢀⢃⠀⠀⢸⣿⣿⣿⣿ 
+⣿⣿⡿⠀⠴⢗⣠⣤⣴⡶⠶⠖⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡸⠀⣿⣿⣿⣿ 
+⣿⣿⣿⡀⢠⣾⣿⠏⠀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠉⠀⣿⣿⣿⣿ 
+⣿⣿⣿⣧⠈⢹⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿ 
+⣿⣿⣿⣿⡄⠈⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣿⣦⣄⣀⣀⣀⣀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠙⣿⣿⡟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠁⠀⠀⠹⣿⠃⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢐⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⣿⣿⣿⣿⠿⠛⠉⠉⠁⠀⢻⣿⡇⠀⠀⠀⠀⠀⠀⢀⠈⣿⣿⡿⠉⠛⠛⠛⠉⠉ 
+⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀,`
     ]
 }
 const tips= localStorage.getObject("tips");
