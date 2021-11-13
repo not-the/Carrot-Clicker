@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.5.3
+    11-12-2021
+// ----------------------------------------------------------- //
+-Prestige change(complicated Equation Here
+-added a Carl.png
+-changed name 'Six Figure Income'
+-Changed Critera 'retro' to golden Carrots
+-Moved theme Changer to Carl
+
+~JJ
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.5.2
     11-12-2021
 // ----------------------------------------------------------- //
