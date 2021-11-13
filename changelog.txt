@@ -4,7 +4,7 @@
 // ----------------------------------------------------------- //
 
 - Cleaned up HTML and reverted a couple changes
-  + Theme switcher is available from Carl but it's also in settings
+  + Theme switcher is available through Carl but it's also in settings
 - General tweaks/improvements
 - Carl's theme/cosmetic buttons look a little cleaner
 - // Charles' buttons now have icons and are consistent with Carl's shop items
@@ -13,12 +13,15 @@
 - When Greg is crafting there will also be a progress bar at the top of the page
   + This can be disabled in settings
 - Added a dropdown menu to the status bar
+- The page title will now display your carrot count and updates every 15 seconds (this is currently disabled because I want to play with it)
+- If #automute is added to the URL the game will disable sounds automatically (mostly for me having to delete save data over and over)
+  + Example: https://jjcvip.github.io/Carrot-Clicker/#automute
 
-Achievement toasts:
+Achievements:
 - Fixed issue where toasts would appear farther than the left than they should if an achievement toast was also on the screen
-- Fixed issue where they would cover other toasts below them
-- Fixed issue where they would have a } and extra gray space at the bottom
-
+- Fixed issue where toasts would cover other toasts below them
+- Fixed issue where toasts would have a } and extra gray space at the bottom
+- Added support for "secret" achievements that don't appear in the list at all, and in the future won't count your achievement progress
 
 ~ Kal
 
