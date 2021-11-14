@@ -485,10 +485,10 @@ function HoeCost(type=0,amount=1,mode="query"){
 
 function CreateHoe(type=0,amount=1) {
     // Greg unlock check
-    if(characterQuery(characterString('greg')) == false) {
-        toast('Nice try', 'That character hasn\'t been unlocked yet.');
-        return;
-    }
+    // if(characterQuery(characterString('greg')) == false) {
+    //    toast('Nice try', 'That character hasn\'t been unlocked yet.');
+    //    return;
+    // }
 
     // Return if a hoe is already in progress
     if(n==1){
