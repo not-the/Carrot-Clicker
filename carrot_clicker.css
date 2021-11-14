@@ -647,6 +647,7 @@ body:not(.theme_light) .theme_checkmark {
 .menu_item {
     padding: 8px 12px 8px 36px;
     position: relative;
+    text-align: left;
 }
 .hover_menu a {
     text-decoration: none;
