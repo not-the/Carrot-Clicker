@@ -576,10 +576,10 @@ function CreateHoe(type=0,amount=1) {
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill, type=0, amount){
     // Greg unlock check
-    if(characterQuery(characterString('greg')) == false) {
-        toast('Nice try', 'That character hasn\'t been unlocked yet.');
-        return;
-    }
+    // if(characterQuery(characterString('greg')) == false) {
+    //     toast('Nice try', 'That character hasn\'t been unlocked yet.');
+    //     return;
+    // }
 
     if(Gregory.Hoes[type]>=amount){
         if(character.Hoes[type]+amount-1>=Gregory.lvl) {
