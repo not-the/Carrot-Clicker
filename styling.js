@@ -19,6 +19,7 @@ var bonusID =      0;
 
 var dialogOpen = false;
 var themeSwitcherOpen = false;
+var cosmeticSwitcherOpen = false;
 
 // Dialog button action
 var dialogButtonAction = 'none';
@@ -38,6 +39,9 @@ const elDialog = {
 const toastContainer =  dom("toast_container");
 const toastsClear =     dom("toasts_clear");
 const themeMenu =       dom("theme_menu");
+const cosmeticMenu =    dom('cosmetic_menu');
+const themesList = dom('themes_list');
+const cosmeticsList = dom('cosmetics_list');
 //#endregion
 
 
@@ -150,13 +154,20 @@ function closeDialog(doAction, backdrop = false) {
     // Hide Theme Switcher
     themeMenu.classList.remove('visible');
     themeSwitcherOpen = false;
+    cosmeticMenu.classList.remove('visible');
+    cosmeticSwitcherOpen = false;
 }
 
 
 // Create Toast notification
 // For the COLOR parameter, options are:
-// gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt" 
-function toast(title, desc, color, persistent, achievement) {
+// gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt"
+function toast(title, desc, color, persistent, replaceable, achievement) {
+    // Replace old if replace is true
+    if(toastsList[toastID - 1] == 'replace') {
+        closeToast(toastID - 1);
+    }
+
     // Create element with parameters filled in
     var toastElement = document.createElement("div");
     toastElement.id = `toast${toastID}`;
@@ -202,7 +213,7 @@ function toast(title, desc, color, persistent, achievement) {
     toastContainer.prepend(toastElement);
 
     let id = toastID;
-    toastsList[toastID] = id;
+    toastsList[toastID] = replaceable == true ? 'replace' : id;
 
     // Increase Toast ID
     activeToasts++;
@@ -218,12 +229,13 @@ function toast(title, desc, color, persistent, achievement) {
     }
 
     if(!persistent) {
+        let timeout = store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000;
+        if(achievement == true ) timeout *= 2;
+
         setTimeout(() => {
             // console.log("Timeout runs: " + toastID);
             closeToast(id);
-        }, achievement ?
-        store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 2000 :
-        store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000
+        }, timeout
         );
     }
 }
@@ -236,12 +248,22 @@ function closeToast(id) {
     element = dom(`toast${id}`);
     
     // Dismiss Animation
-    if(element !== null) {element.classList.add("toast_out");}
+    if(toastsList[id] !== 'replace' && element !== null) {
+        element.classList.add("toast_out");
+    }
     
     // Delete Element after animation is done
-    setTimeout(() => {
-        if(element !== null) {element.remove();}
-    }, 300);
+    if(element !== null) {
+        if(toastsList[id] !== 'replace') {
+            element.remove();
+        } else {
+            setTimeout(() => {
+                element.remove();
+            }, 300);
+        }
+    }
+
+
 
     // Clear all button
     if(activeToasts <= 2) {
@@ -251,7 +273,7 @@ function closeToast(id) {
 
 function clearToasts() {
     for(entry in toastsList) {
-        console.log(entry);
+        // console.log(entry);
         closeToast(entry);
     }
 }
@@ -364,10 +386,21 @@ function themeSwitcher() {
 
     buttonSound();
 }
-// themeSwitcher();
-
 function closeThemeSwitcher() {
     themeMenu.classList.remove('visible');
+    overlay.classList.remove("visible");
+}
+
+/* ----- Fancy Cosmetic Switcher ----- */
+function cosmeticSwitcher() {
+    cosmeticSwitcherOpen = true;
+    cosmeticMenu.classList.add('visible');
+    overlay.classList.add("visible");
+
+    buttonSound();
+}
+function closeThemeSwitcher() {
+    cosmeticMenu.classList.remove('visible');
     overlay.classList.remove("visible");
 }
 
@@ -380,6 +413,7 @@ const cosmetics = {
     'default': {
         'image': './assets/Carrot Clicker.png',
         'name': 'Carrot',
+        'desc': 'Good old carrots',
 
         'bill_image':    './assets/characters/Boomer_Bill.png',
         'belle_image':   './assets/characters/BelleBommerette.png',
@@ -396,7 +430,24 @@ const cosmetics = {
     // Golden Carrot
     'golden_carrot': {
         'image': './assets/golden carrot.png',
-        'name': 'Golden Carrot'
+        'name': 'Golden Carrot',
+    },
+    'cookie': {
+        'image': './assets/theme/cookie/cookie.png',
+        'name': 'Cookie',
+        'desc': '',
+
+        'bill_image':    './assets/theme/cookie/baker_bill.png',
+        'belle_image':   './assets/theme/cookie/grandma_belle.png',
+        'greg_image':    './assets/characters/Gregory.png',
+        'charles_image': './assets/characters/Charles.png',
+        'carl_image':    './assets/characters/Carl.png',
+
+        'bill_name':    'Baker Bill',
+        'belle_name':   'Grandma Belle',
+        'greg_name':    'Greg',
+        'charles_name': 'Charles',
+        'carl_name':    'Carl',
     },
     // Minecraft
     'blockgame': {
@@ -442,6 +493,9 @@ const cosmetics = {
         'name': 'Cursor'
     },
 }
+const cosmeticsKeys = Object.keys(cosmetics);
+
+// Page elements
 const farmableNames = [
     dom('cc_name'),
     dom('cpc_name'),
@@ -466,6 +520,8 @@ const characterNames = {
     // ...
 }
 function setCosmetic(set, resetState = false) {
+    var from = store('cosmetic');
+
     // Reset to default first
     if(resetState == false && set !== 'default') {setCosmetic('default', true);}
     console.log('Switching to cosmetic: ' + set);
@@ -505,6 +561,9 @@ function setCosmetic(set, resetState = false) {
     }
 
     store('cosmetic', set);
+
+    // Fancy Switcher fix
+    themeSwitcherCheckmark(set, from);
 }
 //#endregion
 
@@ -526,8 +585,6 @@ function setCosmetic(set, resetState = false) {
 //         this.cosmetic = cosmetic;
 //     }
 // }
-
-const themesList = dom('themes_list');
 
 // Theme data
 const themes = {
@@ -605,7 +662,7 @@ function populateThemeList() {
         let theme = themes[key];
   
         // Test if unlocked
-        if(isUnlocked(key) == false) {
+        if(isUnlocked('theme', key) == false) {
             // console.log(key + ' is not unlocked!');
             stillLocked++;
             continue;
@@ -650,6 +707,64 @@ function themeSwitcherCheckmark(theme, from = false) {
     // Check new
     if(!elTheme) return;
     elTheme.classList.remove('opacity0');
+}
+
+/* Populate cosmetics */
+// Populate theme switcher list on page load
+function populateCosmeticsList() {
+    var cosmeticHTML = '';
+    var stillLocked = 0;
+
+    for(let i = 0; i < cosmeticsKeys.length; i++) {
+        let key = cosmeticsKeys[i];
+        let cosmetic = cosmetics[key];
+  
+        // Test if unlocked
+        if(isUnlocked('cosmetic', key) == false) {
+            // console.log(key + ' is not unlocked!');
+            stillLocked++;
+            continue;
+        }
+
+        let imgsrc = cosmetic.image !== false ? cosmetic.image : './assets/Carrot Clicker.png'
+    
+        cosmeticHTML += /* html */
+        `
+        <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${key}')">
+            <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
+            <div>
+                <h3>${cosmetic.name}</h3>
+                <p>${cosmetic.desc}</p>
+            </div>
+            <div class="theme_checkbox">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="cosmetic_${key + '_checkmark'}">
+            </div>
+        </div>
+        `;
+    }
+
+    if(stillLocked > 0) {
+        cosmeticHTML += /* html */
+        `<br><center><i>${stillLocked} cosmetics have not been unlocked</i></center>`;
+    } else {
+        cosmeticHTML += /* html */
+        `<br><center><p>You've unlocked every cosmetic!</p></center>`;
+    }
+
+    cosmeticsList.innerHTML = cosmeticHTML;
+}
+
+// Theme switcher checkmark fix
+function cosmeticSwitcherCheckmark(cosmetic, from = false) {
+    var elCosmetic = dom(`cosmetic_${cosmetic}_checkmark`);
+
+    // Uncheck previous
+    if(from == false || !dom(`cosmetic_${from}_checkmark`)) return;
+    dom(`cosmetic_${from}_checkmark`).classList.add('opacity0');
+
+    // Check new
+    if(!elCosmetic) return;
+    elCosmetic.classList.remove('opacity0');
 }
 
 // Populate achievements list
@@ -697,8 +812,34 @@ function populateAchievements() {
                     let rewardName = achieve.reward[i].split(':')[1];
                     if(rewardType == 'function') continue;
     
-                    let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                    let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                    let informalName;
+                    let icon;
+    
+                    // Get reward info
+                    if(rewardType == 'theme' || rewardType == 'cosmetic') {
+                        informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                        icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                    } else if(rewardType == 'character') {
+                        informalName = capitalizeFL(rewardName);
+                        // Get image
+                        switch(rewardName) {
+                            case 'bill':
+                                icon = './assets/characters/Boomer_Bill.png'
+                                break;
+                            case 'belle':
+                                icon = './assets/characters/BelleBommerette.png'
+                                break;
+                            case 'greg':
+                                icon = './assets/characters/Gregory.png'
+                                break;
+                            case 'charles':
+                                icon = './assets/characters/Charles.png'
+                                break;
+                            case 'carl':
+                                icon = './assets/characters/Carl.png'
+                                break;
+                        }
+                    }
 
                     inner += 
                     `
@@ -713,17 +854,43 @@ function populateAchievements() {
                     </div>
                     `;
                 }
-                console.log(achieve);
-                console.log(inner);
+                // console.log(achieve);
+                // console.log(inner);
             }
 
             // Single reward
             else if(achieve.reward.split(':')[0] != 'function') {
                 let rewardType = achieve.reward.split(':')[0];
                 let rewardName = achieve.reward.split(':')[1];
+                let informalName;
+                let icon;
 
-                let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                // Get reward info
+                if(rewardType == 'theme' || rewardType == 'cosmetic') {
+                    informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                    icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                } else if(rewardType == 'character') {
+                    informalName = capitalizeFL(rewardName);
+                    // Get image
+                    switch(rewardName) {
+                        case 'bill':
+                            icon = './assets/characters/Boomer_Bill.png'
+                            break;
+                        case 'belle':
+                            icon = './assets/characters/BelleBommerette.png'
+                            break;
+                        case 'greg':
+                            icon = './assets/characters/Gregory.png'
+                            break;
+                        case 'charles':
+                            icon = './assets/characters/Charles.png'
+                            break;
+                        case 'carl':
+                            icon = './assets/characters/Carl.png'
+                            break;
+                    }
+                }
+
 
                 inner = 
                 `<div class="reward flex">
@@ -736,8 +903,6 @@ function populateAchievements() {
                     </div>
                 </div>
                 `;
-            } else {
-                console.log('Function award: ' + achieve.reward);
             }
             
             rewardHTML =
@@ -746,9 +911,6 @@ function populateAchievements() {
                 ${inner}
             </div>`;
             inner = '';
-
-            console.log(achieve);
-            console.log(inner);
         }
 
         // Achievement info
@@ -805,8 +967,34 @@ function rewardHTML(achieve) {
                 let rewardName = achieve.reward[i].split(':')[1];
                 if(rewardType == 'function') continue;
 
-                let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                let informalName;
+                let icon;
+
+                // Get reward info
+                if(rewardType == 'theme' || rewardType == 'cosmetic') {
+                    informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                    icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                } else if(rewardType == 'character') {
+                    informalName = capitalizeFL(rewardName);
+                    // Get image
+                    switch(rewardName) {
+                        case 'bill':
+                            icon = './assets/characters/Boomer_Bill.png'
+                            break;
+                        case 'belle':
+                            icon = './assets/characters/BelleBommerette.png'
+                            break;
+                        case 'greg':
+                            icon = './assets/characters/Gregory.png'
+                            break;
+                        case 'charles':
+                            icon = './assets/characters/Charles.png'
+                            break;
+                        case 'carl':
+                            icon = './assets/characters/Carl.png'
+                            break;
+                    }
+                }
 
                 inner += 
                 `
@@ -821,8 +1009,6 @@ function rewardHTML(achieve) {
                 </div>
                 `;
             }
-            console.log(achieve);
-            console.log(inner);
         }
 
         // Single reward
@@ -830,8 +1016,34 @@ function rewardHTML(achieve) {
             let rewardType = achieve.reward.split(':')[0];
             let rewardName = achieve.reward.split(':')[1];
 
-            let informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-            let icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+            let informalName;
+            let icon;
+
+            // Get reward info
+            if(rewardType == 'theme' || rewardType == 'cosmetic') {
+                informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
+                icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+            } else if(rewardType == 'character') {
+                informalName = capitalizeFL(rewardName);
+                // Get image
+                switch(rewardName) {
+                    case 'bill':
+                        icon = './assets/characters/Boomer_Bill.png'
+                        break;
+                    case 'belle':
+                        icon = './assets/characters/BelleBommerette.png'
+                        break;
+                    case 'greg':
+                        icon = './assets/characters/Gregory.png'
+                        break;
+                    case 'charles':
+                        icon = './assets/characters/Charles.png'
+                        break;
+                    case 'carl':
+                        icon = './assets/characters/Carl.png'
+                        break;
+                }
+            }
 
             inner = 
             `<div class="reward flex">
@@ -866,7 +1078,7 @@ function achievementProgress() {
 
 elAchievementFilter.addEventListener('change', () => {populateAchievements()});
 
-
+var currentTheme;
 // Set theme
 function setTheme(theme) {
     // var theme = optionTheme.value;
@@ -877,13 +1089,13 @@ function setTheme(theme) {
     elBody.classList.add(theme);
 
     // Temporary cosmetic activator 
-    if(theme == 'theme_blockgame') {
-        setCosmetic('blockgame');
-    } else {
-        if(store('cosmetic') !== 'default') {
-            setCosmetic('default');
-        }
-    }
+    // if(theme == 'theme_blockgame') {
+    //     setCosmetic('blockgame');
+    // } else {
+    //     if(store('cosmetic') !== 'default') {
+    //         setCosmetic('default');
+    //     }
+    // }
 
     // Mobile accent color
     if(theme == 'theme_light') {theme_color = '#FFFFFF';}
@@ -892,6 +1104,7 @@ function setTheme(theme) {
 
     // Save to localStorage
     store('theme', theme);
+    currentTheme = theme;
 
     // Fancy Switcher fix
     themeSwitcherCheckmark(theme, from);

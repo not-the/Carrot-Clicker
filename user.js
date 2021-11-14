@@ -34,16 +34,19 @@ function saveOption() {
     if(value >= 2 && value <= 15) {
         console.log(`[Settings] Notification length set to: ${value}`);
         store("notificationLength", value);
-        toast("Notification time set", `Notifications will disappear after ${value} seconds`);
+        toast("Notification time set", `Notifications will disappear after ${value} seconds`,
+        '', false, true);
     } else {
-        toast("Invalid Number", "Must be between 2 and 15 seconds", "red");
+        toast("Invalid Number", "Must be between 2 and 15 seconds", "red",
+        '', false, true);
     }
 }
 // Reset notification time to default
 function resetOption() {
     notificationLength.value = 5;
     localStorage.removeItem("notificationLength");
-    toast("Notification time reset", `Notification will disappear after 5 seconds`);
+    toast("Notification time reset", `Notifications will disappear after 5 seconds`,
+    '', false, true);
 }
 
 // Disable keybinds setting
@@ -51,7 +54,8 @@ function resetOption() {
 function settingDisableKeybinds() {
     let state = elDisableKeybinds.checked;
     console.log(`disableKeybinds set to ${state}`);
-    toast("Settings", `Keybinds are now ${state == true ? 'disabled' : 'enabled'}`);
+    toast("Settings", `Keybinds are now ${state == true ? 'disabled' : 'enabled'}`,
+    '', false, true);
 
     // localStorage
     if(state == true) {
@@ -66,7 +70,8 @@ const elEnableMainProgress = dom('enable_main_progress');
 function settingMainProgress() {
     let state = elEnableMainProgress.value;
     console.log(`enableMainProgress set to ${state}`);
-    toast("Settings", `Status bar progress is now ${state == true ? 'enabled' : 'disabled'}`);
+    toast("Settings", `Status bar progress is now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
 
     // localStorage
     if(state == true) {
@@ -83,7 +88,8 @@ function settingMainProgress() {
 function settingSounds() {
     let state = elEnableSounds.checked;
     console.log(`enableSounds set to ${state}`);
-    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`);
+    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
 
     // localStorage
     if(state == true) {
@@ -113,7 +119,8 @@ function settingMusic(noToast = false) {
     let state = elEnableMusic.checked;
     console.log(`enableMusic set to ${state}`);
     if(noToast == false) {
-        toast("Settings", `Music is now ${state == true ? 'enabled' : 'disabled'}`);
+        toast("Settings", `Music is now ${state == true ? 'enabled' : 'disabled'}`,
+        '', false, true);
     }
 
     // localStorage
@@ -130,7 +137,8 @@ function settingMusic(noToast = false) {
 function settingCarrotSounds() {
     let state = elEnableCarrotSounds.checked;
     console.log(`enableCarrotSounds set to ${state}`);
-    toast("Settings", `Carrot sounds are now ${state == true ? 'enabled' : 'disabled'}`);
+    toast("Settings", `Carrot sounds are now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
 
     // localStorage
     if(state == true) {
@@ -382,11 +390,80 @@ const achievements = {
             'noToast': false,
         }
     },
+    'bill_lvl_2': {
+        'name': 'Two\'s Company',
+        'desc': 'Upgrade Bill and attract the attention of another farmer',
+        'image': './assets/achievements/bill_and_belle.png',
+        'reward': 'character:belle',
+        'conditions': ['Boomer_Bill.lvl', 2],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '5000_carrot': {
+        'name': 'Heavy Metal',
+        'desc': 'Earn enough carrots to get the attention of a blacksmith',
+        'image': './assets/achievements/unlock_greg.png',
+        'reward': 'character:greg',
+        'conditions': ['player.lifetime.carrots', 5000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '1_prestige': {
+        'name': 'Prestigious',
+        'desc': 'Prestige for the first time and attract the attention of the professor',
+        'image': './assets/achievements/prestige_once.gif',
+        'reward': 'character:charles',
+        'conditions': ['player.lifetime.prestige_count', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'own_a_theme': {
+        'name': 'Taking in the Themery',
+        'desc': 'Obtain a cosmetic! You\'ve gained the attention of an artist.',
+        'image': false,
+        'reward': 'character:carl',
+        'conditions': [
+            ['player.themes.length', 4],
+            ['player.cosmetics.length', 2],
+        ],
+        'condition_amount': 1,
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '401000_carrot': {
+        'name': 'Retirement Fund',
+        'desc': 'Earn 401k carrots. I don\'t think you know what a 401k is.',
+        'image': './assets/achievements/401k_carrots.png',
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 401000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     '1_million_carrots': {
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
         'image': './assets/achievements/1_million_carrots.png',
-        'reward': 'function:confetti',
+        'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000],
         'mystery': {
             'name': true,
@@ -399,7 +476,7 @@ const achievements = {
         'name': 'Boomer Bill Gates',
         'desc': 'Earn your 1 billionth carrot',
         'image': './assets/achievements/boomer_bill_gates.png',
-        'reward': 'function:confetti',
+        'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000000],
         'mystery': {
             'name': true,
@@ -412,8 +489,21 @@ const achievements = {
         'name': 'A World Fed',
         'desc': 'Earn your 1 trillionth carrot. Phew!',
         'image': false,
-        'reward': 'function:confetti',
+        'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_quadrillion_carrots': {
+        'name': 'quadrillion',
+        'desc': 'Earn your 1 quadrillionth carrot. What are we even going to do with this many?',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -445,7 +535,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': false,
+            'image': true,
             'noToast': false,
         }
     },
@@ -453,24 +543,8 @@ const achievements = {
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
         'image': false,
-        'reward': false,
+        'reward': 'character:charles',
         'conditions': ['player.cps', 100000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-
-
-    // Golden Carrots
-    '1_prestige': {
-        'name': 'Prestigious',
-        'desc': 'Prestige for the first time',
-        'image': './assets/achievements/prestige_once.gif',
-        'reward': false,
-        'conditions': ['player.lifetime.prestige_count', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -478,11 +552,14 @@ const achievements = {
             'noToast': false,
         }
     },
+
+
+    // Golden Carrots
     '50_golden_carrots': {
         'name': 'Golden',
-        'desc': 'Earn at least 50 golden carrots',
+        'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
-        'reward': ['cosmetic:golden_carrot', 'function:confetti'],
+        'reward': ['cosmetic:golden_carrot', 'function:confetti()'],
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {
             'name': true,
@@ -526,7 +603,7 @@ const achievements = {
         'name': 'Here\s the Bill',
         'desc': 'Upgrade Bill 10 times',
         'image': false,
-        'reward': 'function:doNothing',
+        'reward': 'function:doNothing()',
         'conditions': ['Boomer_Bill.lvl', 10],
         'mystery': {
             'name': true,
@@ -576,7 +653,7 @@ const achievements = {
     },
     'greg_lvl_64': {
         'name': 'Professional Crafter',
-        'desc': 'Upgrade Greg 64 Times',
+        'desc': 'Upgrade Gregory 64 Times',
         'image': './assets/achievements/pixel_block.png',
         'reward': 'theme:theme_blockgame',
         'conditions': ['Gregory.lvl', 64],
@@ -591,7 +668,7 @@ const achievements = {
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/characters/Charles.png',
-        'reward': 'function:doNothing',
+        'reward': 'function:doNothing()',
         'conditions': ['ex_charlesUses()', 1],
         'mystery': {
             'name': true,
@@ -601,12 +678,12 @@ const achievements = {
         }
     },
     // Misc
-    '12_clicks_per_second': {
+    '9_clicks_per_second': {
         'name': 'Gotta Grow Fast',
-        'desc': 'Click 12 times in one second',
+        'desc': 'Click 9 times in one second',
         'image': './assets/achievements/12_clicks_per_second.png',
-        'reward': 'cosmetic:cursor',
-        'conditions': ['player.clickSpeedRecord', 12],
+        'reward': 'function:doNothing()',
+        'conditions': ['player.clickSpeedRecord', 9],
         'mystery': {
             'name': true,
             'desc': false,
@@ -614,12 +691,12 @@ const achievements = {
             'noToast': false,
         }
     },
-    '16_clicks_per_second': {
+    '13_clicks_per_second': {
         'name': 'Olympic Clicking Games',
-        'desc': 'Click 16 times in one second',
+        'desc': 'Click 13 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
-        'reward': 'function:doNothing',
-        'conditions': ['player.clickSpeedRecord', 16],
+        'reward': 'cosmetic:cursor',
+        'conditions': ['player.clickSpeedRecord', 13],
         'mystery': {
             'name': true,
             'desc': true,
@@ -627,12 +704,12 @@ const achievements = {
             'noToast': false,
         }
     },
-    '21_clicks_per_second': {
+    '15_clicks_per_second': {
         'name': 'I am Seed',
-        'desc': 'Click 21 times in one second',
+        'desc': 'Click 15 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
-        'reward': 'function:doNothing',
-        'conditions': ['player.clickSpeedRecord', 21],
+        'reward': 'function:doNothing()',
+        'conditions': ['player.clickSpeedRecord', 15],
         'mystery': {
             'name': true,
             'desc': true,
@@ -646,10 +723,10 @@ const achievements = {
         'name': 'The Tools to Victory',
         'desc': 'Craft your first hoe (Tutorial milestone)',
         'image': './assets/tools/wood_hoe.png',
-        'reward': 'function:tutorialHoes',
+        'reward': 'function:tutorialHoes()',
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
         'mystery': {
-            'name': false,
+            'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
@@ -674,8 +751,8 @@ const achievements = {
         'name': 'Not Funny',
         'desc': 'Get all 3 characters to level 69 (Hidden achievement)',
         'image': false,
-        'reward': 'function:confetti',
-        'conditions': ['ex_notFunny', 1],
+        'reward': 'function:confetti()',
+        'conditions': ['ex_notFunny()', 1],
         'mystery': {
             'name': true,
             'desc': true,
@@ -704,7 +781,7 @@ setInterval(() => {
         // console.log(achievement.name);
         evaluateConditions(key, achievement);
     }
-}, 5000);
+}, 1000);
 
 // Achievement Conditions converter
 function evaluateConditions(key, achievement) {
@@ -728,7 +805,7 @@ function evaluateConditions(key, achievement) {
             // console.log(key + ' passed tests!');
             multifulfilled++;
 
-            if(multicondition == true && multiamount == multifulfilled) {
+            if(multicondition == true && multiamount <= multifulfilled) {
                 // console.log('Multicondition: ' + multifulfilled + ' / ' + multiamount);
                 grantAchievement(key);
             } else if(multicondition == false) {
@@ -752,7 +829,13 @@ function evaluateConditions(key, achievement) {
 
     // Multiple conditions
     else if(multicondition == true) {
-        multiamount = achievement.conditions.length;
+        // Amount that need to be fulfilled
+        if(achievement.hasOwnProperty('condition_amount')) {
+            multiamount = achievement.condition_amount;
+        } else {
+            multiamount = achievement.conditions.length;
+        }
+
         for(let i = 0; i < achievement.conditions.length; i++) {
             // console.log(achievement.conditions[i]);
             tests(key, achievement.conditions[i]);
@@ -777,8 +860,14 @@ function giveReward(reward) {
     // Function reward
     else if(rewardType == 'function') {
         // Run specified function
-        var rewardFunction = Function(`${rewardName}()`);
+        var rewardFunction = Function(`${rewardName}`);
         rewardFunction();
+    }
+
+    // Character reward
+    else if(rewardType == 'character') {
+        console.log('Character unlocked: ' + rewardName);
+        unlock('character', rewardName);
     }
 }
 
@@ -794,7 +883,7 @@ function grantAchievement(key) {
         // toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
 
         // New toast
-        toast('', '', '', false, key);
+        toast('', '', '', false, false, key);
     }
 
     // Add achievement to player.achievements
@@ -830,13 +919,32 @@ function unlock(type, thingToUnlock) {
 
     // isUnlocked() goes here
 
+    // Theme
     if(type == 'theme') {
         player.themes.push(thingToUnlock);
-
         populateThemeList();
-    } else if(type == 'cosmetic') {
-        player.cosmetics.push(thingToUnlock);
     }
+    // Cosmetic
+    else if(type == 'cosmetic') {
+        player.cosmetics.push(thingToUnlock);
+        populateCosmeticsList();
+    }
+    // Character
+    else if(type == 'character') {
+        player.characters[thingToUnlock] = true;
+        dom(`${thingToUnlock}_box`).classList.remove('char_locked');
+        playerCharKeys = Object.keys(player.characters)
+
+        if(playerCharKeys.length == 5) {
+            dom('more_chars_tooltip').classList.add('char_locked');
+        }
+    }
+}
+
+// Test if a character is unlocked
+function characterQuery(char) {
+    if(player.characters.hasOwnProperty(char)) return true;
+    return false;
 }
 
 // Test if player has an achievement - True = yes, False = no
@@ -847,13 +955,25 @@ function achieveQuery(key) {
 }
 
 // Test if theme is unlocked or not
-function isUnlocked(testfor) {
-    for(let i = 0; i < player.themes.length; i++) {
-        if(testfor == player.themes[i]) {
-            return true;
+function isUnlocked(type = 'theme', key) {
+    // Theme
+    if(type == 'theme') {
+        for(let i = 0; i < player.themes.length; i++) {
+            if(key == player.themes[i]) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
+    // Cosmetic
+    else if(type == 'cosmetic') {
+        for(let i = 0; i < player.cosmetics.length; i++) {
+            if(key == player.cosmetics[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 
@@ -865,7 +985,10 @@ function doNothing() {
 }
 function tutorialHoes() {
     // store('tutorial_first_hoe', "done");
-    toast("You've created your first hoe!", "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).", "", true);
+    toast(
+        "You've created your first hoe!",
+        "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).",
+        "", true);
 }
 // use_charles
 function ex_charlesUses() {
@@ -884,10 +1007,36 @@ function ex_charlesUses() {
 
 // Not funny
 function ex_notFunny() {
-    console.log('ex_notFunny() runs');
+    // console.log('ex_notFunny() runs');
     if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
     return 0;
 }
+
+
+
+
+/* Item/crafting system */
+const items = {
+    'carrot_pot_pie': {
+        'name': 'Carrot Pot Pie',
+        'desc': 'Made with carrot-based meat alternatives of course.',
+        'recipe': {
+            'carrot': 24,
+            'dough': 4,
+        }
+    },
+    'carrot_cookie': {
+        'name': 'Carrot Cookie',
+        'desc': 'Delicious',
+        'recipe': {
+            'carrot': 24,
+            'dough': 4,
+        },
+        // Crafting this unlocks Cookie cosmetic, or maybe you can craft the cookie cosmetic with these
+    }
+}
+
+
 
 // Unlock on page load
 // for(i = 0; i < player.unlockables.length; i++) {
@@ -944,6 +1093,9 @@ function onLoad() {
     player.hasOwnProperty('LifetimeCarrots') == true
     || player.hasOwnProperty('LifetimeGoldenCarrots') == true
     || player.hasOwnProperty('LifetimeEquipedHoes') == true
+    || player.hasOwnProperty('clickSpeedRecord') == false
+    || player.lifetime.hasOwnProperty('clicks') == false
+    || player.hasOwnProperty('characters') == false
     ) {
         if(store('old_player_object_fix') !== 'true' || store('old_player_object_fix') == null) {
             toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
@@ -952,6 +1104,8 @@ function onLoad() {
             player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
             
             store('old_player_object_fix', 'true');
+
+            console.warn('Old save file detected: If you run into any issues you may have to delete your save.')
         }
     }
     //#endregion
@@ -991,8 +1145,8 @@ function onLoad() {
             elEnableSounds.checked = false;
         }
     }
-    // Disable
-    optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+
+    // Moved to bottom as a test
 
     // Volume slider
     if(store('master_volume') !== null) {
@@ -1041,12 +1195,12 @@ function onLoad() {
         panelChange(store('openpanel'), true);
     }
     // Set user cosmetic on page load
-    // if(store('cosmetic') !== null) {
-    //     let cosmetic = store('cosmetic');
-    //     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
-    //     // optionCosmetic.value = cosmetic;
-    //     setCosmetic(cosmetic);
-    // }
+    if(store('cosmetic') !== null) {
+        let cosmetic = store('cosmetic');
+        console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
+        // optionCosmetic.value = cosmetic;
+        setCosmetic(cosmetic);
+    }
     //#endregion
 
 
@@ -1076,15 +1230,28 @@ function onLoad() {
     // }
     if(store("tutorial_sample") == null) {
         store("tutorial_sample", "done");
-        toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+        toast("Welcome to Carrot Clicker!",
+        "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!",
+        "", true);
     }
 
-
+    // Enable unlocked characters
+    for(i = 0; i < playerCharKeys.length; i++) {
+        let key = playerCharKeys[i];
+        if(player.characters[key] == true) {
+            unlock('character', key);
+        }
+    }
 
 
     // Theme Switcher
     populateThemeList();
     themeSwitcherCheckmark(store('theme'));
+    populateCosmeticsList();
+    cosmeticSwitcherCheckmark(store('cosmetic'));
+
+    // Disable
+    optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
 }
 
 onLoad();

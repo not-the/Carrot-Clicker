@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.5.4</title>
+    <title id="page_title">Carrot Clicker dev beta v1.6.0</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -33,7 +33,7 @@
     <!-- Optional classes: dramatic -->
     <div id="overlay" class="dramatic">
         <!-- Backdrop -->
-        <div id="backdrop" onclick="closeDialog(false, true)"></div>
+        <div id="backdrop" onclick="closeDialog(false, true, true)"></div>
 
         <!-- Dialog Box -->
         <div id="dialog" class="popup_box">
@@ -54,12 +54,12 @@
         </div>
 
         <!-- Fancy Theme Switcher -->
-        <div id="theme_menu" class="popup_box">
+        <div id="theme_menu" class="fancy_switcher popup_box">
             <div>
                 <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
                 <!-- Title -->
-                <h2 class="theme_menu_title">Themes</h2>
-                <p class="theme_menu_title">A new coat of paint</p>
+                <h1 class="theme_menu_title">Themes</h1>
+                <p class="theme_menu_title secondary_text">A new coat of paint</p>
             </div>
         
 
@@ -81,12 +81,13 @@
         </div>
 
         <!-- Fancy Cosmetic Switcher -->
-        <div id="cosmetic_menu" class="popup_box">
+        <div id="cosmetic_menu" class="fancy_switcher popup_box">
+            <img src="./assets/paint_splash.png" alt="" class="paint_splash">
             <div>
-                <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
+                <h1 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h1>
                 <!-- Title -->
                 <h2 class="theme_menu_title">Cosmetics</h2>
-                <p class="theme_menu_title">Switch it up</p>
+                <p class="theme_menu_title secondary_text">Switch it up</p>
             </div>
         
 
@@ -281,7 +282,7 @@
                     <span id="Carrot_Count"></span> <span id="cc_name">Carrots</span>
                 </p>
                 <p>
-                    <span id="click_speed">0</span> clicks per second
+                    <span id="click_speed">0/0</span> clicks per second
                 </p><br>
                 <p class="secondary_text">
                     <span id="cpc_name">Carrots</span> per click: <span id="cpc">Loading...</span>
@@ -290,6 +291,7 @@
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p>
                 <p id="golden_carrot_count"></p><br>
+                <!-- <p>Carrot Karma: <span id="karma_count">0</span></p> -->
             </div>
             
             <!-- Prestige Section -->
@@ -316,7 +318,7 @@
 
                 <!--Boomer Bill Rendering-->
                 <!-- #region -->
-                <div class="Bill characterbox">
+                <div class="Bill characterbox" id="bill_box">
                 <div class="billtooltip charactertooltip tooltip" id="billtooltip">Upgrading Bill will increase your carrots per click (CPC) by one.</div>
                 <!-- Top -->
                 <div class="top flex">
@@ -365,57 +367,57 @@
 
                 <!--Belle Boomerette Rendering-->
                 <!-- #region -->
-                <div class="Belle characterbox">
-                <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
+                <div class="Belle characterbox char_locked" id="belle_box">
+                    <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
 
-                <!-- Top -->
-                <div class="top flex">
-                    <img
-                    src="./assets/characters/BelleBommerette.png"
-                    alt="Belle Boomerette"
-                    id="belle_avatar"
-                    class="characterimg"
-                    title="Boomer Belle">
-                    <div class="characterdesc">
-                    <b id="belle_name" class="underline">
-                        Belle
-                    </b>
-                    <p class="secondary_text">
-                        Cost to upgrade Belle: <span id="UpBelleCost"></span>
-                    </p>
-                    <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
+                    <!-- Top -->
+                    <div class="top flex">
+                        <img
+                        src="./assets/characters/BelleBommerette.png"
+                        alt="Belle Boomerette"
+                        id="belle_avatar"
+                        class="characterimg"
+                        title="Boomer Belle">
+                        <div class="characterdesc">
+                        <b id="belle_name" class="underline">
+                            Belle
+                        </b>
+                        <p class="secondary_text">
+                            Cost to upgrade Belle: <span id="UpBelleCost"></span>
+                        </p>
+                        <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Bottom -->
-                <div class="bottom hoecontainer">
+                    <!-- Bottom -->
+                    <div class="bottom hoecontainer">
 
-                    <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
-                    <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe">
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
+                        <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
-                    <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_stone_hoe">
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
+                        <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_stone_hoe">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
-                    <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_iron_hoe">
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
+                        <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_iron_hoe">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
-                    <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_gold_hoe">
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
+                        <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_gold_hoe">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
-                    <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_diamond_hoe">
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
+                        <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_diamond_hoe">
 
-                    <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
-                    <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_netherite_hoe">
-                </div>
+                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
+                        <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_netherite_hoe">
+                    </div>
 
                 </div>
                 <!-- #endregion -->
                 
                 <!--Gregory Rendering-->
-                <div class="Greg characterbox">
+                <div class="Greg characterbox char_locked" id="greg_box">
                     <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
                         Upgrade Greg to create and store hoes.
                     </div>
@@ -485,7 +487,7 @@
             <div class="character_column">
             
                 <!--Charles Rendering-->
-                <div class="Charles characterbox">
+                <div class="Charles characterbox char_locked" id="charles_box">
                     <div class="charlestooltip charactertooltip tooltip" id="charlestooltip">
                         Charles Tooltip
                     </div>
@@ -500,7 +502,7 @@
                             title="Charles">
                         <div class="characterdesc">
                             <b id="charles_name" class="underline">Charles</b>
-                            <p class="secondary_text">Charles description</p>
+                            <p class="secondary_text">Golden Carrot research</p>
                         </div>
                     </div>
 
@@ -508,32 +510,41 @@
                     <div class="bottom">
 
                         <!-- Charles' buttons -->
-                        <button
+                        <div
                         onclick="IncreaseImproveWorkingConditions()"
                         id="ImproveWorkingConditions_button"
-                        class="unbold">
-                        Improve working conditions: <span id="ImproveWorkingConditions">---</span>
-                        </button>
+                        class="unbold shop_item pointer flex cant_afford"
+                        tabindex="0">
+                            <img src="./assets/characters/working_conditions.png" alt="" class="charles_icon">
+                            <p>
+                                Improve working conditions:
+                                <br/><span id="ImproveWorkingConditions">---</span>
+                            </p>
+                        </div>
                         
-                        <button
+                        <div
                         onclick="IncreaseBetterHoes()"
                         id="BetterHoes_button"
-                        class="unbold">
-                            Improve hoe costs: <span id="BetterHoes">---</span>
-                        </button>
+                        class="unbold shop_item pointer flex cant_afford"
+                        tabindex="0">
+                            <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
+                            <p>Improve hoe costs: <span id="BetterHoes">---</span></p>
+                        </div>
 
-                        <button
+                        <div
                         onclick="IncreaseDecreaseWages()"
                         id="DecreaseWages_button"
-                        class="unbold">
-                        Decrease worker wages: <span id="DecreaseWages">---</span>
-                        </button>
+                        class="unbold shop_item pointer flex cant_afford"
+                        tabindex="0">
+                            <img src="./assets/characters/decrease_wages.png" alt="" class="charles_icon">
+                            <p>Decrease worker wages: <span id="DecreaseWages">---</span></p>
+                        </div>
 
                     </div>
                 </div>
 
                 <!--Carl Rendering-->
-                <div class="carl characterbox">
+                <div class="carl characterbox char_locked" id="carl_box">
                     <div class="carltooltip charactertooltip tooltip" id="carl">
                         The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
                     </div>
@@ -559,7 +570,7 @@
                             <button id="carl_theme_button" class="half_width" onclick="themeSwitcher()">
                                 Change Theme
                             </button>
-                            <button id="carl_cosmetic_button" class="half_width" onclick="themeSwitcher()">
+                            <button id="carl_cosmetic_button" class="half_width" onclick="cosmeticSwitcher()">
                                 Change Cosmetic
                             </button><br>
 
@@ -584,6 +595,12 @@
 
                     </div>
                 </div>
+
+                <!-- More characters tooltip -->
+                <br>
+                <p class="secondary_text center" id="more_chars_tooltip">
+                    Progress through the game to unlock additional characters!
+                </p>
             
             </div>
             <!-- #endregion -->
@@ -649,7 +666,7 @@
             <div id="info-inner">
                 <h1>Statistics</h1>
                 <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
-                <i class="secondary_text">Updates every 2 seconds</i><br/>
+                <i class="secondary_text">Updates every second</i><br/>
                 
                 <div id="statistics">
                     <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
@@ -681,6 +698,9 @@
                 </select><br> -->
                 <button id="theme_button" onclick="themeSwitcher()">
                     Change Theme
+                </button>
+                <button id="cosmetic_button" onclick="cosmeticSwitcher()">
+                    Change Cosmetic
                 </button><br><br>
             </label>
 
@@ -688,7 +708,7 @@
             <div class="slidecontainer">
                 <label for="FunTipPercentage" ><b>Percentage of fun tips:</b><br>
                     <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><span id="FunTipsSliderLabel">50</span>%<br>
-                </label><br><br>
+                </label><br>
             </div>
 
 
@@ -794,7 +814,8 @@
             <p>Danger Zone:</p>
             <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
                 Delete Save Data
-            </button>
+            </button><br><br>
+            <!-- <p class="secondary_text center">Carrot Clicker - <a class="secondary_text link_styling">Credits</a></p> -->
         </div>
     </div>
     <!-- End Info section -->

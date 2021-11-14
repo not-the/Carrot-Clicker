@@ -1,13 +1,49 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.6.0
+    11-13-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Cosmetic switcher is here!
+- The game will now remember what cosmetic you had equipped and will enable it on page load
+- New feature for toasts: you can now specify if a toast is replaceable, or "low importance". If true it will disappear when another toast appears.
+  + Given the majority of toast notifications this property so that they no longer cover the screen
+- Added even more achievements
+- Charles' buttons now have icons and are consistent with Carl's shop items
+- Characters now need to be unlocked
+  + Belle is unlocked by upgrading Bill once
+  + Greg is unlocked by earning 5,000 carrots
+  + Charles is unlocked by prestiging
+  + Carl is unlocked by unlocking any theme/cosmetic
+- Statistics: game now keeps track of how many times you've clicked the carrot
+- Achievements now update every second instead of every 5
+- More achievements have icons
+
+Misc:
+- Fixed issue where the achievements list wouldn't load unless you switched tabs
+- Made dropdown menu smaller and gave it a left border
+- Charles now uses eInnerText()
+- Got rid of the console.log()s that were spamming the console
+- Tri-panel section is now taller (specifically, viewport height);
+- Added the new player object variables to the "Old save file" warning
+
+Known issues:
+- Page reloads twice now? Don't know why this is
+- Once again you will need to delete your save data for the game to work
+- Cosmetic switchers' checkmarks don't appear
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.5.4
     11-12-2021
 // ----------------------------------------------------------- //
 
 - Cleaned up HTML and reverted a couple changes
   + Theme switcher is available through Carl but it's also in settings
-- General tweaks/improvements
+- General CSS tweaks/improvements
 - Carl's theme/cosmetic buttons look a little cleaner
-- // Charles' buttons now have icons and are consistent with Carl's shop items
 - Prestige potential now only shows down to the tenths place
 - Restored the tri-panel's tab buttons to their intended CSS (more or less)
 - When Greg is crafting there will also be a progress bar at the top of the page

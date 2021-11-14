@@ -139,12 +139,18 @@ const player1 = {
         carrots: 0,
         golden_carrots: 0,
         prestige_count: 0,
+        clicks: 0,
         hoes: {
             crafted: [0, 0, 0, 0, 0, 0],
             craftedTotal: 0,
             equipped: [0, 0, 0, 0, 0, 0],
             equippedTotal: 0,
         },
+    },
+
+    // Unlocked characters
+    characters: {
+        bill: true,
     },
 
     // Achievements
@@ -158,7 +164,11 @@ const player1 = {
     ],
     cosmetics: [
         'default'
-    ]
+    ],
+
+    inventory: {
+        // Item inventory
+    }
 }
 
 
@@ -176,7 +186,6 @@ const Default_Charles = {
     DecreaseWages:0,
     DecreaseWagesPrice:1
 }
-
 
 //Asigns the Local storage
 const Charles          = localStorage.getObject("Charles");
@@ -204,6 +213,7 @@ setInterval(() => {
 }, 2000);
 //#endregion
 
+var playerCharKeys = Object.keys(player.characters);
 
 /* ----------------------Functions------------------------*/
 //#region
@@ -217,6 +227,7 @@ var clickArray = [];
 function onClick(useMousePos) {
     player.Carrots += player.cpc;
     player.lifetime.carrots += player.cpc;
+    player.lifetime.clicks ++;
 
     // Page stuff
     carrotCount();
@@ -308,14 +319,20 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     }
 
     if(mode=="apply"){
+        // End if character isn't unlocked
+        if(characterQuery(characterString(character)) == false) {
+            toast('Nice try', 'That character hasn\'t been unlocked yet.');
+            return;
+        }
+
         if(amount==1){
             if(character==Gregory){
                 multibuyPrice(0.18);
             }
-            if(character==Belle_Boomerette){
+            else if(character==Belle_Boomerette){
                 multibuyPrice(0.09);
             }
-            if(character==Boomer_Bill){
+            else if(character==Boomer_Bill){
                 multibuyPrice(0.102);
             }
             character.lvlupPrice=Math.floor(r);
@@ -334,7 +351,8 @@ function LevelUp(character=Boomer_Bill, amount=1) {
     } else {
         toast(
             'Cannot afford',
-            `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character)) }`
+            `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character))}`,
+            '', false, true
         );
     }
 }
@@ -343,7 +361,7 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 // Prestige
 function Prestige() {
     if(prestige_potential <= 1) {
-        toast('Insufficient prestige potential', 'Try playing the game some more and then try again', 'red')
+        toast('Insufficient prestige potential', 'Try playing the game some more and then try again', 'red', false, true)
         return;
     }
 
@@ -392,7 +410,8 @@ function IncreaseImproveWorkingConditions(){
     if(player.golden_carrots<Charles.ImproveWorkingConditionsPrice){
         toast(
             'Cannot afford',
-            `You need ${Charles.ImproveWorkingConditionsPrice} Golden Carrots to level up Improve Working Conditions`
+            `You need ${Charles.ImproveWorkingConditionsPrice} Golden Carrots to level up Improve Working Conditions`,
+            '', false, true
         );
         return;
     }
@@ -409,7 +428,8 @@ function IncreaseBetterHoes(){
     if(player.golden_carrots<Charles.BetterHoesPrice){
         toast(
             'Cannot afford',
-            `You need ${Charles.BetterHoesPrice} carrots to level up Better Hoes`
+            `You need ${Charles.BetterHoesPrice} carrots to level up Better Hoes`,
+            '', false, true
         );
         return;
     }
@@ -422,7 +442,8 @@ function IncreaseDecreaseWages(){
     if(player.golden_carrots<Charles.DecreaseWagesPrice){
         toast(
             'Cannot afford',
-            `You need ${Charles.DecreaseWagesPrice} carrots to level up Decrease Wages`
+            `You need ${Charles.DecreaseWagesPrice} carrots to level up Decrease Wages`,
+            '', false, true
         );
         return;
     }
@@ -463,32 +484,43 @@ function HoeCost(type=0,amount=1,mode="query"){
 }
 
 function CreateHoe(type=0,amount=1) {
+    // Greg unlock check
+    if(characterQuery(characterString('greg')) == false) {
+        toast('Nice try', 'That character hasn\'t been unlocked yet.');
+        return;
+    }
+
     // Return if a hoe is already in progress
     if(n==1){
-        toast("Greg is busy", "Wait until he is done crafting")
+        toast("Greg is busy", "Wait until he is done crafting",
+        '', false, true)
         return;
     }
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
     if(Gregory.lvl<=(type*25)-1||Gregory.lvl==0){
         if(type>=1){
-            toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`);
+            toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`,
+            '', false, true);
             return;
         }
-        toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: 1 to create this hoe");
+        toast("Cant Create Hoe", "Greg too inexperienced. Greg must be at least Level: 1 to create this hoe",
+        '', false, true);
         return;
     }
 
     // Checks to see if Greg Can Hold more of this Type
     if(Gregory.Hoes[type]+amount-1>= Gregory.lvl){
-        toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type");
+        toast("Insufficient Upgrades", "You must upgrade Greg to hold more hoes of that type",
+        '', false, true);
         return;
     }
     
     let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
     if(price>=(player.Carrots*2)){
-        toast("Too Expensive!", "That hoe is currently too expensive.");
+        toast("Too Expensive!", "That hoe is currently too expensive.",
+        '', false, true);
         return;
     }
 
@@ -543,9 +575,16 @@ function CreateHoe(type=0,amount=1) {
 
 //Equips A Hoe To a Character
 function EquipHoe(character=Boomer_Bill, type=0, amount){
+    // Greg unlock check
+    if(characterQuery(characterString('greg')) == false) {
+        toast('Nice try', 'That character hasn\'t been unlocked yet.');
+        return;
+    }
+
     if(Gregory.Hoes[type]>=amount){
         if(character.Hoes[type]+amount-1>=Gregory.lvl) {
-            toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type");
+            toast("Insufficient Upgrades", "You Must Upgrade Greg to Hold More Hoes of That Type",
+            '', false, true);
             n=0;
             return;
         }
@@ -751,14 +790,13 @@ setInterval(() => {
         dom("prestige-section").style.visibility="visible";
     }
     //Charles Upgrades
-    elCharles.improveWorkingConditions.innerHTML = `${Charles.ImproveWorkingConditionsPrice} Golden Carrots`;
-    elCharles.betterHoes.innerHTML = `${Charles.BetterHoesPrice} Golden Carrots`;
-    elCharles.decreaseWages.innerHTML = `${Charles.DecreaseWagesPrice} Golden Carrots`;
+    eInnerText(elCharles.improveWorkingConditions, `${Charles.ImproveWorkingConditionsPrice} Golden Carrots`);
+    eInnerText(elCharles.betterHoes, `${Charles.BetterHoesPrice} Golden Carrots`);
+    eInnerText(elCharles.decreaseWages, `${Charles.DecreaseWagesPrice} Golden Carrots`);
 
-    elCharles.charlesTooltip.innerHTML =
-       `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
-       BH: ${Math.floor(100*Charles.BetterHoes)}%\n
-       DWW: ${Math.floor(100*Charles.DecreaseWages)}%`;
+    eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
+    BH: ${Math.floor(100*Charles.BetterHoes)}%\n
+    DWW: ${Math.floor(100*Charles.DecreaseWages)}%`);
 }, 100);
 //#endregion
 
@@ -772,6 +810,7 @@ function loadStatistics() {
     Carrots earned: <b>${DisplayRounded(player.lifetime.carrots)}</b><br/>
     Golden Carrots earned: <b>${DisplayRounded(player.lifetime.golden_carrots)}</b><br/>
     Prestiges: <b>${DisplayRounded(player.lifetime.prestige_count)}</b><br/><br/>
+    Total Clicks: <b>${numCommas(player.lifetime.clicks)}</b><br/><br/>
 
     <b><u>Hoes crafted</u></b><br/>
     Total:  <b>${player.lifetime.hoes.craftedTotal}</b><br/>
@@ -792,7 +831,7 @@ function loadStatistics() {
 }
 
 // Refresh statistics
-setInterval(() => {loadStatistics()}, 2000);
+setInterval(() => {loadStatistics()}, 1000);
 
 //Music
 // setInterval(()=>{

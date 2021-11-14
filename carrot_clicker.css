@@ -170,6 +170,7 @@ select {
 select {
     cursor: pointer;
 }
+.pointer {cursor: pointer;}
 .link_styling {
     cursor: pointer;
 }
@@ -180,7 +181,7 @@ select {
 .popup_box {
     background: var(--main-popup-color);
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 12px;
 
     position: absolute;
     top: 50%;
@@ -461,16 +462,19 @@ select {
 }
 
 /* Fancy Theme Switcher */
-#theme_menu {
+.fancy_switcher {
     width: 100%;
     max-width: 540px;
     max-height: 90%;
+    min-height: 240px;
     overflow: auto;
 
     /* position: relative; */
     z-index: 200;
 
     visibility: hidden;
+
+    overflow: hidden;
 }
 h2.theme_menu_title {
     margin-top: 4px;
@@ -480,8 +484,8 @@ p.theme_menu_title {
     margin-bottom: 12px;
 }
 .theme_preview {image-rendering: pixelated;}
-.theme_menu h2 {
-    margin: 0;
+.fancy_switcher h1 {
+    margin: 4px 0 10px 0;
 }
 .theme_item h3 {
     margin: 0;
@@ -513,6 +517,7 @@ p.theme_menu_title {
     filter: brightness(120%);
     outline: 2px solid white;
 }
+
 .theme_preview {
     height: 100%;
     padding: 10px;
@@ -536,6 +541,22 @@ p.theme_menu_title {
 }
 body:not(.theme_light) .theme_checkmark {
     filter: invert();
+}
+
+/* Paint splatter */
+.paint_splash {
+    position: absolute;
+    right: -20px;
+    bottom: -120px;
+    z-index: 10;
+
+    opacity: 0.4;
+    width: 300px;
+
+    filter: brightness(50%) sepia(100) saturate(100) hue-rotate(200deg);
+}
+.fancy_switcher div {
+    z-index: 20;
 }
 
 /* Number Popup */
@@ -594,8 +615,9 @@ body:not(.theme_light) .theme_checkmark {
 /* Dropdown */
 #info_dropdown {
     cursor: pointer;
-    padding: 10px 16px 0 16px;
+    padding: 10px 12px 0 12px;
     height: 36px;
+    border-left: 1px solid var(--border-color);
 
     position: absolute;
     top: 0;
@@ -773,6 +795,9 @@ body:not(.theme_light) .theme_checkmark {
 .character_column {
     height: 100%;
 }
+.character_column p {
+    max-width: 356px;
+}
 
 /* Characters */
 .characterbox {
@@ -885,6 +910,13 @@ body:not(.theme_light) .theme_checkmark {
     pointer-events: none;
 }
 
+/* Lock character */
+.char_locked {
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+}
+
 /* Greg */
 .Greg .toolicon {
     height: 45px;
@@ -942,13 +974,22 @@ body:not(.theme_light) .theme_checkmark {
 .Charles button {
     width: calc(100% - 10px);
 }
+.Charles .shop_item {
+    padding-bottom: 0;
+}
+.charles_icon {
+    width: 40px;
+    height: 40px;
+    
+    margin-right: 8px;
+}
 .Charles .bottom,
 .carl .bottom {
     padding: 5px;
 }
 
 /* Carl */
-/* Temporaryily hide since not done */
+/* Temporarily hide since not done */
 /* .carl {
     display: none;
 } */
@@ -956,6 +997,12 @@ body:not(.theme_light) .theme_checkmark {
     padding: 5px;
     border-radius: 5px;
     background: var(--lighter-bg-color);
+    margin-bottom: 8px;
+
+    transition: background-color, filter 0.5s;
+}
+.shop_item:last-of-type {
+    margin-bottom: 0;
 }
 .shop_img {
     width: 57px;
@@ -965,6 +1012,13 @@ body:not(.theme_light) .theme_checkmark {
 }
 .padding-5px {
     padding: 5px;
+}
+.shop_item.cant_afford {
+    filter: brightness(50%) contrast(90%);
+    background-color: var(--darker-bg-color);
+}
+.shop_item.cant_afford img {
+    filter: saturate(0%);
 }
 
 /* Greyed out/Blacked out/Glowing effects */
@@ -1037,9 +1091,11 @@ body:not(.theme_light) .theme_checkmark {
     max-width: 1150px;
     position: relative;
     width: 100%;
-    height: 700px;
+    /* height: 700px; */
+    height: calc(100vh - 50px);
     min-width: 270px;
-    margin: 24px auto 80px;
+    /* margin: 24px auto 80px; */
+    margin: 24px auto 0;
     padding: 0;
     background-color: var(--brown-bg-color);
 
@@ -1077,7 +1133,8 @@ body:not(.theme_light) .theme_checkmark {
 /* Info panel */
 .panel {
     position: absolute;
-    height: 667px;
+    /* height: 667px; */
+    height: calc(100vh - 83px);
     width: 100%;
     padding: 0px 24px 16px;
 
@@ -1157,6 +1214,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 .achievement_item:last-child {
     border-radius: 0 0 10px 10px;
+    overflow: hidden;
 }
 .rewards_list {
     background-color: var(--brown-darker-color);
@@ -1281,6 +1339,9 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
         background: black;
         backdrop-filter: none;
+    }
+    #notifs-section {
+        margin-bottom: 80px;
     }
     .rewards_list {
         display: unset;
