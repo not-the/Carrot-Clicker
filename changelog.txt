@@ -1,9 +1,25 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.6.0.1
+    VERSION dev beta 1.6.1
+    11-14-2021
+// ----------------------------------------------------------- //
+
+- The cursor cosmetic is now unlocked via the "I am Seed" achievement, so it's a little harder to get now
+- Both themes and cosmetics are now accessible from the same menu
+- Fixed an issue where carrots per second wouldn't count towards your lifetime carrots
+- Game now keeps track of how many carrots you've earned from clicking & how many you've earned from CPS
+- The statistics menu now has collapsible sections for more detailed statistics
+- Putting #mute at the end of the URL will do the same thing as #automute (disables sound)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.0.1 & 1.6.0.2
     11-13-2021
 // ----------------------------------------------------------- //
 
 - Fixed issue where the dropdown menu text was center aligned on mobile
+- Fixed hoes not working
 
 ~ Kal
 

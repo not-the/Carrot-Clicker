@@ -178,6 +178,20 @@ select {
     text-decoration: underline;
     color: white;
 }
+details {
+    margin-left: 22px;
+}
+details[open] {
+    margin-bottom: 12px;
+}
+summary {
+    cursor: pointer;
+    padding: 4px;
+    margin-left: -22px;
+}
+summary:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
 .popup_box {
     background: var(--main-popup-color);
     padding: 20px;
@@ -419,9 +433,18 @@ select {
 }
 .dialog_close {
     font-size: 24pt;
-    top: 10px;
-    right: 10px;
-    position: absolute;
+    /* top: -12px;
+    right: 2px; */
+    position: static;
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    padding-left: 16px;
+    background-color: var(--main-bg-color);
+    border-left: 1px solid var(--darker-bg-color);
+}
+.dialog_close:hover {
+    filter: brightness(125%);
 }
 .toast h3, .toast p {
     margin: 0;
@@ -461,13 +484,39 @@ select {
     border-bottom: 1px solid var(--brown-darkest-color);
 }
 
+/* Theme/cosmetic switcher tab bar */
+.switcher_bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.switcher_bar .tab {
+    margin: 0;
+    width: calc(50% - 24px);
+    border-radius: 0;
+    border: none;
+    padding: 12px;
+}
+.switcher_bar .tab:hover {
+    background-color: initial;
+    color: white;
+    filter: brightness(125%);
+}
+.switcher_bar .tab:not(.activetab) {
+    background-color: var(--main-bg-color);
+    color: gray;
+}
+
 /* Fancy Theme Switcher */
 .fancy_switcher {
     width: 100%;
     max-width: 540px;
     max-height: 90%;
-    min-height: 240px;
+    min-height: 85vh;
     overflow: auto;
+
+    padding-top: 48px;
 
     /* position: relative; */
     z-index: 200;
@@ -476,8 +525,8 @@ select {
 
     overflow: hidden;
 }
-h2.theme_menu_title {
-    margin-top: 4px;
+h1.theme_menu_title {
+    margin-top: 40px;
     margin-bottom: 10px;
 }
 p.theme_menu_title {
@@ -722,6 +771,23 @@ body:not(.theme_light) .theme_checkmark {
     margin-left: auto;
     white-space: pre;
 }
+
+/* Multibuy indicator */
+#multibuy_button {
+    font-size: 15pt;
+    font-weight: bolder;
+    background-color: blue;
+    color: white;
+    border: 1px solid white;
+    border-top: none;
+    padding: 4px 0 8px;
+    margin-left: 8px;
+    width: 60px;
+    text-align: center;
+    border-radius: 0 0 16px 16px;
+}
+
+
 .Carrot_Count {
     font-size: 20pt;
     text-align: center;

@@ -319,9 +319,9 @@ function panelChange(to, noSound = false) {
     }
 
     // Reset Statistics Panel
-    if(to !== "info-panel") {
-        elStatistics.innerHTML = statLoading;
-    }
+    // if(to !== "info-panel") {
+    //     elStatistics.innerHTML = statLoading;
+    // }
 
     // Update achievements list
     if(to == 'achievements-panel') {
@@ -378,6 +378,21 @@ function popupHandler(useMousePos = true) {
     }
 }
 //#endregion
+
+function switchSwitchers() {
+    if(themeSwitcherOpen == true) {
+        themeSwitcherOpen = false;
+        cosmeticSwitcherOpen = true;
+        cosmeticSwitcher();
+        closeThemeSwitcher(true);
+    } else {
+        themeSwitcherOpen = true;
+        cosmeticSwitcherOpen = false;
+        themeSwitcher();
+        closeCosmeticSwitcher(true);
+    }
+}
+
 /* ----- Fancy Theme Switcher ----- */
 function themeSwitcher() {
     themeSwitcherOpen = true;
@@ -386,9 +401,11 @@ function themeSwitcher() {
 
     buttonSound();
 }
-function closeThemeSwitcher() {
+function closeThemeSwitcher(noOverlay = false) {
     themeMenu.classList.remove('visible');
-    overlay.classList.remove("visible");
+    if(noOverlay == false) {
+        overlay.classList.remove("visible"); 
+    }
 }
 
 /* ----- Fancy Cosmetic Switcher ----- */
@@ -399,9 +416,11 @@ function cosmeticSwitcher() {
 
     buttonSound();
 }
-function closeThemeSwitcher() {
+function closeCosmeticSwitcher(noOverlay = false) {
     cosmeticMenu.classList.remove('visible');
-    overlay.classList.remove("visible");
+    if(noOverlay == false) {
+        overlay.classList.remove("visible");
+    }
 }
 
 

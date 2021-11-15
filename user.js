@@ -176,7 +176,7 @@ document.addEventListener('keydown', event => {
         if(event.key == "Escape"){
             closeDialog();
         } else if(event.key == "Enter"){
-            closeDialog(true);
+            closeDialog(true);``
         }
     }
 
@@ -695,7 +695,7 @@ const achievements = {
         'name': 'Olympic Clicking Games',
         'desc': 'Click 13 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
-        'reward': 'cosmetic:cursor',
+        'reward': false,
         'conditions': ['player.clickSpeedRecord', 13],
         'mystery': {
             'name': true,
@@ -708,7 +708,7 @@ const achievements = {
         'name': 'I am Seed',
         'desc': 'Click 15 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
-        'reward': 'function:doNothing()',
+        'reward': 'cosmetic:cursor',
         'conditions': ['player.clickSpeedRecord', 15],
         'mystery': {
             'name': true,
@@ -1211,7 +1211,7 @@ function onLoad() {
     achievementProgress();
 
     // Automute in URL
-    if(location.hash == '#automute') {
+    if(location.hash == '#automute' || location.has == '#mute') {
         elEnableSounds.checked = false;
         settingSounds();
     }

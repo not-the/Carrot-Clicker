@@ -137,6 +137,9 @@ const player1 = {
     // Lifetime stats
     lifetime: {
         carrots: 0,
+        click_carrots: 0,
+        idle_carrots: 0,
+
         golden_carrots: 0,
         prestige_count: 0,
         clicks: 0,
@@ -227,6 +230,7 @@ var clickArray = [];
 function onClick(useMousePos) {
     player.Carrots += player.cpc;
     player.lifetime.carrots += player.cpc;
+    player.lifetime.click_carrots += player.cpc;
     player.lifetime.clicks ++;
 
     // Page stuff
@@ -287,6 +291,10 @@ function clickSpeedHandler(clicked = false) {
 // Carrots per second
 function CarrotsPerSecond() {
     player.Carrots += player.cps/20;
+    player.lifetime.carrots += player.cps/20;
+    player.lifetime.idle_carrots += player.cps/20;
+
+    // Might want to change this but it seems to be fine for now
     carrotCount();
 }
 var cpsInterval = setInterval(CarrotsPerSecond,50);
@@ -802,32 +810,47 @@ setInterval(() => {
 
 // Lifetime Statistics Panel
 const elStatistics = dom('statistics');
-const statLoading = elStatistics.innerHTML;
+// const statLoading = elStatistics.innerHTML;
+const statsNumbers = {
+    lifetime_carrots: dom('lifetime_carrots'),
+    lifetime_carrots_clicked: dom('lifetime_carrots_clicked'),
+    lifetime_carrots_idled: dom('lifetime_carrots_idled'),
+    lifetime_golden_carrots: dom('lifetime_golden_carrots'),
+    lifetime_prestige: dom('lifetime_prestige'),
+    lifetime_clicks: dom('lifetime_clicks'),
+    lifetime_hoes_crafted_total: dom('lifetime_hoes_crafted_total'),
+    lifetime_hoes_crafted_0: dom('lifetime_hoes_crafted_0'),
+    lifetime_hoes_crafted_1: dom('lifetime_hoes_crafted_1'),
+    lifetime_hoes_crafted_2: dom('lifetime_hoes_crafted_2'),
+    lifetime_hoes_crafted_3: dom('lifetime_hoes_crafted_3'),
+    lifetime_hoes_crafted_4: dom('lifetime_hoes_crafted_4'),
+    lifetime_hoes_crafted_5: dom('lifetime_hoes_crafted_5'),
+    lifetime_clickspeedrecord: dom('lifetime_clickspeedrecord'),
+    stat_themes: dom('stat_themes'),
+    stat_cosmetics: dom('stat_cosmetics'),
+    stat_achievements: dom('stat_achievements'),
+}
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
-    eInnerHTML(elStatistics, 
-    `<h3>Lifetime:</h3>
-    Carrots earned: <b>${DisplayRounded(player.lifetime.carrots)}</b><br/>
-    Golden Carrots earned: <b>${DisplayRounded(player.lifetime.golden_carrots)}</b><br/>
-    Prestiges: <b>${DisplayRounded(player.lifetime.prestige_count)}</b><br/><br/>
-    Total Clicks: <b>${numCommas(player.lifetime.clicks)}</b><br/><br/>
 
-    <b><u>Hoes crafted</u></b><br/>
-    Total:  <b>${player.lifetime.hoes.craftedTotal}</b><br/>
-    Wooden: <b>${player.lifetime.hoes.crafted[0]}</b><br/>
-    Stone:  <b>${player.lifetime.hoes.crafted[1]}</b><br/>
-    Iron:   <b>${player.lifetime.hoes.crafted[2]}</b><br/>
-    Golden: <b>${player.lifetime.hoes.crafted[3]}</b><br/>
-    Diamond: <b>${player.lifetime.hoes.crafted[4]}</b><br/>
-    Netherite: <b>${player.lifetime.hoes.crafted[5]}</b><br/>
-    <br/>
-
-    Clicks per second (Best): <b>${player.clickSpeedRecord}</b><br/><br/>
-
-    Themes:       ${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}<br/>
-    Cosmetics:    ${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}<br/><br/>
-
-    Achievements: ${Object.keys(player.achievements).length}/${Object.keys(achievements).length}<br/>`);
+    eInnerText(statsNumbers.lifetime_carrots, player.lifetime.carrots);
+    eInnerText(statsNumbers.lifetime_carrots_clicked, player.lifetime.click_carrots);
+    eInnerText(statsNumbers.lifetime_carrots_idled, player.lifetime.idle_carrots);
+    eInnerText(statsNumbers.lifetime_golden_carrots, player.lifetime.golden_carrots);
+    eInnerText(statsNumbers.lifetime_prestige, player.lifetime.prestige_count);
+    eInnerText(statsNumbers.lifetime_clicks, player.lifetime.clicks);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_0, player.lifetime.hoes.crafted[0]);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_1, player.lifetime.hoes.crafted[1]);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_2, player.lifetime.hoes.crafted[2]);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_3, player.lifetime.hoes.crafted[3]);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_4, player.lifetime.hoes.crafted[4]);
+    eInnerText(statsNumbers.lifetime_hoes_crafted_5, player.lifetime.hoes.crafted[5]);
+    eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
+    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}`);
+    eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}`);
+    eInnerText(statsNumbers.stat_achievements, `${Object.keys(player.achievements).length}/${Object.keys(achievements).length}`);
+    
 }
 
 // Refresh statistics

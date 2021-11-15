@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.6.0</title>
+    <title id="page_title">Carrot Clicker dev beta v1.6.1</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -55,9 +55,15 @@
 
         <!-- Fancy Theme Switcher -->
         <div id="theme_menu" class="fancy_switcher popup_box">
-            <div>
+            <!-- Tabs -->
+            <div class="switcher_bar flex">
+                <button class="tab activetab">Themes</button>
+                <button class="tab" onclick="switchSwitchers()">Cosmetics</button>
                 <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
-                <!-- Title -->
+            </div>
+
+            <!-- Title -->
+            <div>
                 <h1 class="theme_menu_title">Themes</h1>
                 <p class="theme_menu_title secondary_text">A new coat of paint</p>
             </div>
@@ -82,11 +88,19 @@
 
         <!-- Fancy Cosmetic Switcher -->
         <div id="cosmetic_menu" class="fancy_switcher popup_box">
+            <!-- Tab bar -->
+            <div class="switcher_bar flex">
+                <button class="tab" onclick="switchSwitchers()">Themes</button>
+                <button class="tab activetab">Cosmetics</button>
+                <h2 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h2>
+            </div>
+            
+            <!-- Paint splatter -->
             <img src="./assets/paint_splash.png" alt="" class="paint_splash">
+            
+            <!-- Title -->
             <div>
-                <h1 class="toast_close dialog_close" title="Close" onclick="closeDialog(false)">x</h1>
-                <!-- Title -->
-                <h2 class="theme_menu_title">Cosmetics</h2>
+                <h1 class="theme_menu_title">Cosmetics</h1>
                 <p class="theme_menu_title secondary_text">Switch it up</p>
             </div>
         
@@ -254,6 +268,11 @@
 
                 </div>
             </div>
+        </div>
+
+        <!-- Multibuy Indicator -->
+        <div id="multibuy_button">
+            1x
         </div>
 
         <!-- Progress bar -->
@@ -669,7 +688,34 @@
                 <i class="secondary_text">Updates every second</i><br/>
                 
                 <div id="statistics">
-                    <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+                    <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
+
+                    <!-- Lifetime -->
+                    <h3>Lifetime:</h3>
+                    <details>
+                        <summary>Carrots earned: <b id="lifetime_carrots">---</b></summary>
+                        From clicking: <b id="lifetime_carrots_clicked">---</b><br>
+                        From CPS: <b id="lifetime_carrots_idled">---</b><br>
+                    </details>
+                    Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
+                    Prestiges: <b id="lifetime_prestige">---}</b><br/><br/>
+                    Total Clicks: <b id="lifetime_clicks">---</b><br/><br/>
+                    <details>
+                        <summary>Hoes crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
+                        Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
+                        Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>
+                        Iron:   <b id="lifetime_hoes_crafted_2">---</b><br/>
+                        Golden: <b id="lifetime_hoes_crafted_3">---</b><br/>
+                        Diamond: <b id="lifetime_hoes_crafted_4">---</b><br/>
+                        Netherite: <b id="lifetime_hoes_crafted_5">---</b><br/>
+                    </details><br/>
+
+                    Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b><br/><br/>
+
+                    Themes: <b id="stat_themes">---</b><br/>
+                    Cosmetics: <b id="stat_cosmetics">---</b><br/><br/>
+
+                    Achievements: <b id="stat_achievements">---</b><br/>
                 </div>
 
             </div> 
