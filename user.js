@@ -1256,6 +1256,10 @@ function onLoad() {
     if(location.hash == '#automute' || location.has == '#mute') {
         elEnableSounds.checked = false;
         settingSounds();
+    } else if(location.hash == '#cheatmode') {
+        for(let i = 0; i < achievementsKeys.length; i++) {
+           grantAchievement(achievementsKeys[i])
+        }
     }
     
 
