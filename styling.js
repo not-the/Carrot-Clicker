@@ -98,6 +98,7 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
 
     dialogOpen = true;
     overlay.classList.add('visible');
+    elBody.classList.add('overflow_hidden');
     elDialog.main.classList.add('visible');
     // elDialog.main.classList.add("dialog_animate");
 
@@ -129,6 +130,7 @@ function closeDialog(doAction, backdrop = false) {
     eInnerText(elDialog.buttons.accept, "OK");
 
     overlay.classList.remove("visible");
+    elBody.classList.remove('overflow_hidden');
     elDialog.main.classList.remove('visible');
     // elDialog.main.classList.remove("dialog_animate");
 
@@ -430,8 +432,9 @@ function closeCosmeticSwitcher(noOverlay = false) {
 const cosmetics = {
     // Default
     'default': {
+        'name': 'Carrot (Default)',
         'image': './assets/Carrot Clicker.png',
-        'name': 'Carrot',
+        'farmable': 'Carrot',
         'desc': 'Good old carrots',
 
         'bill_image':    './assets/characters/Boomer_Bill.png',
@@ -448,13 +451,22 @@ const cosmetics = {
     },
     // Golden Carrot
     'golden_carrot': {
-        'image': './assets/golden carrot.png',
         'name': 'Golden Carrot',
+        'image': './assets/golden carrot.png',
+        'farmable': 'Golden Carrot',
+        'desc': 'They are only spray-painted gold. Worthless.'
+    },
+    'pixel_carrot': {
+        'name': 'Pixel Carrot',
+        'image': './assets/theme/pixel_carrot.png',
+        'farmable': 'Carrot',
+        'desc': 'Someone pixelated my carrot'
     },
     'cookie': {
-        'image': './assets/theme/cookie/cookie.png',
         'name': 'Cookie',
-        'desc': '',
+        'image': './assets/theme/cookie/cookie.png',
+        'farmable': 'Cookie',
+        'desc': 'Delicious',
 
         'bill_image':    './assets/theme/cookie/baker_bill.png',
         'belle_image':   './assets/theme/cookie/grandma_belle.png',
@@ -470,22 +482,29 @@ const cosmetics = {
     },
     // Minecraft
     'blockgame': {
+        'name': 'Minecraft Carrot',
         'image': './assets/theme/blockgame/carrot.png',
-        // 'name': 'Carrots'
+        'desc': 'Hrm',
     },
     'blockgame_potato': {
+        'name': 'Minecraft Potato',
         'image': './assets/theme/blockgame/potato.png',
-        'name': 'Potatoe'
+        'farmable': 'Potatoe',
+        'desc': 'Knishes'
     },
     // Pineapple
     'pineapple': {
+        'name': 'Pineapple',
         'image': './assets/theme/pineapple/pineapple.png',
-        'name': 'Pineapple'
+        'farmable': 'Pineapple',
+        'desc': 'My favorite'
     },
     // Bill clicker
     'bill': {
-        'image': './assets/characters/Boomer_Bill.png',
         'name': 'Bill',
+        'image': './assets/characters/Boomer_Bill.png',
+        'farmable': 'Bill',
+        'desc': 'Bill',
 
         'bill_image':    './assets/characters/Boomer_Bill.png',
         'belle_image':   './assets/characters/Boomer_Bill.png',
@@ -502,14 +521,25 @@ const cosmetics = {
     },
     // Netherite hoe
     "netherite_hoe": {
+        'name': 'Netherite hoe',
         'image': './assets/tools/netherite_hoe.png',
-        'name': 'Netherite hoe'
+        'farmable': 'Netherite hoe',
+        'desc': 'All hail'
     },
     // Cursor
     "cursor": {
+        'name': 'Cursor',
         'image': './assets/theme/cursor/cursor.png',
         'image_hover': './assets/theme/cursor/pointer.png',
-        'name': 'Cursor'
+        'farmable': 'Cursor',
+        'desc': 'Cursorception'
+    },
+    // Updoot
+    "upvote": {
+        'name': 'Orange Arrow',
+        'image': './assets/theme/orange_arrow/upvote.png',
+        'farmable': 'Updoot',
+        'desc': 'This is better than going outside'
     },
 }
 const cosmeticsKeys = Object.keys(cosmetics);
@@ -538,6 +568,8 @@ const characterNames = {
     // Cost to upgrade:
     // ...
 }
+
+// Change cosmetic
 function setCosmetic(set, resetState = false) {
     var from = store('cosmetic');
 
@@ -551,11 +583,13 @@ function setCosmetic(set, resetState = false) {
     if(cosmetic.hasOwnProperty('image')) {mainCarrot.src = cosmetic.image;}
 
     // Name
-    if(cosmetic.hasOwnProperty('name')) {
-        nameLoop(cosmetic.name)
+    if(cosmetic.hasOwnProperty('farmable')) {
+        nameLoop(cosmetic.farmable)
     } else {
         nameLoop('Carrot');
     }
+
+    Object.hop = property => {return this.hasOwnProperty(property);}
 
     // Character Avatars
     if(cosmetic.hasOwnProperty('bill_image'))     {characterAvatars.bill.src = cosmetic.bill_image;}
@@ -573,11 +607,11 @@ function setCosmetic(set, resetState = false) {
 
 
     // Loop through page elements containing farmable item name and set accordingly
-    function nameLoop(name) {
+    function nameLoop(farmable) {
         for(i = 0; i < farmableNames.length; i++) {
-            eInnerText(farmableNames[i], name + 's');
+            eInnerText(farmableNames[i], farmable + 's');
         }
-    }
+    }    
 
     store('cosmetic', set);
 
@@ -641,7 +675,7 @@ const themes = {
     'theme_green': {
         name:     'Green Theme',
         image:    './assets/theme/theme_green.png',
-        desc:     'Green',
+        desc:     'Don\'t be jealous',
         cosmetic: false
     },
     'theme_blue': {
@@ -695,7 +729,7 @@ function populateThemeList() {
             <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
             <div>
                 <h3>${theme.name}</h3>
-                <p>${theme.desc}</p>
+                <p class="secondary_text">${theme.desc}</p>
             </div>
             <div class="theme_checkbox">
                 <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="${key + '_checkmark'}">
@@ -753,7 +787,7 @@ function populateCosmeticsList() {
             <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
             <div>
                 <h3>${cosmetic.name}</h3>
-                <p>${cosmetic.desc}</p>
+                <p class="secondary_text">${cosmetic.desc}</p>
             </div>
             <div class="theme_checkbox">
                 <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="cosmetic_${key + '_checkmark'}">
@@ -957,7 +991,7 @@ function populateAchievements() {
                     <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
                     <div>
                         <h2>${achieve.mystery.name == true ? '???' : achieve.name}</h2>
-                        <p class="secondary_text">${achieve.mystery.desc == true ? '?' : achieve.desc}</p>
+                        <p class="secondary_text">${achieve.mystery.desc == true ? '????' : achieve.desc}</p>
                     </div>
                 </div>
             </div>
@@ -1091,7 +1125,7 @@ function achievementProgress() {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
         dom('achievement_progress'),
-        `${unlockedAchievements.length}/${achievementsKeys.length} (${Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length))}%)`
+        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
     );
 }
 

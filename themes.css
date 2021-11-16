@@ -465,7 +465,7 @@
 }
 .theme_blockgame button,
 .theme_blockgame select,
-.theme_blockgame #notifs-section nav .tab,
+.theme_blockgame .tab,
 .theme_blockgame .slider::-webkit-slider-thumb {
     background: #2a2a2a url(./assets/theme/blockgame/button.png);
     background-size: 250%;
@@ -546,6 +546,7 @@
 .theme_blockgame .popup_box {
     background-color: unset;
     width: 500px;
+    border-radius: 0;
 }
 .theme_blockgame .toast {
     background-color: #212121;

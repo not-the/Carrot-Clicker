@@ -1,4 +1,36 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.6.2
+    11-15-2021
+// ----------------------------------------------------------- //
+
+- New cosmetic: Pixel Carrot
+- Cosmetic names and the name that replaces "carrot" are now two separate values (name and farmable respectively)
+- Improved visual hierarchy of the theme/cosmetic menu
+- Got rid of the paint splatter element in the cosmetic screen
+- More achievements have pixel art
+- More achievements have been added
+- Achievements with the "hide from list" property will now be ignored when calculating achievement progress (won't appear in the total and won't be required for 100% completion)
+- Multibuy button redesign is now on hold
+- Statistics will no longer display fractions of a carrot (from CPS)
+- Gave Greg a more detailed tooltip
+- When a dialog or other popup menu is open the page behind it won't be scrollable
+- Added support for keyboard combinations (doesn't trigger anything yet)
+
+Fixes:
+- Fixed an issue where the theme/cosmetic menu would not be scrollable when the list exceeded screen height
+- Fixed some achievements having incorrect rewards
+- Fixed an issue where the tips text would get cut off when it doesn't fit, usually on mobile
+- Fixed an issue where theme/cosmetic descriptions would go outside the div
+- Minecraft theme now supports some of the newer features
+
+Scrapped changes:
+- Redid the CarrotsPerSecond() function so that it no longer gives fractions of a carrot
+- Fixed an issue where the carrot counter wouldn't update when you bought something (was a result of the above change apparently)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.6.1
     11-14-2021
 // ----------------------------------------------------------- //

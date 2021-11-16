@@ -70,7 +70,7 @@
         
 
             <!-- Theme items -->
-            <div id="themes_list">
+            <div id="themes_list" class="fancy_list">
                 <!-- Javascript will do all the work -->
                 <div class="theme_item theme_selected flex">
                     <img src="./assets/Carrot Clicker.png" alt="" class="theme_preview" onclick="setTheme('theme_dark')" id="theme_dark">
@@ -96,7 +96,7 @@
             </div>
             
             <!-- Paint splatter -->
-            <img src="./assets/paint_splash.png" alt="" class="paint_splash">
+            <!-- <img src="./assets/paint_splash.png" alt="" class="paint_splash"> -->
             
             <!-- Title -->
             <div>
@@ -106,7 +106,7 @@
         
 
             <!-- Theme items -->
-            <div id="cosmetics_list">
+            <div id="cosmetics_list" class="fancy_list">
                 <!-- Javascript will do all the work -->
                 <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
             </div>
@@ -270,11 +270,6 @@
             </div>
         </div>
 
-        <!-- Multibuy Indicator -->
-        <div id="multibuy_button">
-            1x
-        </div>
-
         <!-- Progress bar -->
         <div id="main_progress_container" class="status_progress_bar">
             <!-- Image -->
@@ -284,6 +279,11 @@
                 <div id="main_progress_bar" class="progress" style="width: 50%"></div>
             </div>
         </div>
+
+        <!-- Multibuy Indicator -->
+        <!-- <div id="multibuy_button" class="link_styling pointer" onclick="multibuySpin()">
+            1x
+        </div> -->
 
     </div>
 
@@ -438,7 +438,7 @@
                 <!--Gregory Rendering-->
                 <div class="Greg characterbox char_locked" id="greg_box">
                     <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                        Upgrade Greg to create and store hoes.
+                        Upgrade Greg to create and store hoes. The maximum amount of hoes you can hold is equal to his level.
                     </div>
                     <!-- Top -->
                     <div class="top flex">

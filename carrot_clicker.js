@@ -295,6 +295,7 @@ function CarrotsPerSecond() {
     player.lifetime.idle_carrots += player.cps/20;
 
     // Might want to change this but it seems to be fine for now
+    // Note: this being here is the only reason the counter gets updated immediately, if this gets removed it needs to go in every function that changes carrot count or in the main game loop
     carrotCount();
 }
 var cpsInterval = setInterval(CarrotsPerSecond,50);
@@ -833,9 +834,9 @@ const statsNumbers = {
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
 
-    eInnerText(statsNumbers.lifetime_carrots, player.lifetime.carrots);
+    eInnerText(statsNumbers.lifetime_carrots, player.lifetime.carrots.toFixed(0));
     eInnerText(statsNumbers.lifetime_carrots_clicked, player.lifetime.click_carrots);
-    eInnerText(statsNumbers.lifetime_carrots_idled, player.lifetime.idle_carrots);
+    eInnerText(statsNumbers.lifetime_carrots_idled, player.lifetime.idle_carrots.toFixed(0));
     eInnerText(statsNumbers.lifetime_golden_carrots, player.lifetime.golden_carrots);
     eInnerText(statsNumbers.lifetime_prestige, player.lifetime.prestige_count);
     eInnerText(statsNumbers.lifetime_clicks, player.lifetime.clicks);

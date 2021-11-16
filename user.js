@@ -209,9 +209,28 @@ document.addEventListener('keyup', event => {
 /*-----------------------Keybinds-------------------*/
 //#region
 
-
+var keyCombo = '';
+const keyCodes = [
+    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight b a Enter '
+]
 //defining keybinds
 function keybindHandler(event){
+    keyCombo += event.key + ' ';
+    if(keyCombo.substring(0, keyCodes[0].length) == keyCodes[0]) {
+        keyCombo == '';
+        console.log('resetting keyCombo');
+    }
+    // Konami Code
+    if(keyCombo == keyCodes[0]) {
+        keyCombo = '';
+        console.log('Konami Code entered');
+        confetti();
+    }
+    console.log(keyCombo);
+
+
+
+
     // End function if keybinds are disabled, a dialog box is open, or an input field is focused
     if(
         store("disableKeybinds") == "true"
@@ -432,7 +451,7 @@ const achievements = {
     'own_a_theme': {
         'name': 'Taking in the Themery',
         'desc': 'Obtain a cosmetic! You\'ve gained the attention of an artist.',
-        'image': false,
+        'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
         'conditions': [
             ['player.themes.length', 4],
@@ -449,7 +468,7 @@ const achievements = {
     '401000_carrot': {
         'name': 'Retirement Fund',
         'desc': 'Earn 401k carrots. I don\'t think you know what a 401k is.',
-        'image': './assets/achievements/401k_carrots.png',
+        'image': './assets/achievements/401k.png',
         'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 401000],
         'mystery': {
@@ -486,9 +505,9 @@ const achievements = {
         }
     },
     '1_trillion_carrots': {
-        'name': 'A World Fed',
+        'name': 'Lifetime Supply',
         'desc': 'Earn your 1 trillionth carrot. Phew!',
-        'image': false,
+        'image': './assets/achievements/carrot_pile.png',
         'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000000000],
         'mystery': {
@@ -499,8 +518,21 @@ const achievements = {
         }
     },
     '1_quadrillion_carrots': {
-        'name': 'quadrillion',
-        'desc': 'Earn your 1 quadrillionth carrot. What are we even going to do with this many?',
+        'name': 'A World Fed',
+        'desc': 'Earn your 1 quadrillionth carrot. Earth\'s hunger problem is now solved.',
+        'image': './assets/achievements/earth.png',
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_quintillion_carrots': {
+        'name': 'What Do We Even Do With This Many?',
+        'desc': 'Earn your 1 QUINTILLIONTH carrot.',
         'image': false,
         'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000000000000],
@@ -543,7 +575,7 @@ const achievements = {
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
         'image': false,
-        'reward': 'character:charles',
+        'reward': false,
         'conditions': ['player.cps', 100000],
         'mystery': {
             'name': true,
@@ -629,7 +661,7 @@ const achievements = {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
         'image': false,
-        'reward': false,
+        'reward': 'function:doNothing()',
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
             'name': true,
@@ -655,7 +687,7 @@ const achievements = {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Gregory 64 Times',
         'image': './assets/achievements/pixel_block.png',
-        'reward': 'theme:theme_blockgame',
+        'reward': ['theme:theme_blockgame', 'cosmetic:blockgame', 'cosmetic:blockgame_potato'],
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
             'name': true,
@@ -749,8 +781,8 @@ const achievements = {
     // Secret Achievements
     'not_funny': {
         'name': 'Not Funny',
-        'desc': 'Get all 3 characters to level 69 (Hidden achievement)',
-        'image': false,
+        'desc': 'Upgrade all 3 characters to Level 69 (Hidden achievement)',
+        'image': './assets/achievements/nice.png',
         'reward': 'function:confetti()',
         'conditions': ['ex_notFunny()', 1],
         'mystery': {
@@ -763,6 +795,7 @@ const achievements = {
     }
 }
 const achievementsKeys = Object.keys(achievements);
+var hiddenAchievements = 0;
 
 // Test achievement conditions every 5 seconds
 setInterval(() => {
@@ -1007,7 +1040,6 @@ function ex_charlesUses() {
 
 // Not funny
 function ex_notFunny() {
-    // console.log('ex_notFunny() runs');
     if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
     return 0;
 }
@@ -1097,7 +1129,7 @@ function onLoad() {
     || player.lifetime.hasOwnProperty('clicks') == false
     || player.hasOwnProperty('characters') == false
     ) {
-        if(store('old_player_object_fix') !== 'true' || store('old_player_object_fix') == null) {
+        if(store('old_player_object_fix') !== 'true') {
             toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
             player.lifetime.carrots = player.LifetimeCarrots;
             player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
@@ -1105,7 +1137,7 @@ function onLoad() {
             
             store('old_player_object_fix', 'true');
 
-            console.warn('Old save file detected: If you run into any issues you may have to delete your save.')
+            console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
         }
     }
     //#endregion
@@ -1202,7 +1234,17 @@ function onLoad() {
         setCosmetic(cosmetic);
     }
     //#endregion
+    
 
+    // Figure out how many achievements aren't hidden
+    for(let i = 0; i < achievementsKeys.length; i++) {
+        let key = achievementsKeys[i];
+        let achievement = achievements[key];
+
+        if(achievement.mystery.list == true) {
+            hiddenAchievements++;
+        }
+    }
 
     // Populate achievements if said tab is open
     if(currentPanel == "achievements-panel") {
