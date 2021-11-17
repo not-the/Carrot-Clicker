@@ -1,8 +1,12 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.6.2.1
+    VERSION dev beta 1.6.2.1 & 1.6.2.2
     11-16-2021
 // ----------------------------------------------------------- //
 
+.1:
+- Added a temporary cheat tool for developer use
+
+.2:
 - Renamed the 1 quintillion carrots achievement
 - Added an achievement for prestiging 10 times
 
