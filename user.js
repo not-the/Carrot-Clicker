@@ -448,6 +448,19 @@ const achievements = {
             'noToast': false,
         }
     },
+    '10_prestiges': {
+        'name': 'Wibbly Wobbly',
+        'desc': 'Prestige ten times',
+        'image': false,
+        'reward': 'function:confetti',
+        'conditions': ['player.lifetime.prestige_count', 10],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     'own_a_theme': {
         'name': 'Taking in the Themery',
         'desc': 'Obtain a cosmetic! You\'ve gained the attention of an artist.',
@@ -531,7 +544,7 @@ const achievements = {
         }
     },
     '1_quintillion_carrots': {
-        'name': 'What Do We Even Do With This Many?',
+        'name': 'Carrot Singularity', // 'What Do We Even Do With This Many?'
         'desc': 'Earn your 1 QUINTILLIONTH carrot.',
         'image': false,
         'reward': 'function:confetti()',
