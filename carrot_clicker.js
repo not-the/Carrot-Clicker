@@ -354,9 +354,8 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
             
         }
     }
-    if(mode=="apply"){console.log(r);character.lvlupPrice=Math.floor(r);}
-    if(amount==1){return character.lvlupPrice}
-    return r2;
+    if(mode=="apply"){character.lvlupPrice=Math.floor(r);}
+    return Math.floor(r2);
 }
 function LevelUp(character=Boomer_Bill, amount=1) {
     if(player.Carrots >= CharacterLevelUpPrice(character, amount)) {
@@ -377,7 +376,6 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 // Prestige
 function Prestige() {
 
-    console.log("Prestiging...");
     clearInterval(cpsInterval);
 
     // Give golden carrots
@@ -423,29 +421,32 @@ function Prestige() {
 function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions,amount=1,mode="query"){
     let r = tome.price;
     let r2 = tome.price;
-    function multibuyPrice(PriceIncrease){
-        if(tome.price==Math.floor(r*PriceIncrease)){
+    
+    function multibuyPrice(PriceIncrease){console.log(r+=Math.ceil(r*PriceIncrease));
+        if(Math.floor(r*PriceIncrease)==0){
             r+=Math.ceil(r*PriceIncrease);
         }else{
             r+=Math.floor(r*PriceIncrease);
         }
+       
         r2+=r;
         if(amount==1){
             r2=r;
-        }
+        }   
     }
+    
     for(i=0;i<=amount;i++){
-        if(tome==Charles.tome.DecreaseWages){
-           multibuyPrice(0.1); 
+        if(tome==Charles.tome.decreaseWages){
+           multibuyPrice(0.01); 
         }
-        if(tome==Charles.tome.ImproveWorkingConditions){
-            multibuyPrice(0.1);
+        if(tome==Charles.tome.improveWorkingConditions){
+            multibuyPrice(0.01);
         }
         if(tome==Charles.tome.betterHoes){
-            multibuyPrice(0.1);
+            multibuyPrice(0.01);
         }
     }
-    if(mode=="apply"){r2=Math.floor(r);}
+    if(mode=="apply"){tome.price=r2}
     if(amount==1){return tome.price}
     return r2;
 }
@@ -789,7 +790,7 @@ setInterval(() => {
 
     //The Prestige Potential
     let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    prestige_potential=Math.pow(0.0000001*player.Carrots,0.233)*(1+(achieve_percent/100));
+    prestige_potential=Math.pow(0.0000001*player.Carrots,0.38)*(1+(achieve_percent/100));
     eInnerText(prestige_info, DisplayRounded(prestige_potential.toFixed(1),2));
 
     // Greg's Hoe Prices
@@ -804,13 +805,13 @@ setInterval(() => {
         dom("prestige-section").style.visibility="visible";
     }
     //Tomes
-    eInnerText(elCharles.improveWorkingConditions, `${Charles.tome.improveWorkingConditions.price} Golden Carrots`);
-    eInnerText(elCharles.betterHoes, `${Charles.tome.betterHoes.price} Golden Carrots`);
-    eInnerText(elCharles.decreaseWages, `${Charles.tome.decreaseWages.price} Golden Carrots`);
+    eInnerText(elCharles.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[multibuySelector],"query")} Golden Carrots`);
+    eInnerText(elCharles.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[multibuySelector],"query")} Golden Carrots`);
+    eInnerText(elCharles.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[multibuySelector],"query")} Golden Carrots`);
 
-    eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
-    BH: ${Math.floor(100*Charles.BetterHoes)}%\n
-    DWW: ${Math.floor(100*Charles.DecreaseWages)}%`);
+    eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
+    BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
+    DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
 }, 100);
 //#endregion
 
