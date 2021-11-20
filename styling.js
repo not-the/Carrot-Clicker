@@ -148,6 +148,9 @@ function closeDialog(doAction, backdrop = false) {
             case 'clearsave':
                 ClearLocalStorage();
                 break;
+            default:
+                console.log('Dialog action not listed');
+                break;
         };
     };
 
@@ -838,7 +841,7 @@ function populateAchievements() {
         if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
         if(achieve.mystery.list == true && unlocked == false) continue;
 
-        let img = achieve.image != false ? achieve.image : './assets/achievements/locked.png';
+        let img = achieve.image != false ? achieve.image : './assets/achievements/missing.png';
 
         // Plain text list w/ achievement names
         //#region 

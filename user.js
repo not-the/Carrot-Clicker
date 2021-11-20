@@ -209,24 +209,50 @@ document.addEventListener('keyup', event => {
 /*-----------------------Keybinds-------------------*/
 //#region
 
+var keyTrigger = [0, 0, 0]; // Variable achievement(s) test for
 var keyCombo = '';
 const keyCodes = [
-    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight b a Enter '
-]
+    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight b a Enter ',
+    'g a m i n g ',
+    'j j c v i p '
+];
 //defining keybinds
 function keybindHandler(event){
     keyCombo += event.key + ' ';
-    if(keyCombo.substring(0, keyCodes[0].length) == keyCodes[0]) {
-        keyCombo == '';
-        console.log('resetting keyCombo');
-    }
+
+    // Keyboard combos //
     // Konami Code
     if(keyCombo == keyCodes[0]) {
-        keyCombo = '';
         console.log('Konami Code entered');
+        keyCombo = '';
+        keyTrigger[0] = 1;
         confetti();
     }
-    console.log(keyCombo);
+    // gaming
+    else if(keyCombo == keyCodes[1]) {
+        console.log('gaming Code entered');
+        keyCombo = '';
+        keyTrigger[1] = 1;
+        setTheme('theme_retro');
+    }
+    // JJCVIP
+    else if(keyCombo == keyCodes[2]) {
+        console.log('JJ Code entered');
+        keyCombo = '';
+        keyTrigger[2] = 1;
+        openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'hello');
+    }
+
+    // Check if string is on track to be correct or not
+    for(i = 0; i < keyCombo.length; i++) {
+        if(keyCombo[i] != keyCodes[0][i]
+        && keyCombo[i] != keyCodes[1][i]
+        && keyCombo[i] != keyCodes[2][i]) {
+            keyCombo = '';
+            break;
+        }
+    }
+
 
 
 
@@ -397,8 +423,8 @@ const achievements = {
 
     // Carrots
     '1_carrot': {
-        'name': 'First Carrot',
-        'desc': 'Farming is hard',
+        'name': 'Farming is hard',
+        'desc': 'Your first Carrot!',
         'image': './assets/achievements/1_carrot.png',
         'reward': false,
         'conditions': ['player.lifetime.carrots', 1],
@@ -454,6 +480,32 @@ const achievements = {
         'image': false,
         'reward': 'function:confetti',
         'conditions': ['player.lifetime.prestige_count', 10],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'use_charles': {
+        'name': 'Raw Knowledge',
+        'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
+        'image': './assets/achievements/tome animated.gif',
+        'reward': 'function:doNothing()',
+        'conditions': ['ex_charlesUses()', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_decrease_wages': {
+        'name': 'Dollar Bill',
+        'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -544,11 +596,63 @@ const achievements = {
         }
     },
     '1_quintillion_carrots': {
-        'name': 'Carrot Singularity', // 'What Do We Even Do With This Many?'
-        'desc': 'Earn your 1 QUINTILLIONTH carrot.',
-        'image': false,
+        'name': 'Carrot Singularity',
+        'desc': 'Earn your 1 QUINTILLIONTH carrot. We\'re on the verge of something beautiful.',
+        'image': './assets/achievements/singularity.png',
         'reward': 'function:confetti()',
         'conditions': ['player.lifetime.carrots', 1000000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_sextillion_carrots': {
+        'name': 'Carrot Nebula',
+        'desc': 'Earn your 1 SEXTILLIONTH carrot. The culmination of our efforts.',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000000n],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_septillion_carrots': {
+        'name': 'Carrot Galaxy',
+        'desc': 'Earn your 1 SEPTILLIONTH carrot. Something bigger than us has taken notice.',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_octillion_carrots': {
+        'name': 'Carrot Universe',
+        'desc': 'Earn your 1 OCTILLIONTH carrot. There is not a single non-carrot molecule in the universe. Besides you of course.',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_nonillion_carrots': {
+        'name': 'Carrot Multiverse',
+        'desc': 'Earn your 1 NONILLIONTH carrot. Finding new places to put them I see.',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -645,7 +749,7 @@ const achievements = {
         }
     },
     'bill_lvl_10': {
-        'name': 'Here\s the Bill',
+        'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill 10 times',
         'image': false,
         'reward': 'function:doNothing()',
@@ -705,19 +809,6 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'use_charles': {
-        'name': 'Raw Knowledge',
-        'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
-        'image': './assets/characters/Charles.png',
-        'reward': 'function:doNothing()',
-        'conditions': ['ex_charlesUses()', 1],
-        'mystery': {
-            'name': true,
-            'desc': true,
             'image': true,
             'noToast': false,
         }
@@ -785,13 +876,27 @@ const achievements = {
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
         'mystery': {
             'name': true,
-            'desc': true,
+            'desc': false,
             'image': true,
             'noToast': false,
         }
     },
 
     // Secret Achievements
+    'easter_egg_hunter': {
+        'name': 'Easter Egg Hunter',
+        'desc': 'Enter the Konami code. According to Wikipedia. There are multiple versions apparently. (Hidden achievement)',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['keyTrigger[0]', 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
+    },
     'not_funny': {
         'name': 'Not Funny',
         'desc': 'Upgrade all 3 characters to Level 69 (Hidden achievement)',

@@ -1,7 +1,31 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.6.3
-    11-16-2021
+    VERSION dev beta 1.6.4
+    11-19-2021
 // ----------------------------------------------------------- //
+
+Achievement Consistency Update
+- Added some new achievements
+- Modified some achievements so that their requirements are visible by default
+- Changed some achievement descriptions
+- More achievements now have pixel art
+- Keyboard combos now work and a related achievement has been added
+- Some new keyboard combos were added
+- Large numbers in statistics now have commas
+- Statistics is now consistent with the achievements menu in that hidden achievements aren't required for 100% completion
+- There is now a unique icon for unlocked achievements that are missing an image
+
+CSS:
+- Fixed a bug where achievements' rounded borders were jank
+- Status bar dropdown no longer looks out of place/misaligned on mobile
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.3
+    11-19-2021
+// ----------------------------------------------------------- //
+
 - Leveling up isn't riduclously expensive now
 - completely rehualed Charles(not complete)
 

@@ -839,12 +839,12 @@ const statsNumbers = {
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
 
-    eInnerText(statsNumbers.lifetime_carrots, player.lifetime.carrots.toFixed(0));
-    eInnerText(statsNumbers.lifetime_carrots_clicked, player.lifetime.click_carrots);
-    eInnerText(statsNumbers.lifetime_carrots_idled, player.lifetime.idle_carrots.toFixed(0));
-    eInnerText(statsNumbers.lifetime_golden_carrots, player.lifetime.golden_carrots);
-    eInnerText(statsNumbers.lifetime_prestige, player.lifetime.prestige_count);
-    eInnerText(statsNumbers.lifetime_clicks, player.lifetime.clicks);
+    eInnerText(statsNumbers.lifetime_carrots, numCommas(player.lifetime.carrots.toFixed(0)));
+    eInnerText(statsNumbers.lifetime_carrots_clicked, numCommas(player.lifetime.click_carrots));
+    eInnerText(statsNumbers.lifetime_carrots_idled, numCommas(player.lifetime.idle_carrots.toFixed(0)));
+    eInnerText(statsNumbers.lifetime_golden_carrots, numCommas(player.lifetime.golden_carrots));
+    eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
+    eInnerText(statsNumbers.lifetime_clicks, numCommas(player.lifetime.clicks));
     eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);
     eInnerText(statsNumbers.lifetime_hoes_crafted_0, player.lifetime.hoes.crafted[0]);
     eInnerText(statsNumbers.lifetime_hoes_crafted_1, player.lifetime.hoes.crafted[1]);
@@ -855,7 +855,12 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
     eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}`);
     eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}`);
-    eInnerText(statsNumbers.stat_achievements, `${Object.keys(player.achievements).length}/${Object.keys(achievements).length}`);
+    
+    let unlockedAchievements = Object.keys(player.achievements);
+    eInnerText(
+        statsNumbers.stat_achievements,
+        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements}`
+    );
     
 }
 
