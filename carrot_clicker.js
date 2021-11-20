@@ -319,7 +319,7 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     let r2=0;
 
     function multibuyPrice(PriceIncrease){
-        r+=((1-DecreaseWagesEffects())*Math.floor(PriceIncrease));
+        r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
         r2+=r;
         if(amount==1){
             r2=r;
@@ -354,7 +354,7 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
             
         }
     }
-    if(mode=="apply"){character.lvlupPrice=Math.floor(r);}
+    if(mode=="apply"){console.log(r);character.lvlupPrice=Math.floor(r);}
     if(amount==1){return character.lvlupPrice}
     return r2;
 }
