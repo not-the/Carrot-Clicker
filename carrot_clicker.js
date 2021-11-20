@@ -182,12 +182,22 @@ const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0]
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 
 const Default_Charles = {
-    BetterHoes:0,
-    BetterHoesPrice:1,
-    ImproveWorkingConditions:0,
-    ImproveWorkingConditionsPrice:1,
-    DecreaseWages:0,
-    DecreaseWagesPrice:1
+    name:"Charles",
+    type:"Scholar",
+    tome:{
+        improveWorkingConditions:{
+            value:0,
+            price:1
+        },
+        decreaseWages:{
+            value:0,
+            price:1
+        },
+        betterHoes:{
+            value:0,
+            price:1
+        }
+    }
 }
 
 //Asigns the Local storage
@@ -220,6 +230,7 @@ var playerCharKeys = Object.keys(player.characters);
 
 /* ----------------------Functions------------------------*/
 //#region
+
 
 // Store click speed
 var clickSpeed = 0;
@@ -294,7 +305,7 @@ function CarrotsPerSecond() {
     player.lifetime.carrots += player.cps/20;
     player.lifetime.idle_carrots += player.cps/20;
 
-    // Might want to change this but it seems to be fine for now
+    // Might want to change this but it seems to be fine   for now
     // Note: this being here is the only reason the counter gets updated immediately, if this gets removed it needs to go in every function that changes carrot count or in the main game loop
     carrotCount();
 }
@@ -304,11 +315,11 @@ var cpsInterval = setInterval(CarrotsPerSecond,50);
 
 //level up characters 
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
-    var r=character.lvlupPrice;
-    var r2=0;
+    let r=character.lvlupPrice;
+    let r2=0;
 
     function multibuyPrice(PriceIncrease){
-        r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
+        r+=((1-DecreaseWagesEffects())*Math.floor(PriceIncrease));
         r2+=r;
         if(amount==1){
             r2=r;
@@ -316,45 +327,41 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     }
     for(i=0; i<amount; i++){
         if(character==Gregory){
-            multibuyPrice(0.19);
-
+            if(Gregory.lvl+i<50){
+                multibuyPrice(0.14,"character",r,r2);
+            }else{
+                multibuyPrice(0.21,"character",r,r2);
+            }
         }
         if(character==Belle_Boomerette){
-            multibuyPrice(0.09);
+            if(Belle_Boomerette.lvl+i<75){
+                multibuyPrice(0.11,"character",r,r2);
+            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                multibuyPrice(0.12,"character",r,r2)
+            }else{
+                multibuyPrice(0.08,"character",r,r2)
+            }
+            
         }
         if(character==Boomer_Bill){
-            multibuyPrice(0.102);
+            if(Boomer_Bill.lvl+i<75){
+                multibuyPrice(0.11,"character",r,r2);
+            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                multibuyPrice(0.13,"character",r,r2);
+            }else{
+                multibuyPrice(0.09,"character",r,r2);
+            }
+            
         }
     }
-
-    if(mode=="apply"){
-        // End if character isn't unlocked
-        if(characterQuery(characterString(character)) == false) {
-            toast('Nice try', 'That character hasn\'t been unlocked yet.');
-            return;
-        }
-
-        if(amount==1){
-            if(character==Gregory){
-                multibuyPrice(0.18);
-            }
-            else if(character==Belle_Boomerette){
-                multibuyPrice(0.09);
-            }
-            else if(character==Boomer_Bill){
-                multibuyPrice(0.102);
-            }
-            character.lvlupPrice=Math.floor(r);
-        }
-    character.lvlupPrice=Math.floor(r2);
-    }
+    if(mode=="apply"){character.lvlupPrice=Math.floor(r);}
     if(amount==1){return character.lvlupPrice}
     return r2;
 }
 function LevelUp(character=Boomer_Bill, amount=1) {
-    if(player.Carrots >= CharacterLevelUpPrice(character, amount, "query")) {
+    if(player.Carrots >= CharacterLevelUpPrice(character, amount)) {
             character.lvl+=amount;
-            player.Carrots-=CharacterLevelUpPrice(character,amount,"query");
+            player.Carrots-=CharacterLevelUpPrice(character,amount);
             CharacterLevelUpPrice(character,amount,"apply");
             
     } else {
@@ -369,10 +376,6 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 // Prestige
 function Prestige() {
-    if(prestige_potential <= 1) {
-        toast('Insufficient prestige potential', 'Try playing the game some more and then try again', 'red', false, true)
-        return;
-    }
 
     console.log("Prestiging...");
     clearInterval(cpsInterval);
@@ -415,54 +418,56 @@ function Prestige() {
 
 
 // Charles Functions
-function IncreaseImproveWorkingConditions(){
-    if(player.golden_carrots<Charles.ImproveWorkingConditionsPrice){
-        toast(
-            'Cannot afford',
-            `You need ${Charles.ImproveWorkingConditionsPrice} Golden Carrots to level up Improve Working Conditions`,
-            '', false, true
-        );
-        return;
-    }
-    if(Charles.ImproveWorkingConditionsPrice*1.02==Charles.ImproveWorkingConditionsPrice){
-        Charles.ImproveWorkingConditionsPrice=Math.ceil(Charles.ImproveWorkingConditionsPrice*1.02);
-    }else{
-            Charles.ImproveWorkingConditionsPrice=Math.floor(Charles.ImproveWorkingConditionsPrice*1.02);
-    }
+//Needs commenting
 
-    player.golden_carrots-=Charles.ImproveWorkingConditionsPrice;
-    Charles.ImproveWorkingConditions+=1;
-}
-function IncreaseBetterHoes(){
-    if(player.golden_carrots<Charles.BetterHoesPrice){
-        toast(
-            'Cannot afford',
-            `You need ${Charles.BetterHoesPrice} carrots to level up Better Hoes`,
-            '', false, true
-        );
-        return;
+function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions,amount=1,mode="query"){
+    let r = tome.price;
+    let r2 = tome.price;
+    function multibuyPrice(PriceIncrease){
+        if(tome.price==Math.floor(r*PriceIncrease)){
+            r+=Math.ceil(r*PriceIncrease);
+        }else{
+            r+=Math.floor(r*PriceIncrease);
+        }
+        r2+=r;
+        if(amount==1){
+            r2=r;
+        }
     }
-    Charles.BetterHoesPrice=Math.ceil(Charles.BetterHoesPrice*1.03);
-    player.golden_carrots-=Charles.BetterHoesPrice;
-    Charles.BetterHoes+=1;
+    for(i=0;i<=amount;i++){
+        if(tome==Charles.tome.DecreaseWages){
+           multibuyPrice(0.1); 
+        }
+        if(tome==Charles.tome.ImproveWorkingConditions){
+            multibuyPrice(0.1);
+        }
+        if(tome==Charles.tome.betterHoes){
+            multibuyPrice(0.1);
+        }
+    }
+    if(mode=="apply"){r2=Math.floor(r);}
+    if(amount==1){return tome.price}
+    return r2;
 }
 
-function IncreaseDecreaseWages(){
-    if(player.golden_carrots<Charles.DecreaseWagesPrice){
+function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
+    if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
+            tome.value+=amount;
+            player.golden_carrots-=CharlesUpgradePrices(tome,amount);
+            CharlesUpgradePrices(tome,amount,"apply");
+            
+    } else {
         toast(
             'Cannot afford',
-            `You need ${Charles.DecreaseWagesPrice} carrots to level up Decrease Wages`,
+            `You need ${DisplayRounded(tome.price, 1)} Golden Carrots to buy this Tome`,
             '', false, true
         );
-        return;
     }
-    Charles.DecreaseWagesPrice=Math.ceil(Charles.DecreaseWagesPrice*1.03);
-    player.golden_carrots-=Charles.DecreaseWagesPrice;
-    Charles.DecreaseWages+=1;
 }
+
 
 function DecreaseWagesEffects(){
-    return (Math.sqrt(Charles.DecreaseWages)/100);
+    return (Math.sqrt(Charles.tome.decreaseWages.value)/100);
 }
 
 //#endregion
@@ -738,9 +743,9 @@ setInterval(() => {
         player.cps=Belle_Boomerette.lvl;
     }
     // Add improve working conditions bonus
-    if(Charles.ImproveWorkingConditions>0) {
-        player.cpc = (player.cpc * (1.1 * Charles.ImproveWorkingConditions));
-        player.cps = (player.cps * (1.1 * Charles.ImproveWorkingConditions));
+    if(Charles.tome.improveWorkingConditions.value>0) {
+        player.cpc = (player.cpc * (1.1 * Charles.tome.improveWorkingConditions.value));
+        player.cps = (player.cps * (1.1 * Charles.tome.improveWorkingConditions.value));
     }
     
 
@@ -798,10 +803,10 @@ setInterval(() => {
     if(player.lifetime.golden_carrots>0 || prestige_potential>=1){
         dom("prestige-section").style.visibility="visible";
     }
-    //Charles Upgrades
-    eInnerText(elCharles.improveWorkingConditions, `${Charles.ImproveWorkingConditionsPrice} Golden Carrots`);
-    eInnerText(elCharles.betterHoes, `${Charles.BetterHoesPrice} Golden Carrots`);
-    eInnerText(elCharles.decreaseWages, `${Charles.DecreaseWagesPrice} Golden Carrots`);
+    //Tomes
+    eInnerText(elCharles.improveWorkingConditions, `${Charles.tome.improveWorkingConditions.price} Golden Carrots`);
+    eInnerText(elCharles.betterHoes, `${Charles.tome.betterHoes.price} Golden Carrots`);
+    eInnerText(elCharles.decreaseWages, `${Charles.tome.decreaseWages.price} Golden Carrots`);
 
     eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(100*Charles.ImproveWorkingConditions)}%\n
     BH: ${Math.floor(100*Charles.BetterHoes)}%\n
@@ -912,175 +917,7 @@ const default_tips = {
         "Carrots are people too",
         "Carrots have been proven to improve eyesight by 9000%. It's true!"
     ],
-    cheater: [
-`We're no strangers to love
-You know the rules and so do I
-A full commitment's what I'm thinking of
-You wouldn't get this from any other guy
-I just wanna tell you how I'm feeling
-Gotta make you understand
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you
-We've known each other for so long
-Your heart's been aching but you're too shy to say it
-Inside we both know what's been going on
-We know the game and we're gonna play it
-And if you ask me how I'm feeling
-Don't tell me you're too blind to see
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you
-Never gonna give, never gonna give
-(Give you up)
-We've known each other for so long
-Your heart's been aching but you're too shy to say it
-Inside we both know what's been going on
-We know the game and we're gonna play it
-I just wanna tell you how I'm feeling
-Gotta make you understand
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye`,
-`Somebody once told me the world is gonna roll me
-I ain't the sharpest tool in the shed
-She was looking kind of dumb with her finger and her thumb
-In the shape of an "L" on her forehead
-Well the years start coming and they don't stop coming
-Fed to the rules and I hit the ground running
-Didn't make sense not to live for fun
-Your brain gets smart but your head gets dumb
-So much to do, so much to see
-So what's wrong with taking the back streets?
-You'll never know if you don't go
-You'll never shine if you don't glow
-Hey now, you're an all-star, get your game on, go play
-Hey now, you're a rock star, get the show on, get paid
-And all that glitters is gold
-Only shooting stars break the mold
-It's a cool place and they say it gets colder
-You're bundled up now, wait 'til you get older
-But the meteor men beg to differ
-Judging by the hole in the satellite picture
-The ice we skate is getting pretty thin
-The water's getting warm so you might as well swim
-My world's on fire, how about yours?
-That's the way I like it and I'll never get bored
-Hey now, you're an all-star, get your game on, go play
-Hey now, you're a rock star, get the show on, get paid
-All that glitters is gold
-Only shooting stars break the mold
-Hey now, you're an all-star, get your game on, go play
-Hey now, you're a rock star, get the show, on get paid
-And all that glitters is gold
-Only shooting stars
-Somebody once asked could I spare some change for gas?
-I need to get myself away from this place
-I said, "Yup" what a concept
-I could use a little fuel myself
-And we could all use a little change
-Well, the years start coming and they don't stop coming
-Fed to the rules and I hit the ground running
-Didn't make sense not to live for fun
-Your brain gets smart but your head gets dumb
-So much to do, so much to see
-So what's wrong with taking the back streets?
-You'll never know if you don't go (go!)
-You'll never shine if you don't glow
-Hey now, you're an all-star, get your game on, go play
-Hey now, you're a rock star, get the show on, get paid
-And all that glitters is gold
-Only shooting stars break the mold
-And all that glitters is gold
-Only shooting stars break the mold`,
-`Incoming ROFLCOPTER!
-
-ROFL:ROFL:ROFL:ROFL
-        ___^___ _
-L    __/      [] \    
-LOL===__           \ 
-L      \___ ___ ___]
-            I   I
-        ----------/`,
-`My ROFLCopter goes soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi soi `,
-`⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌
-⠀⠀⠀⠟⠝⠈⠀⠀⠀⠡⠀⠠⢈⠠⢐⢠⢂⢔⣐⢄⡂⢔⠀⡁⢉⠸⢨⢑⠕⡌
-⠀⠀⡀⠁⠀⠀⠀⡀⢂⠡⠈⡔⣕⢮⣳⢯⣿⣻⣟⣯⣯⢷⣫⣆⡂⠀⠀⢐⠑⡌
-⢀⠠⠐⠈⠀⢀⢂⠢⡂⠕⡁⣝⢮⣳⢽⡽⣾⣻⣿⣯⡯⣟⣞⢾⢜⢆⠀⡀⠀⠪
-⣬⠂⠀⠀⢀⢂⢪⠨⢂⠥⣺⡪⣗⢗⣽⢽⡯⣿⣽⣷⢿⡽⡾⡽⣝⢎⠀⠀⠀⢡
-⣿⠀⠀⠀⢂⠢⢂⢥⢱⡹⣪⢞⡵⣻⡪⡯⡯⣟⡾⣿⣻⡽⣯⡻⣪⠧⠑⠀⠁⢐
-⣿⠀⠀⠀⠢⢑⠠⠑⠕⡝⡎⡗⡝⡎⣞⢽⡹⣕⢯⢻⠹⡹⢚⠝⡷⡽⡨⠀⠀⢔
-⣿⡯⠀⢈⠈⢄⠂⠂⠐⠀⠌⠠⢑⠱⡱⡱⡑⢔⠁⠀⡀⠐⠐⠐⡡⡹⣪⠀⠀⢘
-⣿⣽⠀⡀⡊⠀⠐⠨⠈⡁⠂⢈⠠⡱⡽⣷⡑⠁⠠⠑⠀⢉⢇⣤⢘⣪⢽⠀⢌⢎
-⣿⢾⠀⢌⠌⠀⡁⠢⠂⠐⡀⠀⢀⢳⢽⣽⡺⣨⢄⣑⢉⢃⢭⡲⣕⡭⣹⠠⢐⢗
-⣿⡗⠀⠢⠡⡱⡸⣔⢵⢱⢸⠈⠀⡪⣳⣳⢹⢜⡵⣱⢱⡱⣳⡹⣵⣻⢔⢅⢬⡷
-⣷⡇⡂⠡⡑⢕⢕⠕⡑⠡⢂⢊⢐⢕⡝⡮⡧⡳⣝⢴⡐⣁⠃⡫⡒⣕⢏⡮⣷⡟
-⣷⣻⣅⠑⢌⠢⠁⢐⠠⠑⡐⠐⠌⡪⠮⡫⠪⡪⡪⣺⢸⠰⠡⠠⠐⢱⠨⡪⡪⡰
-⣯⢷⣟⣇⡂⡂⡌⡀⠀⠁⡂⠅⠂⠀⡑⡄⢇⠇⢝⡨⡠⡁⢐⠠⢀⢪⡐⡜⡪⡊
-⣿⢽⡾⢹⡄⠕⡅⢇⠂⠑⣴⡬⣬⣬⣆⢮⣦⣷⣵⣷⡗⢃⢮⠱⡸⢰⢱⢸⢨⢌
-⣯⢯⣟⠸⣳⡅⠜⠔⡌⡐⠈⠻⠟⣿⢿⣿⣿⠿⡻⣃⠢⣱⡳⡱⡩⢢⠣⡃⠢⠁
-⡯⣟⣞⡇⡿⣽⡪⡘⡰⠨⢐⢀⠢⢢⢄⢤⣰⠼⡾⢕⢕⡵⣝⠎⢌⢪⠪⡘⡌⠀
-⡯⣳⠯⠚⢊⠡⡂⢂⠨⠊⠔⡑⠬⡸⣘⢬⢪⣪⡺⡼⣕⢯⢞⢕⢝⠎⢻⢼⣀⠀
-⠁⡂⠔⡁⡢⠣⢀⠢⠀⠅⠱⡐⡱⡘⡔⡕⡕⣲⡹⣎⡮⡏⡑⢜⢼⡱⢩⣗⣯⣟
-⢀⢂⢑⠀⡂⡃⠅⠊⢄⢑⠠⠑⢕⢕⢝⢮⢺⢕⢟⢮⢊⢢⢱⢄⠃⣇⣞⢞⣞⢾
-⢀⠢⡑⡀⢂⢊⠠⠁⡂⡐⠀⠅⡈⠪⠪⠪⠣⠫⠑⡁⢔⠕⣜⣜⢦⡰⡎⡯⡾⡽`,
-`⠀⠀⠘⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀⠀ ⠀⠀⠀
-⠑⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⠁⠀⠀⠀ ⠀⠀⠀⠀
- ⠈⠢⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠴⠊⠀⠀⠀⠀⠀ ⠀⠀
-⠀⠀ ⠀ ⠀⠀⢸⠀⠀⠀⢀⣀⣀⣀⣀⣀⡀⠤⠄⠒⠈⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⠀
-⠀⠀⠀⠀  ⠀⠘⣀⠄⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀
-⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠛⠋⠉⠈⠉⠉⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠉⠛⢿⣿⣿⣿⣿
-⣿⣿⣿⣿⡏⣀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣄⡀⠀⠀⠀  ⠀⠀ ⠀⠀⠙⢿⣿⣿
-⣿⣿⣿⢏⣴⣿⣷⠀⠀⠀⠀⠀⢾⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀ ⠀  ⠀⠀⠀⠈⣿⣿
-⣿⣿⣟⣾⣿⡟⠁⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣷⢢⠀⠀⠀⠀   ⠀⠀⠀⢸⣿ 
-⣿⣿⣿⣿⣟⠀⡴⠄⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀   ⠀⠀⣿ 
-⣿⣿⣿⠟⠻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠶⢴⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀   ⠀⣿ 
-⣿⣁⡀⠀⠀⢰⢠⣦⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣿⡄⠀⣴⣶⣿⡄⣿ 
-⣿⡋⠀⠀⠀⠎⢸⣿⡆⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠗⢘⣿⣟⠛⠿⣼ 
-⣿⣿⠋⢀⡌⢰⣿⡿⢿⡀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣧⢀⣼ 
-⣿⣿⣷⢻⠄⠘⠛⠋⠛⠃⠀⠀⠀⠀⠀⢿⣧⠈⠉⠙⠛⠋⠀⠀⠀⣿⣿⣿⣿⣿ 
-⣿⣿⣧⠀⠈⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠟⠀⠀⠀⠀⢀⢃⠀⠀⢸⣿⣿⣿⣿ 
-⣿⣿⡿⠀⠴⢗⣠⣤⣴⡶⠶⠖⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡸⠀⣿⣿⣿⣿ 
-⣿⣿⣿⡀⢠⣾⣿⠏⠀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠉⠀⣿⣿⣿⣿ 
-⣿⣿⣿⣧⠈⢹⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿ 
-⣿⣿⣿⣿⡄⠈⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣿⣦⣄⣀⣀⣀⣀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠙⣿⣿⡟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠁⠀⠀⠹⣿⠃⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢐⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
-⣿⣿⣿⣿⠿⠛⠉⠉⠁⠀⢻⣿⡇⠀⠀⠀⠀⠀⠀⢀⠈⣿⣿⡿⠉⠛⠛⠛⠉⠉ 
-⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀,`
-    ]
+    
 }
 const tips= localStorage.getObject("tips");
 setInterval(()=>{
