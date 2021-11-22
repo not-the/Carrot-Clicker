@@ -422,7 +422,9 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions,amount=
     let r = tome.price;
     let r2 = tome.price;
     
-    function multibuyPrice(PriceIncrease){console.log(r+=Math.ceil(r*PriceIncrease));
+    function multibuyPrice(PriceIncrease) {
+        // console.log(r+=Math.ceil(r*PriceIncrease));
+
         if(Math.floor(r*PriceIncrease)==0){
             r+=Math.ceil(r*PriceIncrease);
         }else{
@@ -498,6 +500,16 @@ function HoeCost(type=0,amount=1,mode="query"){
     return p2;
 }
 
+// Hoe images
+const hoeImg = [
+    './assets/tools/wood_hoe.png',
+    './assets/tools/stone_hoe.png',
+    './assets/tools/iron_hoe.png',
+    './assets/tools/gold_hoe.png',
+    './assets/tools/diamond_hoe.png',
+    './assets/tools/netherite_hoe.png',
+]
+
 function CreateHoe(type=0,amount=1) {
     // Greg unlock check
     // if(characterQuery(characterString('greg')) == false) {
@@ -550,6 +562,8 @@ function CreateHoe(type=0,amount=1) {
             var p = 0;
             var id = setInterval(frame,100);
             elMainProgressContainer.classList.add('status_tidbit_in');
+            dom('main_progress_image').src = hoeImg[type];
+            
             function frame() {
                 if (p >= price) {
                     clearInterval(id);

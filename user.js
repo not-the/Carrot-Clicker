@@ -209,17 +209,18 @@ document.addEventListener('keyup', event => {
 /*-----------------------Keybinds-------------------*/
 //#region
 
-var keyTrigger = [0, 0, 0]; // Variable achievement(s) test for
+var keyTrigger = [0, 0, 0, 0]; // Variable achievement(s) test for
 var keyCombo = '';
 const keyCodes = [
     'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight b a Enter ',
     'g a m i n g ',
-    'j j c v i p '
+    'j j c v i p ',
+    'p i n e a p p l e ',
 ];
 //defining keybinds
 function keybindHandler(event){
     keyCombo += event.key + ' ';
-
+    keyTrigger[3]
     // Keyboard combos //
     // Konami Code
     if(keyCombo == keyCodes[0]) {
@@ -242,12 +243,20 @@ function keybindHandler(event){
         keyTrigger[2] = 1;
         openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'hello');
     }
+    // Pineapple
+    else if(keyCombo == keyCodes[3]) {
+        console.log('Pineapple Code entered');
+        keyCombo = '';
+        keyTrigger[3] = 1;
+        setCosmetic('pineapple');
+    }
 
     // Check if string is on track to be correct or not
     for(i = 0; i < keyCombo.length; i++) {
         if(keyCombo[i] != keyCodes[0][i]
         && keyCombo[i] != keyCodes[1][i]
-        && keyCombo[i] != keyCodes[2][i]) {
+        && keyCombo[i] != keyCodes[2][i]
+        && keyCombo[i] != keyCodes[3][i]) {
             keyCombo = '';
             break;
         }
@@ -503,7 +512,7 @@ const achievements = {
     '1_decrease_wages': {
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
-        'image': false,
+        'image': './assets/characters/decrease_wages.png',
         'reward': 'function:doNothing()',
         'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {
@@ -671,7 +680,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -684,7 +693,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -697,7 +706,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -870,7 +879,7 @@ const achievements = {
     },
     '1_netherite_hoe': {
         'name': 'Extreme Farming',
-        'desc': 'Netherite',
+        'desc': 'Obtain the ultimate farming apparatus (Netherite Hoe)',
         'image': './assets/tools/netherite_hoe.png',
         'reward': 'cosmetic:netherite_hoe',
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
@@ -886,9 +895,23 @@ const achievements = {
     'easter_egg_hunter': {
         'name': 'Easter Egg Hunter',
         'desc': 'Enter the Konami code. According to Wikipedia. There are multiple versions apparently. (Hidden achievement)',
-        'image': false,
+        'image': './assets/achievements/easter_egg.png',
         'reward': 'function:confetti()',
         'conditions': ['keyTrigger[0]', 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
+    },
+    'pineapple': {
+        'name': 'Pineapple',
+        'desc': 'Hey that\'s me (Hidden achievement)',
+        'image': './assets/theme/pineapple/pineapple.png',
+        'reward': 'cosmetic:pineapple',
+        'conditions': ['keyTrigger[3]', 1],
         'mystery': {
             'name': true,
             'desc': true,
@@ -1200,7 +1223,7 @@ function onLoad() {
     console.log('Running onLoad()');
     
     // Start music
-    playMusic('music.m4a');
+    // playMusic('music.m4a');
 
     // Put things on page
     carrotCount();
@@ -1308,7 +1331,7 @@ function onLoad() {
     // Enable Music
     if(store('enableMusic') == null) {
         console.log('enableMusic not found in localStorage, creating...')
-        store('enableMusic', 'true');
+        store('enableMusic', 'false');
     } else {
         console.log('enableMusic: ' + store("enableMusic"));
         if(store("enableMusic") == "true") {
@@ -1375,9 +1398,26 @@ function onLoad() {
         elEnableSounds.checked = false;
         settingSounds();
     } else if(location.hash == '#cheatmode') {
+        // Achievements
         for(let i = 0; i < achievementsKeys.length; i++) {
            grantAchievement(achievementsKeys[i])
         }
+
+        // Themes
+        for(let i = 0; i < themesKeys.length; i++) {
+            unlock('theme', themesKeys[i])
+        }
+
+        // Cosmetics
+        for(let i = 0; i < cosmeticsKeys.length; i++) {
+            unlock('cosmetic', cosmeticsKeys[i])
+        }
+
+        // Characters
+        unlock('character', 'belle');
+        unlock('character', 'greg');
+        unlock('character', 'charles');
+        unlock('character', 'carl');
     }
     
 

@@ -649,61 +649,71 @@ const themes = {
         name:     'Dark Theme',
         image:    './assets/theme/theme_dark.png',
         desc:     'Default dark',
-        cosmetic: false
+        cosmetic: false,
+
     },
     'theme_light': {
         name:     'Light Theme',
         image:    './assets/theme/theme_light.png',
         desc:     'Default light',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#FFFFFF',
     },
     'theme_oled': {
         name:     'OLED Dark Theme',
         image:    './assets/theme/theme_oled.png',
         desc:     'Don\'t play Carrot Clicker after midnight',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#000000',
     },
     'theme_classic': {
         name:     'Carrot Clicker classic',
         image:    './assets/theme/theme_classic.png',
         desc:     'The original look of carrot clicker',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#4e3f34',
     },
     'theme_red': {
         name:     'Red Theme',
         image:    './assets/theme/theme_red.png',
         desc:     'Town painted.',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#913535'
     },
     'theme_green': {
         name:     'Green Theme',
         image:    './assets/theme/theme_green.png',
         desc:     'Don\'t be jealous',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#4c6949'
     },
     'theme_blue': {
         name:     'Blue Theme',
         image:    './assets/theme/theme_blue.png',
         desc:     'For when you get tired of gray',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#455779'
     },
     'theme_camo': {
         name:     'Camo Theme',
         image:    './assets/theme/theme_camo.png',
         desc:     'In the trees',
-        cosmetic: false
+        cosmetic: false,
+        // accent:   false
     },
     'theme_retro': {
         name:     'Retro Green Theme',
         image:    './assets/theme/theme_retro.png',
         desc:     ':D',
-        cosmetic: false
+        cosmetic: false,
+        // accent:   false
     },
     'theme_blockgame': {
         name:     'Minecraft',
         image:    './assets/theme/blockgame/grass_block_side.png',
         desc:     'Does it violate copyright if this is just a hobby project with no ads? Genuine question',
-        cosmetic: false
+        cosmetic: false,
+        accent:   '#3c2a1d'
     },
 };
 const themesKeys = Object.keys(themes);
@@ -1154,8 +1164,13 @@ function setTheme(theme) {
     // }
 
     // Mobile accent color
-    if(theme == 'theme_light') {theme_color = '#FFFFFF';}
-    else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
+    // if(theme == 'theme_light') {theme_color = '#FFFFFF';}
+    // else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
+
+    if(themes[theme].hasOwnProperty('accent')) {
+        theme_color = themes[theme].accent;
+    };
+
     dom('theme_color').content = theme_color;
 
     // Save to localStorage
@@ -1166,6 +1181,26 @@ function setTheme(theme) {
     themeSwitcherCheckmark(theme, from);
 }
 //#endregion
+
+
+
+// Character info
+function characterInfo(character) {
+    console.log('characterInfo(): ' + character);
+    let element = dom(`${character}_box`);
+    let back = dom(`${character}_bio`);
+
+    // Front
+    if(element.classList.contains('charflip')) {
+        element.classList.remove('charflip');
+        back.classList.add('charflip_r');
+    } else {
+        element.classList.add('charflip');
+        back.classList.remove('charflip_r');
+    }
+}
+
+
 
 
 

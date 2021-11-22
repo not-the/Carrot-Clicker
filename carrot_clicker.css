@@ -888,6 +888,9 @@ body:not(.theme_light) .theme_checkmark {
     outline: transparent;
     transition-property: box-shadow, border, background, outline;
     transition-duration: 0.15s;
+
+    /* 3D */
+    transform: perspective(800px);
 }
 .characterbox:hover {
     /* border: 3px solid #6d6565; */
@@ -936,6 +939,37 @@ body:not(.theme_light) .theme_checkmark {
     }
 }
 
+/* Character in-depth card */
+.bio_card {
+    height: 100%;
+    width: 100%;
+    background-color: green;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    visibility: hidden;
+    pointer-events: none;
+    transform: perspective(800px) rotateY(180deg);
+}
+.charflip {animation: charflip 1s forwards;}
+.charflip_r {animation: charflip 1s forwards reverse;}
+@keyframes charflip {
+    0% {
+        transform: perspective(800px);
+        filter: brightness(100%);
+        visibility: unset;
+        pointer-events: unset;
+    }
+    100% {
+        transform: perspective(800px) rotateY(180deg);
+        filter: brightness(50%);
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+
 /* Character info */
 .characterdesc {
     margin-left: 4px;
@@ -945,6 +979,8 @@ body:not(.theme_light) .theme_checkmark {
     width: 64px;
     image-rendering: pixelated;
     border-top-left-radius: 9px;
+
+    cursor: pointer;
 }
 /* Tools/upgrades */
 .levelupimg, .toolicon {
@@ -1264,8 +1300,8 @@ body:not(.theme_light) .theme_checkmark {
     overflow: hidden;
 }
 .achievement_item .achievement_img {
-    height: 100px;
-    width: 100px;
+    height: 75px;
+    width: 75px;
     margin-right: 16px;
     
     border-radius: 16px;
@@ -1275,14 +1311,12 @@ body:not(.theme_light) .theme_checkmark {
     filter: saturate(0%);
 }
 .achievement_details {
-    min-height: 100px;
     padding: 8px;
-    /* padding-bottom: 18px; */
     background-color: var(--brown-darkest-color);
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.45) inset;
 }
 .achievement_details h2 {
-    margin: 16px 0 10px 0;
+    margin: 6px 0 8px 0;
     font-size: 20pt;
 }
 .achievement_item h4 {
@@ -1302,8 +1336,8 @@ body:not(.theme_light) .theme_checkmark {
     border: none;
 }
 .reward_img {
-    height: 48px;
-    width: 48px;
+    height: 42px;
+    width: 42px;
     margin-right: 10px;
 }
 

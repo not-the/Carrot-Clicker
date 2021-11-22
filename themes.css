@@ -16,6 +16,9 @@
 .theme_light select {
     border: 1px solid var(--border-color);
 }
+.theme_light .secondary_text {
+    color: rgb(70, 70, 70);
+}
 
 /* Scrollbar */
 .theme_light ::-webkit-scrollbar {
@@ -217,7 +220,7 @@
     background-color: rgb(63, 20, 20);
 }
 .theme_red .Basic_Info {
-    background-color: rgb(145, 53, 53);
+    background-color: #913535;
 }
 .theme_red #left-section {
     background-color: rgb(112, 37, 37);

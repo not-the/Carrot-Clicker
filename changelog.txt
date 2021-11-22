@@ -1,4 +1,27 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.6.5
+    11-21-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Achievements are now more compact
+- Modified a number of achievements and gave some pixel art
+- Updated developer tools
+- Added another keyboard combo with related achievement
+- Music is now off by default, but can be reenabled in settings
+- Themes now have proper accent color support, and all of the themes now have accent colors
+
+Fixes:
+- ~~Fixed numbers having decimal places when they shouldn't (carrot utilities)~~
+  + My fix broke even more things so I've just reverted it for now
+- Commented out console.log() that was spamming the console
+- The status bar progress bar will now correctly display what hoe you are crafting
+- Minor light theme fix- secondary_text was difficult to read (light theme is still incomplete)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.6.4.1
     11-20-2021
 // ----------------------------------------------------------- //
