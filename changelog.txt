@@ -1,9 +1,13 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.6.6.1
+    VERSION dev beta 1.6.6.1 & 1.6.6.2
     11-22-2021
 // ----------------------------------------------------------- //
 
+.1
 - Potentially fixed the social media preview not having an image
+
+.2
+- Added a link to the changelog to the dropdown menu
 
 ~ Kal
 
