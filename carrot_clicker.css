@@ -102,6 +102,12 @@ p {margin: 0;}
 a {color: rgb(137, 184, 255);}
 a:hover {filter: brightness(120%);}
 
+.noscript {
+    width: 100%;
+    padding: 16px 0;
+    background-color: var(--warning-red);
+}
+
 .flex {display: flex;}
 .half_width {width: 50% !important;}
 .overflow_hidden {overflow: hidden !important;}
@@ -511,23 +517,33 @@ summary:hover {
 
 /* Fancy Theme Switcher */
 .fancy_switcher {
-    width: 100%;
-    max-width: 540px;
+    width: 540px;
+    max-width: 100%;
     max-height: 90%;
     min-height: 85vh;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: hidden;
 
+    padding: 0;
     padding-top: 48px;
     z-index: 200;
 
     visibility: hidden;
 }
+.fancy_list {
+    overflow: auto;
+    height: 100%;
+    max-height: 75vh;
+    padding: 8px 24px 24px;
+}
 h1.theme_menu_title {
     margin-top: 40px;
     margin-bottom: 10px;
+    padding-left: 24px;
 }
 p.theme_menu_title {
     margin-bottom: 12px;
+    padding-left: 24px;
 }
 .theme_preview {image-rendering: pixelated;}
 .fancy_switcher h1 {
@@ -589,6 +605,20 @@ body:not(.theme_light) .theme_checkmark {
     filter: invert();
 }
 
+/* Popup animation */
+/* .popup_in  {animation: popup_anim 0.2s ease;}
+.popup_out {animation: popup_anim 0.2s ease forwards reverse;}
+@keyframes popup_anim {
+    0% {
+        transform: translate(-50%, calc(-50% + 200px));
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+} */
+
 /* Paint splatter */
 .paint_splash {
     position: absolute;
@@ -634,6 +664,16 @@ body:not(.theme_light) .theme_checkmark {
         opacity: 0;
     }
 }
+.falling_carrot {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+
+    z-index: 110;
+    filter: drop-shadow(4px 4px 10px black);
+    cursor: pointer;
+    padding: 4px;
+}
 
 /* Status Bar */
 .status_bar {
@@ -672,7 +712,9 @@ body:not(.theme_light) .theme_checkmark {
     top: 0;
     right: 0;
 }
-#info_dropdown:hover {
+#info_dropdown:hover,
+#info_dropdown:active,
+#info_dropdown:focus-visible {
     background-color: var(--highlight-color);
 }
 #info_dropdown svg {
@@ -690,7 +732,9 @@ body:not(.theme_light) .theme_checkmark {
 
     min-width: 240px;
 }
-#info_dropdown:hover .hover_menu {
+#info_dropdown:hover .hover_menu,
+#info_dropdown:active .hover_menu,
+#info_dropdown:focus-visible .hover_menu {
     visibility: visible;
 }
 .menu_item {
@@ -863,9 +907,6 @@ body:not(.theme_light) .theme_checkmark {
 
 
 /* Right section */
-.character_column {
-    height: 100%;
-}
 .character_column p {
     max-width: 356px;
 }
@@ -1420,6 +1461,14 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
 /* Media queries */
 /* Minimum supported width: 362px */
+@media only screen and (min-width: 1300px) {
+    #right-section {
+        display: flex;
+    }
+}
+
+
+
 @media only screen and (max-width: 848px) {
     .Basic_Info {
         flex-direction: column;
@@ -1443,7 +1492,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
         max-width: 100%;
         margin: 0 auto;
         box-shadow: none;
-        background-color: transparent;
+        background-color: transparent !important;
     }
     #right-section {
         border: none;

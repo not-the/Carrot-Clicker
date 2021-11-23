@@ -451,6 +451,37 @@
 
 
 
+/* Black & White theme */
+.theme_bw * {
+    filter: saturate(0);
+}
+.theme_bw {
+    background-color: rgb(36, 36, 36);
+}
+/* .theme_bw img,
+.theme_bw #main_carrot {
+    filter: saturate(0%);
+    /* image-rendering: unset; */
+/* }
+.theme_bw .Basic_Info {
+    background-color: rgb(71, 71, 71);
+}
+.theme_bw .characterbox {
+    background-color: rgb(71, 71, 71);
+    border-color: rgb(71, 71, 71);
+}
+.theme_bw .bottom {
+    background-color: rgb(44, 44, 44);
+} */
+
+
+
+
+
+
+
+
+
 
 
 

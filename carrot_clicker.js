@@ -171,7 +171,7 @@ const player1 = {
 
     inventory: {
         // Item inventory
-    }
+    },
 }
 
 
@@ -200,12 +200,32 @@ const Default_Charles = {
     }
 }
 
+const Default_Carl = {
+    prices: {
+        'theme:theme_classic': {
+            currency: 'golden_carrot',
+            amount: 1,
+            conditions: false,
+            available: true,
+            bought: false,
+        },
+        'theme:theme_camo': {
+            currency: 'golden_carrot',
+            amount: 2,
+            conditions: false,
+            available: true,
+            bought: false,
+        },
+    },
+}
+
 //Asigns the Local storage
-const Charles          = localStorage.getObject("Charles");
 const player           = localStorage.getObject("player");
 const Boomer_Bill      = localStorage.getObject("Bill");
 const Belle_Boomerette = localStorage.getObject("Belle");
 const Gregory          = localStorage.getObject("Greg");
+const Charles          = localStorage.getObject("Charles");
+const Carl             = localStorage.getObject("Carl");
 
 //autosaves
 setInterval(() => {
@@ -214,13 +234,15 @@ setInterval(() => {
         localStorage.setObject("Bill",Boomer_Bill);
         localStorage.setObject("Belle",Belle_Boomerette);
         localStorage.setObject("Greg",Gregory);
-        localStorage.setObject("Charles",Charles)
+        localStorage.setObject("Charles",Charles);
+        localStorage.setObject("Carl",Carl);
     }else{
         localStorage.setObject("player",player1);
         localStorage.setObject("Bill",Default_Boomer_Bill);
         localStorage.setObject("Belle",Default_Belle_Boomerette);
         localStorage.setObject("Greg",Default_Gregory);
         localStorage.setObject("Charles",Default_Charles);
+        localStorage.setObject("Carl",Default_Carl);
         location.reload();
     }
 }, 2000);
@@ -237,12 +259,29 @@ var clickSpeed = 0;
 var clickSpeedBest = 0;
 var clickArray = [];
 
+// Earn carrots function
+function earnCarrots(amount, type) {
+    player.Carrots += amount;
+    player.lifetime.carrots += amount;
+
+    // Type
+    switch(type) {
+        // Click
+        case 'click':
+            player.lifetime.click_carrots += amount;
+            player.lifetime.clicks ++;
+            break;
+        // Idle
+        case 'idle':
+            player.lifetime.idle_carrots += amount;
+            break;
+    }
+}
+
 //On Carrots Click
 function onClick(useMousePos) {
-    player.Carrots += player.cpc;
-    player.lifetime.carrots += player.cpc;
-    player.lifetime.click_carrots += player.cpc;
-    player.lifetime.clicks ++;
+    // Grant carrots
+    earnCarrots(player.cpc, 'click');
 
     // Page stuff
     carrotCount();
@@ -301,9 +340,11 @@ function clickSpeedHandler(clicked = false) {
 
 // Carrots per second
 function CarrotsPerSecond() {
-    player.Carrots += player.cps/20;
-    player.lifetime.carrots += player.cps/20;
-    player.lifetime.idle_carrots += player.cps/20;
+    // player.Carrots += player.cps/20;
+    // player.lifetime.carrots += player.cps/20;
+    // player.lifetime.idle_carrots += player.cps/20;
+
+    earnCarrots(player.cps/20, 'idle');
 
     // Might want to change this but it seems to be fine   for now
     // Note: this being here is the only reason the counter gets updated immediately, if this gets removed it needs to go in every function that changes carrot count or in the main game loop

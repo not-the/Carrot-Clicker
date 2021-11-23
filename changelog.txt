@@ -1,4 +1,37 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.6.6
+    11-22-2021
+// ----------------------------------------------------------- //
+
+Oversights and other backlog changes
+
+- Added Alien Carrot cosmetic (currently not obtainable)
+- There is now a warning at the top of the page when you have Javascript disabled
+- Social media link preview tags have been added, so sharing the link will now provide information about the game.
+- Game will no longer grant an achievement if you already have it
+- Game will no longer grant a theme or cosmetic if you already have it
+- Moved earning carrots into its own function
+- You can now press escape to close the cosmetic switcher
+- Fixed issue where left-section would have a background color on mobile while a theme that changes it is active
+- Fixed issue where theme/cosmetic switchers would be wider than the viewport on small screens
+- When any popup box is open the main page will not be scrollable (this previously only worked for dialog boxes, other popups got left out)
+- The theme/cosmetic switcher buttons now play the button press sound
+- Fixed big number achievements past 1 quintillion being 1000x less than intended
+- Achievements without images will now display missing.png in their toast notification
+- Changed the prestige dialog to reflect the fact that you keep your unlocked characters
+- Carl will now spill over to the right side of the screen when there is space (1300px or wider)
+- Charles has been moved to the leftmost column since he fits there better
+- The theme/cosmetic menu now keeps the tabs/close button at the top so they are accessible at all times
+- New theme: Black & White
+- Most of the clickable elements on the page should now be keyboard focusable (some still aren't interactable- accessibility is still an ongoing process)
+- You should be able to press enter while navigating the page via keyboard as an alternative to clicking
+- Dropdown menu will open when keyboard focused (items still don't seem to be selectable, not sure why)
+- Wrote some (currently unused) code for random falling carrots
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.6.5
     11-21-2021
 // ----------------------------------------------------------- //
@@ -35,6 +68,7 @@ Fixes:
 // ----------------------------------------------------------- //
 
 Achievement Consistency Update
+
 - Added some new achievements
 - Modified some achievements so that their requirements are visible by default
 - Changed some achievement descriptions

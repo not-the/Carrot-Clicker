@@ -181,7 +181,7 @@ document.addEventListener('keydown', event => {
     }
 
     // Close theme switcher
-    if(themeSwitcherOpen) {
+    if(themeSwitcherOpen || cosmeticSwitcherOpen) {
         if(event.key == "Escape"){
             closeDialog();
         }
@@ -218,7 +218,7 @@ const keyCodes = [
     'p i n e a p p l e ',
 ];
 //defining keybinds
-function keybindHandler(event){
+function keybindHandler(event) {
     keyCombo += event.key + ' ';
     keyTrigger[3]
     // Keyboard combos //
@@ -263,15 +263,14 @@ function keybindHandler(event){
     }
 
 
+    // Browser keyboard navigation enter acts as click
+    if(event.key == "Enter"){
+        document.activeElement.click();
+    }
 
-
-
+    
     // End function if keybinds are disabled, a dialog box is open, or an input field is focused
-    if(
-        store("disableKeybinds") == "true"
-        || dialogOpen == true
-        || document.activeElement.id == 'notificationLength')
-        return;
+    if(store("disableKeybinds") == "true" || dialogOpen == true || document.activeElement.id == 'notificationLength') return;
 
     // Multibuy
     if(event.key == "Shift"){
@@ -509,10 +508,36 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1_improve_working_conditions': {
+        'name': 'OSHA Violator',
+        'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
+        'image': './assets/achievements/safety_greg.png',
+        'reward': 'function:doNothing()',
+        'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '1_improve_hoe_costs': {
+        'name': 'Divine Intervention',
+        'desc': 'Buy a tome that improves hoe costs. Unholy magic, I say.',
+        'image': './assets/achievements/tome_improve_hoe_costs.png',
+        'reward': 'function:doNothing()',
+        'conditions': ['Charles.tome.betterHoes.value', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     '1_decrease_wages': {
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
-        'image': './assets/characters/decrease_wages.png',
+        'image': './assets/achievements/tome_decrease_wages.png',
         'reward': 'function:doNothing()',
         'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {
@@ -609,7 +634,7 @@ const achievements = {
         'desc': 'Earn your 1 QUINTILLIONTH carrot. We\'re on the verge of something beautiful.',
         'image': './assets/achievements/singularity.png',
         'reward': 'function:confetti()',
-        'conditions': ['player.lifetime.carrots', 1000000000000000],
+        'conditions': ['player.lifetime.carrots', 1000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -622,7 +647,7 @@ const achievements = {
         'desc': 'Earn your 1 SEXTILLIONTH carrot. The culmination of our efforts.',
         'image': false,
         'reward': 'function:confetti()',
-        'conditions': ['player.lifetime.carrots', 1000000000000000000n],
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -635,7 +660,7 @@ const achievements = {
         'desc': 'Earn your 1 SEPTILLIONTH carrot. Something bigger than us has taken notice.',
         'image': false,
         'reward': 'function:confetti()',
-        'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -648,7 +673,7 @@ const achievements = {
         'desc': 'Earn your 1 OCTILLIONTH carrot. There is not a single non-carrot molecule in the universe. Besides you of course.',
         'image': false,
         'reward': 'function:confetti()',
-        'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -661,7 +686,7 @@ const achievements = {
         'desc': 'Earn your 1 NONILLIONTH carrot. Finding new places to put them I see.',
         'image': false,
         'reward': 'function:confetti()',
-        'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
+        'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000n],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1021,10 +1046,8 @@ function evaluateConditions(key, achievement) {
 // Reward user
 function giveReward(reward) {
     if(reward == false) return;
-    // console.log('Unlocked: ' + reward);
-    console.log(reward);
-    let rewardType = reward.split(':')[0];
-    let rewardName = reward.split(':')[1];
+    console.log('Unlocked: ' + reward);
+    let [rewardType, rewardName] = reward.split(':');
     // console.log(rewardType, rewardName);
 
     // Theme or Cosmetic reward
@@ -1047,6 +1070,11 @@ function giveReward(reward) {
 
 // Grant Achievement (Takes in object key)
 function grantAchievement(key) {
+    if(achieveQuery(key)) {
+        console.warn(key + ' achievement already unlocked');
+        return;
+    }
+
     console.log('grant: ' + key);
     let achieve = achievements[key];
 
@@ -1089,9 +1117,11 @@ function grantAchievement(key) {
 // var playerThemes =    [];
 // var playerCosmetics = [];
 function unlock(type, thingToUnlock) {
+    if(isUnlocked(type, thingToUnlock)) {
+        console.warn(`${type}:${thingToUnlock} is already unlocked`);
+        return;
+    }
     console.log('unlock(): ' + type + ':' + thingToUnlock);
-
-    // isUnlocked() goes here
 
     // Theme
     if(type == 'theme') {
@@ -1148,6 +1178,7 @@ function isUnlocked(type = 'theme', key) {
         }
         return false;
     }
+    // Does not return anything for characters
 }
 
 
@@ -1456,6 +1487,47 @@ function onLoad() {
 
     // Disable
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+
+    // Finished
+    console.log(`                                                                
+                                         (( #%@@@           
+                                        @/@#//*%            
+                                        %(&//*&   @//&      
+                                       @/&/(*@  %//**#      
+                                       %//(/@@///**@        
+                                      @((((#//**%    /@%(((/
+                             @#######((((((**(@&#((((%@     
+                           %#####(###((((/(((((*******@     
+                         %########((((((/(//@               
+                       %(#######((((((((////@               
+                     @((#####((((((*((/////&                
+                   @#(###(#((((((((//////&                  
+                 @((####((((((((/*/////@                    
+               &((###(((((((((//////&                       
+             &((##(/(((((/(//////@                          
+           @((#(((((((/(//////#                             
+          #(#(((((((((//////&                               
+        @((((((((((//////#(                                 
+      @(((((((/(//////%(                                    
+    (((((((((/////#@                                        
+   @((((((//////@                                           
+  &/((((/////&                                              
+ %///////(@                                                 
+%////(@                                                     
+
+  _____                     _      _____ _ _      _             
+ / ____|                   | |    / ____| (_)    | |            
+| |     __ _ _ __ _ __ ___ | |_  | |    | |_  ___| | _____ _ __ 
+| |    / _\` | '__| '__/ _ \\| __| | |    | | |/ __| |/ / _ \\ '__|
+| |___| (_| | |  | | | (_) | |_  | |____| | | (__|   <  __/ |   
+ \\_____\\__,_|_|  |_|  \\___/ \\__|  \\_____|_|_|\\___|_|\\_\\___|_|   
+                                                                 
+                                                                  
+
+                                                               
+                                                               
+`)
+
 }
 
 onLoad();

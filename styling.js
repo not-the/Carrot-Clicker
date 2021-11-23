@@ -190,6 +190,8 @@ function toast(title, desc, color, persistent, replaceable, achievement) {
     else {
         let achieve = achievements[achievement];
         let rewardHTMLstring = '';
+        let noImg = false;
+        if(achieve.image == false || achieve.image == undefined) { noImg = true; }
 
         if(achieve.reward != false) {
             rewardHTMLstring =
@@ -205,7 +207,7 @@ function toast(title, desc, color, persistent, replaceable, achievement) {
         <span class="toast_close" onclick="closeToast(${toastID})">X</span>
         <!-- Details -->
         <div class="achievement_details flex">
-            <img src="${achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
+            <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
             <div>
                 <h2>${achieve.name}</h2>
                 <p class="secondary_text">${achieve.desc}</p>
@@ -384,7 +386,30 @@ function popupHandler(useMousePos = true) {
 }
 //#endregion
 
+// Falling carrots
+function fallingCarrots() {
+    var element = document.createElement("img");
+    element.src = './assets/Carrot Clicker.png';
+    element.classList.add('falling_carrot');
+    element.onclick = () => { console.log('Bonus carrot clicked') };
+
+    // Get positions
+    let mcPosition = mainCarrot.getBoundingClientRect();
+    let fixedX = Math.floor((Math.random() * 10) - 5) + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
+    let fixedY = Math.floor((Math.random() * 10) - 5) + mcPosition.bottom - 12;
+
+    element.style.left = fixedX + "px";
+    element.style.top =  fixedY + "px";
+
+    // To page
+    bonusVisualArea.append(element);
+}
+
+
+// Theme switcher <-> Cosmetic switcher
 function switchSwitchers() {
+    buttonSound();
+
     if(themeSwitcherOpen == true) {
         themeSwitcherOpen = false;
         cosmeticSwitcherOpen = true;
@@ -403,6 +428,7 @@ function themeSwitcher() {
     themeSwitcherOpen = true;
     themeMenu.classList.add('visible');
     overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
 
     buttonSound();
 }
@@ -418,6 +444,7 @@ function cosmeticSwitcher() {
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
     overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
 
     buttonSound();
 }
@@ -537,6 +564,14 @@ const cosmetics = {
         'farmable': 'Cursor',
         'desc': 'Cursorception'
     },
+    "alien_carrot": {
+        'name': 'Alien Carrot',
+        'image': './assets/theme/alien carrot/alien_carrot.png',
+        'farmable': 'Alien Carrot',
+        'desc': 'So strange'
+    },
+    // Alien Carrot
+
     // Updoot
     "upvote": {
         'name': 'Orange Arrow',
@@ -705,6 +740,13 @@ const themes = {
         name:     'Retro Green Theme',
         image:    './assets/theme/theme_retro.png',
         desc:     ':D',
+        cosmetic: false,
+        // accent:   false
+    },
+    'theme_bw': {
+        name:     'Black & White',
+        image:    false,
+        desc:     'Back in my day',
         cosmetic: false,
         // accent:   false
     },
@@ -1201,8 +1243,11 @@ function characterInfo(character) {
 }
 
 
-
-
+// Credits scroll
+const elCredits = dom('credits');
+function startCredits() {
+    elCredits.classList.add('visible');
+}
 
 
 // Title changer
