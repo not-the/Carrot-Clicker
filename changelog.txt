@@ -1,4 +1,38 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.7.0
+    11-24-2021
+// ----------------------------------------------------------- //
+
+Keybind Customization and miscellaneous improvements
+
+What's new:
+- Added a footer/image attribution section to settings
+- Tri-panel tabs now have icons and rounded borders
+- You can now hover over an achievement icon to enlarge it
+- Made rewards in the achievement list more compact and changed their background color to be darker
+- A message now displays when you filter by locked only or unlocked only and nothing fits the criteria
+- Lots of miscellaneous CSS tweaks
+- Carrot count will not display as rounded if under 1,000,000
+- You can now customize the keybinds to your liking in settings
+- Settings are now stored in a localStorage object
+- Keybinds will now work with caps lock turned on
+- You can now filter the achievements list to show hidden (secret) achievements
+- The panels at the bottom will now use their own height and scroll with the rest of the page instead of a contained scrollable area
+- Got rid of the "big social" meta tag
+- Added a volume slider to the dropdown menu
+- Messed up slider CSS
+
+Fixes:
+- Fixed extra pixel on the easter egg achievement's image
+- Fixed issue where theme/cosmetic items would be wider than the container
+- Fixed issue where dropdown didn't work on mobile
+- Fixed long tips overlapping the dropdown button on mobile
+- Partially fixed an issue where achievements would appear to have the same reward as the previous achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.6.6.1 & 1.6.6.2
     11-22-2021
 // ----------------------------------------------------------- //

@@ -297,7 +297,7 @@ function onClick(useMousePos) {
 
 // Update carrot count on page
 function carrotCount() {
-    eInnerText(elCarrotCount, `${DisplayRounded(Math.floor(player.Carrots))}`);
+    eInnerText(elCarrotCount, `${DisplayRounded(Math.floor(player.Carrots), 3, 1000000)}`);
 }
 
 // Click speed handler
@@ -915,7 +915,7 @@ function loadStatistics() {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
         statsNumbers.stat_achievements,
-        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements}`
+        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
     );
     
 }

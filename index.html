@@ -25,7 +25,7 @@
     <meta property="og:url" content="https://jjcvip.github.io/Carrot-Clicker/" />
     <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
-    <meta name="twitter:card" content="summary_large_image">
+    <!-- <meta name="twitter:card" content="summary_large_image"> -->
 </head>  
 <!--#endregion-->
 
@@ -119,6 +119,170 @@
                 <!-- Javascript will do all the work -->
                 <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
             </div>
+        </div>
+
+        <!-- Keybinds menu -->
+        <div id="keybinds_menu" class="popup_box fancy_switcher">
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <button onclick="resetKeybinds()" id="key_reset">Reset to defaults</button>
+            <h1>Customize Keybinds</h1>
+            <p><i class="secondary_text" id="keybinds_blurb">Keybinds are disabled while this menu is open</i></p><br>
+
+            <!-- Can't change -->
+            <p><b>Basic:</b></p>
+            <p class="secondary_text">Go back/close menu: <b class="white">Escape</b></p>
+            <p class="secondary_text">Dialog accept/select focused: <b class="white">Enter</b></p><br><br>
+
+            <p><b>Hoe keybinds:</b></p>
+            <p class="secondary_text">Hold the <b class="white">Alt</b> key to equip to Bill</p>
+            <p class="secondary_text">Hold the <b class="white">Control</b> key to equip to Belle</p>
+            <br/><br/>
+
+            <!-- List Keybinds -->
+            <div id="keybinds_list">
+
+                <!-- Gameplay -->
+                <div class="key_column flex_1">
+                    
+                    <p class="flex_1 no_border"><b class="underline">General:</b></p><br>
+
+                    <!-- Gameplay -->
+                    <div class="keybind_item">
+                        <label for="key_carrot">
+                            <p>Farm Carrots:</p>
+                            <button class="edit_keybind" id="key_carrot" onclick="detectKey('key_carrot')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                    <div class="keybind_item">
+                        <label for="key_multibuy">
+                            <p>Rotate Multibuy:</p>
+                            <button class="edit_keybind" id="key_multibuy" onclick="detectKey('key_multibuy')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                    <!-- Upgrades -->
+                    <div class="keybind_item">
+                        <label for="key_bill_lvlup">
+                            <p>Upgrade Bill:</p>
+                            <button class="edit_keybind" id="key_bill_lvlup" onclick="detectKey('key_bill_lvlup')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_belle_lvlup">
+                            <p>Upgrade Belle:</p>
+                            <button class="edit_keybind" id="key_belle_lvlup" onclick="detectKey('key_belle_lvlup')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_greg_lvlup">
+                            <p>Upgrade Greg:</p>
+                            <button class="edit_keybind" id="key_greg_lvlup" onclick="detectKey('key_greg_lvlup')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Hoes -->
+                <div class="key_column flex_1">
+                    
+                    <p class="flex_1 no_border"><b class="underline">Hoes:</b></p><br>
+
+                    <div class="keybind_item">
+                        <label for="key_craft_0">
+                            <p>Craft Wooden hoe:</p>
+                            <button class="edit_keybind" id="key_craft_0" onclick="detectKey('key_craft_0')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_craft_1">
+                            <p>Craft Stone hoe:</p>
+                            <button class="edit_keybind" id="key_craft_1" onclick="detectKey('key_craft_1')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_craft_2">
+                            <p>Craft Iron hoe:</p>
+                            <button class="edit_keybind" id="key_craft_2" onclick="detectKey('key_craft_2')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_craft_3">
+                            <p>Craft Golden hoe:</p>
+                            <button class="edit_keybind" id="key_craft_3" onclick="detectKey('key_craft_3')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_craft_4">
+                            <p>Craft Diamond hoe:</p>
+                            <button class="edit_keybind" id="key_craft_4" onclick="detectKey('key_craft_4')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_craft_5">
+                            <p>Craft Netherite hoe:</p>
+                            <button class="edit_keybind" id="key_craft_5" onclick="detectKey('key_craft_5')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Interface -->
+                <div class="key_column flex_1">
+                    <p class="flex_1 no_border"><b class="underline">Interface:</b></p><br>
+
+                    <div class="keybind_item">
+                        <label for="key_inventory" class="secondary_text">
+                            <p>Inventory:</p>
+                            <button class="edit_keybind" id="key_inventory" onclick="detectKey('key_inventory')" disabled>
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_prestige">
+                            <p>Open Prestige dialog:</p>
+                            <button class="edit_keybind" id="key_prestige" onclick="detectKey('key_prestige')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_cleartoasts">
+                            <p>Clear notifications:</p>
+                            <button class="edit_keybind" id="key_cleartoasts" onclick="detectKey('key_cleartoasts')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+
         </div>
 
         <!-- Credits scroll -->
@@ -265,6 +429,15 @@
                             Settings
                         </div>
                     </a>
+
+                    <div class="menu_item link_styling secondary_text">
+                        <label for="volume_master_dropdown">
+                            <img src="./assets/iconography/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
+                            </div>
+                        </label>
+                    </div>
 
                     <!-- View credits -->
                     <a tabindex="0">
@@ -679,17 +852,17 @@
 
   <!-- Lower section -->
   <!-- #region -->
-  <div class="information-area flex">
+  <div class="information-area">
     <!-- Info section -->
     <!-- <div class="row-break"></div> -->
     <div id="notifs-section">
         <!-- Nav buttons -->
         <nav id="notifs-nav">
-            <button class="activetab tab" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)">Achievements</button><button class="tab" id="info-panel-button" onclick="panelChange(`info-panel`)">Statistics</button><button class="tab" id="settings-panel-button" onclick="panelChange(`settings-panel`)">Settings</button>
+            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/iconography/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/iconography/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/iconography/settings.svg" alt="" class="button_icon invert"> Settings</button>
         </nav>
 
         <!-- Achievements Panel -->
-        <div id="achievements-panel" class="panel">
+        <div id="achievements-panel" class="panel" style="visibility: visible; position: relative; height: unset; overflow: unset; transform: none">
             <h1>Achievements</h1>
             
             <!-- Filter dropdown -->
@@ -700,7 +873,12 @@
                 <option value="unlocked">
                     Unlocked
                 </option>
-                <option value="locked">Locked</option>
+                <option value="locked">
+                    Locked
+                </option>
+                <option value="secret">
+                    Secret Achievements
+                </option>
             </select>
 
             <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
@@ -804,8 +982,8 @@
             <label for="disable_keybinds">
             <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
                 Disable keybinds
-            </label><br><br>
-            <!-- <button id="edit_keybinds" disabled>Edit keybinds</button><br><br> -->
+            </label><br>
+            <button id="edit_keybinds" onclick="keybindsMenu()">Customize Keybinds</button><br><br>
 
             <!-- Disable main progress bar -->
             <b>Interface:</b><br>
@@ -902,7 +1080,35 @@
             <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
                 Delete Save Data
             </button><br><br>
+            <hr><br>
             <!-- <p class="secondary_text center">Carrot Clicker - <a class="secondary_text link_styling">Credits</a></p> -->
+
+            <footer id="settings_footer">
+                <!-- Title -->
+                <div>
+                    <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot">
+                    <h1>Carrot Clicker</h1>
+                </div>
+
+                <!-- Footer things -->
+                <div class="footer_bottom">
+                    <div class="footer_column">
+                        <b>Created by:</b>
+                        <div class="secondary_text">not-the and JJCVIP</div>
+                        <!-- <a href="#" class="white">View Credits</a><br/> -->
+                    </div>
+                    <div class="footer_column">
+                        <b>Image Attribution:</b>
+                        <div class="secondary_text"><a href="https://www.flaticon.com/free-icon/medal_1895474" class="white">Medal icon</a> made by <a href="https://www.freepik.com" title="Freepik" class="white">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon" class="white">www.flaticon.com</a></div>
+                    </div>
+                    <div class="footer_column">
+                        <b>These links don't do anything:</b><br/>
+                        <a href="#" class="white">About</a><br/>
+                        <a href="#" class="white">Contact</a><br/>
+                    </div>
+                </div>
+
+            </footer>
         </div>
     </div>
     <!-- End Info section -->

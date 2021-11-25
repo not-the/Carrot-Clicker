@@ -20,6 +20,7 @@ var bonusID =      0;
 var dialogOpen = false;
 var themeSwitcherOpen = false;
 var cosmeticSwitcherOpen = false;
+var keybindsMenuOpen = false;
 
 // Dialog button action
 var dialogButtonAction = 'none';
@@ -159,8 +160,12 @@ function closeDialog(doAction, backdrop = false) {
     // Hide Theme Switcher
     themeMenu.classList.remove('visible');
     themeSwitcherOpen = false;
+
     cosmeticMenu.classList.remove('visible');
     cosmeticSwitcherOpen = false;
+
+    elKeybindsMenu.classList.remove('visible');
+    keybindsMenuOpen = false;
 }
 
 
@@ -237,6 +242,7 @@ function toast(title, desc, color, persistent, replaceable, achievement) {
 
     if(!persistent) {
         let timeout = store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000;
+        console.log(timeout);
         if(achievement == true ) timeout *= 2;
 
         setTimeout(() => {
@@ -292,6 +298,7 @@ function clearToasts() {
 //#region 
 var currentPanel = "achievements-panel";
 // Tab Panels
+const tripane =         dom('notifs-section');
 const infoPanel =       dom("info-panel");
 const achievementsPanel = dom("achievements-panel");
 const settingsPanel =   dom("settings-panel");
@@ -300,6 +307,9 @@ const settingsPanel =   dom("settings-panel");
 const infoTab =         dom("info-panel-button");
 const achievementsTab = dom("achievements-panel-button");
 const settingsTab =     dom("settings-panel-button");
+const panelReset = "visibility: hidden; position: absolute; transform: translateY(-100%)";
+
+// Change panel
 function panelChange(to, noSound = false) {
     if(currentPanel == to) {
         return;
@@ -312,15 +322,19 @@ function panelChange(to, noSound = false) {
         achievementsTab.classList.remove("activetab");
         settingsTab.classList.remove("activetab");
 
+        
+
         // Panel clear
-        infoPanel.style.visibility = "hidden";
-        achievementsPanel.style.visibility = "hidden";
-        settingsPanel.style.visibility = "hidden";
+        infoPanel.style = panelReset;
+        achievementsPanel.style = panelReset;
+        settingsPanel.style = panelReset;
 
         // Unhide selected panel
         dom(to + "-button").classList.add("activetab");
-        dom(to).style.visibility = "visible";
+
+        dom(to).style = "visibility: visible; position: relative; height: unset; overflow: unset; transform: none";
         
+        // Save
         store('openpanel', to);
         currentPanel = to;
     }
@@ -334,6 +348,11 @@ function panelChange(to, noSound = false) {
     if(to == 'achievements-panel') {
         populateAchievements();
     }
+
+    // Change container size
+    // let panelHeight = dom(currentPanel).clientHeight;
+    // console.log(panelHeight);
+    // tripane.style.height = `${panelHeight + 33}px`;
 }
 //#endregion
 
@@ -885,12 +904,15 @@ function populateAchievements() {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achieve = achievements[key];
-  
+
         // Test if unlocked
         let unlocked = achieveQuery(key);
 
+        // Filters
+        const achievementFilter = dom('achievement_filter');
         if(dom('achievement_filter').value == 'unlocked' && unlocked == false) continue;
         if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
+        if(dom('achievement_filter').value == 'secret' && achieve.mystery.list != true) continue;
         if(achieve.mystery.list == true && unlocked == false) continue;
 
         let img = achieve.image != false ? achieve.image : './assets/achievements/missing.png';
@@ -911,15 +933,19 @@ function populateAchievements() {
         //#endregion
 
         // Rewards info
-        if(achieve.reward != false && unlocked == true) {
+        if((achieve.reward != false) && unlocked == true) {
             let inner = '';
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
                 for(let i = 0; i < achieve.reward.length; i++) {
                     let rewardType = achieve.reward[i].split(':')[0];
                     let rewardName = achieve.reward[i].split(':')[1];
-                    if(rewardType == 'function') continue;
-    
+
+                    if(rewardType == 'function') {
+                        console.log('test');
+                        continue;
+                    };
+
                     let informalName;
                     let icon;
     
@@ -962,8 +988,6 @@ function populateAchievements() {
                     </div>
                     `;
                 }
-                // console.log(achieve);
-                // console.log(inner);
             }
 
             // Single reward
@@ -1013,6 +1037,7 @@ function populateAchievements() {
                 `;
             }
             
+            // Export HTML
             rewardHTML =
             `<!-- Rewards -->
             <div class="rewards_list">
@@ -1058,6 +1083,23 @@ function populateAchievements() {
     //     achievementHTML += /* html */
     //     `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`
     // }
+
+    if(dom('achievement_filter').value == 'unlocked' && achievementHTML == '') {
+        achievementHTML =
+            `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
+    }
+
+    // Filter by locked
+    if(dom('achievement_filter').value == 'locked' && achievementHTML == '') {
+        achievementHTML =
+            `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
+    };
+
+    // Filter by locked
+    if(dom('achievement_filter').value == 'secret' && achievementHTML == '') {
+        achievementHTML =
+            `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="confetti()"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+    };
 
     elAchievementsList.innerHTML = achievementHTML;
     // eInnerHTML(elAchievementsList, achievementHTML);
@@ -1184,6 +1226,7 @@ function achievementProgress() {
     );
 }
 
+// Filter achievements on dropdown change
 elAchievementFilter.addEventListener('change', () => {populateAchievements()});
 
 var currentTheme;
@@ -1227,26 +1270,54 @@ function setTheme(theme) {
 
 
 // Character info
-function characterInfo(character) {
-    console.log('characterInfo(): ' + character);
-    let element = dom(`${character}_box`);
-    let back = dom(`${character}_bio`);
+// function characterInfo(character) {
+//     console.log('characterInfo(): ' + character);
+//     let element = dom(`${character}_box`);
+//     let back = dom(`${character}_bio`);
 
-    // Front
-    if(element.classList.contains('charflip')) {
-        element.classList.remove('charflip');
-        back.classList.add('charflip_r');
-    } else {
-        element.classList.add('charflip');
-        back.classList.remove('charflip_r');
-    }
-}
+//     // Front
+//     if(element.classList.contains('charflip')) {
+//         element.classList.remove('charflip');
+//         back.classList.add('charflip_r');
+//     } else {
+//         element.classList.add('charflip');
+//         back.classList.remove('charflip_r');
+//     }
+// }
 
 
 // Credits scroll
 const elCredits = dom('credits');
 function startCredits() {
     elCredits.classList.add('visible');
+}
+
+
+// Keybinds menu
+const elKeybindsMenu = dom('keybinds_menu');
+const elKeybindsBlurb = dom('keybinds_blurb');
+let keyBlurbText = elKeybindsBlurb.innerHTML;
+function keybindsMenu() {
+    keybindsMenuOpen = true;
+    elKeybindsMenu.classList.add('visible');
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+
+    if(elDisableKeybinds.checked == true) {
+        elKeybindsBlurb.classList.add('color_red');
+        elKeybindsBlurb.innerText = 'Warning: Keybinds are currently disabled in settings.';
+    } else {
+        elKeybindsBlurb.classList.remove('color_red');
+        elKeybindsBlurb.innerText = keyBlurbText;
+    }
+
+    buttonSound();
+}
+function closeKeybindsMenu(noOverlay = false) {
+    elKeybindsMenu.classList.remove('visible');
+    if(noOverlay == false) {
+        overlay.classList.remove("visible"); 
+    }
 }
 
 

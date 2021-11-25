@@ -109,6 +109,7 @@ a:hover {filter: brightness(120%);}
 }
 
 .flex {display: flex;}
+.flex_1 {flex: 1;}
 .half_width {width: 50% !important;}
 .overflow_hidden {overflow: hidden !important;}
 /* .fixed {
@@ -141,6 +142,12 @@ img {
 .underline {
     text-decoration: underline !important;
 }
+.vertical_align_middle {
+    vertical-align: middle;
+}
+.no_border {
+    border: none !important;
+}
 button {
     color: white;
     background-color: transparent;
@@ -156,6 +163,8 @@ button {
 
     transition-property: transform, background-color, color;
     transition-duration: 0.25s;
+
+    vertical-align: middle;
 }
 button:hover {
     color: black;
@@ -163,6 +172,10 @@ button:hover {
 
     transform: translateY(-1px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.button_icon {
+    width: 15px;
+    display: inline-block;
 }
 input:not(.checkbox),
 select {
@@ -179,6 +192,7 @@ select {
 }
 .pointer {cursor: pointer;}
 .link_styling {
+    text-decoration: none;
     cursor: pointer;
 }
 .link_styling:hover {
@@ -244,15 +258,10 @@ summary:hover {
 }
 
 /* Text Colors */
-.secondary_text {
-    color: var(--secondary-text);
-}
-.colorwhite {
-    color: white !important;
-}
-.golden {
-    color: var(--golden-carrot) !important;
-}
+.secondary_text {color: var(--secondary-text);}
+.white {color: white !important;}
+.golden {color: var(--golden-carrot) !important;}
+.color_red {color: var(--warning-red) !important;}
 
 /* Background Colors (Toasts Usually) */
 .background_white {
@@ -560,6 +569,7 @@ p.theme_menu_title {
 .theme_item {
     /* height: 90px; */
     width: 100%;
+    max-width: 100%;
     border-radius: 10px;
     background-color: var(--darker-bg-color);
     margin-bottom: 14px;
@@ -603,6 +613,37 @@ p.theme_menu_title {
 }
 body:not(.theme_light) .theme_checkmark {
     filter: invert();
+}
+
+#keybinds_menu {
+    width: 800px;
+    padding: 24px;
+    overflow: auto;
+}
+#key_reset {
+    position: absolute;
+    top: 28px;
+    right: 64px;
+}
+.generic_close {
+    font-size: 24pt;
+    top: 24px;
+    right: 24px;
+    padding: 0;
+    margin: 0;
+}
+#keybinds_list {
+    display: flex;
+}
+.key_column {
+    margin-right: 8px;
+    padding-right: 8px;
+    border-right: 1px solid var(--border-color);
+}
+.key_column:last-of-type {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
 }
 
 /* Popup animation */
@@ -733,8 +774,7 @@ body:not(.theme_light) .theme_checkmark {
     min-width: 240px;
 }
 #info_dropdown:hover .hover_menu,
-#info_dropdown:active .hover_menu,
-#info_dropdown:focus-visible .hover_menu {
+#info_dropdown:active .hover_menu {
     visibility: visible;
 }
 .menu_item {
@@ -766,6 +806,7 @@ body:not(.theme_light) .theme_checkmark {
     right: 8px;
 }
 .invert {filter: invert();}
+/* .desaturate {filter: saturate(0%);} */
 
 
 .status_progress_bar {
@@ -984,12 +1025,26 @@ body:not(.theme_light) .theme_checkmark {
 .bio_card {
     height: 100%;
     width: 100%;
-    background-color: green;
+    background-color: var(--darker-bg-color);
+    border-radius: 8px;
+    padding: 8px;
+
     position: absolute;
     top: 0;
     left: 0;
 
     visibility: hidden;
+}
+/* Old */
+/* .bio_card {
+    height: 100%;
+    width: 100%;
+    background-color: green;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    opacity: 0;
     pointer-events: none;
     transform: perspective(800px) rotateY(180deg);
 }
@@ -999,16 +1054,18 @@ body:not(.theme_light) .theme_checkmark {
     0% {
         transform: perspective(800px);
         filter: brightness(100%);
-        visibility: unset;
+        opacity: 1 !important;
+        z-index: 55;
         pointer-events: unset;
     }
     100% {
         transform: perspective(800px) rotateY(180deg);
         filter: brightness(50%);
-        visibility: hidden;
+        opacity: 0 !important;
+        z-index: 54;
         pointer-events: none;
     }
-}
+} */
 
 
 /* Character info */
@@ -1242,51 +1299,78 @@ body:not(.theme_light) .theme_checkmark {
     position: relative;
     width: 100%;
     /* height: 700px; */
-    height: calc(100vh - 50px);
+    /* height: calc(100vh - 50px); */
     min-width: 270px;
+    min-height: 85vh;
     /* margin: 24px auto 80px; */
     margin: 24px auto 0;
     padding: 0;
     background-color: var(--brown-bg-color);
 
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 16px 16px 0 0;
+}
+#notifs-section hr {
+    border: none;
+    height: 1px;
+    background-color: var(--brown-darkest-color);
 }
 #notifs-section nav {
     margin: 0 auto;
     background-color: var(--brown-bg-color);
+    border-radius: 16px 16px 0 0;
+
+    position: sticky;
+    z-index: 2;
+    top: 36px;
 }
 #notifs-section nav .tab {
     width: 33.33%;
     height: 2em;
-    color: white;
     cursor: pointer;
     background-color: rgb(53, 42, 34);
     border: none;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
+    border-radius: 0 !important;
+    border-left: 1px solid var(--brown-darker-color);
+    border-right: 1px solid var(--brown-darker-color);
     margin-top: 0;
-}
 
+    position: relative;
+}
 .tab:hover {
     transform: translateY(-2px);
     box-shadow: none;
+    color: unset;
 }
 #notifs-section nav .activetab {
     background-color: var(--brown-bg-color);
     border: none;
     border-bottom: none;
+    color: white;
 }
 .inactivetab:hover {
     filter: brightness(120%)
+}
+#notifs-section nav .tab img {opacity: 0.6; transition: opacity 0.1s;}
+#notifs-section nav .activetab img {opacity: 1;}
+.tab:hover img {opacity: 1 !important;}
+
+#notifs-section nav .tab:first-of-type {
+    border-radius: 16px 0 0 0 !important;
+}
+#notifs-section nav .tab:last-of-type {
+    border-radius: 0 16px 0 0 !important;
 }
 
 /* Info panel */
 .panel {
     position: absolute;
     /* height: 667px; */
-    height: calc(100vh - 83px);
+    /* height: calc(100vh - 83px); */
+    min-height: 85vh;
+    height: min-content;
     width: 100%;
-    padding: 0px 24px 16px;
+    padding: 0px 24px 64px;
 
     overflow: auto;
 }
@@ -1294,7 +1378,7 @@ body:not(.theme_light) .theme_checkmark {
     width: 200px;
 } */
 #achievements-panel {
-    visibility: visible;
+    visibility: hidden;
 }
 #info-panel {
     visibility: hidden;
@@ -1335,10 +1419,11 @@ body:not(.theme_light) .theme_checkmark {
 .achievement_item {
     width: 100%;
     margin-bottom: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 0, 0, 0.45) inset;
+    background-color: var(--brown-darkest-color);
 
     border-radius: 20px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .achievement_item .achievement_img {
     height: 75px;
@@ -1346,16 +1431,25 @@ body:not(.theme_light) .theme_checkmark {
     margin-right: 16px;
     
     border-radius: 16px;
+
+    transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition-property: transform, margin;
 }
 .achievement_locked .achievement_img {
     opacity: 0.7;
     filter: saturate(0%);
 }
+.achievement_item:not(.achievement_locked):not(.toast) .achievement_img:hover {
+    transform: scale(1.8, 1.8) translateX(14px);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+    margin-right: 72px;
+    /* position: absolute; */
+}
 .achievement_details {
     padding: 8px;
-    background-color: var(--brown-darkest-color);
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.45) inset;
+    border-radius: 16px;
 }
+.achievement_details.has_reward {border-radius: 16px 16px 0 0;}
 .achievement_details h2 {
     margin: 6px 0 8px 0;
     font-size: 20pt;
@@ -1364,12 +1458,14 @@ body:not(.theme_light) .theme_checkmark {
     margin: 0;
 }
 .rewards_list {
-    background-color: var(--brown-darker-color);
+    /* background-color: var(--brown-darker-color); */
+    background-color: #00000033;
     display: flex;
+    border-radius: 0 0 16px 16px;
 }
 .reward {
-    background-color: var(--brown-darker-color);
-    padding: 10px;
+    /* background-color: var(--brown-darker-color); */
+    padding: 8px 10px;
     border-right: 1px solid var(--brown-darkest-color);
     flex: 1;
 }
@@ -1377,8 +1473,8 @@ body:not(.theme_light) .theme_checkmark {
     border: none;
 }
 .reward_img {
-    height: 42px;
-    width: 42px;
+    height: 36px;
+    width: 36px;
     margin-right: 10px;
 }
 
@@ -1420,14 +1516,14 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
   
 /* The slider itself */
 .slider {
-    -webkit-appearance: none;  /* Override default CSS styles */
-    appearance: none;
-    width: 10%; /* Full-width */
-    height: 2px; /* Specified height */
-    border-radius: 5px;
+    /* -webkit-appearance: none;
+    appearance: none; */
+    width: 10%;
+    height: 2px;
+    /* border-radius: 5px; */
     background: rgba(255, 255, 255, 0.5);
-    outline: none; /* Remove outline */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    outline: none;
+    -webkit-transition: .2s;
     transition: background-color .2s;
 
     margin-top: 6px;
@@ -1440,23 +1536,80 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
   
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    width: 4px; /* Set a specific slider handle width */
-    height: 4px; /* Slider handle height */
-    transform: scale(6, 6);
+    /* -webkit-appearance: none;
+    appearance: none; */
+    /* width: 4px;
+    height: 4px; */
+    transform: scale(2.3, 2.3);
     border-radius: 50%;
-    background: #ffffff; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    background: #ffffff;
+    cursor: pointer;
 
-    box-shadow: 0 1px 6px black;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
   
 .slider::-moz-range-thumb {
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
-    background: #ffffff; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    width: 25px;
+    height: 25px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/* Keybinds Menu */
+.keybind_item {
+    padding-bottom: 12px;
+}
+.edit_keybind {
+    background-color: var(--highlight-color);
+    color: white;
+    border-color: gray;
+
+    width: 100%;
+    text-align: left;
+
+    transition-property: border-color, background-color, color;
+}
+.edit_keybind:hover {
+    background-color: var(--highlight-color);
+    color: unset;
+    border-color: white;
+}
+.edit_keybind:focus {
+    background-color: white;
+    color: black;
+    border-color: var(--generic-blue);
+}
+.edit_keybind[disabled],
+.edit_keybind[disabled]:hover,
+.edit_keybind[disabled]:focus {
+    border-color: var(--highlight-color);
+    transform: none;
+    color: gray;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: brightness(80%);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+}
+.footer_carrot {
+    width: 200px;
+    filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.3));
+}
+.footer_bottom {
+    display: flex;
+
+    background-color: var(--brown-darker-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset;
+    border-radius: 16px;
+}
+.footer_column {
+    flex: 1;
+    /* text-align: center; */
+    padding: 16px 24px;
+
 }
 
 /* Media queries */
@@ -1473,7 +1626,8 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     .Basic_Info {
         flex-direction: column;
         text-align: center;
-        padding-right: 20px;
+        padding-right: 38px;
+        padding-left: 38px;
     }
     #Tip {
         margin-left: unset;
@@ -1506,23 +1660,42 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     }
     #notifs-section {
         margin-bottom: 80px;
+        border-radius: 16px;
+    }
+    #notifs-section nav {
+        top: 55px;
     }
     .rewards_list {
-        display: unset;
+        display: block;
     }
     .reward {
         border-right: none;
         border-bottom: 1px solid var(--brown-darkest-color);
     }
+    .footer_bottom {
+        display:block;
+    }
 }
 
 @media only screen and (max-width: 400px) {
     #right-section {
-        width: 100%;
+        max-width: 100%;
     }
     .status_progress_bar {
         border-radius: 0;
         border-right: none;
         border-left: none;
+    }
+    #notifs-section .button_icon {
+        visibility: hidden;
+        position: absolute;
+    }
+    #keybinds_list {
+        display: block;
+    }
+    .key_column {
+        border: none;
+        padding: 0;
+        margin: 0;
     }
 }

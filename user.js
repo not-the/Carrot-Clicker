@@ -15,6 +15,8 @@ const elEnableCarrotSounds = dom('enable_carrot_sounds');
 
 const elVolumeMaster = dom('volume_master');
 const elVolumeMaster_label = dom('volume_master_percent');
+const volumeMasterDropdown = dom('volume_master_dropdown');
+const vmdImage = dom('volume_master_dropdown_img');
 
 // Percentage of fun tips
 // JJ's Slider stuffs (ripping off w3 again)
@@ -150,7 +152,28 @@ function settingCarrotSounds() {
 
 // Volume slider
 elVolumeMaster.oninput = () => {
-    let value = elVolumeMaster.value;
+    volumeSliderHandler(0);
+}
+volumeMasterDropdown.oninput = () => {
+    volumeSliderHandler(1);
+}
+
+// Volume slider
+function volumeSliderHandler(v) {
+    let value;
+    if(v == 0) {
+        value = elVolumeMaster.value;
+        volumeMasterDropdown.value = value;
+    } else {
+        value = volumeMasterDropdown.value;
+        elVolumeMaster.value = value;
+    }
+
+    if(value == 0) {
+        vmdImage.src = './assets/iconography/mute.svg';
+    } else if(vmdImage.src != './assets/iconography/volume.svg') {
+        vmdImage.src = './assets/iconography/volume.svg';
+    }
 
     volume = value / 100;
 
@@ -171,6 +194,32 @@ elVolumeMaster.oninput = () => {
 /*------------EVENT LISTENERS--------------*/
 document.addEventListener('keydown', event => {
 
+    if(event.key == " ") {
+        event.preventDefault();   
+    }
+
+    // Close/Accept dialog
+    // if(dialogOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     } else if(event.key == "Enter"){
+    //         closeDialog(true);
+    //     }
+    // }
+
+    // Close theme switcher
+    // if(themeSwitcherOpen || cosmeticSwitcherOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     }
+    // }
+
+    // When on main page send to keybind handler
+    // keybindHandler(event);
+
+});
+
+document.addEventListener('keyup', event => {
     // Close/Accept dialog
     if(dialogOpen) {
         if(event.key == "Escape"){
@@ -178,31 +227,18 @@ document.addEventListener('keydown', event => {
         } else if(event.key == "Enter"){
             closeDialog(true);``
         }
+        return;
     }
-
     // Close theme switcher
     if(themeSwitcherOpen || cosmeticSwitcherOpen) {
         if(event.key == "Escape"){
             closeDialog();
         }
+        return;
     }
 
     // When on main page send to keybind handler
-    keybindHandler(event);
-
-});
-
-document.addEventListener('keyup', event => {
-    if(
-        store("disableKeybinds") == "true"
-        || dialogOpen == true
-        || document.activeElement.id == 'notificationLength'
-    ) return;
-
-        
-    if(event.key == " "){
-        onClick(false);
-    }
+    keybindHandler(event, 'keyup');
 });
 
 
@@ -212,16 +248,66 @@ document.addEventListener('keyup', event => {
 var keyTrigger = [0, 0, 0, 0]; // Variable achievement(s) test for
 var keyCombo = '';
 const keyCodes = [
-    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight b a Enter ',
-    'g a m i n g ',
-    'j j c v i p ',
-    'p i n e a p p l e ',
+    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight B A Enter ',
+    'G A M I N G ',
+    'J J C V I P ',
+    'P I N E A P P L E ',
 ];
-//defining keybinds
-function keybindHandler(event) {
-    keyCombo += event.key + ' ';
-    keyTrigger[3]
+// Defining Keybinds
+const keybinds_default = {
+    // Gameplay
+    key_carrot: ' ',
+    key_multibuy: 'Shift',
+    key_bill_lvlup: '1',
+    key_belle_lvlup: '2',
+    key_greg_lvlup: '3',
+    key_craft_0: '4',
+    key_craft_1: '5',
+    key_craft_2: '6',
+    key_craft_3: '7',
+    key_craft_4: '8',
+    key_craft_5: '9',
+
+    // Interface
+    key_cleartoasts: 'X',
+    key_prestige: 'P',
+    key_inventory: 'E',
+
+    // Make object loopable
+    keys: [],
+}
+keybinds_default['keys'] = Object.keys(keybinds_default);
+keybinds_default['keys'].pop();
+function keybindHandler(event, state) {
+    let key = interpretKey(event.key)
+
+    // Custom keybinds
+    if(keyWaiting[0] == true) {
+        let element = dom(keyWaiting[1])
+
+        if(key == 'Escape') key = 'Not set';
+
+        element.innerText = key;
+        element.blur();
+
+        // Set and reset
+        setKeybind(keyWaiting[1], key);
+        keyWaiting = [false, 'none'];
+        return;
+    }
+
+    // Stop if keybinds are being ignored
+    if(
+        store("disableKeybinds") == "true"
+        || dialogOpen == true
+        || document.activeElement.id == 'notificationLength'
+        || keybindsMenuOpen
+    ) return;
+
+
+    keyCombo += key + ' ';
     // Keyboard combos //
+    //#region 
     // Konami Code
     if(keyCombo == keyCodes[0]) {
         console.log('Konami Code entered');
@@ -261,10 +347,11 @@ function keybindHandler(event) {
             break;
         }
     }
+    //#endregion
 
 
     // Browser keyboard navigation enter acts as click
-    if(event.key == "Enter"){
+    if(key == "Enter"){
         document.activeElement.click();
     }
 
@@ -272,106 +359,188 @@ function keybindHandler(event) {
     // End function if keybinds are disabled, a dialog box is open, or an input field is focused
     if(store("disableKeybinds") == "true" || dialogOpen == true || document.activeElement.id == 'notificationLength') return;
 
+    // if(state != 'keyup') return;
+
+    // Prevent spacebar scrolling
+    if(key == "Spacebar") {
+        event.preventDefault();
+        onClick(false);
+    }
+
     // Multibuy
-    if(event.key == "Shift"){
+    else if(
+        key == settings.keybinds['key_multibuy']
+        && state == 'keyup')
+    {
         multibuySpin();
     }
     // Carrot click
-    else if(event.key == " "){
-        event.preventDefault();
+    else if(
+        key == settings.keybinds['key_carrot']
+        && state == 'keyup')
+    {
+        
+        onClick(false);
     }
 
     //Level up
-    else if(event.key=="1" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_bill_lvlup']
+        && event.altKey==false
+        && event.ctrlKey==false)
+        {
         LevelUp(Boomer_Bill,multibuy[multibuySelector]);
     }
-    else if(event.key=="2" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_belle_lvlup']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         LevelUp(Belle_Boomerette,multibuy[multibuySelector]);
     }
-    else if(event.key=="3" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_greg_lvlup']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         LevelUp(Gregory,multibuy[multibuySelector]);
     }
 
     // Hoes
-    else if(event.key=="4" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_0']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(0,multibuy[multibuySelector]);
     }
-    else if(event.key=="5" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_1']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(1,multibuy[multibuySelector]);
     }
-    else if(event.key=="6" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_2']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(2,multibuy[multibuySelector]);
     }
-    else if(event.key=="7" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_3']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(3,multibuy[multibuySelector]);
     }
-    else if(event.key=="8" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_4']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(4,multibuy[multibuySelector]);
     }
-    else if(event.key=="9" && event.altKey==false && event.ctrlKey==false){
+    else if(
+        key == settings.keybinds['key_craft_5']
+        && event.altKey==false
+        && event.ctrlKey==false)
+    {
         CreateHoe(5,multibuy[multibuySelector]);
     }
 
 
-    else if(event.key=="4" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="4" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,0,multibuy[multibuySelector]);
     }
-    else if(event.key=="5" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="5" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,1,multibuy[multibuySelector]);
     }
-    else if(event.key=="6" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="6" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,2,multibuy[multibuySelector]);
     }
-    else if(event.key=="7" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="7" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,3,multibuy[multibuySelector]);
     }
-    else if(event.key=="8" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="8" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,4,multibuy[multibuySelector]);
     }
-    else if(event.key=="9" && event.altKey==true && event.ctrlKey==false){
+    else if(key=="9" && event.altKey==true && event.ctrlKey==false){
         EquipHoe(Boomer_Bill,5,multibuy[multibuySelector]);
     }
 
-    else if(event.key=="4" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="4" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector]);
     }
-    else if(event.key=="5" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="5" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector]);
     }
-    else if(event.key=="6" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="6" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector]);
     }
-    else if(event.key=="7" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="7" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector]);
     }
-    else if(event.key=="8" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="8" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector]);
     }
-    else if(event.key=="9" && event.altKey==false && event.ctrlKey==true){
+    else if(key=="9" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector]);
     }
 
     // Close all Toasts
-    else if(event.key == 'x') {
+    else if(key == settings.keybinds['key_cleartoasts']) {
         event.preventDefault();
         clearToasts();
     }
     
-    //settings and prestige
-    else if(event.key=="Backspace" && event.altKey==false && event.ctrlKey==true){
+    // Settings and prestige
+    else if(key=="Backspace" && event.altKey==false && event.ctrlKey==true){
         event.preventDefault();
         openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave');
     }
-    else if(event.key=="p"){
+    else if(key == settings.keybinds['key_prestige']){
         openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
     }
+
+    // Inventory
+    // else if(key == settings.keybinds['key_inventory']) {
+    //     console.log('inventory');
+    //     openDialog('test', 'test');
+    // }
 }
+
+
+// Custom Keybinds
+var keyWaiting = [false, 'none'];
+function detectKey(bind) {
+    keyWaiting = [true, bind];
+}
+function setKeybind(action, key) {
+    console.log(`[Settings] Set ${action} to key: ${key}`)
+    settings.keybinds[action] = key;
+    localStorage.setObject('settings', settings);
+    console.log(action, key);
+}
+
+
+// User-friendly key translation
+function interpretKey(key) {
+    if(key == ' ') {
+        return 'Spacebar';
+    }
+
+
+    return capitalizeFL(key);
+}
+
 
 // var keybindsLS = localStorage.getItem("keybinds");
 // if(keybindsLS=="false"){
@@ -1240,16 +1409,52 @@ const items = {
     }
 }
 
+// Fill out keybinds menu
+function populateKeybinds() {
+    for(i = 0; i < settings.keybinds.keys.length; i++) {
+        let keybindName =   settings.keybinds.keys[i];
+        let key =           settings.keybinds[keybindName];
+    
+        // console.log(keybindName + ' ' + key);
+    
+        if(dom(keybindName) != null) {
+            let element = dom(keybindName);
+            element.innerHTML = interpretKey(key);
+        }
+    }
+}
+function resetKeybinds() {
+    settings.keybinds = keybinds_default;
+    saveSettings();
+    populateKeybinds();
+}
+
+function saveSettings() { localStorage.setObject("settings", settings); }
 
 
-// Unlock on page load
-// for(i = 0; i < player.unlockables.length; i++) {
-//     console.log(player[unlockables][i]);
-// }
+// Default settings object
+const settings_default = {
+    notificationLength: 5000,
+    disableKeybinds: false,     // boolean
 
+    master_volume: 1,           // Between 0 and 1
+    enableSounds: true,         // boolean
+    enableMusic: false,         // boolean
+    enableCarrotSounds: true,   // boolean
+    theme: 'theme_default',     // string
+    cosmetic: 'default',        // string
+    openpanel: null,            // string
+
+    keybinds: keybinds_default, // object
+}
+
+var settings;
 
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
+
+
+
 function onLoad() {
     console.log('Running onLoad()');
     
@@ -1317,12 +1522,26 @@ function onLoad() {
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
 
+    // Settings object
+    if(localStorage.getObject("settings") != null) {
+        // Save found
+        console.log('[Settings] SETTINGS localStorage object found!');
+        settings = localStorage.getObject('settings');
+    } else {
+        // Create from default
+        console.log('[Settings] No localStorage object found, creating...');
+        localStorage.setObject("settings", settings_default);
+        settings = settings_default;
+    }
+
+    populateKeybinds();
+
     // Fun tips
     elFunTipsSlider.value = 100 * tips.TypeModifier;
     eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
 
     // Notification length
-    if(store("notificationLength") !== null) {
+    if(store("notificationLength") != null) {
         notificationLength.value = parseInt(store("notificationLength"));
     }
 
@@ -1384,26 +1603,27 @@ function onLoad() {
         }
     }
 
-
     //#region 
     // Set user theme on page load
-    if(store('theme') !== null) {
+    if(store('theme') != null) {
         let theme = store('theme');
         console.log(`Theme setting found, switching to: ${theme}`);
         // optionTheme.value = theme;
         setTheme(theme);
     }
-    // Switch to previously open panel on page load
-    if(store('openpanel') !== null) {
-        console.log('openpanel found, switching to: ' + store('openpanel'));
-        panelChange(store('openpanel'), true);
-    }
     // Set user cosmetic on page load
-    if(store('cosmetic') !== null) {
+    if(store('cosmetic') != null) {
         let cosmetic = store('cosmetic');
         console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
         // optionCosmetic.value = cosmetic;
         setCosmetic(cosmetic);
+    }
+    // Switch to previously open panel on page load
+    if(store('openpanel') != null) {
+        console.log('openpanel found, switching to: ' + store('openpanel'));
+        panelChange(store('openpanel'), true);
+    } else {
+        panelChange('achievements-panel');
     }
     //#endregion
     
@@ -1489,44 +1709,44 @@ function onLoad() {
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
 
     // Finished
-    console.log(`                                                                
-                                         (( #%@@@           
-                                        @/@#//*%            
-                                        %(&//*&   @//&      
-                                       @/&/(*@  %//**#      
-                                       %//(/@@///**@        
-                                      @((((#//**%    /@%(((/
-                             @#######((((((**(@&#((((%@     
-                           %#####(###((((/(((((*******@     
-                         %########((((((/(//@               
-                       %(#######((((((((////@               
-                     @((#####((((((*((/////&                
-                   @#(###(#((((((((//////&                  
-                 @((####((((((((/*/////@                    
-               &((###(((((((((//////&                       
-             &((##(/(((((/(//////@                          
-           @((#(((((((/(//////#                             
-          #(#(((((((((//////&                               
-        @((((((((((//////#(                                 
-      @(((((((/(//////%(                                    
-    (((((((((/////#@                                        
-   @((((((//////@                                           
-  &/((((/////&                                              
- %///////(@                                                 
-%////(@                                                     
+//     console.log(`                                                                
+//                                          (( #%@@@           
+//                                         @/@#//*%            
+//                                         %(&//*&   @//&      
+//                                        @/&/(*@  %//**#      
+//                                        %//(/@@///**@        
+//                                       @((((#//**%    /@%(((/
+//                              @#######((((((**(@&#((((%@     
+//                            %#####(###((((/(((((*******@     
+//                          %########((((((/(//@               
+//                        %(#######((((((((////@               
+//                      @((#####((((((*((/////&                
+//                    @#(###(#((((((((//////&                  
+//                  @((####((((((((/*/////@                    
+//                &((###(((((((((//////&                       
+//              &((##(/(((((/(//////@                          
+//            @((#(((((((/(//////#                             
+//           #(#(((((((((//////&                               
+//         @((((((((((//////#(                                 
+//       @(((((((/(//////%(                                    
+//     (((((((((/////#@                                        
+//    @((((((//////@                                           
+//   &/((((/////&                                              
+//  %///////(@                                                 
+// %////(@                                                     
 
-  _____                     _      _____ _ _      _             
- / ____|                   | |    / ____| (_)    | |            
-| |     __ _ _ __ _ __ ___ | |_  | |    | |_  ___| | _____ _ __ 
-| |    / _\` | '__| '__/ _ \\| __| | |    | | |/ __| |/ / _ \\ '__|
-| |___| (_| | |  | | | (_) | |_  | |____| | | (__|   <  __/ |   
- \\_____\\__,_|_|  |_|  \\___/ \\__|  \\_____|_|_|\\___|_|\\_\\___|_|   
+//   _____                     _      _____ _ _      _             
+//  / ____|                   | |    / ____| (_)    | |            
+// | |     __ _ _ __ _ __ ___ | |_  | |    | |_  ___| | _____ _ __ 
+// | |    / _\` | '__| '__/ _ \\| __| | |    | | |/ __| |/ / _ \\ '__|
+// | |___| (_| | |  | | | (_) | |_  | |____| | | (__|   <  __/ |   
+//  \\_____\\__,_|_|  |_|  \\___/ \\__|  \\_____|_|_|\\___|_|\\_\\___|_|   
                                                                  
                                                                   
 
                                                                
                                                                
-`)
+// `)
 
 }
 
