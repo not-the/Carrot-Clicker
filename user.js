@@ -1073,7 +1073,7 @@ const achievements = {
     },
     '1_netherite_hoe': {
         'name': 'Extreme Farming',
-        'desc': 'Obtain the ultimate farming apparatus (Netherite Hoe)',
+        'desc': 'Obtain the ultimate farming implement (Netherite Hoe)',
         'image': './assets/tools/netherite_hoe.png',
         'reward': 'cosmetic:netherite_hoe',
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
