@@ -145,6 +145,9 @@ img {
 .vertical_align_middle {
     vertical-align: middle;
 }
+.bright_200 {
+    filter: brightness(200%);
+}
 .no_border {
     border: none !important;
 }
@@ -173,7 +176,11 @@ button:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
+button:hover:not(.tab) .button_icon {
+    filter: invert() !important;
+}
 .button_icon {
+    transform: translateY(2px);
     width: 15px;
     display: inline-block;
 }
@@ -1326,7 +1333,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 #notifs-section nav .tab {
     width: 33.33%;
-    height: 2em;
+    height: 2.3em;
     cursor: pointer;
     background-color: rgb(53, 42, 34);
     border: none;
@@ -1410,10 +1417,11 @@ body:not(.theme_light) .theme_checkmark {
 } */
 
 /* Filter dropdown */
-#achievement_filter {
+.panel_select {
     position: absolute;
     top: 30px;
     right: 24px;
+    width: 200px;
 }
 
 .achievement_item {
@@ -1424,6 +1432,14 @@ body:not(.theme_light) .theme_checkmark {
 
     border-radius: 20px;
     /* overflow: hidden; */
+}
+.style_challenge {
+    border: 2px solid rgb(177, 44, 44) !important;
+    background-color: rgb(85, 43, 43);
+}
+.achievement_secret {
+    border: 2px solid purple !important;
+    background-color: rgb(61, 49, 61);
 }
 .achievement_item .achievement_img {
     height: 75px;

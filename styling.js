@@ -5,9 +5,9 @@ const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
 const mainCarrot =      dom("main_carrot");
-var tooltipBill =       dom("billtooltip").style.top;
-var tooltipBelle =      dom("belletooltip").style.top;
-var tooltipGreg =       dom("gregtooltip").style.top;
+// var tooltipBill =       dom("billtooltip").style.top;
+// var tooltipBelle =      dom("belletooltip").style.top;
+// var tooltipGreg =       dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 
@@ -149,6 +149,9 @@ function closeDialog(doAction, backdrop = false) {
             case 'clearsave':
                 ClearLocalStorage();
                 break;
+            case 'resetsettings':
+                resetSettings(true);
+                break;
             default:
                 console.log('Dialog action not listed');
                 break;
@@ -172,7 +175,7 @@ function closeDialog(doAction, backdrop = false) {
 // Create Toast notification
 // For the COLOR parameter, options are:
 // gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt"
-function toast(title, desc, color, persistent, replaceable, achievement) {
+function toast(title, desc, color, persistent, replaceable, achievement = false) {
     // Replace old if replace is true
     if(toastsList[toastID - 1] == 'replace') {
         closeToast(toastID - 1);
@@ -207,19 +210,19 @@ function toast(title, desc, color, persistent, replaceable, achievement) {
         }
 
         toastElement.innerHTML =
-        `<div class="toast achievement_item">
-        <!-- Close button -->
-        <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-        <!-- Details -->
-        <div class="achievement_details flex">
-            <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
-            <div>
-                <h2>${achieve.name}</h2>
-                <p class="secondary_text">${achieve.desc}</p>
+        `<div class="toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}">
+            <!-- Close button -->
+            <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+            <!-- Details -->
+            <div class="achievement_details flex">
+                <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
+                <div>
+                    <h2>${achieve.name}</h2>
+                    <p class="secondary_text">${achieve.desc}</p>
+                </div>
             </div>
-        </div>
-        ${rewardHTMLstring}
-    </div>`;
+            ${rewardHTMLstring}
+        </div>`;
     }
 
     toastContainer.prepend(toastElement);
@@ -386,7 +389,7 @@ function popupHandler(useMousePos = true) {
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
-    eInnerText(clickVisualElement, `+${DisplayRounded(Math.floor(player.cpc,2))}`);
+    eInnerText(clickVisualElement, `+${DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort)}`);
 
     bonusVisualArea.append(clickVisualElement);
 
@@ -583,13 +586,21 @@ const cosmetics = {
         'farmable': 'Cursor',
         'desc': 'Cursorception'
     },
+    // Alien Carrot
     "alien_carrot": {
         'name': 'Alien Carrot',
         'image': './assets/theme/alien carrot/alien_carrot.png',
         'farmable': 'Alien Carrot',
         'desc': 'So strange'
     },
-    // Alien Carrot
+    // Demon Carrot
+    "demon_carrot": {
+        'name': 'Demon Carrot',
+        'image': './assets/theme/evil_carrot.png',
+        'farmable': 'Demon Carrot',
+        'desc': 'Eeevil!',
+    },
+
 
     // Updoot
     "upvote": {
@@ -1050,7 +1061,7 @@ function populateAchievements() {
         if(unlocked == true) {
             achievementHTML += /* htmla */
             `
-            <div id="${key}" class="achievement_item">
+            <div id="${key}" class="achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}">
                 <!-- Details -->
                 <div class="achievement_details flex">
                     <img src="${img}" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">

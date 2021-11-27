@@ -129,10 +129,29 @@ const player1 = {
     EquipedHoes: 0,
     clickSpeedRecord: 0,
 
+    prestige_available: false,
+
     // Lifetime stats (old)
     // LifetimeCarrots: 0,
     // LifetimeGoldenCarrots: 0,
     // LifetimeEquipedHoes: 0,
+
+    // Current prestige
+    prestige: {
+        carrots: 0,
+        click_carrots: 0,
+        idle_carrots: 0,
+
+        golden_carrots: 0,
+        prestige_count: 0,
+        clicks: 0,
+        hoes: {
+            crafted: [0, 0, 0, 0, 0, 0],
+            craftedTotal: 0,
+            equipped: [0, 0, 0, 0, 0, 0],
+            equippedTotal: 0,
+        },
+    },
 
     // Lifetime stats
     lifetime: {
@@ -178,9 +197,8 @@ const player1 = {
 // Character Defaults
 const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 const Default_Belle_Boomerette = new Character("Farmer",0,250,[0,0,0,0,0,0]);
-const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0])
+const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0]);
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
-
 const Default_Charles = {
     name:"Charles",
     type:"Scholar",
@@ -199,7 +217,6 @@ const Default_Charles = {
         }
     }
 }
-
 const Default_Carl = {
     prices: {
         'theme:theme_classic': {
@@ -220,35 +237,128 @@ const Default_Carl = {
 }
 
 //Asigns the Local storage
-const player           = localStorage.getObject("player");
-const Boomer_Bill      = localStorage.getObject("Bill");
-const Belle_Boomerette = localStorage.getObject("Belle");
-const Gregory          = localStorage.getObject("Greg");
-const Charles          = localStorage.getObject("Charles");
-const Carl             = localStorage.getObject("Carl");
+var player;
+var playerCharKeys;
+var Boomer_Bill;
+var Belle_Boomerette;
+var Gregory;
+var Charles;
+var Carl;
 
-//autosaves
+// Determine if player has savedata
+if(localStorage.getObject("player") != null ) {
+    // Import savedata
+    console.log('[Autosave] Player has savedata, importing...');
+    player           = localStorage.getObject("player");
+    Boomer_Bill      = localStorage.getObject("Bill");
+    Belle_Boomerette = localStorage.getObject("Belle");
+    Gregory          = localStorage.getObject("Greg");
+    Charles          = localStorage.getObject("Charles");
+    Carl             = localStorage.getObject("Carl");
+} else {
+    // New game, use defaults
+    console.log('[Autosave] New game, creating savedata...');
+    player           = player1;
+    Boomer_Bill      = Default_Boomer_Bill;
+    Belle_Boomerette = Default_Belle_Boomerette;
+    Gregory          = Default_Gregory;
+    Charles          = Default_Charles;
+    Carl             = Default_Carl;
+}
+
+function saveGame() {
+    console.log('Saving game...');
+    localStorage.setObject("player", player);
+    localStorage.setObject("Bill", Boomer_Bill);
+    localStorage.setObject("Belle", Belle_Boomerette);
+    localStorage.setObject("Greg", Gregory);
+    localStorage.setObject("Charles", Charles);
+    localStorage.setObject("Carl", Carl);
+}
+
+// Autosave
+var autosave = 
 setInterval(() => {
-    if(player){
-        localStorage.setObject("player",player);
-        localStorage.setObject("Bill",Boomer_Bill);
-        localStorage.setObject("Belle",Belle_Boomerette);
-        localStorage.setObject("Greg",Gregory);
-        localStorage.setObject("Charles",Charles);
-        localStorage.setObject("Carl",Carl);
-    }else{
-        localStorage.setObject("player",player1);
-        localStorage.setObject("Bill",Default_Boomer_Bill);
-        localStorage.setObject("Belle",Default_Belle_Boomerette);
-        localStorage.setObject("Greg",Default_Gregory);
-        localStorage.setObject("Charles",Default_Charles);
-        localStorage.setObject("Carl",Default_Carl);
-        location.reload();
-    }
+    saveGame();
 }, 2000);
 //#endregion
 
-var playerCharKeys = Object.keys(player.characters);
+
+/* Settings data */
+
+function saveSettings() { localStorage.setObject("settings", settings); }
+function resetSettings(dialog = false) {
+    settings = settings_default;
+    if(!dialog) return;
+    toast('Settings Reset', 'All settings returned to defaults');
+}
+
+// Defining Keybinds
+const keybinds_default = {
+    // Gameplay
+    key_carrot: ' ',
+    key_multibuy: 'Shift',
+    key_bill_lvlup: '1',
+    key_belle_lvlup: '2',
+    key_greg_lvlup: '3',
+    key_craft_0: '4',
+    key_craft_1: '5',
+    key_craft_2: '6',
+    key_craft_3: '7',
+    key_craft_4: '8',
+    key_craft_5: '9',
+
+    // Interface
+    key_cleartoasts: 'X',
+    key_prestige: 'P',
+    key_inventory: 'E',
+
+    // Make object loopable
+    keys: [],
+}
+keybinds_default['keys'] = Object.keys(keybinds_default);
+keybinds_default['keys'].pop();
+
+// Default settings object
+const settings_default = {
+    notificationLength: 5000,
+    disableKeybinds: false,     // boolean
+
+    master_volume: 1,           // Between 0 and 1
+    enableSounds: true,         // boolean
+    enableMusic: false,         // boolean
+    enableCarrotSounds: true,   // boolean
+
+    full_numbers: false,
+
+    // Autosave (in seconds)
+    autosave_interval: 2,
+
+    // UI
+    theme: 'theme_default',     // string
+    cosmetic: 'default',        // string
+    openpanel: null,            // string
+
+    keybinds: keybinds_default, // object
+}
+
+var settings;
+
+playerCharKeys   = Object.keys(player.characters);
+
+// Settings object
+if(localStorage.getObject("settings") != null) {
+    // Save found
+    console.log('[Settings] SETTINGS localStorage object found!');
+    settings = localStorage.getObject('settings');
+} else {
+    // Create from default
+    console.log('[Settings] No localStorage object found, creating...');
+    localStorage.setObject("settings", settings_default);
+    settings = settings_default;
+    resetSettings();
+}
+
 
 /* ----------------------Functions------------------------*/
 //#region
@@ -262,17 +372,22 @@ var clickArray = [];
 // Earn carrots function
 function earnCarrots(amount, type) {
     player.Carrots += amount;
+    player.prestige.carrots += amount;
     player.lifetime.carrots += amount;
 
     // Type
     switch(type) {
         // Click
         case 'click':
+            player.prestige.click_carrots += amount
+            player.prestige.carrots ++;
+
             player.lifetime.click_carrots += amount;
             player.lifetime.clicks ++;
             break;
         // Idle
         case 'idle':
+            player.prestige.idle_carrots += amount;
             player.lifetime.idle_carrots += amount;
             break;
     }
@@ -297,7 +412,13 @@ function onClick(useMousePos) {
 
 // Update carrot count on page
 function carrotCount() {
-    eInnerText(elCarrotCount, `${DisplayRounded(Math.floor(player.Carrots), 3, 1000000)}`);
+    if(settings.full_numbers != true) {
+        count = DisplayRounded(Math.floor(player.Carrots), 3, 1000000);
+    } else {
+        count = numCommas(player.Carrots);
+    }
+
+    eInnerText(elCarrotCount, count);
 }
 
 // Click speed handler
@@ -340,9 +461,6 @@ function clickSpeedHandler(clicked = false) {
 
 // Carrots per second
 function CarrotsPerSecond() {
-    // player.Carrots += player.cps/20;
-    // player.lifetime.carrots += player.cps/20;
-    // player.lifetime.idle_carrots += player.cps/20;
 
     earnCarrots(player.cps/20, 'idle');
 
@@ -416,8 +534,11 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 // Prestige
 function Prestige() {
+    window.scrollTo(0, 0);
 
     clearInterval(cpsInterval);
+
+    player.prestige_available = false;
 
     // Give golden carrots
     player.golden_carrots += prestige_potential;
@@ -635,6 +756,9 @@ function CreateHoe(type=0,amount=1) {
         }
 
         // Statistics
+        player.prestige.hoes.crafted[type] += amount;
+        player.prestige.hoes.craftedTotal += amount;
+
         player.lifetime.hoes.crafted[type] += amount;
         player.lifetime.hoes.craftedTotal += amount;
     }
@@ -659,6 +783,7 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
             return;
         }
         player.EquipedHoes+=1;
+        player.prestige.hoes.equipped+=1;
         player.lifetime.hoes.equipped+=1;
         character.Hoes[type]+=amount;
         Gregory.Hoes[type]-=amount;
@@ -703,10 +828,6 @@ function DisplayHoe(character, type) {
         if(Gregory.Hoes[type] >= 1) {
             img.classList.remove('blackedout');
             img.classList.add('glowing');
-
-            // If first hoe send tutorial message
-            // Replace with achievements system, didn't delete because I might still revert
-            // if(store('tutorial_first_hoe') == null) {tutorialHoes();}
         } else {
             img.classList.remove('glowing');
             img.classList.add('blackedout');
@@ -747,7 +868,7 @@ function DisplayHoe(character, type) {
 /*---------------Main Game Loop---------------- */
 //#region
 
-setInterval(() => {
+function gameLoop() {
     // Calculates the CPC
     var cpcHoes;
     var cpsHoes;
@@ -816,14 +937,7 @@ setInterval(() => {
     // Carrot counter moved to functions that update it
     eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
     eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
-
     //The Basic info for the player, Carrots; Cpc; Cps
-    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1) {
-        eInnerText(elGoldenCarrotCount, `Golden Carrots: ${DisplayRounded(player.golden_carrots,2)}`);
-    }
-    if(player.lifetime.golden_carrots>=1) {
-        elGoldenCarrotCount.style.color = "white";
-    }
     eInnerText(dom("multibuy"), multibuy[multibuySelector] + "x");
 
     // Costs to level up characters
@@ -856,9 +970,18 @@ setInterval(() => {
     eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`);
     eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`);
 
-    if(player.lifetime.golden_carrots>0 || prestige_potential>=1){
-        dom("prestige-section").style.visibility="visible";
+    // Prestige info
+    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1) {
+        eInnerText(elGoldenCarrotCount, `Golden Carrots: ${DisplayRounded(player.golden_carrots, 2)}`);
     }
+    if(player.lifetime.golden_carrots>=1) {
+        elGoldenCarrotCount.style.color = "white";
+    }
+    if( (player.lifetime.golden_carrots>0 || prestige_potential>=1) && player.prestige_available == false ){
+        dom("prestige-section").classList.add('visible');
+        player.prestige_available = true;
+    }
+
     //Tomes
     eInnerText(elCharles.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[multibuySelector],"query")} Golden Carrots`);
     eInnerText(elCharles.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[multibuySelector],"query")} Golden Carrots`);
@@ -867,6 +990,11 @@ setInterval(() => {
     eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
     BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
     DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
+}
+
+setInterval(() => {
+    // Yes I know this looks silly but it prevents the rest of the code from stopping if the game loop throws an error
+    gameLoop();
 }, 100);
 //#endregion
 
@@ -894,6 +1022,8 @@ const statsNumbers = {
 }
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
+
+    let filter = 'e';
 
     eInnerText(statsNumbers.lifetime_carrots, numCommas(player.lifetime.carrots.toFixed(0)));
     eInnerText(statsNumbers.lifetime_carrots_clicked, numCommas(player.lifetime.click_carrots));
@@ -980,15 +1110,26 @@ const default_tips = {
     ],
     
 }
-const tips= localStorage.getObject("tips");
-setInterval(()=>{
-    if(tips){
-        localStorage.setObject("tips",tips);
-    }else{
-        localStorage.setObject("tips",default_tips);
-        location.reload();
-    }
-},2000);
+
+var tips = default_tips;
+
+// const tips = localStorage.getObject("tips");
+// setInterval(()=>{
+//     if(tips){
+//         localStorage.setObject("tips",tips);
+//     }else{
+//         localStorage.setObject("tips",default_tips);
+//         // location.reload();
+//     }
+// }, 2000);
+
+// const tips;
+
+// if(localStorage.getObject("tips") == null) {
+//     localStorage.setObject("tips", default_tips);
+// } else {
+//     tips = localStorage.getObject("tips");
+// }
 
 function tipchange() {
     
@@ -1001,7 +1142,7 @@ function tipchange() {
     }
     
     //decides if the tip will be real or fun.
-    tips.random=Math.random();
+    tips.random = Math.random();
     console.log(tips.random);
     if(tips.random<tips.TypeModifier){
         tips.Type="fun";

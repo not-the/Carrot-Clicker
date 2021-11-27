@@ -30,6 +30,63 @@ elFunTipsSlider.oninput = () => {
     tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
 }
 
+// Universal checkbox option updater (not used by everything because some options need extra code)
+function setting(option) {
+    let state = dom(option).checked;
+    console.log(`${option} set to ${state}`);
+
+    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} is now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
+
+    settings[option] = state;
+    saveSettings();
+}
+// Autosave interval
+// Intended to be universal but needs unique code so just leaving it as is
+dom('autosave_interval').addEventListener('input', () => { settingText('autosave_interval') });
+function settingText(option) {
+    let value = dom(option).value;
+    
+    if(value == '') return;
+
+    if(value >= 1 && value <= 60) {
+        console.log(`[Settings] Autosave interval set to: ${value}`);
+
+        settings.autosave_interval = value;
+        saveSettings();
+
+        toast("Autosave interval set", `Game will save every ${value} seconds`,
+        '', false, true);
+
+        // Update autosave variable
+        clearInterval(autosave);
+        autosave = setInterval(() => {
+            saveGame();
+        }, value * 1000);
+    } else {
+        toast("Invalid Number", "Must be between 1 and 60 seconds", "red", false, true);
+    }
+}
+function resetAutosave() {
+    let value = 2;
+
+    console.log(`[Settings] Autosave interval reset to: ${value}`);
+    dom('autosave_interval').value = value;
+
+    settings.autosave_interval = value;
+    saveSettings();
+
+    toast("Autosave interval reset", `Game will save every 2 seconds`,
+    '', false, true);
+
+    // Update autosave variable
+    clearInterval(autosave);
+    autosave = setInterval(() => {
+        saveGame();
+    }, value * 1000);
+}
+
+
 // Notification length
 function saveOption() {
     let value = notificationLength.value;
@@ -39,8 +96,7 @@ function saveOption() {
         toast("Notification time set", `Notifications will disappear after ${value} seconds`,
         '', false, true);
     } else {
-        toast("Invalid Number", "Must be between 2 and 15 seconds", "red",
-        '', false, true);
+        toast("Invalid Number", "Must be between 2 and 15 seconds", "red", false, true);
     }
 }
 // Reset notification time to default
@@ -68,9 +124,11 @@ function settingDisableKeybinds() {
 }
 
 // Interface settings
+
+// Main progress bar
 const elEnableMainProgress = dom('enable_main_progress');
 function settingMainProgress() {
-    let state = elEnableMainProgress.value;
+    let state = elEnableMainProgress.checked;
     console.log(`enableMainProgress set to ${state}`);
     toast("Settings", `Status bar progress is now ${state == true ? 'enabled' : 'disabled'}`,
     '', false, true);
@@ -253,31 +311,6 @@ const keyCodes = [
     'J J C V I P ',
     'P I N E A P P L E ',
 ];
-// Defining Keybinds
-const keybinds_default = {
-    // Gameplay
-    key_carrot: ' ',
-    key_multibuy: 'Shift',
-    key_bill_lvlup: '1',
-    key_belle_lvlup: '2',
-    key_greg_lvlup: '3',
-    key_craft_0: '4',
-    key_craft_1: '5',
-    key_craft_2: '6',
-    key_craft_3: '7',
-    key_craft_4: '8',
-    key_craft_5: '9',
-
-    // Interface
-    key_cleartoasts: 'X',
-    key_prestige: 'P',
-    key_inventory: 'E',
-
-    // Make object loopable
-    keys: [],
-}
-keybinds_default['keys'] = Object.keys(keybinds_default);
-keybinds_default['keys'].pop();
 function keybindHandler(event, state) {
     let key = interpretKey(event.key)
 
@@ -300,7 +333,8 @@ function keybindHandler(event, state) {
     if(
         store("disableKeybinds") == "true"
         || dialogOpen == true
-        || document.activeElement.id == 'notificationLength'
+        || document.activeElement.nodeName == 'TEXTAREA'
+        || document.activeElement.nodeName == 'INPUT'
         || keybindsMenuOpen
     ) return;
 
@@ -588,7 +622,7 @@ function interpretKey(key) {
 // If you need to test for anything other than if FIRST >= SECOND you can simply use a function and only return a passing number if it comes out to true
 const achievements = {
 
-    // Template
+    // OLD Template
     // 'template': {
     //     'name': 'Achievement',
     //     'desc': 'Description',
@@ -596,6 +630,26 @@ const achievements = {
     //     'reward': 'Reward',
     //     'conditions': '',
     //     'rarity': '0'
+    // },
+
+    // Template
+    // 'template': {
+    //     'name': 'Achievement',
+    //     'desc': 'Description',
+    //     'image': './assets/achievements/generic.png',
+    //     'reward': 'rewardtype:reward', // accepts one string or an array of strings
+    //     'conditions': [
+    //         ['player.themes.length', 4],
+    //         ['player.cosmetics.length', 2],
+    //     ],
+    //     // 'condition_amount': 1, // when there are multiple conditions, minimum required (or don't specify for all)
+    //     'style': false,
+    //     'mystery': { // parts of the achievement to hide before it's unlocked
+    //         'name': true,
+    //         'desc': false,
+    //         'image': true,
+    //         'noToast': false,
+    //     }
     // },
 
     // Carrots
@@ -725,11 +779,11 @@ const achievements = {
             ['player.themes.length', 4],
             ['player.cosmetics.length', 2],
         ],
-        'condition_amount': 1,
+        // 'condition_amount': 1,
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -742,7 +796,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -755,7 +809,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -947,7 +1001,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -960,7 +1014,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -986,7 +1040,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -999,7 +1053,7 @@ const achievements = {
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
         }
     },
@@ -1057,7 +1111,7 @@ const achievements = {
         }
     },
 
-    // Tutorial
+    // Hoes
     'first_hoe': {
         'name': 'The Tools to Victory',
         'desc': 'Craft your first hoe (Tutorial milestone)',
@@ -1077,6 +1131,20 @@ const achievements = {
         'image': './assets/tools/netherite_hoe.png',
         'reward': 'cosmetic:netherite_hoe',
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'no_hoes_challenge': {
+        'name': 'Nonbeliever',
+        'desc': 'Farm 100,000 carrots without crafting a single hoe (Challenge achievement)',
+        'image': false,
+        'reward': 'function:confetti()',
+        'conditions': ['ex_noHoes()', true],
+        'style': 'challenge',
         'mystery': {
             'name': true,
             'desc': false,
@@ -1378,6 +1446,11 @@ function ex_charlesUses() {
 
     return value;
 }
+// No hoes challenge
+function ex_noHoes() {
+    if(player.prestige.hoes.craftedTotal == 0 && player.prestige.carrots >= 100000) return true;
+    return false;
+}
 
 // Not funny
 function ex_notFunny() {
@@ -1427,28 +1500,10 @@ function resetKeybinds() {
     settings.keybinds = keybinds_default;
     saveSettings();
     populateKeybinds();
+    toast('Settings', 'Keybinds set to defaults')
 }
 
-function saveSettings() { localStorage.setObject("settings", settings); }
 
-
-// Default settings object
-const settings_default = {
-    notificationLength: 5000,
-    disableKeybinds: false,     // boolean
-
-    master_volume: 1,           // Between 0 and 1
-    enableSounds: true,         // boolean
-    enableMusic: false,         // boolean
-    enableCarrotSounds: true,   // boolean
-    theme: 'theme_default',     // string
-    cosmetic: 'default',        // string
-    openpanel: null,            // string
-
-    keybinds: keybinds_default, // object
-}
-
-var settings;
 
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
@@ -1505,6 +1560,12 @@ function onLoad() {
     || player.hasOwnProperty('clickSpeedRecord') == false
     || player.lifetime.hasOwnProperty('clicks') == false
     || player.hasOwnProperty('characters') == false
+    || player.hasOwnProperty('achievements') == false
+    || player.hasOwnProperty('prestige') == false
+    || player.hasOwnProperty('prestige_available') == false
+    || player.hasOwnProperty('inventory') == false
+
+    || settings.hasOwnProperty('full_numbers') == false
     ) {
         if(store('old_player_object_fix') !== 'true') {
             toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
@@ -1512,7 +1573,7 @@ function onLoad() {
             player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
             player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
             
-            store('old_player_object_fix', 'true');
+            store('old_player_object_fix', '1.7.1');
 
             console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
         }
@@ -1522,17 +1583,7 @@ function onLoad() {
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
 
-    // Settings object
-    if(localStorage.getObject("settings") != null) {
-        // Save found
-        console.log('[Settings] SETTINGS localStorage object found!');
-        settings = localStorage.getObject('settings');
-    } else {
-        // Create from default
-        console.log('[Settings] No localStorage object found, creating...');
-        localStorage.setObject("settings", settings_default);
-        settings = settings_default;
-    }
+    // > Settings object moved to carrot_clicker.js <
 
     populateKeybinds();
 
@@ -1545,6 +1596,17 @@ function onLoad() {
         notificationLength.value = parseInt(store("notificationLength"));
     }
 
+    // Autosave
+    // Update autosave variable
+    if(settings.autosave_interval != 2) {
+        dom('autosave_interval').value = settings.autosave_interval;
+        clearInterval(autosave);
+        autosave = setInterval(() => {
+            saveGame();
+        }, settings.autosave_interval * 1000);
+    }
+
+
     // Disable keybinds
     if(store("disableKeybinds") == null) {
         store("disableKeybinds", "false");
@@ -1553,6 +1615,22 @@ function onLoad() {
             elDisableKeybinds.checked = false;
         } else {
             elDisableKeybinds.checked = true;
+        }
+    }
+
+    // Full numbers
+    dom('full_numbers').checked = settings.full_numbers;
+
+    // Main progress bar
+    if(store('enableMainProgress') == null) {
+        console.log('enableMainProgress not found in localStorage, creating...')
+        store('enableMainProgress', 'true');
+    } else {
+        console.log('enableMainProgress: ' + store("enableMainProgress"));
+        if(store("enableMainProgress") == "true") {
+            elEnableMainProgress.checked = true;
+        } else {
+            elEnableMainProgress.checked = false;
         }
     }
 

@@ -1,4 +1,30 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.7.1
+    11-26-2021
+// ----------------------------------------------------------- //
+
+localStorage is fixed
+
+- localStorage / autosave are now fixed, the game no longer requires a page reload to function
+- Autosave interval option in settings & option to save on command
+- Carl is now slightly harder to unlock (you need at least 1 theme and 1 cosmetic instead of one or the other)
+- A number of achievements' images are no longer hidden by default
+- Deleting your save data or prestiging now scrolls you to the top of the page
+- Made tri-pane tabs taller
+- The game now keeps track of your statistics for your current prestige
+- Click popup now has a minimum before it is rounded
+- Added "Full numbers" option to settings (due to the way javascript works it will display scientific notation beyond a certain point)
+- Reset keybinds button now creates a toast
+- Added more triggers for the "out of date save data" warning
+- Fixed an issue where the error toast would not appear when trying to set "Time until notifications disappear" to an invalid number
+- "Always-on-top progress bar" option now functions properly and saves its state
+- Achievements now have a "style" property and special achievements will now have unique styling
+- 1 new achievement (reach 100,000 carrots without crafting hoes)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.7.0.1
     11-24-2021
 // ----------------------------------------------------------- //

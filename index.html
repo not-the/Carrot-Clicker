@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.7.0.1</title>
+    <title id="page_title">Carrot Clicker dev beta v1.7.1</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -125,7 +125,7 @@
         <div id="keybinds_menu" class="popup_box fancy_switcher">
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <button onclick="resetKeybinds()" id="key_reset">Reset to defaults</button>
-            <h1>Customize Keybinds</h1>
+            <h1>Edit Keybinds</h1>
             <p><i class="secondary_text" id="keybinds_blurb">Keybinds are disabled while this menu is open</i></p><br>
 
             <!-- Can't change -->
@@ -866,7 +866,7 @@
             <h1>Achievements</h1>
             
             <!-- Filter dropdown -->
-            <select name="achievement_filter" id="achievement_filter">
+            <select name="achievement_filter" id="achievement_filter" class="panel_select">
                 <option value="all">
                     All (Default)
                 </option>
@@ -904,8 +904,16 @@
             <div id="info-inner">
                 <h1>Statistics</h1>
                 <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
-                <i class="secondary_text">Updates every second</i><br/>
-                
+                <i class="secondary_text">Updates every second</i><br/><br/>
+
+                <!-- Filter -->
+                <!-- <select name="statistics_filter" id="statistics_filter" class="panel_select">
+                    <option value="prestige">Current Prestige</option>
+                    <option value="lifetime">Lifetime</option>
+                </select> -->
+
+
+                <!-- Statistics -->
                 <div id="statistics">
                     <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
 
@@ -977,16 +985,33 @@
             </div>
 
 
+
             <!-- Options item -->
             <b>Keybinds:</b><br>
             <label for="disable_keybinds">
             <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
                 Disable keybinds
             </label><br>
-            <button id="edit_keybinds" onclick="keybindsMenu()">Customize Keybinds</button><br><br>
+            <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
+                <img src="./assets/iconography/keyboard.svg" alt="" class="button_icon bright_200">
+                Edit Keybinds
+            </button><br><br>
+
+            <!-- Autosave -->
+            <label for="autosave_interval"><b>Autosave Frequency:</b><br>
+                <p class="secondary_text">Default is 2 seconds</p>
+                
+                <input type="number" id="autosave_interval" value="2"/>
+                <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
+                <button onclick="resetAutosave()">Reset</button>
+            </label><br><br>
 
             <!-- Disable main progress bar -->
             <b>Interface:</b><br>
+            <label for="full_numbers">
+                <input type="checkbox" class="checkbox" id="full_numbers" onclick="setting('full_numbers')">
+                    Full numbers
+            </label><br>
             <label for="enable_main_progress">
                 <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
                     Always-on-top progress bar
@@ -1079,7 +1104,10 @@
             <p>Danger Zone:</p>
             <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
                 Delete Save Data
-            </button><br><br>
+            </button>
+            <!-- Reset button -->
+            <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings (WIP)</button>
+            <br><br>
             <hr><br>
             <!-- <p class="secondary_text center">Carrot Clicker - <a class="secondary_text link_styling">Credits</a></p> -->
 
