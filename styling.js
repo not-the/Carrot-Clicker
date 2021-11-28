@@ -363,7 +363,7 @@ function panelChange(to, noSound = false) {
 
 // Click bonus popup
 //#region 
-function popupHandler(useMousePos = true) {
+function popupHandler(useMousePos = true, amount) {
     // Create Element
     var clickVisualElement = document.createElement("div");
 
@@ -389,7 +389,7 @@ function popupHandler(useMousePos = true) {
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
-    eInnerText(clickVisualElement, `+${DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort)}`);
+    eInnerText(clickVisualElement, `+${amount}`);
 
     bonusVisualArea.append(clickVisualElement);
 
@@ -409,23 +409,51 @@ function popupHandler(useMousePos = true) {
 //#endregion
 
 // Falling carrots
-function fallingCarrots() {
+var fallingID = 0;
+var fallingActive = 0;
+const fallingCarrotsArea = dom('fallingCarrotsArea');
+function fallingCarrot() {
     var element = document.createElement("img");
     element.src = './assets/Carrot Clicker.png';
     element.classList.add('falling_carrot');
-    element.onclick = () => { console.log('Bonus carrot clicked') };
+    element.id = fallingID;
+    fallingID++;
+    fallingActive++;
 
-    // Get positions
-    let mcPosition = mainCarrot.getBoundingClientRect();
-    let fixedX = Math.floor((Math.random() * 10) - 5) + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
-    let fixedY = Math.floor((Math.random() * 10) - 5) + mcPosition.bottom - 12;
+    // Reward
+    // Between 200% and 400% of player's CPC
+    let rewardVariation = (Math.floor((Math.random() * 200)) + 200) / 100;
+    let carrotReward = Math.round(player.cpc * rewardVariation);
+    element.onclick = () => {
+        earnCarrots( carrotReward, 'bonus' );
+        dom(element.id).remove();
+        fallingActive--;
+    };
 
-    element.style.left = fixedX + "px";
-    element.style.top =  fixedY + "px";
+    // Positioning
+    let randomX = Math.floor((Math.random() * 400));
+    element.style.left = randomX - 30 + "px";
 
     // To page
-    bonusVisualArea.append(element);
+    fallingCarrotsArea.append(element);
+
+    element.classList.add('bright_200');
+
+    setTimeout(() => {
+        dom(element.id).remove();
+        fallingActive--;
+    }, 2600);
 }
+
+// Randomly drop falling carrots
+var fallingFrenzy = false;
+setInterval(() => {
+    let roll = Math.floor((Math.random() * 25));
+
+    if(roll == 1 && fallingActive < 3 || fallingFrenzy == true) {
+        fallingCarrot();
+    }
+}, 500);
 
 
 // Theme switcher <-> Cosmetic switcher

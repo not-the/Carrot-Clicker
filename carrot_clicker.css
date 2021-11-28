@@ -88,14 +88,15 @@
 
 /* Universal */
 * {box-sizing: border-box;}
+html {
+    scroll-behavior: smooth;
+}
 body {
     margin: 0;
     padding: 0;
     background-color: var(--main-bg-color);
     color: white;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-
-    scroll-behavior: smooth !important;
 }
 
 p {margin: 0;}
@@ -460,6 +461,8 @@ summary:hover {
     top: 0;
     right: 0;
     cursor: pointer;
+
+    z-index: 10;
 }
 .toast_close:hover {
     color: white;
@@ -727,11 +730,24 @@ body:not(.theme_light) .theme_checkmark {
     position: absolute;
     width: 64px;
     height: 64px;
+    box-sizing: unset;
+
+    top: -72px;
 
     z-index: 110;
     filter: drop-shadow(4px 4px 10px black);
     cursor: pointer;
-    padding: 4px;
+    padding: 12px 8px;
+
+    animation: falling_carrot 2.5s ease-in forwards;
+}
+@keyframes falling_carrot {
+    0% {
+        transform: none;
+    }
+    100% {
+        transform: translateY(720px);
+    }
 }
 
 /* Status Bar */
@@ -809,6 +825,9 @@ body:not(.theme_light) .theme_checkmark {
     padding: 8px 12px 8px 36px;
     position: relative;
     text-align: left;
+}
+.hover_menu {
+    box-shadow: 0px 12px 12px rgba(0, 0, 0, 0.2);
 }
 .hover_menu a {
     text-decoration: none;
@@ -920,6 +939,8 @@ body:not(.theme_light) .theme_checkmark {
     border-radius: 24px;
     height: fit-content;
 
+    position: relative;
+    overflow: hidden;
     background-color: var(--darker-bg-color);
 }
 #main_carrot {
@@ -927,7 +948,6 @@ body:not(.theme_light) .theme_checkmark {
     margin-right: 20px;
     width: 400px;
     height: auto;
-    position:inherit;
     z-index: 0;
     cursor: pointer;
 
@@ -1172,7 +1192,7 @@ body:not(.theme_light) .theme_checkmark {
     width: 100%;
     height: 10px;
     /* background: gray; */
-    background-color: gray;
+    background-color: var(--darker-bg-color);
     border-end-start-radius: 10px;
     border-end-end-radius: 10px;
     overflow: hidden;
@@ -1490,6 +1510,7 @@ body:not(.theme_light) .theme_checkmark {
     border-radius: 16px;
 
     position: relative;
+    z-index: 1;
 }
 .achievement_details.has_reward {border-radius: 16px 16px 0 0;}
 .achievement_details h2 {

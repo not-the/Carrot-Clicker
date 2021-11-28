@@ -1570,7 +1570,8 @@ function resetKeybinds() {
 
 function onLoad() {
     console.log('Running onLoad()');
-    
+    // window.scrollTo(0, 0);
+
     // Start music
     // playMusic('music.m4a');
 
@@ -1846,6 +1847,9 @@ function onLoad() {
     if(player.pages !== pagesIntended) {
         console.warn('Achievement page rewards have been changed');
         toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been changed to reflect those changes ${player.pages} -> ${pagesIntended})`, 'orange', true);
+
+        if(player.pages)
+
         player.pages = pagesIntended;
     }
 

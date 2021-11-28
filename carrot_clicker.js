@@ -130,6 +130,9 @@ const playerPrestigeTemplate = {
     carrots: 0,
     click_carrots: 0,
     idle_carrots: 0,
+    bonus_carrots: 0,
+
+    falling_carrots_grabbed: 0,
 
     golden_carrots: 0,
     prestige_count: 0,
@@ -168,6 +171,9 @@ const player1 = {
         carrots: 0,
         click_carrots: 0,
         idle_carrots: 0,
+        bonus_carrots: 0,
+
+        falling_carrots_grabbed: 0,
 
         golden_carrots: 0,
         prestige_count: 0,
@@ -382,6 +388,10 @@ var clickArray = [];
 
 // Earn carrots function
 function earnCarrots(amount, type) {
+    if(type == 'bonus') {
+        popupHandler(true, amount);
+    }
+
     player.Carrots += amount;
     player.prestige.carrots += amount;
     player.lifetime.carrots += amount;
@@ -401,6 +411,13 @@ function earnCarrots(amount, type) {
             player.prestige.idle_carrots += amount;
             player.lifetime.idle_carrots += amount;
             break;
+        // Bonus
+        case 'bonus':
+            player.prestige.bonus_carrots += amount;
+            player.lifetime.bonus_carrots += amount;
+
+            player.lifetime.falling_carrots_grabbed++;
+            break;
     }
 }
 
@@ -408,8 +425,6 @@ function earnCarrots(amount, type) {
 // var clickMethodLimit = 'none';
 // var clickMethodTimer = 0;
 function onClick(useMousePos, method = 'click') {
-    console.log(method);
-
     // Prevent use of spacebar/click at the same time
     // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
     //     clickMethodLimit = method;
@@ -428,7 +443,7 @@ function onClick(useMousePos, method = 'click') {
 
     // Page stuff
     carrotCount();
-    popupHandler(useMousePos);
+    popupHandler(useMousePos, DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort));
 
     // Click speed
     clickSpeedHandler(true);
@@ -441,12 +456,33 @@ function onClick(useMousePos, method = 'click') {
 /* ----------------------Page Manipulation------------------------*/
 const elPrestigeStats = dom('this_prestige_stats');
 
+// Display rounded numbers
+function DisplayRounded(Value, Fixedto = 3, min = 0, units = unitsShort) {
+    let fixed = Fixedto;
+    if(Value % 1 == 0) { fixed = 0; }
+
+    // Return with commas instead of min is specified
+    if(Value < min) {
+        return numCommas(Value.toFixed(fixed));
+    }
+    
+    for(i = 0; i < units.length; i++){
+        if(Value/Bases[i] % 1 == 0) { fixed = 0; }
+        else { fixed = Fixedto; }
+        if(Value < Bases[i + 1] && Value > Bases[0]){
+            return (Value/Bases[i]).toFixed(fixed) + units[i];
+        }
+    }
+    return Value;
+}
+
+
 // Update carrot count on page
 function carrotCount() {
     if(settings.full_numbers != true) {
         count = DisplayRounded(Math.floor(player.Carrots), 3, 1000000);
     } else {
-        count = DisplayRounded(Math.floor(player.Carrots), 0);
+        count = numCommas(Math.floor(player.Carrots));
     }
 
     eInnerText(elCarrotCount, count);

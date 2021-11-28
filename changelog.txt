@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.7.3
+    11-27-2021
+// ----------------------------------------------------------- //
+
+- Dropdown menu now has a shadow
+- Added theme option to dropdown menu
+- Fixed full numbers not working
+- Added falling carrots. Click them for a small carrot bonus.
+- Smooth scroll behavior works now
+- Fixed issue where achievement toasts' x button wouldn't work
+
+Carrot Utilities:
+- DisplayRounded() works again
+- Fixed issue where fixedTo would get ignored under certain conditions
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.7.2
     11-27-2021
 // ----------------------------------------------------------- //

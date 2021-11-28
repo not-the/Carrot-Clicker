@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.7.1</title>
+    <title id="page_title">Carrot Clicker dev beta v1.7.3</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -33,6 +33,9 @@
 
     <!-- On top -->
     <!-- #region -->
+
+    <!-- Number Popup -->
+    <div id="bonusVisualArea"></div>
 
     <!-- Gif overlay -->
     <img src="./assets/blank.png" alt="" id="confetti" class="hidden">
@@ -392,10 +395,6 @@
 
     </div>
     <!-- #endregion -->
-  
-
-    <!-- Number Popup -->
-    <div id="bonusVisualArea"></div>
 
     <!-- #endregion -->
 
@@ -427,6 +426,13 @@
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/iconography/settings.svg" alt="" class="dropdown_img invert">
                             Settings
+                        </div>
+                    </a>
+
+                    <a onclick="themeSwitcher()" tabindex="0">
+                        <div class="menu_item link_styling secondary_text">
+                            <img src="./assets/iconography/palette.svg" alt="" class="dropdown_img invert">
+                            Change Theme
                         </div>
                     </a>
 
@@ -491,6 +497,10 @@
         <!-- Left Section -->
         <!-- #region -->
         <div id="left-section">
+
+            <!-- Falling Carrots -->
+            <div id="fallingCarrotsArea"></div>
+
             <!-- Carrot image-->
             <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick(true, 'click')" role="button" tabindex="0">
 
@@ -509,7 +519,7 @@
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p><br/>
                 <p class="secondary_text" style="margin-left:18px">
-                    Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true)">?</span>
+                    Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
                 </p>
                 <p class="secondary_text">
                     <span id="golden_carrot_count"></span>
@@ -899,7 +909,10 @@
             </select>
 
             <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
-            <p class="secondary_text">Progress: <span id="achievement_progress">-/- (0%)</span></p><br>
+            <p class="secondary_text">
+                Progress: <span id="achievement_progress">-/- (0%)</span>
+                <span class="question_mark" title="Secret achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret achievements are not required to reach 100%.', '', true, true)">?</span>
+            </p><br>
             
             <div id="achievements_list">
                 <!-- Old achievement notification -->
@@ -1009,6 +1022,7 @@
                     <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
                 </select><br> -->
                 <button id="theme_button" onclick="themeSwitcher()">
+                    <img src="./assets/iconography/palette.svg" alt="" class="button_icon invert">
                     Change Theme
                 </button>
                 <button id="cosmetic_button" onclick="cosmeticSwitcher()">
