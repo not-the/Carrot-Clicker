@@ -492,7 +492,7 @@
         <!-- #region -->
         <div id="left-section">
             <!-- Carrot image-->
-            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick()" role="button" tabindex="0">
+            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick(true, 'click')" role="button" tabindex="0">
 
             <!-- Numbers/Info Section -->
             <div class="mini_stats">
@@ -507,8 +507,15 @@
                 </p>
                 <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
+                </p><br/>
+                <p class="secondary_text" style="margin-left:18px">
+                    Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true)">?</span>
                 </p>
-                <p id="golden_carrot_count"></p><br>
+                <p class="secondary_text">
+                    <span id="golden_carrot_count"></span>
+                </p><br>
+
+                
                 <!-- <p>Carrot Karma: <span id="karma_count">0</span></p> -->
             </div>
             
@@ -722,13 +729,15 @@
                             title="Charles">
                         <div class="characterdesc">
                             <b id="charles_name" class="underline">Charles</b>
-                            <p class="secondary_text">Golden Carrot research</p>
+                            <p class="secondary_text">
+                                Golden Carrot research<br/>
+                                Sells tomes
+                            </p>
                         </div>
                     </div>
 
                     <!-- Bottom -->
                     <div class="bottom">
-
                         <!-- Charles' buttons -->
                         <div
                         onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[multibuySelector])"
@@ -792,7 +801,9 @@
                             title="Carl">
                         <div class="characterdesc">
                             <b id="carl_name" class="underline">Carl</b>
-                            <p class="secondary_text">&gt; IN DEVELOPMENT &lt;<br>Purchase Cosmetics</p>
+                            <p class="secondary_text">
+                                <!-- &gt; IN DEVELOPMENT &lt;<br> -->
+                                Purchase Cosmetics</p>
                         </div>
                     </div>
 
@@ -801,13 +812,16 @@
                         <div class="flex">
                             <!-- Themes -->
                             <button id="carl_theme_button" class="half_width" onclick="themeSwitcher()">
-                                Change Theme
+                                Themes
                             </button>
                             <button id="carl_cosmetic_button" class="half_width" onclick="cosmeticSwitcher()">
-                                Change Cosmetic
-                            </button><br>
-
+                                Cosmetics
+                            </button>
+                            <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
+                                Custom
+                            </button> -->
                         </div>
+
 
 
                         <!-- Shop item -->
@@ -876,6 +890,9 @@
                 <option value="locked">
                     Locked
                 </option>
+                <option value="challenge">
+                    Challenge Achievements
+                </option>
                 <option value="secret">
                     Secret Achievements
                 </option>
@@ -917,6 +934,27 @@
                 <div id="statistics">
                     <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
 
+                    <!-- Prestige -->
+                    <div id="this_prestige_stats" class='remove'>
+                        <h3>This prestige:</h3>
+                        <details>
+                            <summary>Carrots earned: <b id="prestige_carrots">---</b></summary>
+                            From clicking: <b id="prestige_carrots_clicked">---</b><br>
+                            From CPS: <b id="prestige_carrots_idled">---</b><br>
+                        </details>
+    
+                        Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
+                        <details>
+                            <summary>Hoes crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
+                            Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
+                            Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
+                            Iron:   <b id="prestige_hoes_crafted_2">---</b><br/>
+                            Golden: <b id="prestige_hoes_crafted_3">---</b><br/>
+                            Diamond: <b id="prestige_hoes_crafted_4">---</b><br/>
+                            Netherite: <b id="prestige_hoes_crafted_5">---</b><br/>
+                        </details><br/>
+                    </div>
+
                     <!-- Lifetime -->
                     <h3>Lifetime:</h3>
                     <details>
@@ -925,7 +963,8 @@
                         From CPS: <b id="lifetime_carrots_idled">---</b><br>
                     </details>
                     Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
-                    Prestiges: <b id="lifetime_prestige">---}</b><br/><br/>
+                    Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
+                    Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
                     Total Clicks: <b id="lifetime_clicks">---</b><br/><br/>
                     <details>
                         <summary>Hoes crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
@@ -1095,8 +1134,8 @@
             <!-- Notification Length -->
             <label for="notificationLength">Time until notifications disappear (In seconds):<br>
                 <p class="secondary_text">Note: Achievements will use double this number</p>
+                
                 <input type="number" id="notificationLength" value="5"/>
-                <button onclick="saveOption('notificationLength')">Save</button>
                 <button onclick="resetOption()">Reset</button>
             </label><br><br>
             

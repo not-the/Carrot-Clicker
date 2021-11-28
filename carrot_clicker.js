@@ -97,10 +97,17 @@ const elMainProgressContainer = dom('main_progress_container');
 const elMainProgressBar = dom('main_progress_bar');
 const elGregProgress = dom("Greg_Progress");
 const elCharles = {
-    improveWorkingConditions: dom("ImproveWorkingConditions"),
-    betterHoes:               dom("BetterHoes"),
-    decreaseWages:            dom("DecreaseWages"),
-    charlesTooltip:           dom("charlestooltip")
+    charlesTooltip: dom("charlestooltip"),
+    prices: {
+        improveWorkingConditions: dom("ImproveWorkingConditions"),
+        betterHoes:               dom("BetterHoes"),
+        decreaseWages:            dom("DecreaseWages"),
+    },
+    shop: {
+        improveWorkingConditions: dom("ImproveWorkingConditions_button"),
+        betterHoes:               dom("BetterHoes_button"),
+        decreaseWages:            dom("DecreaseWages_button"),
+    }
 }
 //#endregion
 
@@ -119,14 +126,31 @@ class Character{
     }
 }
 // Default Values Stored in a Player Object
+const playerPrestigeTemplate = {
+    carrots: 0,
+    click_carrots: 0,
+    idle_carrots: 0,
+
+    golden_carrots: 0,
+    prestige_count: 0,
+    clicks: 0,
+    hoes: {
+        crafted: [0, 0, 0, 0, 0, 0],
+        craftedTotal: 0,
+        equipped: [0, 0, 0, 0, 0, 0],
+        equippedTotal: 0,
+    },
+}
 const player1 = {
     // Progress
     Carrots: 0,
     cpc: 0,
     cps: 0,
+    pages: 0,
+
     golden_carrots: 0,
     prestige_potential: 0,
-    EquipedHoes: 0,
+    EquippedHoes: 0,
     clickSpeedRecord: 0,
 
     prestige_available: false,
@@ -134,24 +158,10 @@ const player1 = {
     // Lifetime stats (old)
     // LifetimeCarrots: 0,
     // LifetimeGoldenCarrots: 0,
-    // LifetimeEquipedHoes: 0,
+    // LifetimeEquippedHoes: 0,
 
     // Current prestige
-    prestige: {
-        carrots: 0,
-        click_carrots: 0,
-        idle_carrots: 0,
-
-        golden_carrots: 0,
-        prestige_count: 0,
-        clicks: 0,
-        hoes: {
-            crafted: [0, 0, 0, 0, 0, 0],
-            craftedTotal: 0,
-            equipped: [0, 0, 0, 0, 0, 0],
-            equippedTotal: 0,
-        },
-    },
+    prestige: playerPrestigeTemplate,
 
     // Lifetime stats
     lifetime: {
@@ -168,6 +178,7 @@ const player1 = {
             equipped: [0, 0, 0, 0, 0, 0],
             equippedTotal: 0,
         },
+        tomes_bought: 0,
     },
 
     // Unlocked characters
@@ -267,7 +278,7 @@ if(localStorage.getObject("player") != null ) {
 }
 
 function saveGame() {
-    console.log('Saving game...');
+    // console.log('Saving game...');
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
     localStorage.setObject("Belle", Belle_Boomerette);
@@ -296,7 +307,7 @@ function resetSettings(dialog = false) {
 // Defining Keybinds
 const keybinds_default = {
     // Gameplay
-    key_carrot: ' ',
+    key_carrot: 'Spacebar',
     key_multibuy: 'Shift',
     key_bill_lvlup: '1',
     key_belle_lvlup: '2',
@@ -380,7 +391,7 @@ function earnCarrots(amount, type) {
         // Click
         case 'click':
             player.prestige.click_carrots += amount
-            player.prestige.carrots ++;
+            player.prestige.clicks ++;
 
             player.lifetime.click_carrots += amount;
             player.lifetime.clicks ++;
@@ -394,7 +405,24 @@ function earnCarrots(amount, type) {
 }
 
 //On Carrots Click
-function onClick(useMousePos) {
+// var clickMethodLimit = 'none';
+// var clickMethodTimer = 0;
+function onClick(useMousePos, method = 'click') {
+    console.log(method);
+
+    // Prevent use of spacebar/click at the same time
+    // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
+    //     clickMethodLimit = method;
+    //     clickMethodTimer = Date.now();
+
+    //     return;
+    // }
+
+    // Click method limit
+    // if(clickMethodTimer < Date.now - 500) {
+    //     clickMethodLimit = 'none';
+    // }
+
     // Grant carrots
     earnCarrots(player.cpc, 'click');
 
@@ -410,15 +438,61 @@ function onClick(useMousePos) {
     randomSound('crunch', 95);
 }
 
+/* ----------------------Page Manipulation------------------------*/
+const elPrestigeStats = dom('this_prestige_stats');
+
 // Update carrot count on page
 function carrotCount() {
     if(settings.full_numbers != true) {
         count = DisplayRounded(Math.floor(player.Carrots), 3, 1000000);
     } else {
-        count = numCommas(player.Carrots);
+        count = DisplayRounded(Math.floor(player.Carrots), 0);
     }
 
     eInnerText(elCarrotCount, count);
+}
+function characterPrices() {
+    // Update page
+    eInnerText(elCharacterUpCost.bill, `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`);
+    eInnerText(elCharacterUpCost.belle, `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`);
+    eInnerText(elCharacterUpCost.greg, `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`);
+    
+    // Character levels
+    eInnerText(elCharacterLevel.bill, `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`);
+    eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
+    eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
+}
+function updateCharlesShop() {
+    // Highlight when affordable
+    if(Charles.tome.improveWorkingConditions.price <= player.golden_carrots) {
+        elCharles.shop.improveWorkingConditions.classList.remove('cant_afford');
+    } else {
+        elCharles.shop.improveWorkingConditions.classList.add('cant_afford');
+    }
+
+    if(Charles.tome.betterHoes.price <= player.golden_carrots) {
+        elCharles.shop.betterHoes.classList.remove('cant_afford');
+    } else {
+        elCharles.shop.betterHoes.classList.add('cant_afford');
+    }
+
+    if(Charles.tome.decreaseWages.price <= player.golden_carrots) {
+        elCharles.shop.decreaseWages.classList.remove('cant_afford');
+    } else {
+        elCharles.shop.decreaseWages.classList.add('cant_afford');
+    }
+
+    // Update tome prices
+    eInnerText(elCharles.prices.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[multibuySelector],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[multibuySelector],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[multibuySelector],"query")} Golden Carrots`);
+}
+function showPrestigeStats() {
+    elPrestigeStats.classList.add('unremove');
+}
+const elPageCount = dom('page_count');
+function pagesCount() {
+    elPageCount.innerText = player.pages;
 }
 
 // Click speed handler
@@ -474,6 +548,7 @@ var cpsInterval = setInterval(CarrotsPerSecond,50);
 
 //level up characters 
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
+    console.log(`CharacterLevelUpPrice(${characterString(character)}, ${amount}, ${mode})`);
     let r=character.lvlupPrice;
     let r2=0;
 
@@ -518,10 +593,12 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
 }
 function LevelUp(character=Boomer_Bill, amount=1) {
     if(player.Carrots >= CharacterLevelUpPrice(character, amount)) {
-            character.lvl+=amount;
-            player.Carrots-=CharacterLevelUpPrice(character,amount);
-            CharacterLevelUpPrice(character,amount,"apply");
-            
+        character.lvl+=amount;
+        player.Carrots-=CharacterLevelUpPrice(character,amount);
+        CharacterLevelUpPrice(character,amount,"apply");
+
+        // Update page
+        characterPrices();
     } else {
         toast(
             'Cannot afford',
@@ -535,10 +612,12 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 // Prestige
 function Prestige() {
     window.scrollTo(0, 0);
-
     clearInterval(cpsInterval);
-
+    
     player.prestige_available = false;
+
+    // Statistics
+    player.prestige = playerPrestigeTemplate;
 
     // Give golden carrots
     player.golden_carrots += prestige_potential;
@@ -570,17 +649,21 @@ function Prestige() {
         Gregory.Hoes[i]=0;
         Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
     }
-    player.EquipedHoes=0;
+    player.EquippedHoes=0;
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
     tips.tracker=0;
+
+    // Update Charles' tome shop
+    updateCharlesShop();
+    showPrestigeStats();
 }
 
 
 // Charles Functions
 //Needs commenting
 
-function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions,amount=1,mode="query"){
+function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount=1, mode="query"){
     let r = tome.price;
     let r2 = tome.price;
     
@@ -617,10 +700,11 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions,amount=
 
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
-            tome.value+=amount;
-            player.golden_carrots-=CharlesUpgradePrices(tome,amount);
-            CharlesUpgradePrices(tome,amount,"apply");
-            
+        tome.value += amount;
+        player.golden_carrots -= CharlesUpgradePrices(tome,amount);
+        CharlesUpgradePrices(tome,amount,"apply");
+
+        updateCharlesShop();    
     } else {
         toast(
             'Cannot afford',
@@ -761,6 +845,9 @@ function CreateHoe(type=0,amount=1) {
 
         player.lifetime.hoes.crafted[type] += amount;
         player.lifetime.hoes.craftedTotal += amount;
+
+        // Update page
+        DisplayAllHoes();
     }
 }
 
@@ -782,7 +869,7 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
             n=0;
             return;
         }
-        player.EquipedHoes+=1;
+        player.EquippedHoes+=1;
         player.prestige.hoes.equipped+=1;
         player.lifetime.hoes.equipped+=1;
         character.Hoes[type]+=amount;
@@ -816,6 +903,13 @@ function characterString(character, reverse = false) {
 
 
 // Update hoe on page
+function DisplayAllHoes() {
+    for(i = 0; i < 6; i++) {
+        DisplayHoe(Boomer_Bill, i);
+        DisplayHoe(Belle_Boomerette, i);
+        DisplayHoe(Gregory, i);
+    }
+}
 function DisplayHoe(character, type) {
     let charString = characterString(character);
     let count = elHoeCount[charString][type];
@@ -941,25 +1035,15 @@ function gameLoop() {
     eInnerText(dom("multibuy"), multibuy[multibuySelector] + "x");
 
     // Costs to level up characters
-    eInnerText(elCharacterUpCost.bill, `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`);
-    eInnerText(elCharacterUpCost.belle, `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`);
-    eInnerText(elCharacterUpCost.greg, `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`);
 
-    // Character levels
-    eInnerText(elCharacterLevel.bill, `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`);
-    eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
-    eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
+    // > Moved to onload() and levelup() functions <
 
-    // Update Hoes on page
-    for(i = 0; i < 6; i++) {
-        DisplayHoe(Boomer_Bill, i);
-        DisplayHoe(Belle_Boomerette, i);
-        DisplayHoe(Gregory, i);
-    }
+    // Hoes
+    DisplayAllHoes()
 
     //The Prestige Potential
-    let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    prestige_potential=Math.pow(0.0000001*player.Carrots,0.38)*(1+(achieve_percent/100));
+    // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
+    prestige_potential = Math.pow(0.0000001*player.Carrots, 0.38) * (1 + (player.pages/100));
     eInnerText(prestige_info, DisplayRounded(prestige_potential.toFixed(1),2));
 
     // Greg's Hoe Prices
@@ -971,25 +1055,18 @@ function gameLoop() {
     eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`);
 
     // Prestige info
-    if(player.lifetime.golden_carrots>=1 || player.prestige_potential>=1) {
-        eInnerText(elGoldenCarrotCount, `Golden Carrots: ${DisplayRounded(player.golden_carrots, 2)}`);
+    if(player.lifetime.golden_carrots >= 1 || player.prestige_potential >= 1) {
+        eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
     }
-    if(player.lifetime.golden_carrots>=1) {
-        elGoldenCarrotCount.style.color = "white";
-    }
-    if( (player.lifetime.golden_carrots>0 || prestige_potential>=1) && player.prestige_available == false ){
+    if(player.lifetime.golden_carrots > 0 || prestige_potential >= 1){
         dom("prestige-section").classList.add('visible');
         player.prestige_available = true;
     }
 
-    //Tomes
-    eInnerText(elCharles.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[multibuySelector],"query")} Golden Carrots`);
-    eInnerText(elCharles.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[multibuySelector],"query")} Golden Carrots`);
-    eInnerText(elCharles.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[multibuySelector],"query")} Golden Carrots`);
-
-    eInnerText(elCharles.charlesTooltip, `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
-    BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
-    DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
+    eInnerText(elCharles.charlesTooltip,
+        `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
+        BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
+        DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
 }
 
 setInterval(() => {
@@ -1002,33 +1079,61 @@ setInterval(() => {
 const elStatistics = dom('statistics');
 // const statLoading = elStatistics.innerHTML;
 const statsNumbers = {
-    lifetime_carrots: dom('lifetime_carrots'),
-    lifetime_carrots_clicked: dom('lifetime_carrots_clicked'),
-    lifetime_carrots_idled: dom('lifetime_carrots_idled'),
-    lifetime_golden_carrots: dom('lifetime_golden_carrots'),
-    lifetime_prestige: dom('lifetime_prestige'),
-    lifetime_clicks: dom('lifetime_clicks'),
+    // Prestige
+    prestige_carrots:            dom('prestige_carrots'),
+    prestige_carrots_clicked:    dom('prestige_carrots_clicked'),
+    prestige_carrots_idled:      dom('prestige_carrots_idled'),
+    prestige_clicks:             dom('prestige_clicks'),
+    prestige_hoes_crafted_total: dom('prestige_hoes_crafted_total'),
+    prestige_hoes_crafted_0:     dom('prestige_hoes_crafted_0'),
+    prestige_hoes_crafted_1:     dom('prestige_hoes_crafted_1'),
+    prestige_hoes_crafted_2:     dom('prestige_hoes_crafted_2'),
+    prestige_hoes_crafted_3:     dom('prestige_hoes_crafted_3'),
+    prestige_hoes_crafted_4:     dom('prestige_hoes_crafted_4'),
+    prestige_hoes_crafted_5:     dom('prestige_hoes_crafted_5'),
+
+    // Lifetime
+    lifetime_carrots:            dom('lifetime_carrots'),
+    lifetime_carrots_clicked:    dom('lifetime_carrots_clicked'),
+    lifetime_carrots_idled:      dom('lifetime_carrots_idled'),
+    lifetime_golden_carrots:     dom('lifetime_golden_carrots'),
+    lifetime_golden_carrots_spent: dom('lifetime_golden_carrots_spent'),
+    lifetime_prestige:           dom('lifetime_prestige'),
+    lifetime_clicks:             dom('lifetime_clicks'),
     lifetime_hoes_crafted_total: dom('lifetime_hoes_crafted_total'),
-    lifetime_hoes_crafted_0: dom('lifetime_hoes_crafted_0'),
-    lifetime_hoes_crafted_1: dom('lifetime_hoes_crafted_1'),
-    lifetime_hoes_crafted_2: dom('lifetime_hoes_crafted_2'),
-    lifetime_hoes_crafted_3: dom('lifetime_hoes_crafted_3'),
-    lifetime_hoes_crafted_4: dom('lifetime_hoes_crafted_4'),
-    lifetime_hoes_crafted_5: dom('lifetime_hoes_crafted_5'),
-    lifetime_clickspeedrecord: dom('lifetime_clickspeedrecord'),
-    stat_themes: dom('stat_themes'),
-    stat_cosmetics: dom('stat_cosmetics'),
-    stat_achievements: dom('stat_achievements'),
+    lifetime_hoes_crafted_0:     dom('lifetime_hoes_crafted_0'),
+    lifetime_hoes_crafted_1:     dom('lifetime_hoes_crafted_1'),
+    lifetime_hoes_crafted_2:     dom('lifetime_hoes_crafted_2'),
+    lifetime_hoes_crafted_3:     dom('lifetime_hoes_crafted_3'),
+    lifetime_hoes_crafted_4:     dom('lifetime_hoes_crafted_4'),
+    lifetime_hoes_crafted_5:     dom('lifetime_hoes_crafted_5'),
+    lifetime_clickspeedrecord:   dom('lifetime_clickspeedrecord'),
+    stat_themes:                 dom('stat_themes'),
+    stat_cosmetics:              dom('stat_cosmetics'),
+    stat_achievements:           dom('stat_achievements'),
 }
 function loadStatistics() {
     if(currentPanel !== "info-panel") return;
 
-    let filter = 'e';
+    // Prestige
+    eInnerText(prestige_carrots, numCommas(player.prestige.carrots) );
+    eInnerText(prestige_carrots_clicked, numCommas(player.prestige.click_carrots) );
+    eInnerText(prestige_carrots_idled, numCommas(player.prestige.idle_carrots.toFixed(0)) );
+    eInnerText(prestige_clicks, numCommas(player.prestige.clicks) );
+    eInnerText(prestige_hoes_crafted_total, numCommas(player.prestige.hoes.craftedTotal) );
+    eInnerText(prestige_hoes_crafted_0, numCommas(player.prestige.hoes.crafted[0]) );
+    eInnerText(prestige_hoes_crafted_1, numCommas(player.prestige.hoes.crafted[1]) );
+    eInnerText(prestige_hoes_crafted_2, numCommas(player.prestige.hoes.crafted[2]) );
+    eInnerText(prestige_hoes_crafted_3, numCommas(player.prestige.hoes.crafted[3]) );
+    eInnerText(prestige_hoes_crafted_4, numCommas(player.prestige.hoes.crafted[4]) );
+    eInnerText(prestige_hoes_crafted_5, numCommas(player.prestige.hoes.crafted[5]) );
 
+    // Lifetime
     eInnerText(statsNumbers.lifetime_carrots, numCommas(player.lifetime.carrots.toFixed(0)));
     eInnerText(statsNumbers.lifetime_carrots_clicked, numCommas(player.lifetime.click_carrots));
     eInnerText(statsNumbers.lifetime_carrots_idled, numCommas(player.lifetime.idle_carrots.toFixed(0)));
     eInnerText(statsNumbers.lifetime_golden_carrots, numCommas(player.lifetime.golden_carrots));
+    eInnerText(statsNumbers.lifetime_golden_carrots_spent, numCommas(player.lifetime.golden_carrots - player.golden_carrots));
     eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
     eInnerText(statsNumbers.lifetime_clicks, numCommas(player.lifetime.clicks));
     eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);
@@ -1134,7 +1239,7 @@ var tips = default_tips;
 function tipchange() {
     
     //Tracker
-    if(player.EquipedHoes>0 && tips.tracker==0){
+    if(player.EquippedHoes>0 && tips.tracker==0){
         tips.tracker=1;
     }
     if(player.Carrots>1000000 && tips.tracker==1){

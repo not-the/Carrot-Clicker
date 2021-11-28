@@ -600,6 +600,18 @@ const cosmetics = {
         'farmable': 'Demon Carrot',
         'desc': 'Eeevil!',
     },
+    "ghost_carrot": {
+        'name': 'Ghost Carrot',
+        'image': './assets/theme/Ghost_carrot.png',
+        'farmable': 'Ghost Carrot',
+        'desc': 'description',
+    },
+    "rainbow_carrot": {
+        'name': 'Rainbow Carrot',
+        'image': './assets/theme/rainbow_carrot.png',
+        'farmable': 'Rainbow Carrot',
+        'desc': 'Tastes like candy',
+    },
 
 
     // Updoot
@@ -608,6 +620,19 @@ const cosmetics = {
         'image': './assets/theme/orange_arrow/upvote.png',
         'farmable': 'Updoot',
         'desc': 'This is better than going outside'
+    },
+
+
+    // Character cosmetics (temporary)
+    'fancy_bill': {
+        'name': 'Fancy Bill',
+        'desc': 'description',
+        'bill_image':    './assets/theme/boomer_bill_gates.png',
+    },
+    'safety_greg': {
+        'name': 'High Vis Greg',
+        'desc': 'Can\'t have you dying on the job now can we',
+        'greg_image':    './assets/theme/safety_greg.png',
     },
 }
 const cosmeticsKeys = Object.keys(cosmetics);
@@ -787,6 +812,13 @@ const themes = {
         cosmetic: false,
         accent:   '#3c2a1d'
     },
+    'theme_custom': {
+        name: 'Custom',
+        image: false,
+        desc: 'Make your own theme!',
+        cosmetic: false,
+        // accent: false
+    }
 };
 const themesKeys = Object.keys(themes);
 
@@ -923,6 +955,7 @@ function populateAchievements() {
         const achievementFilter = dom('achievement_filter');
         if(dom('achievement_filter').value == 'unlocked' && unlocked == false) continue;
         if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
+        if(dom('achievement_filter').value == 'challenge' && achieve.style != 'challenge') continue;
         if(dom('achievement_filter').value == 'secret' && achieve.mystery.list != true) continue;
         if(achieve.mystery.list == true && unlocked == false) continue;
 
@@ -1064,6 +1097,9 @@ function populateAchievements() {
             <div id="${key}" class="achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}">
                 <!-- Details -->
                 <div class="achievement_details flex">
+                    ${achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : ''}
+                    
+
                     <img src="${img}" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">
                     <div>
                         <h2>${achieve.name}</h2>
@@ -1249,6 +1285,10 @@ function setTheme(theme) {
 
     elBody.className = '';
     elBody.classList.add(theme);
+
+    if(themeSwitcherOpen) {
+        elBody.classList.add('overflow_hidden');
+    }
 
     // Temporary cosmetic activator 
     // if(theme == 'theme_blockgame') {

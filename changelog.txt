@@ -1,4 +1,34 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.7.2
+    11-27-2021
+// ----------------------------------------------------------- //
+
+Page manipulation improvements & Tome Pages update
+
+- Removed the save button for the notification time option, it will now save whenever it's changed
+- Moved character level/price page manipulation out of the main game loop
+- Charles' tomes will now become highlighted when you can afford them
+- You can now filter the achievements list to only show challenge achievements
+- "Raw Knowledge" achievement now works
+- Fixed prestige section not appearing
+- Fixed Golden Carrot count text being the wrong color
+- Added "Golden Carrots spent" statistic to statistics
+- Prestige statistics should now work and can be viewed in the statistics menu
+  + This information won't appear until after you've prestiged
+- Reordered the achievements list a little
+- Fixed issue where the page would be scrollable while in the themes menu after you changed themes
+- Added some character specific cosmetics (fancy bill and safety greg)
+  + Note: You can't mix and match cosmetics yet
+- New collectible: Pages
+  + These are the replacement for the achievement percentage = prestige buff mechanic- for every page you have, you will earn +1% golden carrots when you prestige. Pages are earned by completing achievements.
+  + There is support for balance changes here: if the page reward(s) for an achievement are changed in an update the game will update the player's page count accordingly
+- Added an achievement for unlocking every achievement (excluding secret achievements)
+- Fixed issue where spacebar for carrot farming didn't work
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.7.1
     11-26-2021
 // ----------------------------------------------------------- //
@@ -6,7 +36,7 @@
 localStorage is fixed
 
 - localStorage / autosave are now fixed, the game no longer requires a page reload to function
-- Autosave interval option in settings & option to save on command
+- Autosave interval option in settings
 - Carl is now slightly harder to unlock (you need at least 1 theme and 1 cosmetic instead of one or the other)
 - A number of achievements' images are no longer hidden by default
 - Deleting your save data or prestiging now scrolls you to the top of the page

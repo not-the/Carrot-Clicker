@@ -111,6 +111,7 @@ a:hover {filter: brightness(120%);}
 .flex {display: flex;}
 .flex_1 {flex: 1;}
 .half_width {width: 50% !important;}
+.full_width {width: 100% !important;}
 .overflow_hidden {overflow: hidden !important;}
 /* .fixed {
     position: fixed;
@@ -385,6 +386,16 @@ summary:hover {
 }
 .visible {
     visibility: visible !important;
+}
+.remove {
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+}
+.unremove {
+    visibility: visible;
+    position: unset;
+    overflow: hidden;
 }
 .opacity0 {opacity: 0 !important;}
 
@@ -748,6 +759,16 @@ body:not(.theme_light) .theme_checkmark {
     position: relative;
 }
 
+/* Hover info */
+.question_mark {
+    color: gray;
+    font-weight: bolder;
+    font-size: 10pt;
+    cursor: help;
+    padding: 6px;
+    position: inherit;
+}
+
 /* Dropdown */
 #info_dropdown {
     cursor: pointer;
@@ -890,9 +911,6 @@ body:not(.theme_light) .theme_checkmark {
 }
 .mini_stats p {
     text-align: center;
-}
-#golden_carrot_count {
-    color: gray;
 }
 #left-section {
     /* width: 420px; */
@@ -1212,6 +1230,7 @@ body:not(.theme_light) .theme_checkmark {
     margin-bottom: 8px;
 
     transition: background-color, filter 0.5s;
+    cursor: pointer;
 }
 .shop_item:last-of-type {
     margin-bottom: 0;
@@ -1431,11 +1450,16 @@ body:not(.theme_light) .theme_checkmark {
     background-color: var(--brown-darkest-color);
 
     border-radius: 20px;
+    /* position: relative; */
     /* overflow: hidden; */
 }
 .style_challenge {
     border: 2px solid rgb(177, 44, 44) !important;
     background-color: rgb(85, 43, 43);
+}
+.style_endgame {
+    border: 2px solid white;
+    background-color: rgb(94, 94, 94);
 }
 .achievement_secret {
     border: 2px solid purple !important;
@@ -1456,19 +1480,26 @@ body:not(.theme_light) .theme_checkmark {
     filter: saturate(0%);
 }
 .achievement_item:not(.achievement_locked):not(.toast) .achievement_img:hover {
-    transform: scale(1.8, 1.8) translateX(14px);
+    transform: scale(1.8, 1.8) translateX(12px);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
-    margin-right: 72px;
+    margin-right: 68px;
     /* position: absolute; */
 }
 .achievement_details {
     padding: 8px;
     border-radius: 16px;
+
+    position: relative;
 }
 .achievement_details.has_reward {border-radius: 16px 16px 0 0;}
 .achievement_details h2 {
     margin: 6px 0 8px 0;
     font-size: 20pt;
+}
+.achieve_pages {
+    position: absolute;
+    top: 16px;
+    right: 16px;
 }
 .achievement_item h4 {
     margin: 0;
