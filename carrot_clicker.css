@@ -389,16 +389,22 @@ summary:hover {
     visibility: visible !important;
 }
 .remove {
-    visibility: hidden;
-    position: absolute;
-    overflow: hidden;
+    visibility: hidden !important;
+    position: absolute !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(-100%) !important;
 }
 .unremove {
-    visibility: visible;
-    position: unset;
-    overflow: hidden;
+    visibility: inherit !important;
+    position: unset !important;
+    overflow: hidden !important;
+    transform: none !important;
+    pointer-events: initial !important;
 }
 .opacity0 {opacity: 0 !important;}
+.position_absolute {position: absolute;}
+.position_unset {position: unset;}
 
 /* Toasts */
 #toast_container {
@@ -1417,21 +1423,10 @@ body:not(.theme_light) .theme_checkmark {
     height: min-content;
     width: 100%;
     padding: 0px 24px 64px;
-
-    overflow: auto;
 }
 /* .panel button {
     width: 200px;
 } */
-#achievements-panel {
-    visibility: hidden;
-}
-#info-panel {
-    visibility: hidden;
-}
-#settings-panel {
-    visibility: hidden;
-}
 
 /* Achievements */
 /* Old */
@@ -1458,7 +1453,7 @@ body:not(.theme_light) .theme_checkmark {
 /* Filter dropdown */
 .panel_select {
     position: absolute;
-    top: 30px;
+    top: 64px;
     right: 24px;
     width: 200px;
 }
@@ -1470,7 +1465,7 @@ body:not(.theme_light) .theme_checkmark {
     background-color: var(--brown-darkest-color);
 
     border-radius: 20px;
-    /* position: relative; */
+    position: relative;
     /* overflow: hidden; */
 }
 .style_challenge {
@@ -1479,12 +1474,35 @@ body:not(.theme_light) .theme_checkmark {
 }
 .style_endgame {
     border: 2px solid white;
-    background-color: rgb(94, 94, 94);
+    background: rgb(94, 94, 94);
+    background: linear-gradient(
+        110deg,
+        rgb(94, 94, 94) 50%,
+        rgba(189, 189, 189, 0.664) 53%,
+        rgb(114, 114, 114) 56%,
+        rgb(94, 94, 94) 60%
+    );
+    background-attachment:local;
+    background-size: 120%;
+
+    animation: shine 4s infinite;
 }
-.achievement_secret {
+@keyframes shine {
+    0% {
+        background-position-x: -800px;
+    }
+    50% {
+        background-position-x: 500px;
+    }
+    100% {
+        background-position-x: 500px;
+    }
+}
+.style_secret {
     border: 2px solid purple !important;
     background-color: rgb(61, 49, 61);
 }
+
 .achievement_item .achievement_img {
     height: 75px;
     width: 75px;

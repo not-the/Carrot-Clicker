@@ -353,7 +353,14 @@ const settings_default = {
 
     // UI
     theme: 'theme_default',     // string
-    cosmetic: 'default',        // string
+    cosmetics: {
+        farmable: 'default',
+        bill: 'default',
+        belle: 'default',
+        greg: 'default',
+        charles: 'default',
+        carl: 'default',
+    },
     openpanel: null,            // string
 
     keybinds: keybinds_default, // object
@@ -424,6 +431,7 @@ function earnCarrots(amount, type) {
 //On Carrots Click
 // var clickMethodLimit = 'none';
 // var clickMethodTimer = 0;
+var fallingCarrotPromiser = 0;
 function onClick(useMousePos, method = 'click') {
     // Prevent use of spacebar/click at the same time
     // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
@@ -448,6 +456,16 @@ function onClick(useMousePos, method = 'click') {
     // Click speed
     clickSpeedHandler(true);
 
+    // Falling carrots
+    let roll = Math.floor((Math.random() * 50));
+    console.log(fallingCarrotPromiser);
+    if(roll == 1 && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser > 50) {
+        fallingCarrotPromiser = 0;
+        fallingCarrot();
+    } else {
+        fallingCarrotPromiser++;
+    }
+
     // Sound effect
     if(store('enableSounds') == 'false' || store('enableCarrotSounds') == 'false') return;
     randomSound('crunch', 95);
@@ -455,27 +473,6 @@ function onClick(useMousePos, method = 'click') {
 
 /* ----------------------Page Manipulation------------------------*/
 const elPrestigeStats = dom('this_prestige_stats');
-
-// Display rounded numbers
-function DisplayRounded(Value, Fixedto = 3, min = 0, units = unitsShort) {
-    let fixed = Fixedto;
-    if(Value % 1 == 0) { fixed = 0; }
-
-    // Return with commas instead of min is specified
-    if(Value < min) {
-        return numCommas(Value.toFixed(fixed));
-    }
-    
-    for(i = 0; i < units.length; i++){
-        if(Value/Bases[i] % 1 == 0) { fixed = 0; }
-        else { fixed = Fixedto; }
-        if(Value < Bases[i + 1] && Value > Bases[0]){
-            return (Value/Bases[i]).toFixed(fixed) + units[i];
-        }
-    }
-    return Value;
-}
-
 
 // Update carrot count on page
 function carrotCount() {
@@ -588,7 +585,7 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     let r=character.lvlupPrice;
     let r2=0;
 
-    function multibuyPrice(PriceIncrease){
+    function multibuyPrice(PriceIncrease) {
         r+=((1-DecreaseWagesEffects())*Math.floor(r*PriceIncrease));
         r2+=r;
         if(amount==1){
@@ -656,8 +653,8 @@ function Prestige() {
     player.prestige = playerPrestigeTemplate;
 
     // Give golden carrots
-    player.golden_carrots += prestige_potential;
-    player.lifetime.golden_carrots += prestige_potential;
+    player.golden_carrots += player.prestige_potential;
+    player.lifetime.golden_carrots += player.prestige_potential;
     player.lifetime.prestige_count += 1;
 
     // Reset characters to default
@@ -1079,8 +1076,8 @@ function gameLoop() {
 
     //The Prestige Potential
     // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    prestige_potential = Math.pow(0.0000001*player.Carrots, 0.38) * (1 + (player.pages/100));
-    eInnerText(prestige_info, DisplayRounded(prestige_potential.toFixed(1),2));
+    player.prestige_potential = Math.pow(0.0000001*player.Carrots, 0.38) * (1 + (player.pages/100));
+    eInnerText(prestige_info, DisplayRounded(player.prestige_potential.toFixed(1),2));
 
     // Greg's Hoe Prices
     eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`);
@@ -1094,7 +1091,7 @@ function gameLoop() {
     if(player.lifetime.golden_carrots >= 1 || player.prestige_potential >= 1) {
         eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
     }
-    if(player.lifetime.golden_carrots > 0 || prestige_potential >= 1){
+    if(player.lifetime.golden_carrots > 0 || player.prestige_potential >= 1){
         dom("prestige-section").classList.add('visible');
         player.prestige_available = true;
     }
@@ -1201,57 +1198,6 @@ setInterval(() => {loadStatistics()}, 1000);
 
 /*-----------Tips----------- */
 //#region
-const default_tips = {
-    number:0,
-    random:0,
-    tracker:0,
-    Type:0,
-    TypeModifier:0.5,
-    basic: [
-        "Click the lvl up arrow to level up characters",
-        "To buy a Hoe, go to Greg and click the correct type",
-        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
-        "Click the carrot",
-        "Long hover over a character to view their description",
-        "Click here to cycle through available tips!"
-    ],
-    beginner: [
-        "Each character can only hold up to 1 hoe for every level Greg has reached"
-    ],
-    advanced: [
-        "When you're ready, click the prestige button. You will start over but gain a permanent boost", 
-        "Golden carrots increase your characters by 10%"
-    ],
-
-    fun: [
-        "Carrots can end world hunger",
-        "Only YOU can save the carrots!",
-        "Carrots have been proven to improve eyesight by 150%. It's true!",
-        "Carrots are your friend",
-        "JJ broke it"
-    ],
-    funIntermediate: [
-        "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
-        "Tired of eating carrots? Make carrot cake!",
-        "Carrots have been proven to improve eyesight by 1000%. It's true!",
-        "Carrots love you ♥",
-        "Studies are being done to determine if carrots can cure the common cold"
-    ],
-    funAdvanced: [
-        "World hunger has been cured, but there must be more we can do.",
-        "Carrots have never been found at a crime scene because they are the direct cause of peace and friendship.",
-        "Carrots have received 7,000,000,000 (★★★★★) 5-star ratings on ebay",
-        "Eating carrots cures cancer",
-        "Studies done on people eating only carrots for 90 days have proven that they are the only food required for human survival.",
-        "Report any anti-carrot propaganda you see on the internet to your local carrot police",
-        "Public Service Announcement: Reminder to eat more carrots. That is all.",
-        "People who regularly eat carrots have been known to exceed a life expectancy of 200 years",
-        "Carrots are people too",
-        "Carrots have been proven to improve eyesight by 9000%. It's true!"
-    ],
-    
-}
-
 var tips = default_tips;
 
 // const tips = localStorage.getObject("tips");
@@ -1272,7 +1218,12 @@ var tips = default_tips;
 //     tips = localStorage.getObject("tips");
 // }
 
+// Automatically change tips
+var tipInterval = setInterval(() => {tipchange()}, 15000);
+
 function tipchange() {
+    clearInterval(tipInterval);
+    tipInterval = setInterval(() => {tipchange()}, 15000);
     
     //Tracker
     if(player.EquippedHoes>0 && tips.tracker==0){
@@ -1284,10 +1235,10 @@ function tipchange() {
     
     //decides if the tip will be real or fun.
     tips.random = Math.random();
-    console.log(tips.random);
+    // console.log(tips.random);
     if(tips.random<tips.TypeModifier){
         tips.Type="fun";
-    }else{tips.Type="real"}
+    }else{tips.Type="real";}
     
     //displays the tip
     if(tips.Type=="fun"){
@@ -1323,8 +1274,6 @@ function tipchange() {
     }
 }
 
-// Automatically change tips
-setInterval(tipchange(), 10000);
 
 
 //#endregion

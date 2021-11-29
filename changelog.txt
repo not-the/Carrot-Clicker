@@ -1,4 +1,25 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.7.4
+    11-28-2021
+// ----------------------------------------------------------- //
+
+- Falling Carrots will no longer appear at random, but instead have a chance of appearing when you click the main carrot.
+  + This is subject to change but I think this rewards clicking better and avoids making the player feel like they're missing something while they are away from the carrot
+- Changed some achievements' page rewards
+- Fixed tips not automatically cycling and changed it to change every 15 seconds (Issue #28)
+- Moved themes, cosmetics, and achievement data into gamedata.js
+- Added a number of new tips and edited some outdated ones
+- Clicking to cycle through tips will now reset the automatic cycle timer (Issue #28)
+- Fixed a (non) issue where game used nonexistant prestige_potential variable instead of player.prestige_potential (apparently this didn't break anything but still)
+- Added an HTML changelog (unused for the moment)
+- Most of the themes should now support most of the newer features
+- Fixed the issue where there would be extra space underneath the achievements tab (Issue #42)
+- Internal changes in preparation for the improved cosmetics system
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.7.3
     11-27-2021
 // ----------------------------------------------------------- //

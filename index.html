@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.7.3</title>
+    <title id="page_title">Carrot Clicker dev beta v1.7.4</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -454,7 +454,7 @@
                     </a>
 
                     <!-- Changelog -->
-                    <a href="./changelog.txt" target="_blank" rel="noopener noreferrer" tabindex="0">
+                    <a href="./changelog/index.html" target="_blank" rel="noopener noreferrer" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/iconography/refresh.png" alt="" class="dropdown_img">
                             Changelog
@@ -518,7 +518,7 @@
                 <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p><br/>
-                <p class="secondary_text" style="margin-left:18px">
+                <p class="secondary_text" style="margin-right:-24px">
                     Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
                 </p>
                 <p class="secondary_text">
@@ -886,7 +886,7 @@
         </nav>
 
         <!-- Achievements Panel -->
-        <div id="achievements-panel" class="panel" style="visibility: visible; position: relative; height: unset; overflow: unset; transform: none">
+        <div id="achievements-panel" class="panel remove unremove">
             <h1>Achievements</h1>
             
             <!-- Filter dropdown -->
@@ -930,7 +930,7 @@
         </div>
 
         <!-- Info Panel -->
-        <div id="info-panel" class="panel">
+        <div id="info-panel" class="panel remove">
             <div id="info-inner">
                 <h1>Statistics</h1>
                 <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
@@ -1003,7 +1003,7 @@
 
 
         <!-- Settings Panel -->
-        <div id="settings-panel" class="panel">
+        <div id="settings-panel" class="panel remove">
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
@@ -1201,6 +1201,7 @@
   <!-- Javascript -->
   <!-- #region -->
   <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
+  <script src="gamedata.js"></script>
   <script src="carrot_clicker.js"></script>
   <script src="styling.js"></script>
   <script src="user.js"></script>

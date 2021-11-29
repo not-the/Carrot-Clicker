@@ -19,6 +19,19 @@
 .theme_light .secondary_text {
     color: rgb(70, 70, 70);
 }
+.theme_light .white {
+    color: black !important;
+}
+.theme_light .invert {
+    filter: none;
+}
+.theme_light .hover_menu {
+    border-color: var(--light-theme-border-color);
+}
+.theme_light .button_icon:not(.invert),
+.theme_light .dropdown_img:not(.invert) {
+    filter: invert();
+}
 
 /* Scrollbar */
 .theme_light ::-webkit-scrollbar {
@@ -79,6 +92,12 @@
     opacity: 0.2;
 }
 
+.theme_light .achievement_item,
+.theme_light .shop_item,
+.theme_light .footer_bottom {
+    background-color: white;
+}
+
 /* Dialog box/toasts */
 .theme_light .toast {
     color: white;
@@ -105,6 +124,17 @@
     background-color: white;
 }
 
+.theme_light .switcher_bar .tab:not(.activetab),
+.theme_light #dialog_close {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light #info_dropdown:hover,
+.theme_light .menu_item:hover {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light .hover_menu {
+    background-color: white;
+}
 
 
 
@@ -619,7 +649,12 @@
 .theme_blockgame .characterbox img,
 .theme_blockgame .bottom,
 .theme_blockgame .toast,
-.theme_blockgame #Greg_Bar {
+.theme_blockgame #Greg_Bar,
+.theme_blockgame .achievement_item,
+.theme_blockgame .achievement_img,
+.theme_blockgame .footer_bottom,
+.theme_blockgame .theme_item,
+.theme_blockgame .shop_item {
     border-radius: 0;
 }
 .theme_blockgame .characterbox {
@@ -675,7 +710,7 @@
     filter: none;
     outline-color: white;
 }
-.theme_blockgame .panel {
+.theme_blockgame #notifs-section {
     background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
                 url(./assets/theme/blockgame/stone.png);
     background-size: 64px;
@@ -683,9 +718,17 @@
     background-attachment: local;
     image-rendering: pixelated;
 }
-
-
-
+.theme_blockgame .achievement_item,
+.theme_blockgame .footer_bottom {
+    background: rgba(0, 0, 0, 0.3);
+}
+.theme_blockgame .theme_item {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid black;
+}
+.theme_blockgame .shop_item {
+    background-color: #8b8b8b;
+}
 
 
 
