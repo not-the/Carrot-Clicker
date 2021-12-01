@@ -755,8 +755,8 @@ function grantAchievement(key) {
 // Unlock themes/cosmetics
 // var playerThemes =    [];
 // var playerCosmetics = [];
-function unlock(type, thingToUnlock) {
-    if(isUnlocked(type, thingToUnlock)) {
+function unlock(type, thingToUnlock, subtype) {
+    if(isUnlocked(type, thingToUnlock, subtype)) {
         console.warn(`${type}:${thingToUnlock} is already unlocked`);
         return;
     }
@@ -769,8 +769,8 @@ function unlock(type, thingToUnlock) {
     }
     // Cosmetic
     else if(type == 'cosmetic') {
-        player.cosmetics.push(thingToUnlock);
-        populateCosmeticsList();
+        player.cosmetics[subtype].push(thingToUnlock);
+        populateCosmeticsList('all');
     }
     // Character
     else if(type == 'character') {
@@ -798,7 +798,7 @@ function achieveQuery(key) {
 }
 
 // Test if theme is unlocked or not
-function isUnlocked(type = 'theme', key) {
+function isUnlocked(type = 'theme', key, subtype) {
     // Theme
     if(type == 'theme') {
         for(let i = 0; i < player.themes.length; i++) {
@@ -810,7 +810,7 @@ function isUnlocked(type = 'theme', key) {
     }
     // Cosmetic
     else if(type == 'cosmetic') {
-        for(let i = 0; i < player.cosmetics.length; i++) {
+        for(let i = 0; i < player.cosmetics[subtype].length; i++) {
             if(key == player.cosmetics[i]) {
                 return true;
             }
@@ -845,6 +845,11 @@ function ex_charlesUses() {
     }
 
     return 0;
+}
+// No Belle challenge
+function ex_noBelle() {
+    if(Belle_Boomerette.lvl == 0 && player.prestige.carrots >= 5000000) return true;
+    return false;
 }
 // No hoes challenge
 function ex_noHoes() {
@@ -1085,19 +1090,19 @@ function onLoad() {
     }
 
     // Set user theme on page load
-    if(store('theme') != null) {
-        let theme = store('theme');
+    if(settings.theme != 'theme_dark') {
+        let theme = settings.theme;
         console.log(`Theme setting found, switching to: ${theme}`);
         // optionTheme.value = theme;
         setTheme(theme);
     }
     // Set user cosmetic on page load
-    if(store('cosmetic') != null) {
-        let cosmetic = store('cosmetic');
-        console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
-        // optionCosmetic.value = cosmetic;
-        setCosmetic(cosmetic);
-    }
+    // if(store('cosmetic') != null) {
+    //     let cosmetic = store('cosmetic');
+    //     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
+    //     // optionCosmetic.value = cosmetic;
+    //     setCosmetic(cosmetic);
+    // }
     // Switch to previously open panel on page load
     if(store('openpanel') != null) {
         console.log('openpanel found, switching to: ' + store('openpanel'));
@@ -1130,9 +1135,9 @@ function onLoad() {
         settingSounds();
     } else if(location.hash == '#cheatmode') {
         // Achievements
-        for(let i = 0; i < achievementsKeys.length; i++) {
-           grantAchievement(achievementsKeys[i])
-        }
+        // for(let i = 0; i < achievementsKeys.length; i++) {
+        //    grantAchievement(achievementsKeys[i])
+        // }
 
         // Themes
         for(let i = 0; i < themesKeys.length; i++) {
@@ -1140,9 +1145,9 @@ function onLoad() {
         }
 
         // Cosmetics
-        for(let i = 0; i < cosmeticsKeys.length; i++) {
-            unlock('cosmetic', cosmeticsKeys[i])
-        }
+        // for(let i = 0; i < cosmeticsKeys.length; i++) {
+        //     unlock('cosmetic', cosmeticsKeys[i])
+        // }
 
         // Characters
         unlock('character', 'belle');
@@ -1164,10 +1169,14 @@ function onLoad() {
     //     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
     // }
     if(store("tutorial_sample") == null) {
+        // Welcome message
         toast("Welcome to Carrot Clicker!",
         "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!",
         "", true);
         store("tutorial_sample", "done");
+
+        // Cookie notification
+        toast('Cookie Usage', 'By playing Carrot Clicker you agree to the usage of cookies to save your progress.', 'purple', true);
     }
 
     // Enable unlocked characters
@@ -1203,8 +1212,8 @@ function onLoad() {
 
     // Theme Switcher
     populateThemeList();
-    themeSwitcherCheckmark(store('theme'));
-    populateCosmeticsList();
+    themeSwitcherCheckmark(settings.theme);
+    populateCosmeticsList('all');
     cosmeticSwitcherCheckmark(store('cosmetic'));
 
     // Disable

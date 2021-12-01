@@ -201,9 +201,16 @@ const player1 = {
         'theme_light',
         'theme_oled'
     ],
-    cosmetics: [
-        'default'
-    ],
+    cosmetics: {
+        'bundle':   ['default'],
+        'farmable': ['default'],
+        'bill':     ['default'],
+        'belle':    ['default'],
+        'greg':     ['default'],
+        'charles':  ['default'],
+        'carl':     ['default'],
+        'tools':    ['default'],
+    },
 
     inventory: {
         // Item inventory
@@ -352,7 +359,7 @@ const settings_default = {
     autosave_interval: 2,
 
     // UI
-    theme: 'theme_default',     // string
+    theme: 'theme_dark',     // string
     cosmetics: {
         farmable: 'default',
         bill: 'default',
@@ -1133,6 +1140,7 @@ const statsNumbers = {
     lifetime_golden_carrots_spent: dom('lifetime_golden_carrots_spent'),
     lifetime_prestige:           dom('lifetime_prestige'),
     lifetime_clicks:             dom('lifetime_clicks'),
+    lifetime_falling_carrots_grabbed: dom('lifetime_falling_carrots_grabbed'),
     lifetime_hoes_crafted_total: dom('lifetime_hoes_crafted_total'),
     lifetime_hoes_crafted_0:     dom('lifetime_hoes_crafted_0'),
     lifetime_hoes_crafted_1:     dom('lifetime_hoes_crafted_1'),
@@ -1169,6 +1177,7 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_golden_carrots_spent, numCommas(player.lifetime.golden_carrots - player.golden_carrots));
     eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
     eInnerText(statsNumbers.lifetime_clicks, numCommas(player.lifetime.clicks));
+    eInnerText(statsNumbers.lifetime_falling_carrots_grabbed, numCommas(player.lifetime.falling_carrots_grabbed));
     eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);
     eInnerText(statsNumbers.lifetime_hoes_crafted_0, player.lifetime.hoes.crafted[0]);
     eInnerText(statsNumbers.lifetime_hoes_crafted_1, player.lifetime.hoes.crafted[1]);
@@ -1178,7 +1187,7 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_hoes_crafted_5, player.lifetime.hoes.crafted[5]);
     eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
     eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}`);
-    eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1}`);
+    // eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1} (${cosmeticsPercent()}%)`);
     
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(

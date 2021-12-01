@@ -41,8 +41,16 @@ const toastContainer =  dom("toast_container");
 const toastsClear =     dom("toasts_clear");
 const themeMenu =       dom("theme_menu");
 const cosmeticMenu =    dom('cosmetic_menu');
-const themesList = dom('themes_list');
-const cosmeticsList = dom('cosmetics_list');
+const themesList =      dom('themes_list');
+const cosmeticsList =   dom('cosmetics_list');
+const cosmList = {
+    farmable:   dom('farmable_cosmetics'),
+    bill:       dom('bill_cosmetics'),
+    bell:       dom('belle_cosmetics'),
+    greg:       dom('greg_cosmetics'),
+    charles:    dom('charles_cosmetics'),
+    carl:       dom('carl_cosmetics'),
+}
 //#endregion
 
 
@@ -218,7 +226,7 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
                 <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
                 <div>
                     <h2>${achieve.name}</h2>
-                    <p class="secondary_text">${achieve.desc}</p>
+                    <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? ` (+${achieve.pages} pages)` : ''}</p>
                 </div>
             </div>
             ${rewardHTMLstring}
@@ -411,6 +419,7 @@ function popupHandler(useMousePos = true, amount) {
 // Falling carrots
 var fallingID = 0;
 var fallingActive = 0;
+var fallingFrenzy = false;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 function fallingCarrot() {
     var element = document.createElement("img");
@@ -421,13 +430,15 @@ function fallingCarrot() {
     fallingActive++;
 
     // Reward
-    // Between 200% and 400% of player's CPC
-    let rewardVariation = (Math.floor((Math.random() * 200)) + 200) / 100;
+    // Between 200% and 600% of player's CPC
+    let rewardVariation = (Math.floor((Math.random() * 400)) + 200) / 100;
     let carrotReward = Math.round(player.cpc * rewardVariation);
     element.onclick = () => {
         earnCarrots( carrotReward, 'bonus' );
         dom(element.id).remove();
         fallingActive--;
+
+        player.lifetime.falling_carrots_grabbed ++;
     };
 
     // Positioning
@@ -446,16 +457,6 @@ function fallingCarrot() {
         }
     }, 2600);
 }
-
-// Randomly drop falling carrots
-var fallingFrenzy = false;
-// setInterval(() => {
-//     let roll = Math.floor((Math.random() * 25));
-
-//     if(roll == 1 && fallingActive < 3 || fallingFrenzy == true) {
-//         fallingCarrot();
-//     }
-// }, 500);
 
 
 // Theme switcher <-> Cosmetic switcher
@@ -532,105 +533,83 @@ const characterNames = {
     // ...
 }
 
-// Change cosmetic
-function setCosmetic(set, resetState = false) {
-    var from = store('cosmetic');
-
+// Change cosmetic (V2)
+function setCosmetic(target, to, resetState = false) {
     // Reset to default first
-    if(resetState == false && set !== 'default') {setCosmetic('default', true);}
-    console.log('Switching to cosmetic: ' + set);
+    if(resetState == false && to !== 'default')
+    {setCosmetic(target, 'default', true);}
 
-    let cosmetic = cosmetics[set];
+    console.log('Switching ' + target + '\'s cosmetic to: ' + to);
 
-    // Image
-    if(cosmetic.hasOwnProperty('image')) {mainCarrot.src = cosmetic.image;}
+    var from = settings.cosmetics[target];
+    let cosmetic = cosmetics[target][to];
 
-    // Name
-    if(cosmetic.hasOwnProperty('farmable')) {
-        nameLoop(cosmetic.farmable)
-    } else {
-        nameLoop('Carrot');
+    // Change page
+    switch(target) {
+        case 'bundle':
+            if(cosmetic.hasOwnProperty('farmable'))
+            {setCosmetic('farmable', cosmetic.farmable);}
+            else {setCosmetic('farmable', 'default');}
+
+            if(cosmetic.hasOwnProperty('bill'))
+            {setCosmetic('bill', cosmetic.bill);}
+            else {setCosmetic('farmable', 'bill');}
+            if(cosmetic.hasOwnProperty('belle'))
+            {setCosmetic('belle', cosmetic.belle);}
+            else {setCosmetic('farmable', 'belle');}
+            if(cosmetic.hasOwnProperty('greg'))
+            {setCosmetic('greg', cosmetic.greg);}
+            else {setCosmetic('farmable', 'greg');}
+            if(cosmetic.hasOwnProperty('charles'))
+            {setCosmetic('charles', cosmetic.charles);}
+            else {setCosmetic('farmable', 'charles');}
+            if(cosmetic.hasOwnProperty('carl'))
+            {setCosmetic('carl', cosmetic.carl);}
+            else {setCosmetic('farmable', 'carl');}
+            break;
+        
+        case 'farmable':
+            // Image
+            if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
+            { mainCarrot.src = cosmetic.image; }
+            // Name
+            if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
+                nameLoop(cosmetic.farmable)
+            } else {
+                nameLoop('Carrot');
+            }
+            break;
+
+        case 'bill':
+        case 'belle':
+        case 'greg':
+        case 'charles':
+        case 'carl':
+            if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
+            {characterAvatars[target]['src'] = cosmetic.image;}
+            if(cosmetic.hasOwnProperty('rename') && cosmetic.rename != false)
+            {eInnerText(characterNames[target], cosmetic.rename);}
+            break;
     }
 
+
+    // Image
+
+
     Object.hop = property => {return this.hasOwnProperty(property);}
-
-    // Character Avatars
-    if(cosmetic.hasOwnProperty('bill_image'))     {characterAvatars.bill.src = cosmetic.bill_image;}
-    if(cosmetic.hasOwnProperty('belle_image'))    {characterAvatars.belle.src = cosmetic.belle_image;}
-    if(cosmetic.hasOwnProperty('greg_image'))     {characterAvatars.greg.src = cosmetic.greg_image;}
-    if(cosmetic.hasOwnProperty('charles_image'))  {characterAvatars.charles.src = cosmetic.charles_image;}
-    if(cosmetic.hasOwnProperty('carl_image'))     {characterAvatars.carl.src = cosmetic.carl_image;}
-
-    // Character Names
-    if(cosmetic.hasOwnProperty('bill_name'))     {eInnerText(characterNames.bill, cosmetic.bill_name);}
-    if(cosmetic.hasOwnProperty('belle_name'))    {eInnerText(characterNames.belle, cosmetic.belle_name);}
-    if(cosmetic.hasOwnProperty('greg_name'))     {eInnerText(characterNames.greg, cosmetic.greg_name);}
-    if(cosmetic.hasOwnProperty('charles_name'))  {eInnerText(characterNames.charles, cosmetic.charles_name);}
-    if(cosmetic.hasOwnProperty('carl_name'))     {eInnerText(characterNames.carl, cosmetic.carl_name);}
-
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(farmable) {
         for(i = 0; i < farmableNames.length; i++) {
             eInnerText(farmableNames[i], farmable + 's');
         }
-    }    
+    }
 
-    store('cosmetic', set);
+    store('cosmetic', to);
 
     // Fancy Switcher fix
-    themeSwitcherCheckmark(set, from);
+    themeSwitcherCheckmark(to, from);
 }
-
-// New
-// function setCosmeticV2(target, to, resetState = false) {
-//     var from = store('cosmetic');
-
-//     // Reset to default first
-//     if(resetState == false && to !== 'default') {setCosmetic('default', true);}
-//     console.log('Switching to cosmetic: ' + set);
-
-//     let cosmetic = cosmetics[to];
-
-//     // Image
-//     if(cosmetic.hasOwnProperty('image')) {mainCarrot.src = cosmetic.image;}
-
-//     // Name
-//     if(cosmetic.hasOwnProperty('farmable')) {
-//         nameLoop(cosmetic.farmable)
-//     } else {
-//         nameLoop('Carrot');
-//     }
-
-//     Object.hop = property => {return this.hasOwnProperty(property);}
-
-//     // Character Avatars
-//     if(cosmetic.hasOwnProperty('bill_image'))     {characterAvatars.bill.src = cosmetic.bill_image;}
-//     if(cosmetic.hasOwnProperty('belle_image'))    {characterAvatars.belle.src = cosmetic.belle_image;}
-//     if(cosmetic.hasOwnProperty('greg_image'))     {characterAvatars.greg.src = cosmetic.greg_image;}
-//     if(cosmetic.hasOwnProperty('charles_image'))  {characterAvatars.charles.src = cosmetic.charles_image;}
-//     if(cosmetic.hasOwnProperty('carl_image'))     {characterAvatars.carl.src = cosmetic.carl_image;}
-
-//     // Character Names
-//     if(cosmetic.hasOwnProperty('bill_name'))     {eInnerText(characterNames.bill, cosmetic.bill_name);}
-//     if(cosmetic.hasOwnProperty('belle_name'))    {eInnerText(characterNames.belle, cosmetic.belle_name);}
-//     if(cosmetic.hasOwnProperty('greg_name'))     {eInnerText(characterNames.greg, cosmetic.greg_name);}
-//     if(cosmetic.hasOwnProperty('charles_name'))  {eInnerText(characterNames.charles, cosmetic.charles_name);}
-//     if(cosmetic.hasOwnProperty('carl_name'))     {eInnerText(characterNames.carl, cosmetic.carl_name);}
-
-
-//     // Loop through page elements containing farmable item name and set accordingly
-//     function nameLoop(farmable) {
-//         for(i = 0; i < farmableNames.length; i++) {
-//             eInnerText(farmableNames[i], farmable + 's');
-//         }
-//     }    
-
-//     store('cosmetic', to);
-
-//     // Fancy Switcher fix
-//     themeSwitcherCheckmark(to, from);
-// }
 //#endregion
 
 
@@ -712,48 +691,83 @@ function themeSwitcherCheckmark(theme, from = false) {
 
 /* Populate cosmetics */
 // Populate theme switcher list on page load
-function populateCosmeticsList() {
+//#region 
+// Cosmetics List style
+const cosmeticsView = dom('cosmetics_view');
+cosmeticsView.addEventListener('input', () => {
+    let value = cosmeticsView.value;
+    let elements = document.querySelectorAll('.cosmetics_mini');
+    
+    if(value == 'grid') {
+        elements.forEach(element => {
+            element.classList.add('cosmetics_grid');
+        });
+    } else {
+        elements.forEach(element => {
+            element.classList.remove('cosmetics_grid');
+        });
+    }
+});
+
+// New
+function populateCosmeticsList(target) {
+    // Do all lists
+    if(target == 'all') {
+        for(let i = 0; cosmeticsKeys.length; i++) {
+            populateCosmeticsList(cosmeticsKeys[i]);
+        }
+        return
+    }
+
     var cosmeticHTML = '';
     var stillLocked = 0;
+    
+    let list = cosmetics[target];
 
-    for(let i = 0; i < cosmeticsKeys.length; i++) {
-        let key = cosmeticsKeys[i];
-        let cosmetic = cosmetics[key];
+    for(let i = 0; i < cosmetics[target].keys.length; i++) {
+        let key = list['keys'][i];
+        let cosmetic = list[key];
+
   
         // Test if unlocked
-        if(isUnlocked('cosmetic', key) == false) {
-            // console.log(key + ' is not unlocked!');
-            stillLocked++;
-            continue;
-        }
+        // if(isUnlocked('cosmetic', key, target) == false) {
+        //     // console.log(key + ' is not unlocked!');
+        //     stillLocked++;
+        //     continue;
+        // }
 
-        let imgsrc = cosmetic.image !== false ? cosmetic.image : './assets/Carrot Clicker.png'
+        let imgsrc = cosmetic.hasOwnProperty('preview') ? cosmetic.preview : (cosmetic.hasOwnProperty('image') ? cosmetic.image : './assets/Carrot Clicker.png');
     
+        console.log('aaa::: ' + `setCosmetic('${target}', '${key}')`)
         cosmeticHTML += /* html */
         `
-        <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${key}')">
+        <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
             <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
-            <div>
+            <div class="description">
                 <h3>${cosmetic.name}</h3>
                 <p class="secondary_text">${cosmetic.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="cosmetic_${key + '_checkmark'}">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="${target}_cosmetic_${key}_checkmark">
             </div>
         </div>
         `;
     }
 
-    if(stillLocked > 0) {
-        cosmeticHTML += /* html */
-        `<br><center><i>${stillLocked} cosmetics have not been unlocked</i></center>`;
-    } else {
-        cosmeticHTML += /* html */
-        `<br><center><p>You've unlocked every cosmetic!</p></center>`;
-    }
+    // if(stillLocked > 0) {
+    //     cosmeticHTML += /* html */
+    //     `<br><center><i>${stillLocked} cosmetics have not been unlocked</i></center>`;
+    // } else {
+    //     cosmeticHTML += /* html */
+    //     `<br><center><p>You've unlocked every cosmetic!</p></center>`;
+    // }
 
-    cosmeticsList.innerHTML = cosmeticHTML;
+    dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
 }
+function cosmeticsPercent() {
+    return percentage(Object.keys(player.cosmetics).length - 1, Object.keys(cosmetics).length - 1);
+}
+
 
 // Theme switcher checkmark fix
 function cosmeticSwitcherCheckmark(cosmetic, from = false) {
@@ -767,6 +781,9 @@ function cosmeticSwitcherCheckmark(cosmetic, from = false) {
     if(!elCosmetic) return;
     elCosmetic.classList.remove('opacity0');
 }
+//#endregion
+
+
 
 // Populate achievements list
 const elAchievementsList = dom('achievements_list');
@@ -1112,7 +1129,7 @@ var currentTheme;
 function setTheme(theme) {
     // var theme = optionTheme.value;
     var theme_color = '#312e2e';
-    var from = store('theme');
+    var from = settings.theme;
 
     elBody.className = '';
     elBody.classList.add(theme);
@@ -1134,6 +1151,7 @@ function setTheme(theme) {
     // if(theme == 'theme_light') {theme_color = '#FFFFFF';}
     // else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
 
+    console.log(themes[theme]);
     if(themes[theme].hasOwnProperty('accent')) {
         theme_color = themes[theme].accent;
     };
@@ -1141,7 +1159,8 @@ function setTheme(theme) {
     dom('theme_color').content = theme_color;
 
     // Save to localStorage
-    store('theme', theme);
+    settings.theme = theme;
+    saveSettings();
     currentTheme = theme;
 
     // Fancy Switcher fix

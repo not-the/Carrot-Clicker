@@ -1,4 +1,25 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.0
+    11-putsomethinghere-2021
+// ----------------------------------------------------------- //
+
+Cosmetics Upgrade
+
+- Ability to set cosmetics per-character
+  + The UI for this is still a WIP but 90% of the code is functional
+  + Certain things related to cosmetics are probably broken now
+- Cookie notice on page load
+- Achievement notification rewards now have the correct background color
+- Achievement notifications now show how many pages they give
+- Switched over theme localStorage to the settings object
+- The amount of falling carrots you've clicked is now stored and displayed in statistics
+- Added achievements for number of clicks
+- Falling carrots have had their rewards increased slightly (200% - 400% to 200% to 600%)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.7.4
     11-28-2021
 // ----------------------------------------------------------- //

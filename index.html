@@ -114,13 +114,121 @@
             <div>
                 <h1 class="theme_menu_title">Cosmetics</h1>
                 <p class="theme_menu_title secondary_text">Switch it up</p>
+
+                <!-- Grid/List -->
+                <select name="cosmetics_view" id="cosmetics_view" class="panel_select">
+                    <option value="list">
+                        List
+                    </option>
+                    <option value="grid">
+                        Grid
+                    </option>
+                </select>
             </div>
         
 
             <!-- Theme items -->
             <div id="cosmetics_list" class="fancy_list">
                 <!-- Javascript will do all the work -->
-                <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+                <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>All:</h3>
+                    </summary>
+                    <div id="bundle_cosmetics" class="cosmetics_mini">
+                        <i class="center color_red">
+                            If you're seeing this something is wrong. Please let us know!
+                        </i>
+                        
+                        <!-- Sample item -->
+                        <!-- <div class="theme_item flex active" title="Dark Theme" onclick="setCosmetic('farmable', 'default')">
+                            <img src="./assets/Carrot Clicker.png" alt="img" class="theme_preview" id="theme">
+                            <div class="description">
+                                <h3>Carrot</h3>
+                                <p class="secondary_text">Default</p>
+                            </div>
+                            <div class="theme_checkbox">
+                                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="cosmetic_default_checkmark">
+                            </div>
+                        </div> -->
+    
+                        <!-- Sample item -->
+                        <!-- <div class="theme_item flex" title="Dark Theme" onclick="setCosmetic('farmable', 'default')">
+                            <img src="./assets/Carrot Clicker.png" alt="img" class="theme_preview" id="theme">
+                            <div class="description">
+                                <h3>Carrot</h3>
+                                <p class="secondary_text">Default</p>
+                            </div>
+                            <div class="theme_checkbox">
+                                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="cosmetic_default_checkmark">
+                            </div>
+                        </div> -->
+    
+                    </div>
+                </details>
+                
+
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Farmable:</h3>
+                    </summary>
+                    <div id="farmable_cosmetics" class="cosmetics_mini"></div>
+                </details>
+                
+                
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Bill:</h3>
+                    </summary>
+                    <div id="bill_cosmetics" class="cosmetics_mini"></div>
+                </details>
+                
+                
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Belle:</h3>
+                    </summary>
+                    <div id="belle_cosmetics" class="cosmetics_mini"></div>
+                </details>
+                
+                
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Greg:</h3>
+                    </summary>
+                    <div id="greg_cosmetics" class="cosmetics_mini"></div>
+                </details>
+                
+                
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Charles:</h3>
+                    </summary>
+                    <div id="charles_cosmetics" class="cosmetics_mini"></div>
+                </details>
+                
+                
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Carl:</h3>
+                    </summary>
+                    <div id="carl_cosmetics" class="cosmetics_mini"></div>
+                </details>
+
+                <details open class="cosmetic_collapse">
+                    <summary>
+                        <h3>Tools:</h3>
+                    </summary>
+                    <div id="tools_cosmetics" class="cosmetics_mini"></div>
+                </details>
+
             </div>
         </div>
 
@@ -950,14 +1058,14 @@
                     <!-- Prestige -->
                     <div id="this_prestige_stats" class='remove'>
                         <h3>This prestige:</h3>
-                        <details>
+                        <details class="stat_collapse">
                             <summary>Carrots earned: <b id="prestige_carrots">---</b></summary>
                             From clicking: <b id="prestige_carrots_clicked">---</b><br>
                             From CPS: <b id="prestige_carrots_idled">---</b><br>
                         </details>
     
                         Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
-                        <details>
+                        <details class="stat_collapse">
                             <summary>Hoes crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
                             Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
                             Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
@@ -970,7 +1078,7 @@
 
                     <!-- Lifetime -->
                     <h3>Lifetime:</h3>
-                    <details>
+                    <details class="stat_collapse">
                         <summary>Carrots earned: <b id="lifetime_carrots">---</b></summary>
                         From clicking: <b id="lifetime_carrots_clicked">---</b><br>
                         From CPS: <b id="lifetime_carrots_idled">---</b><br>
@@ -978,8 +1086,9 @@
                     Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
                     Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
                     Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
-                    Total Clicks: <b id="lifetime_clicks">---</b><br/><br/>
-                    <details>
+                    Total Clicks: <b id="lifetime_clicks">---</b><br/>
+                    Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
+                    <details class="stat_collapse">
                         <summary>Hoes crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
                         Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
                         Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>

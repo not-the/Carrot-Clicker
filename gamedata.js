@@ -170,172 +170,192 @@ const themesKeys = Object.keys(themes);
 
 /* ---------------- COSMETICS ---------------- */
 //#region
-const cosmetics = {
-    // Default
-    'default': {
-        'name': 'Carrot (Default)',
-        'image': './assets/Carrot Clicker.png',
-        'farmable': 'Carrot',
-        'desc': 'Good old carrots',
+// const cosmetics = {
+//     // Default
+//     'default': {
+//         'name': 'Carrot (Default)',
+//         'image': './assets/Carrot Clicker.png',
+//         'farmable': 'Carrot',
+//         'desc': 'Good old carrots',
 
-        'bill_image':    './assets/characters/Boomer_Bill.png',
-        'belle_image':   './assets/characters/BelleBommerette.png',
-        'greg_image':    './assets/characters/Gregory.png',
-        'charles_image': './assets/characters/Charles.png',
-        'carl_image':    './assets/characters/Carl.png',
+//         'bill_image':    './assets/characters/Boomer_Bill.png',
+//         'belle_image':   './assets/characters/BelleBommerette.png',
+//         'greg_image':    './assets/characters/Gregory.png',
+//         'charles_image': './assets/characters/Charles.png',
+//         'carl_image':    './assets/characters/Carl.png',
 
-        'bill_name':    'Bill',
-        'belle_name':   'Belle',
-        'greg_name':    'Greg',
-        'charles_name': 'Charles',
-        'carl_name':    'Carl',
-    },
-    // Golden Carrot
-    'golden_carrot': {
-        'name': 'Golden Carrot',
-        'image': './assets/golden carrot.png',
-        'farmable': 'Golden Carrot',
-        'desc': 'They are only spray-painted gold. Worthless.'
-    },
-    'pixel_carrot': {
-        'name': 'Pixel Carrot',
-        'image': './assets/theme/pixel_carrot.png',
-        'farmable': 'Carrot',
-        'desc': 'Someone pixelated my carrot'
-    },
-    'cookie': {
-        'name': 'Cookie',
-        'image': './assets/theme/cookie/cookie.png',
-        'farmable': 'Cookie',
-        'desc': 'Delicious',
+//         'bill_name':    'Bill',
+//         'belle_name':   'Belle',
+//         'greg_name':    'Greg',
+//         'charles_name': 'Charles',
+//         'carl_name':    'Carl',
+//     },
+//     // Golden Carrot
+//     'golden_carrot': {
+//         'name': 'Golden Carrot',
+//         'image': './assets/golden carrot.png',
+//         'farmable': 'Golden Carrot',
+//         'desc': 'They are only spray-painted gold. Worthless.'
+//     },
+//     'pixel_carrot': {
+//         'name': 'Pixel Carrot',
+//         'image': './assets/theme/pixel_carrot.png',
+//         'farmable': 'Carrot',
+//         'desc': 'Someone pixelated my carrot'
+//     },
+//     'cookie': {
+//         'name': 'Cookie',
+//         'image': './assets/theme/cookie/cookie.png',
+//         'farmable': 'Cookie',
+//         'desc': 'Delicious',
 
-        'bill_image':    './assets/theme/cookie/baker_bill.png',
-        'belle_image':   './assets/theme/cookie/grandma_belle.png',
-        'greg_image':    './assets/characters/Gregory.png',
-        'charles_image': './assets/characters/Charles.png',
-        'carl_image':    './assets/characters/Carl.png',
+//         'bill_image':    './assets/theme/cookie/baker_bill.png',
+//         'belle_image':   './assets/theme/cookie/grandma_belle.png',
+//         'greg_image':    './assets/characters/Gregory.png',
+//         'charles_image': './assets/characters/Charles.png',
+//         'carl_image':    './assets/characters/Carl.png',
 
-        'bill_name':    'Baker Bill',
-        'belle_name':   'Grandma Belle',
-        'greg_name':    'Greg',
-        'charles_name': 'Charles',
-        'carl_name':    'Carl',
-    },
-    // Minecraft
-    'blockgame': {
-        'name': 'Minecraft Carrot',
-        'image': './assets/theme/blockgame/carrot.png',
-        'desc': 'Hrm',
-    },
-    'blockgame_potato': {
-        'name': 'Minecraft Potato',
-        'image': './assets/theme/blockgame/potato.png',
-        'farmable': 'Potatoe',
-        'desc': 'Knishes'
-    },
-    // Pineapple
-    'pineapple': {
-        'name': 'Pineapple',
-        'image': './assets/theme/pineapple/pineapple.png',
-        'farmable': 'Pineapple',
-        'desc': 'My favorite'
-    },
-    // Bill clicker
-    'bill': {
-        'name': 'Bill',
-        'image': './assets/characters/Boomer_Bill.png',
-        'farmable': 'Bill',
-        'desc': 'Bill',
+//         'bill_name':    'Baker Bill',
+//         'belle_name':   'Grandma Belle',
+//         'greg_name':    'Greg',
+//         'charles_name': 'Charles',
+//         'carl_name':    'Carl',
+//     },
+//     // Minecraft
+//     'blockgame': {
+//         'name': 'Minecraft Carrot',
+//         'image': './assets/theme/blockgame/carrot.png',
+//         'desc': 'Hrm',
+//     },
+//     'blockgame_potato': {
+//         'name': 'Minecraft Potato',
+//         'image': './assets/theme/blockgame/potato.png',
+//         'farmable': 'Potatoe',
+//         'desc': 'Knishes'
+//     },
+//     // Pineapple
+//     'pineapple': {
+//         'name': 'Pineapple',
+//         'image': './assets/theme/pineapple/pineapple.png',
+//         'farmable': 'Pineapple',
+//         'desc': 'My favorite'
+//     },
+//     // Bill clicker
+//     'bill': {
+//         'name': 'Bill',
+//         'image': './assets/characters/Boomer_Bill.png',
+//         'farmable': 'Bill',
+//         'desc': 'Bill',
 
-        'bill_image':    './assets/characters/Boomer_Bill.png',
-        'belle_image':   './assets/characters/Boomer_Bill.png',
-        'greg_image':    './assets/characters/Boomer_Bill.png',
-        'charles_image': './assets/characters/Boomer_Bill.png',
-        'carl_image':    './assets/characters/Boomer_Bill.png',
+//         'bill_image':    './assets/characters/Boomer_Bill.png',
+//         'belle_image':   './assets/characters/Boomer_Bill.png',
+//         'greg_image':    './assets/characters/Boomer_Bill.png',
+//         'charles_image': './assets/characters/Boomer_Bill.png',
+//         'carl_image':    './assets/characters/Boomer_Bill.png',
 
     
-        'bill_name':    'Bill',
-        'belle_name':   'Bill',
-        'greg_name':    'Bill',
-        'charles_name': 'Bill',
-        'carl_name':    'Bill',
-    },
-    // Netherite hoe
-    "netherite_hoe": {
-        'name': 'Netherite hoe',
-        'image': './assets/tools/netherite_hoe.png',
-        'farmable': 'Netherite hoe',
-        'desc': 'All hail'
-    },
-    // Cursor
-    "cursor": {
-        'name': 'Cursor',
-        'image': './assets/theme/cursor/cursor.png',
-        'image_hover': './assets/theme/cursor/pointer.png',
-        'farmable': 'Cursor',
-        'desc': 'Cursorception'
-    },
-    // Alien Carrot
-    "alien_carrot": {
-        'name': 'Alien Carrot',
-        'image': './assets/theme/alien carrot/alien_carrot.png',
-        'farmable': 'Alien Carrot',
-        'desc': 'So strange'
-    },
-    // Demon Carrot
-    "demon_carrot": {
-        'name': 'Demon Carrot',
-        'image': './assets/theme/evil_carrot.png',
-        'farmable': 'Demon Carrot',
-        'desc': 'Eeevil!',
-    },
-    "ghost_carrot": {
-        'name': 'Ghost Carrot',
-        'image': './assets/theme/Ghost_carrot.png',
-        'farmable': 'Ghost Carrot',
-        'desc': 'description',
-    },
-    "rainbow_carrot": {
-        'name': 'Rainbow Carrot',
-        'image': './assets/theme/rainbow_carrot.png',
-        'farmable': 'Rainbow Carrot',
-        'desc': 'Tastes like candy',
-    },
+//         'bill_name':    'Bill',
+//         'belle_name':   'Bill',
+//         'greg_name':    'Bill',
+//         'charles_name': 'Bill',
+//         'carl_name':    'Bill',
+//     },
+//     // Netherite hoe
+//     "netherite_hoe": {
+//         'name': 'Netherite hoe',
+//         'image': './assets/tools/netherite_hoe.png',
+//         'farmable': 'Netherite hoe',
+//         'desc': 'All hail'
+//     },
+//     // Cursor
+//     "cursor": {
+//         'name': 'Cursor',
+//         'image': './assets/theme/cursor/cursor.png',
+//         'image_hover': './assets/theme/cursor/pointer.png',
+//         'farmable': 'Cursor',
+//         'desc': 'Cursorception'
+//     },
+//     // Alien Carrot
+//     "alien_carrot": {
+//         'name': 'Alien Carrot',
+//         'image': './assets/theme/alien carrot/alien_carrot.png',
+//         'farmable': 'Alien Carrot',
+//         'desc': 'So strange'
+//     },
+//     // Demon Carrot
+//     "demon_carrot": {
+//         'name': 'Demon Carrot',
+//         'image': './assets/theme/evil_carrot.png',
+//         'farmable': 'Demon Carrot',
+//         'desc': 'Eeevil!',
+//     },
+//     "ghost_carrot": {
+//         'name': 'Ghost Carrot',
+//         'image': './assets/theme/Ghost_carrot.png',
+//         'farmable': 'Ghost Carrot',
+//         'desc': 'description',
+//     },
+//     "rainbow_carrot": {
+//         'name': 'Rainbow Carrot',
+//         'image': './assets/theme/rainbow_carrot.png',
+//         'farmable': 'Rainbow Carrot',
+//         'desc': 'Tastes like candy',
+//     },
 
 
-    // Updoot
-    "upvote": {
-        'name': 'Orange Arrow',
-        'image': './assets/theme/orange_arrow/upvote.png',
-        'farmable': 'Updoot',
-        'desc': 'This is better than going outside'
-    },
+//     // Updoot
+//     "upvote": {
+//         'name': 'Orange Arrow',
+//         'image': './assets/theme/orange_arrow/upvote.png',
+//         'farmable': 'Updoot',
+//         'desc': 'This is better than going outside'
+//     },
 
 
-    // Character cosmetics (temporary)
-    'fancy_bill': {
-        'name': 'Fancy Bill',
-        'desc': 'description',
-        'bill_image':    './assets/theme/boomer_bill_gates.png',
-    },
-    'safety_greg': {
-        'name': 'High Vis Greg',
-        'desc': 'Can\'t have you dying on the job now can we',
-        'greg_image':    './assets/theme/safety_greg.png',
-    },
-}
-const cosmeticsKeys = Object.keys(cosmetics);
+//     // Character cosmetics (temporary)
+//     'fancy_bill': {
+//         'name': 'Fancy Bill',
+//         'desc': 'description',
+//         'bill_image':    './assets/theme/boomer_bill_gates.png',
+//     },
+//     'safety_greg': {
+//         'name': 'High Vis Greg',
+//         'desc': 'Can\'t have you dying on the job now can we',
+//         'greg_image':    './assets/theme/safety_greg.png',
+//     },
+// }
+// const cosmeticsKeys = Object.keys(cosmetics);
 
 // Version 2
-const cosmeticsV2 = {
+const cosmetics = {
     bundle: {
         // Cookie
+        'default': {
+            'name': 'Default',
+            'preview': './assets/Carrot Clicker.png',
+            'desc': 'The carrot and characters you know and love',
+
+            'farmable': 'default',
+            'bill':     'default',
+            'belle':    'default',
+            'greg':     'default',
+            'charles':  'default',
+            'carl':     'default',
+        },
         'cookie': {
+            'name': 'Cookie',
+            'preview': './assets/theme/cookie/cookie.png',
+            'desc': 'Cookies and cookie-related outfits',
+
             'farmable': 'cookie',
             'bill': 'baker_bill',
             'belle': 'grandma_belle',
         },
         'bill': {
+            'name': 'All Bill',
+            'preview': './assets/characters/Boomer_Bill.png',
+            'desc': 'One of us',
+
             'farmable': 'bill',
             'bill':     'default',
             'belle':    'bill',
@@ -344,6 +364,10 @@ const cosmeticsV2 = {
             'carl':     'bill',
         },
         'blockgame': {
+            'name': 'Minecraft',
+            'preview': './assets/theme/blockgame/grass_block_side.png',
+            'desc': 'This probably won\'t make it to Carrot Clicker 1.0 to be honest',
+
             'theme': 'theme_blockgame',
             'farmable': 'blockgame',
         },
@@ -485,6 +509,9 @@ const cosmeticsV2 = {
     },
     bill: {
         'default': {
+            'name': 'Bill',
+            'desc': 'write something here please',
+
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
@@ -518,6 +545,10 @@ const cosmeticsV2 = {
             'rename': 'Grandma Belle',
             'image': './assets/theme/cookie/grandma_belle.png',
         },
+        'bill': {
+            'rename': 'Bill',
+            'image': './assets/characters/Boomer_Bill.png',
+        },
     },
     greg: {
         'default': {
@@ -532,11 +563,19 @@ const cosmeticsV2 = {
             'rename': false,
             'image': './assets/theme/safety_greg.png',
         },
+        'bill': {
+            'rename': 'Bill',
+            'image': './assets/characters/Boomer_Bill.png',
+        },
     },
     charles: {
         'default': {
             'rename': 'Charles',
             'image': './assets/characters/Charles.png',
+        },
+        'bill': {
+            'rename': 'Bill',
+            'image': './assets/characters/Boomer_Bill.png',
         },
     },
     carl: {
@@ -544,7 +583,29 @@ const cosmeticsV2 = {
             'rename': 'Carl',
             'image': './assets/characters/Carl.png',
         },
+        'bill': {
+            'rename': 'Bill',
+            'image': './assets/characters/Boomer_Bill.png',
+        },
+    },
+    tools: {
+        'default': {
+            '0': './',
+            '1': './',
+            '2': './',
+            '3': './',
+            '4': './',
+            '5': './',
+        }
     }
+}
+// Get keys
+const cosmeticsKeys = Object.keys(cosmetics);
+for(let i = 0; i < cosmeticsKeys.length; i++) {
+    let key = cosmeticsKeys[i];
+    let target = cosmetics[key];
+
+    target['keys'] = Object.keys(target);
 }
 //#endregion
 
@@ -689,7 +750,8 @@ const achievements = {
         'name': 'OSHA Violator',
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
         'image': './assets/theme/safety_greg.png',
-        'reward': 'cosmetic:safety_greg',
+        // 'reward': 'cosmetic:safety_greg',
+        'reward': false,
         'pages': 3,
         'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
         'mystery': {
@@ -1022,6 +1084,92 @@ const achievements = {
         }
     },
 
+    // Clicks
+    '500_clicks': {
+        'name': 'Click the Carrot, Bill.',
+        'desc': 'Click the carrot 500 times',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'pages': false,
+        'conditions': ['player.lifetime.clicks', 500],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '10000_clicks': {
+        'name': 'Clicker Hero',
+        'desc': 'Click the carrot 10,000 times',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'pages': 1,
+        'conditions': ['player.lifetime.clicks', 100000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '100000_clicks': {
+        'name': 'Destroyer of Mice',
+        'desc': 'Click the carrot 100,000 times',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'pages': 3,
+        'conditions': ['player.lifetime.clicks', 100000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '500000_clicks': {
+        'name': '"My Finger Hurts"',
+        'desc': 'Click the carrot 500,000 times',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'pages': 4,
+        'conditions': ['player.lifetime.clicks', 500000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '1000000_clicks': {
+        'name': 'Clicker God',
+        'desc': 'Click the carrot 1,000,000 times',
+        'image': false,
+        'reward': 'function:doNothing()',
+        'pages': 5,
+        'conditions': ['player.lifetime.clicks', 1000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    // 'too_many_clicks': {
+    //     'name': 'Destroyer of Mice',
+    //     'desc': 'Click the carrot 10,000,000 times',
+    //     'image': false,
+    //     'reward': 'function:doNothing()',
+    //     'pages': 4,
+    //     'conditions': ['player.lifetime.clicks', 10000000],
+    //     'mystery': {
+    //         'name': true,
+    //         'desc': false,
+    //         'image': false,
+    //         'noToast': false,
+    //     }
+    // },
+
 
     // Golden Carrots
     '50_golden_carrots': {
@@ -1118,6 +1266,21 @@ const achievements = {
         'reward': 'cosmetic:netherite_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'no_belle_challenge': {
+        'name': 'Off the Clock',
+        'desc': 'Farm 5,000,000 carrots without Belle (Challenge achievement)',
+        'image': false,
+        'reward': 'function:confetti()',
+        'pages': 5,
+        'conditions': ['ex_noBelle()', true],
+        'style': 'challenge',
         'mystery': {
             'name': true,
             'desc': false,

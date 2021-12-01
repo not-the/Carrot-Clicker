@@ -208,7 +208,7 @@ select {
     text-decoration: underline;
     color: white;
 }
-details {
+.stat_collapse {
     margin-left: 22px;
 }
 details[open] {
@@ -249,7 +249,7 @@ summary:hover {
 }
 @keyframes spin {
     0% {
-        transform: translate(-50%, -50%)rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
         transform: translate(-50%, -50%) rotate(360deg);
@@ -329,6 +329,7 @@ summary:hover {
     overflow: hidden;
     pointer-events: none;
 }
+
 
 /* Dialog Popup */
 #overlay {
@@ -517,11 +518,8 @@ summary:hover {
     border-radius: 10px !important;
     margin-bottom: 16px;
 }
-.toast.achievement_item .achievement_details {
-    box-shadow: none;
-}
 .toast.achievement_item .rewards_list {
-    display: unset;
+    width: 100%;
 }
 .toast.achievement_item .reward:not(:last-of-type) {
     border-bottom: 1px solid var(--brown-darkest-color);
@@ -553,7 +551,7 @@ summary:hover {
 
 /* Fancy Theme Switcher */
 .fancy_switcher {
-    width: 540px;
+    width: 560px;
     max-width: 100%;
     max-height: 90%;
     min-height: 85vh;
@@ -568,6 +566,7 @@ summary:hover {
 }
 .fancy_list {
     overflow: auto;
+    overflow-x: hidden;
     height: 100%;
     max-height: 75vh;
     padding: 8px 24px 24px;
@@ -642,6 +641,50 @@ body:not(.theme_light) .theme_checkmark {
     filter: invert();
 }
 
+
+/* Cosmetics Grid */
+.theme_item.active {
+    border: 3px solid white;
+}
+.cosmetics_grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+.cosmetics_grid .theme_item {
+    width: 94px;
+    height: 94px;
+    margin-right: 4px;
+}
+.cosmetics_grid .theme_item:hover {
+    z-index: 200;
+}
+.cosmetics_grid .theme_item .description,
+.cosmetics_grid .theme_item .theme_checkbox {
+    visibility: hidden;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(88, 88, 88, 0.8);
+    backdrop-filter: blur(10px);
+    left: -3px;
+    top: 105%;
+
+    min-width: 240px;
+    padding: 24px;
+
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.cosmetics_grid .theme_item:hover .description {
+    visibility: visible;
+    opacity: 1;
+    position: absolute;
+    pointer-events: none;
+}
+
+
+
+
+/* Keybinds */
 #keybinds_menu {
     width: 800px;
     padding: 24px;
