@@ -1,6 +1,6 @@
 // ----------------------------------------------------------- //
     VERSION dev beta 1.8.0
-    11-putsomethinghere-2021
+    11-30-2021
 // ----------------------------------------------------------- //
 
 Cosmetics Upgrade
@@ -15,6 +15,9 @@ Cosmetics Upgrade
 - The amount of falling carrots you've clicked is now stored and displayed in statistics
 - Added achievements for number of clicks
 - Falling carrots have had their rewards increased slightly (200% - 400% to 200% to 600%)
+
+Note: Users will have to delete their save for the game to function
+1.8.0.1: Added outdated save warning
 
 ~ Kal
 

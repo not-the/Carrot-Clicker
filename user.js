@@ -971,6 +971,8 @@ function onLoad() {
     || player.hasOwnProperty('prestige') == false
     || player.hasOwnProperty('prestige_available') == false
     || player.hasOwnProperty('inventory') == false
+    || player.hasOwnProperty('cosmetic') == true
+    || typeof player.cosmetics != 'object'
 
     || settings.hasOwnProperty('full_numbers') == false
     ) {
@@ -980,7 +982,7 @@ function onLoad() {
             player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
             player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
             
-            store('old_player_object_fix', '1.7.1');
+            store('old_player_object_fix', '1.8.0');
 
             console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
         }
