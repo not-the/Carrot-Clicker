@@ -888,6 +888,11 @@ function ex_charlesUses() {
 
     return 0;
 }
+// No Bill challenge
+function ex_noBill() {
+    if(Boomer_Bill.lvl == 1 && player.prestige.carrots >= 2500000) return true;
+    return false;
+}
 // No Belle challenge
 function ex_noBelle() {
     if(Belle_Boomerette.lvl == 0 && player.prestige.carrots >= 5000000) return true;

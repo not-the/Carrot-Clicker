@@ -1106,7 +1106,7 @@ function rewardHTML(achieve) {
 
         // Single reward
         else if(achieve.reward.split(':')[0] != 'function') {
-            let [rewardType, rewardName] = achieve.reward[i].split(':');
+            let [rewardType, rewardName] = achieve.reward.split(':');
             let subtype = '';
 
             let informalName;

@@ -881,7 +881,7 @@ const achievements = {
         }
     },
     '48_tomes': {
-        'name': 'tome',
+        'name': 'Infinite Library',
         'desc': 'Obtain 48 tomes',
         'image': false,
         'reward': false,
@@ -1150,12 +1150,28 @@ const achievements = {
     },
 
     // Misc
+    '5000000_idle_carrots': {
+        'name': 'On the Clock',
+        'desc': 'Earn 5,000,000 carrots with CPS',
+        'image': false,
+        'reward': false,
+        'pages': 2,
+        'conditions': ['player.lifetime.idle_carrots', 5000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
+    // CPC
     '9000_cpc': {
         'name': 'There\'s a Joke Here Somewhere',
         'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
         'image': './assets/achievements/9000.png',
         'reward': false,
-        'pages': 3,
+        'pages': 2,
         'conditions': ['player.cpc', 9000],
         'mystery': {
             'name': true,
@@ -1169,7 +1185,7 @@ const achievements = {
         'desc': 'Produce 1000 carrots every second',
         'image': false,
         'reward': false,
-        'pages': 3,
+        'pages': 2,
         'conditions': ['player.cps', 100000],
         'mystery': {
             'name': true,
@@ -1178,12 +1194,14 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // CPS
     '100000_cps': {
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
         'image': false,
         'reward': false,
-        'pages': 4,
+        'pages': 3,
         'conditions': ['player.cps', 100000],
         'mystery': {
             'name': true,
@@ -1375,6 +1393,23 @@ const achievements = {
         'reward': 'cosmetic:farmable/netherite_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+
+    // Challenge achievements
+    'no_bill_challenge': {
+        'name': 'Patience is Free',
+        'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
+        'image': false,
+        'reward': 'function:confetti()',
+        'pages': 3,
+        'conditions': ['ex_noBill()', true],
+        'style': 'challenge',
         'mystery': {
             'name': true,
             'desc': false,
