@@ -465,7 +465,6 @@ function onClick(useMousePos, method = 'click') {
 
     // Falling carrots
     let roll = Math.floor((Math.random() * 50));
-    console.log(fallingCarrotPromiser);
     if(roll == 1 && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser > 50) {
         fallingCarrotPromiser = 0;
         fallingCarrot();

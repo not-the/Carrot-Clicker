@@ -253,7 +253,7 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
     if(!persistent) {
         let timeout = store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000;
-        console.log(timeout);
+        // console.log(timeout);
         if(achievement == true ) timeout *= 2;
 
         setTimeout(() => {
@@ -566,9 +566,11 @@ function setCosmetic(target, to, resetState = false) {
             if(cosmetic.hasOwnProperty('carl'))
             {setCosmetic('carl', cosmetic.carl);}
             else {setCosmetic('farmable', 'carl');}
+
             break;
         
         case 'farmable':
+            console.log(cosmetic);
             // Image
             if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
             { mainCarrot.src = cosmetic.image; }
@@ -605,7 +607,7 @@ function setCosmetic(target, to, resetState = false) {
         }
     }
 
-    store('cosmetic', to);
+    settings.cosmetics[target] = to;
 
     // Fancy Switcher fix
     themeSwitcherCheckmark(to, from);
@@ -710,35 +712,39 @@ cosmeticsView.addEventListener('input', () => {
 });
 
 // New
+// var debug;
 function populateCosmeticsList(target) {
     // Do all lists
     if(target == 'all') {
-        for(let i = 0; cosmeticsKeys.length; i++) {
+        for(let i = 0; i < cosmeticsKeys.length; i++) {
             populateCosmeticsList(cosmeticsKeys[i]);
         }
-        return
+        return;
     }
 
     var cosmeticHTML = '';
     var stillLocked = 0;
-    
     let list = cosmetics[target];
+    // console.log('gg: ' + target);
 
-    for(let i = 0; i < cosmetics[target].keys.length; i++) {
+    // console.log(list['keys']);
+    for(let i = 0; i < list['keys'].length; i++) {
         let key = list['keys'][i];
         let cosmetic = list[key];
 
-  
+        // console.log(target + '/' + key);
+
         // Test if unlocked
-        // if(isUnlocked('cosmetic', key, target) == false) {
-        //     // console.log(key + ' is not unlocked!');
-        //     stillLocked++;
-        //     continue;
-        // }
+        if(isUnlocked('cosmetic', key, target) == false) {
+            // console.log(key + ' is not unlocked!');
+            stillLocked++;
+            // console.log('nah');
+            continue;
+        }
 
         let imgsrc = cosmetic.hasOwnProperty('preview') ? cosmetic.preview : (cosmetic.hasOwnProperty('image') ? cosmetic.image : './assets/Carrot Clicker.png');
     
-        console.log('aaa::: ' + `setCosmetic('${target}', '${key}')`)
+        // console.log('aaa::: ' + `setCosmetic('${target}', '${key}')`);
         cosmeticHTML += /* html */
         `
         <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
@@ -825,26 +831,41 @@ function populateAchievements() {
         //#endregion
 
         // Rewards info
-        if((achieve.reward != false) && unlocked == true) {
+        if(achieve.reward != false && unlocked == true) {
+
             let inner = '';
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
                 for(let i = 0; i < achieve.reward.length; i++) {
-                    let rewardType = achieve.reward[i].split(':')[0];
-                    let rewardName = achieve.reward[i].split(':')[1];
-
-                    if(rewardType == 'function') {
-                        console.log('test');
-                        continue;
-                    };
-
+                    let [rewardType, rewardName] = achieve.reward[i].split(':');
+                    let subtype = '';
+    
                     let informalName;
                     let icon;
     
+                    // Exceptions
+                    if(rewardType == 'function') continue;
+    
+    
                     // Get reward info
-                    if(rewardType == 'theme' || rewardType == 'cosmetic') {
-                        informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                        icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                    if(rewardType == 'theme') {
+                        informalName = themes[rewardName].name;
+                        icon = themes[rewardName].image
+                    }
+                    // Cosmetic
+                    else if(rewardType == 'cosmetic') {
+                        [subtype, rewardName] = rewardName.split('/');
+                        
+    
+                        console.log(` cosmetics[${subtype}][${rewardName}].preview`);
+
+                        informalName = cosmetics[subtype][rewardName].name;
+                        if(cosmetics[subtype][rewardName].hasOwnProperty('preview') == false) {
+                            icon = cosmetics[subtype][rewardName].image;
+                        } else {
+                            icon = cosmetics[subtype][rewardName].preview;
+                        }
+                        
                     } else if(rewardType == 'character') {
                         informalName = capitalizeFL(rewardName);
                         // Get image
@@ -884,15 +905,24 @@ function populateAchievements() {
 
             // Single reward
             else if(achieve.reward.split(':')[0] != 'function') {
-                let rewardType = achieve.reward.split(':')[0];
-                let rewardName = achieve.reward.split(':')[1];
+                let [rewardType, rewardName] = achieve.reward.split(':');
+                let subtype = '';
+
                 let informalName;
                 let icon;
 
+
                 // Get reward info
-                if(rewardType == 'theme' || rewardType == 'cosmetic') {
-                    informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                    icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
+                if(rewardType == 'theme') {
+                    informalName = themes[rewardName].name;
+                    icon = themes[rewardName].image
+                }
+                // Cosmetic
+                else if(rewardType == 'cosmetic') {
+                    [subtype, rewardName] = rewardName.split('/');
+
+                    informalName = cosmetics[subtype][rewardName].name;
+                    icon = cosmetics[subtype][rewardName].image;
                 } else if(rewardType == 'character') {
                     informalName = capitalizeFL(rewardName);
                     // Get image
@@ -936,6 +966,8 @@ function populateAchievements() {
                 ${inner}
             </div>`;
             inner = '';
+        } else {
+            rewardHTML = '';
         }
 
         // Achievement info
@@ -1008,18 +1040,34 @@ function rewardHTML(achieve) {
         // Multiple rewards
         if(Array.isArray(achieve.reward) == true) {
             for(let i = 0; i < achieve.reward.length; i++) {
-                let rewardType = achieve.reward[i].split(':')[0];
-                let rewardName = achieve.reward[i].split(':')[1];
-                if(rewardType == 'function') continue;
+                let [rewardType, rewardName] = achieve.reward[i].split(':');
+                let target = '';
+                let cosKey = '';
 
                 let informalName;
                 let icon;
 
+                // Exceptions
+                if(rewardType == 'cosmetic') {
+                    [target, cosKey] = rewardName.split('/');
+                }
+                else if(rewardType == 'function') continue;
+
+
                 // Get reward info
-                if(rewardType == 'theme' || rewardType == 'cosmetic') {
-                    informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                    icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
-                } else if(rewardType == 'character') {
+                if(rewardType == 'theme') {
+                    informalName = themes[rewardName].name;
+                    icon = themes[rewardName].image
+                }
+                // Cosmetic
+                else if(rewardType == 'cosmetic') {
+                    // console.log('vvvvv: ' + target + cosKey);
+                    console.log(cosmetics[target]);
+                    informalName = cosmetics[target][cosKey].name;
+                    icon = cosmetics[target][cosKey].image;
+                }
+                // Character
+                else if(rewardType == 'character') {
                     informalName = capitalizeFL(rewardName);
                     // Get image
                     switch(rewardName) {
@@ -1058,17 +1106,26 @@ function rewardHTML(achieve) {
 
         // Single reward
         else if(achieve.reward.split(':')[0] != 'function') {
-            let rewardType = achieve.reward.split(':')[0];
-            let rewardName = achieve.reward.split(':')[1];
+            let [rewardType, rewardName] = achieve.reward[i].split(':');
+            let subtype = '';
 
             let informalName;
             let icon;
 
             // Get reward info
-            if(rewardType == 'theme' || rewardType == 'cosmetic') {
-                informalName = (rewardType == 'theme' ? themes[rewardName].name : cosmetics[rewardName].name);
-                icon = (rewardType == 'theme' ? themes[rewardName].image : cosmetics[rewardName].image);
-            } else if(rewardType == 'character') {
+            if(rewardType == 'theme') {
+                informalName = themes[rewardName].name;
+                icon = themes[rewardName].image;
+            }
+            // Cosmetic
+            else if(rewardType == 'cosmetic') {
+                subtype = rewardName.split('/')[1];
+
+                informalName = cosmetics[subtype][rewardName].name;
+                icon = cosmetics[subtype][rewardName].image;
+            }
+            // Character
+            else if(rewardType == 'character') {
                 informalName = capitalizeFL(rewardName);
                 // Get image
                 switch(rewardName) {
@@ -1151,7 +1208,7 @@ function setTheme(theme) {
     // if(theme == 'theme_light') {theme_color = '#FFFFFF';}
     // else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
 
-    console.log(themes[theme]);
+    // console.log(themes[theme]);
     if(themes[theme].hasOwnProperty('accent')) {
         theme_color = themes[theme].accent;
     };

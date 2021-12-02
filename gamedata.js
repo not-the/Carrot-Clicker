@@ -366,7 +366,7 @@ const cosmetics = {
         'blockgame': {
             'name': 'Minecraft',
             'preview': './assets/theme/blockgame/grass_block_side.png',
-            'desc': 'This probably won\'t make it to Carrot Clicker 1.0 to be honest',
+            'desc': 'This probably won\'t make it to Carrot Clicker 1.0',
 
             'theme': 'theme_blockgame',
             'farmable': 'blockgame',
@@ -378,6 +378,7 @@ const cosmetics = {
             'name': 'Carrot (Default)',
             'preview': './assets/Carrot Clicker.png',
             'desc': 'Good old carrots',
+            'group': 'default',
 
             'farmable': 'Carrot',
             'image': './assets/Carrot Clicker.png',
@@ -403,6 +404,7 @@ const cosmetics = {
             'name': 'Cookie',
             'preview': './assets/theme/cookie/cookie.png',
             'desc': 'Delicious',
+            'group': 'cookie',
 
             'farmable': 'Cookie',
             'image': './assets/theme/cookie/cookie.png',
@@ -412,6 +414,7 @@ const cosmetics = {
             'name': 'Minecraft Carrot',
             'preview': './assets/theme/blockgame/carrot.png',
             'desc': 'Hrm',
+            'group': 'blockgame',
 
             'farmable': 'Minecraft Carrot',
             'image': './assets/theme/blockgame/carrot.png',
@@ -438,6 +441,7 @@ const cosmetics = {
             'name': 'Bill',
             'preview': './assets/characters/Boomer_Bill.png',
             'desc': 'Bill',
+            'group': 'bill',
 
             'farmable': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
@@ -509,11 +513,21 @@ const cosmetics = {
     },
     bill: {
         'default': {
-            'name': 'Bill',
+            'name': 'Bill (Default)',
             'desc': 'write something here please',
+            'group': 'default',
 
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
+        },
+        'baker_bill': {
+            'name': 'Baker Bill',
+            'preview': './assets/theme/cookie/baker_bill.png',
+            'desc': 'Care for a cookie?',
+            'group': 'cookie',
+
+            'rename': false,
+            'image': './assets/theme/cookie/baker_bill.png',
         },
         'fancy_bill': {
             'name': 'Fancy Bill',
@@ -523,17 +537,13 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/boomer_bill_gates.png',
         },
-        'baker_bill': {
-            'name': 'Baker Bill',
-            'preview': './assets/theme/cookie/baker_bill.png',
-            'desc': 'Care for a cookie?',
-
-            'rename': false,
-            'image': './assets/theme/cookie/baker_bill.png',
-        },
     },
     belle: {
         'default': {
+            'name': 'Belle (Default)',
+            'desc': 'placeholder',
+            'group': 'default',
+
             'rename': 'Belle',
             'image': './assets/characters/BelleBommerette.png',
         },
@@ -541,22 +551,33 @@ const cosmetics = {
             'name': 'Grandma Belle',
             'preview': './assets/theme/cookie/grandma_belle.png',
             'desc': 'No you can\'t buy more grandmas, what kind of question is that?',
+            'group': 'cookie',
 
             'rename': 'Grandma Belle',
             'image': './assets/theme/cookie/grandma_belle.png',
         },
         'bill': {
+            'name': 'Bill',
+            'desc': 'write something here please',
+            'group': 'bill',
+            
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
     greg: {
         'default': {
+            'name': 'Greg (Default)',
+            'desc': 'placeholder',
+            'group': 'default',
+
             'rename': 'Greg',
             'image': './assets/characters/Gregory.png',
         },
         'safety_greg': {
             'name': 'High Vis Greg',
+            'desc': 'placeholder',
+
             'preview': './assets/theme/safety_greg.png',
             'desc': 'Can\'t have you dying on the job now can we',
 
@@ -564,32 +585,57 @@ const cosmetics = {
             'image': './assets/theme/safety_greg.png',
         },
         'bill': {
+            'name': 'Bill',
+            'desc': 'placeholder',
+            'group': 'bill',
+
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
     charles: {
         'default': {
+            'name': 'Charles (Default)',
+            'desc': 'placeholder',
+            'group': 'default',
+
             'rename': 'Charles',
             'image': './assets/characters/Charles.png',
         },
         'bill': {
+            'name': 'Bill',
+            'desc': 'placeholder',
+            'group': 'bill',
+
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
     carl: {
         'default': {
+            'name': 'Carl (Default)',
+            'desc': 'placeholder',
+            'group': 'default',
+
             'rename': 'Carl',
             'image': './assets/characters/Carl.png',
         },
         'bill': {
+            'name': 'Bill',
+            'desc': 'placeholder',
+            'group': 'bill',
+
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
     tools: {
         'default': {
+            'name': 'default tools',
+            // 'preview': false,
+            'desc': 'wuh huh',
+            'group': 'default',
+
             '0': './',
             '1': './',
             '2': './',
@@ -606,6 +652,12 @@ for(let i = 0; i < cosmeticsKeys.length; i++) {
     let target = cosmetics[key];
 
     target['keys'] = Object.keys(target);
+}
+console.log(cosmetics.bundle.keys);
+
+// Individual Bundle keys
+for(let i = 0; i < cosmetics.bundle.keys.length; i++) {
+    cosmetics.bundle[cosmetics.bundle.keys[i]]['keys'] = Object.keys(cosmetics.bundle[cosmetics.bundle.keys[i]]);
 }
 //#endregion
 
@@ -704,6 +756,8 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Prestiging
     '1_prestige': {
         'name': 'Prestigious',
         'desc': 'Prestige for the first time and attract the attention of the professor',
@@ -736,8 +790,8 @@ const achievements = {
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/achievements/tome animated.gif',
-        'reward': 'function:doNothing()',
-        'pages': 3,
+        'reward': false,
+        'pages': 1,
         'conditions': ['ex_charlesUses()', 1],
         'mystery': {
             'name': true,
@@ -746,13 +800,14 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Tome types
     '1_improve_working_conditions': {
         'name': 'OSHA Violator',
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
         'image': './assets/theme/safety_greg.png',
-        // 'reward': 'cosmetic:safety_greg',
-        'reward': false,
-        'pages': 3,
+        'reward': 'cosmetic:greg/safety_greg',
+        'pages': 2,
         'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
         'mystery': {
             'name': true,
@@ -765,8 +820,8 @@ const achievements = {
         'name': 'Divine Intervention',
         'desc': 'Buy a tome that improves hoe costs. Unholy magic, I say.',
         'image': './assets/achievements/tome_improve_hoe_costs.png',
-        'reward': 'function:doNothing()',
-        'pages': 3,
+        'reward': false,
+        'pages': 2,
         'conditions': ['Charles.tome.betterHoes.value', 1],
         'mystery': {
             'name': true,
@@ -779,8 +834,8 @@ const achievements = {
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
         'image': './assets/achievements/tome_decrease_wages.png',
-        'reward': 'function:doNothing()',
-        'pages': 3,
+        'reward': false,
+        'pages': 2,
         'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {
             'name': true,
@@ -789,6 +844,60 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Number of tomes
+    '12_tomes': {
+        'name': 'Tome\'d You so',
+        'desc': 'Obtain 12 tomes',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': [
+            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            12
+        ],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '24_tomes': {
+        'name': 'Librarian',
+        'desc': 'Obtain 24 tomes',
+        'image': false,
+        'reward': false,
+        'pages': 4,
+        'conditions': [
+            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            24
+        ],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '48_tomes': {
+        'name': 'tome',
+        'desc': 'Obtain 48 tomes',
+        'image': false,
+        'reward': false,
+        'pages': 5,
+        'conditions': [
+            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            48
+        ],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+
     'own_a_theme': {
         'name': 'Taking in the Themery',
         'desc': 'Obtain a cosmetic and a theme! You\'ve gained the attention of an artist.',
@@ -830,7 +939,7 @@ const achievements = {
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill 10 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 10],
         'mystery': {
@@ -844,7 +953,7 @@ const achievements = {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill 100 times',
         'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
-        'reward': 'cosmetic:bill',
+        'reward': 'cosmetic:bundle/bill',
         'pages': 5,
         'conditions': ['Boomer_Bill.lvl', 100],
         'mystery': {
@@ -858,7 +967,7 @@ const achievements = {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 2,
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
@@ -872,7 +981,7 @@ const achievements = {
         'name': 'The Gregs of Defeat',
         'desc': 'Upgrade Gregory 20 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 3,
         'conditions': ['Gregory.lvl', 15],
         'mystery': {
@@ -886,7 +995,7 @@ const achievements = {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Gregory 64 Times',
         'image': './assets/achievements/pixel_block.png',
-        'reward': ['theme:theme_blockgame', 'cosmetic:blockgame', 'cosmetic:blockgame_potato'],
+        'reward': ['theme:theme_blockgame', 'cosmetic:bundle/blockgame', 'cosmetic:farmable/blockgame_potato'],
         'pages': 5,
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
@@ -929,7 +1038,7 @@ const achievements = {
         'desc': 'Earn your 1 billionth carrot',
         'image': './assets/theme/boomer_bill_gates.png',
         'reward': [
-            'cosmetic:fancy_bill',
+            'cosmetic:bill/fancy_bill',
             'function:confetti()',
         ],
         'pages': 3,
@@ -1045,7 +1154,7 @@ const achievements = {
         'name': 'There\'s a Joke Here Somewhere',
         'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
         'image': './assets/achievements/9000.png',
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 3,
         'conditions': ['player.cpc', 9000],
         'mystery': {
@@ -1059,7 +1168,7 @@ const achievements = {
         'name': 'Time is Hungry',
         'desc': 'Produce 1000 carrots every second',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 3,
         'conditions': ['player.cps', 100000],
         'mystery': {
@@ -1073,7 +1182,7 @@ const achievements = {
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 4,
         'conditions': ['player.cps', 100000],
         'mystery': {
@@ -1089,7 +1198,7 @@ const achievements = {
         'name': 'Click the Carrot, Bill.',
         'desc': 'Click the carrot 500 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 500],
         'mystery': {
@@ -1103,7 +1212,7 @@ const achievements = {
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 10,000 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 1,
         'conditions': ['player.lifetime.clicks', 100000],
         'mystery': {
@@ -1117,7 +1226,7 @@ const achievements = {
         'name': 'Destroyer of Mice',
         'desc': 'Click the carrot 100,000 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 3,
         'conditions': ['player.lifetime.clicks', 100000],
         'mystery': {
@@ -1131,7 +1240,7 @@ const achievements = {
         'name': '"My Finger Hurts"',
         'desc': 'Click the carrot 500,000 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 4,
         'conditions': ['player.lifetime.clicks', 500000],
         'mystery': {
@@ -1145,7 +1254,7 @@ const achievements = {
         'name': 'Clicker God',
         'desc': 'Click the carrot 1,000,000 times',
         'image': false,
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 5,
         'conditions': ['player.lifetime.clicks', 1000000],
         'mystery': {
@@ -1159,7 +1268,7 @@ const achievements = {
     //     'name': 'Destroyer of Mice',
     //     'desc': 'Click the carrot 10,000,000 times',
     //     'image': false,
-    //     'reward': 'function:doNothing()',
+    //     'reward': false,
     //     'pages': 4,
     //     'conditions': ['player.lifetime.clicks', 10000000],
     //     'mystery': {
@@ -1176,7 +1285,7 @@ const achievements = {
         'name': 'Golden',
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
-        'reward': ['cosmetic:golden_carrot', 'function:confetti()'],
+        'reward': ['cosmetic:farmable/golden_carrot', 'function:confetti()'],
         'pages': 3,
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {
@@ -1205,7 +1314,7 @@ const achievements = {
         'name': 'Gotta Grow Fast',
         'desc': 'Click 9 times in one second',
         'image': './assets/achievements/12_clicks_per_second.png',
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 1,
         'conditions': ['player.clickSpeedRecord', 9],
         'mystery': {
@@ -1219,7 +1328,7 @@ const achievements = {
         'name': 'Olympic Clicking Games',
         'desc': 'Click 13 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
-        'reward': 'function:doNothing()',
+        'reward': false,
         'pages': 1,
         'conditions': ['player.clickSpeedRecord', 13],
         'mystery': {
@@ -1233,7 +1342,7 @@ const achievements = {
         'name': 'I am Seed',
         'desc': 'Click 15 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
-        'reward': 'cosmetic:cursor',
+        'reward': 'cosmetic:farmable/cursor',
         'pages': 2,
         'conditions': ['player.clickSpeedRecord', 15],
         'mystery': {
@@ -1263,7 +1372,7 @@ const achievements = {
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement (Netherite Hoe)',
         'image': './assets/tools/netherite_hoe.png',
-        'reward': 'cosmetic:netherite_hoe',
+        'reward': 'cosmetic:farmable/netherite_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
         'mystery': {
@@ -1340,7 +1449,7 @@ const achievements = {
         'name': 'Pineapple',
         'desc': 'Hey that\'s me (Hidden achievement)',
         'image': './assets/theme/pineapple/pineapple.png',
-        'reward': 'cosmetic:pineapple',
+        'reward': 'cosmetic:farmable/pineapple',
         'pages': 1,
         'conditions': ['keyTrigger[3]', 1],
         'style': 'secret',

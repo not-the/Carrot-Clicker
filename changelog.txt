@@ -1,4 +1,22 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.1
+    12-2-2021
+// ----------------------------------------------------------- //
+
+Cosmetics Upgrade Part 2™️
+
+- I've gone through everything related to cosmetics (which was a lot) and made it compatible with the new cosmetics system (hopefully)
+- Fixed issue where numbers on page wouldn't appear on page load
+- Fixed an old bug where achievement list rewards would continue to appear on the next achievement until another reward was encountered (and got rid of my hacky fix for this, which was having a doNothing() function as the reward for achievements without one)
+- Imrpoved cosmetics grid view
+- Unlocking a cosmetics bundle will now also unlock all related cosmetics
+- Achievements should be working again
+- Added a (currently unused) grid view for achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.0
     11-30-2021
 // ----------------------------------------------------------- //

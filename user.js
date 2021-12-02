@@ -683,9 +683,15 @@ function giveReward(reward) {
     let [rewardType, rewardName] = reward.split(':');
     // console.log(rewardType, rewardName);
 
-    // Theme or Cosmetic reward
-    if(rewardType == 'theme' || rewardType == 'cosmetic') {
+    // Theme reward
+    if(rewardType == 'theme') {
         unlock(rewardType, rewardName);
+    }
+    // Cosmetic reward
+    else if(rewardType == 'cosmetic') {
+        let [target, cosmetic] = rewardName.split('/');
+        console.log(rewardName.split('/'));
+        unlock(rewardType, cosmetic, target);
     }
     // Function reward
     else if(rewardType == 'function') {
@@ -757,7 +763,7 @@ function grantAchievement(key) {
 // var playerCosmetics = [];
 function unlock(type, thingToUnlock, subtype) {
     if(isUnlocked(type, thingToUnlock, subtype)) {
-        console.warn(`${type}:${thingToUnlock} is already unlocked`);
+        console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
         return;
     }
     console.log('unlock(): ' + type + ':' + thingToUnlock);
@@ -769,6 +775,39 @@ function unlock(type, thingToUnlock, subtype) {
     }
     // Cosmetic
     else if(type == 'cosmetic') {
+        // For bundles
+        if(subtype == 'bundle') {
+            console.log('Unlocking a cosmetic bundle! ' + subtype + thingToUnlock);
+            // let bundle = cosmetics.bundle[thingToUnlock];
+
+            // for(let i = 0; i < bundle.length; i++) {
+            //     let key = bundle.keys[i];
+            //     let ntarget = bundle[key];
+
+            //     console.log(`unlock('cosmetic', ${key}, ${ntarget})`);
+
+            //     // if(key == 'name' || key == 'preview' || key == 'desc') continue;
+            //     unlock('cosmetic', key, ntarget);
+            // }
+
+            // Loop across subtypes and unlock all relevant cosmetics
+            for(let t = 0; t < cosmeticsKeys.length; t++) {
+                let key = cosmeticsKeys[t];
+                if(key == 'bundle') continue;
+
+                let target = cosmetics[key];
+
+                // Loop through cosmetics
+                for(let c = 0; c < target['keys'].length; c++) {
+                    if(target[ target['keys'][c] ].group == thingToUnlock) {
+                        unlock('cosmetic', target.keys[c], key);
+                    }
+                }
+            }
+
+        }
+        
+
         player.cosmetics[subtype].push(thingToUnlock);
         populateCosmeticsList('all');
     }
@@ -810,8 +849,11 @@ function isUnlocked(type = 'theme', key, subtype) {
     }
     // Cosmetic
     else if(type == 'cosmetic') {
+        // console.log(player.cosmetics[subtype]);
+        // console.log(player.cosmetics[subtype].length);
+
         for(let i = 0; i < player.cosmetics[subtype].length; i++) {
-            if(key == player.cosmetics[i]) {
+            if(key == player.cosmetics[subtype][i]) {
                 return true;
             }
         }
@@ -1137,9 +1179,9 @@ function onLoad() {
         settingSounds();
     } else if(location.hash == '#cheatmode') {
         // Achievements
-        // for(let i = 0; i < achievementsKeys.length; i++) {
-        //    grantAchievement(achievementsKeys[i])
-        // }
+        for(let i = 0; i < achievementsKeys.length; i++) {
+           grantAchievement(achievementsKeys[i])
+        }
 
         // Themes
         for(let i = 0; i < themesKeys.length; i++) {
@@ -1150,6 +1192,15 @@ function onLoad() {
         // for(let i = 0; i < cosmeticsKeys.length; i++) {
         //     unlock('cosmetic', cosmeticsKeys[i])
         // }
+        for(let t = 0; t < cosmeticsKeys.length; t++) {
+            let key = cosmeticsKeys[t];
+            let target = cosmetics[key];
+
+            // Loop through cosmetics
+            for(let c = 0; c < target['keys'].length; c++) {
+                unlock('cosmetic', target.keys[c], key);
+            }
+        }
 
         // Characters
         unlock('character', 'belle');
@@ -1215,7 +1266,7 @@ function onLoad() {
     // Theme Switcher
     populateThemeList();
     themeSwitcherCheckmark(settings.theme);
-    populateCosmeticsList('all');
+    
     cosmeticSwitcherCheckmark(store('cosmetic'));
 
     // Disable
@@ -1237,8 +1288,8 @@ function onLoad() {
 
 
 
-
-
+    // Down here because it throws an error
+    populateCosmeticsList('all');
 
 
     // Finished

@@ -643,23 +643,19 @@ body:not(.theme_light) .theme_checkmark {
 
 
 /* Cosmetics Grid */
-.theme_item.active {
-    border: 3px solid white;
-}
 .cosmetics_grid {
     display: flex;
     flex-wrap: wrap;
 }
 .cosmetics_grid .theme_item {
-    width: 94px;
-    height: 94px;
+    width: 90px;
+    height: 90px;
     margin-right: 4px;
 }
 .cosmetics_grid .theme_item:hover {
     z-index: 200;
 }
-.cosmetics_grid .theme_item .description,
-.cosmetics_grid .theme_item .theme_checkbox {
+.cosmetics_grid .theme_item .description {
     visibility: hidden;
     position: relative;
     background-color: rgba(0, 0, 0, 0.8);
@@ -673,6 +669,12 @@ body:not(.theme_light) .theme_checkmark {
 
     opacity: 0;
     transition: opacity 0.2s;
+}
+.cosmetics_grid .theme_item .theme_checkbox {
+    position: absolute;
+    right: -8px;
+    transform: translateY(-5px) scale(0.5, 0.5);
+    background-color: var(--darker-bg-color);
 }
 .cosmetics_grid .theme_item:hover .description {
     visibility: visible;
@@ -1611,6 +1613,52 @@ body:not(.theme_light) .theme_checkmark {
 .achievement_locked {
     filter: brightness(70%);
 }
+
+
+/* Achievement GRID view */
+.achieve_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.achieve_grid .achievement_item {
+    width: 91px;
+    height: 91px;
+    margin-right: 8px;
+}
+.achieve_grid .achievement_item:hover {
+    z-index: 100;
+}
+.achieve_grid .achievement_img:hover {
+    transform: none !important;
+    margin-right: 16px !important;
+}
+.achieve_grid .achievement_item .achievement_details {
+    position: absolute !important;
+    min-width: 400px;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid gray;
+    backdrop-filter: blur(10px);
+}
+.achieve_grid .achievement_item .achievement_details,
+.achieve_grid .rewards_list,
+.achieve_grid .reward {
+    visibility: hidden !important;
+    pointer-events: none;
+}
+.achieve_grid .achievement_item .achievement_details .achievement_img,
+.achieve_grid .achievement_item .rewards_list {
+    visibility: visible !important;
+}
+/* Unhide details */
+.achieve_grid .achievement_item:hover .achievement_details {
+    position: absolute;
+    visibility: visible !important;
+}
+
+
+
 
 /* Statistics */
 /* Nothing here */
