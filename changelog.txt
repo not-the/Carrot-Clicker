@@ -1,4 +1,29 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.3
+    12-2-2021
+// ----------------------------------------------------------- //
+
+HD Carrots and rounding out the rough spots
+
+- Greg's hoes will now appear grayed out when they are unlocked, but are too expensive
+  + They will also become highlighted when you have 80% of their crafting cost
+- The game will now show if a hoe slot is full (amount is equal to Greg's level)
+- Fixed another issue with achievements
+- The game will now remember what cosmetics you had selected (again)
+- The game will now remember if you had the cosmetics menu in grid mode
+- Fixed cosmetic menu dropdowns being jank
+- Fixed cosmetic menu (grid mode) hover effects being jank (still goes offscreen)
+- Made theme/cosmetic switchers slightly wider and taller
+- Cosmetics menu is now in grid view by default
+- Main carrot image is now HD, and the main carrot has extra padding
+- The checkmarks in the cosmetic and theme switchers now work
+
+Known issues: cosmetic bundles ("All" category) not always working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.2
     12-2-2021
 // ----------------------------------------------------------- //

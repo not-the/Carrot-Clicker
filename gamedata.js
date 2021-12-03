@@ -44,6 +44,7 @@ const default_tips = {
         "\"Game development is hard\" clicker game developer says",
         `Only on ${window.location.href.split('#')[0]}`,
         'If you see a ? near something you can click it to get a more detailed dsecription of what it does',
+        'Now in HD',
     ],
     funIntermediate: [
         "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
@@ -170,168 +171,12 @@ const themesKeys = Object.keys(themes);
 
 /* ---------------- COSMETICS ---------------- */
 //#region
-// const cosmetics = {
-//     // Default
-//     'default': {
-//         'name': 'Carrot (Default)',
-//         'image': './assets/Carrot Clicker.png',
-//         'farmable': 'Carrot',
-//         'desc': 'Good old carrots',
-
-//         'bill_image':    './assets/characters/Boomer_Bill.png',
-//         'belle_image':   './assets/characters/BelleBommerette.png',
-//         'greg_image':    './assets/characters/Gregory.png',
-//         'charles_image': './assets/characters/Charles.png',
-//         'carl_image':    './assets/characters/Carl.png',
-
-//         'bill_name':    'Bill',
-//         'belle_name':   'Belle',
-//         'greg_name':    'Greg',
-//         'charles_name': 'Charles',
-//         'carl_name':    'Carl',
-//     },
-//     // Golden Carrot
-//     'golden_carrot': {
-//         'name': 'Golden Carrot',
-//         'image': './assets/golden carrot.png',
-//         'farmable': 'Golden Carrot',
-//         'desc': 'They are only spray-painted gold. Worthless.'
-//     },
-//     'pixel_carrot': {
-//         'name': 'Pixel Carrot',
-//         'image': './assets/theme/pixel_carrot.png',
-//         'farmable': 'Carrot',
-//         'desc': 'Someone pixelated my carrot'
-//     },
-//     'cookie': {
-//         'name': 'Cookie',
-//         'image': './assets/theme/cookie/cookie.png',
-//         'farmable': 'Cookie',
-//         'desc': 'Delicious',
-
-//         'bill_image':    './assets/theme/cookie/baker_bill.png',
-//         'belle_image':   './assets/theme/cookie/grandma_belle.png',
-//         'greg_image':    './assets/characters/Gregory.png',
-//         'charles_image': './assets/characters/Charles.png',
-//         'carl_image':    './assets/characters/Carl.png',
-
-//         'bill_name':    'Baker Bill',
-//         'belle_name':   'Grandma Belle',
-//         'greg_name':    'Greg',
-//         'charles_name': 'Charles',
-//         'carl_name':    'Carl',
-//     },
-//     // Minecraft
-//     'blockgame': {
-//         'name': 'Minecraft Carrot',
-//         'image': './assets/theme/blockgame/carrot.png',
-//         'desc': 'Hrm',
-//     },
-//     'blockgame_potato': {
-//         'name': 'Minecraft Potato',
-//         'image': './assets/theme/blockgame/potato.png',
-//         'farmable': 'Potatoe',
-//         'desc': 'Knishes'
-//     },
-//     // Pineapple
-//     'pineapple': {
-//         'name': 'Pineapple',
-//         'image': './assets/theme/pineapple/pineapple.png',
-//         'farmable': 'Pineapple',
-//         'desc': 'My favorite'
-//     },
-//     // Bill clicker
-//     'bill': {
-//         'name': 'Bill',
-//         'image': './assets/characters/Boomer_Bill.png',
-//         'farmable': 'Bill',
-//         'desc': 'Bill',
-
-//         'bill_image':    './assets/characters/Boomer_Bill.png',
-//         'belle_image':   './assets/characters/Boomer_Bill.png',
-//         'greg_image':    './assets/characters/Boomer_Bill.png',
-//         'charles_image': './assets/characters/Boomer_Bill.png',
-//         'carl_image':    './assets/characters/Boomer_Bill.png',
-
-    
-//         'bill_name':    'Bill',
-//         'belle_name':   'Bill',
-//         'greg_name':    'Bill',
-//         'charles_name': 'Bill',
-//         'carl_name':    'Bill',
-//     },
-//     // Netherite hoe
-//     "netherite_hoe": {
-//         'name': 'Netherite hoe',
-//         'image': './assets/tools/netherite_hoe.png',
-//         'farmable': 'Netherite hoe',
-//         'desc': 'All hail'
-//     },
-//     // Cursor
-//     "cursor": {
-//         'name': 'Cursor',
-//         'image': './assets/theme/cursor/cursor.png',
-//         'image_hover': './assets/theme/cursor/pointer.png',
-//         'farmable': 'Cursor',
-//         'desc': 'Cursorception'
-//     },
-//     // Alien Carrot
-//     "alien_carrot": {
-//         'name': 'Alien Carrot',
-//         'image': './assets/theme/alien carrot/alien_carrot.png',
-//         'farmable': 'Alien Carrot',
-//         'desc': 'So strange'
-//     },
-//     // Demon Carrot
-//     "demon_carrot": {
-//         'name': 'Demon Carrot',
-//         'image': './assets/theme/evil_carrot.png',
-//         'farmable': 'Demon Carrot',
-//         'desc': 'Eeevil!',
-//     },
-//     "ghost_carrot": {
-//         'name': 'Ghost Carrot',
-//         'image': './assets/theme/Ghost_carrot.png',
-//         'farmable': 'Ghost Carrot',
-//         'desc': 'description',
-//     },
-//     "rainbow_carrot": {
-//         'name': 'Rainbow Carrot',
-//         'image': './assets/theme/rainbow_carrot.png',
-//         'farmable': 'Rainbow Carrot',
-//         'desc': 'Tastes like candy',
-//     },
-
-
-//     // Updoot
-//     "upvote": {
-//         'name': 'Orange Arrow',
-//         'image': './assets/theme/orange_arrow/upvote.png',
-//         'farmable': 'Updoot',
-//         'desc': 'This is better than going outside'
-//     },
-
-
-//     // Character cosmetics (temporary)
-//     'fancy_bill': {
-//         'name': 'Fancy Bill',
-//         'desc': 'description',
-//         'bill_image':    './assets/theme/boomer_bill_gates.png',
-//     },
-//     'safety_greg': {
-//         'name': 'High Vis Greg',
-//         'desc': 'Can\'t have you dying on the job now can we',
-//         'greg_image':    './assets/theme/safety_greg.png',
-//     },
-// }
-// const cosmeticsKeys = Object.keys(cosmetics);
-
 // Version 2
 const cosmetics = {
     bundle: {
         // Cookie
         'default': {
-            'name': 'Default',
+            'name': 'Carrot Clicker (Default)',
             'preview': './assets/Carrot Clicker.png',
             'desc': 'The carrot and characters you know and love',
 
@@ -602,6 +447,13 @@ const cosmetics = {
             'rename': 'Charles',
             'image': './assets/characters/Charles.png',
         },
+        'special_charles': {
+            'name': 'Potato Charles',
+            'desc': 'God is he alright?',
+
+            'rename': 'chrles',
+            'image': './assets/theme/special_charles.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'placeholder',
@@ -629,21 +481,21 @@ const cosmetics = {
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
-    tools: {
-        'default': {
-            'name': 'default tools',
-            // 'preview': false,
-            'desc': 'wuh huh',
-            'group': 'default',
+    // tools: {
+    //     'default': {
+    //         'name': 'default tools',
+    //         // 'preview': false,
+    //         'desc': 'wuh huh',
+    //         'group': 'default',
 
-            '0': './',
-            '1': './',
-            '2': './',
-            '3': './',
-            '4': './',
-            '5': './',
-        }
-    }
+    //         '0': './',
+    //         '1': './',
+    //         '2': './',
+    //         '3': './',
+    //         '4': './',
+    //         '5': './',
+    //     }
+    // }
 }
 // Get keys
 const cosmeticsKeys = Object.keys(cosmetics);
@@ -850,10 +702,10 @@ const achievements = {
         'name': 'Tome\'d You so',
         'desc': 'Obtain 12 tomes',
         'image': false,
-        'reward': false,
+        'reward': 'cosmetic:charles/special_charles',
         'pages': 3,
         'conditions': [
-            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            'player.lifetime.tomes_bought',
             12
         ],
         'mystery': {
@@ -870,7 +722,7 @@ const achievements = {
         'reward': false,
         'pages': 4,
         'conditions': [
-            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            'player.lifetime.tomes_bought',
             24
         ],
         'mystery': {
@@ -887,7 +739,7 @@ const achievements = {
         'reward': false,
         'pages': 5,
         'conditions': [
-            'Charles.tome.improveWorkingConditions.value + Charles.tome.decreaseWages.value + Charles.tome.betterHoes.value',
+            'player.lifetime.tomes_bought',
             48
         ],
         'mystery': {

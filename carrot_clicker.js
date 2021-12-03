@@ -369,6 +369,7 @@ const settings_default = {
         carl: 'default',
     },
     openpanel: null,            // string
+    cosmetics_grid: true,
 
     keybinds: keybinds_default, // object
 }
@@ -587,7 +588,7 @@ var cpsInterval = setInterval(CarrotsPerSecond,50);
 
 //level up characters 
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
-    console.log(`CharacterLevelUpPrice(${characterString(character)}, ${amount}, ${mode})`);
+    // console.log(`CharacterLevelUpPrice(${characterString(character)}, ${amount}, ${mode})`);
     let r=character.lvlupPrice;
     let r2=0;
 
@@ -740,6 +741,7 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
         tome.value += amount;
+        player.lifetime.tomes_bought ++;
         player.golden_carrots -= CharlesUpgradePrices(tome,amount);
         CharlesUpgradePrices(tome,amount,"apply");
 
@@ -795,7 +797,30 @@ const hoeImg = [
     './assets/tools/netherite_hoe.png',
 ]
 
-function CreateHoe(type=0,amount=1) {
+function gregLevelTest(type, minusone = true, debug) {
+    let modifier = -1;
+    if(minusone == false) modifier = 0;
+
+    // if(debug == true) {
+    //     console.log((type*25) -modifier);
+    // }
+
+    if(type == 0) {
+        // console.log('n: ' + Gregory.lvl);
+        if(Gregory.lvl == 0) {
+            return true;
+        }
+        return false;
+    }
+    else if(Gregory.lvl >= (type*25)) {
+        // console.log('n B');
+        return false;
+    }
+    return true;
+}
+
+function CreateHoe(type=0, amount=1) {
+    console.log(type);
     // Greg unlock check
     // if(characterQuery(characterString('greg')) == false) {
     //    toast('Nice try', 'That character hasn\'t been unlocked yet.');
@@ -805,12 +830,12 @@ function CreateHoe(type=0,amount=1) {
     // Return if a hoe is already in progress
     if(n==1){
         toast("Greg is busy", "Wait until he is done crafting",
-        '', false, true)
+        '', false, true);
         return;
     }
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(Gregory.lvl<=(type*25)-1||Gregory.lvl==0){
+    if(gregLevelTest(type)){
         if(type>=1){
             toast("Cant Create Hoe", `Greg too inexperienced. Greg must be at least Level: ${type*25} to create this hoe`,
             '', false, true);
@@ -965,32 +990,48 @@ function DisplayHoe(character, type) {
             img.classList.remove('glowing');
             img.classList.add('blackedout');
         }
-
-        // Character has at least 1 and
-        if(character.Hoes[type] >= 1) {
-            eInnerText(count, `x${character.Hoes[type]}`);
-            img.classList.remove('blackedout');
-        } else {
-            eInnerText(count, '');
-        }
     }
     // Greg hoes
     else if(charString == 'greg') {
-        // Greg has at least 1
-        if(Gregory.Hoes[type] >= 1) {
-            eInnerText(count, `x${Gregory.Hoes[type]}`);
+        // Can afford and is unlocked
+        if(
+            !gregLevelTest(type, false)
+            && player.Carrots / 0.8 >= Gregory.HoePrices[type]
+        ) {
+            // console.log(type + ': unlocked and CAN afford');
             img.classList.remove('blackedout');
-        }
-        // Greg can afford one
-        else if(player.Carrots >= Gregory.HoePrices[type]) {
-            img.classList.remove('blackedout');
+            img.classList.remove('grayedout');
             eInnerText(count, '');
+        }
+        // Greg's lvl is sufficient but can't afford
+        else if(
+            !gregLevelTest(type, false)
+        ) {
+            // console.log(type + ': unlocked but can\'t afford');
+            img.classList.add('grayedout');
+            img.classList.remove('blackedout');
         }
         // Blacked out
         else {
-            eInnerText(count, '');
+            // console.log(type + ': other');
             img.classList.add('blackedout');
         }
+    }
+
+
+    // Number
+    if(character.Hoes[type] == Gregory.lvl && Gregory.lvl != 0) {
+        eInnerText(count, 'MAX');
+        count.classList.add('toolfull');
+    }
+    else if(character.Hoes[type] >= 1) {
+        // Not full, show number
+        count.classList.remove('toolfull');
+        eInnerText(count, `x${character.Hoes[type]}`);
+    } else {
+        // Hide number
+        count.classList.remove('toolfull');
+        eInnerText(count, '');
     }
 }
 

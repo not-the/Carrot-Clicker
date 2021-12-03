@@ -570,7 +570,7 @@ function setCosmetic(target, to, resetState = false) {
             break;
         
         case 'farmable':
-            console.log(cosmetic);
+            // console.log(cosmetic);
             // Image
             if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
             { mainCarrot.src = cosmetic.image; }
@@ -608,9 +608,10 @@ function setCosmetic(target, to, resetState = false) {
     }
 
     settings.cosmetics[target] = to;
+    saveSettings();
 
     // Fancy Switcher fix
-    themeSwitcherCheckmark(to, from);
+    cosmeticSwitcherCheckmark(target, to, from);
 }
 //#endregion
 
@@ -661,7 +662,7 @@ function populateThemeList() {
                 <p class="secondary_text">${theme.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark opacity0" id="${key + '_checkmark'}">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${settings.theme == key ? '' : ' opacity0'}" id="${key + '_checkmark'}">
             </div>
         </div>
         `;
@@ -697,6 +698,10 @@ function themeSwitcherCheckmark(theme, from = false) {
 // Cosmetics List style
 const cosmeticsView = dom('cosmetics_view');
 cosmeticsView.addEventListener('input', () => {
+    cosmeticsGridMode();
+});
+
+function cosmeticsGridMode() {
     let value = cosmeticsView.value;
     let elements = document.querySelectorAll('.cosmetics_mini');
     
@@ -709,7 +714,11 @@ cosmeticsView.addEventListener('input', () => {
             element.classList.remove('cosmetics_grid');
         });
     }
-});
+
+    // Save preference
+    settings.cosmetics_grid = value == 'list' ? false : true;
+    saveSettings();
+}
 
 // New
 // var debug;
@@ -739,6 +748,20 @@ function populateCosmeticsList(target) {
             // console.log(key + ' is not unlocked!');
             stillLocked++;
             // console.log('nah');
+
+            cosmeticHTML += /* html */
+            `
+            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
+                <img src="./assets/achievements/locked.png" alt="img" class="theme_preview" id="cosmetic_${key}">
+                <div class="description">
+                    <h3>???</h3>
+                    <p class="secondary_text">Locked</p>
+                </div>
+                <div class="theme_checkbox">
+                    <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="${target}_cosmetic_${key}_checkmark">
+                </div>
+            </div>
+            `;
             continue;
         }
 
@@ -748,13 +771,13 @@ function populateCosmeticsList(target) {
         cosmeticHTML += /* html */
         `
         <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
-            <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
+            <img src="${imgsrc}" alt="img" class="theme_preview" id="cosmetic_${key}">
             <div class="description">
                 <h3>${cosmetic.name}</h3>
                 <p class="secondary_text">${cosmetic.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="${target}_cosmetic_${key}_checkmark">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${key == 'default' ? '' : ' opacity0'}" id="${target}_cosmetic_${key}_checkmark">
             </div>
         </div>
         `;
@@ -776,12 +799,12 @@ function cosmeticsPercent() {
 
 
 // Theme switcher checkmark fix
-function cosmeticSwitcherCheckmark(cosmetic, from = false) {
-    var elCosmetic = dom(`cosmetic_${cosmetic}_checkmark`);
+function cosmeticSwitcherCheckmark(target, to, from = false) {
+    var elCosmetic = dom(`${target}_cosmetic_${to}_checkmark`);
 
     // Uncheck previous
-    if(from == false || !dom(`cosmetic_${from}_checkmark`)) return;
-    dom(`cosmetic_${from}_checkmark`).classList.add('opacity0');
+    if(from == false || !dom(`${target}_cosmetic_${to}_checkmark`)) return;
+    dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
 
     // Check new
     if(!elCosmetic) return;
@@ -1119,7 +1142,7 @@ function rewardHTML(achieve) {
             }
             // Cosmetic
             else if(rewardType == 'cosmetic') {
-                subtype = rewardName.split('/')[1];
+                [subtype, rewardName] = rewardName.split('/');
 
                 informalName = cosmetics[subtype][rewardName].name;
                 icon = cosmetics[subtype][rewardName].image;

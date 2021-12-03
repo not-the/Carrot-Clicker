@@ -1020,8 +1020,8 @@ function onLoad() {
     || player.hasOwnProperty('inventory') == false
     || player.hasOwnProperty('cosmetic') == true
     || typeof player.cosmetics != 'object'
-
     || settings.hasOwnProperty('full_numbers') == false
+    || settings.hasOwnProperty('cosmetics_grid') == false
     ) {
         if(store('old_player_object_fix') !== 'true') {
             toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
@@ -1029,7 +1029,7 @@ function onLoad() {
             player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
             player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
             
-            store('old_player_object_fix', '1.8.0');
+            store('old_player_object_fix', '1.8.3');
 
             console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
         }
@@ -1145,19 +1145,23 @@ function onLoad() {
         // optionTheme.value = theme;
         setTheme(theme);
     }
-    // Set user cosmetic on page load
-    // if(store('cosmetic') != null) {
-    //     let cosmetic = store('cosmetic');
-    //     console.log(`Cosmetic setting found, switching to: ${cosmetic}`);
-    //     // optionCosmetic.value = cosmetic;
-    //     setCosmetic(cosmetic);
-    // }
+    // Set user cosmetics on page load
+    for(let i = 1; i < cosmeticsKeys.length; i++) {
+        if( settings.cosmetics[ cosmeticsKeys[i] ] == 'default' ) continue;
+
+        setCosmetic(cosmeticsKeys[i], settings.cosmetics[ cosmeticsKeys[i] ]);
+    }
     // Switch to previously open panel on page load
     if(store('openpanel') != null) {
         console.log('openpanel found, switching to: ' + store('openpanel'));
         panelChange(store('openpanel'), true);
     } else {
         panelChange('achievements-panel');
+    }
+    // Set cosmetics grid mode
+    if(settings.cosmetics_grid == true) {
+        cosmeticsView.value = 'grid';
+        cosmeticsGridMode();
     }
     //#endregion
     
@@ -1272,8 +1276,6 @@ function onLoad() {
     populateThemeList();
     themeSwitcherCheckmark(settings.theme);
     
-    cosmeticSwitcherCheckmark(store('cosmetic'));
-
     // Disable
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
 
@@ -1286,6 +1288,7 @@ function onLoad() {
     characterPrices();
     updateCharlesShop();
     pagesCount();
+    DisplayAllHoes();
 
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();
