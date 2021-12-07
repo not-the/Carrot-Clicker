@@ -694,7 +694,8 @@ function Prestige() {
     cpsInterval = setInterval(CarrotsPerSecond,100);
     tips.tracker=0;
 
-    // Update Charles' tome shop
+    // Update page
+    characterPrices();
     updateCharlesShop();
     showPrestigeStats();
 }
@@ -1163,6 +1164,7 @@ const statsNumbers = {
     prestige_carrots:            dom('prestige_carrots'),
     prestige_carrots_clicked:    dom('prestige_carrots_clicked'),
     prestige_carrots_idled:      dom('prestige_carrots_idled'),
+    prestige_carrots_bonus:      dom('prestige_carrots_bonus'),
     prestige_clicks:             dom('prestige_clicks'),
     prestige_hoes_crafted_total: dom('prestige_hoes_crafted_total'),
     prestige_hoes_crafted_0:     dom('prestige_hoes_crafted_0'),
@@ -1176,6 +1178,7 @@ const statsNumbers = {
     lifetime_carrots:            dom('lifetime_carrots'),
     lifetime_carrots_clicked:    dom('lifetime_carrots_clicked'),
     lifetime_carrots_idled:      dom('lifetime_carrots_idled'),
+    lifetime_carrots_bonus:      dom('lifetime_carrots_bonus'),
     lifetime_golden_carrots:     dom('lifetime_golden_carrots'),
     lifetime_golden_carrots_spent: dom('lifetime_golden_carrots_spent'),
     lifetime_prestige:           dom('lifetime_prestige'),
@@ -1200,6 +1203,7 @@ function loadStatistics() {
     eInnerText(prestige_carrots, numCommas(player.prestige.carrots) );
     eInnerText(prestige_carrots_clicked, numCommas(player.prestige.click_carrots) );
     eInnerText(prestige_carrots_idled, numCommas(player.prestige.idle_carrots.toFixed(0)) );
+    eInnerText(prestige_carrots_bonus, numCommas(player.prestige.bonus_carrots.toFixed(0)) );
     eInnerText(prestige_clicks, numCommas(player.prestige.clicks) );
     eInnerText(prestige_hoes_crafted_total, numCommas(player.prestige.hoes.craftedTotal) );
     eInnerText(prestige_hoes_crafted_0, numCommas(player.prestige.hoes.crafted[0]) );
@@ -1213,6 +1217,8 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_carrots, numCommas(player.lifetime.carrots.toFixed(0)));
     eInnerText(statsNumbers.lifetime_carrots_clicked, numCommas(player.lifetime.click_carrots));
     eInnerText(statsNumbers.lifetime_carrots_idled, numCommas(player.lifetime.idle_carrots.toFixed(0)));
+    eInnerText(statsNumbers.lifetime_carrots_bonus, numCommas(player.lifetime.bonus_carrots.toFixed(0)));
+
     eInnerText(statsNumbers.lifetime_golden_carrots, numCommas(player.lifetime.golden_carrots));
     eInnerText(statsNumbers.lifetime_golden_carrots_spent, numCommas(player.lifetime.golden_carrots - player.golden_carrots));
     eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
@@ -1228,6 +1234,7 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
     eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}`);
     // eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1} (${cosmeticsPercent()}%)`);
+    eInnerText(statsNumbers.stat_cosmetics, `${playerCosmetics}/${totalCosmetics} (${percentage(playerCosmetics, totalCosmetics).toFixed(0)}%)`);
     
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(

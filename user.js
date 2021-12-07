@@ -810,6 +810,8 @@ function unlock(type, thingToUnlock, subtype) {
 
         player.cosmetics[subtype].push(thingToUnlock);
         populateCosmeticsList('all');
+
+        playerCosmeticsCount();
     }
     // Character
     else if(type == 'character') {
@@ -910,6 +912,22 @@ function ex_notFunny() {
     return 0;
 }
 
+// Get cosmetics count
+let playerCosmeticsKeys = Object.keys(player.cosmetics);
+var playerCosmetics = 0;
+var cosmeticsTypes = 0;
+function playerCosmeticsCount() {
+    for(i = 0; i < playerCosmeticsKeys.length; i++) {
+        cosmeticsTypes++;
+        let target = player.cosmetics[ playerCosmeticsKeys[i] ];
+        for(t = 1; t < target.length; t++) {
+            playerCosmetics++;
+        }
+    }
+
+    return playerCosmetics;
+}
+playerCosmeticsCount();
 
 
 
@@ -1138,6 +1156,11 @@ function onLoad() {
         }
     }
 
+    // Theme Switcher
+    populateThemeList();
+    populateCosmeticsList('all');
+    themeSwitcherCheckmark(settings.theme);
+
     // Set user theme on page load
     if(settings.theme != 'theme_dark') {
         let theme = settings.theme;
@@ -1271,10 +1294,6 @@ function onLoad() {
 
     console.log(pagesIntended);
 
-
-    // Theme Switcher
-    populateThemeList();
-    themeSwitcherCheckmark(settings.theme);
     
     // Disable
     optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
@@ -1295,9 +1314,6 @@ function onLoad() {
     }
 
 
-
-    // Down here because it throws an error
-    populateCosmeticsList('all');
 
 
     // Finished

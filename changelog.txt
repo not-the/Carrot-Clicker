@@ -1,4 +1,25 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.4
+    12-7-2021
+// ----------------------------------------------------------- //
+
+- Carl is now unlockable again
+- Theme and cosmetic switcher checkmarks will now work on page load if the player had settings other than the default saved
+- Added an achievement for getting Belle to level 100
+- Falling carrot dropshadow is no longer pure black
+- Falling carrots now leave the carrot container before disappearing
+- Fixed an issue where the lifetime falling carrots grabbed statistics was twice as much as it should have been
+- You can now see how many carrots you have in statistics
+- You can once again see how many cosmetics out of the total you have in settings, along with a percentage (does not include the default cosmetics)
+- Added a cosmetic: Business Bill
+- Gave a bunch cosmetics descriptions
+- Added a cosmetic: Golden pixel carrot
+- "Fixed" bundle cosmetics not having an image in the achievements list
+- Added achievements for grabbing 50, 250, and 2048 falling carrots
+- More cosmetics are now available via the achievements system (this may be subject to change)
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.3
     12-2-2021
 // ----------------------------------------------------------- //

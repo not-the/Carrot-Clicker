@@ -437,8 +437,6 @@ function fallingCarrot() {
         earnCarrots( carrotReward, 'bonus' );
         dom(element.id).remove();
         fallingActive--;
-
-        player.lifetime.falling_carrots_grabbed ++;
     };
 
     // Positioning
@@ -793,9 +791,9 @@ function populateCosmeticsList(target) {
 
     dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
 }
-function cosmeticsPercent() {
-    return percentage(Object.keys(player.cosmetics).length - 1, Object.keys(cosmetics).length - 1);
-}
+// function cosmeticsPercent() {
+//     return percentage(Object.keys(player.cosmetics).length - 1, Object.keys(cosmetics).length - 1);
+// }
 
 
 // Theme switcher checkmark fix

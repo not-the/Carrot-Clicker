@@ -178,6 +178,7 @@ const cosmetics = {
         'default': {
             'name': 'Carrot Clicker (Default)',
             'preview': './assets/Carrot Clicker.png',
+
             'desc': 'The carrot and characters you know and love',
 
             'farmable': 'default',
@@ -190,6 +191,7 @@ const cosmetics = {
         'cookie': {
             'name': 'Cookie',
             'preview': './assets/theme/cookie/cookie.png',
+            'image': './assets/theme/cookie/cookie.png',
             'desc': 'Cookies and cookie-related outfits',
 
             'farmable': 'cookie',
@@ -199,6 +201,7 @@ const cosmetics = {
         'bill': {
             'name': 'All Bill',
             'preview': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Boomer_Bill.png',
             'desc': 'One of us',
 
             'farmable': 'bill',
@@ -211,6 +214,7 @@ const cosmetics = {
         'blockgame': {
             'name': 'Minecraft',
             'preview': './assets/theme/blockgame/grass_block_side.png',
+            'image': './assets/theme/blockgame/grass_block_side.png',
             'desc': 'This probably won\'t make it to Carrot Clicker 1.0',
 
             'theme': 'theme_blockgame',
@@ -244,6 +248,14 @@ const cosmetics = {
 
             'farmable': 'Carrot',
             'image': './assets/theme/pixel_carrot.png',
+        },
+        'pixel_golden_carrot': {
+            'name': 'Golden Pixel Carrot',
+            'preview': './assets/theme/pixel_golden_carrot.png',
+            'desc': 'An entirely original concept',
+
+            'farmable': 'Golden Carrot',
+            'image': './assets/theme/pixel_golden_carrot.png',
         },
         'cookie': {
             'name': 'Cookie',
@@ -359,7 +371,7 @@ const cosmetics = {
     bill: {
         'default': {
             'name': 'Bill (Default)',
-            'desc': 'write something here please',
+            'desc': 'A fan of carrots, Bill is ready for any carrot-related challenges you throw at him.',
             'group': 'default',
 
             'rename': 'Bill',
@@ -377,10 +389,18 @@ const cosmetics = {
         'fancy_bill': {
             'name': 'Fancy Bill',
             'preview': './assets/theme/boomer_bill_gates.png',
-            'desc': 'description',
+            'desc': 'He still doesn\'t get invited to social gatherings',
 
             'rename': false,
             'image': './assets/theme/boomer_bill_gates.png',
+        },
+        'business_bill': {
+            'name': 'Business Bill',
+            'preview': './assets/theme/business_bill.png',
+            'desc': '"I earn more carrots in a minute than you do in an entire year"',
+
+            'rename': false,
+            'image': './assets/theme/business_bill.png',
         },
     },
     belle: {
@@ -403,7 +423,7 @@ const cosmetics = {
         },
         'bill': {
             'name': 'Bill',
-            'desc': 'write something here please',
+            'desc': 'Return to Bill.',
             'group': 'bill',
             
             'rename': 'Bill',
@@ -421,9 +441,6 @@ const cosmetics = {
         },
         'safety_greg': {
             'name': 'High Vis Greg',
-            'desc': 'placeholder',
-
-            'preview': './assets/theme/safety_greg.png',
             'desc': 'Can\'t have you dying on the job now can we',
 
             'rename': false,
@@ -431,7 +448,7 @@ const cosmetics = {
         },
         'bill': {
             'name': 'Bill',
-            'desc': 'placeholder',
+            'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
@@ -456,7 +473,7 @@ const cosmetics = {
         },
         'bill': {
             'name': 'Bill',
-            'desc': 'placeholder',
+            'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
@@ -499,11 +516,17 @@ const cosmetics = {
 }
 // Get keys
 const cosmeticsKeys = Object.keys(cosmetics);
+var totalCosmetics = 0;
 for(let i = 0; i < cosmeticsKeys.length; i++) {
     let key = cosmeticsKeys[i];
     let target = cosmetics[key];
 
     target['keys'] = Object.keys(target);
+
+    // Figure out how many cosmetics there are
+    for(let c = 1; c < target.keys.length; c++) {
+        totalCosmetics++;
+    }
 }
 console.log(cosmetics.bundle.keys);
 
@@ -758,7 +781,7 @@ const achievements = {
         'pages': 2,
         'conditions': [
             ['player.themes.length', 4],
-            ['player.cosmetics.length', 2],
+            ['playerCosmetics', 1],
         ],
         // 'condition_amount': 1,
         'mystery': {
@@ -826,6 +849,20 @@ const achievements = {
             'name': true,
             'desc': false,
             'image': false,
+            'noToast': false,
+        }
+    },
+    'belle_lvl_100': {
+        'name': 'Tough Belle',
+        'desc': 'Upgrade Belle 100 times',
+        'image': false,
+        'reward': false,
+        'pages': 5,
+        'conditions': ['Belle_Boomerette.lvl', 100],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
             'noToast': false,
         }
     },
@@ -1063,6 +1100,50 @@ const achievements = {
         }
     },
 
+    // Falling carrots
+    '50_falling_carrots': {
+        'name': 'Free Falling',
+        'desc': 'Grab 50 falling carrots',
+        'image': false,
+        'reward': false,
+        'pages': 1,
+        'conditions': ['player.lifetime.falling_carrots_grabbed', 50],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '250_falling_carrots': {
+        'name': 'Carrot Rain',
+        'desc': 'Grab 250 falling carrots',
+        'image': false,
+        'reward': 'cosmetic:bundle/cookie',
+        'pages': 2,
+        'conditions': ['player.lifetime.falling_carrots_grabbed', 250],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '2048_falling_carrots': {
+        'name': 'Falling Into Place',
+        'desc': 'Grab 2048 falling carrots',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': ['player.lifetime.falling_carrots_grabbed', 2048],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
     // Clicks
     '500_clicks': {
         'name': 'Click the Carrot, Bill.',
@@ -1082,7 +1163,7 @@ const achievements = {
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 10,000 times',
         'image': false,
-        'reward': false,
+        'reward': 'cosmetic:farmable/pixel_carrot',
         'pages': 1,
         'conditions': ['player.lifetime.clicks', 100000],
         'mystery': {
@@ -1155,7 +1236,7 @@ const achievements = {
         'name': 'Golden',
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
-        'reward': ['cosmetic:farmable/golden_carrot', 'function:confetti()'],
+        'reward': ['cosmetic:farmable/golden_carrot', 'cosmetic:farmable/pixel_golden_carrot', 'function:confetti()'],
         'pages': 3,
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {

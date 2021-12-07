@@ -662,7 +662,7 @@ body:not(.theme_light) .theme_checkmark {
     position: relative;
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid rgba(88, 88, 88, 0.8);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     left: -3px;
     top: 105%;
 
@@ -795,7 +795,7 @@ body:not(.theme_light) .theme_checkmark {
     top: -72px;
 
     z-index: 110;
-    filter: drop-shadow(4px 4px 10px black);
+    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
     cursor: pointer;
     padding: 12px 8px;
 
@@ -806,7 +806,7 @@ body:not(.theme_light) .theme_checkmark {
         transform: none;
     }
     100% {
-        transform: translateY(720px);
+        transform: translateY(740px);
     }
 }
 
@@ -1010,7 +1010,7 @@ body:not(.theme_light) .theme_checkmark {
     height: auto;
     z-index: 0;
     cursor: pointer;
-    padding: 12px;
+    padding: 16px;
 
     filter: drop-shadow(12px 12px 5px rgba(0, 0, 0, 0.3));
 
@@ -1020,7 +1020,7 @@ body:not(.theme_light) .theme_checkmark {
     image-rendering: unset;
 }
 #main_carrot:active {
-    transform: scale(0.98,0.98);
+    transform: scale(0.97,0.97);
     filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.3))
             brightness(85%)
             saturate(110%);
