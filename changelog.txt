@@ -18,6 +18,8 @@
 - Added achievements for grabbing 50, 250, and 2048 falling carrots
 - More cosmetics are now available via the achievements system (this may be subject to change)
 
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.8.3
