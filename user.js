@@ -289,7 +289,7 @@ document.addEventListener('keyup', event => {
         return;
     }
     // Close theme switcher
-    if(themeSwitcherOpen || cosmeticSwitcherOpen) {
+    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || inventoryOpen) {
         if(event.key == "Escape"){
             closeDialog();
         }
@@ -541,10 +541,15 @@ function keybindHandler(event, state) {
     }
 
     // Inventory
-    // else if(key == settings.keybinds['key_inventory']) {
-    //     console.log('inventory');
-    //     openDialog('test', 'test');
-    // }
+    else if(key == settings.keybinds['key_inventory']) {
+        // console.log('inventory');
+        // openDialog('test', 'test');
+        if(inventoryOpen == false) {
+            openInventory();
+        } else {
+            closeDialog();
+        }
+    }
 }
 
 
@@ -864,6 +869,11 @@ function isUnlocked(type = 'theme', key, subtype) {
     // Does not return anything for characters
 }
 
+// Fill inventory
+// function populateInventory() {
+//     console.log('populateInventory() runs');
+// }
+
 
 // External achievement checks
 // After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
@@ -1024,6 +1034,15 @@ function onLoad() {
     // LifetimeCarrots: 0,
     // LifetimeGoldenCarrots: 0,
     // LifetimeEquipedHoes: 0,
+
+    // Inventory thing
+    if(typeof player.inventory == 'object' &&
+        !Array.isArray(player.inventory) &&
+        player.inventory !== null) {
+
+        console.log('[Player Fix] Object inventory found, fixing...');
+        player.inventory = [];
+    }
 
     if(
     player.hasOwnProperty('LifetimeCarrots') == true
@@ -1308,6 +1327,7 @@ function onLoad() {
     updateCharlesShop();
     pagesCount();
     DisplayAllHoes();
+    updateHoePrices();
 
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();
@@ -1359,3 +1379,5 @@ function onLoad() {
 }
 
 onLoad();
+
+loadCheck = true;

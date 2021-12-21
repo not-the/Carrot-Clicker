@@ -1,4 +1,58 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.6
+    12-20-2021
+// ----------------------------------------------------------- //
+
+Big bug fix update, again
+
+- Keybinds menu now has a maximum height
+- Dropdown menu animates in
+- Fixed bug where toasts wouldn't animate most of the time
+- Added an achievement between "A World Fed" and "Lifetime Supply": "Carrot Continent"
+  + All big number achievements after this one have been increased by a factor of 1,000
+- Gave some more achievements icons! (On the Clock, Off the Clock, Free Falling, The Tools to Victory)
+- Blockgame theme fixes:
+  + Fixed the theme & cosmetic menus being the wrong width
+  + Fixed the left outline on toast notifications being cut off
+  + Fixed the main background shifting downward when the size of the page changes
+- Fixed oversight where the escape wouldn't work in the inventory (doesn't work in the keybinds menu either but i left that as is since escape is used to unbind)
+- Reduced the page rewards on some achievements
+- Added a Jokester Carl cosmetic
+- Farmable cosmetics that are pixel art will now render pixelated (no longer blurry)
+- You can now see how many of each tome you have
+- Fixed bug where achievements would stay for the normal toast notification time instead of double, as the settings page says
+- Replaceable toasts no longer animate/make the above toasts jitter
+- Moved hoe prices out of the main game loop
+- Moved multibuy from carrot_utilities.js to carrot_clicker.js
+- The game will now display an error message if it takes 2 or more seconds to run the initial javascript
+- In phone-width viewports (460px and smaller) the cosmetics in grid view will shrink to fit 4 in each row (I have only tested this on my phone)
+- theme icons now have rounded borders
+- The game once again checks if Greg is unlocked before creating or equipping a hoe (and it works this time)
+- Fixed character prices being 1 level higher than intended (issue #44)
+- Fixed certain statistics showing non-whole numbers when they shouldn't
+- Redesigned prestige menu, button, and an inventory button
+
+Prestige changes:
+- Prestige potential is now based on the total carrots you've earned during a prestige instead of the amount you have
+- You now earn 5x the golden carrots as before
+  + This, combined with the previous change makes for a significant increase in golden carrots. Both are subject to change but I wanted prestiging to be something you do more often)
+- You can only get whole number amounts of golden carrots
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.5
+    12-7-2021
+// ----------------------------------------------------------- //
+
+- Autosave interval and notification time inputs now have min and max attributes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.4
     12-7-2021
 // ----------------------------------------------------------- //

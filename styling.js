@@ -17,10 +17,13 @@ var activeToasts = 0;
 var toastsList =  {};
 var bonusID =      0;
 
-var dialogOpen = false;
-var themeSwitcherOpen = false;
-var cosmeticSwitcherOpen = false;
-var keybindsMenuOpen = false;
+// Menu state
+var dialogOpen =            false;
+var themeSwitcherOpen =     false;
+var cosmeticSwitcherOpen =  false;
+var keybindsMenuOpen =      false;
+var prestigeMenuOpen =      false;
+var inventoryOpen =         false;
 
 // Dialog button action
 var dialogButtonAction = 'none';
@@ -51,6 +54,8 @@ const cosmList = {
     charles:    dom('charles_cosmetics'),
     carl:       dom('carl_cosmetics'),
 }
+const prestigeMenu =  dom('prestige_menu');
+const inventoryMenu = dom('inventory_menu');
 //#endregion
 
 
@@ -103,6 +108,9 @@ function buttonSound() {
 
 // Popup Notifications
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
+    // Close other popup first
+    closeDialog();
+
     buttonSound();
 
     dialogOpen = true;
@@ -168,7 +176,7 @@ function closeDialog(doAction, backdrop = false) {
 
     dialogButtonAction = 'none';
 
-    // Hide Theme Switcher
+    // Hide other popup menus
     themeMenu.classList.remove('visible');
     themeSwitcherOpen = false;
 
@@ -177,6 +185,12 @@ function closeDialog(doAction, backdrop = false) {
 
     elKeybindsMenu.classList.remove('visible');
     keybindsMenuOpen = false;
+
+    prestigeMenu.classList.remove('visible');
+    prestigeMenuOpen = false;
+
+    inventoryMenu.classList.remove('visible');
+    inventoryOpen = false;
 }
 
 
@@ -186,7 +200,7 @@ function closeDialog(doAction, backdrop = false) {
 function toast(title, desc, color, persistent, replaceable, achievement = false) {
     // Replace old if replace is true
     if(toastsList[toastID - 1] == 'replace') {
-        closeToast(toastID - 1);
+        closeToast(toastID - 1, false);
     }
 
     // Create element with parameters filled in
@@ -253,8 +267,8 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
     if(!persistent) {
         let timeout = store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000;
+        if(achievement != false ) timeout *= 2;
         // console.log(timeout);
-        if(achievement == true ) timeout *= 2;
 
         setTimeout(() => {
             // console.log("Timeout runs: " + toastID);
@@ -265,33 +279,34 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 }
 
 // Delete Toast Notification
-function closeToast(id) {
+function closeToast(id, animate = true) {
     // console.log(id + " - toast removed");
     activeToasts--;
     delete toastsList[id];
-    element = dom(`toast${id}`);
+    let element = dom(`toast${id}`);
+
+    // No animation
+    if(animate == false) {
+        element.remove();
+        return;
+    }
     
+    // Clear all button
+    if(activeToasts <= 2) {
+        toastsClear.classList.remove("visible");
+    }
+
+    // Animate
     // Dismiss Animation
-    if(toastsList[id] !== 'replace' && element !== null) {
+    if(toastsList[id] != 'replace' && element != null) {
         element.classList.add("toast_out");
     }
     
     // Delete Element after animation is done
-    if(element !== null) {
-        if(toastsList[id] !== 'replace') {
+    if(element != null) {
+        setTimeout(() => {
             element.remove();
-        } else {
-            setTimeout(() => {
-                element.remove();
-            }, 300);
-        }
-    }
-
-
-
-    // Clear all button
-    if(activeToasts <= 2) {
-        toastsClear.classList.remove("visible");
+        }, 300);
     }
 }
 
@@ -506,6 +521,32 @@ function closeCosmeticSwitcher(noOverlay = false) {
     }
 }
 
+/* ----- Fancy Prestige menu ----- */
+function openPrestigeMenu() {
+    prestigeMenuOpen = true;
+    prestigeMenu.classList.add('visible');
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+
+    buttonSound();
+}
+
+/* ----- Inventory ----- */
+function openInventory() {
+    inventoryOpen = true;
+    inventoryMenu.classList.add('visible');
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+
+    buttonSound();
+}
+// function closeInventory(noOverlay = false) {
+//     themeMenu.classList.remove('visible');
+//     if(noOverlay == false) {
+//         overlay.classList.remove("visible");
+//     }
+// }
+
 // Page elements
 const farmableNames = [
     dom('cc_name'),
@@ -574,10 +615,20 @@ function setCosmetic(target, to, resetState = false) {
             { mainCarrot.src = cosmetic.image; }
             // Name
             if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
-                nameLoop(cosmetic.farmable)
+                nameLoop(cosmetic.farmable);
             } else {
                 nameLoop('Carrot');
             }
+            // Image render type
+            if(cosmetic.hasOwnProperty('render_type') && cosmetic.render_type != false) {
+                // Pixelated
+                if(cosmetic.render_type == 'pixel') {
+                    mainCarrot.classList.add('render_pixelated');
+                }
+            } else {
+                mainCarrot.classList.remove('render_pixelated');
+            }
+
             break;
 
         case 'bill':
@@ -596,7 +647,7 @@ function setCosmetic(target, to, resetState = false) {
     // Image
 
 
-    Object.hop = property => {return this.hasOwnProperty(property);}
+    // Object.hop = property => {return this.hasOwnProperty(property);}
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(farmable) {

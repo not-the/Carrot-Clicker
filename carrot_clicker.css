@@ -35,7 +35,7 @@
 
     /* Misc */
     --generic-blue:     #518ed4;
-    --golden-carrot:    rgb(250, 225, 0);
+    --golden-carrot:    #fae100;
     --warning-red:      rgb(255, 65, 65);
 
     /* Theme colors */
@@ -111,6 +111,7 @@ a:hover {filter: brightness(120%);}
 
 .flex {display: flex;}
 .flex_1 {flex: 1;}
+.justify_center {justify-content: center;}
 .half_width {width: 50% !important;}
 .full_width {width: 100% !important;}
 .overflow_hidden {overflow: hidden !important;}
@@ -153,6 +154,11 @@ img {
 .no_border {
     border: none !important;
 }
+.render_pixelated {
+    image-rendering: pixelated !important;
+}
+
+
 button {
     color: white;
     background-color: transparent;
@@ -308,6 +314,10 @@ summary:hover {
 .background_dirt {
     background-image: url(./assets/Dirt-Background.jpg) !important;
 }
+.background_rgb {
+    background: black !important;
+    background: linear-gradient(110deg, rgba(190,0,0,1) 0%, rgba(144,70,0,1) 15%, rgba(149,145,0,1) 30%, rgba(18,149,0,1) 45%, rgba(0,132,140,1) 60%, rgba(0,17,139,1) 75%, rgba(70,0,124,1) 87%, rgba(140,35,124,1) 100%) !important;
+}
 
 .background_red,
 .background_orange,
@@ -415,6 +425,7 @@ summary:hover {
     right: 0;
     margin-bottom: 0px;
     padding-top: 20px;
+    padding-left: 2px;
 
     display: flex;
     flex-direction: column-reverse;
@@ -615,10 +626,13 @@ p.theme_menu_title {
     outline: 2px solid white;
 }
 
+#themes_list .theme_preview {
+    border-radius: 24px;
+}
 .theme_preview {
     height: 90px;
+    width: 90px;
     padding: 10px;
-    border-radius: 10px;
 }
 .theme_checkbox {
     width: 60px;
@@ -661,8 +675,10 @@ body:not(.theme_light) .theme_checkmark {
     visibility: hidden;
     position: relative;
     background-color: rgba(0, 0, 0, 0.8);
+    /* backdrop-filter: blur(10px); */ /* This doesn't work for some reason */
+
     border: 1px solid rgba(88, 88, 88, 0.8);
-    /* backdrop-filter: blur(10px); */
+
     left: -3px;
     top: 105%;
 
@@ -682,7 +698,7 @@ body:not(.theme_light) .theme_checkmark {
     visibility: visible;
     opacity: 1;
     position: absolute;
-    pointer-events: none;
+    /* pointer-events: none; */
 }
 .cosmetics_grid .theme_item:hover .description h3 {
     margin-top: 0;
@@ -694,6 +710,7 @@ body:not(.theme_light) .theme_checkmark {
 /* Keybinds */
 #keybinds_menu {
     width: 800px;
+    max-height: 800px;
     padding: 24px;
     overflow: auto;
 }
@@ -880,6 +897,17 @@ body:not(.theme_light) .theme_checkmark {
 #info_dropdown:hover .hover_menu,
 #info_dropdown:active .hover_menu {
     visibility: visible;
+    animation: dropdown_anim 0.2s ease;
+}
+@keyframes dropdown_anim {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
 }
 .menu_item {
     padding: 8px 12px 8px 36px;
@@ -1028,14 +1056,44 @@ body:not(.theme_light) .theme_checkmark {
 #main_carrot:focus-visible {
     outline: none;
 }
+
+/* Main buttons */
+.main_buttons {
+    justify-content: center;
+}
+.main_button_item {
+    width: 46px;
+    height: 45px;
+    padding: 0;
+    /* opacity: 0.7; */
+}
+.main_button_item:not(:last-of-type) {
+    margin-right: 12px;
+}
+.main_button_img {
+    width: 26px;
+    height: 26px;
+}
+
+
 /* Prestige */
 #prestige-section {
-    margin: 20px auto 20px;
-    width: 290px;
-
-
-    display: flex;
+    /* margin: 20px 0 20px; */
+    padding-bottom: 20px;
     visibility: hidden;
+
+    justify-content: center;
+}
+/* Prestige Button */
+/* .prestige_button {
+    padding: 6px 8px;
+} */
+.prestige_button img {
+    filter: saturate(0%) brightness(150%);
+    transform: translateY(2px);
+}
+.prestige_button:hover img {
+    filter: saturate(0%) brightness(20%);
 }
 .button_gold {
     background-color: transparent;
@@ -1184,7 +1242,7 @@ body:not(.theme_light) .theme_checkmark {
     image-rendering: pixelated;
     border-top-left-radius: 9px;
 
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 /* Tools/upgrades */
 .levelupimg, .toolicon {
@@ -1309,6 +1367,10 @@ body:not(.theme_light) .theme_checkmark {
 .Charles .bottom,
 .carl .bottom {
     padding: 5px;
+}
+.Charles .tome_count {
+    position: absolute;
+    right: 12px;
 }
 
 /* Carl */
@@ -1578,7 +1640,7 @@ body:not(.theme_light) .theme_checkmark {
     border-radius: 16px;
 
     transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
-    transition-property: transform, margin;
+    transition-property: transform, margin, border-radius;
 }
 .achievement_locked .achievement_img {
     opacity: 0.7;
@@ -1588,6 +1650,7 @@ body:not(.theme_light) .theme_checkmark {
     transform: scale(1.8, 1.8) translateX(12px);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
     margin-right: 68px;
+    border-radius: 4px;
     /* position: absolute; */
 }
 .achievement_details {
@@ -1789,6 +1852,70 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     filter: brightness(80%);
 }
 
+/* Fancy Prestige menu */
+#prestige_menu {
+    padding: 24px;
+    width: 100%;
+    max-height: 500px;
+    max-width: 500px;
+}
+
+/* Inventory menu */
+#inventory_menu {
+    padding: 24px;
+    width: 100%;
+    max-height: 750px;
+    max-width: 985px;
+}
+#inventory {
+    display: flex;
+    flex-wrap: wrap;
+    height: 560px;
+    width: 100%;
+    overflow: auto;
+    border-radius: 16px;
+}
+.inventory_slot {
+    background-color: var(--main-bg-color);
+    width: 96px;
+    height: 96px;
+    border-radius: 16px;
+
+    position: relative;
+
+    margin: 0 6px 6px 0;
+    cursor: pointer;
+}
+.inventory_slot img {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+}
+.inventory_number {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+.inventory_slot:hover {
+    filter: brightness(110%);
+}
+
+#inventory_preview {
+    /* background-color: teal; */
+    border-left: 1px solid var(--border-color);
+    width: 430px;
+    padding: 0 16px;
+}
+.item_preview {
+    width: 260px;
+    height: 260px;
+    border-radius: 24px;
+    cursor: unset;
+}
+.item_preview img {
+    padding: 24px;
+}
+
 /* Footer */
 footer {
     text-align: center;
@@ -1813,14 +1940,15 @@ footer {
 
 /* Media queries */
 /* Minimum supported width: 362px */
+
+/* 1300px */
 @media only screen and (min-width: 1300px) {
     #right-section {
         display: flex;
     }
 }
 
-
-
+/* 848px */
 @media only screen and (max-width: 848px) {
     .Basic_Info {
         flex-direction: column;
@@ -1876,6 +2004,16 @@ footer {
     }
 }
 
+/* 460px */
+@media only screen and (max-width: 460px) {
+    .cosmetics_grid .theme_item,
+    .cosmetics_grid .theme_item .theme_preview {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* 400px */
 @media only screen and (max-width: 400px) {
     #right-section {
         max-width: 100%;

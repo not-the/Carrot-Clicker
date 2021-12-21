@@ -524,7 +524,7 @@
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
                 url(./assets/theme/blockgame/dirt.png);
     background-size: 64px;
-    background-position: center;
+    background-position: top;
     image-rendering: pixelated;
 }
 .theme_blockgame button,
@@ -609,7 +609,7 @@
 }
 .theme_blockgame .popup_box {
     background-color: unset;
-    width: 500px;
+    /* width: 500px; */
     border-radius: 0;
 }
 .theme_blockgame .toast {

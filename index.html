@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.8.3</title>
+    <title id="page_title">Carrot Clicker dev beta v1.8.6</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -349,9 +349,9 @@
                     <p class="flex_1 no_border"><b class="underline">Interface:</b></p><br>
 
                     <div class="keybind_item">
-                        <label for="key_inventory" class="secondary_text">
+                        <label for="key_inventory">
                             <p>Inventory:</p>
-                            <button class="edit_keybind" id="key_inventory" onclick="detectKey('key_inventory')" disabled>
+                            <button class="edit_keybind" id="key_inventory" onclick="detectKey('key_inventory')">
                                 -
                             </button>
                         </label>
@@ -377,6 +377,72 @@
 
             </div>
 
+
+        </div>
+
+        <!-- Fancy Prestige menu -->
+        <div id="prestige_menu" class="popup_box fancy_switcher">
+            <h1>Prestige</h1>
+
+            <!-- Golden Carrot count -->
+            <div class="flex">
+                <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" style="width: 80px;">
+                <p>
+                    <span style="font-size: 22pt;">204</span><br>
+                    Golden Carrots
+                </p>
+            </div>
+
+            <!--  -->
+            <div class="flex">
+                <img src="./assets/iconography/tome_transparent.png" alt="Golden Carrots" style="width: 80px;">
+                <p>
+                    <span style="font-size: 22pt;">37</span><br>
+                    Tome Pages
+                </p>
+            </div>
+
+            <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold" title="Prestige">
+                Prestige
+            </button>
+        </div>
+
+        <!-- Inventory -->
+        <div id="inventory_menu" class="popup_box fancy_switcher">
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h1>Inventory</h1>
+            <p><i class="secondary_text" id="keybinds_blurb">Secondary text</i></p><br>
+
+            <nav class="inventory_filter">
+                <img src="./assets/iconography/star.png" alt="Special">
+            </nav>
+
+            <div class="flex">
+                <!-- Inventory slots -->
+                <div id="inventory">
+                    <div class="inventory_slot">
+                        <img src="./assets/Carrot Clicker.png" alt="Carrot">
+                        <p class="inventory_number secondary_text">x1200</p>
+                    </div>
+                    <div class="inventory_slot">
+                        <img src="" alt="Tome1">
+                        <p class="inventory_number secondary_text">x2</p>
+                    </div>
+                    <div class="inventory_slot"></div>
+                    <div class="inventory_slot"></div>
+                </div>
+    
+                <!-- Preview pane -->
+                <div id="inventory_preview">
+                    <div class="inventory_slot item_preview">
+                        <img src="./assets/Carrot Clicker.png" alt="Carrot">
+                    </div>
+                    <h2 style="margin-bottom: 6px;">Carrot</h2>
+                    <p class="secondary_text">
+                        Good old carrots
+                    </p>
+                </div>
+            </div>
 
         </div>
 
@@ -610,26 +676,38 @@
                 <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p><br/>
+                <p class="secondary_text">Carrot Karma: <span id="karma_count">0</span></p>
                 <p class="secondary_text" style="margin-right:-24px">
                     Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
                 </p>
                 <p class="secondary_text">
                     <span id="golden_carrot_count"></span>
                 </p><br>
-
-                
-                <!-- <p>Carrot Karma: <span id="karma_count">0</span></p> -->
             </div>
             
             <!-- Prestige Section -->
-            <div id="prestige-section">
-                <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige')" class="button_gold">
-                    Prestige
+            <div class="main_buttons flex">
+                <!-- Prestige button -->
+                <button onClick="openPrestigeMenu()" class="prestige_button main_button_item" title="Prestige">
+                    <img src="./assets/iconography/golden_icon.png" alt="Prestige" class="main_button_img">
                 </button>
-                <p class="prestigetooltip">
+
+                <!-- Inventory button -->
+                <button onClick="openInventory()" title="Inventory" class="main_button_item">
+                    <img src="./assets/iconography/backpack.svg" alt="Inventory" class="main_button_img">
+                </button>
+            </div>
+            <div id="prestige-section" class="flex">
+
+                <p class="prestigetooltip secondary_text" style="padding-top: 6px;">
+                    Prestige potential: <span id="Prestige">0</span>
+                </p>
+
+                <!-- <p class="prestigetooltip" style="padding-top: 6px;">
                     Prestiging now will result in:<br>
                     <span id="Prestige">0</span> Golden Carrots
-                </p>
+                </p> -->
+
             </div>
 
         </div>
@@ -656,8 +734,7 @@
                         alt="Boomer Bill"
                         id="bill_avatar"
                         class="characterimg"
-                        title="Boomer Bill"
-                        onclick="characterInfo('bill')">
+                        title="Boomer Bill">
 
                         <div class="characterdesc">
                             <b id="bill_name" class="underline">Bill</b>
@@ -850,6 +927,7 @@
                             <p>
                                 Improve working conditions:<br/>
                                 <span id="ImproveWorkingConditions">---</span>
+                                <span id="iwc_count" class="tome_count">x0</span>
                             </p>
                         </div>
                         
@@ -862,6 +940,7 @@
                             <p>
                                 Improve hoe costs:<br/>
                                 <span id="BetterHoes">---</span>
+                                <span id="bh_count" class="tome_count">x0</span>
                             </p>
                         </div>
 
@@ -874,6 +953,7 @@
                             <p>
                                 Decrease worker wages:<br/>
                                 <span id="DecreaseWages">---</span>
+                                <span id="dww_count" class="tome_count">x0</span>
                             </p>
                         </div>
 
@@ -1150,7 +1230,7 @@
             <label for="autosave_interval"><b>Autosave Frequency:</b><br>
                 <p class="secondary_text">Default is 2 seconds</p>
                 
-                <input type="number" id="autosave_interval" value="2"/>
+                <input type="number" id="autosave_interval" min="1" max="60" value="2"/>
                 <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
                 <button onclick="resetAutosave()">Reset</button>
             </label><br><br>
@@ -1245,7 +1325,7 @@
             <label for="notificationLength">Time until notifications disappear (In seconds):<br>
                 <p class="secondary_text">Note: Achievements will use double this number</p>
                 
-                <input type="number" id="notificationLength" value="5"/>
+                <input type="number" id="notificationLength" min="2" max="15" value="5"/>
                 <button onclick="resetOption()">Reset</button>
             </label><br><br>
             
