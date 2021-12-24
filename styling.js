@@ -386,7 +386,7 @@ function panelChange(to, noSound = false) {
 
 // Click bonus popup
 //#region 
-function popupHandler(useMousePos = true, amount) {
+function popupHandler(useMousePos = true, amount, style = 'carrot') {
     // Create Element
     var clickVisualElement = document.createElement("div");
 
@@ -412,7 +412,17 @@ function popupHandler(useMousePos = true, amount) {
     // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
-    eInnerText(clickVisualElement, `+${amount}`);
+
+    // Carrot
+    if(style == 'carrot') {
+        eInnerText(clickVisualElement, `+${amount}`); 
+    }
+    // Cash
+    else if(style == 'cash') {
+        eInnerText(clickVisualElement, `₪${amount}`);
+        clickVisualElement.classList.add("clickvisual_cash");
+    }
+    
 
     bonusVisualArea.append(clickVisualElement);
 
@@ -438,21 +448,37 @@ var fallingFrenzy = false;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 function fallingCarrot() {
     var element = document.createElement("img");
-    element.src = './assets/Carrot Clicker.png';
+    
+    // 0.66% chance the drop is money instead
+    let type = Math.floor(Math.random() * 200) <= 0 ? 'cash' : 'carrot';
+
+    element.src = type == 'carrot' ? './assets/Carrot Clicker.png' : './assets/coin.png';
     element.classList.add('falling_carrot');
     element.id = fallingID;
     fallingID++;
     fallingActive++;
 
-    // Reward
-    // Between 200% and 600% of player's CPC
-    let rewardVariation = (Math.floor((Math.random() * 400)) + 200) / 100;
-    let carrotReward = Math.round(player.cpc * rewardVariation);
-    element.onclick = () => {
-        earnCarrots( carrotReward, 'bonus' );
-        dom(element.id).remove();
-        fallingActive--;
-    };
+    if(type == 'carrot') {
+        // Carrot reward
+        // Between 200% and 600% of player's CPC
+        let rewardVariation = (Math.floor((Math.random() * 400)) + 200) / 100;
+        let amount = Math.round(player.cpc * rewardVariation);
+        element.onclick = () => {
+            earnCarrots( amount, 'bonus' );
+            dom(element.id).remove();
+            fallingActive--;
+        };
+    } else if(type == 'cash') {
+        // Cash reward
+        // Between 200% and 600% of player's CPC
+        let amount = Math.floor((Math.random() * 9)) + 2;
+        element.onclick = () => {
+            earnCash( amount, 'bonus' );
+            dom(element.id).remove();
+            fallingActive--;
+        };
+    }
+
 
     // Positioning
     let randomX = Math.floor((Math.random() * 400));
@@ -523,16 +549,20 @@ function closeCosmeticSwitcher(noOverlay = false) {
 
 /* ----- Fancy Prestige menu ----- */
 function openPrestigeMenu() {
+    closeDialog();
     prestigeMenuOpen = true;
     prestigeMenu.classList.add('visible');
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
+
+    updatePrestigeMenu();
 
     buttonSound();
 }
 
 /* ----- Inventory ----- */
 function openInventory() {
+    closeDialog();
     inventoryOpen = true;
     inventoryMenu.classList.add('visible');
     overlay.classList.add("visible");

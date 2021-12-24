@@ -26,7 +26,7 @@
     <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
     <!-- <meta name="twitter:card" content="summary_large_image"> -->
-</head>  
+</head>
 <!--#endregion-->
 
 <body>
@@ -382,39 +382,71 @@
 
         <!-- Fancy Prestige menu -->
         <div id="prestige_menu" class="popup_box fancy_switcher">
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <h1>Prestige</h1>
 
-            <!-- Golden Carrot count -->
             <div class="flex">
-                <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" style="width: 80px;">
-                <p>
-                    <span style="font-size: 22pt;">204</span><br>
-                    Golden Carrots
+                <!-- Current -->
+                <div class="half_width">
+                    <!-- Tomes -->
+                    <!-- <div class="flex">
+                        <div class="prestige_item">
+                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
+                        </div>
+                        <div class="prestige_item">
+                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
+                        </div>
+                        <div class="prestige_item">
+                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
+                        </div>
+                    </div> -->
+                    <!-- Golden Carrot count -->
+                    <div class="flex prestige_item">
+                        <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
+                        <div>
+                            <h6 class="prestige_number" id="prestige_menu_gc_count">Loading...</h6>
+                            <p>Golden Carrots</p>
+                        </div>
+                    </div>
+
+                    <!-- Tome page count -->
+                    <div class="flex prestige_item">
+                        <img src="./assets/icons/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
+                        <div>
+                            <h6 class="prestige_number" id="prestige_menu_tp_count">Loading...</h6>
+                            <p>Tome Pages</p>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next prestige -->
+                <p class="prestigetooltip center half_width" style="padding-top: 6px;">
+                    Prestiging now will result in:<br/>
+                    <span id="prestige_potential">
+                        0
+                    </span> Golden Carrots<br/>
+
+                    <!-- Prestige button -->
+                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold" title="Prestige">
+                        Prestige
+                    </button>
                 </p>
             </div>
 
-            <!--  -->
-            <div class="flex">
-                <img src="./assets/iconography/tome_transparent.png" alt="Golden Carrots" style="width: 80px;">
-                <p>
-                    <span style="font-size: 22pt;">37</span><br>
-                    Tome Pages
-                </p>
-            </div>
+            
 
-            <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold" title="Prestige">
-                Prestige
-            </button>
+
         </div>
 
         <!-- Inventory -->
         <div id="inventory_menu" class="popup_box fancy_switcher">
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <h1>Inventory</h1>
-            <p><i class="secondary_text" id="keybinds_blurb">Secondary text</i></p><br>
+            <p><i class="secondary_text">Secondary text</i></p><br>
 
             <nav class="inventory_filter">
-                <img src="./assets/iconography/star.png" alt="Special">
+                <img src="./assets/icons/star.png" alt="Special">
             </nav>
 
             <div class="flex">
@@ -568,8 +600,17 @@
         </noscript>
 
         <!-- Status bar -->
-        <div class="Basic_Info flex"> 
-            <p id="Basic_Info"><b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" onclick="multibuySpin()" tabindex="0">1x</b><p>
+        <div class="Basic_Info flex">
+            <!-- Info -->
+            <p id="Basic_Info">
+                <!-- Main Icon -->
+                <img src="./assets/pixel_carrot_32x.png" alt="" id="main_icon"
+                style="position: absolute; transform: translate(-38px, -6px)"
+                title="Carrot Clicker">
+
+                <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" onclick="multibuySpin()" tabindex="0">1x</b><p>
+
+            <!-- Tips -->
             <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click The Carrot</div>
 
             <div id="info_dropdown" tabindex="0">
@@ -582,21 +623,21 @@
                     <!-- Settings -->
                     <a href="#settings-panel" onclick="panelChange(`settings-panel`)" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/iconography/settings.svg" alt="" class="dropdown_img invert">
+                            <img src="./assets/icons/settings.svg" alt="" class="dropdown_img invert">
                             Settings
                         </div>
                     </a>
 
                     <a onclick="themeSwitcher()" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/iconography/palette.svg" alt="" class="dropdown_img invert">
+                            <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
                             Change Theme
                         </div>
                     </a>
 
                     <div class="menu_item link_styling secondary_text">
                         <label for="volume_master_dropdown">
-                            <img src="./assets/iconography/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
+                            <img src="./assets/icons/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
                             <div class="slidecontainer">
                                 <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
                             </div>
@@ -614,18 +655,18 @@
                     <!-- Changelog -->
                     <a href="./changelog/index.html" target="_blank" rel="noopener noreferrer" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/iconography/refresh.png" alt="" class="dropdown_img">
+                            <img src="./assets/icons/refresh.png" alt="" class="dropdown_img">
                             Changelog
-                            <img src="./assets/iconography/external.png" alt="(External)" class="dropdown_img right_img">
+                            <img src="./assets/icons/external.png" alt="(External)" class="dropdown_img right_img">
                         </div>
                     </a>
 
                     <!-- Github -->
                     <a href="https://github.com/JJCVIP/Carrot-Clicker" target="_blank" rel="noopener noreferrer" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/iconography/github.png" alt="" class="dropdown_img">
+                            <img src="./assets/icons/github.png" alt="" class="dropdown_img">
                             Github
-                            <img src="./assets/iconography/external.png" alt="(External)" class="dropdown_img right_img">
+                            <img src="./assets/icons/external.png" alt="(External)" class="dropdown_img right_img">
                         </div>
                     </a>
 
@@ -676,9 +717,9 @@
                 <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p><br/>
-                <p class="secondary_text">Carrot Karma: <span id="karma_count">0</span></p>
+                <p class="secondary_text">Shekels: ₪<span id="cash_count">Loading...</span></p>
                 <p class="secondary_text" style="margin-right:-24px">
-                    Tome Pages: <span id="page_count">-</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
+                    Tome Pages: <span id="page_count">Loading...</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
                 </p>
                 <p class="secondary_text">
                     <span id="golden_carrot_count"></span>
@@ -688,19 +729,19 @@
             <!-- Prestige Section -->
             <div class="main_buttons flex">
                 <!-- Prestige button -->
-                <button onClick="openPrestigeMenu()" class="prestige_button main_button_item" title="Prestige">
-                    <img src="./assets/iconography/golden_icon.png" alt="Prestige" class="main_button_img">
+                <button onClick="openPrestigeMenu()" title="Prestige" class="prestige_button main_button_item" id="prestige_menu_button">
+                    <img src="./assets/icons/pixel_carrot_white.png" alt="Prestige" class="main_button_img">
                 </button>
 
                 <!-- Inventory button -->
-                <button onClick="openInventory()" title="Inventory" class="main_button_item">
-                    <img src="./assets/iconography/backpack.svg" alt="Inventory" class="main_button_img">
+                <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
+                    <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img">
                 </button>
             </div>
             <div id="prestige-section" class="flex">
 
                 <p class="prestigetooltip secondary_text" style="padding-top: 6px;">
-                    Prestige potential: <span id="Prestige">0</span>
+                    Prestige potential: <span id="main_prestige_potential">0</span>
                 </p>
 
                 <!-- <p class="prestigetooltip" style="padding-top: 6px;">
@@ -749,7 +790,7 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/iconography/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Upgrade">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
                         <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe">
@@ -805,7 +846,7 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/iconography/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
                         <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe">
@@ -857,7 +898,7 @@
                     <div class="bottom secondary_text">
                         <div class="Greg_Hoe_Container hoecontainer">
                         <span class="hoe_price">Prices:</span>
-                        <img src="./assets/iconography/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
                         
                         <span id="wooden_hoe_price" class="hoe_price">Wooden</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Wooden_Hoe_Number">err</p>
@@ -1054,7 +1095,7 @@
     <div id="notifs-section">
         <!-- Nav buttons -->
         <nav id="notifs-nav">
-            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/iconography/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/iconography/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/iconography/settings.svg" alt="" class="button_icon invert"> Settings</button>
+            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
         </nav>
 
         <!-- Achievements Panel -->
@@ -1198,7 +1239,7 @@
                     <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
                 </select><br> -->
                 <button id="theme_button" onclick="themeSwitcher()">
-                    <img src="./assets/iconography/palette.svg" alt="" class="button_icon invert">
+                    <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
                     Change Theme
                 </button>
                 <button id="cosmetic_button" onclick="cosmeticSwitcher()">
@@ -1222,7 +1263,7 @@
                 Disable keybinds
             </label><br>
             <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
-                <img src="./assets/iconography/keyboard.svg" alt="" class="button_icon bright_200">
+                <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
                 Edit Keybinds
             </button><br><br>
 

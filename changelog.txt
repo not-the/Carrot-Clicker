@@ -1,4 +1,29 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.8.7
+    12-21-2021
+// ----------------------------------------------------------- //
+
+- Renamed the "iconography" folder to simply "icons"
+- Inventory button now displays as expected when hovered
+- More achievements have pixel art (Completionist)
+- Tome pages now have a unique sprite instead of recycling the generic tome
+- More themes have icons (Black & White)
+- Fixed bug where prestige potential would be reset to 0 before golden carrots were granted (prestiging didn't give anything)
+- Infrastucture for a persistent currency
+- There is now a chance a falling carrot will be currency instead
+- Fixed Black & White theme jank
+- Cosmetic bundles no longer have checkmarks (the logic for them to be correct would take effort and they don't really need them)
+- Added a carrot icon in the top left that changes based on game progression (only thing that changes it currently is getting all achievements and prestiging)
+- Revamped prestige menu now displays the correct numbers
+
+Light theme fixes:
+- Prestige and inventory button icons are now visible
+- Greg's progress bar is now a lighter color
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.6
     12-20-2021
 // ----------------------------------------------------------- //
@@ -37,7 +62,6 @@ Prestige changes:
 - You now earn 5x the golden carrots as before
   + This, combined with the previous change makes for a significant increase in golden carrots. Both are subject to change but I wanted prestiging to be something you do more often)
 - You can only get whole number amounts of golden carrots
-
 
 ~ Kal
 

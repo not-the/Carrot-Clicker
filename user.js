@@ -229,9 +229,9 @@ function volumeSliderHandler(v) {
     }
 
     if(value == 0) {
-        vmdImage.src = './assets/iconography/mute.svg';
-    } else if(vmdImage.src != './assets/iconography/volume.svg') {
-        vmdImage.src = './assets/iconography/volume.svg';
+        vmdImage.src = './assets/icons/mute.svg';
+    } else if(vmdImage.src != './assets/icons/volume.svg') {
+        vmdImage.src = './assets/icons/volume.svg';
     }
 
     volume = value / 100;
@@ -289,11 +289,10 @@ document.addEventListener('keyup', event => {
         return;
     }
     // Close theme switcher
-    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || inventoryOpen) {
+    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen) {
         if(event.key == "Escape"){
             closeDialog();
         }
-        return;
     }
 
     // When on main page send to keybind handler
@@ -537,7 +536,8 @@ function keybindHandler(event, state) {
         openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave');
     }
     else if(key == settings.keybinds['key_prestige']){
-        openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
+        openPrestigeMenu();
+        // openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
     }
 
     // Inventory
@@ -761,6 +761,7 @@ function grantAchievement(key) {
     }
 
     achievementProgress();
+    updateMainIcon();
 }
 
 // Unlock themes/cosmetics
@@ -1323,11 +1324,13 @@ function onLoad() {
     /* -------------------- Fill out page -------------------- */
     // Put things on page
     carrotCount();
+    cashCount();
     characterPrices();
     updateCharlesShop();
     pagesCount();
     DisplayAllHoes();
     updateHoePrices();
+    updateMainIcon()
 
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();

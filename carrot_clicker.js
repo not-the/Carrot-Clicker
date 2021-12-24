@@ -24,11 +24,13 @@ var n = 0;
 document.addEventListener("touchstart", function() {}, true);
 
 // Getting InnerHtml
-const elPrestigePotential = dom("Prestige");
+const elMainPrestigePotential = dom("main_prestige_potential");
+const elPrestigePotential = dom('prestige_potential');
 const Basic_Info =          dom("Basic_Info");
 const elCarrotCount =       dom("Carrot_Count");
 const elCPC =               dom("cpc");
 const elCPS =               dom("cps");
+const elCashCount =         dom("cash_count");
 const elGoldenCarrotCount = dom("golden_carrot_count");
 const elTips =              dom("Tip");
 const elCharacterUpCost = {
@@ -145,10 +147,11 @@ const playerPrestigeTemplate = {
     idle_carrots: 0,
     bonus_carrots: 0,
 
+    // cash: 0,
     falling_carrots_grabbed: 0,
 
-    golden_carrots: 0,
-    prestige_count: 0,
+    // golden_carrots: 0,
+    // prestige_count: 0,
     clicks: 0,
     hoes: {
         crafted: [0, 0, 0, 0, 0, 0],
@@ -162,19 +165,15 @@ const player1 = {
     Carrots: 0,
     cpc: 0,
     cps: 0,
-    pages: 0,
-
-    golden_carrots: 0,
-    prestige_potential: 0,
     EquippedHoes: 0,
     clickSpeedRecord: 0,
+    cash: 0,
 
+    // Prestige
+    pages: 0,
+    golden_carrots: 0,
+    prestige_potential: 0,
     prestige_available: false,
-
-    // Lifetime stats (old)
-    // LifetimeCarrots: 0,
-    // LifetimeGoldenCarrots: 0,
-    // LifetimeEquippedHoes: 0,
 
     // Current prestige
     prestige: playerPrestigeTemplate,
@@ -186,6 +185,7 @@ const player1 = {
         idle_carrots: 0,
         bonus_carrots: 0,
 
+        cash: 0,
         falling_carrots_grabbed: 0,
 
         golden_carrots: 0,
@@ -462,6 +462,44 @@ function earnCarrots(amount, type) {
             player.lifetime.falling_carrots_grabbed++;
             break;
     }
+
+    carrotCount();
+}
+
+// Earn currency
+function earnCash(amount, type) {
+    if(type == 'bonus') {
+        popupHandler(true, amount, 'cash');
+    }
+
+    player.cash += amount;
+    player.lifetime.cash += amount;
+
+    // Type
+    // switch(type) {
+    //     // Click
+    //     case 'bonus':
+    //         player.prestige.click_carrots += amount
+    //         player.prestige.clicks ++;
+
+    //         player.lifetime.click_carrots += amount;
+    //         player.lifetime.clicks ++;
+    //         break;
+    //     // Idle
+    //     case 'achievement':
+    //         player.prestige.idle_carrots += amount;
+    //         player.lifetime.idle_carrots += amount;
+    //         break;
+    //     // Bonus
+    //     case 'other':
+    //         player.prestige.bonus_carrots += amount;
+    //         player.lifetime.bonus_carrots += amount;
+
+    //         player.lifetime.falling_carrots_grabbed++;
+    //         break;
+    // }
+
+    cashCount();
 }
 
 //On Carrots Click
@@ -519,6 +557,9 @@ function carrotCount() {
 
     eInnerText(elCarrotCount, count);
 }
+function cashCount() {
+    eInnerText(elCashCount, DisplayRounded(player.cash));
+}
 function characterPrices() {
     // Update page
     eInnerText(elCharacterUpCost.bill, `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`);
@@ -574,6 +615,22 @@ function showPrestigeStats() {
 const elPageCount = dom('page_count');
 function pagesCount() {
     elPageCount.innerText = player.pages;
+}
+const elMainIcon = dom('main_icon');
+function updateMainIcon() {
+    if(achieveQuery('all_achievements')) {
+        elMainIcon.src = './assets/medal_spin.gif';
+        elMainIcon.title = '100% Completion';
+    } else if(achieveQuery('1_prestige')) {
+        elMainIcon.src = './assets/theme/pixel_golden_carrot.png';
+        elMainIcon.title = 'Prestiged';
+    }
+}
+const elPrestigeMenuGCCount = dom('prestige_menu_gc_count');
+const elPrestigeMenuTPCount = dom('prestige_menu_tp_count');
+function updatePrestigeMenu() {
+    eInnerText(elPrestigeMenuGCCount, numCommas(player.golden_carrots));
+    eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
 }
 
 // Click speed handler
@@ -698,12 +755,16 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 // Prestige
 function Prestige() {
+    console.log('Prestiging...');
+
+    if(player.prestige_potential < 3) {
+        console.warn('Insufficient prestige potential');
+        toast('Cannot Prestige', 'Insufficient prestige potential. Try again later.');
+        return;
+    }
+
     window.scrollTo(0, 0);
     clearInterval(cpsInterval);
-    
-    // Reset prestige potential
-    player.prestige_potential = 0;
-    player.prestige_available = false;
 
     // Statistics
     player.prestige = playerPrestigeTemplate;
@@ -712,6 +773,10 @@ function Prestige() {
     player.golden_carrots += player.prestige_potential;
     player.lifetime.golden_carrots += player.prestige_potential;
     player.lifetime.prestige_count += 1;
+
+    // Reset prestige potential
+    player.prestige_potential = 0;
+    player.prestige_available = false;
 
     // Reset characters to default
     [
@@ -743,9 +808,15 @@ function Prestige() {
     cpsInterval = setInterval(CarrotsPerSecond,100);
     tips.tracker=0;
 
+    // Tutorial message
+    if(player.lifetime.prestige_count == 0) {
+        toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.');
+    }
+
     // Update page
     characterPrices();
     updateCharlesShop();
+    // updatePrestigeMenu();
     showPrestigeStats();
 }
 
@@ -1179,7 +1250,10 @@ function gameLoop() {
     //The Prestige Potential
     // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
     player.prestige_potential = Math.floor( 5 * Math.pow(0.0000001 * player.prestige.carrots, 0.38) * (1 + (player.pages/100)) );
-    eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
+    eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
+    if(prestigeMenuOpen) {
+        eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
+    }
 
     // Greg's Hoe Prices
     // updateHoePrices();

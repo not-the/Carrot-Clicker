@@ -43,7 +43,7 @@ const default_tips = {
         "Fun fact: baby carrots are just shaved down regular carrots",
         "\"Game development is hard\" clicker game developer says",
         `Only on ${window.location.href.split('#')[0]}`,
-        'If you see a ? near something you can click it to get a more detailed dsecription of what it does',
+        'If you see a ? near something you can click it to get a more detailed description of what it does',
         'Now in HD',
     ],
     funIntermediate: [
@@ -144,7 +144,7 @@ const themes = {
     },
     'theme_bw': {
         name:     'Black & White',
-        image:    false,
+        image:    './assets/theme/theme_bw.png',
         desc:     'Back in my day',
         cosmetic: false,
         // accent:   false
@@ -275,7 +275,7 @@ const cosmetics = {
             'desc': 'Hrm',
             'group': 'blockgame',
 
-            'farmable': 'Minecraft Carrot',
+            'farmable': 'Carrot',
             'image': './assets/theme/blockgame/carrot.png',
             'render_type': 'pixel',
         },
@@ -1467,9 +1467,9 @@ const achievements = {
         }
     },
     'all_achievements': {
-        'name': 'Achievement hunter',
+        'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
-        'image': false,
+        'image': './assets/achievements/medal_spin_bg.gif',
         'reward': 'function:confetti()',
         'pages': 10,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],

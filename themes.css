@@ -71,6 +71,9 @@
 .theme_light #left-section {
     background-color: var(--light-darker-bg-color);
 }
+.theme_light .main_button_img {
+    filter: invert();
+}
 .theme_light .characterbox {
     background-color: white;
     border-color: white;
@@ -86,6 +89,9 @@
 }
 .theme_light .tooltip {
     color: white;
+}
+.theme_light #Greg_Bar {
+    background-color: gray;
 }
 
 .theme_light .blackedout {
@@ -205,6 +211,10 @@
 
 
 /* Classic theme */
+.theme_classic .popup_box {
+    border-radius: 0;
+    box-shadow: none;
+}
 .theme_classic .Basic_Info {
     background-color: #4e3f34;
     background-image: url(./assets/Dirt-Background.jpg);
@@ -482,8 +492,19 @@
 
 
 /* Black & White theme */
-.theme_bw * {
+/* .theme_bw * {
     filter: saturate(0);
+} */
+.theme_bw #left-section,
+.theme_bw .status_bar,
+.theme_bw .characterbox,
+.theme_bw .information-area,
+.theme_bw .popup_box,
+.theme_bw .clickvisual {
+    filter: saturate(0);
+}
+.theme_bw .status_bar {
+    top: 0;
 }
 .theme_bw {
     background-color: rgb(36, 36, 36);
@@ -610,7 +631,9 @@
 .theme_blockgame .popup_box {
     background-color: unset;
     /* width: 500px; */
+    border: none;
     border-radius: 0;
+    box-shadow: none;
 }
 .theme_blockgame .toast {
     background-color: #212121;

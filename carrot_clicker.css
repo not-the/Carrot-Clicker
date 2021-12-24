@@ -230,6 +230,9 @@ summary:hover {
 }
 .popup_box {
     background: var(--main-popup-color);
+    border: 2px solid var(--border-color);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+
     padding: 20px;
     border-radius: 12px;
 
@@ -239,6 +242,9 @@ summary:hover {
     transform: translate(-50%, -50%);
 
     visibility: hidden;
+}
+.transparency_on .popup_box {
+    background-color: rgba(134, 134, 134, 0.2);
 }
 .loading_carrot {
     height: 80px;
@@ -660,6 +666,10 @@ body:not(.theme_light) .theme_checkmark {
     display: flex;
     flex-wrap: wrap;
 }
+/* dumb way to hide bundle checkmarks */
+#bundle_cosmetics .theme_checkbox {
+    visibility: hidden;
+}
 .cosmetics_grid .theme_item {
     width: 90px;
     height: 90px;
@@ -803,7 +813,13 @@ body:not(.theme_light) .theme_checkmark {
         opacity: 0;
     }
 }
+.clickvisual_cash {
+    color: rgb(204, 64, 64);
+}
+
+/* Falling carrots */
 .falling_carrot {
+    box-sizing: content-box;
     position: absolute;
     width: 64px;
     height: 64px;
@@ -814,7 +830,7 @@ body:not(.theme_light) .theme_checkmark {
     z-index: 110;
     filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
     cursor: pointer;
-    padding: 12px 8px;
+    padding: 12px 10px;
 
     animation: falling_carrot 2.5s ease-in forwards;
 }
@@ -839,6 +855,10 @@ body:not(.theme_light) .theme_checkmark {
 .status_bar * {
     pointer-events: all;
 }
+#main_icon {
+    height: 32px;
+    width: 32px;
+}
 .Basic_Info {
     background-color: var(--lighter-bg-color);
     border-bottom: 1px solid var(--border-color);
@@ -848,6 +868,7 @@ body:not(.theme_light) .theme_checkmark {
 
     padding: 8px 20px;
     padding-right: 50px;
+    padding-left: 50px;
 
     position: relative;
 }
@@ -1046,6 +1067,8 @@ body:not(.theme_light) .theme_checkmark {
     transition: filter, 0.1s linear; /* Comma is here on purpose, removing it breaks this for some reason*/
 
     image-rendering: unset;
+
+    touch-action: manipulation;
 }
 #main_carrot:active {
     transform: scale(0.97,0.97);
@@ -1065,7 +1088,6 @@ body:not(.theme_light) .theme_checkmark {
     width: 46px;
     height: 45px;
     padding: 0;
-    /* opacity: 0.7; */
 }
 .main_button_item:not(:last-of-type) {
     margin-right: 12px;
@@ -1073,9 +1095,11 @@ body:not(.theme_light) .theme_checkmark {
 .main_button_img {
     width: 26px;
     height: 26px;
+    transition: filter 0.25s ;
 }
-
-
+.main_button_item:hover .main_button_img {
+    filter: invert();
+}
 /* Prestige */
 #prestige-section {
     /* margin: 20px 0 20px; */
@@ -1084,17 +1108,8 @@ body:not(.theme_light) .theme_checkmark {
 
     justify-content: center;
 }
-/* Prestige Button */
-/* .prestige_button {
-    padding: 6px 8px;
-} */
-.prestige_button img {
-    filter: saturate(0%) brightness(150%);
-    transform: translateY(2px);
-}
-.prestige_button:hover img {
-    filter: saturate(0%) brightness(20%);
-}
+
+
 .button_gold {
     background-color: transparent;
     color: var(--golden-carrot);
@@ -1856,8 +1871,22 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 #prestige_menu {
     padding: 24px;
     width: 100%;
-    max-height: 500px;
+    max-height: 260px;
     max-width: 500px;
+}
+.prestige_item {
+    background-color: var(--main-bg-color);
+    padding: 4px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+}
+.prestige_item_img {
+    width: 64px;
+}
+.prestige_number {
+    margin: 0;
+    padding-top: 4px;
+    font-size: 20pt;
 }
 
 /* Inventory menu */
@@ -1866,6 +1895,8 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     width: 100%;
     max-height: 750px;
     max-width: 985px;
+
+    /* background-color: rgba(134, 134, 134, 0.2); */
 }
 #inventory {
     display: flex;
