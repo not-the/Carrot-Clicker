@@ -324,15 +324,17 @@ function clearToasts() {
 //#region 
 var currentPanel = "achievements-panel";
 // Tab Panels
-const tripane =         dom('notifs-section');
-const infoPanel =       dom("info-panel");
+const tripane           = dom('notifs-section');
+const infoPanel         = dom("info-panel");
 const achievementsPanel = dom("achievements-panel");
-const settingsPanel =   dom("settings-panel");
+const settingsPanel     = dom("settings-panel");
+const devPanel          = dom("dev-panel");
 
 // Tab Buttons
-const infoTab =         dom("info-panel-button");
+const infoTab         = dom("info-panel-button");
 const achievementsTab = dom("achievements-panel-button");
-const settingsTab =     dom("settings-panel-button");
+const settingsTab     = dom("settings-panel-button");
+const devTab          = dom("dev-panel-button");
 // const panelReset = "visibility: hidden; position: absolute; transform: translateY(-100%)";
 
 // Change panel
@@ -347,6 +349,7 @@ function panelChange(to, noSound = false) {
         infoTab.classList.remove("activetab");
         achievementsTab.classList.remove("activetab");
         settingsTab.classList.remove("activetab");
+        devTab.classList.remove("activetab");
 
         
 
@@ -354,6 +357,7 @@ function panelChange(to, noSound = false) {
         infoPanel.classList.remove('unremove');
         achievementsPanel.classList.remove('unremove');
         settingsPanel.classList.remove('unremove');
+        devPanel.classList.remove('unremove')
 
         // Unhide selected panel
         dom(to + "-button").classList.add("activetab");
