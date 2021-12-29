@@ -387,7 +387,6 @@ function panelChange(to, noSound = false) {
 //#endregion
 
 
-
 // Click bonus popup
 //#region 
 function popupHandler(useMousePos = true, amount, style = 'carrot') {
