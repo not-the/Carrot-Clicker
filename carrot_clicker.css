@@ -46,6 +46,9 @@
 
     /* Dark scrollbar (also changes other unstyled elements */
     /* color-scheme: dark; */
+	
+    /* info panel width */
+    --tab-percent: 33.33%;
 }
 
 /* Scrollbar */
@@ -1557,7 +1560,7 @@ body:not(.theme_light) .theme_checkmark {
     top: 36px;
 }
 #notifs-section nav .tab {
-    width: 33.33%;
+    width: var(--tab-percent);
     height: 2.3em;
     cursor: pointer;
     background-color: rgb(53, 42, 34);
@@ -1593,7 +1596,9 @@ body:not(.theme_light) .theme_checkmark {
 #notifs-section nav .tab:last-of-type {
     border-radius: 0 16px 0 0 !important;
 }
-
+#dev-panel-button{
+    visibility:hidden;
+}
 /* Info panel */
 .panel {
     position: absolute;
@@ -1603,6 +1608,10 @@ body:not(.theme_light) .theme_checkmark {
     height: min-content;
     width: 100%;
     padding: 0px 24px 64px;
+}
+
+input[type="number"].inputNumber{
+    width: 100px;
 }
 /* .panel button {
     width: 200px;
