@@ -1,5 +1,5 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.9.0.1
+    VERSION dev beta 1.9.1
     12-28-2021
 // ----------------------------------------------------------- //
 -Spent 3 hours working through the HTML and CSS to add a hidden Developer Tools Tab
