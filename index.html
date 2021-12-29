@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.1.1/title>
+    <title id="page_title">Carrot Clicker dev beta v1.8.6</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -555,6 +555,8 @@
 
 
         <!-- <div id="${SOMETHING ID}" class="toast achievement_item">
+
+
             <div class="achievement_details flex">
                 <img src="./assets/achievements/21_clicks_per_second.gif" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">
                 <div>
@@ -562,6 +564,8 @@
                     <p class="secondary_text">Do a thing, then another thing, then... um... something else?</p>
                 </div>
             </div>
+
+
             <div class="rewards_list">
                 <div class="reward flex">
                     <img src="./assets/theme/theme_red.png" alt="${informalName}" class="reward_img">
@@ -1043,6 +1047,7 @@
                     <!-- Bottom -->
                     <div class="bottom" id="cosmetic_shop">
                         <!-- <div class="flex">
+
                         </div> -->
 
 
@@ -1054,6 +1059,7 @@
                                 <div class="info">
                                     <b class="underline">Carrot Clicker Classic</b>
                                     <p class="secondary_text">Theme</p>
+
                                     <div class="shop_price">
                                         ₪10
                                     </div>
@@ -1095,7 +1101,7 @@
     <div id="notifs-section">
         <!-- Nav buttons -->
         <nav id="notifs-nav">
-            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
+            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button><button class="tab secondary_text" id="dev-panel-button" onclick="panelChange(`dev-panel`)">Dev Tools</button>
         </nav>
 
         <!-- Achievements Panel -->
@@ -1193,9 +1199,6 @@
                     Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
                     Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
                     Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
-
-                    Cash earned: <b id="lifetime_cash">---</b><br>
-                    Cash spent: <b id="lifetime_cash_spent">---</b><br>
                     Total Clicks: <b id="lifetime_clicks">---</b><br/>
                     Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
                     <details class="stat_collapse">
@@ -1226,9 +1229,6 @@
         <div id="settings-panel" class="panel remove">
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
-
-            <!-- Dev panel -->
-            <div id="dev"></div>
 
             <!-- Themes -->
             <label for="theme_dropdown">
@@ -1414,30 +1414,25 @@
 
             </footer>
         </div>
-    </div>
+        <div id="dev-panel" class="panel remove">
+            <h1>Developer Tools</h1>
+            <h4>Set Values</h4>
+            <label for="setting Carrots">
+                Carrots:
+                <input id="setCarrot" class="inputNumber" type="number">
+            </label>
+            <label for="setting Golden Carrots">
+                Golden Carrots:
+                <input id="setGoldenCarrot" class="inputNumber" type="number">
+            </label>
+            <label for="setting Bill's level">
+                Bill's Level:
+                <input id="setBillLvl" class="inputNumber" type="number">
+            </label>
+            <br>
+            <button onclick="updateValues()">Update Values</button>
+        </div>
     <!-- End Info section -->
-
-    <!-- Dev Tools -->
-    <div id="dev-panel" class="panel remove">
-        <h1>Developer Tools</h1>
-        <h4>Set Values</h4>
-        <label for="setting Carrots">
-            Carrots:
-            <input id="setCarrot" class="inputNumber" type="number">
-        </label>
-        <label for="setting Golden Carrots">
-            Golden Carrots:
-            <input id="setGoldenCarrot" class="inputNumber" type="number">
-        </label>
-        <label for="setting Bill's level">
-            Bill's Level:
-            <input id="setBillLvl" class="inputNumber" type="number">
-        </label>
-        <br>
-        <button onclick="updateValues()">Update Values</button>
-    </div>
-
-
   </div>
 <!-- #endregion -->
   
