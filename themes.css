@@ -218,6 +218,13 @@
 .theme_classic .Basic_Info {
     background-color: #4e3f34;
     background-image: url(./assets/Dirt-Background.jpg);
+    padding-left: 20px;
+}
+.theme_classic #main_icon {
+    visibility: hidden;
+}
+.theme_classic .hover_menu {
+    background-color: #4e3f34;
 }
 
 .theme_classic #left-section {
@@ -243,6 +250,10 @@
 .theme_classic #Greg_Bar {
     background-color: gray;
     border-radius: 0;
+}
+.theme_classic .footer_bottom {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 

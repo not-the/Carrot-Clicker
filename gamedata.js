@@ -101,7 +101,7 @@ const themes = {
         accent:   '#000000',
     },
     'theme_classic': {
-        name:     'Carrot Clicker classic',
+        name:     'Carrot Clicker Classic',
         image:    './assets/theme/theme_classic.png',
         desc:     'The original look of carrot clicker',
         cosmetic: false,
@@ -636,7 +636,7 @@ const achievements = {
         'desc': 'Earn enough carrots to get the attention of a blacksmith',
         'image': './assets/achievements/unlock_greg.png',
         'reward': 'character:greg',
-        'pages': 1,
+        'pages': false,
         'conditions': ['player.lifetime.carrots', 5000],
         'mystery': {
             'name': true,
@@ -651,7 +651,10 @@ const achievements = {
         'name': 'Prestigious',
         'desc': 'Prestige for the first time and attract the attention of the professor',
         'image': './assets/achievements/prestige_once.gif',
-        'reward': 'character:charles',
+        'reward': [
+            'character:charles',
+            'shop:theme/theme_bw',
+        ],
         'pages': 5,
         'conditions': ['player.lifetime.prestige_count', 1],
         'mystery': {
@@ -914,7 +917,10 @@ const achievements = {
         'name': 'Retirement Fund',
         'desc': 'Earn 401k carrots. I don\'t think you know what a 401k is.',
         'image': './assets/achievements/401k.png',
-        'reward': 'function:confetti()',
+        'reward': [
+            'shop:theme/theme_camo',
+            'function:confetti()',
+        ],
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 401000],
         'mystery': {
@@ -1237,7 +1243,7 @@ const achievements = {
         'image': false,
         'reward': 'cosmetic:farmable/pixel_carrot',
         'pages': 1,
-        'conditions': ['player.lifetime.clicks', 100000],
+        'conditions': ['player.lifetime.clicks', 10000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1352,7 +1358,7 @@ const achievements = {
         'desc': 'Click 9 times in one second',
         'image': './assets/achievements/12_clicks_per_second.png',
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['player.clickSpeedRecord', 9],
         'mystery': {
             'name': true,
@@ -1366,7 +1372,7 @@ const achievements = {
         'desc': 'Click 13 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['player.clickSpeedRecord', 13],
         'mystery': {
             'name': true,
@@ -1380,7 +1386,7 @@ const achievements = {
         'desc': 'Click 15 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
         'reward': 'cosmetic:farmable/cursor',
-        'pages': 2,
+        'pages': false,
         'conditions': ['player.clickSpeedRecord', 15],
         'mystery': {
             'name': true,
@@ -1412,6 +1418,36 @@ const achievements = {
         'reward': 'cosmetic:farmable/netherite_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    '50_percent_achievements': {
+        'name': 'Half Way There',
+        'desc': 'Reach 50% normal achievements unlocked',
+        'image': './assets/achievements/bronze_medal.gif',
+        'reward': 'function:confetti()',
+        'pages': 10,
+        'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 1))', 50],
+        // 'style': 'endgame',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'all_normal_achievements': {
+        'name': 'all_normal_achievements',
+        'desc': 'Unlock every non-challenge achievement',
+        'image': './assets/achievements/silver_medal.gif',
+        'reward': 'function:confetti()',
+        'pages': 10,
+        'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 3))', 100],
+        // 'style': 'endgame',
         'mystery': {
             'name': true,
             'desc': false,
@@ -1471,7 +1507,7 @@ const achievements = {
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
         'reward': 'function:confetti()',
-        'pages': 10,
+        'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',
         'mystery': {
@@ -1535,7 +1571,7 @@ const achievements = {
         'name': 'Early Playtester',
         'desc': 'Thanks for playtesting! Have a theme.',
         'image': false,
-        'reward': 'theme:theme_classic',
+        'reward': 'cash:32',
         'pages': false,
         'conditions': ['0', 1],
         'style': 'shine',
@@ -1550,4 +1586,5 @@ const achievements = {
 }
 const achievementsKeys = Object.keys(achievements);
 var hiddenAchievements = 0;
+var challengeAchievements = 0;
 //#endregion

@@ -368,7 +368,7 @@ function keybindHandler(event, state) {
         console.log('Pineapple Code entered');
         keyCombo = '';
         keyTrigger[3] = 1;
-        setCosmetic('pineapple');
+        setCosmetic('farmable', 'pineapple');
     }
 
     // Check if string is on track to be correct or not
@@ -698,6 +698,15 @@ function giveReward(reward) {
         console.log(rewardName.split('/'));
         unlock(rewardType, cosmetic, target);
     }
+    // Shop reward
+    else if(rewardType == 'shop') {
+        let [target, item] = rewardName.split('/');
+        unlock("shop_item", item, target);
+    }
+    // Cash reward
+    else if(rewardType == 'cash') {
+        earnCash(parseInt(rewardName), 'achievement');
+    }
     // Function reward
     else if(rewardType == 'function') {
         // Run specified function
@@ -777,6 +786,8 @@ function unlock(type, thingToUnlock, subtype) {
     // Theme
     if(type == 'theme') {
         player.themes.push(thingToUnlock);
+
+        newIndicator(true, 'theme');
         populateThemeList();
     }
     // Cosmetic
@@ -812,11 +823,11 @@ function unlock(type, thingToUnlock, subtype) {
             }
 
         }
-        
 
         player.cosmetics[subtype].push(thingToUnlock);
         populateCosmeticsList('all');
 
+        newIndicator(true, 'cosmetic');
         playerCosmeticsCount();
     }
     // Character
@@ -828,6 +839,66 @@ function unlock(type, thingToUnlock, subtype) {
         if(playerCharKeys.length == 5) {
             dom('more_chars_tooltip').classList.add('char_locked');
         }
+    }
+    // Carl shop item
+    else if(type == 'shop_item') {
+        Carl.shop[subtype][thingToUnlock].available = true;
+        console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
+        populateCarl();
+    }
+}
+
+// Shop
+function purchase(source, type, item, subtype) {
+    // Check if already unlocked or bought
+    if(isUnlocked(type, item, subtype) || Carl.shop[type][item].bought == true) {
+        console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
+        toast('Error', 'You already own this');
+
+        Carl.shop[type][item].bought = true;
+        populateCarl();
+        return;
+    }
+    console.log('purchase(): ' + type + ':' + item);
+
+    // let currency = Carl.shop[type][item].currency;
+    // let price;
+
+    let carlListing = Carl.shop[type][item];
+
+    // Carl shop
+    if(source == 'carl') {
+        // Check if Carl is unlocked (anticheat)
+        if(characterQuery('carl') == false) {
+            toast('Nice Try', 'Carl has not been unlocked');
+            return;
+        }
+        if(carlListing.available == false) {
+            toast('Nice Try', 'This item isn\'t available yet');
+            return;
+        }
+
+        // Currency: Cash
+        if(carlListing.currency == 'cash') {
+            // Buy
+            if(player.cash >= carlListing.price) {
+                player.cash -= carlListing.price;
+                Carl.shop[type][item].bought = true;
+                unlock(type, item, subtype);
+
+                cashCount();
+                populateCarl();
+                toast(`Item bought: ${item} (${type})`);
+            }
+            // Can't afford
+            else {
+                toast('Can\'t Afford', 'Carl wouldn\'t dare let this piece go for less than ${price}');
+            }
+        } else {
+            toast('other currency', 'other currencies aren\'t supported yet');
+        }
+
+
     }
 }
 
@@ -984,13 +1055,8 @@ function resetKeybinds() {
     toast('Settings', 'Keybinds set to defaults')
 }
 
-
-
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
-
-
-
 function onLoad() {
     console.log('Running onLoad()');
 
@@ -1217,6 +1283,9 @@ function onLoad() {
         if(achievement.mystery.list == true) {
             hiddenAchievements++;
         }
+        if(achievement.style == 'challenge') {
+            challengeAchievements++;
+        }
     }
 
     // Populate achievements if said tab is open
@@ -1226,7 +1295,7 @@ function onLoad() {
     achievementProgress();
 
     // URL hashes
-    if(location.hash == '#automute' || location.has == '#mute') {
+    if(location.hash == '#automute' || location.hash == '#mute') {
         elEnableSounds.checked = false;
         settingSounds();
     } else if(location.hash == '#cheatmode') {
@@ -1260,6 +1329,102 @@ function onLoad() {
         unlock('character', 'charles');
         unlock('character', 'carl');
     }
+    // else if(location.hash == '#cheatmode') {
+    //     console.log(`
+    //     allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     allCosmetics = () => {
+    //         for(let t = 0; t < cosmeticsKeys.length; t++) {
+    //             let key = cosmeticsKeys[t];
+    //             let target = cosmetics[key];
+        
+    //             // Loop through cosmetics
+    //             for(let c = 0; c < target['keys'].length; c++) {
+    //                 unlock('cosmetic', target.keys[c], key);
+    //             }
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;var allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     var allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     var allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     var allCosmetics = () => {
+    //         for(let i = 0; i < cosmeticsKeys.length; i++) {
+    //             unlock('cosmetic', cosmeticsKeys[i])
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;
+        
+    //     toast('Dev Tools enabled', false);`)
+    // }
     
 
 
@@ -1305,9 +1470,9 @@ function onLoad() {
 
     if(player.pages !== pagesIntended) {
         console.warn('Achievement page rewards have been changed');
-        toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been changed to reflect those changes ${player.pages} -> ${pagesIntended})`, 'orange', true);
+        toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes ${player.pages} -> ${pagesIntended})`, 'orange', true);
 
-        if(player.pages)
+        if(player.pages) // this doesn't break anything?
 
         player.pages = pagesIntended;
     }
@@ -1330,7 +1495,8 @@ function onLoad() {
     pagesCount();
     DisplayAllHoes();
     updateHoePrices();
-    updateMainIcon()
+    updateMainIcon();
+    populateCarl();
 
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();

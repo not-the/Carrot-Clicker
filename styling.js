@@ -211,9 +211,9 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
     if(!achievement) {
         toastElement.innerHTML =
         `<div class="toast background_${color}">
-            <h3>${title}</h3>
+            ${title == '' || title == false || title == undefined ? '' : `<h3>${title}</h3>`}
             <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-            <p>${desc}</p>
+            ${desc == '' || desc == false || desc == undefined ? '' : `<p>${desc}</p>`}
         </div>`;
     }
     // Achievement toast
@@ -470,7 +470,7 @@ function fallingCarrot() {
         };
     } else if(type == 'cash') {
         // Cash reward
-        // Between 200% and 600% of player's CPC
+        // Between 2 and 10
         let amount = Math.floor((Math.random() * 9)) + 2;
         element.onclick = () => {
             earnCash( amount, 'bonus' );
@@ -481,7 +481,7 @@ function fallingCarrot() {
 
 
     // Positioning
-    let randomX = Math.floor((Math.random() * 400));
+    let randomX = Math.floor((Math.random() * 324));
     element.style.left = randomX - 30 + "px";
 
     // To page
@@ -522,6 +522,7 @@ function themeSwitcher() {
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
 
+    newIndicator(false, 'theme');
     buttonSound();
 }
 function closeThemeSwitcher(noOverlay = false) {
@@ -538,6 +539,7 @@ function cosmeticSwitcher() {
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
 
+    newIndicator(false, 'cosmetic');
     buttonSound();
 }
 function closeCosmeticSwitcher(noOverlay = false) {
@@ -1094,7 +1096,7 @@ function populateAchievements() {
         } else {
             achievementHTML += /* htmla */
             `
-            <div id="${key}" class="achievement_item achievement_locked">
+            <div id="${key}" class="achievement_item achievement_locked" onclick="grantAchievement('${key}')">
                 <!-- Details -->
                 <div class="achievement_details flex">
                     <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
@@ -1377,6 +1379,75 @@ function closeKeybindsMenu(noOverlay = false) {
     elKeybindsMenu.classList.remove('visible');
     if(noOverlay == false) {
         overlay.classList.remove("visible"); 
+    }
+}
+
+
+// Populate Carls' shop
+const carlShop = dom('cosmetic_shop');
+function populateCarl() {
+    let html = '';
+    carlShopData = {};
+
+    // Loop through themes
+    for(let ti = 0; ti < Carl.shop.theme.keys.length; ti++) {
+        let name = Carl.shop.theme.keys[ti];
+        let item = Carl.shop.theme[name];
+        if(
+            item.available == false ||
+            item.bought == true
+        ) continue;
+
+        carlShopData[name] = item.price;
+
+        let theme = themes[Carl.shop.theme.keys[ti]];
+        let img = theme.image;
+
+        html += carlHTML(name, 'theme', theme.name, img, item.price);
+    }
+
+    if(html == '') {
+        carlShop.innerHTML = `
+        <p class="padding-5px secondary_text center">
+            That's all for now. Complete more achievements for more things to buy!
+        </p>`;
+    } else {
+        carlShop.innerHTML = html;
+    }
+    updateCarlsShop();
+}
+function carlHTML(internalName, type, name, img, price) {
+    return `
+    <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
+        <div class="flex">
+            <img src="${img}" alt="" class="shop_img">
+            <div class="info" style="margin-top: 4px;">
+                <b>${name}</b>
+                <p class="secondary_text">Theme</p>
+
+                <div class="shop_price">
+                    ₪${price}
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// Theme/cosmetic NEW indicator
+const carl_theme_button = dom('carl_theme_button');
+const carl_cosmetic_button = dom('carl_cosmetic_button');
+function newIndicator(state, type, item, subtype) {
+    let element = type == 'theme' ? carl_theme_button : carl_cosmetic_button;
+    let buttonName = type == 'theme' ? 'Themes' : 'Cosmetics';
+
+    if(state == true) {
+        element.innerHTML =
+        `${buttonName}
+        <div class="new_indicator">
+            NEW
+        </div>`;
+    } else {
+        element.innerHTML = buttonName;
     }
 }
 

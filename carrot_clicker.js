@@ -200,6 +200,12 @@ const player1 = {
         tomes_bought: 0,
     },
 
+    // Unlocked main buttons
+    main_buttons: {
+        prestige: false,
+        inventory: false,
+    },
+
     // Unlocked characters
     characters: {
         bill: true,
@@ -255,23 +261,53 @@ const Default_Charles = {
     }
 }
 const Default_Carl = {
-    prices: {
-        'theme:theme_classic': {
-            currency: 'golden_carrot',
-            amount: 1,
-            conditions: false,
-            available: true,
-            bought: false,
+    shop: {
+        theme: {
+            'theme_classic': {
+                currency: 'cash',
+                price: 24,
+                available: true,
+                bought: false,
+            },
+            'theme_camo': {
+                currency: 'cash',
+                price: 10,
+                available: true,
+                bought: false,
+            },
+            'theme_bw': {
+                currency: 'cash',
+                price: 40,
+                available: true,
+                bought: false,
+            },
+            'theme_red': {
+                currency: 'cash',
+                price: 24,
+                available: true,
+                bought: false,
+            },
+            'theme_green': {
+                currency: 'cash',
+                price: 10,
+                available: true,
+                bought: false,
+            },
+            'theme_blue': {
+                currency: 'cash',
+                price: 40,
+                available: true,
+                bought: false,
+            },
         },
-        'theme:theme_camo': {
-            currency: 'golden_carrot',
-            amount: 2,
-            conditions: false,
-            available: true,
-            bought: false,
-        },
+        cosmetic: {
+            
+        }
+
     },
 }
+Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
+Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
 
 //Asigns the Local storage
 var player;
@@ -470,6 +506,8 @@ function earnCarrots(amount, type) {
 function earnCash(amount, type) {
     if(type == 'bonus') {
         popupHandler(true, amount, 'cash');
+    } else {
+        popupHandler(false, amount, 'cash');
     }
 
     player.cash += amount;
@@ -500,6 +538,7 @@ function earnCash(amount, type) {
     // }
 
     cashCount();
+    updateCarlsShop();
 }
 
 //On Carrots Click
@@ -609,6 +648,22 @@ function updateCharlesShop() {
     eInnerText(tomeCount.bh, `x${Charles.tome.betterHoes.value}`);
     eInnerText(tomeCount.dww, `x${Charles.tome.decreaseWages.value}`);
 }
+var carlShopData = {};
+function updateCarlsShop() {
+    let keys = Object.keys(carlShopData);
+    
+    for(let sd = 0; sd < keys.length; sd++) {
+        let id = `carl_shop_${keys[sd]}`;
+        let element = dom(id);
+        let price = carlShopData[keys[sd]];
+
+        if(player.cash >= price) {
+            element.classList.remove('cant_afford');
+        } else {
+            element.classList.add('cant_afford');
+        }
+    }
+}
 function showPrestigeStats() {
     elPrestigeStats.classList.add('unremove');
 }
@@ -618,10 +673,23 @@ function pagesCount() {
 }
 const elMainIcon = dom('main_icon');
 function updateMainIcon() {
+    // Gold Medal
     if(achieveQuery('all_achievements')) {
         elMainIcon.src = './assets/medal_spin.gif';
         elMainIcon.title = '100% Completion';
-    } else if(achieveQuery('1_prestige')) {
+    }
+    // Silver Medal
+    else if(achieveQuery('all_normal_achievements')) {
+        elMainIcon.src = './assets/medal_silver_transparent.gif';
+        elMainIcon.title = 'All normal achievements complete';
+    }
+    // Bronze Medal
+    else if(achieveQuery('50_percent_achievements')) {
+        elMainIcon.src = './assets/medal_bronze_transparent.gif';
+        elMainIcon.title = '50% Completion';
+    }
+    // Golden Carrot
+    else if(achieveQuery('1_prestige')) {
         elMainIcon.src = './assets/theme/pixel_golden_carrot.png';
         elMainIcon.title = 'Prestiged';
     }
@@ -1305,6 +1373,8 @@ const statsNumbers = {
     lifetime_golden_carrots:     dom('lifetime_golden_carrots'),
     lifetime_golden_carrots_spent: dom('lifetime_golden_carrots_spent'),
     lifetime_prestige:           dom('lifetime_prestige'),
+    lifetime_cash:               dom('lifetime_cash'),
+    lifetime_cash_spent:               dom('lifetime_cash_spent'),
     lifetime_clicks:             dom('lifetime_clicks'),
     lifetime_falling_carrots_grabbed: dom('lifetime_falling_carrots_grabbed'),
     lifetime_hoes_crafted_total: dom('lifetime_hoes_crafted_total'),
@@ -1345,6 +1415,9 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_golden_carrots, numCommas(player.lifetime.golden_carrots));
     eInnerText(statsNumbers.lifetime_golden_carrots_spent, numCommas(player.lifetime.golden_carrots - player.golden_carrots));
     eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
+    
+    eInnerText(statsNumbers.lifetime_cash, numCommas(player.lifetime.cash));
+    eInnerText(statsNumbers.lifetime_cash_spent, numCommas(player.lifetime.cash - player.cash));
     eInnerText(statsNumbers.lifetime_clicks, numCommas(player.lifetime.clicks));
     eInnerText(statsNumbers.lifetime_falling_carrots_grabbed, numCommas(player.lifetime.falling_carrots_grabbed));
     eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);

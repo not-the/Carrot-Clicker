@@ -117,11 +117,11 @@
 
                 <!-- Grid/List -->
                 <select name="cosmetics_view" id="cosmetics_view" class="panel_select">
-                    <option value="list">
-                        List
-                    </option>
                     <option value="grid">
                         Grid
+                    </option>
+                    <option value="list">
+                        List
                     </option>
                 </select>
             </div>
@@ -415,22 +415,20 @@
                         <div>
                             <h6 class="prestige_number" id="prestige_menu_tp_count">Loading...</h6>
                             <p>Tome Pages</p>
-                            
                         </div>
                     </div>
                 </div>
 
                 <!-- Next prestige -->
                 <p class="prestigetooltip center half_width" style="padding-top: 6px;">
+                    <!-- Prestige button -->
+                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold full_width" title="Prestige">
+                        Prestige
+                    </button><br>
                     Prestiging now will result in:<br/>
                     <span id="prestige_potential">
                         0
-                    </span> Golden Carrots<br/>
-
-                    <!-- Prestige button -->
-                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold" title="Prestige">
-                        Prestige
-                    </button>
+                    </span> Golden Carrots
                 </p>
             </div>
 
@@ -730,12 +728,12 @@
             <div class="main_buttons flex">
                 <!-- Prestige button -->
                 <button onClick="openPrestigeMenu()" title="Prestige" class="prestige_button main_button_item" id="prestige_menu_button">
-                    <img src="./assets/icons/pixel_carrot_white.png" alt="Prestige" class="main_button_img">
+                    <img src="./assets/icons/pixel_carrot_white.png" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
                 </button>
 
                 <!-- Inventory button -->
                 <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
-                    <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img">
+                    <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
                 </button>
             </div>
             <div id="prestige-section" class="flex">
@@ -790,7 +788,7 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Level up">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
                         <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe">
@@ -846,7 +844,7 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Level up">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
                         <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe">
@@ -898,7 +896,7 @@
                     <div class="bottom secondary_text">
                         <div class="Greg_Hoe_Container hoecontainer">
                         <span class="hoe_price">Prices:</span>
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Upgrade">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Level up">
                         
                         <span id="wooden_hoe_price" class="hoe_price">Wooden</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Wooden_Hoe_Number">err</p>
@@ -966,8 +964,8 @@
                         tabindex="0">
                             <img src="./assets/characters/working_conditions.png" alt="" class="charles_icon">
                             <p>
-                                Improve working conditions:<br/>
-                                <span id="ImproveWorkingConditions">---</span>
+                                Improve working conditions<br/>
+                                <span id="ImproveWorkingConditions" class="tome_price">---</span>
                                 <span id="iwc_count" class="tome_count">x0</span>
                             </p>
                         </div>
@@ -979,8 +977,8 @@
                         tabindex="0">
                             <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
                             <p>
-                                Improve hoe costs:<br/>
-                                <span id="BetterHoes">---</span>
+                                Reduce hoe costs<br/>
+                                <span id="BetterHoes" class="tome_price">---</span>
                                 <span id="bh_count" class="tome_count">x0</span>
                             </p>
                         </div>
@@ -992,8 +990,8 @@
                         tabindex="0">
                             <img src="./assets/characters/decrease_wages.png" alt="" class="charles_icon">
                             <p>
-                                Decrease worker wages:<br/>
-                                <span id="DecreaseWages">---</span>
+                                Decrease worker wages<br/>
+                                <span id="DecreaseWages" class="tome_price">---</span>
                                 <span id="dww_count" class="tome_count">x0</span>
                             </p>
                         </div>
@@ -1022,45 +1020,53 @@
                             id="carl_avatar"
                             class="characterimg"
                             title="Carl">
-                        <div class="characterdesc">
-                            <b id="carl_name" class="underline">Carl</b>
-                            <p class="secondary_text">
-                                <!-- &gt; IN DEVELOPMENT &lt;<br> -->
-                                Purchase Cosmetics</p>
+                        <div class="characterdesc flex">
+                            <div>
+                                <b id="carl_name" class="underline">Carl</b>
+                                <!-- <p class="secondary_text"> -->
+                                    <!-- &gt; IN DEVELOPMENT &lt;<br> -->
+                                    <!-- Purchase Cosmetics
+                                </p> -->
+
+                                <div class="flex" style="margin-top: 2px;">
+                                    <button id="carl_theme_button" class="carl_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
+                                        Themes
+                                    </button>
+                                    <button id="carl_cosmetic_button" class="carl_button" onclick="cosmeticSwitcher()" style="width: 140px">
+                                        Cosmetics
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
+                                Custom
+                            </button> -->
                         </div>
                     </div>
 
                     <!-- Bottom -->
                     <div class="bottom" id="cosmetic_shop">
-                        <div class="flex">
-                            <!-- Themes -->
-                            <button id="carl_theme_button" class="half_width" onclick="themeSwitcher()">
-                                Themes
-                            </button>
-                            <button id="carl_cosmetic_button" class="half_width" onclick="cosmeticSwitcher()">
-                                Cosmetics
-                            </button>
-                            <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
-                                Custom
-                            </button> -->
-                        </div>
+                        <!-- <div class="flex">
+
+                        </div> -->
 
 
 
                         <!-- Shop item -->
-                        <div class="shop_item">
+                        <!-- <div id="carl_shop_theme_classic" class="shop_item" onclick="purchase('carl', 'theme', 'theme_classic')">
                             <div class="flex">
                                 <img src="./assets/theme/theme_classic.png" alt="" class="shop_img">
                                 <div class="info">
                                     <b class="underline">Carrot Clicker Classic</b>
                                     <p class="secondary_text">Theme</p>
+
+                                    <div class="shop_price">
+                                        ₪10
+                                    </div>
                                 </div>
                             </div>
-                            <div class="shop_price">
-                                1 Golden Carrot
-                            </div>
-                        </div>
-                        <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p>
+                        </div> -->
+                        <!-- <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p> -->
 
 
                     </div>
@@ -1193,6 +1199,9 @@
                     Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
                     Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
                     Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
+
+                    Cash earned: <b id="lifetime_cash">---</b><br>
+                    Cash spent: <b id="lifetime_cash_spent">---</b><br>
                     Total Clicks: <b id="lifetime_clicks">---</b><br/>
                     Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
                     <details class="stat_collapse">
@@ -1223,6 +1232,9 @@
         <div id="settings-panel" class="panel remove">
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
+
+            <!-- Dev panel -->
+            <div id="dev"></div>
 
             <!-- Themes -->
             <label for="theme_dropdown">

@@ -1,6 +1,31 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.0
+    12-28-2021
+// ----------------------------------------------------------- //
+
+Carl has learned to draw and is no longer useless
+
+- Removed page rewards from some achievements so that you get less early game
+- Fixed the "Clicker Hero" achievement incorrectly being 100,000 instead of 10,000
+- Fixed falling carrots not fully falling out of the container (since it's bigger now)
+- Support for descriptionless and/or titleless toasts
+- Condensed Carl's card a little bit
+- Carl's shop is now mostly functional. Save data needs to be deleted for him to work. Adding a theme to his shop is now possible via achievements
+- Support for cash rewards from achievements
+- You can now see how much cash you have earned & spent in statistics
+- Some changes to the classic theme to make it more consistent/accurate
+- Reduced the size of the main carrot (and in turn its container) so that it and the character boxes match the width of the tri-panel
+- Fixed 6 items no longer fitting in a row within the cosmetics switcher
+- Fixed the pineapple easter egg not working
+- Fixed certain button icons (Change Theme button in settings) not being visible on hover (if they need to be inverted by default)
+- Tri-panel button icons are now hidden on smaller screens
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.8.7
-    12-21-2021
+    12-23-2021
 // ----------------------------------------------------------- //
 
 - Renamed the "iconography" folder to simply "icons"
