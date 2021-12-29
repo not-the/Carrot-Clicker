@@ -1328,6 +1328,11 @@ function onLoad() {
         unlock('character', 'greg');
         unlock('character', 'charles');
         unlock('character', 'carl');
+    }else if(location.hash == '#dev' || location.hash == '#developer'){
+        //Places Dev Tools in the lower section tab list
+        document.documentElement.style.setProperty('--tab-percent', '25%');
+        document.getElementById("dev-panel-button").style.visibility = "visible";
+
     }
     // else if(location.hash == '#cheatmode') {
     //     console.log(`
