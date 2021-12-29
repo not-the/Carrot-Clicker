@@ -347,7 +347,9 @@ function saveGame() {
     localStorage.setObject("Charles", Charles);
     localStorage.setObject("Carl", Carl);
 }
-
+window.onbeforeunload = function(){
+    saveGame();
+ }
 // Autosave
 var autosave = 
 setInterval(() => {
@@ -405,7 +407,7 @@ const settings_default = {
     full_numbers: false,
 
     // Autosave (in seconds)
-    autosave_interval: 10,
+    autosave_interval: 10000000000,
 
     // UI
     theme: 'theme_dark',     // string
