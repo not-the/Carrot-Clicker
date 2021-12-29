@@ -367,6 +367,8 @@ function panelChange(to, noSound = false) {
         // Save
         store('openpanel', to);
         currentPanel = to;
+        
+
     }
 
     // Reset Statistics Panel
@@ -377,6 +379,11 @@ function panelChange(to, noSound = false) {
     // Update achievements list
     if(to == 'achievements-panel') {
         populateAchievements();
+    }
+    if(to == 'info-panel'){
+        statsInterval = setInterval(() => {loadStatistics()}, 1000);
+    }else{
+        clearInterval(statsInterval);
     }
 
     // Change container size

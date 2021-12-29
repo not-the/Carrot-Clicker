@@ -126,7 +126,6 @@ const tomeCount = {
 }
 //#endregion
 
-
 /*-------------Local Storage and Characters-------------*/
 //#region
 
@@ -353,9 +352,10 @@ function saveGame() {
 var autosave = 
 setInterval(() => {
     saveGame();
-}, 2000);
+}, 5000);
 //#endregion
 
+/*--------------Settings----------------*/
 
 /* Settings data */
 
@@ -405,7 +405,7 @@ const settings_default = {
     full_numbers: false,
 
     // Autosave (in seconds)
-    autosave_interval: 2,
+    autosave_interval: 10,
 
     // UI
     theme: 'theme_dark',     // string
@@ -440,6 +440,8 @@ if(localStorage.getObject("settings") != null) {
     resetSettings();
 }
 
+
+//#endregion
 
 /* ----------------------Functions------------------------*/
 //#region
@@ -1366,31 +1368,30 @@ const statsNumbers = {
     prestige_hoes_crafted_5:     dom('prestige_hoes_crafted_5'),
 
     // Lifetime
-    lifetime_carrots:            dom('lifetime_carrots'),
-    lifetime_carrots_clicked:    dom('lifetime_carrots_clicked'),
-    lifetime_carrots_idled:      dom('lifetime_carrots_idled'),
-    lifetime_carrots_bonus:      dom('lifetime_carrots_bonus'),
-    lifetime_golden_carrots:     dom('lifetime_golden_carrots'),
-    lifetime_golden_carrots_spent: dom('lifetime_golden_carrots_spent'),
-    lifetime_prestige:           dom('lifetime_prestige'),
-    lifetime_cash:               dom('lifetime_cash'),
-    lifetime_cash_spent:               dom('lifetime_cash_spent'),
-    lifetime_clicks:             dom('lifetime_clicks'),
+    lifetime_carrots:                 dom('lifetime_carrots'),
+    lifetime_carrots_clicked:         dom('lifetime_carrots_clicked'),
+    lifetime_carrots_idled:           dom('lifetime_carrots_idled'),
+    lifetime_carrots_bonus:           dom('lifetime_carrots_bonus'),
+    lifetime_golden_carrots:          dom('lifetime_golden_carrots'),
+    lifetime_golden_carrots_spent:    dom('lifetime_golden_carrots_spent'),
+    lifetime_prestige:                dom('lifetime_prestige'),
+    lifetime_cash:                    dom('lifetime_cash'),
+    lifetime_cash_spent:              dom('lifetime_cash_spent'),
+    lifetime_clicks:                  dom('lifetime_clicks'),
     lifetime_falling_carrots_grabbed: dom('lifetime_falling_carrots_grabbed'),
-    lifetime_hoes_crafted_total: dom('lifetime_hoes_crafted_total'),
-    lifetime_hoes_crafted_0:     dom('lifetime_hoes_crafted_0'),
-    lifetime_hoes_crafted_1:     dom('lifetime_hoes_crafted_1'),
-    lifetime_hoes_crafted_2:     dom('lifetime_hoes_crafted_2'),
-    lifetime_hoes_crafted_3:     dom('lifetime_hoes_crafted_3'),
-    lifetime_hoes_crafted_4:     dom('lifetime_hoes_crafted_4'),
-    lifetime_hoes_crafted_5:     dom('lifetime_hoes_crafted_5'),
-    lifetime_clickspeedrecord:   dom('lifetime_clickspeedrecord'),
-    stat_themes:                 dom('stat_themes'),
-    stat_cosmetics:              dom('stat_cosmetics'),
-    stat_achievements:           dom('stat_achievements'),
+    lifetime_hoes_crafted_total:      dom('lifetime_hoes_crafted_total'),
+    lifetime_hoes_crafted_0:          dom('lifetime_hoes_crafted_0'),
+    lifetime_hoes_crafted_1:          dom('lifetime_hoes_crafted_1'),
+    lifetime_hoes_crafted_2:          dom('lifetime_hoes_crafted_2'),
+    lifetime_hoes_crafted_3:          dom('lifetime_hoes_crafted_3'),
+    lifetime_hoes_crafted_4:          dom('lifetime_hoes_crafted_4'),
+    lifetime_hoes_crafted_5:          dom('lifetime_hoes_crafted_5'),
+    lifetime_clickspeedrecord:        dom('lifetime_clickspeedrecord'),
+    stat_themes:                      dom('stat_themes'),
+    stat_cosmetics:                   dom('stat_cosmetics'),
+    stat_achievements:                dom('stat_achievements'),
 }
 function loadStatistics() {
-    if(currentPanel !== "info-panel") return;
 
     // Prestige
     eInnerText(prestige_carrots, numCommas(player.prestige.carrots) );
@@ -1441,7 +1442,7 @@ function loadStatistics() {
 }
 
 // Refresh statistics
-setInterval(() => {loadStatistics()}, 1000);
+var statsInterval = setInterval(() => {loadStatistics()}, 1000);
 
 //Music
 // setInterval(()=>{
