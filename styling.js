@@ -1094,9 +1094,10 @@ function populateAchievements() {
             </div>
             `;
         } else {
+            // cheat: onclick="grantAchievement('${key}')"
             achievementHTML += /* htmla */
             `
-            <div id="${key}" class="achievement_item achievement_locked" onclick="grantAchievement('${key}')">
+            <div id="${key}" class="achievement_item achievement_locked" >
                 <!-- Details -->
                 <div class="achievement_details flex">
                     <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
