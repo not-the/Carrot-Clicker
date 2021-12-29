@@ -1525,7 +1525,17 @@ function tipchange() {
         }
     }
 }
+/*------Dev Tools---------*/
+var setCarrotsEl=dom("setCarrot");
+var setGoldenCarrotsEl=dom("setGoldenCarrot");
+var setBillLvlEl = dom("setBillLvl");
 
+function updateValues(){
+    if(parseInt(setCarrotsEl.value)>-0.01){player.Carrots=parseInt(setCarrotsEl.value)}
+    if(parseInt(setGoldenCarrotsEl.value)>-0.01){player.golden_carrots=parseInt(setGoldenCarrotsEl.value)}
+    if(parseInt(setBillLvlEl.value)>-0.01){Boomer_Bill.lvl=parseInt(setBillLvlEl.value)}
+    
+}
 
 
 //#endregion
