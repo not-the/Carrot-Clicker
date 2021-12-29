@@ -2,6 +2,17 @@
     VERSION dev beta 1.9.0.1
     12-28-2021
 // ----------------------------------------------------------- //
+-Spent 3 hours working through the HTML and CSS to add a hidden Developer Tools Tab
+-Got it to work with #Dev
+-Kal already made developer tools, didn't push them, commented them out when he did push them
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.0.1
+    12-28-2021
+// ----------------------------------------------------------- //
 
 - Accidentally left a debugging tool in (clicking a locked achievement unlocks it)
 
