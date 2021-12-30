@@ -347,14 +347,13 @@ function saveGame() {
     localStorage.setObject("Charles", Charles);
     localStorage.setObject("Carl", Carl);
 }
+let preventSaveGame=false;
 window.onbeforeunload = function(){
-    saveGame();
+    if(preventSaveGame==false){
+       saveGame(); 
+    }
  }
-// Autosave
-var autosave = 
-setInterval(() => {
-    saveGame();
-}, 5000);
+
 //#endregion
 
 /*--------------Settings----------------*/
@@ -406,8 +405,6 @@ const settings_default = {
 
     full_numbers: false,
 
-    // Autosave (in seconds)
-    autosave_interval: 10000000000,
 
     // UI
     theme: 'theme_dark',     // string
@@ -969,12 +966,12 @@ function HoeCost(type=0,amount=1,mode="query"){
     var p2 = 0;
     if(amount==1){
         if(mode=="apply"){
-            Gregory.HoePrices[type]+=(0.02*p);
+            Gregory.HoePrices[type]+=(0.01*p);
         }
         return p;
     }
     for(j=0;j<amount;j++){
-        p+=(0.019*p);
+        p+=(0.09*p);
         p2+=p;     
     }
 
@@ -1321,7 +1318,7 @@ function gameLoop() {
 
     //The Prestige Potential
     // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    player.prestige_potential = Math.floor( 5 * Math.pow(0.0000001 * player.prestige.carrots, 0.38) * (1 + (player.pages/100)) );
+    player.prestige_potential = Math.floor( 5 * Math.pow(0.0000001 * player.prestige.carrots, 0.37) * (1 + (player.pages/100)) );
     eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
     if(prestigeMenuOpen) {
         eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));

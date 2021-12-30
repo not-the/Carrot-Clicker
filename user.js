@@ -41,50 +41,6 @@ function setting(option) {
     settings[option] = state;
     saveSettings();
 }
-// Autosave interval
-// Intended to be universal but needs unique code so just leaving it as is
-dom('autosave_interval').addEventListener('input', () => { settingText('autosave_interval') });
-function settingText(option) {
-    let value = dom(option).value;
-    
-    if(value == '') return;
-
-    if(value >= 1 && value <= 60) {
-        console.log(`[Settings] Autosave interval set to: ${value}`);
-
-        settings.autosave_interval = value;
-        saveSettings();
-
-        toast("Autosave interval set", `Game will save every ${value} seconds`,
-        '', false, true);
-
-        // Update autosave variable
-        clearInterval(autosave);
-        autosave = setInterval(() => {
-            saveGame();
-        }, value * 1000);
-    } else {
-        toast("Invalid Number", "Must be between 1 and 60 seconds", "red", false, true);
-    }
-}
-function resetAutosave() {
-    let value = 2;
-
-    console.log(`[Settings] Autosave interval reset to: ${value}`);
-    dom('autosave_interval').value = value;
-
-    settings.autosave_interval = value;
-    saveSettings();
-
-    toast("Autosave interval reset", `Game will save every 2 seconds`,
-    '', false, true);
-
-    // Update autosave variable
-    clearInterval(autosave);
-    autosave = setInterval(() => {
-        saveGame();
-    }, value * 1000);
-}
 
 
 // Notification length
@@ -1157,15 +1113,6 @@ function onLoad() {
         notificationLength.value = parseInt(store("notificationLength"));
     }
 
-    // Autosave
-    // Update autosave variable
-    if(settings.autosave_interval != 2) {
-        dom('autosave_interval').value = settings.autosave_interval;
-        clearInterval(autosave);
-        autosave = setInterval(() => {
-            saveGame();
-        }, settings.autosave_interval * 1000);
-    }
 
 
     // Disable keybinds

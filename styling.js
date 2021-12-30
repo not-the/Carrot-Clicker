@@ -163,6 +163,7 @@ function closeDialog(doAction, backdrop = false) {
                 Prestige();
                 break;
             case 'clearsave':
+                preventSaveGame=true;
                 ClearLocalStorage();
                 break;
             case 'resetsettings':
