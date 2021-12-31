@@ -91,9 +91,9 @@
 
 /* Universal */
 * {box-sizing: border-box;}
-html {
+/* html {
     scroll-behavior: smooth;
-}
+} */
 body {
     margin: 0;
     padding: 0;
@@ -105,6 +105,9 @@ body {
 p {margin: 0;}
 a {color: rgb(137, 184, 255);}
 a:hover {filter: brightness(120%);}
+h4 {
+    margin: 10px 0 0 0;
+}
 
 .noscript {
     width: 100%;
@@ -161,7 +164,7 @@ img {
     image-rendering: pixelated !important;
 }
 
-
+/* Input */
 button {
     color: white;
     background-color: transparent;
@@ -211,6 +214,11 @@ select {
 select {
     cursor: pointer;
 }
+
+/* Fancy toggle */
+/* fancy toggle goes here */
+
+/* Shortcuts */
 .pointer {cursor: pointer;}
 .link_styling {
     text-decoration: none;
@@ -703,6 +711,8 @@ body:not(.theme_light) .theme_checkmark {
 
     opacity: 0;
     transition: opacity 0.2s;
+
+    pointer-events: none;
 }
 .cosmetics_grid .theme_item .theme_checkbox {
     position: absolute;
@@ -1462,6 +1472,11 @@ body:not(.theme_light) .theme_checkmark {
         opacity: 1;
     }
 }
+#more_chars_tooltip {
+    width: 372px;
+    max-width: 100%;
+}
+
 
 /* Greyed out/Blacked out/Glowing effects */
 .grayedout {
@@ -1529,7 +1544,7 @@ body:not(.theme_light) .theme_checkmark {
 
 
 /* Notifications section */
-#notifs-section {
+#tripane {
     max-width: 1150px;
     position: relative;
     width: 100%;
@@ -1545,12 +1560,12 @@ body:not(.theme_light) .theme_checkmark {
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
     border-radius: 16px 16px 0 0;
 }
-#notifs-section hr {
+#tripane hr {
     border: none;
     height: 1px;
     background-color: var(--brown-darkest-color);
 }
-#notifs-section nav {
+#tripane nav {
     margin: 0 auto;
     background-color: var(--brown-bg-color);
     border-radius: 16px 16px 0 0;
@@ -1559,7 +1574,7 @@ body:not(.theme_light) .theme_checkmark {
     z-index: 2;
     top: 36px;
 }
-#notifs-section nav .tab {
+#tripane nav .tab {
     width: var(--tab-percent);
     height: 2.3em;
     cursor: pointer;
@@ -1569,6 +1584,7 @@ body:not(.theme_light) .theme_checkmark {
     border-left: 1px solid var(--brown-darker-color);
     border-right: 1px solid var(--brown-darker-color);
     margin-top: 0;
+    margin-bottom: 0;
 
     position: relative;
 }
@@ -1577,7 +1593,7 @@ body:not(.theme_light) .theme_checkmark {
     box-shadow: none;
     color: unset;
 }
-#notifs-section nav .activetab {
+#tripane nav .activetab {
     background-color: var(--brown-bg-color);
     border: none;
     border-bottom: none;
@@ -1586,19 +1602,33 @@ body:not(.theme_light) .theme_checkmark {
 .inactivetab:hover {
     filter: brightness(120%)
 }
-#notifs-section nav .tab img {opacity: 0.6; transition: opacity 0.1s;}
-#notifs-section nav .activetab img {opacity: 1;}
+#tripane nav .tab img {opacity: 0.6; transition: opacity 0.1s;}
+#tripane nav .activetab img {opacity: 1;}
 .tab:hover img {opacity: 1 !important;}
 
-#notifs-section nav .tab:first-of-type {
+#tripane nav .tab:first-of-type {
     border-radius: 16px 0 0 0 !important;
 }
-#notifs-section nav .tab:last-of-type {
+#tripane nav .tab:nth-of-type(3) {
     border-radius: 0 16px 0 0 !important;
 }
-#dev-panel-button{
-    visibility:hidden;
+
+/* Dev button */
+#dev-panel-button {
+    visibility: hidden;
+    position: absolute !important;
+    background-color: var(--lighter-bg-color) !important;
+    filter: brightness(85%);
+    border-radius: 16px 16px 0 0 !important;
 }
+#dev-panel-button.activetab {
+    background-color: var(--lighter-bg-color) !important;
+    filter: none;
+}
+#dev-panel {
+    background-color: var(--lighter-bg-color);
+}
+
 /* Info panel */
 .panel {
     position: absolute;
@@ -1610,9 +1640,6 @@ body:not(.theme_light) .theme_checkmark {
     padding: 0px 24px 64px;
 }
 
-input[type="number"].inputNumber{
-    width: 100px;
-}
 /* .panel button {
     width: 200px;
 } */
@@ -1649,13 +1676,16 @@ input[type="number"].inputNumber{
 
 .achievement_item {
     width: 100%;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 0, 0, 0.45) inset;
+    margin-bottom: 8px;
+    box-shadow: /*0 2px 10px rgba(0, 0, 0, 0.3),*/ 0 0 16px rgba(0, 0, 0, 0.45) inset;
     background-color: var(--brown-darkest-color);
 
     border-radius: 20px;
     position: relative;
     /* overflow: hidden; */
+}
+.achievement_item:hover {
+    z-index: 2;
 }
 .style_challenge {
     border: 2px solid rgb(177, 44, 44) !important;
@@ -1692,9 +1722,11 @@ input[type="number"].inputNumber{
     background-color: rgb(61, 49, 61);
 }
 
+/* Achievement details */
 .achievement_item .achievement_img {
     height: 75px;
     width: 75px;
+
     margin-right: 16px;
     
     border-radius: 16px;
@@ -1702,29 +1734,43 @@ input[type="number"].inputNumber{
     transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
     transition-property: transform, margin, border-radius;
 }
+.compact .achievement_item .achievement_img,
+.toast.achievement_item .achievement_img {
+    height: 50px;
+    width: 50px;
+}
 .achievement_locked .achievement_img {
     opacity: 0.7;
     filter: saturate(0%);
 }
 .achievement_item:not(.achievement_locked):not(.toast) .achievement_img:hover {
-    transform: scale(1.8, 1.8) translateX(12px);
+    /* transform: scale(1.8, 1.8) translateX(12px); */
+    transform: scale(2.2, 2.2) translateX(10px);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
-    margin-right: 68px;
+    /* margin-right: 68px; */
+    margin-right: 64px;
     border-radius: 4px;
     /* position: absolute; */
 }
 .achievement_details {
-    padding: 8px;
+    padding: 7px;
     border-radius: 16px;
 
     position: relative;
     z-index: 1;
 }
 .achievement_details.has_reward {border-radius: 16px 16px 0 0;}
+
 .achievement_details h2 {
     margin: 6px 0 8px 0;
     font-size: 20pt;
 }
+.compact .achievement_details h2,
+.toast.achievement_item .achievement_details h2  {
+    margin: 0;
+    font-size: 18pt;
+}
+
 .achieve_pages {
     position: absolute;
     top: 16px;
@@ -1767,12 +1813,20 @@ input[type="number"].inputNumber{
     justify-content: center;
 }
 .achieve_grid .achievement_item {
-    width: 91px;
-    height: 91px;
+    width: 95px;
+    height: 95px;
     margin-right: 8px;
 }
-.achieve_grid .achievement_item:hover {
-    z-index: 100;
+.achieve_grid .achievement_item .reward {
+    display: none;
+}
+.achieve_grid.compact .achievement_item {
+    width: 64px;
+    height: 64px;
+    margin-right: 4px;
+}
+.achieve_grid.compact .achievement_item .achievement_details {
+    padding: 5px;
 }
 .achieve_grid .achievement_img:hover {
     transform: none !important;
@@ -1784,7 +1838,7 @@ input[type="number"].inputNumber{
     top: 0;
     background-color: rgba(0, 0, 0, 0.8);
     border: 2px solid gray;
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
 }
 .achieve_grid .achievement_item .achievement_details,
 .achieve_grid .rewards_list,
@@ -2061,11 +2115,11 @@ footer {
         background: black;
         backdrop-filter: none;
     }
-    #notifs-section {
+    #tripane {
         margin-bottom: 80px;
         border-radius: 16px;
     }
-    #notifs-section nav {
+    #tripane nav {
         top: 55px;
     }
     .rewards_list {
@@ -2087,7 +2141,7 @@ footer {
         width: 80px;
         height: 80px;
     }
-    #notifs-section .tab .button_icon {
+    #tripane .tab .button_icon {
         visibility: hidden;
         position: absolute;
     }
@@ -2103,7 +2157,7 @@ footer {
         border-right: none;
         border-left: none;
     }
-    #notifs-section .button_icon {
+    #tripane .button_icon {
         visibility: hidden;
         position: absolute;
     }

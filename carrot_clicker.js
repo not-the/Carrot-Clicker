@@ -124,6 +124,21 @@ const tomeCount = {
     bh:  dom('bh_count'),
     dww: dom('dww_count'),
 }
+
+// Settings elements
+const elFunTipsSlider = dom("FunTipsSlider");
+const elFunTipsSlider_label = dom("FunTipsSliderLabel");
+
+const elDisableKeybinds = dom('disable_keybinds');
+const elEnableSounds = dom('enable_sounds');
+const elEnableMusic = dom('enable_music');
+const elEnableCarrotSounds = dom('enable_carrot_sounds');
+
+const elVolumeMaster = dom('volume_master');
+const elVolumeMaster_label = dom('volume_master_percent');
+const volumeMasterDropdown = dom('volume_master_dropdown');
+const vmdImage = dom('volume_master_dropdown_img');
+const elEnableMainProgress = dom('enable_main_progress');
 //#endregion
 
 /*-------------Local Storage and Characters-------------*/
@@ -271,31 +286,31 @@ const Default_Carl = {
             'theme_camo': {
                 currency: 'cash',
                 price: 10,
-                available: true,
+                available: false,
                 bought: false,
             },
             'theme_bw': {
                 currency: 'cash',
                 price: 40,
-                available: true,
+                available: false,
                 bought: false,
             },
             'theme_red': {
                 currency: 'cash',
                 price: 24,
-                available: true,
+                available: false,
                 bought: false,
             },
             'theme_green': {
                 currency: 'cash',
                 price: 10,
-                available: true,
+                available: false,
                 bought: false,
             },
             'theme_blue': {
                 currency: 'cash',
                 price: 40,
-                available: true,
+                available: false,
                 bought: false,
             },
         },
@@ -348,7 +363,7 @@ function saveGame() {
     localStorage.setObject("Carl", Carl);
 }
 let preventSaveGame=false;
-window.onbeforeunload = function(){
+window.onbeforeunload = () => {
     if(preventSaveGame==false){
        saveGame(); 
     }
@@ -359,10 +374,41 @@ window.onbeforeunload = function(){
 /*--------------Settings----------------*/
 
 /* Settings data */
+// Disable individual sound options
+function optionSoundsDisable(state) {
+    // Carrot sounds
+    if(state == false) {
+        elEnableMusic.disabled = true;
+        elEnableCarrotSounds.disabled = true;
+        stopMusic();
+    } else {
+        elEnableMusic.disabled = false;
+        elEnableCarrotSounds.disabled = false;
+    }
+}
+// Fill out settings page options
+function fillSettingsPage() {
+    dom('full_numbers').checked = settings.full_numbers;
+    dom('compact_achievements').checked = settings.compact_achievements;
+    dom('achievements_grid').checked = settings.achievements_grid;
+    elEnableMainProgress.checked = settings.enableMainProgress;
+    elEnableSounds.checked = settings.enableSounds;
+    optionSoundsDisable(settings.enableSounds);
+    elVolumeMaster.value = settings.master_volume * 100;
+    elEnableMusic.checked = settings.enableMusic;
+    elEnableCarrotSounds.checked = settings.enableCarrotSounds;
+    eInnerText(elVolumeMaster_label, `${settings.master_volume * 100}%`);
+    volume = settings.master_volume;
+
+    console.log("fillSettingsPage()");
+}
 
 function saveSettings() { localStorage.setObject("settings", settings); }
 function resetSettings(dialog = false) {
     settings = settings_default;
+    saveSettings();
+    fillSettingsPage();
+
     if(!dialog) return;
     toast('Settings Reset', 'All settings returned to defaults');
 }
@@ -418,6 +464,8 @@ const settings_default = {
     },
     openpanel: null,            // string
     cosmetics_grid: true,
+    achievements_grid: false,
+    compact_achievements: false,
 
     keybinds: keybinds_default, // object
 }
@@ -439,6 +487,12 @@ if(localStorage.getObject("settings") != null) {
     resetSettings();
 }
 
+
+// Clear localStorage
+function clearSave() {
+    preventSaveGame = true;
+    ClearLocalStorage();
+}
 
 //#endregion
 
@@ -467,9 +521,9 @@ var clickSpeedBest = 0;
 var clickArray = [];
 
 // Earn carrots function
-function earnCarrots(amount, type) {
+function earnCarrots(amount, type, useMousePos = false) {
     if(type == 'bonus') {
-        popupHandler(true, amount);
+        popupHandler(useMousePos, amount);
     }
 
     player.Carrots += amount;
@@ -701,6 +755,7 @@ function updatePrestigeMenu() {
     eInnerText(elPrestigeMenuGCCount, numCommas(player.golden_carrots));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
 }
+
 
 // Click speed handler
 setInterval(() => {
@@ -1441,7 +1496,7 @@ function loadStatistics() {
 }
 
 // Refresh statistics
-var statsInterval = setInterval(() => {loadStatistics()}, 1000);
+var statsInterval;
 
 //Music
 // setInterval(()=>{
@@ -1526,16 +1581,10 @@ function tipchange() {
     }
 }
 /*------Dev Tools---------*/
-var setCarrotsEl=dom("setCarrot");
-var setGoldenCarrotsEl=dom("setGoldenCarrot");
-var setBillLvlEl = dom("setBillLvl");
+var setCarrotsEl;
+var setGoldenCarrotsEl;
+var setBillLvlEl;
 
-function updateValues(){
-    if(parseInt(setCarrotsEl.value)>-0.01){player.Carrots=parseInt(setCarrotsEl.value)}
-    if(parseInt(setGoldenCarrotsEl.value)>-0.01){player.golden_carrots=parseInt(setGoldenCarrotsEl.value)}
-    if(parseInt(setBillLvlEl.value)>-0.01){Boomer_Bill.lvl=parseInt(setBillLvlEl.value)}
-    
-}
 
 
 //#endregion

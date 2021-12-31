@@ -25,6 +25,8 @@ var keybindsMenuOpen =      false;
 var prestigeMenuOpen =      false;
 var inventoryOpen =         false;
 
+var achieveHTMLupdate =     true;
+
 // Dialog button action
 var dialogButtonAction = 'none';
 
@@ -163,11 +165,13 @@ function closeDialog(doAction, backdrop = false) {
                 Prestige();
                 break;
             case 'clearsave':
-                preventSaveGame=true;
-                ClearLocalStorage();
+                clearSave();
                 break;
             case 'resetsettings':
                 resetSettings(true);
+                break;
+            case 'jjcvip':
+                earnCarrots(1, 'bonus');
                 break;
             default:
                 console.log('Dialog action not listed');
@@ -241,7 +245,7 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
                 <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
                 <div>
                     <h2>${achieve.name}</h2>
-                    <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? ` (+${achieve.pages} pages)` : ''}</p>
+                    <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? `\n (+${achieve.pages} pages)` : ''}</p>
                 </div>
             </div>
             ${rewardHTMLstring}
@@ -325,17 +329,17 @@ function clearToasts() {
 //#region 
 var currentPanel = "achievements-panel";
 // Tab Panels
-const tripane           = dom('notifs-section');
-const infoPanel         = dom("info-panel");
+const tripane           = dom('tripane');
+const infoPanel         = dom("stats-panel");
 const achievementsPanel = dom("achievements-panel");
 const settingsPanel     = dom("settings-panel");
-const devPanel          = dom("dev-panel");
+// const devPanel          = dom("dev-panel");
 
 // Tab Buttons
-const infoTab         = dom("info-panel-button");
+const infoTab         = dom("stats-panel-button");
 const achievementsTab = dom("achievements-panel-button");
 const settingsTab     = dom("settings-panel-button");
-const devTab          = dom("dev-panel-button");
+// const devTab          = dom("dev-panel-button");
 // const panelReset = "visibility: hidden; position: absolute; transform: translateY(-100%)";
 
 // Change panel
@@ -350,7 +354,7 @@ function panelChange(to, noSound = false) {
         infoTab.classList.remove("activetab");
         achievementsTab.classList.remove("activetab");
         settingsTab.classList.remove("activetab");
-        devTab.classList.remove("activetab");
+        // devTab.classList.remove("activetab");
 
         
 
@@ -358,7 +362,7 @@ function panelChange(to, noSound = false) {
         infoPanel.classList.remove('unremove');
         achievementsPanel.classList.remove('unremove');
         settingsPanel.classList.remove('unremove');
-        devPanel.classList.remove('unremove')
+        // devPanel.classList.remove('unremove')
 
         // Unhide selected panel
         dom(to + "-button").classList.add("activetab");
@@ -366,24 +370,23 @@ function panelChange(to, noSound = false) {
         dom(to).classList.add('unremove');
         
         // Save
-        store('openpanel', to);
+        settings.openpanel = to;
+        saveSettings();
         currentPanel = to;
-        
-
     }
 
     // Reset Statistics Panel
-    // if(to !== "info-panel") {
+    // if(to !== "stats-panel") {
     //     elStatistics.innerHTML = statLoading;
     // }
 
     // Update achievements list
-    if(to == 'achievements-panel') {
+    if(to == 'achievements-panel' && achieveHTMLupdate == true) {
         populateAchievements();
     }
-    if(to == 'info-panel'){
+    if(to == 'stats-panel'){
         statsInterval = setInterval(() => {loadStatistics()}, 1000);
-    }else{
+    } else {
         clearInterval(statsInterval);
     }
 
@@ -910,6 +913,10 @@ function cosmeticSwitcherCheckmark(target, to, from = false) {
 const elAchievementsList = dom('achievements_list');
 const elAchievementFilter = dom('achievement_filter');
 function populateAchievements() {
+    // Don't populate if not needed
+    if(achieveHTMLupdate == false) {return;}
+    else {achieveHTMLupdate = false;}
+    
     var achievementHTML = '';
     var rewardHTML = '';
 
@@ -1145,7 +1152,7 @@ function populateAchievements() {
     };
 
     elAchievementsList.innerHTML = achievementHTML;
-    // eInnerHTML(elAchievementsList, achievementHTML);
+    // eInnerHTML(elAchievementsList, achievementHTML); // doesn't work
 }
 
 function rewardHTML(achieve) {
@@ -1295,7 +1302,10 @@ function achievementProgress() {
 }
 
 // Filter achievements on dropdown change
-elAchievementFilter.addEventListener('change', () => {populateAchievements()});
+elAchievementFilter.addEventListener('change', () => {
+    achieveHTMLupdate = true;
+    populateAchievements();
+});
 
 var currentTheme;
 // Set theme
@@ -1463,11 +1473,26 @@ function newIndicator(state, type, item, subtype) {
     }
 }
 
+// Achievement list CSS modes
+function achieveCompactMode(state) {
+    if(state == true) {
+        elAchievementsList.classList.add('compact');
+    } else {
+        elAchievementsList.classList.remove('compact');
+    }
+}
+function achieveGridMode(state) {
+    if(state == true) {
+        elAchievementsList.classList.add('achieve_grid');
+    } else {
+        elAchievementsList.classList.remove('achieve_grid');
+    }
+}
 
 // Title changer
 // setInterval(() => {
 //     dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.Carrots)} carrots`;
-// }, 15000);
+// }, 2000);
 
 
 

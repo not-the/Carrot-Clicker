@@ -5,21 +5,7 @@ Users settings, keybind handling, and tutorial handling
 /*---------------OPTIONS-------------------*/
 
 // Page variables
-const elFunTipsSlider = dom("FunTipsSlider");
-const elFunTipsSlider_label = dom("FunTipsSliderLabel");
 
-const elDisableKeybinds = dom('disable_keybinds');
-const elEnableSounds = dom('enable_sounds');
-const elEnableMusic = dom('enable_music');
-const elEnableCarrotSounds = dom('enable_carrot_sounds');
-
-const elVolumeMaster = dom('volume_master');
-const elVolumeMaster_label = dom('volume_master_percent');
-const volumeMasterDropdown = dom('volume_master_dropdown');
-const vmdImage = dom('volume_master_dropdown_img');
-
-// Percentage of fun tips
-// JJ's Slider stuffs (ripping off w3 again)
 
 // Update the current slider value (each time you drag the slider handle)
 elFunTipsSlider.oninput = () => {
@@ -40,6 +26,12 @@ function setting(option) {
 
     settings[option] = state;
     saveSettings();
+
+    if(option == 'compact_achievements') {
+        achieveCompactMode(state);
+    } else if(option == 'achievements_grid') {
+        achieveGridMode(state);
+    }
 }
 
 
@@ -73,17 +65,13 @@ function settingDisableKeybinds() {
     '', false, true);
 
     // localStorage
-    if(state == true) {
-        store('disableKeybinds', 'true');
-    } else {
-        store('disableKeybinds', 'false');
-    }
+    settings.disableKeybinds = state;
+    saveSettings();
 }
 
 // Interface settings
 
 // Main progress bar
-const elEnableMainProgress = dom('enable_main_progress');
 function settingMainProgress() {
     let state = elEnableMainProgress.checked;
     console.log(`enableMainProgress set to ${state}`);
@@ -91,11 +79,8 @@ function settingMainProgress() {
     '', false, true);
 
     // localStorage
-    if(state == true) {
-        store('enableMainProgress', 'true');
-    } else {
-        store('enableMainProgress', 'false');
-    }
+    settings.enableMainProgress = state;
+    saveSettings();
 
     elMainProgressContainer.classList.remove('status_tidbit_in');
 }
@@ -109,28 +94,13 @@ function settingSounds() {
     '', false, true);
 
     // localStorage
-    if(state == true) {
-        store('enableSounds', 'true');
-    } else {
-        store('enableSounds', 'false');
-    }
+    settings.enableSounds = state;
+    saveSettings();
 
     optionSoundsDisable(state);
     settingMusic(true);
 }
 
-// Disable individual sound options
-function optionSoundsDisable(state) {
-    // Carrot sounds
-    if(state == false) {
-        elEnableMusic.disabled = true;
-        elEnableCarrotSounds.disabled = true;
-        stopMusic();
-    } else {
-        elEnableMusic.disabled = false;
-        elEnableCarrotSounds.disabled = false;
-    }
-}
 
 function settingMusic(noToast = false) {
     let state = elEnableMusic.checked;
@@ -141,11 +111,13 @@ function settingMusic(noToast = false) {
     }
 
     // localStorage
+    settings.enableMusic = state;
+    saveSettings();
+
+    // Start/Stop
     if(state == true) {
-        store('enableMusic', 'true');
         playMusic();
     } else {
-        store('enableMusic', 'false');
         stopMusic();
     }
 }
@@ -158,11 +130,8 @@ function settingCarrotSounds() {
     '', false, true);
 
     // localStorage
-    if(state == true) {
-        store('enableCarrotSounds', 'true');
-    } else {
-        store('enableCarrotSounds', 'false');
-    }
+    settings.enableCarrotSounds = state;
+    saveSettings();
 }
 
 // Volume slider
@@ -199,7 +168,9 @@ function volumeSliderHandler(v) {
     // Update percentage
     eInnerText(elVolumeMaster_label, value > 0 ? `${value}%` : 'OFF');
 
-    store('master_volume', value / 100);
+    settings.master_volume = value / 100;
+    saveSettings();
+
     // Set modifier
     // tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
 }
@@ -256,10 +227,9 @@ document.addEventListener('keyup', event => {
 });
 
 
-/*-----------------------Keybinds-------------------*/
+/*---------------------Keybinds---------------------*/
 //#region
 
-var keyTrigger = [0, 0, 0, 0]; // Variable achievement(s) test for
 var keyCombo = '';
 const keyCodes = [
     'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight B A Enter ',
@@ -267,6 +237,9 @@ const keyCodes = [
     'J J C V I P ',
     'P I N E A P P L E ',
 ];
+// Variable achievement(s) test for
+var keyTrigger = []; 
+
 function keybindHandler(event, state) {
     let key = interpretKey(event.key);
 
@@ -285,9 +258,9 @@ function keybindHandler(event, state) {
         return;
     }
 
-    // Stop if keybinds are being ignored
+    // Stop if keybinds need to be ignored
     if(
-        store("disableKeybinds") == "true"
+        settings.disableKeybinds == "true"
         || dialogOpen == true
         || document.activeElement.nodeName == 'TEXTAREA'
         || document.activeElement.nodeName == 'INPUT'
@@ -298,34 +271,34 @@ function keybindHandler(event, state) {
     keyCombo += key + ' ';
     // Keyboard combos //
     //#region 
-    // Konami Code
-    if(keyCombo == keyCodes[0]) {
-        console.log('Konami Code entered');
-        keyCombo = '';
-        keyTrigger[0] = 1;
-        confetti();
+    for(let ci = 0; ci < keyCodes.length; ci++) {
+        if(keyCombo == keyCodes[ci]) {
+            keyComboHandler(ci);
+        }
     }
-    // gaming
-    else if(keyCombo == keyCodes[1]) {
-        console.log('gaming Code entered');
-        keyCombo = '';
-        keyTrigger[1] = 1;
-        setTheme('theme_retro');
-    }
-    // JJCVIP
-    else if(keyCombo == keyCodes[2]) {
-        console.log('JJ Code entered');
-        keyCombo = '';
-        keyTrigger[2] = 1;
-        openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'hello');
-    }
-    // Pineapple
-    else if(keyCombo == keyCodes[3]) {
+
+    function keyComboHandler(combo) {
         console.log('Pineapple Code entered');
         keyCombo = '';
-        keyTrigger[3] = 1;
-        setCosmetic('farmable', 'pineapple');
+        keyTrigger[combo] = true;
+
+        // Reward
+        switch(combo) {
+            case 0:
+                confetti();
+                break;
+            case 1:
+                setTheme('theme_retro');
+                break;
+            case 2:
+                openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip');
+                break;
+            case 3:
+                setCosmetic('farmable', 'pineapple');
+                break;
+        }
     }
+    //#endregion
 
     // Check if string is on track to be correct or not
     for(i = 0; i < keyCombo.length; i++) {
@@ -347,7 +320,7 @@ function keybindHandler(event, state) {
 
     
     // End function if keybinds are disabled, a dialog box is open, or an input field is focused
-    if(store("disableKeybinds") == "true" || dialogOpen == true || document.activeElement.id == 'notificationLength') return;
+    if(settings.disableKeybinds == "true" || dialogOpen == true || document.activeElement.id == 'notificationLength') return;
 
     // if(state != 'keyup') return;
 
@@ -721,6 +694,7 @@ function grantAchievement(key) {
     }
 
     // Update achievement list
+    achieveHTMLupdate = true;
     if(currentPanel == "achievements-panel") {
         populateAchievements();
     }
@@ -1011,6 +985,8 @@ function resetKeybinds() {
     toast('Settings', 'Keybinds set to defaults')
 }
 
+
+
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
 function onLoad() {
@@ -1116,78 +1092,16 @@ function onLoad() {
 
 
     // Disable keybinds
-    if(store("disableKeybinds") == null) {
-        store("disableKeybinds", "false");
-    } else {
-        if(store("disableKeybinds") == "false") {
-            elDisableKeybinds.checked = false;
-        } else {
-            elDisableKeybinds.checked = true;
-        }
+    if(settings.disableKeybinds != settings_default.disableKeybinds) {
+        elDisableKeybinds.checked = settings.disableKeybinds;
     }
 
-    // Full numbers
-    dom('full_numbers').checked = settings.full_numbers;
+    // Fill out settings page from settings object
+    fillSettingsPage();
 
-    // Main progress bar
-    if(store('enableMainProgress') == null) {
-        console.log('enableMainProgress not found in localStorage, creating...')
-        store('enableMainProgress', 'true');
-    } else {
-        console.log('enableMainProgress: ' + store("enableMainProgress"));
-        if(store("enableMainProgress") == "true") {
-            elEnableMainProgress.checked = true;
-        } else {
-            elEnableMainProgress.checked = false;
-        }
-    }
-
-    // Enable Sounds
-    if(store('enableSounds') == null) {
-        console.log('enableSounds not found in localStorage, creating...')
-        store('enableSounds', 'true');
-    } else {
-        console.log('enableSounds: ' + store("enableSounds"));
-        if(store("enableSounds") == "true") {
-            elEnableSounds.checked = true;
-        } else {
-            elEnableSounds.checked = false;
-        }
-    }
-
-    // Moved to bottom as a test
-
-    // Volume slider
-    if(store('master_volume') !== null) {
-        elVolumeMaster.value = store('master_volume') * 100;
-        eInnerText(elVolumeMaster_label, `${store('master_volume') * 100}%`);
-        volume = store('master_volume');
-    }
-
-    // Enable Music
-    if(store('enableMusic') == null) {
-        console.log('enableMusic not found in localStorage, creating...')
-        store('enableMusic', 'false');
-    } else {
-        console.log('enableMusic: ' + store("enableMusic"));
-        if(store("enableMusic") == "true") {
-            elEnableMusic.checked = true;
-        } else {
-            elEnableMusic.checked = false;
-        }
-    }
-    // Enable Carrot Sounds
-    if(store('enableCarrotSounds') == null) {
-        console.log('enableCarrotSounds not found in localStorage, creating...')
-        store('enableCarrotSounds', 'true');
-    } else {
-        console.log('enableCarrotSounds: ' + store("enableCarrotSounds"));
-        if(store("enableCarrotSounds") == "true") {
-            elEnableCarrotSounds.checked = true;
-        } else {
-            elEnableCarrotSounds.checked = false;
-        }
-    }
+    // Achievement list CSS
+    achieveCompactMode(settings.compact_achievements);
+    achieveGridMode(settings.achievements_grid);
 
     // Theme Switcher
     populateThemeList();
@@ -1208,9 +1122,9 @@ function onLoad() {
         setCosmetic(cosmeticsKeys[i], settings.cosmetics[ cosmeticsKeys[i] ]);
     }
     // Switch to previously open panel on page load
-    if(store('openpanel') != null) {
-        console.log('openpanel found, switching to: ' + store('openpanel'));
-        panelChange(store('openpanel'), true);
+    if(settings.openpanel != null) {
+        console.log('openpanel found, switching to: ' + settings.openpanel);
+        panelChange(settings.openpanel, true);
     } else {
         panelChange('achievements-panel');
     }
@@ -1245,138 +1159,180 @@ function onLoad() {
     if(location.hash == '#automute' || location.hash == '#mute') {
         elEnableSounds.checked = false;
         settingSounds();
-    } else if(location.hash == '#cheatmode') {
-        // Achievements
-        for(let i = 0; i < achievementsKeys.length; i++) {
-           grantAchievement(achievementsKeys[i])
-        }
+    } // else if(location.hash == '#cheatmode') {
+    //     // Achievements
+    //     for(let i = 0; i < achievementsKeys.length; i++) {
+    //        grantAchievement(achievementsKeys[i])
+    //     }
 
-        // Themes
-        for(let i = 0; i < themesKeys.length; i++) {
-            unlock('theme', themesKeys[i])
-        }
+    //     // Themes
+    //     for(let i = 0; i < themesKeys.length; i++) {
+    //         unlock('theme', themesKeys[i])
+    //     }
 
-        // Cosmetics
-        // for(let i = 0; i < cosmeticsKeys.length; i++) {
-        //     unlock('cosmetic', cosmeticsKeys[i])
-        // }
-        for(let t = 0; t < cosmeticsKeys.length; t++) {
-            let key = cosmeticsKeys[t];
-            let target = cosmetics[key];
+    //     // Cosmetics
+    //     // for(let i = 0; i < cosmeticsKeys.length; i++) {
+    //     //     unlock('cosmetic', cosmeticsKeys[i])
+    //     // }
+    //     for(let t = 0; t < cosmeticsKeys.length; t++) {
+    //         let key = cosmeticsKeys[t];
+    //         let target = cosmetics[key];
 
-            // Loop through cosmetics
-            for(let c = 0; c < target['keys'].length; c++) {
-                unlock('cosmetic', target.keys[c], key);
-            }
-        }
+    //         // Loop through cosmetics
+    //         for(let c = 0; c < target['keys'].length; c++) {
+    //             unlock('cosmetic', target.keys[c], key);
+    //         }
+    //     }
 
-        // Characters
-        unlock('character', 'belle');
-        unlock('character', 'greg');
-        unlock('character', 'charles');
-        unlock('character', 'carl');
-    }else if(location.hash == '#dev' || location.hash == '#developer'){
-        //Places Dev Tools in the lower section tab list
-        document.documentElement.style.setProperty('--tab-percent', '25%');
-        document.getElementById("dev-panel-button").style.visibility = "visible";
-
-    }
-    // else if(location.hash == '#cheatmode') {
-    //     console.log(`
-    //     allCharacters = () => {
-    //         unlock('character', 'belle');
-    //         unlock('character', 'greg');
-    //         unlock('character', 'charles');
-    //         unlock('character', 'carl');
-    //         toast('All Characters now available', 'Dev tools');
-    //     }
-    //     allAchievements = () => {
-    //         for(let i = 0; i < achievementsKeys.length; i++) {
-    //            grantAchievement(achievementsKeys[i])
-    //         }
-    //         toast('All Achievements now visible', 'Dev tools');
-    //     }
-    //     allThemes = () => {
-    //         for(let i = 0; i < themesKeys.length; i++) {
-    //             unlock('theme', themesKeys[i])
-    //         }
-    //         toast('All Themes now available', 'Dev tools');
-    //     }
-    //     allCosmetics = () => {
-    //         for(let t = 0; t < cosmeticsKeys.length; t++) {
-    //             let key = cosmeticsKeys[t];
-    //             let target = cosmetics[key];
-        
-    //             // Loop through cosmetics
-    //             for(let c = 0; c < target['keys'].length; c++) {
-    //                 unlock('cosmetic', target.keys[c], key);
-    //             }
-    //         }
-    //         toast('All Cosmetics now available', 'Dev tools');
-    //     }
-        
-    //     $('#dev').innerHTML =
-    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
-    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-    //         Unlock all:
-    //         <button onclick="allCharacters()">
-    //             Characters
-    //         </button>
-    //         <button onclick="allAchievements()">
-    //             Achievements
-    //         </button>
-    //         <button onclick="allThemes()">
-    //             Themes
-    //         </button>
-    //         <button onclick="allCosmetics()">
-    //             Cosmetics
-    //         </button>
-    //     </div><br>\`;var allCharacters = () => {
-    //         unlock('character', 'belle');
-    //         unlock('character', 'greg');
-    //         unlock('character', 'charles');
-    //         unlock('character', 'carl');
-    //         toast('All Characters now available', 'Dev tools');
-    //     }
-    //     var allAchievements = () => {
-    //         for(let i = 0; i < achievementsKeys.length; i++) {
-    //            grantAchievement(achievementsKeys[i])
-    //         }
-    //         toast('All Achievements now visible', 'Dev tools');
-    //     }
-    //     var allThemes = () => {
-    //         for(let i = 0; i < themesKeys.length; i++) {
-    //             unlock('theme', themesKeys[i])
-    //         }
-    //         toast('All Themes now available', 'Dev tools');
-    //     }
-    //     var allCosmetics = () => {
-    //         for(let i = 0; i < cosmeticsKeys.length; i++) {
-    //             unlock('cosmetic', cosmeticsKeys[i])
-    //         }
-    //         toast('All Cosmetics now available', 'Dev tools');
-    //     }
-        
-    //     $('#dev').innerHTML =
-    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
-    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-    //         Unlock all:
-    //         <button onclick="allCharacters()">
-    //             Characters
-    //         </button>
-    //         <button onclick="allAchievements()">
-    //             Achievements
-    //         </button>
-    //         <button onclick="allThemes()">
-    //             Themes
-    //         </button>
-    //         <button onclick="allCosmetics()">
-    //             Cosmetics
-    //         </button>
-    //     </div><br>\`;
-        
-    //     toast('Dev Tools enabled', false);`)
+    //     // Characters
+    //     unlock('character', 'belle');
+    //     unlock('character', 'greg');
+    //     unlock('character', 'charles');
+    //     unlock('character', 'carl');
+    // } 
+    // JJ Dev mode
+    // else if(location.hash == '#dev' || location.hash == '#developer'){
+    //     //Places Dev Tools in the lower section tab list
+    //     document.documentElement.style.setProperty('--tab-percent', '25%');
+    //     document.getElementById("dev-panel-button").style.visibility = "visible";
     // }
+    // Merged Dev tools
+    else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == 'cheatmode') {
+        // Register cheat functions globally
+        //#region
+        window.allCharacters = () => {
+            unlock('character', 'belle');
+            unlock('character', 'greg');
+            unlock('character', 'charles');
+            unlock('character', 'carl');
+            toast('All Characters now available', 'Dev tools');
+        }
+        window.allAchievements = () => {
+            for(let i = 0; i < achievementsKeys.length; i++) {
+               grantAchievement(achievementsKeys[i])
+            }
+            toast('All Achievements now unlocked', 'Dev tools');
+        }
+        window.allThemes = () => {
+            for(let i = 0; i < themesKeys.length; i++) {
+                unlock('theme', themesKeys[i])
+            }
+            toast('All Themes now available', 'Dev tools');
+        }
+        window.allCosmetics = () => {
+            for(let t = 0; t < cosmeticsKeys.length; t++) {
+                let key = cosmeticsKeys[t];
+                let target = cosmetics[key];
+        
+                // Loop through cosmetics
+                for(let c = 0; c < target['keys'].length; c++) {
+                    unlock('cosmetic', target.keys[c], key);
+                }
+            }
+            toast('All Cosmetics now available', 'Dev tools');
+        }
+        window.allUnlocks = () => {
+            allCharacters();
+            allAchievements();
+            allThemes();
+            allCosmetics();
+        }
+        window.updateValues = () => {
+            if(parseInt(setCarrotsEl.value)>-0.01){
+                player.Carrots = parseInt(setCarrotsEl.value);
+                player.lifetime.carrots = parseInt(setCarrotsEl.value);
+            }
+            if(parseInt(setGoldenCarrotsEl.value)>-0.01){player.golden_carrots=parseInt(setGoldenCarrotsEl.value)}
+            if(parseInt(setBillLvlEl.value)>-0.01){Boomer_Bill.lvl=parseInt(setBillLvlEl.value)}
+        }
+        //#endregion
+        
+        // Put dev panel in settings
+        $('#dev').innerHTML = /* html */
+        `<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+            <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+
+            <button onclick="clearSave()" class="button_red">
+                Quick Reset
+            </button>
+
+            <h4>Unlock all</h4>
+            <button onclick="allUnlocks()">
+                Everything
+            </button>
+            <button onclick="allCharacters()">
+                Characters
+            </button>
+            <button onclick="allAchievements()">
+                Achievements
+            </button>
+            <button onclick="allThemes()">
+                Themes
+            </button>
+            <button onclick="allCosmetics()">
+                Cosmetics
+            </button><br/>
+            
+            <h4>Set Values</h4>
+            <table>
+                <tr>
+                    <td>
+                        <label for="setting Carrots">
+                            Carrots:
+                        </label>
+                    </td>
+                    <td>
+                        <input id="setCarrot" class="dev_input" type="number">
+                    </td>
+                    <td id="setCarrotRounded" class="secondary_text"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="setting Golden Carrots">
+                            Golden Carrots:
+                        </label>
+                    </td>
+                    <td>
+                        <input id="setGoldenCarrot" class="dev_input" type="number">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="setting Bill's level">
+                            Bill's Level:
+                        </label>
+                    </td>
+                    <td>
+                        <input id="setBillLvl" class="dev_input" type="number">
+                    </td>
+                </tr>
+            </table>
+            
+            <button onclick="updateValues()">Update Values</button>
+        </div><br>`;
+
+        setCarrotsEl =          dom("setCarrot");
+        setGoldenCarrotsEl =    dom("setGoldenCarrot");
+        setBillLvlEl =          dom("setBillLvl");
+        elSetCarrotRounded =    dom('setCarrotRounded')
+
+        // Enter key updates values
+        document.querySelector('.dev_input').addEventListener('keyup', e => {
+            if(e.key == 'Enter') {
+                updateValues();
+            }
+        });
+
+        // DisplayRounded preview
+        setCarrotsEl.addEventListener('input', () => {
+            if(setCarrotsEl.value == '') return;
+            elSetCarrotRounded.innerText = `(${DisplayRounded(setCarrotsEl.value)})`;
+        });
+
+        // toast('Dev Tools enabled', false);
+    }
     
 
 
@@ -1433,7 +1389,7 @@ function onLoad() {
 
     
     // Disable
-    optionSoundsDisable(store('enableSounds') == 'true' ? true : false);
+    optionSoundsDisable(settings.enableSounds);
 
 
 

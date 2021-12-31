@@ -116,17 +116,17 @@
 }
 
 /* Tri-pane */
-.theme_light #notifs-section {
+.theme_light #tripane {
     background-color: white;
 }
-.theme_light #notifs-section nav {
+.theme_light #tripane nav {
     background-color: var(--light-darker-bg-color);
 }
-.theme_light #notifs-section nav .tab {
+.theme_light #tripane nav .tab {
     background-color: var(--light-darker-bg-color);
     color: gray;
 }
-.theme_light #notifs-section nav .activetab {
+.theme_light #tripane nav .activetab {
     background-color: white;
 }
 
@@ -155,13 +155,19 @@
 .theme_oled {
     background-color: black;
 }
+.theme_oled .popup_box {
+    background-color: black;
+}
 .theme_oled .Basic_Info {
+    background-color: black;
+}
+.theme_oled .hover_menu {
     background-color: black;
 }
 .theme_oled #left-section,
 .theme_oled #main_carrot,
 .theme_oled .characterbox,
-.theme_oled #notifs-section {
+.theme_oled #tripane {
     box-shadow: none;
 }
 
@@ -180,23 +186,35 @@
 }
 
 /* Tri-pane */
-.theme_oled #notifs-section {
+.theme_oled #tripane {
     background-color: black;
 }
-.theme_oled #notifs-section nav {
+.theme_oled #tripane nav {
     background-color: black;
 }
-.theme_oled #notifs-section nav .tab {
+.theme_oled #tripane nav .tab {
     background-color: rgb(24, 24, 24);
     color: gray;
 }
-.theme_oled #notifs-section nav .activetab {
+.theme_oled #tripane nav .activetab {
     background-color: black;
     border: 1px solid white;
     border-bottom: none;
     color: white;
 }
 
+/* Achievements */
+.theme_oled .achievement_item,
+.theme_oled .footer_bottom,
+.theme_oled .prestige_item,
+.theme_oled .shop_item {
+    background-color: black;
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+}
+.theme_oled hr {
+    background-color: var(--border-color) !important;
+}
 
 
 
@@ -284,17 +302,17 @@
     background-color: rgb(112, 37, 37);
 }
 /* Tri-pane */
-.theme_red #notifs-section {
+.theme_red #tripane {
     background-color: var(--lighter-bg-color);
 }
-.theme_red #notifs-section nav {
+.theme_red #tripane nav {
     background-color: var(--main-bg-color);
 }
-.theme_red #notifs-section nav .tab {
+.theme_red #tripane nav .tab {
     background-color: var(--main-bg-color);
     color: gray;
 }
-.theme_red #notifs-section nav .activetab {
+.theme_red #tripane nav .activetab {
     background-color: var(--lighter-bg-color);
     color: white;
 }
@@ -328,17 +346,17 @@
     background-color: rgb(37, 49, 34);
 }
 /* Tri-pane */
-.theme_green #notifs-section {
+.theme_green #tripane {
     background-color: var(--lighter-bg-color);
 }
-.theme_green #notifs-section nav {
+.theme_green #tripane nav {
     background-color: var(--main-bg-color);
 }
-.theme_green #notifs-section nav .tab {
+.theme_green #tripane nav .tab {
     background-color: var(--main-bg-color);
     color: gray;
 }
-.theme_green #notifs-section nav .activetab {
+.theme_green #tripane nav .activetab {
     background-color: var(--lighter-bg-color);
     color: white;
 }
@@ -372,17 +390,17 @@
     background-color:rgb(40, 50, 70);
 }
 /* Tri-pane */
-.theme_blue #notifs-section {
+.theme_blue #tripane {
     background-color: var(--lighter-bg-color);
 }
-.theme_blue #notifs-section nav {
+.theme_blue #tripane nav {
     background-color: var(--main-bg-color);
 }
-.theme_blue #notifs-section nav .tab {
+.theme_blue #tripane nav .tab {
     background-color: var(--main-bg-color);
     color: gray;
 }
-.theme_blue #notifs-section nav .activetab {
+.theme_blue #tripane nav .activetab {
     background-color: var(--lighter-bg-color);
     color: white;
 }
@@ -479,16 +497,16 @@
 
 
 /* Tri-pane */
-.theme_retro #notifs-section {
+.theme_retro #tripane {
     background-color: #30622f;
 }
-.theme_retro #notifs-section nav {
+.theme_retro #tripane nav {
     background-color: #0f380e;
 }
-.theme_retro #notifs-section .tab {
+.theme_retro #tripane .tab {
     background-color: #0f380e;
 }
-.theme_retro #notifs-section .activetab {
+.theme_retro #tripane .activetab {
     background-color: #30622f;
 }
 
@@ -582,7 +600,7 @@
 }
 .theme_blockgame button:hover,
 .theme_blockgame select:hover,
-.theme_blockgame #notifs-section nav .tab:hover {
+.theme_blockgame #tripane nav .tab:hover {
     background-image: url(./assets/theme/blockgame/button_active.png);
     color: white;
 }
@@ -735,16 +753,16 @@
 }
 
 /* Tri-pane */
-.theme_blockgame #notifs-section nav .tab {
+.theme_blockgame #tripane nav .tab {
     color: rgb(163, 163, 163);
     padding-bottom: 20px;
 }
-.theme_blockgame #notifs-section nav .activetab {
+.theme_blockgame #tripane nav .activetab {
     color: white;
     filter: none;
     outline-color: white;
 }
-.theme_blockgame #notifs-section {
+.theme_blockgame #tripane {
     background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
                 url(./assets/theme/blockgame/stone.png);
     background-size: 64px;

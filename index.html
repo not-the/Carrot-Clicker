@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.2</title>
+    <title id="page_title">Carrot Clicker dev beta v1.9.3</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -1098,10 +1098,10 @@
   <div class="information-area">
     <!-- Info section -->
     <!-- <div class="row-break"></div> -->
-    <div id="notifs-section">
+    <div id="tripane">
         <!-- Nav buttons -->
-        <nav id="notifs-nav">
-            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="info-panel-button" onclick="panelChange(`info-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button><button class="tab secondary_text" id="dev-panel-button" onclick="panelChange(`dev-panel`)">Dev Tools</button>
+        <nav id="tripane-nav">
+            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button><!-- <button class="tab secondary_text" id="dev-panel-button" onclick="panelChange(`dev-panel`)">Dev Tools</button> -->
         </nav>
 
         <!-- Achievements Panel -->
@@ -1132,6 +1132,12 @@
                 Progress: <span id="achievement_progress">-/- (0%)</span>
                 <span class="question_mark" title="Secret achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret achievements are not required to reach 100%.', '', true, true)">?</span>
             </p><br>
+            <label for="compact_achievements">
+                <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
+            </label>
+            <label for="achievements_grid">
+                <input type="checkbox" class="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view (WIP)
+            </label><br><br>
             
             <div id="achievements_list">
                 <!-- Old achievement notification -->
@@ -1148,8 +1154,8 @@
             </div>
         </div>
 
-        <!-- Info Panel -->
-        <div id="info-panel" class="panel remove">
+        <!-- Statistics Panel -->
+        <div id="stats-panel" class="panel remove">
             <div id="info-inner">
                 <h1>Statistics</h1>
                 <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
@@ -1199,6 +1205,9 @@
                     Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
                     Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
                     Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
+
+                    Cash earned: <b id="lifetime_cash">---</b><br>
+                    Cash spent: <b id="lifetime_cash_spent">---</b><br>
                     Total Clicks: <b id="lifetime_clicks">---</b><br/>
                     Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
                     <details class="stat_collapse">
@@ -1230,20 +1239,12 @@
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
+            <!-- Kal dev panel -->
+            <div id="dev"></div>
+
             <!-- Themes -->
             <label for="theme_dropdown">
                 Themes<br>
-                <!-- <select name="theme_dropdown" id="theme_dropdown">
-                    <option value="theme_dark" id="theme_dark">Dark Theme</option>
-                    <option value="theme_light" id="theme_light">Light Theme</option>
-                    <option value="theme_oled" id="theme_oled">OLED Dark</option>
-                    <option value="theme_classic" id="theme_classic">Carrot Clicker classic</option>
-                    <option value="theme_red" id="theme_red">Red Theme</option>
-                    <option value="theme_green" id="theme_green">Green Theme)</option>
-                    <option value="theme_blue" id="theme_blue">Blue Theme</option>
-                    <option value="theme_retro" id="theme_retro">Retro green</option>
-                    <option value="theme_blockgame" id="theme_blockgame">Minecraft</option>
-                </select><br> -->
                 <button id="theme_button" onclick="themeSwitcher()">
                     <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
                     Change Theme
@@ -1259,7 +1260,6 @@
                     <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><span id="FunTipsSliderLabel">50</span>%<br>
                 </label><br>
             </div>
-
 
 
             <!-- Options item -->
@@ -1374,7 +1374,7 @@
                 Delete Save Data
             </button>
             <!-- Reset button -->
-            <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings (WIP)</button>
+            <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings</button>
             <br><br>
             <hr><br>
             <!-- <p class="secondary_text center">Carrot Clicker - <a class="secondary_text link_styling">Credits</a></p> -->
@@ -1406,7 +1406,9 @@
 
             </footer>
         </div>
-        <div id="dev-panel" class="panel remove">
+
+        <!-- JJ Dev panel -->
+        <!-- <div id="dev-panel" class="panel remove">
             <h1>Developer Tools</h1>
             <h4>Set Values</h4>
             <label for="setting Carrots">
@@ -1423,7 +1425,7 @@
             </label>
             <br>
             <button onclick="updateValues()">Update Values</button>
-        </div>
+        </div> -->
     <!-- End Info section -->
   </div>
 <!-- #endregion -->

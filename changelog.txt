@@ -1,4 +1,47 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.3
+    12-30-2021
+// ----------------------------------------------------------- //
+
+Dev panels merged & consistency changes
+
+- More characters tooltip is now the same width as the character boxes, preventing the page from shifting around as you unlock new characters
+- Renamed some older HTML elements to have more accurate ID names:
+  + "notifs-section" -> "tripane"
+  + "info-panel"     -> "stats-panel"
+  + "notifs-nav"     -> "tripane-nav"
+- Fixed issue where cosmetic grid descriptions were interactable
+- Fixed achievement icons being underneath each other when hovered
+- Added a "Compact Achievements" option that makes achievements much more compact (rewards list is still unchanged since it needs a rework)
+  + Achievement notifications will always use the compact CSS
+- Made the grid view for achievements accessible (still experimental)
+- PopulateAchievements() will now keep track of when it needs to generate new HTML and when it doesn't (specifically, changing tabs doesn't generate the list every time, it only runs when there is a change)
+- Heavily streamlined the code for keyboard combos and made it easier to add new ones
+- The JJCVIP easter egg now gives you 1 carrot
+- OLED theme fixes: popup menus, status bar dropdown, achievements, settings footer/dev tools, hr tags, prestige menu, Charles & Carl shop items
+- Disabled scroll-behavior: smooth because of an issue where you would get scrolled down when deleting save data or prestiging
+
+More settings are now stored within the settings object:
+  + openpanel
+  + master_volume
+  + disableKeybinds
+  + enableMainProgress
+  + enableMusic
+  + enableCarrotSounds
+This means that the "Reset Settings" button will now work and settings uses much less code. Resetting settings will also correctly update the checkboxes in settings now
+
+Fixed JJ jank:
+- Statistics were not working (html got reverted to an earlier version without the cash statistics)
+- Merged mine and JJ's dev mode- unfortunately the way tabs work is too jank and I had to move it into settings where mine was
+- Dev mode:
+  + Carrot & golden carrot now set lifetime carrots/golden carrots too (not the same way the game normally would but this still fixes it not working with lifetime-based achievements among other things)
+  + Carrot input has a displayrounded representation of the number next to it
+  + You can press enter while typing in the fields to update the values
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.2
     12-29-2021
 // ----------------------------------------------------------- //
@@ -17,6 +60,7 @@
 -Autosave now runs on window unload
 
 ~JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.9.1
