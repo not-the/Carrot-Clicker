@@ -1,0 +1,256 @@
+/-------------------------------------/
+
+        Written But Unused Code
+
+/------------------------------------/
+
+
+/----------CarrotClicker.Js---------/
+
+*In EarnCash()
+    // Type
+    // switch(type) {
+    //     // Click
+    //     case 'bonus':
+    //         player.prestige.click_carrots += amount
+    //         player.prestige.clicks ++;
+
+    //         player.lifetime.click_carrots += amount;
+    //         player.lifetime.clicks ++;
+    //         break;
+    //     // Idle
+    //     case 'achievement':
+    //         player.prestige.idle_carrots += amount;
+    //         player.lifetime.idle_carrots += amount;
+    //         break;
+    //     // Bonus
+    //     case 'other':
+    //         player.prestige.bonus_carrots += amount;
+    //         player.lifetime.bonus_carrots += amount;
+
+    //         player.lifetime.falling_carrots_grabbed++;
+    //         break;
+    // }
+
+
+*In onClick()
+    // Prevent use of spacebar/click at the same time
+    // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
+    //     clickMethodLimit = method;
+    //     clickMethodTimer = Date.now();
+
+    //     return;
+    // }
+
+    // Click method limit
+    // if(clickMethodTimer < Date.now - 500) {
+    //     clickMethodLimit = 'none';
+    // }
+
+
+*Under Tips Section
+    // const tips = localStorage.getObject("tips");
+    // setInterval(()=>{
+    //     if(tips){
+    //         localStorage.setObject("tips",tips);
+    //     }else{
+    //         localStorage.setObject("tips",default_tips);
+    //         // location.reload();
+    //     }
+    // }, 2000);
+
+    // const tips;
+
+    // if(localStorage.getObject("tips") == null) {
+    //     localStorage.setObject("tips", default_tips);
+    // } else {
+    //     tips = localStorage.getObject("tips");
+    // }
+
+
+*Function Music
+    //Music
+    // setInterval(()=>{
+    //     playMusic('music.m4a');
+    // },80000);
+
+
+*In MainGameLoop
+    // Top bar (Might bring back later - don't delete)
+    // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+
+
+
+
+/------------User.Js-------------/
+
+
+*In Eventlistener('keydown')
+    // Close/Accept dialog
+    // if(dialogOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     } else if(event.key == "Enter"){
+    //         closeDialog(true);
+    //     }
+    // }
+
+    // Close theme switcher
+    // if(themeSwitcherOpen || cosmeticSwitcherOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     }
+    // }
+
+    // When on main page send to keybind handler
+    // keybindHandler(event);
+
+
+*Under custom keybinds
+    // var keybindsLS = localStorage.getItem("keybinds");
+    // if(keybindsLS=="false"){
+    //     elDisableKeybinds.checked=true;
+    // }
+    // //Keyboard Event listener and checkboxing
+    // function KeyBinds() {
+    //     //checkbox
+    
+    //     //checking checkbox
+    //     if (elDisableKeybinds.checked == true){
+    //         toast("Settings","Keybinds are Disabled","red");
+    //         window.removeEventListener('keydown',keybinds);
+    //         localStorage.setItem("keybinds","false");
+    //         return;
+    //     }
+
+    //     window.addEventListener('keydown',keybinds);
+    //     localStorage.setItem("keybinds","true");
+    // }
+
+    // KeyBinds();
+
+
+*In unlock if type='cosmetic' and subtype == 'bundle'
+
+    // let bundle = cosmetics.bundle[thingToUnlock];
+
+    // for(let i = 0; i < bundle.length; i++) {
+    //     let key = bundle.keys[i];
+    //     let ntarget = bundle[key];
+
+    //     console.log(`unlock('cosmetic', ${key}, ${ntarget})`);
+
+    //     // if(key == 'name' || key == 'preview' || key == 'desc') continue;
+    //     unlock('cosmetic', key, ntarget);
+    // }
+
+
+*Under location hashes
+    // else if(location.hash == '#cheatmode') {
+    //     console.log(`
+    //     allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     allCosmetics = () => {
+    //         for(let t = 0; t < cosmeticsKeys.length; t++) {
+    //             let key = cosmeticsKeys[t];
+    //             let target = cosmetics[key];
+        
+    //             // Loop through cosmetics
+    //             for(let c = 0; c < target['keys'].length; c++) {
+    //                 unlock('cosmetic', target.keys[c], key);
+    //             }
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;var allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     var allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     var allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     var allCosmetics = () => {
+    //         for(let i = 0; i < cosmeticsKeys.length; i++) {
+    //             unlock('cosmetic', cosmeticsKeys[i])
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;
+        
+    //     toast('Dev Tools enabled', false);`)
+    // }
+
+*under tutorial
+    // Initial Welcome
+    // if(store("tutorial_sample") == null) {
+    //     store("tutorial_sample", "done");
+    //     toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
+    // } else if(store("tutorial_sample") == "done") {
+    //     // Temporary two step until someone fixes the storage issue
+    //     store("tutorial_sample", "really_done");
+    //     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+    // }

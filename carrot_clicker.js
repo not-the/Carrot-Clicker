@@ -372,6 +372,7 @@ window.onbeforeunload = () => {
 //#endregion
 
 /*--------------Settings----------------*/
+//#region 
 
 /* Settings data */
 // Disable individual sound options
@@ -568,30 +569,6 @@ function earnCash(amount, type) {
     player.cash += amount;
     player.lifetime.cash += amount;
 
-    // Type
-    // switch(type) {
-    //     // Click
-    //     case 'bonus':
-    //         player.prestige.click_carrots += amount
-    //         player.prestige.clicks ++;
-
-    //         player.lifetime.click_carrots += amount;
-    //         player.lifetime.clicks ++;
-    //         break;
-    //     // Idle
-    //     case 'achievement':
-    //         player.prestige.idle_carrots += amount;
-    //         player.lifetime.idle_carrots += amount;
-    //         break;
-    //     // Bonus
-    //     case 'other':
-    //         player.prestige.bonus_carrots += amount;
-    //         player.lifetime.bonus_carrots += amount;
-
-    //         player.lifetime.falling_carrots_grabbed++;
-    //         break;
-    // }
-
     cashCount();
     updateCarlsShop();
 }
@@ -601,19 +578,6 @@ function earnCash(amount, type) {
 // var clickMethodTimer = 0;
 var fallingCarrotPromiser = 0;
 function onClick(useMousePos, method = 'click') {
-    // Prevent use of spacebar/click at the same time
-    // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
-    //     clickMethodLimit = method;
-    //     clickMethodTimer = Date.now();
-
-    //     return;
-    // }
-
-    // Click method limit
-    // if(clickMethodTimer < Date.now - 500) {
-    //     clickMethodLimit = 'none';
-    // }
-
     // Grant carrots
     earnCarrots(player.cpc, 'click');
 
@@ -638,7 +602,8 @@ function onClick(useMousePos, method = 'click') {
     randomSound('crunch', 95);
 }
 
-/* ----------------------Page Manipulation------------------------*/
+/* ----------------------Page Manipulation Functions------------------------*/
+//#region 
 const elPrestigeStats = dom('this_prestige_stats');
 
 // Update carrot count on page
@@ -794,6 +759,7 @@ function clickSpeedHandler(clicked = false) {
     eInnerText(dom('click_speed'), clickSpeed + '/' + clickSpeedBest);
 }
 
+//#endregion
 
 // Carrots per second
 function CarrotsPerSecond() {
@@ -944,7 +910,10 @@ function Prestige() {
     showPrestigeStats();
 }
 
+//#endregion
 
+/*---------------------Charles Functions------------------*/
+//#region 
 // Charles Functions
 //Needs commenting
 
@@ -1009,9 +978,8 @@ function DecreaseWagesEffects(){
     return (Math.sqrt(Charles.tome.decreaseWages.value)/100);
 }
 
+
 //#endregion
-
-
 /*-----------Hoe Functions--------------*/
 //#region
 
@@ -1288,7 +1256,6 @@ function DisplayHoe(character, type) {
 
 //#endregion
 
-
 /*---------------Main Game Loop---------------- */
 //#region
 
@@ -1354,9 +1321,6 @@ function gameLoop() {
 
     //// Update numbers on page ////
 
-    // Top bar (Might bring back later - don't delete)
-    // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
-
     // New display
     // Carrot counter moved to functions that update it
     eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
@@ -1402,6 +1366,9 @@ setInterval(() => {
     gameLoop();
 }, 100);
 //#endregion
+
+/*-----------------Statistics-----------------*/
+//#region 
 
 // Lifetime Statistics Panel
 const elStatistics = dom('statistics');
@@ -1497,33 +1464,11 @@ function loadStatistics() {
 
 // Refresh statistics
 var statsInterval;
-
-//Music
-// setInterval(()=>{
-//     playMusic('music.m4a');
-// },80000);
+//#endregion
 
 /*-----------Tips----------- */
 //#region
 var tips = default_tips;
-
-// const tips = localStorage.getObject("tips");
-// setInterval(()=>{
-//     if(tips){
-//         localStorage.setObject("tips",tips);
-//     }else{
-//         localStorage.setObject("tips",default_tips);
-//         // location.reload();
-//     }
-// }, 2000);
-
-// const tips;
-
-// if(localStorage.getObject("tips") == null) {
-//     localStorage.setObject("tips", default_tips);
-// } else {
-//     tips = localStorage.getObject("tips");
-// }
 
 // Automatically change tips
 var tipInterval = setInterval(() => {tipchange()}, 15000);

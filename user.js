@@ -184,24 +184,6 @@ document.addEventListener('keydown', event => {
         event.preventDefault();   
     }
 
-    // Close/Accept dialog
-    // if(dialogOpen) {
-    //     if(event.key == "Escape"){
-    //         closeDialog();
-    //     } else if(event.key == "Enter"){
-    //         closeDialog(true);
-    //     }
-    // }
-
-    // Close theme switcher
-    // if(themeSwitcherOpen || cosmeticSwitcherOpen) {
-    //     if(event.key == "Escape"){
-    //         closeDialog();
-    //     }
-    // }
-
-    // When on main page send to keybind handler
-    // keybindHandler(event);
 
 });
 
@@ -506,28 +488,6 @@ function interpretKey(key) {
 }
 
 
-// var keybindsLS = localStorage.getItem("keybinds");
-// if(keybindsLS=="false"){
-//     elDisableKeybinds.checked=true;
-// }
-// //Keyboard Event listener and checkboxing
-// function KeyBinds() {
-//     //checkbox
-  
-//     //checking checkbox
-//     if (elDisableKeybinds.checked == true){
-//         toast("Settings","Keybinds are Disabled","red");
-//         window.removeEventListener('keydown',keybinds);
-//         localStorage.setItem("keybinds","false");
-//         return;
-//     }
-
-//     window.addEventListener('keydown',keybinds);
-//     localStorage.setItem("keybinds","true");
-// }
-
-// KeyBinds();
-
 //#endregion
 
 // Test achievement conditions every 5 seconds
@@ -725,17 +685,6 @@ function unlock(type, thingToUnlock, subtype) {
         // For bundles
         if(subtype == 'bundle') {
             console.log('Unlocking a cosmetic bundle! ' + subtype + thingToUnlock);
-            // let bundle = cosmetics.bundle[thingToUnlock];
-
-            // for(let i = 0; i < bundle.length; i++) {
-            //     let key = bundle.keys[i];
-            //     let ntarget = bundle[key];
-
-            //     console.log(`unlock('cosmetic', ${key}, ${ntarget})`);
-
-            //     // if(key == 'name' || key == 'preview' || key == 'desc') continue;
-            //     unlock('cosmetic', key, ntarget);
-            // }
 
             // Loop across subtypes and unlock all relevant cosmetics
             for(let t = 0; t < cosmeticsKeys.length; t++) {
@@ -1159,43 +1108,7 @@ function onLoad() {
     if(location.hash == '#automute' || location.hash == '#mute') {
         elEnableSounds.checked = false;
         settingSounds();
-    } // else if(location.hash == '#cheatmode') {
-    //     // Achievements
-    //     for(let i = 0; i < achievementsKeys.length; i++) {
-    //        grantAchievement(achievementsKeys[i])
-    //     }
-
-    //     // Themes
-    //     for(let i = 0; i < themesKeys.length; i++) {
-    //         unlock('theme', themesKeys[i])
-    //     }
-
-    //     // Cosmetics
-    //     // for(let i = 0; i < cosmeticsKeys.length; i++) {
-    //     //     unlock('cosmetic', cosmeticsKeys[i])
-    //     // }
-    //     for(let t = 0; t < cosmeticsKeys.length; t++) {
-    //         let key = cosmeticsKeys[t];
-    //         let target = cosmetics[key];
-
-    //         // Loop through cosmetics
-    //         for(let c = 0; c < target['keys'].length; c++) {
-    //             unlock('cosmetic', target.keys[c], key);
-    //         }
-    //     }
-
-    //     // Characters
-    //     unlock('character', 'belle');
-    //     unlock('character', 'greg');
-    //     unlock('character', 'charles');
-    //     unlock('character', 'carl');
-    // } 
-    // JJ Dev mode
-    // else if(location.hash == '#dev' || location.hash == '#developer'){
-    //     //Places Dev Tools in the lower section tab list
-    //     document.documentElement.style.setProperty('--tab-percent', '25%');
-    //     document.getElementById("dev-panel-button").style.visibility = "visible";
-    // }
+    }
     // Merged Dev tools
     else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == 'cheatmode') {
         // Register cheat functions globally
@@ -1338,14 +1251,6 @@ function onLoad() {
 
     /* --------------- TUTORIAL --------------- */
     // Initial Welcome
-    // if(store("tutorial_sample") == null) {
-    //     store("tutorial_sample", "done");
-    //     toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
-    // } else if(store("tutorial_sample") == "done") {
-    //     // Temporary two step until someone fixes the storage issue
-    //     store("tutorial_sample", "really_done");
-    //     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
-    // }
     if(store("tutorial_sample") == null) {
         // Welcome message
         toast("Welcome to Carrot Clicker!",
