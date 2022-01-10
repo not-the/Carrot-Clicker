@@ -362,12 +362,18 @@ function saveGame() {
     localStorage.setObject("Charles", Charles);
     localStorage.setObject("Carl", Carl);
 }
-let preventSaveGame=false;
+var preventSaveGame=false;
+
+// Autosave
+var autosave = 
+setInterval(() => {
+    if(preventSaveGame == false) saveGame();
+}, 5000);
+
+// Save before unload (does not work for some browsers/devices)
 window.onbeforeunload = () => {
-    if(preventSaveGame==false){
-       saveGame(); 
-    }
- }
+    if(preventSaveGame == false) saveGame();
+}
 
 //#endregion
 

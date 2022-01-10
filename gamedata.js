@@ -393,6 +393,14 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/cookie/baker_bill.png',
         },
+        'dollar_bill': {
+            'name': 'Dollar Bill',
+            'preview': './assets/theme/dollar_bill.png',
+            'desc': 'Yall',
+
+            'rename': 'Dollar Bill',
+            'image': './assets/theme/dollar_bill.png',
+        },
         'fancy_bill': {
             'name': 'Fancy Bill',
             'preview': './assets/theme/boomer_bill_gates.png',
@@ -408,6 +416,14 @@ const cosmetics = {
 
             'rename': false,
             'image': './assets/theme/business_bill.png',
+        },
+        'biker_bill': {
+            'name': 'Biker Bill',
+            'preview': './assets/theme/biker_bill.png',
+            'desc': 'placeholder',
+
+            'rename': false,
+            'image': './assets/theme/biker_bill.png',
         },
     },
     belle: {
@@ -622,7 +638,7 @@ const achievements = {
         'desc': 'Upgrade Bill and attract the attention of another farmer',
         'image': './assets/achievements/bill_and_belle.png',
         'reward': 'character:belle',
-        'pages': 1,
+        'pages': false,
         'conditions': ['Boomer_Bill.lvl', 2],
         'mystery': {
             'name': true,
@@ -726,7 +742,7 @@ const achievements = {
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
         'image': './assets/achievements/tome_decrease_wages.png',
-        'reward': false,
+        'reward': 'cosmetic:bill/dollar_bill',
         'pages': 2,
         'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {

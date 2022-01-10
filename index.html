@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.3</title>
+    <title id="page_title">Carrot Clicker dev beta v1.9.4</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -651,7 +651,7 @@
                     </a>
 
                     <!-- Changelog -->
-                    <a href="./changelog/index.html" target="_blank" rel="noopener noreferrer" tabindex="0">
+                    <a href="./changelog/" target="_blank" rel="noopener noreferrer" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/icons/refresh.png" alt="" class="dropdown_img">
                             Changelog
@@ -1273,6 +1273,14 @@
                 Edit Keybinds
             </button><br><br>
 
+            <!-- Autosave -->
+            <label for="autosave_interval"><b>Autosave Frequency:</b><br>
+                <p class="secondary_text">Default is 2 seconds</p>
+
+                <input type="number" id="autosave_interval" min="1" max="60" value="2"/>
+                <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
+                <button onclick="resetAutosave()">Reset</button>
+            </label><br><br>
 
             <!-- Disable main progress bar -->
             <b>Interface:</b><br>

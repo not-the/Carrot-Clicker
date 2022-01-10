@@ -642,7 +642,7 @@ p.theme_menu_title {
     background-color: var(--main-bg-color);
 }
 .theme_item:hover, .shop_item:hover {
-    filter: brightness(120%);
+    filter: brightness(110%);
     outline: 2px solid white;
 }
 

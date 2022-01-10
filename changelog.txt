@@ -1,4 +1,13 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.4
+    1-9-2022
+// ----------------------------------------------------------- //
+
+- Reverted removal of autosave since onbeforeunload doesn't work on mobile (onbeforeunload is left untouched)
+- Added two cosmetics: "Dollar Bill" (from the Dollar Bill achievement) and "Biker Bill"
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.3
     12-30-2021
 // ----------------------------------------------------------- //
