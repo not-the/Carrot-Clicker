@@ -517,6 +517,7 @@ summary:hover {
     padding-left: 14px;
     background-color: var(--main-bg-color);
     border-left: 1px solid var(--darker-bg-color);
+
 }
 .dialog_close:hover {
     filter: brightness(125%);
@@ -1283,7 +1284,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 .levelupimg {
     margin-bottom: -6px;
-    width: 48px;
+    width: 40px;
     height: 40px;
     cursor: pointer;
 }
@@ -1971,7 +1972,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
     padding: 24px;
     width: 100%;
     max-height: 260px;
-    max-width: 500px;
+    max-width: 540px;
 }
 .prestige_item {
     background-color: var(--main-bg-color);
@@ -2144,6 +2145,15 @@ footer {
     #tripane .tab .button_icon {
         visibility: hidden;
         position: absolute;
+    }
+    #prestige_menu {
+        max-height: 360px;
+    }
+    #prestige_menu .prestige_menu_flex {
+        flex-direction: column;
+    }
+    #prestige_menu .half_width {
+        width: 100% !important;
     }
 }
 

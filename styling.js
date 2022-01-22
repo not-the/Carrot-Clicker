@@ -455,6 +455,17 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 }
 //#endregion
 
+function fallingCarrotClick(amount, type) {
+    dom(element.id).remove();
+    fallingActive--;
+
+    if(type == 'carrot') {
+        earnCarrots( amount, 'bonus' );
+    } else if(type == 'cash') {
+        earnCash(amount, 'bonus' );
+    }
+}
+
 // Falling carrots
 var fallingID = 0;
 var fallingActive = 0;
@@ -474,23 +485,15 @@ function fallingCarrot() {
 
     if(type == 'carrot') {
         // Carrot reward
-        // Between 200% and 600% of player's CPC
-        let rewardVariation = (Math.floor((Math.random() * 400)) + 200) / 100;
+        // Between 400% and 800% of player's CPC
+        let rewardVariation = (Math.floor((Math.random() * 400)) + 400) / 100;
         let amount = Math.round(player.cpc * rewardVariation);
-        element.onclick = () => {
-            earnCarrots( amount, 'bonus' );
-            dom(element.id).remove();
-            fallingActive--;
-        };
+        element.onclick = fallingCarrotClick(amount, 'bonus');
     } else if(type == 'cash') {
         // Cash reward
         // Between 2 and 10
         let amount = Math.floor((Math.random() * 9)) + 2;
-        element.onclick = () => {
-            earnCash( amount, 'bonus' );
-            dom(element.id).remove();
-            fallingActive--;
-        };
+        element.onclick = fallingCarrotClick(amount, 'bonus');
     }
 
 
@@ -741,13 +744,23 @@ function populateThemeList() {
   
         // Test if unlocked
         if(isUnlocked('theme', key) == false) {
-            // console.log(key + ' is not unlocked!');
             stillLocked++;
+            // Locked HTML
+            themeHTML += /* html */
+            `
+            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This theme has not been unlocked', '', false, true)">
+                <img src="./assets/locked_transparent.png" alt="img" class="theme_preview">
+                <div>
+                    <h3>???</h3>
+                    <p class="secondary_text">Locked</p>
+                </div>
+            </div>
+            `;
             continue;
         }
 
-        let imgsrc = theme.image !== false ? theme.image : './assets/Carrot Clicker.png'
-    
+        // Unlocked HTML
+        let imgsrc = theme.image !== false ? theme.image : './assets/Carrot Clicker.png';
         themeHTML += /* html */
         `
         <div class="theme_item flex" title="${theme.name}" onclick="setTheme('${key}')">
@@ -763,13 +776,13 @@ function populateThemeList() {
         `;
     }
 
-    if(stillLocked > 0) {
-        themeHTML += /* html */
-        `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`;
-    } else {
-        themeHTML += /* html */
-        `<br><center><p>You've unlocked every theme!</p></center>`;
-    }
+    // if(stillLocked > 0) {
+    //     themeHTML += /* html */
+    //     `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`;
+    // } else {
+    //     themeHTML += /* html */
+    //     `<br><center><p>You've unlocked every theme!</p></center>`;
+    // }
 
     themesList.innerHTML = themeHTML;
 }
@@ -847,13 +860,10 @@ function populateCosmeticsList(target) {
             cosmeticHTML += /* html */
             `
             <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
-                <img src="./assets/achievements/locked.png" alt="img" class="theme_preview" id="cosmetic_${key}">
+                <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}">
                 <div class="description">
                     <h3>???</h3>
                     <p class="secondary_text">Locked</p>
-                </div>
-                <div class="theme_checkbox">
-                    <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="${target}_cosmetic_${key}_checkmark">
                 </div>
             </div>
             `;

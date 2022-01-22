@@ -450,6 +450,7 @@ keybinds_default['keys'].pop();
 const settings_default = {
     notificationLength: 5000,
     disableKeybinds: false,     // boolean
+    autosave_interval: 5,
 
     master_volume: 1,           // Between 0 and 1
     enableSounds: true,         // boolean
@@ -457,7 +458,6 @@ const settings_default = {
     enableCarrotSounds: true,   // boolean
 
     full_numbers: false,
-
 
     // UI
     theme: 'theme_dark',     // string

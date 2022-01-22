@@ -1,10 +1,32 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.5
+    1-13-2022, changes pushed 1-21-2021
+// ----------------------------------------------------------- //
+
+- Fixed the level up arrow being the wrong aspect ratio (and this also fixed the final hoe not fitting in some themes)
+- Changed some page rewards
+  + Secret achievements no longer give pages
+- Added a new challenge achievement (no falling carrots)
+- Increased falling carrot rewards from between 200%-600% to 400%-800%
+- The achievements menu now has its own ? png for locked cosmetics with no background
+- The themes menu is now consistent with the cosmetics menu and has the "full" list from the start, where locked themes are greyed and with info redacted
+- Theme & cosmetic switchers: checkmarks don't appear on locked items
+- Misc light theme fixes
+- Prestige menu now goes into column mode for smaller viewports (460px and smaller)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.4
     1-9-2022
 // ----------------------------------------------------------- //
 
 - Reverted removal of autosave since onbeforeunload doesn't work on mobile (onbeforeunload is left untouched)
 - Added two cosmetics: "Dollar Bill" (from the Dollar Bill achievement) and "Biker Bill"
+- Changed some page rewards for early game achievements
+
+~ Kal
 
 
 // ----------------------------------------------------------- //

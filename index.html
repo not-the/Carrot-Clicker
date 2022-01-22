@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.4</title>
+    <title id="page_title">Carrot Clicker dev beta v1.9.5</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -385,7 +385,7 @@
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <h1>Prestige</h1>
 
-            <div class="flex">
+            <div class="prestige_menu_flex flex">
                 <!-- Current -->
                 <div class="half_width">
                     <!-- Tomes -->
@@ -1130,7 +1130,7 @@
             <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
             <p class="secondary_text">
                 Progress: <span id="achievement_progress">-/- (0%)</span>
-                <span class="question_mark" title="Secret achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret achievements are not required to reach 100%.', '', true, true)">?</span>
+                <span class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true)">?</span>
             </p><br>
             <label for="compact_achievements">
                 <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode

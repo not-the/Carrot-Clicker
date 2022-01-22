@@ -109,7 +109,9 @@
     color: white;
 }
 .theme_light .dialog_close {
+    background-color: var(--light-darker-bg-color);
     color: black;
+    border-color: var(--light-theme-border-color);
 }
 .theme_light .popup_box {
     background-color: white;

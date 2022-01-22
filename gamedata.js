@@ -374,6 +374,15 @@ const cosmetics = {
             'farmable': 'Updoot',
             'image': './assets/theme/orange_arrow/upvote.png',
         },
+        // huh whuh meme
+        "huhwhuh": {
+            'name': 'huh',
+            'preview': 'https://i.imgur.com/ELs31g5.jpg',
+
+            'desc': 'huh whuh',
+            'farmable': 'huh',
+            'image': 'https://i.imgur.com/ELs31g5.jpg',
+        },
     },
     bill: {
         'default': {
@@ -900,7 +909,7 @@ const achievements = {
         }
     },
     'greg_lvl_20': {
-        'name': 'The Gregs of Defeat',
+        'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
         'desc': 'Upgrade Gregory 20 times',
         'image': false,
         'reward': false,
@@ -1345,7 +1354,7 @@ const achievements = {
         'desc': 'Earn 500 golden carrots',
         'image': './assets/achievements/gold_au.png',
         'reward': false,
-        'pages': 3,
+        'pages': 4,
         'conditions': ['player.lifetime.golden_carrots', 500],
         'mystery': {
             'name': false,
@@ -1446,7 +1455,7 @@ const achievements = {
         'desc': 'Reach 50% normal achievements unlocked',
         'image': './assets/achievements/bronze_medal.gif',
         'reward': 'function:confetti()',
-        'pages': 10,
+        'pages': 5,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 1))', 50],
         // 'style': 'endgame',
         'mystery': {
@@ -1473,12 +1482,27 @@ const achievements = {
     },
 
     // Challenge achievements
+    'no_bonus_carrots_challenge': {
+        'name': 'no falling carrots',
+        'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
+        'image': false,
+        'reward': 'function:confetti()',
+        'pages': 3,
+        'conditions': ['ex_noBonusCarrots()', true],
+        'style': 'challenge',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     'no_bill_challenge': {
         'name': 'Patience is Free',
         'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
         'image': false,
         'reward': 'function:confetti()',
-        'pages': 3,
+        'pages': 5,
         'conditions': ['ex_noBill()', true],
         'style': 'challenge',
         'mystery': {
@@ -1518,6 +1542,7 @@ const achievements = {
             'noToast': false,
         }
     },
+
     'all_achievements': {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
@@ -1540,7 +1565,7 @@ const achievements = {
         'desc': 'Enter the Konami code, at least according to Wikipedia. There are multiple versions, apparently. (Hidden achievement)',
         'image': './assets/achievements/easter_egg.png',
         'reward': 'function:confetti()',
-        'pages': 1,
+        'pages': false,
         'conditions': ['keyTrigger[0]', 1],
         'style': 'secret',
         'mystery': {
@@ -1556,7 +1581,7 @@ const achievements = {
         'desc': 'Hey that\'s me (Hidden achievement)',
         'image': './assets/theme/pineapple/pineapple.png',
         'reward': 'cosmetic:farmable/pineapple',
-        'pages': 1,
+        'pages': false,
         'conditions': ['keyTrigger[3]', 1],
         'style': 'secret',
         'mystery': {
@@ -1572,7 +1597,7 @@ const achievements = {
         'desc': 'Upgrade all 3 characters to Level 69 (Hidden achievement)',
         'image': './assets/achievements/nice.png',
         'reward': 'function:confetti()',
-        'pages': 3,
+        'pages': false,
         'conditions': ['ex_notFunny()', 1],
         'style': 'secret',
         'mystery': {

@@ -263,6 +263,7 @@ const keyCodes = [
     'G A M I N G ',
     'J J C V I P ',
     'P I N E A P P L E ',
+    'H U H W H U H ',
 ];
 // Variable achievement(s) test for
 var keyTrigger = []; 
@@ -322,6 +323,10 @@ function keybindHandler(event, state) {
                 break;
             case 3:
                 setCosmetic('farmable', 'pineapple');
+                break;
+            case 4:
+                toast('huh', 'huh whuh');
+                setCosmetic('farmable', 'huhwhuh');
                 break;
         }
     }
@@ -896,6 +901,11 @@ function ex_charlesUses() {
 
     return 0;
 }
+// No falling carrots challenge
+function ex_noBonusCarrots() {
+    if(player.prestige.carrots >= 500000 && player.prestige.falling_carrots_grabbed == 0) return true;
+    return false;
+}
 // No Bill challenge
 function ex_noBill() {
     if(Boomer_Bill.lvl == 1 && player.prestige.carrots >= 2500000) return true;
@@ -1336,7 +1346,7 @@ function onLoad() {
 
     if(player.pages !== pagesIntended) {
         console.warn('Achievement page rewards have been changed');
-        toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes ${player.pages} -> ${pagesIntended})`, 'orange', true);
+        toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange', true);
 
         if(player.pages) // this doesn't break anything?
 
