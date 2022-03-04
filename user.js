@@ -306,7 +306,7 @@ function keybindHandler(event, state) {
     }
 
     function keyComboHandler(combo) {
-        console.log('Pineapple Code entered');
+        console.log(`keyComboHandler(${combo})`);
         keyCombo = '';
         keyTrigger[combo] = true;
 
@@ -325,7 +325,8 @@ function keybindHandler(event, state) {
                 setCosmetic('farmable', 'pineapple');
                 break;
             case 4:
-                toast('huh', 'huh whuh');
+                toast('huh', 'huh whuh', 'blue');
+                unlock('huhwhuh', 'cosmetic', 'farmable');
                 setCosmetic('farmable', 'huhwhuh');
                 break;
         }
@@ -333,11 +334,21 @@ function keybindHandler(event, state) {
     //#endregion
 
     // Check if string is on track to be correct or not
+    // for(i = 0; i < keyCombo.length; i++) {
+    //     if(keyCombo[i] != keyCodes[0][i]
+    //     && keyCombo[i] != keyCodes[1][i]
+    //     && keyCombo[i] != keyCodes[2][i]
+    //     && keyCombo[i] != keyCodes[3][i]) {
+    //         keyCombo = '';
+    //         break;
+    //     }
+    // }
     for(i = 0; i < keyCombo.length; i++) {
         if(keyCombo[i] != keyCodes[0][i]
         && keyCombo[i] != keyCodes[1][i]
         && keyCombo[i] != keyCodes[2][i]
-        && keyCombo[i] != keyCodes[3][i]) {
+        && keyCombo[i] != keyCodes[3][i]
+        && keyCombo[i] != keyCodes[4][i]) {
             keyCombo = '';
             break;
         }

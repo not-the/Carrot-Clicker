@@ -1107,11 +1107,12 @@ body:not(.theme_light) .theme_checkmark {
     padding: 0;
 }
 .main_button_item:not(:last-of-type) {
-    margin-right: 12px;
+    margin-right: 8px;
 }
 .main_button_img {
     width: 26px;
     height: 26px;
+    transform: translateY(1px);
     transition: filter 0.25s ;
 }
 .main_button_item:hover .main_button_img {
@@ -1968,8 +1969,11 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 }
 
 /* Fancy Prestige menu */
-#prestige_menu {
+#prestige_menu,
+#tips_menu {
     padding: 24px;
+}
+#prestige_menu {
     width: 100%;
     max-height: 260px;
     max-width: 540px;

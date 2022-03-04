@@ -24,6 +24,7 @@ var cosmeticSwitcherOpen =  false;
 var keybindsMenuOpen =      false;
 var prestigeMenuOpen =      false;
 var inventoryOpen =         false;
+var tipsMenuOpen =          false;
 
 var achieveHTMLupdate =     true;
 
@@ -58,6 +59,7 @@ const cosmList = {
 }
 const prestigeMenu =  dom('prestige_menu');
 const inventoryMenu = dom('inventory_menu');
+const tipsMenu =      dom('tips_menu');
 //#endregion
 
 
@@ -140,62 +142,71 @@ function closeDialog(doAction, backdrop = false) {
     // Cancel if specific theme is chosen
     if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
 
-    dialogOpen = false;
-    eInnerText(elDialog.title, 'Dialog Title');
-    eInnerText(elDialog.desc, 'Dialog description');
-    // Reset Accept button
-    elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
-    // elDialog.buttons.accept.onclick = closeDialog;
-    eInnerText(elDialog.buttons.accept, "OK");
+    // Reset dialog
+    if(dialogOpen) {
+        // Run a function when accept is pressed
+        if(doAction) {
+            switch(dialogButtonAction) {
+                case 'prestige':
+                    Prestige();
+                    break;
+                case 'clearsave':
+                    clearSave();
+                    break;
+                case 'resetsettings':
+                    resetSettings(true);
+                    break;
+                case 'jjcvip':
+                    earnCarrots(1, 'bonus');
+                    break;
+                default:
+                    console.log('Dialog action not listed');
+                    break;
+            };
+        };
+
+        dialogOpen = false;
+        eInnerText(elDialog.title, 'Dialog Title');
+        eInnerText(elDialog.desc, 'Dialog description');
+        // Reset Accept button
+        elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
+        // elDialog.buttons.accept.onclick = closeDialog;
+        eInnerText(elDialog.buttons.accept, "OK");
+    }
 
     overlay.classList.remove("visible");
     elBody.classList.remove('overflow_hidden');
     elDialog.main.classList.remove('visible');
-    // elDialog.main.classList.remove("dialog_animate");
-
-    // Run passed in function if applicable
-    // if(action) {
-    //     action();
-    // }
-
-    // Run a function when accept is pressed
-    if(doAction) {
-        switch(dialogButtonAction) {
-            case 'prestige':
-                Prestige();
-                break;
-            case 'clearsave':
-                clearSave();
-                break;
-            case 'resetsettings':
-                resetSettings(true);
-                break;
-            case 'jjcvip':
-                earnCarrots(1, 'bonus');
-                break;
-            default:
-                console.log('Dialog action not listed');
-                break;
-        };
-    };
 
     dialogButtonAction = 'none';
 
     // Hide other popup menus
-    themeMenu.classList.remove('visible');
-    themeSwitcherOpen = false;
-
-    cosmeticMenu.classList.remove('visible');
-    cosmeticSwitcherOpen = false;
-
-    elKeybindsMenu.classList.remove('visible');
-    keybindsMenuOpen = false;
-
-    prestigeMenu.classList.remove('visible');
-    prestigeMenuOpen = false;
-
-    inventoryMenu.classList.remove('visible');
-    inventoryOpen = false;
+    //#region 
+    if(themeSwitcherOpen) {
+        themeMenu.classList.remove('visible');
+        themeSwitcherOpen = false;
+    }
+    if(cosmeticSwitcherOpen) {
+        cosmeticMenu.classList.remove('visible');
+        cosmeticSwitcherOpen = false;
+    }
+    if(keybindsMenuOpen) {
+        elKeybindsMenu.classList.remove('visible');
+        keybindsMenuOpen = false;
+    }
+    if(prestigeMenuOpen) {
+        prestigeMenu.classList.remove('visible');
+        prestigeMenuOpen = false;
+    }
+    if(inventoryOpen) {
+        inventoryMenu.classList.remove('visible');
+        inventoryOpen = false;
+    }
+    if(tipsMenuOpen) {
+        tipsMenu.classList.remove('visible');
+        tipsMenuOpen = false;
+    }
+    //#endregion
 }
 
 
@@ -595,6 +606,18 @@ function openInventory() {
 //         overlay.classList.remove("visible");
 //     }
 // }
+
+/* ----- Tips Menu ----- */
+function openTipsMenu() {
+    closeDialog();
+    tipsMenuOpen = true;
+    tipsMenu.classList.add('visible');
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+
+    buttonSound();
+}
+
 
 // Page elements
 const farmableNames = [

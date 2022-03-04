@@ -476,6 +476,19 @@
 
         </div>
 
+        <!-- Tips menu -->
+        <div id="tips_menu" class="popup_box fancy_switcher">
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h1>Tips</h1>
+
+            <!-- List -->
+            <div id="tips_list">
+                <p>Click here to cycle through available tips!</p>
+                <p class="secondary_text">???</p>
+            </div>
+        </div>
+
+
         <!-- Credits scroll -->
         <div id="credits" class="center">
             <h1>Credits</h1>
@@ -734,6 +747,11 @@
                 <!-- Inventory button -->
                 <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
                     <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
+                </button>
+
+                <!-- Tips button -->
+                <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
+                    <img src="./assets/icons/lightbulb.svg" alt="Inventory" class="main_button_img" id="tips_button_img">
                 </button>
             </div>
             <div id="prestige-section" class="flex">
