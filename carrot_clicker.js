@@ -472,7 +472,7 @@ const settings_default = {
     openpanel: null,            // string
     cosmetics_grid: true,
     achievements_grid: false,
-    compact_achievements: false,
+    compact_achievements: true,
 
     keybinds: keybinds_default, // object
 }
@@ -530,7 +530,7 @@ var clickArray = [];
 // Earn carrots function
 function earnCarrots(amount, type, useMousePos = false) {
     if(type == 'bonus') {
-        popupHandler(useMousePos, amount);
+        popupHandler(useMousePos, amount, 'falling');
     }
 
     player.Carrots += amount;
@@ -1484,14 +1484,13 @@ function tipchange() {
     tipInterval = setInterval(() => {tipchange()}, 15000);
     
     //Tracker
-    if(player.EquippedHoes>0 && tips.tracker==0){
+    if(player.EquippedHoes > 0 && tips.tracker == 0) {
         tips.tracker=1;
-    }
-    if(player.Carrots>1000000 && tips.tracker==1){
+    } else if(player.Carrots>1000000 && tips.tracker == 1) {
         tips.tracker=2;
     }
     
-    //decides if the tip will be real or fun.
+    // decides if the tip will be real or fun.
     tips.random = Math.random();
     // console.log(tips.random);
     if(tips.random<tips.TypeModifier){

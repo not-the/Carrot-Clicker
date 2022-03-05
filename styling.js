@@ -442,6 +442,11 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
     if(style == 'carrot') {
         eInnerText(clickVisualElement, `+${amount}`); 
     }
+    // Falling carrot
+    else if(style == 'falling') {
+        eInnerText(clickVisualElement, `+${amount}`);
+        clickVisualElement.classList.add("clickvisual_falling");
+    }
     // Cash
     else if(style == 'cash') {
         eInnerText(clickVisualElement, `₪${amount}`);
@@ -466,16 +471,6 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 }
 //#endregion
 
-function fallingCarrotClick(amount, type) {
-    dom(element.id).remove();
-    fallingActive--;
-
-    if(type == 'carrot') {
-        earnCarrots( amount, 'bonus' );
-    } else if(type == 'cash') {
-        earnCash(amount, 'bonus' );
-    }
-}
 
 // Falling carrots
 var fallingID = 0;
@@ -494,18 +489,31 @@ function fallingCarrot() {
     fallingID++;
     fallingActive++;
 
+    let amount;
+
     if(type == 'carrot') {
         // Carrot reward
         // Between 400% and 800% of player's CPC
         let rewardVariation = (Math.floor((Math.random() * 400)) + 400) / 100;
-        let amount = Math.round(player.cpc * rewardVariation);
-        element.onclick = fallingCarrotClick(amount, 'bonus');
+        amount = Math.round(player.cpc * rewardVariation);
     } else if(type == 'cash') {
         // Cash reward
         // Between 2 and 10
-        let amount = Math.floor((Math.random() * 9)) + 2;
-        element.onclick = fallingCarrotClick(amount, 'bonus');
+        amount = Math.floor((Math.random() * 9)) + 2;
     }
+
+    // Set onclick function
+    element.onclick = () => {
+        dom(element.id).remove();
+        fallingActive--;
+    
+        if(type == 'carrot') {
+            earnCarrots( amount, 'bonus', true);
+        } else if(type == 'cash') {
+            earnCash(amount, 'bonus');
+        }
+    };
+
 
 
     // Positioning

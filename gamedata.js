@@ -815,6 +815,22 @@ const achievements = {
         }
     },
 
+    // Tome pages tutorial message
+    'first_tome_page': {
+        'name': 'Paginator',
+        'desc': 'Earn a tome page (Tutorial milestone)',
+        'image': false,
+        'reward': 'function:tutorialPages()',
+        'pages': false,
+        'conditions': ['player.pages', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': true,
+        }
+    },
+
     'own_a_theme': {
         'name': 'Taking in the Themery',
         'desc': 'Obtain a cosmetic and a theme! You\'ve gained the attention of an artist.',
@@ -857,7 +873,7 @@ const achievements = {
         'desc': 'Upgrade Bill 10 times',
         'image': false,
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['Boomer_Bill.lvl', 10],
         'mystery': {
             'name': true,
@@ -885,7 +901,7 @@ const achievements = {
         'desc': 'Upgrade Belle 15 times',
         'image': false,
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
             'name': true,
@@ -1209,7 +1225,7 @@ const achievements = {
         'desc': 'Grab 50 falling carrots',
         'image': './assets/achievements/parachute_carrot.png',
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 50],
         'mystery': {
             'name': true,
@@ -1262,13 +1278,27 @@ const achievements = {
             'noToast': false,
         }
     },
-    '10000_clicks': {
+    '5000_clicks': {
         'name': 'Clicker Hero',
-        'desc': 'Click the carrot 10,000 times',
+        'desc': 'Click the carrot 5,000 times',
         'image': false,
         'reward': 'cosmetic:farmable/pixel_carrot',
-        'pages': 1,
-        'conditions': ['player.lifetime.clicks', 10000],
+        'pages': false,
+        'conditions': ['player.lifetime.clicks', 5000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '50000_clicks': {
+        'name': 'Destroyer of Mice',
+        'desc': 'Click the carrot 50,000 times',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.lifetime.clicks', 50000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1277,40 +1307,12 @@ const achievements = {
         }
     },
     '100000_clicks': {
-        'name': 'Destroyer of Mice',
+        'name': '"My Finger Hurts"',
         'desc': 'Click the carrot 100,000 times',
         'image': false,
         'reward': false,
-        'pages': 3,
+        'pages': false,
         'conditions': ['player.lifetime.clicks', 100000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '500000_clicks': {
-        'name': '"My Finger Hurts"',
-        'desc': 'Click the carrot 500,000 times',
-        'image': false,
-        'reward': false,
-        'pages': 4,
-        'conditions': ['player.lifetime.clicks', 500000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1000000_clicks': {
-        'name': 'Clicker God',
-        'desc': 'Click the carrot 1,000,000 times',
-        'image': false,
-        'reward': false,
-        'pages': 5,
-        'conditions': ['player.lifetime.clicks', 1000000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1340,7 +1342,7 @@ const achievements = {
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
         'reward': ['cosmetic:farmable/golden_carrot', 'cosmetic:farmable/pixel_golden_carrot', 'function:confetti()'],
-        'pages': 3,
+        'pages': false,
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {
             'name': false,
@@ -1354,7 +1356,7 @@ const achievements = {
         'desc': 'Earn 500 golden carrots',
         'image': './assets/achievements/gold_au.png',
         'reward': false,
-        'pages': 4,
+        'pages': 2,
         'conditions': ['player.lifetime.golden_carrots', 500],
         'mystery': {
             'name': false,
@@ -1368,7 +1370,7 @@ const achievements = {
         'desc': 'Earn 1989 golden carrots',
         'image': './assets/theme/theme_retro.png',
         'reward': 'theme:theme_retro',
-        'pages': 5,
+        'pages': 3,
         'conditions': ['player.lifetime.golden_carrots', 1989],
         'mystery': {
             'name': true,
@@ -1466,7 +1468,7 @@ const achievements = {
         }
     },
     'all_normal_achievements': {
-        'name': 'all_normal_achievements',
+        'name': 'All Normal Achievements',
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
         'reward': 'function:confetti()',
@@ -1483,11 +1485,11 @@ const achievements = {
 
     // Challenge achievements
     'no_bonus_carrots_challenge': {
-        'name': 'no falling carrots',
+        'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
-        'image': false,
+        'image': './assets/achievements/no_falling_carrots.png',
         'reward': 'function:confetti()',
-        'pages': 3,
+        'pages': 5,
         'conditions': ['ex_noBonusCarrots()', true],
         'style': 'challenge',
         'mystery': {
@@ -1498,7 +1500,7 @@ const achievements = {
         }
     },
     'no_bill_challenge': {
-        'name': 'Patience is Free',
+        'name': 'You\'re Free to Wait', // Renamed from "Patience is free"
         'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
         'image': false,
         'reward': 'function:confetti()',
@@ -1560,6 +1562,22 @@ const achievements = {
     },
 
     // Secret Achievements
+    '1000000_clicks': {
+        'name': 'Clicker God',
+        'desc': 'Click the carrot 1 million times',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.lifetime.clicks', 1000000],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+            'list': true,
+        }
+    },
     'easter_egg_hunter': {
         'name': 'Easter Egg Hunter',
         'desc': 'Enter the Konami code, at least according to Wikipedia. There are multiple versions, apparently. (Hidden achievement)',
@@ -1611,7 +1629,7 @@ const achievements = {
     'playtester': {
         'name': 'Early Playtester',
         'desc': 'Thanks for playtesting! Have a theme.',
-        'image': false,
+        'image': './assets/achievements/early_playtester.png',
         'reward': 'cash:32',
         'pages': false,
         'conditions': ['0', 1],

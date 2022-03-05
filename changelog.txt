@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.7
+    3-4-2022
+// ----------------------------------------------------------- //
+
+- Falling carrots now work again
+- Falling carrot popup will once again correctly use your mouse position
+- Fixed an issue where setting achievements to grid view and then switching to another tab would still display the achievements farther up the page
+- Fixed an issue where hovering over an achievement would make it render above the tripane buttons
+- Compact achievements is now enabled by default
+- Added an info button to the cash count
+- Cleaned up changelog page's CSS
+- More achievements have images: Early Playtester, Fall Guy
+- Reduced the numbers for the clicks achievements, removed their page rewards and made the final one a secret achievement
+- Reduced/removed some more page rewards, particularly for early game achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.6
     2-6-2022, changes pushed 3-4-2022
 // ----------------------------------------------------------- //
@@ -93,6 +112,7 @@ Fixed JJ jank:
 -tweaked some prestige calculations
 
 ~JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.9.1.1

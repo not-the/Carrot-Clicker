@@ -900,6 +900,12 @@ function tutorialHoes() {
         "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).",
         "", true);
 }
+function tutorialPages() {
+    toast(
+        "You've earned a tome page!",
+        "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.",
+        "", true);
+}
 // use_charles
 function ex_charlesUses() {
     if(

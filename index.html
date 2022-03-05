@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.5</title>
+    <title id="page_title">Carrot Clicker dev beta v1.9.7</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -728,7 +728,8 @@
                 <p class="secondary_text">
                     <span id="cps_name">Carrots</span> per second: <span id="cps">Loading...</span>
                 </p><br/>
-                <p class="secondary_text">Shekels: ₪<span id="cash_count">Loading...</span></p>
+                <p class="secondary_text" style="margin-right:-24px">
+                    Shekels: ₪<span id="cash_count">Loading...</span> <span class="question_mark" title="While clicking the carrot there is a chance that shekels will drop instead of carrots. Make sure to grab them!" onclick="toast('Info: Shekels', 'While clicking the carrot there is a chance that shekels will drop instead of carrots. Make sure to grab them!', '', true, true)">?</span></p>
                 <p class="secondary_text" style="margin-right:-24px">
                     Tome Pages: <span id="page_count">Loading...</span> <span class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging." onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.', '', true, true)">?</span>
                 </p>
@@ -794,7 +795,7 @@
                         title="Boomer Bill">
 
                         <div class="characterdesc">
-                            <b id="bill_name" class="underline">Bill</b>
+                            <b id="bill_name" class="character_name">Bill</b>
                             <p class="secondary_text">
                                 Cost to upgrade Bill: <span id="UpBillCost"></span>
                             </p>
@@ -849,7 +850,7 @@
                         class="characterimg"
                         title="Boomer Belle">
                         <div class="characterdesc">
-                        <b id="belle_name" class="underline">
+                        <b id="belle_name" class="character_name">
                             Belle
                         </b>
                         <p class="secondary_text">
@@ -900,7 +901,7 @@
                         class="characterimg"
                         title="Gregory">
                         <div class="characterdesc">
-                            <b id="greg_name" class="underline">Greg</b>
+                            <b id="greg_name" class="character_name">Greg</b>
                             <p class="secondary_text">
                                 Cost to Upgrade Greg: <span id="UpGregCost"></span>
                             </p>
@@ -964,7 +965,7 @@
                             class="characterimg"
                             title="Charles">
                         <div class="characterdesc">
-                            <b id="charles_name" class="underline">Charles</b>
+                            <b id="charles_name" class="character_name">Charles</b>
                             <p class="secondary_text">
                                 Golden Carrot research<br/>
                                 Sells tomes
@@ -1040,7 +1041,7 @@
                             title="Carl">
                         <div class="characterdesc flex">
                             <div>
-                                <b id="carl_name" class="underline">Carl</b>
+                                <b id="carl_name" class="character_name">Carl</b>
                                 <!-- <p class="secondary_text"> -->
                                     <!-- &gt; IN DEVELOPMENT &lt;<br> -->
                                     <!-- Purchase Cosmetics
@@ -1151,7 +1152,7 @@
                 <span class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true)">?</span>
             </p><br>
             <label for="compact_achievements">
-                <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
+                <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')" checked> Compact mode
             </label>
             <label for="achievements_grid">
                 <input type="checkbox" class="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view (WIP)

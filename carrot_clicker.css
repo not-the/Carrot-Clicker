@@ -426,6 +426,9 @@ summary:hover {
     pointer-events: none !important;
     transform: translateY(-100%) !important;
 }
+.remove:not(.unremove) .achieve_grid .achievement_item {
+    opacity: 0;
+}
 .unremove {
     visibility: inherit !important;
     position: unset !important;
@@ -830,8 +833,19 @@ body:not(.theme_light) .theme_checkmark {
         opacity: 0;
     }
 }
+.clickvisual_falling {
+    animation: anim_falling_popup 0.3s linear alternate, clickBonus 1.25s linear forwards;
+}
 .clickvisual_cash {
     color: rgb(204, 64, 64);
+}
+@keyframes anim_falling_popup {
+    0% {
+        color: rgb(255, 255, 255);
+    }
+    100% {
+        color: rgb(120, 127, 141);
+    }
 }
 
 /* Falling carrots */
@@ -1080,15 +1094,17 @@ body:not(.theme_light) .theme_checkmark {
 
     filter: drop-shadow(12px 12px 5px rgba(0, 0, 0, 0.3));
 
-    transition: transform 0.1s linear;
-    transition: filter, 0.1s linear; /* Comma is here on purpose, removing it breaks this for some reason*/
+    /* Click animation */
+    transition-property: transform, filter;
+    transition-duration: 0.07s;
+    transition-timing-function: linear;
 
     image-rendering: unset;
 
     touch-action: manipulation;
 }
 #main_carrot:active {
-    transform: scale(0.97,0.97);
+    transform: scale(0.96,0.96);
     filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.3))
             brightness(85%)
             saturate(110%);
@@ -1102,7 +1118,7 @@ body:not(.theme_light) .theme_checkmark {
     justify-content: center;
 }
 .main_button_item {
-    width: 46px;
+    width: 45px;
     height: 45px;
     padding: 0;
 }
@@ -1175,6 +1191,9 @@ body:not(.theme_light) .theme_checkmark {
     /* border: 3px solid #6d6565; */
     outline: 1px solid #4b4747;
     z-index: 11;
+}
+.characterbox:hover .character_name {
+    text-decoration: underline;
 }
 .bottom {
     padding-top: 2px;
@@ -1573,7 +1592,7 @@ body:not(.theme_light) .theme_checkmark {
     border-radius: 16px 16px 0 0;
 
     position: sticky;
-    z-index: 2;
+    z-index: 3;
     top: 36px;
 }
 #tripane nav .tab {
