@@ -26,6 +26,7 @@ var prestigeMenuOpen =      false;
 var inventoryOpen =         false;
 var tipsMenuOpen =          false;
 
+// Don't regenerate achievements list unless necessary
 var achieveHTMLupdate =     true;
 
 // Dialog button action
@@ -480,8 +481,8 @@ const fallingCarrotsArea = dom('fallingCarrotsArea');
 function fallingCarrot() {
     var element = document.createElement("img");
     
-    // 0.66% chance the drop is money instead
-    let type = Math.floor(Math.random() * 200) <= 0 ? 'cash' : 'carrot';
+    // 1% chance the drop is money instead
+    let type = Math.floor(Math.random() * 100) == 0 ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? './assets/Carrot Clicker.png' : './assets/coin.png';
     element.classList.add('falling_carrot');
@@ -493,13 +494,13 @@ function fallingCarrot() {
 
     if(type == 'carrot') {
         // Carrot reward
-        // Between 400% and 800% of player's CPC
-        let rewardVariation = (Math.floor((Math.random() * 400)) + 400) / 100;
+        // Between 500% and 2000% of player's CPC
+        let rewardVariation = (Math.floor((Math.random() * 1500)) + 500) / 100;
         amount = Math.round(player.cpc * rewardVariation);
     } else if(type == 'cash') {
         // Cash reward
-        // Between 2 and 10
-        amount = Math.floor((Math.random() * 9)) + 2;
+        // Between 4 and 12
+        amount = Math.floor((Math.random() * 9)) + 4;
     }
 
     // Set onclick function
@@ -569,7 +570,8 @@ function closeThemeSwitcher(noOverlay = false) {
 }
 
 /* ----- Fancy Cosmetic Switcher ----- */
-function cosmeticSwitcher() {
+var uncollapseNeeded = false;
+function cosmeticSwitcher(category = false) {
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
     overlay.classList.add("visible");
@@ -577,6 +579,23 @@ function cosmeticSwitcher() {
 
     newIndicator(false, 'cosmetic');
     buttonSound();
+
+    // Uncollapse intended category
+    if(category != false) {
+        // Collapse all
+        document.querySelectorAll('.cosmetic_collapse').forEach(e => {
+            e.open = false;
+        });
+
+        // Uncollapse
+        dom(`collapse_${category}`).open = true;
+        uncollapseNeeded = true;
+    } else if(uncollapseNeeded == true) {
+        uncollapseNeeded = false;
+        document.querySelectorAll('.cosmetic_collapse').forEach(e => {
+            e.open = true;
+        });
+    }
 }
 function closeCosmeticSwitcher(noOverlay = false) {
     cosmeticMenu.classList.remove('visible');
@@ -587,6 +606,9 @@ function closeCosmeticSwitcher(noOverlay = false) {
 
 /* ----- Fancy Prestige menu ----- */
 function openPrestigeMenu() {
+    // Prevent from opening if unavailable
+    if(player.lifetime.golden_carrots < 1 && player.prestige_potential < 1) {return};
+    
     closeDialog();
     prestigeMenuOpen = true;
     prestigeMenu.classList.add('visible');
@@ -628,11 +650,7 @@ function openTipsMenu() {
 
 
 // Page elements
-const farmableNames = [
-    dom('cc_name'),
-    dom('cpc_name'),
-    dom('cps_name'),
-]
+const farmableNames = document.querySelectorAll('.farmable_name');
 const characterAvatars = {
     'bill':     dom('bill_avatar'),
     'belle':    dom('belle_avatar'),
@@ -658,7 +676,7 @@ function setCosmetic(target, to, resetState = false) {
     if(resetState == false && to !== 'default')
     {setCosmetic(target, 'default', true);}
 
-    console.log('Switching ' + target + '\'s cosmetic to: ' + to);
+    // console.log('Switching ' + target + '\'s cosmetic to: ' + to);
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
@@ -731,9 +749,9 @@ function setCosmetic(target, to, resetState = false) {
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(farmable) {
-        for(i = 0; i < farmableNames.length; i++) {
-            eInnerText(farmableNames[i], farmable + 's');
-        }
+        farmableNames.forEach(e => {
+            e.innerText = farmable + 's';
+        });
     }
 
     settings.cosmetics[target] = to;
@@ -879,15 +897,15 @@ function populateCosmeticsList(target) {
     for(let i = 0; i < list['keys'].length; i++) {
         let key = list['keys'][i];
         let cosmetic = list[key];
-
         // console.log(target + '/' + key);
 
-        // Test if unlocked
+        // If not unlocked
         if(isUnlocked('cosmetic', key, target) == false) {
+            // Test if hidden
+            if(cosmetic.hidden == true) continue;
+
             // console.log(key + ' is not unlocked!');
             stillLocked++;
-            // console.log('nah');
-
             cosmeticHTML += /* html */
             `
             <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
@@ -1020,7 +1038,7 @@ function populateAchievements() {
                         [subtype, rewardName] = rewardName.split('/');
                         
     
-                        console.log(` cosmetics[${subtype}][${rewardName}].preview`);
+                        // console.log(` cosmetics[${subtype}][${rewardName}].preview`);
 
                         informalName = cosmetics[subtype][rewardName].name;
                         if(cosmetics[subtype][rewardName].hasOwnProperty('preview') == false) {
@@ -1049,6 +1067,11 @@ function populateAchievements() {
                                 icon = './assets/characters/Carl.png'
                                 break;
                         }
+                    } else if(rewardType == 'cash') {
+                        icon = './assets/piggy_bank.png';
+                        informalName = `x${rewardName} shekels`;
+                    } else if(rewardType == 'shop') {
+                        continue;
                     }
 
                     inner += 
@@ -1106,6 +1129,11 @@ function populateAchievements() {
                             icon = './assets/characters/Carl.png'
                             break;
                     }
+                } else if(rewardType == 'cash') {
+                    icon = './assets/piggy_bank.png';
+                    informalName = `x${rewardName} shekels`;
+                } else if(rewardType == 'shop') {
+                    continue;
                 }
 
 
@@ -1251,6 +1279,11 @@ function rewardHTML(achieve) {
                             icon = './assets/characters/Carl.png'
                             break;
                     }
+                } else if(rewardType == 'cash') {
+                    icon = './assets/piggy_bank.png';
+                    informalName = `x${rewardName} shekels`;
+                } else if(rewardType == 'shop') {
+                    continue;
                 }
 
                 inner += 
@@ -1309,6 +1342,11 @@ function rewardHTML(achieve) {
                         icon = './assets/characters/Carl.png'
                         break;
                 }
+            } else if(rewardType == 'cash') {
+                icon = './assets/piggy_bank.png';
+                informalName = `x${rewardName} shekels`;
+            } else if(rewardType == 'shop') {
+                return '';
             }
 
             inner = 
@@ -1355,25 +1393,15 @@ function setTheme(theme) {
     var theme_color = '#312e2e';
     var from = settings.theme;
 
-    elBody.className = '';
+    // If there is already a theme class, remove it
+    [...elBody.classList].forEach(c => {
+        if(c.includes('theme')) {
+            elBody.classList.remove(c);
+        }
+    });
+
+    // Add new theme
     elBody.classList.add(theme);
-
-    if(themeSwitcherOpen) {
-        elBody.classList.add('overflow_hidden');
-    }
-
-    // Temporary cosmetic activator 
-    // if(theme == 'theme_blockgame') {
-    //     setCosmetic('blockgame');
-    // } else {
-    //     if(store('cosmetic') !== 'default') {
-    //         setCosmetic('default');
-    //     }
-    // }
-
-    // Mobile accent color
-    // if(theme == 'theme_light') {theme_color = '#FFFFFF';}
-    // else if(theme == 'theme_classic') {theme_color = '#4e3f34';}
 
     // console.log(themes[theme]);
     if(themes[theme].hasOwnProperty('accent')) {
@@ -1409,6 +1437,9 @@ function setTheme(theme) {
 //         back.classList.remove('charflip_r');
 //     }
 // }
+function characterInfo(character) {
+    console.log('characterInfo: ' + character)
+}
 
 
 // Credits scroll
@@ -1453,8 +1484,9 @@ function populateCarl() {
     carlShopData = {};
 
     // Loop through themes
-    for(let ti = 0; ti < Carl.shop.theme.keys.length; ti++) {
-        let name = Carl.shop.theme.keys[ti];
+    let theme_keys = Carl.shop.theme.keys;
+    for(let ti = 0; ti < theme_keys.length; ti++) {
+        let name = theme_keys[ti];
         let item = Carl.shop.theme[name];
         if(
             item.available == false ||
@@ -1463,10 +1495,29 @@ function populateCarl() {
 
         carlShopData[name] = item.price;
 
-        let theme = themes[Carl.shop.theme.keys[ti]];
+        let theme = themes[theme_keys[ti]];
         let img = theme.image;
 
         html += carlHTML(name, 'theme', theme.name, img, item.price);
+    }
+
+    // Loop through cosmetics
+    let cosm_keys = Carl.shop.cosmetic.keys;
+    for(let ti = 0; ti < cosm_keys.length; ti++) {
+        let name = cosm_keys[ti];
+        let item = Carl.shop.cosmetic[name];
+        if(
+            item.available == false ||
+            item.bought == true
+        ) continue;
+
+        carlShopData[name] = item.price;
+
+        let [ca, cb] = name.split('/');
+        let cosmetic = cosmetics[ca][cb];
+        let img = cosmetic.image;
+
+        html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
     }
 
     if(html == '') {
@@ -1486,7 +1537,7 @@ function carlHTML(internalName, type, name, img, price) {
             <img src="${img}" alt="" class="shop_img">
             <div class="info" style="margin-top: 4px;">
                 <b>${name}</b>
-                <p class="secondary_text">Theme</p>
+                <p class="secondary_text">${capitalizeFL(type)}</p>
 
                 <div class="shop_price">
                     ₪${price}

@@ -2,6 +2,46 @@
 Users settings, keybind handling, and tutorial handling
 ------------------------------------------------------------- */
 
+/*---------------AUDIO HANDLING-------------------*/
+// Volume variable
+var volume = 1;
+
+function playSound(file, path = './assets/sounds/') {
+    if(settings.enableSounds == false) return;
+    var audio = new Audio(path + file);
+    audio.play();
+}
+
+// Play Music
+var music;
+function playMusic(file = 'music.m4a', loop = false, path='assets/music/') {
+    // Return if sounds are disabled
+    if(settings.enableSounds == false || settings.enableMusic == false) return;
+
+    // Create
+    music = new Audio(path + file);
+    music.volume = volume;
+    music.loop = loop;
+
+    console.log('playMusic() - Playing track 1...');
+    music.play();
+}
+
+function stopMusic() {
+    if(!music) {
+        console.log('stopMusic(): No music is playing');
+        return;
+    };
+    music.pause();
+    music.currentTime = 0;
+}
+
+
+
+
+
+
+
 /*---------------OPTIONS-------------------*/
 
 // Page variables
@@ -83,7 +123,7 @@ function settingText(option) {
     }
 }
 function resetAutosave() {
-    let value = 2;
+    let value = settings_default.autosave_interval;
 
     console.log(`[Settings] Autosave interval reset to: ${value}`);
     dom('autosave_interval').value = value;
@@ -243,7 +283,7 @@ document.addEventListener('keyup', event => {
         return;
     }
     // Close theme switcher
-    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen) {
+    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen) {
         if(event.key == "Escape"){
             closeDialog();
         }
@@ -651,7 +691,7 @@ function giveReward(reward) {
     // Shop reward
     else if(rewardType == 'shop') {
         let [target, item] = rewardName.split('/');
-        unlock("shop_item", item, target);
+        unlock("shop_item", item, target, reward);
     }
     // Cash reward
     else if(rewardType == 'cash') {
@@ -725,14 +765,12 @@ function grantAchievement(key) {
 }
 
 // Unlock themes/cosmetics
-// var playerThemes =    [];
-// var playerCosmetics = [];
-function unlock(type, thingToUnlock, subtype) {
+function unlock(type, thingToUnlock, subtype, raw) {
     if(isUnlocked(type, thingToUnlock, subtype)) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
         return;
     }
-    console.log('unlock(): ' + type + ':' + thingToUnlock);
+    // console.log('unlock(): ' + type + ':' + thingToUnlock);
 
     // Theme
     if(type == 'theme') {
@@ -774,7 +812,8 @@ function unlock(type, thingToUnlock, subtype) {
     else if(type == 'character') {
         player.characters[thingToUnlock] = true;
         dom(`${thingToUnlock}_box`).classList.remove('char_locked');
-        playerCharKeys = Object.keys(player.characters)
+        playerCharKeys = Object.keys(player.characters);
+        elBody.classList.add(`c_${thingToUnlock}`);
 
         if(playerCharKeys.length == 5) {
             dom('more_chars_tooltip').classList.add('char_locked');
@@ -782,16 +821,40 @@ function unlock(type, thingToUnlock, subtype) {
     }
     // Carl shop item
     else if(type == 'shop_item') {
-        Carl.shop[subtype][thingToUnlock].available = true;
-        console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
+        console.log(raw);
+        // Theme
+        if(subtype == 'theme') {
+            Carl.shop['theme'][thingToUnlock].available = true;
+            console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
+        }
+        // Cosmetic
+        else if(subtype == 'cosmetic') {
+            let target = raw.split('/')[1];
+            let cosmetic = raw.split('/')[2];
+            Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
+            console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
+        }
+
+        toast('', 'Carl: A new item is now available');
+
         populateCarl();
     }
 }
 
 // Shop
-function purchase(source, type, item, subtype) {
+function purchase(source, type, item, subtype = false) {
+    let raw = item;
+    // Fix input data for cosmetics
+    if(type[type.length - 1] == 'c') {
+        type = 'cosmetic';
+        [subtype, item] = item.split('/');
+    };
+
+    // console.log(`purchase(${source}, ${type}, ${item}, ${subtype})`);
+
     // Check if already unlocked or bought
-    if(isUnlocked(type, item, subtype) || Carl.shop[type][item].bought == true) {
+    console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
+    if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
         toast('Error', 'You already own this');
 
@@ -799,18 +862,18 @@ function purchase(source, type, item, subtype) {
         populateCarl();
         return;
     }
-    console.log('purchase(): ' + type + ':' + item);
+    console.log('purchase(): ' + type + ':' + raw);
 
     // let currency = Carl.shop[type][item].currency;
     // let price;
 
-    let carlListing = Carl.shop[type][item];
+    let carlListing = Carl.shop[type][raw];
 
     // Carl shop
     if(source == 'carl') {
         // Check if Carl is unlocked (anticheat)
         if(characterQuery('carl') == false) {
-            toast('Nice Try', 'Carl has not been unlocked');
+            // toast('Nice Try', 'That character has not been unlocked');
             return;
         }
         if(carlListing.available == false) {
@@ -823,16 +886,16 @@ function purchase(source, type, item, subtype) {
             // Buy
             if(player.cash >= carlListing.price) {
                 player.cash -= carlListing.price;
-                Carl.shop[type][item].bought = true;
+                Carl.shop[type][raw].bought = true;
                 unlock(type, item, subtype);
 
                 cashCount();
                 populateCarl();
-                toast(`Item bought: ${item} (${type})`);
+                toast('', `Item bought: ${raw} (${type})`);
             }
             // Can't afford
             else {
-                toast('Can\'t Afford', 'Carl wouldn\'t dare let this piece go for less than ${price}');
+                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ₪${carlListing.price}`, '', false, true);
             }
         } else {
             toast('other currency', 'other currencies aren\'t supported yet');
@@ -847,6 +910,18 @@ function characterQuery(char) {
     if(player.characters.hasOwnProperty(char)) return true;
     return false;
 }
+function allCharQuery() {
+    if(
+        characterQuery('belle') == true
+        && characterQuery('greg') == true
+        && characterQuery('charles') == true
+        && characterQuery('carl') == true
+        // And so on
+    ) {
+        return true;
+    }
+    return false;
+}
 
 // Test if player has an achievement - True = yes, False = no
 function achieveQuery(key) {
@@ -856,6 +931,7 @@ function achieveQuery(key) {
 }
 
 // Test if theme is unlocked or not
+                    'cosmetic', 'biker_bill', 'bill'
 function isUnlocked(type = 'theme', key, subtype) {
     // Theme
     if(type == 'theme') {
@@ -872,6 +948,7 @@ function isUnlocked(type = 'theme', key, subtype) {
         // console.log(player.cosmetics[subtype].length);
 
         for(let i = 0; i < player.cosmetics[subtype].length; i++) {
+            // console.log(key == player.cosmetics[subtype][i]);
             if(key == player.cosmetics[subtype][i]) {
                 return true;
             }
@@ -903,7 +980,7 @@ function tutorialHoes() {
 function tutorialPages() {
     toast(
         "You've earned a tome page!",
-        "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging.",
+        "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
         "", true);
 }
 // use_charles
@@ -945,45 +1022,15 @@ function ex_notFunny() {
     return 0;
 }
 
-// Get cosmetics count
-let playerCosmeticsKeys = Object.keys(player.cosmetics);
-var playerCosmetics = 0;
-var cosmeticsTypes = 0;
+// Get total cosmetics count
 function playerCosmeticsCount() {
-    for(i = 0; i < playerCosmeticsKeys.length; i++) {
-        cosmeticsTypes++;
-        let target = player.cosmetics[ playerCosmeticsKeys[i] ];
-        for(t = 1; t < target.length; t++) {
-            playerCosmetics++;
-        }
+    let a = 0;
+    for(i = 0; i < cosmeticsKeys.length; i++) {
+        a += player.cosmetics[cosmeticsKeys[i]].length - 1;
     }
-
-    return playerCosmetics;
+    return a;
 }
-playerCosmeticsCount();
 
-
-
-/* Item/crafting system */
-const items = {
-    'carrot_pot_pie': {
-        'name': 'Carrot Pot Pie',
-        'desc': 'Made with carrot-based meat alternatives of course.',
-        'recipe': {
-            'carrot': 24,
-            'dough': 4,
-        }
-    },
-    'carrot_cookie': {
-        'name': 'Carrot Cookie',
-        'desc': 'Delicious',
-        'recipe': {
-            'carrot': 24,
-            'dough': 4,
-        },
-        // Crafting this unlocks Cookie cosmetic, or maybe you can craft the cookie cosmetic with these
-    }
-}
 
 // Fill out keybinds menu
 function populateKeybinds() {
@@ -1011,7 +1058,7 @@ function resetKeybinds() {
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
 function onLoad() {
-    console.log('Running onLoad()');
+    // console.log('Running onLoad()');
 
     // Flag for early playtesters
     store('playtest', 'yes');
@@ -1152,7 +1199,7 @@ function onLoad() {
     }
     // Switch to previously open panel on page load
     if(settings.openpanel != null) {
-        console.log('openpanel found, switching to: ' + settings.openpanel);
+        // console.log('openpanel found, switching to: ' + settings.openpanel);
         panelChange(settings.openpanel, true);
     } else {
         panelChange('achievements-panel');
@@ -1189,7 +1236,7 @@ function onLoad() {
         elEnableSounds.checked = false;
         settingSounds();
     }
-    // Merged Dev tools
+    // Dev tools
     else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == 'cheatmode') {
         // Register cheat functions globally
         //#region
@@ -1275,7 +1322,7 @@ function onLoad() {
                         </label>
                     </td>
                     <td>
-                        <input id="setCarrot" class="dev_input" type="number">
+                        <input id="setCarrot" class="dev_input" type="number" value="500000">
                     </td>
                     <td id="setCarrotRounded" class="secondary_text"></td>
                 </tr>
@@ -1370,11 +1417,13 @@ function onLoad() {
         player.pages = pagesIntended;
     }
 
-    console.log(pagesIntended);
+    // console.log(pagesIntended);
 
     
     // Disable
     optionSoundsDisable(settings.enableSounds);
+
+    // Make golden carrot count visible
 
 
 

@@ -1,4 +1,60 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.9.8
+    3-8-2022
+// ----------------------------------------------------------- //
+
+Fixing all the bugs
+
+Fixes:
+- Tome page info button/tutorial message now tell you how to get tome pages
+- The "Always-on-top progress bar" option is no longer broken
+- Moved sound and music functions over from carrot_utilities to user.js
+  + Fixed them not disabling properly (were still on the old settings system)
+  + Fixed music being 100x quieter than intended until the volume slider was used
+  + "Carrot sound effects" is now disabled by default
+  + Renamed "Music" and "Carrot sound effects" to "Beta music" and "Beta carrot sounds" respectively
+- Both the autosave frequency tooltip and its reset button were under the impression that the default was 2 despite it being 5
+- Minecraft theme no longer uses bold text since the font doesn't support it
+- Number popups created by falling carrots are now larger, have a unique animation, and will render above other popups
+- Unlocked themes statistic now has a percentage value next to it
+- Gave Greg a small indicator to show what he is crafting (similar to the main progress bar)
+- Replaced the level up button with a different image (subject to change)
+- You can no longer upgrade characters that haven't been unlocked
+- The prestige menu can no longer be opened until prestiging becomes available
+- Escape key now works to close the tips menu
+- Misc light theme fixes
+- Some other random optimizations/improvements
+
+Achievements:
+- More achievements now have images: Paginator, Pineapple
+- The "shine" achievement style now does something
+- Support for cash rewards in the achievements list
+- New achievement: unlock_all_characters
+
+Carl:
+- Shop unlocks will no longer be visible in the achievements list as rewards
+- Carl will now unlock once he has at least 2 shop items available
+- Carl can now sell cosmetics
+- Made a number of previously unobtainable cosmetics & themes available
+- Carl's "Can't afford" toast now tells you the price
+
+Cosmetics:
+- There is now a button on each character that allows you to jump to their cosmetics list, and another button that will allow you to view character info
+- The cosmetics count in statistics is now correct
+- Cosmetics for characters you haven't unlocked will no longer be visible
+- Support for hidden cosmetics (upvote and huh whuh are now hidden)
+- Gave more cosmetics descriptions
+
+Balance changes:
+- Falling carrot rewards changed (400% and 800% of CPC) -> (500% and 2000% of CPC)
+- Falling carrots now have a 1% chance of being cash instead of the 0.5% it was previously
+- Minimum cash drop changed from 2 to 4
+- "Half Way There" achievement now includes challenge achievements, so it will be slightly harder to get
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.7
     3-4-2022
 // ----------------------------------------------------------- //
@@ -13,6 +69,7 @@
 - More achievements have images: Early Playtester, Fall Guy
 - Reduced the numbers for the clicks achievements, removed their page rewards and made the final one a secret achievement
 - Reduced/removed some more page rewards, particularly for early game achievements
+- Added an achievement and tutorial message for earning your first tome page
 
 ~ Kal
 

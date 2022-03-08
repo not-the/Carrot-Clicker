@@ -279,49 +279,65 @@ const Default_Carl = {
         theme: {
             'theme_classic': {
                 currency: 'cash',
-                price: 24,
+                price: 20,
                 available: true,
                 bought: false,
             },
             'theme_camo': {
                 currency: 'cash',
-                price: 10,
+                price: 4,
                 available: false,
                 bought: false,
             },
             'theme_bw': {
                 currency: 'cash',
-                price: 40,
+                price: 32,
                 available: false,
                 bought: false,
             },
             'theme_red': {
                 currency: 'cash',
-                price: 24,
+                price: 6,
                 available: false,
                 bought: false,
             },
             'theme_green': {
                 currency: 'cash',
-                price: 10,
+                price: 6,
                 available: false,
                 bought: false,
             },
             'theme_blue': {
                 currency: 'cash',
-                price: 40,
+                price: 6,
                 available: false,
                 bought: false,
             },
         },
         cosmetic: {
-            
+            'bill/biker_bill': {
+                currency: 'cash',
+                price: 6,
+                available: false,
+                bought: false,
+            }
         }
 
     },
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
+// Return number of available shop items
+function carlItemsAvailable() {
+    let c = 0;
+    // Themes
+    let theme_keys = Default_Carl.shop.theme.keys;
+    for(i = 0; i < theme_keys.length; i++) { if(Carl.shop.theme[theme_keys[i]].available == true) c++; }
+    // Cosmetics
+    // let cosm_keys = Default_Carl.shop.cosmetic.keys;
+    // for(i = 0; i < cosm_keys.length; i++) { if(Carl.shop.cosmetic[cosm_keys[i]].available == true) c++; }
+    return c;
+}
 
 //Asigns the Local storage
 var player;
@@ -407,7 +423,7 @@ function fillSettingsPage() {
     eInnerText(elVolumeMaster_label, `${settings.master_volume * 100}%`);
     volume = settings.master_volume;
 
-    console.log("fillSettingsPage()");
+    // console.log("fillSettingsPage()");
 }
 
 function saveSettings() { localStorage.setObject("settings", settings); }
@@ -455,9 +471,10 @@ const settings_default = {
     master_volume: 1,           // Between 0 and 1
     enableSounds: true,         // boolean
     enableMusic: false,         // boolean
-    enableCarrotSounds: true,   // boolean
+    enableCarrotSounds: false,  // boolean
 
     full_numbers: false,
+    enableMainProgress: true,
 
     // UI
     theme: 'theme_dark',     // string
@@ -604,7 +621,10 @@ function onClick(useMousePos, method = 'click') {
     }
 
     // Sound effect
-    if(store('enableSounds') == 'false' || store('enableCarrotSounds') == 'false') return;
+    if(
+        settings.enableSounds == false
+        || settings.enableCarrotSounds == false
+    ) return;
     randomSound('crunch', 95);
 }
 
@@ -832,6 +852,11 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     return character.lvlupPrice;
 }
 function LevelUp(character=Boomer_Bill, amount=1) {
+    if(characterQuery(characterString(character)) == false) {
+        // toast('Nice Try', 'That character has not been unlocked');
+        return;
+    }
+
     if(player.Carrots >= CharacterLevelUpPrice(character, amount)) {
         character.lvl+=amount;
         player.Carrots-=CharacterLevelUpPrice(character,amount);
@@ -1046,7 +1071,7 @@ function CreateHoe(type=0, amount=1) {
     console.log(type);
     // Greg unlock check
     if(characterQuery('greg') == false) {
-        toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
+        // toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
        return;
     }
 
@@ -1094,9 +1119,18 @@ function CreateHoe(type=0, amount=1) {
             i = 1;
             var p = 0;
             var id = setInterval(frame,100);
-            elMainProgressContainer.classList.add('status_tidbit_in');
+
+            // Main progress bar
+            if(settings.enableMainProgress == true) {
+                elMainProgressContainer.classList.add('status_tidbit_in');
+            }
             dom('main_progress_image').src = hoeImg[type];
             
+            // Greg info
+            dom('greg_progress_image').src = hoeImg[type];
+            dom('greg_crafting_info').classList.remove('inactive');
+            dom('greg_crafting_info').title = 'Crafting...';
+
             function frame() {
                 if (p >= price) {
                     clearInterval(id);
@@ -1104,20 +1138,23 @@ function CreateHoe(type=0, amount=1) {
                     player.Carrots+=p-price;
                     p=0;
                     elGregProgress.style.width = 0 + "%";
-                    if(store('enableMainProgress') !== 'false') {
+                    if(settings.enableMainProgress == true) {
                         elMainProgressBar.style.width = 0 + "%";
-                        elMainProgressContainer.classList.remove('status_tidbit_in');
                     }
+                    elMainProgressContainer.classList.remove('status_tidbit_in');
+                    dom('greg_crafting_info').classList.add('inactive');
+                    dom('greg_crafting_info').title = 'Idle';
 
                     Gregory.Hoes[type]+=amount;
                     n=0;
                 } else {
-                    p+=(0.01*player.Carrots);
-                    player.Carrots-=(0.01*player.Carrots);
+                    let adjust = 0.01 * player.Carrots
+                    p += adjust;
+                    player.Carrots -= adjust;
 
                     // Progress bar
-                    if(store('enableMainProgress') !== 'false') {
-                        elGregProgress.style.width = `${100*(p/price)}%`;
+                    elGregProgress.style.width = `${100*(p/price)}%`;
+                    if(settings.enableMainProgress == true) {
                         elMainProgressBar.style.width  = `${100*(p/price)}%`;
                     }
 
@@ -1146,7 +1183,7 @@ function CreateHoe(type=0, amount=1) {
 function EquipHoe(character=Boomer_Bill, type=0, amount){
     // Greg unlock check
     if(characterQuery('greg') == false) {
-        toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
+        // toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
        return;
     }
 
@@ -1353,11 +1390,11 @@ function gameLoop() {
     // updateHoePrices();
 
     // Prestige info
-    if(player.lifetime.golden_carrots >= 1 || player.prestige_potential >= 1) {
+    if(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0) {
         eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
-    }
-    if(player.lifetime.golden_carrots > 0 || player.prestige_potential >= 1){
         dom("prestige-section").classList.add('visible');
+        dom('prestige_menu_button').disabled = false;
+        dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`;
         player.prestige_available = true;
     }
 
@@ -1414,8 +1451,18 @@ const statsNumbers = {
     lifetime_hoes_crafted_4:          dom('lifetime_hoes_crafted_4'),
     lifetime_hoes_crafted_5:          dom('lifetime_hoes_crafted_5'),
     lifetime_clickspeedrecord:        dom('lifetime_clickspeedrecord'),
+
     stat_themes:                      dom('stat_themes'),
     stat_cosmetics:                   dom('stat_cosmetics'),
+    // stat_cosmetics_bundle:            dom('stat_cosmetics_bundle'),
+    // stat_cosmetics_farmable:          dom('stat_cosmetics_farmable'),
+    // stat_cosmetics_bill:              dom('stat_cosmetics_bill'),
+    // stat_cosmetics_belle:             dom('stat_cosmetics_belle'),
+    // stat_cosmetics_greg:              dom('stat_cosmetics_greg'),
+    // stat_cosmetics_charles:           dom('stat_cosmetics_charles'),
+    // stat_cosmetics_carl:              dom('stat_cosmetics_carl'),
+    // stat_cosmetics_tools:             dom('stat_cosmetics_tools'),
+
     stat_achievements:                dom('stat_achievements'),
 }
 function loadStatistics() {
@@ -1456,10 +1503,9 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_hoes_crafted_4, player.lifetime.hoes.crafted[4]);
     eInnerText(statsNumbers.lifetime_hoes_crafted_5, player.lifetime.hoes.crafted[5]);
     eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
-    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3}`);
-    // eInnerText(statsNumbers.stat_cosmetics, `${Object.keys(player.cosmetics).length - 1}/${Object.keys(cosmetics).length - 1} (${cosmeticsPercent()}%)`);
-    eInnerText(statsNumbers.stat_cosmetics, `${playerCosmetics}/${totalCosmetics} (${percentage(playerCosmetics, totalCosmetics).toFixed(0)}%)`);
-    
+
+    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3)}%)`);
+    eInnerText(statsNumbers.stat_cosmetics, `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`);
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
         statsNumbers.stat_achievements,

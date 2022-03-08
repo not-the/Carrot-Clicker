@@ -26,7 +26,7 @@ const default_tips = {
         "When you're ready, click the prestige button. You will start over but gain the ability to buy tomes",
         // "Golden carrots increase your characters by 10%",
         "Golden carrots can be used to buy tomes, which give you permanent buffs",
-        "Every Tome Page you have will give you a +1% golden carrot increase when prestiging"
+        "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
     ],
 
     // Fun tips
@@ -213,8 +213,8 @@ const cosmetics = {
         },
         'blockgame': {
             'name': 'Minecraft',
-            'preview': './assets/theme/blockgame/grass_block_side.png',
-            'image': './assets/theme/blockgame/grass_block_side.png',
+            'preview': './assets/theme/blockgame/carrot.png',
+            'image': './assets/theme/blockgame/carrot.png',
             'desc': 'This probably won\'t make it to Carrot Clicker 1.0',
 
             'theme': 'theme_blockgame',
@@ -365,14 +365,15 @@ const cosmetics = {
         },
     
     
-        // Updoot
+        // Upvote
         "upvote": {
             'name': 'Orange Arrow',
             'preview': './assets/theme/orange_arrow/upvote.png',
 
             'desc': 'This is better than going outside',
-            'farmable': 'Updoot',
+            'farmable': 'Arrow',
             'image': './assets/theme/orange_arrow/upvote.png',
+            'hidden': true,
         },
         // huh whuh meme
         "huhwhuh": {
@@ -382,6 +383,7 @@ const cosmetics = {
             'desc': 'huh whuh',
             'farmable': 'huh',
             'image': 'https://i.imgur.com/ELs31g5.jpg',
+            'hidden': true,
         },
     },
     bill: {
@@ -429,7 +431,7 @@ const cosmetics = {
         'biker_bill': {
             'name': 'Biker Bill',
             'preview': './assets/theme/biker_bill.png',
-            'desc': 'placeholder',
+            'desc': 'Actual motorcycle not included',
 
             'rename': false,
             'image': './assets/theme/biker_bill.png',
@@ -564,6 +566,7 @@ for(let i = 0; i < cosmeticsKeys.length; i++) {
 
     // Figure out how many cosmetics there are
     for(let c = 1; c < target.keys.length; c++) {
+        if(target[target.keys[c]].hidden == true) continue;
         totalCosmetics++;
     }
 }
@@ -819,7 +822,7 @@ const achievements = {
     'first_tome_page': {
         'name': 'Paginator',
         'desc': 'Earn a tome page (Tutorial milestone)',
-        'image': false,
+        'image': './assets/achievements/paginator.png',
         'reward': 'function:tutorialPages()',
         'pages': false,
         'conditions': ['player.pages', 1],
@@ -827,20 +830,17 @@ const achievements = {
             'name': true,
             'desc': false,
             'image': true,
-            'noToast': true,
+            'noToast': false, // should probably be true
         }
     },
 
     'own_a_theme': {
         'name': 'Taking in the Themery',
-        'desc': 'Obtain a cosmetic and a theme! You\'ve gained the attention of an artist.',
+        'desc': 'You\'ve gained the attention of an artist',
         'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
-        'pages': 2,
-        'conditions': [
-            ['player.themes.length', 4],
-            ['playerCosmetics', 1],
-        ],
+        'pages': 1,
+        'conditions': ['carlItemsAvailable()', 2],
         // 'condition_amount': 1,
         'mystery': {
             'name': true,
@@ -854,7 +854,7 @@ const achievements = {
         'name': '3 Heads Are Better Than One',
         'desc': 'Upgrade every (upgradeable) character at least once',
         'image': './assets/achievements/3_heads.png',
-        'reward': ['theme:theme_red', 'theme:theme_green', 'theme:theme_blue'],
+        'reward': ['shop:theme/theme_red', 'shop:theme/theme_green', 'shop:theme/theme_blue'],
         'pages': 3,
         'conditions': [
             ['Boomer_Bill.lvl',      2],
@@ -872,7 +872,7 @@ const achievements = {
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill 10 times',
         'image': false,
-        'reward': false,
+        'reward': 'shop:cosmetic/bill/biker_bill',
         'pages': false,
         'conditions': ['Boomer_Bill.lvl', 10],
         'mystery': {
@@ -942,13 +942,27 @@ const achievements = {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Gregory 64 Times',
         'image': './assets/achievements/pixel_block.png',
-        'reward': ['theme:theme_blockgame', 'cosmetic:bundle/blockgame', 'cosmetic:farmable/blockgame_potato'],
+        'reward': ['theme:theme_blockgame', 'cosmetic:bundle/blockgame', 'shop:cosmetic/farmable/blockgame_potato'],
         'pages': 5,
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
+            'noToast': false,
+        }
+    },
+    'unlock_all_characters': {
+        'name': 'Carrot Convention',
+        'desc': 'Unlock every character',
+        'image': false,
+        'reward': ['cash:24', 'shop:cosmetic/carl/joker_carl'],
+        'pages': 5,
+        'conditions': ['allCharQuery()', true],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
             'noToast': false,
         }
     },
@@ -1149,6 +1163,7 @@ const achievements = {
         'reward': 'function:confetti()',
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000000n],
+        'style': 'endgame',
         'mystery': {
             'name': true,
             'desc': false,
@@ -1172,6 +1187,34 @@ const achievements = {
             'noToast': false,
         }
     },
+    // 'basic_tips': {
+    //     'name': 'Tip of the Iceberg',
+    //     'desc': 'View all basic tips',
+    //     'image': false,
+    //     'reward': false,
+    //     'pages': 1,
+    //     'conditions': ['', 1],
+    //     'mystery': {
+    //         'name': false,
+    //         'desc': false,
+    //         'image': false,
+    //         'noToast': false,
+    //     }
+    // },
+    // 'all_tips': {
+    //     'name': 'all_tips',
+    //     'desc': 'View every tip in the game',
+    //     'image': false,
+    //     'reward': false,
+    //     'pages': 5,
+    //     'conditions': ['', 1],
+    //     'mystery': {
+    //         'name': true,
+    //         'desc': false,
+    //         'image': false,
+    //         'noToast': false,
+    //     }
+    // },
 
     // CPC
     '9000_cpc': {
@@ -1341,7 +1384,7 @@ const achievements = {
         'name': 'Golden',
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
-        'reward': ['cosmetic:farmable/golden_carrot', 'cosmetic:farmable/pixel_golden_carrot', 'function:confetti()'],
+        'reward': ['cosmetic:farmable/golden_carrot', 'shop:cosmetic/farmable/pixel_golden_carrot', 'function:confetti()'],
         'pages': false,
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {
@@ -1417,7 +1460,7 @@ const achievements = {
         'conditions': ['player.clickSpeedRecord', 15],
         'mystery': {
             'name': true,
-            'desc': true,
+            'desc': false,
             'image': true,
             'noToast': false,
         }
@@ -1454,12 +1497,12 @@ const achievements = {
     },
     '50_percent_achievements': {
         'name': 'Half Way There',
-        'desc': 'Reach 50% normal achievements unlocked',
+        'desc': 'Reach 50% achievements unlocked',
         'image': './assets/achievements/bronze_medal.gif',
         'reward': 'function:confetti()',
         'pages': 5,
-        'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 1))', 50],
-        // 'style': 'endgame',
+        'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 50],
+
         'mystery': {
             'name': true,
             'desc': false,
@@ -1564,7 +1607,7 @@ const achievements = {
     // Secret Achievements
     '1000000_clicks': {
         'name': 'Clicker God',
-        'desc': 'Click the carrot 1 million times',
+        'desc': 'Click the carrot 1 million times (Hidden achievement)',
         'image': false,
         'reward': false,
         'pages': false,
@@ -1597,7 +1640,7 @@ const achievements = {
     'pineapple': {
         'name': 'Pineapple',
         'desc': 'Hey that\'s me (Hidden achievement)',
-        'image': './assets/theme/pineapple/pineapple.png',
+        'image': './assets/achievements/pineapple_achieve.png',
         'reward': 'cosmetic:farmable/pineapple',
         'pages': false,
         'conditions': ['keyTrigger[3]', 1],
@@ -1628,9 +1671,12 @@ const achievements = {
     },
     'playtester': {
         'name': 'Early Playtester',
-        'desc': 'Thanks for playtesting! Have a theme.',
+        'desc': 'Thanks for playtesting!',
         'image': './assets/achievements/early_playtester.png',
-        'reward': 'cash:32',
+        'reward': [
+            'theme:theme_classic',
+            'cash:32',
+        ],
         'pages': false,
         'conditions': ['0', 1],
         'style': 'shine',
@@ -1647,3 +1693,33 @@ const achievementsKeys = Object.keys(achievements);
 var hiddenAchievements = 0;
 var challengeAchievements = 0;
 //#endregion
+
+
+
+
+
+
+
+
+
+
+/* Item/crafting system */
+// const items = {
+//     'carrot_pot_pie': {
+//         'name': 'Carrot Pot Pie',
+//         'desc': 'Made with carrot-based meat alternatives of course.',
+//         'recipe': {
+//             'carrot': 24,
+//             'dough': 4,
+//         }
+//     },
+//     'carrot_cookie': {
+//         'name': 'Carrot Cookie',
+//         'desc': 'Delicious',
+//         'recipe': {
+//             'carrot': 24,
+//             'dough': 4,
+//         },
+//         // Crafting this unlocks Cookie cosmetic, or maybe you can craft the cookie cosmetic with these
+//     }
+// }

@@ -9,6 +9,12 @@
     /* border: 1px solid var(--light-theme-border-color); */
     background-color: whitesmoke;
 }
+.theme_light .main_bg_color {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light .link_styling:hover {
+    color: black;
+}
 .theme_light button:hover {
     border-color: var(--border-color);
 }
@@ -98,6 +104,11 @@
     opacity: 0.2;
 }
 
+.theme_light .achieve_grid .achievement_item,
+.theme_light .achieve_grid .achievement_item .secondary_text {
+    color: white;
+}
+
 .theme_light .achievement_item,
 .theme_light .shop_item,
 .theme_light .footer_bottom {
@@ -112,6 +123,10 @@
     background-color: var(--light-darker-bg-color);
     color: black;
     border-color: var(--light-theme-border-color);
+}
+.theme_light .toast_close,
+.theme_light .generic_close {
+    color: black;
 }
 .theme_light .popup_box {
     background-color: white;
@@ -571,6 +586,7 @@
 .theme_blockgame * {
     font-family: 'Minecraft Regular', 'Courier New', Courier, monospace;
     text-shadow: 0.1em 0.1em black;
+    font-weight: normal;
 }
 .theme_blockgame {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
@@ -816,4 +832,26 @@
 }
 .theme_camo .bottom {
     background-color: var(--brown-darkest-color);   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.theme_blockgame .greg_margin_fix,
+.theme_retro .greg_margin_fix {
+    margin-left: 0;
 }
