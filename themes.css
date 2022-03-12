@@ -100,19 +100,30 @@
     background-color: gray;
 }
 
-.theme_light .blackedout {
-    opacity: 0.2;
+.theme_light .achieve_grid .achievement_item .achievement_details h2,
+.theme_light .achieve_grid .achievement_item .achievement_details .secondary_text {
+    color: white !important;
 }
 
-.theme_light .achieve_grid .achievement_item,
-.theme_light .achieve_grid .achievement_item .secondary_text {
+.theme_light .cosmetics_grid .description,
+.theme_light .cosmetics_grid .description .secondary_text {
     color: white;
+}
+.theme_light .theme_checkbox {
+    background-color: white !important;
 }
 
 .theme_light .achievement_item,
 .theme_light .shop_item,
 .theme_light .footer_bottom {
     background-color: white;
+}
+.theme_light .achievement_item h2 {
+    color: black;
+}
+.theme_light #toasts_clear,
+.theme_light .toast_close:not(.generic_close):not(.dialog_close) {
+    color: white !important;
 }
 
 /* Dialog box/toasts */
@@ -279,16 +290,41 @@
     border: 2px solid rgb(29, 248, 0);
     box-shadow: none;
 }
+.theme_classic .character_name {
+    text-decoration: underline;
+}
 .theme_classic .characterimg {
     border-radius: 0;
+}
+.theme_classic .levelupimg {
+    content: url("./assets/icons/lvl_up_arrow_old.png");
+    /* transform: scale(1.2, 1) translateX(2px); */
+}
+.theme_classic .shop_item {
+    background-color: transparent;
 }
 .theme_classic #Greg_Bar {
     background-color: gray;
     border-radius: 0;
 }
+.theme_classic .greg_crafting_info {
+    visibility: hidden;
+    transform: translateY(4px);
+}
+.theme_classic .greg_crafting_info::before {
+    content: "Prices:";
+    visibility: visible;
+}
+.theme_classic .achievement_item {
+    border: 1px solid goldenrod;
+}
 .theme_classic .footer_bottom {
     background-color: transparent;
     box-shadow: none;
+}
+
+.theme_classic .popup_box {
+    border-color: transparent;
 }
 
 
@@ -429,6 +465,45 @@
 
 
 
+/* Black & White theme */
+/* .theme_bw * {
+    filter: saturate(0);
+} */
+.theme_bw #left-section,
+.theme_bw .status_bar,
+.theme_bw .characterbox,
+.theme_bw .information-area,
+.theme_bw .popup_box,
+.theme_bw .clickvisual {
+    filter: saturate(0);
+}
+.theme_bw .status_bar {
+    top: 0;
+}
+.theme_bw {
+    background-color: rgb(36, 36, 36);
+}
+/* .theme_bw img,
+.theme_bw #main_carrot {
+    filter: saturate(0%);
+    /* image-rendering: unset; */
+/* }
+.theme_bw .Basic_Info {
+    background-color: rgb(71, 71, 71);
+}
+.theme_bw .characterbox {
+    background-color: rgb(71, 71, 71);
+    border-color: rgb(71, 71, 71);
+}
+.theme_bw .bottom {
+    background-color: rgb(44, 44, 44);
+} */
+
+
+
+
+
+
 
 
 
@@ -535,41 +610,162 @@
 
 
 
-
-
-/* Black & White theme */
-/* .theme_bw * {
-    filter: saturate(0);
-} */
-.theme_bw #left-section,
-.theme_bw .status_bar,
-.theme_bw .characterbox,
-.theme_bw .information-area,
-.theme_bw .popup_box,
-.theme_bw .clickvisual {
-    filter: saturate(0);
+/* Terminal theme */
+.theme_terminal,
+.theme_terminal #left-section,
+.theme_terminal .characterbox,
+.theme_terminal .bottom,
+.theme_terminal .shop_item,
+.theme_terminal .Basic_Info,
+.theme_terminal #info_dropdown,
+.theme_terminal #main_progress_container,
+.theme_terminal .popup_box,
+.theme_terminal .theme_item,
+.theme_terminal .panel,
+.theme_terminal #tripane nav,
+.theme_terminal #tripane nav .tab,
+.theme_terminal .achievement_item,
+.theme_terminal .achievement_details,
+.theme_terminal .reward,
+.theme_terminal .toast,
+.theme_terminal .footer_bottom,
+.theme_terminal #backdrop
+ {
+    background-color: #0c0c0c;
+    border-color: transparent;
+    animation: none !important;
+    transition: none !important;
+    border-radius: 0;
+    box-shadow: none;
 }
-.theme_bw .status_bar {
+.theme_terminal * {
+    font-family: 'Rowdies', cursive;
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+
+/* Scanline effect */
+/* http://aleclownes.com/2017/02/01/crt-display.html */
+/* .theme_terminal::before {
+    content: "";
+    display: block;
+    position: fixed;
     top: 0;
-}
-.theme_bw {
-    background-color: rgb(36, 36, 36);
-}
-/* .theme_bw img,
-.theme_bw #main_carrot {
-    filter: saturate(0%);
-    /* image-rendering: unset; */
-/* }
-.theme_bw .Basic_Info {
-    background-color: rgb(71, 71, 71);
-}
-.theme_bw .characterbox {
-    background-color: rgb(71, 71, 71);
-    border-color: rgb(71, 71, 71);
-}
-.theme_bw .bottom {
-    background-color: rgb(44, 44, 44);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 1000;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+
+    backdrop-filter: blur(0.5px);
 } */
+
+
+/* Overlays */
+.theme_terminal .popup_box {
+    box-shadow: none;
+    border-top: 2px dashed gray;
+    border-bottom: 2px dashed gray;
+}
+/* Buttons */
+.theme_terminal button:not(.main_button_item) {
+    border: none;
+    padding: none;
+    transition: none;
+    border-radius: 0;
+}
+.theme_terminal button:hover {
+    color: unset;
+    background-color: initial;
+    transform: none;
+    text-decoration: underline;
+}
+.theme_terminal button:not(.main_button_item)::before {
+    content: "[";
+    /* margin-right: -7px; */
+}
+.theme_terminal button:not(.main_button_item)::after {
+    content: "]";
+}
+.theme_terminal #tripane nav .tab::before {
+    margin-right: -7px;
+}
+
+/* Main */
+.theme_terminal .Basic_Info {
+    padding-bottom: 16px;
+    padding-left: 20px;
+    border-bottom: 2px dashed white;
+}
+.theme_terminal #main_icon {
+    visibility: hidden;
+}
+.theme_terminal #main_carrot {
+    padding: 0;
+    transition: none;
+}
+.theme_terminal #main_carrot:active {
+    transform: translateY(4px);
+    filter: none;
+}
+.theme_terminal .main_button_item  {
+    border: none;
+    border-radius: 0;
+}
+.theme_terminal .main_button_item:hover:not([disabled]) .main_button_img {
+    filter: none;
+    transform: translateY(-1px);
+}
+.theme_terminal .characterbox {
+    border-radius: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px dashed gray;
+}
+.theme_terminal .characterimg {
+    visibility: hidden;
+    margin-right: -64px;
+}
+.theme_terminal #Greg_Bar {
+    border-radius: 0;
+}
+.theme_terminal #Greg_Progress,
+.theme_terminal #main_progress_bar {
+    background: white;
+    transition: none;
+}
+.theme_terminal .charles_icon {
+    visibility: hidden;
+    margin-right: -36px;
+}
+.theme_terminal .levelupimg {
+    filter: saturate(0%) brightness(150%);
+}
+/* .theme_terminal .levelupimg::before {
+    content: "↑";
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+} */
+.theme_terminal .button_icon {
+    visibility: hidden;
+    position: absolute;
+}
+.theme_terminal #tripane nav {
+    border-top: 2px dashed gray;
+    border-bottom: 2px dashed gray;
+    border-radius: 0;
+}
+.theme_terminal #tripane nav .tab:not(.activetab) {
+    color: gray;
+}
+.theme_terminal #tripane nav .tab:hover {
+    transform: none;
+    color: white;
+}
 
 
 
@@ -823,7 +1019,7 @@
     background-size: 900px;
 }
 .theme_camo #left-section {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(7px);
 }
 .theme_camo .characterbox {
@@ -844,6 +1040,104 @@
 
 
 
+/* Chat app theme */
+.theme_chatapp * {
+    font-family: "Helvetica Neue", Helvetica,Arial,sans-serif;
+}
+.theme_chatapp:not(.secondary_text) {
+    color: #dcddde !important;
+}
+.theme_chatapp {
+    background-color: #36393f;
+}
+/* .theme_chatapp .secondary_text {
+    color: #72767d;
+} */
+
+/* Status bar */
+.theme_chatapp .Basic_Info {
+    background-color: #202225;
+}
+.theme_chatapp .Basic_Info,
+.theme_chatapp #info_dropdown {
+    border-color: none;
+}
+.theme_chatapp #info_dropdown:hover {
+    background-color: #282b2e;
+}
+.theme_chatapp .hover_menu {
+    background-color: #202225;
+}
+
+/* Overlays */
+.theme_chatapp .popup_box {
+    background-color: #36393f;
+}
+
+/* Left */
+.theme_chatapp #left-section {
+    /* background-color: #2f3136; */
+    border-radius: 10px !important;
+}
+
+/* Right */
+.theme_chatapp .characterbox {
+    border-radius: 0;
+    background-color: #36393f;
+    border-color: transparent;
+    box-shadow: none;
+    transition: none;
+}
+.theme_chatapp .characterbox:hover {
+    outline: none;
+    background-color: #32353b;
+}
+.theme_chatapp .characterimg {
+    border-radius: 5px;
+}
+.theme_chatapp .bottom,
+.theme_chatapp .shop_item,
+.theme_chatapp .achievement_item,
+.theme_chatapp input[type="text"],
+.theme_chatapp input[type="number"],
+.theme_chatapp select,
+.theme_chatapp #left-section,
+.theme_chatapp .theme_item,
+.theme_chatapp .footer_bottom {
+    background-color: #2f3136;
+    border: 1px solid #202225;
+    box-shadow: none;
+    border-radius: 5px;
+    color: white;
+}
+
+/* Tripane */
+.theme_chatapp .button_icon {
+    visibility: hidden;
+    position: absolute;
+}
+.theme_chatapp #tripane nav .tab::before {
+    content: "#";
+}
+.theme_chatapp #tripane nav {
+    background-color: #2f3136;
+    border-radius: 0;
+}
+.theme_chatapp #tripane nav .tab {
+    background-color: #2f3136;
+    border-radius: 10px !important;
+    border-color: transparent;
+}
+.theme_chatapp #tripane nav .tab:not(.activetab):hover {
+    background-color: #34373c;
+    color: white;
+}
+.theme_chatapp #tripane nav .tab.activetab {
+    background-color: #393c43;
+}
+.theme_chatapp .panel {
+    background-color: #36393f;
+}
 
 
 
@@ -851,7 +1145,34 @@
 
 
 
+
+
+
+
+
+
+
+/* XP Theme */
+/* .theme_xp {
+    background: url("./assets/theme/xp/joy.jpeg");
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+/* Hoe positioning fix */
 .theme_blockgame .greg_margin_fix,
 .theme_retro .greg_margin_fix {
     margin-left: 0;
+}
+.theme_terminal .greg_margin_fix {
+    margin-left: -2px;
 }

@@ -1,4 +1,61 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.10.0
+    3-12-2022
+// ----------------------------------------------------------- //
+
+- Introduced a way to update saves- changes to any game objects used in save data will be added to the player's save data (this may need some testing to ensure it works as intended)
+  + Game's internal data version has been bumped to 1, and will be incremented by 1 every time an addition to save data is made
+  + Player page count checks will only occur after the data_version number has been incremented
+- Status bar dropdown arrow is now closer to the middle on mobile
+- Gave the multibuy indicator a title on hover, and made the prestige button's title hidden until prestiging is available
+- The light, retro, and black and white themes now have mobile accent colors
+- Everything related to the inventory has been commented out for now
+- Fixed the theme % in statistics not being toFixed(0)
+- Support for internal achievements that will not appear to the player, but can be used to trigger certain events like a normal achievement
+- Failure to make a shop item available will no longer halt the rest of the code
+- Game will now use price and currency data from the default carl object so that it can change as the game is updated
+- Added a shorthand function for looping through objects as if they are arrays (loopObject())
+- Custom theme is now obtainable (but not customizable yet) by getting all other themes
+- Moved over some achievement rewards into being shop items instead (still made available after a certain achievement is earned)
+- Gave the biker bill and dollar bill cosmetics unique backgrounds
+- All cosmetics should now be obtainable
+- Redrew Charles so that he is no longer the wrong resolution & blurry
+- Replaced the main carrot image with a 1:1 aspect ratio version
+- Fixed an issue where if you already owned a cosmetic and tried to buy it from Carl it wouldn't be removed from the shop (or marked as bought)
+- Misc theme fixes:
+  + Blacked out hoes will now match theme's colors
+- Gave more achievements images: OSHA Violator, Wibbly Wobbly (most likely a placeholder), Falling Into Place
+- All cosmetics now have descriptions
+- Added some (overly complicated) JS to make sure cosmetics in columns on the right will still have readable descriptions- this will start to break down if the window size changes
+- Fixed player.prestige.falling_carrots_grabbed not being counted
+- Reduced minimum prestige potential to 1 so it's in line with when the option becomes available
+- Cosmetic bundles now work as intended (previously on the bill bundle would work) and are also future-proof for if new cosmetic types are added
+- Classic Theme fixes + improvements
+
+
+Tips:
+- Cleaned up code
+  + Changed the way different tip levels are unlocked
+  + Tips won't cycle if a menu or dialog is open
+  + Tips lower than your level will still appear but at a decreased rate
+
+
+New unlockables
+- Added some new cosmetics: 
+  + Ascii Carrot and Color Ascii Carrot (goes with terminal theme)
+  + Santa Charles
+- New themes:
+  + Terminal
+  + Chat App
+- New achievements:
+  + Penny Pincher (100_lifetime_cash)
+  + Savings Account (50_cash)
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.9.8
     3-8-2022
 // ----------------------------------------------------------- //
@@ -43,7 +100,6 @@ Cosmetics:
 - The cosmetics count in statistics is now correct
 - Cosmetics for characters you haven't unlocked will no longer be visible
 - Support for hidden cosmetics (upvote and huh whuh are now hidden)
-- Gave more cosmetics descriptions
 
 Balance changes:
 - Falling carrot rewards changed (400% and 800% of CPC) -> (500% and 2000% of CPC)

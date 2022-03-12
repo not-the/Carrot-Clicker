@@ -2,35 +2,41 @@
 
 /* ------------------- TIPS ------------------- */
 //#region 
+const tl = ['basic', 'beginner', 'intermediate'/*, 'advanced'*/];
 const default_tips = {
     number:0,
-    random:0,
+    // random:0,
     tracker:0,
-    Type:0,
+    Type: false,
     TypeModifier:0.5,
 
     // Practical tips
-    basic: [
-        "Click the lvl up arrow to level up characters",
-        "To buy a Hoe, go to Greg and click the correct type",
-        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
-        "Click the carrot",
-        "Long hover over a character to view their description",
+    basic: [ // 0
+        "Tip: Click the carrot",
         "Click here to cycle through available tips!",
+        "Click the lvl up arrow to level up characters",
+        "Long hover over a character to view their description",
+        "To buy a Hoe, go to Greg and click the correct type",
     ],
-    beginner: [
+    beginner: [ // 1
+        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
         "Each character can only hold up to 1 hoe for every level Greg has reached",
         "By completing achievements you will earn mysterious tome pages.",
+        "Completing achievements will give you additional themes and cosmetics to buy",
+        "When clicking the carrot, cash will sometimes drop. Make sure to grab it!",
     ],
-    advanced: [
+    intermediate: [ // 2
         "When you're ready, click the prestige button. You will start over but gain the ability to buy tomes",
         // "Golden carrots increase your characters by 10%",
         "Golden carrots can be used to buy tomes, which give you permanent buffs",
         "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
     ],
+    advanced: [ // 3
+        "Unlocking every theme will make a special theme available",
+    ],
 
     // Fun tips
-    fun: [
+    fun_basic: [
         "Carrots can end world hunger",
         "Only YOU can save the carrots!",
         "Carrots have been proven to improve eyesight by 150%. It's true!",
@@ -46,7 +52,10 @@ const default_tips = {
         'If you see a ? near something you can click it to get a more detailed description of what it does',
         'Now in HD',
     ],
-    funIntermediate: [
+    fun_beginner: [
+        "Carrot?!",
+    ],
+    fun_intermediate: [
         "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
         "Tired of eating carrots? Make carrot cake!",
         "Carrots have been proven to improve eyesight by 1000%. It's true!",
@@ -58,7 +67,7 @@ const default_tips = {
         "Study the carrot, Charles.",
         "Paint the carrot, Carl.",
     ],
-    funAdvanced: [
+    fun_advanced: [
         "World hunger has been cured, but there must be more we can do.",
         "Carrots have never been found at a crime scene because they are the direct cause of peace and friendship.",
         "Carrots have received 7,000,000,000 (★★★★★) 5-star ratings on ebay",
@@ -70,6 +79,22 @@ const default_tips = {
         "Carrots are people too",
         "Carrots have been proven to improve eyesight by 9000%. It's true!",
     ],
+
+
+
+    // Mark as seen
+    s_basic: {
+        0: true,
+    },
+    s_beginner: {},
+    s_intermediate: {},
+    s_advanced: {},
+
+    // Fun tips
+    s_fun_basic: {},
+    s_fun_beginner: {},
+    s_fun_intermediate: {},
+    s_fun_advanced: {},
     
 }
 //#endregion
@@ -91,7 +116,7 @@ const themes = {
         image:    './assets/theme/theme_light.png',
         desc:     'Default light',
         cosmetic: false,
-        accent:   '#ffffff',
+        accent:   '#FFFFFF',
     },
     'theme_oled': {
         name:     'OLED Dark Theme',
@@ -129,36 +154,57 @@ const themes = {
         accent:   '#455779'
     },
     'theme_camo': {
-        name:     'Camo Theme',
+        name:     'Camo',
         image:    './assets/theme/theme_camo.png',
         desc:     'In the trees',
         cosmetic: false,
-        // accent:   false
-    },
-    'theme_retro': {
-        name:     'Retro Green Theme',
-        image:    './assets/theme/theme_retro.png',
-        desc:     ':D',
-        cosmetic: false,
-        // accent:   false
+        // accent:   false,
     },
     'theme_bw': {
         name:     'Black & White',
         image:    './assets/theme/theme_bw.png',
         desc:     'Back in my day',
         cosmetic: false,
-        // accent:   false
+        accent:   '#2f2f2f',
     },
+    'theme_retro': {
+        name:     'Retro Green',
+        image:    './assets/theme/theme_retro.png',
+        desc:     ':D',
+        cosmetic: false,
+        accent:   '#30622f',
+    },
+    'theme_terminal': {
+        name:     'Terminal',
+        image:    './assets/theme/theme_terminal.png',
+        desc:     'Become 1337 hax0r',
+        cosmetic: 'farmable/ascii',
+        accent:   '#0c0c0c',
+    },
+    'theme_chatapp': {
+        name:     'Chat App',
+        image:    './assets/theme/theme_chatapp.png',
+        desc:     '"how do i find #general"',
+        cosmetic: false,
+        accent:   '#202225',
+    },
+    // 'theme_xp': {
+    //     name:     'Doors Experience',
+    //     image:    './assets/theme/theme_xp.png',
+    //     desc:     'placeholder',
+    //     cosmetic: false,
+    //     accent:   '#FFFFFF',
+    // },
     'theme_blockgame': {
         name:     'Minecraft',
         image:    './assets/theme/blockgame/grass_block_side.png',
         desc:     'Does it violate copyright if this is just a hobby project with no ads? Genuine question',
-        cosmetic: false,
+        cosmetic: 'bundle/blockgame',
         accent:   '#3c2a1d'
     },
     'theme_custom': {
-        name: 'Custom',
-        image: false,
+        name: 'Custom Theme',
+        image: './assets/Carrot Clicker.png',
         desc: 'Make your own theme!',
         cosmetic: false,
         // accent: false
@@ -173,7 +219,7 @@ const themesKeys = Object.keys(themes);
 // Version 2
 const cosmetics = {
     bundle: {
-        // Cookie
+        // Default
         'default': {
             'name': 'Carrot Clicker (Default)',
             'preview': './assets/Carrot Clicker.png',
@@ -188,6 +234,7 @@ const cosmetics = {
             'carl':     'default',
             'tools':    'default',
         },
+        // Cookie
         'cookie': {
             'name': 'Cookie',
             'preview': './assets/theme/cookie/cookie.png',
@@ -198,6 +245,31 @@ const cosmetics = {
             'bill': 'baker_bill',
             'belle': 'grandma_belle',
         },
+        // Blockgame
+        'blockgame': {
+            'name': 'Minecraft',
+            'preview': './assets/theme/blockgame/carrot.png',
+            'image': './assets/theme/blockgame/carrot.png',
+            'desc': 'This probably won\'t make it to Carrot Clicker 1.0',
+
+            // 'theme': 'theme_blockgame',
+            'farmable': 'blockgame',
+        },
+        // Christmas
+        'xmas': {
+            'name': 'Festive',
+            'preview': './assets/theme/santa_charles.png',
+            'image': './assets/theme/santa_charles.png',
+            'desc': 'placeholder',
+
+            // 'farmable': 'default',
+            'bill':     'ugly_sweater',
+            // 'belle':    'bill',
+            // 'greg':     'bill',
+            'charles':  'santa_charles',
+            // 'carl':     'bill',
+        },
+        // All Bill
         'bill': {
             'name': 'All Bill',
             'preview': './assets/characters/Boomer_Bill.png',
@@ -210,15 +282,6 @@ const cosmetics = {
             'greg':     'bill',
             'charles':  'bill',
             'carl':     'bill',
-        },
-        'blockgame': {
-            'name': 'Minecraft',
-            'preview': './assets/theme/blockgame/carrot.png',
-            'image': './assets/theme/blockgame/carrot.png',
-            'desc': 'This probably won\'t make it to Carrot Clicker 1.0',
-
-            'theme': 'theme_blockgame',
-            'farmable': 'blockgame',
         },
     },
     farmable: {
@@ -267,6 +330,27 @@ const cosmetics = {
 
             'farmable': 'Cookie',
             'image': './assets/theme/cookie/cookie.png',
+        },
+        // Ascii Carrot
+        'ascii_color': {
+            'name': 'Ascii Carrot (Color)',
+            'preview': './assets/theme/ascii_carrot.png',
+            'desc': 'surfing the web, in color',
+            // 'group': 'ascii',
+
+            'farmable': 'Carrot',
+            'image': './assets/theme/ascii_carrot.png',
+            // 'render_type': 'pixel',
+        },
+        'ascii': {
+            'name': 'Ascii Carrot',
+            'preview': './assets/theme/ascii_white.png',
+            'desc': 'surfing the web',
+            // 'group': 'ascii',
+
+            'farmable': 'Carrot',
+            'image': './assets/theme/ascii_white.png',
+            // 'render_type': 'pixel',
         },
         // Minecraft
         'blockgame': {
@@ -436,11 +520,20 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/biker_bill.png',
         },
+        'ugly_sweater': {
+            'name': 'Ugly Sweater',
+            'preview': './assets/theme/bill_ugly_sweater.png',
+            'desc': 'placeholder',
+            'group': 'xmas',
+
+            'rename': false,
+            'image': './assets/theme/bill_ugly_sweater.png',
+        },
     },
     belle: {
         'default': {
             'name': 'Belle (Default)',
-            'desc': 'placeholder',
+            'desc': 'Belle is also a fan of carrots, but I think she\'s just here because Bill is.',
             'group': 'default',
 
             'rename': 'Belle',
@@ -467,7 +560,7 @@ const cosmetics = {
     greg: {
         'default': {
             'name': 'Greg (Default)',
-            'desc': 'placeholder',
+            'desc': 'A professional blacksmith, Greg can turn carrots into farming implements. I\'m not sure how he does it.',
             'group': 'default',
 
             'rename': 'Greg',
@@ -492,7 +585,7 @@ const cosmetics = {
     charles: {
         'default': {
             'name': 'Charles (Default)',
-            'desc': 'placeholder',
+            'desc': 'Don\'t tell anyone, but Charles doesn\'t actually know how to read.',
             'group': 'default',
 
             'rename': 'Charles',
@@ -504,6 +597,14 @@ const cosmetics = {
 
             'rename': 'chrles',
             'image': './assets/theme/special_charles.png',
+        },
+        'santa_charles': {
+            'name': 'Santa Charles',
+            'desc': 'He accidentally left the gifts at home',
+            'group': 'xmas',
+
+            'rename': 'Santa Charles',
+            'image': './assets/theme/santa_charles.png',
         },
         'bill': {
             'name': 'Bill',
@@ -517,7 +618,7 @@ const cosmetics = {
     carl: {
         'default': {
             'name': 'Carl (Default)',
-            'desc': 'placeholder',
+            'desc': 'Carl likes to paint almost as much as he likes carrots. (The person writing this description was unable to come up with something to positive to say, so just made something up. It is unknown if he actually likes carrots.)',
             'group': 'default',
 
             'rename': 'Carl',
@@ -525,14 +626,14 @@ const cosmetics = {
         },
         'joker_carl': {
             'name': 'Jokester Carl',
-            'desc': 'placeholder',
+            'desc': 'Carl lives in a society',
 
             'rename': false,
             'image': './assets/theme/joker_carl.png',
         },
         'bill': {
             'name': 'Bill',
-            'desc': 'placeholder',
+            'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
@@ -543,7 +644,7 @@ const cosmetics = {
         'default': {
             'name': 'Tools (Default)',
             'preview': './assets/tools/wood_hoe.png',
-            'desc': '---',
+            'desc': 'Default tools',
             'group': 'default',
 
             '0': './',
@@ -695,7 +796,7 @@ const achievements = {
     '10_prestiges': {
         'name': 'Wibbly Wobbly',
         'desc': 'Prestige ten times',
-        'image': false,
+        'image': './assets/achievements/wobbly.gif',
         'reward': 'function:confetti',
         'pages': 5,
         'conditions': ['player.lifetime.prestige_count', 10],
@@ -725,7 +826,7 @@ const achievements = {
     '1_improve_working_conditions': {
         'name': 'OSHA Violator',
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
-        'image': './assets/theme/safety_greg.png',
+        'image': './assets/achievements/working_conditions.png',
         'reward': 'cosmetic:greg/safety_greg',
         'pages': 2,
         'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
@@ -836,7 +937,7 @@ const achievements = {
 
     'own_a_theme': {
         'name': 'Taking in the Themery',
-        'desc': 'You\'ve gained the attention of an artist',
+        'desc': 'Gain the attention of the artist',
         'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
         'pages': 1,
@@ -900,7 +1001,11 @@ const achievements = {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
         'image': false,
-        'reward': false,
+        'reward': [
+            'shop:theme/theme_terminal',
+            'shop:cosmetic/farmable/ascii',
+            'shop:cosmetic/farmable/ascii_color',
+        ],
         'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
@@ -956,7 +1061,11 @@ const achievements = {
         'name': 'Carrot Convention',
         'desc': 'Unlock every character',
         'image': false,
-        'reward': ['cash:24', 'shop:cosmetic/carl/joker_carl'],
+        'reward': [
+            'cash:24',
+            'shop:cosmetic/carl/joker_carl',
+            'shop:cosmetic/bundle/xmas',
+        ],
         'pages': 5,
         'conditions': ['allCharQuery()', true],
         'mystery': {
@@ -1203,7 +1312,7 @@ const achievements = {
     // },
     // 'all_tips': {
     //     'name': 'all_tips',
-    //     'desc': 'View every tip in the game',
+    //     'desc': 'View every tip',
     //     'image': false,
     //     'reward': false,
     //     'pages': 5,
@@ -1221,7 +1330,7 @@ const achievements = {
         'name': 'There\'s a Joke Here Somewhere',
         'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
         'image': './assets/achievements/9000.png',
-        'reward': false,
+        'reward': 'shop:theme/theme_chatapp',
         'pages': 2,
         'conditions': ['player.cpc', 9000],
         'mystery': {
@@ -1235,7 +1344,7 @@ const achievements = {
         'name': 'Time is Hungry',
         'desc': 'Produce 1,000 carrots every second',
         'image': false,
-        'reward': 'cosmetic:bill/business_bill',
+        'reward': 'shop:cosmetic/bill/business_bill',
         'pages': 2,
         'conditions': ['player.cps', 100000],
         'mystery': {
@@ -1281,7 +1390,7 @@ const achievements = {
         'name': 'Carrot Rain',
         'desc': 'Grab 250 falling carrots',
         'image': false,
-        'reward': 'cosmetic:bundle/cookie',
+        'reward': 'shop:cosmetic/bundle/cookie',
         'pages': 2,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 250],
         'mystery': {
@@ -1294,14 +1403,14 @@ const achievements = {
     '2048_falling_carrots': {
         'name': 'Falling Into Place',
         'desc': 'Grab 2048 falling carrots',
-        'image': false,
+        'image': './assets/achievements/tetris.gif',
         'reward': false,
         'pages': 3,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 2048],
         'mystery': {
             'name': true,
             'desc': false,
-            'image': false,
+            'image': true,
             'noToast': false,
         }
     },
@@ -1325,7 +1434,7 @@ const achievements = {
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 5,000 times',
         'image': false,
-        'reward': 'cosmetic:farmable/pixel_carrot',
+        'reward': 'shop:cosmetic/farmable/pixel_carrot',
         'pages': false,
         'conditions': ['player.lifetime.clicks', 5000],
         'mystery': {
@@ -1422,6 +1531,37 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Cash
+    '100_lifetime_cash': {
+        'name': 'Penny Pincher',
+        'desc': 'Earn 100 cash',
+        'image': false,
+        'reward': false,
+        'pages': 1,
+        'conditions': ['player.lifetime.cash', 100],
+        'mystery': {
+            'name': false,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '50_cash': {
+        'name': 'Savings Account',
+        'desc': 'Have 50 cash in the bank without spending it',
+        'image': false,
+        'reward': false,
+        'pages': 1,
+        'conditions': ['player.cash', 50],
+        'mystery': {
+            'name': false,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
     // Misc
     '9_clicks_per_second': {
         'name': 'Gotta Grow Fast',
@@ -1592,7 +1732,7 @@ const achievements = {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
-        'reward': 'function:confetti()',
+        'reward': 'function:confetti(2)',
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',
@@ -1679,6 +1819,7 @@ const achievements = {
         ],
         'pages': false,
         'conditions': ['0', 1],
+        // 'conditions': ['store("playtest")', 'yes'],
         'style': 'shine',
         'mystery': {
             'name': true,
@@ -1688,6 +1829,25 @@ const achievements = {
             'list': true,
         }
     },
+
+    // Internal achievements- won't appear in game but it's way easier to use the achievements system to trigger certain events
+    'internal_custom_theme_available': {
+        'internal': true,
+        'name': 'internal_custom_theme_available',
+        // 'desc': 'Thanks for playtesting!',
+        // 'image': './assets/achievements/early_playtester.png',
+        'reward': 'shop:theme/theme_custom',
+        'pages': false,
+        'conditions': ['player.themes.length', Object.keys(themes).length - 1],
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': true,
+            'list': true,
+        }
+    },
+
 }
 const achievementsKeys = Object.keys(achievements);
 var hiddenAchievements = 0;

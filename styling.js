@@ -28,6 +28,7 @@ var tipsMenuOpen =          false;
 
 // Don't regenerate achievements list unless necessary
 var achieveHTMLupdate =     true;
+var tipsHTMLupdate =        true;
 
 // Dialog button action
 var dialogButtonAction = 'none';
@@ -621,15 +622,16 @@ function openPrestigeMenu() {
 }
 
 /* ----- Inventory ----- */
-function openInventory() {
-    closeDialog();
-    inventoryOpen = true;
-    inventoryMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+// function openInventory() {
+//     closeDialog();
+//     inventoryOpen = true;
+//     inventoryMenu.classList.add('visible');
+//     overlay.classList.add("visible");
+//     elBody.classList.add('overflow_hidden');
 
-    buttonSound();
-}
+//     buttonSound();
+// }
+// Unused, use closeDialog() instead
 // function closeInventory(noOverlay = false) {
 //     themeMenu.classList.remove('visible');
 //     if(noOverlay == false) {
@@ -640,12 +642,50 @@ function openInventory() {
 /* ----- Tips Menu ----- */
 function openTipsMenu() {
     closeDialog();
+
+    if(tipsHTMLupdate == true) {
+        populateTipsMenu();
+        tipsHTMLupdate = false;
+    }
+
     tipsMenuOpen = true;
     tipsMenu.classList.add('visible');
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
 
     buttonSound();
+}
+const elTipsList = dom('tips_list');
+function populateTipsMenu() {
+    let html = '';
+    // Loop
+    for(let i = 0; i < tl.length; i += 0.5) {
+        let ri = Math.floor(i);
+        let type = '';
+        if(i % 1 != 0) { type = 'fun_'; }
+        // console.log(type + ri);
+
+        let id = `${type}${tl[ri]}`;
+        let cat = tips[id];
+        if(type != 'fun_') { html += `<h3>${capitalizeFL(id.split('_').join(' '))}</h3>`; }
+        
+
+        for(ii = 0; ii < cat.length; ii++) {
+            // console.log(cat[ii]);
+            // Normal
+            if(tips[`s_${id}`][ii] == true) {
+                html += `
+                <p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
+            }
+            // ???
+            else {
+                html += `
+                <p class="tip_item secondary_text"><span class="tip_number">${ii + 1}</span>???</p>`;
+            }
+        }
+    }
+
+    elTipsList.innerHTML = html;
 }
 
 
@@ -680,43 +720,30 @@ function setCosmetic(target, to, resetState = false) {
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
+    // console.log(`cosmetics[${target}][${to}]`)
 
     // Change page
     switch(target) {
         case 'bundle':
-            if(cosmetic.hasOwnProperty('farmable'))
-            {setCosmetic('farmable', cosmetic.farmable);}
-            else {setCosmetic('farmable', 'default');}
-
-            if(cosmetic.hasOwnProperty('bill'))
-            {setCosmetic('bill', cosmetic.bill);}
-            else {setCosmetic('farmable', 'bill');}
-            if(cosmetic.hasOwnProperty('belle'))
-            {setCosmetic('belle', cosmetic.belle);}
-            else {setCosmetic('farmable', 'belle');}
-            if(cosmetic.hasOwnProperty('greg'))
-            {setCosmetic('greg', cosmetic.greg);}
-            else {setCosmetic('farmable', 'greg');}
-            if(cosmetic.hasOwnProperty('charles'))
-            {setCosmetic('charles', cosmetic.charles);}
-            else {setCosmetic('farmable', 'charles');}
-            if(cosmetic.hasOwnProperty('carl'))
-            {setCosmetic('carl', cosmetic.carl);}
-            else {setCosmetic('farmable', 'carl');}
+            // Loop types
+            for(i = 0; i < cosmeticsKeys.length; i++) {
+                let target = cosmeticsKeys[i];
+                if(target == 'bundle') continue;
+                if(cosmetic.hasOwnProperty(target))
+                {setCosmetic(target, cosmetic[target]);}
+                else {setCosmetic(target, 'default');}
+            }
 
             break;
         
         case 'farmable':
-            // console.log(cosmetic);
             // Image
             if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
             { mainCarrot.src = cosmetic.image; }
             // Name
             if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
                 nameLoop(cosmetic.farmable);
-            } else {
-                nameLoop('Carrot');
-            }
+            } else { nameLoop('Carrot'); }
             // Image render type
             if(cosmetic.hasOwnProperty('render_type') && cosmetic.render_type != false) {
                 // Pixelated
@@ -885,6 +912,39 @@ function populateCosmeticsList(target) {
         for(let i = 0; i < cosmeticsKeys.length; i++) {
             populateCosmeticsList(cosmeticsKeys[i]);
         }
+
+        setTimeout(() => {
+            // Size adjust
+            let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            if(width > 632) { width = 632 - 68; }
+            else { width = width - 68; }
+            let item_width = 94;
+            if(width <= 460) { item_width = 84; }
+            // 632 theme popup width
+            // minus 57 to get actual used space
+            let amount = Math.floor(width / item_width);
+            // console.log(amount);
+            
+            for(i = 0; i < cosmeticsKeys.length; i++) {
+                let category = dom(`collapse_${cosmeticsKeys[i]}`);
+                let item_list = category.querySelectorAll('.cosmetic_item');
+                let iterate = 1;
+
+                item_list.forEach(item => {
+                    if(iterate > amount / 2) {
+                        // console.log(item);
+                        item.classList.add('desc_fit');
+                    }
+                    // Count
+                    if(iterate < amount) {
+                        iterate++;
+                    } else {
+                        iterate = 1;
+                    }
+                });
+            }
+        }, 50);
+
         return;
     }
 
@@ -908,7 +968,7 @@ function populateCosmeticsList(target) {
             stillLocked++;
             cosmeticHTML += /* html */
             `
-            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
+            <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
                 <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}">
                 <div class="description">
                     <h3>???</h3>
@@ -924,7 +984,7 @@ function populateCosmeticsList(target) {
         // console.log('aaa::: ' + `setCosmetic('${target}', '${key}')`);
         cosmeticHTML += /* html */
         `
-        <div class="theme_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
+        <div class="theme_item cosmetic_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
             <img src="${imgsrc}" alt="img" class="theme_preview" id="cosmetic_${key}">
             <div class="description">
                 <h3>${cosmetic.name}</h3>
@@ -946,6 +1006,8 @@ function populateCosmeticsList(target) {
     // }
 
     dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
+
+
 }
 // function cosmeticsPercent() {
 //     return percentage(Object.keys(player.cosmetics).length - 1, Object.keys(cosmetics).length - 1);
@@ -982,6 +1044,9 @@ function populateAchievements() {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achieve = achievements[key];
+
+        // Skip if internal
+        if(achieve.internal == true) continue;
 
         // Test if unlocked
         let unlocked = achieveQuery(key);
@@ -1404,11 +1469,17 @@ function setTheme(theme) {
     elBody.classList.add(theme);
 
     // console.log(themes[theme]);
-    if(themes[theme].hasOwnProperty('accent')) {
+    if(themes[theme].hasOwnProperty('accent') == true) {
         theme_color = themes[theme].accent;
     };
 
     dom('theme_color').content = theme_color;
+
+    // Set related cosmetic
+    // if(themes[theme].hasOwnProperty('cosmetic') == true && themes[theme].cosmetic != false) {
+    //     let [t, c] = themes[theme].cosmetic.split('/');
+    //     setCosmetic(t, c);
+    // }
 
     // Save to localStorage
     settings.theme = theme;
@@ -1479,9 +1550,42 @@ function closeKeybindsMenu(noOverlay = false) {
 
 // Populate Carls' shop
 const carlShop = dom('cosmetic_shop');
+// let carlHTMLStore = {};
 function populateCarl() {
     let html = '';
     carlShopData = {};
+
+    // Loop through shop_order
+    // for(let i = 0; i < Carl.shop_order.length; i++) {
+    //     let raw = Carl.shop_order[i];
+    //     console.log('aaaaaaaa: ' + raw);
+    //     let [type, name] = raw.includes(':') == false ? ['theme', raw] : raw.split(':');
+    //     let item = Carl.shop[type][name];
+    //     if(
+    //         item.available == false ||
+    //         item.bought == true
+    //     ) continue;
+
+    //     carlShopData[name] = item.price;
+
+    //     // Theme
+    //     if(type == 'theme') {
+    //         // let theme_keys = Carl.shop.theme.keys;
+    //         let theme = themes[name];
+    //         let img = theme.image;
+    
+    //         html += carlHTML(name, 'theme', theme.name, img, item.price);
+    //     }
+    //     // Cosmetic
+    //     else if(type == 'cosmetic') {
+    //         // let cosm_keys = Carl.shop.cosmetic.keys;
+    //         let [ca, cb] = name.split('/');
+    //         let cosmetic = cosmetics[ca][cb];
+    //         let img = cosmetic.image;
+    
+    //         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+    //     }
+    // }
 
     // Loop through themes
     let theme_keys = Carl.shop.theme.keys;

@@ -175,6 +175,8 @@ const playerPrestigeTemplate = {
     },
 }
 const player1 = {
+    data_version: 1, // needs to be incremented by 1 any time any game object is changed
+
     // Progress
     Carrots: 0,
     cpc: 0,
@@ -215,10 +217,10 @@ const player1 = {
     },
 
     // Unlocked main buttons
-    main_buttons: {
-        prestige: false,
-        inventory: false,
-    },
+    // main_buttons: {
+    //     prestige: false,
+    //     inventory: false,
+    // },
 
     // Unlocked characters
     characters: {
@@ -245,9 +247,9 @@ const player1 = {
         'tools':    ['default'],
     },
 
-    inventory: [
+    // inventory: [
         
-    ],
+    // ],
 }
 
 
@@ -275,6 +277,9 @@ const Default_Charles = {
     }
 }
 const Default_Carl = {
+    // shop_order: [
+    //     'theme_classic',
+    // ],
     shop: {
         theme: {
             'theme_classic': {
@@ -283,15 +288,27 @@ const Default_Carl = {
                 available: true,
                 bought: false,
             },
-            'theme_camo': {
-                currency: 'cash',
-                price: 4,
-                available: false,
-                bought: false,
-            },
             'theme_bw': {
                 currency: 'cash',
                 price: 32,
+                available: false,
+                bought: false,
+            },
+            'theme_terminal': {
+                currency: 'cash',
+                price: 16,
+                available: false,
+                bought: false,
+            },
+            'theme_chatapp': {
+                currency: 'cash',
+                price: 5,
+                available: false,
+                bought: false,
+            },
+            'theme_camo': {
+                currency: 'cash',
+                price: 4,
                 available: false,
                 bought: false,
             },
@@ -313,14 +330,74 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+            'theme_custom': {
+                currency: 'cash',
+                price: 80,
+                available: false,
+                bought: false,
+            }
         },
         cosmetic: {
+            'bundle/cookie': {
+                currency: 'cash',
+                price: 32,
+                available: false,
+                bought: false,
+            },
+            'bundle/xmas': {
+                currency: 'cash',
+                price: 25,
+                available: false,
+                bought: false,
+            },
+            'farmable/pixel_carrot': {
+                currency: 'cash',
+                price: 16,
+                available: false,
+                bought: false,
+            },
+            'farmable/blockgame_potato': {
+                currency: 'cash',
+                price: 12,
+                available: false,
+                bought: false,
+            },
+            'farmable/pixel_golden_carrot': {
+                currency: 'cash',
+                price: 12,
+                available: false,
+                bought: false,
+            },
+            'farmable/ascii_color': {
+                currency: 'cash',
+                price: 2,
+                available: false,
+                bought: false,
+            },
+            'farmable/ascii': {
+                currency: 'cash',
+                price: 2,
+                available: false,
+                bought: false,
+            },
+            'bill/business_bill': {
+                currency: 'cash',
+                price: 12,
+                available: false,
+                bought: false,
+            },
             'bill/biker_bill': {
                 currency: 'cash',
                 price: 6,
                 available: false,
                 bought: false,
-            }
+            },
+            'carl/joker_carl': {
+                currency: 'cash',
+                price: 12,
+                available: false,
+                bought: false,
+            },
         }
 
     },
@@ -377,6 +454,7 @@ function saveGame() {
     localStorage.setObject("Greg", Gregory);
     localStorage.setObject("Charles", Charles);
     localStorage.setObject("Carl", Carl);
+    localStorage.setObject("tips_seen", tips);
 }
 var preventSaveGame=false;
 
@@ -574,6 +652,7 @@ function earnCarrots(amount, type, useMousePos = false) {
             player.prestige.bonus_carrots += amount;
             player.lifetime.bonus_carrots += amount;
 
+            player.prestige.falling_carrots_grabbed++;
             player.lifetime.falling_carrots_grabbed++;
             break;
     }
@@ -878,7 +957,7 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 function Prestige() {
     console.log('Prestiging...');
 
-    if(player.prestige_potential < 3) {
+    if(player.prestige_potential < 1) {
         console.warn('Insufficient prestige potential');
         toast('Cannot Prestige', 'Insufficient prestige potential. Try again later.');
         return;
@@ -1394,6 +1473,7 @@ function gameLoop() {
         eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
         dom("prestige-section").classList.add('visible');
         dom('prestige_menu_button').disabled = false;
+        dom('prestige_menu_button').title = "Prestige";
         dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`;
         player.prestige_available = true;
     }
@@ -1504,7 +1584,7 @@ function loadStatistics() {
     eInnerText(statsNumbers.lifetime_hoes_crafted_5, player.lifetime.hoes.crafted[5]);
     eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
 
-    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3)}%)`);
+    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`);
     eInnerText(statsNumbers.stat_cosmetics, `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`);
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
@@ -1521,61 +1601,73 @@ var statsInterval;
 /*-----------Tips----------- */
 //#region
 var tips = default_tips;
+try {
+    let tips_seen = localStorage.getObject('tips_seen');
+    [
+        tips.s_basic,
+        tips.s_beginner,
+        tips.s_intermediate,
+        tips.s_fun_basic,
+        tips.s_fun_beginner,
+        tips.s_fun_intermediate,
+    ] = [
+        tips_seen.s_basic,
+        tips_seen.s_beginner,
+        tips_seen.s_intermediate,
+        tips_seen.s_fun_basic,
+        tips_seen.s_fun_beginner,
+        tips_seen.s_fun_intermediate,
+    ];
+} catch (error) {
+    console.warn(error);
+}
+
 
 // Automatically change tips
 var tipInterval = setInterval(() => {tipchange()}, 15000);
 
 function tipchange() {
+    if(menuOpen()) return;
+    
     clearInterval(tipInterval);
     tipInterval = setInterval(() => {tipchange()}, 15000);
     
-    //Tracker
-    if(player.EquippedHoes > 0 && tips.tracker == 0) {
-        tips.tracker=1;
-    } else if(player.Carrots>1000000 && tips.tracker == 1) {
-        tips.tracker=2;
+    // Tracker - determine tips level
+    if(player.EquippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) {
+        tips.tracker = 1;
+    } else if(player.prestige.carrots > 1000000 && tips.tracker == 1) {
+        tips.tracker = 2;
+    } else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) {
+        tips.tracker = 3;
     }
+
+    // 20% chance a lower level tip will appear
+    // console.log(tips.tracker);
+    let roll = Math.floor(Math.random() * 5);
+    if(roll == 0) {
+        let t_roll = Math.floor(Math.random() * (tips.tracker - 1));
+        tips.tracker = t_roll;
+    }
+    // console.log(tips.tracker);
     
-    // decides if the tip will be real or fun.
+    // Decides if the tip will be real or fun.
     tips.random = Math.random();
-    // console.log(tips.random);
-    if(tips.random<tips.TypeModifier){
-        tips.Type="fun";
-    }else{tips.Type="real";}
-    
-    //displays the tip
-    if(tips.Type=="fun"){
-        switch (tips.tracker){
-            case 1:
-                tips.number = Math.floor(Math.random()*tips.beginner.length);
-                eInnerText(elTips, tips.beginner[tips.number]);
-                break;
-            case 2:
-            case 3:
-                tips.number = Math.floor(Math.random()*tips.funAdvanced.length);
-                eInnerText(elTips, tips.funAdvanced[tips.number]);
-                break;
-            default:
-                tips.number = Math.floor(Math.random()*tips.fun.length);
-                eInnerText(elTips, tips.fun[tips.number]);
-        }
-    }else{
-        switch (tips.tracker){
-            case 1:
-                tips.number = Math.floor(Math.random()*tips.funIntermediate.length);
-                eInnerText(elTips, tips.funIntermediate[tips.number]);
-                break;
-            case 2:
-            case 3:
-                tips.number = Math.floor(Math.random()*tips.advanced.length);
-                eInnerText(elTips, tips.advanced[tips.number]);
-                break;
-            default:
-                tips.number = Math.floor(Math.random()*tips.basic.length);
-                eInnerText(elTips, tips.basic[tips.number]);
-        }
+    tips.Type = tips.random < tips.TypeModifier ? "fun" : "real";
+
+    // Determine and display the tip
+    let type = tips.Type == "fun" ? 'fun_' : '';
+    type += tl[tips.tracker];
+    tips.number = Math.floor(Math.random() * tips[type].length);
+    eInnerText(elTips, tips[type][tips.number]);
+
+    // Mark tip as seen
+    if(tips[`s_${type}`][tips.number] != true) {
+        tips[`s_${type}`][tips.number] = true;
+        localStorage.setObject("tips_seen", tips);
     }
+    tipsHTMLupdate = true;
 }
+
 /*------Dev Tools---------*/
 var setCarrotsEl;
 var setGoldenCarrotsEl;

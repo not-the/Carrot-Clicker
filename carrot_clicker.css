@@ -1,5 +1,6 @@
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rowdies&family=Ubuntu+Mono:wght@400;700&display=swap');
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
 /* From https://fonts2u.com/minecraft-regular.font */
@@ -486,6 +487,7 @@ summary:hover {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
     position: relative;
     word-break: break-word;
+    max-height: 400px;
 
     animation: toast 0.4s;
     pointer-events: initial;
@@ -499,6 +501,7 @@ summary:hover {
 }
 @keyframes toast_out {
     to {
+        /* max-height: 0; */
         transform: translateY(-20px);
         opacity: 0;
     }
@@ -603,7 +606,8 @@ summary:hover {
 .fancy_switcher {
     width: 632px;
     max-width: 100%;
-    height: 95%;
+    height: 100%;
+    max-height: 95%;
     /* overflow: auto; */
     overflow: hidden;
 
@@ -644,7 +648,7 @@ p.theme_menu_title {
 .theme_item {
     /* height: 90px; */
     width: 100%;
-    max-width: 100%;
+    /* max-width: 100%; */
     border-radius: 10px;
     background-color: var(--darker-bg-color);
     margin-bottom: 14px;
@@ -697,6 +701,9 @@ body:not(.theme_light) .theme_checkmark {
     filter: invert();
 }
 
+#cosmetics_list {
+    padding-bottom: 100px;
+}
 #cosmetics_list details {
     box-shadow: inset 0 -4px 4px -4px #00000077;
 }
@@ -715,6 +722,7 @@ body:not(.theme_light) .theme_checkmark {
     width: 90px;
     height: 90px;
     margin-right: 4px;
+    display: unset;
 }
 .cosmetics_grid .theme_item:hover {
     z-index: 200;
@@ -741,6 +749,11 @@ body:not(.theme_light) .theme_checkmark {
 
     pointer-events: none;
 }
+.cosmetics_grid .theme_item.desc_fit .description {
+    /* background-color: blue; */
+    left: unset;
+    right: -3px;
+}
 .cosmetics_grid .theme_item .theme_checkbox {
     position: absolute;
     right: -8px;
@@ -763,7 +776,7 @@ body:not(.theme_light) .theme_checkmark {
 /* Keybinds */
 #keybinds_menu {
     width: 800px;
-    max-height: 800px;
+    height: 800px;
     padding: 24px;
     overflow: auto;
 }
@@ -791,6 +804,9 @@ body:not(.theme_light) .theme_checkmark {
     margin-right: 0;
     padding-right: 0;
     border-right: none;
+}
+#keybinds_menu label p {
+    pointer-events: none;
 }
 
 /* Popup animation */
@@ -1292,9 +1308,15 @@ body:not(.theme_light) .theme_checkmark {
 .char_mini_button:hover {
     filter: invert();
 }
-.characterbox:hover .char_mini_button {
+.characterbox:hover .char_mini_button,
+#left-section:hover .char_mini_button {
     opacity: 1;
 }
+/* #left-section .char_mini_button {
+    top: unset;
+    bottom: 24px;
+    right: 16px;
+} */
 
 /* Character in-depth card */
 .bio_card {
@@ -1610,7 +1632,7 @@ body:not(.gp) #golden_carrot_count*/ {
     filter: brightness(40%) saturate(50%);
 }
 .blackedout {
-    filter: contrast(0%) brightness(20%);
+    filter: contrast(0%) brightness(0%) opacity(30%);
 }
 .grayedout .levelupimg,
 .grayedout .toolicon,
@@ -1738,22 +1760,6 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 #tripane nav .tab:nth-of-type(3) {
     border-radius: 0 16px 0 0 !important;
-}
-
-/* Dev button */
-#dev-panel-button {
-    visibility: hidden;
-    position: absolute !important;
-    background-color: var(--lighter-bg-color) !important;
-    filter: brightness(85%);
-    border-radius: 16px 16px 0 0 !important;
-}
-#dev-panel-button.activetab {
-    background-color: var(--lighter-bg-color) !important;
-    filter: none;
-}
-#dev-panel {
-    background-color: var(--lighter-bg-color);
 }
 
 /* Info panel */
@@ -2112,7 +2118,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 }
 #prestige_menu {
     width: 100%;
-    max-height: 260px;
+    height: 260px;
     max-width: 540px;
 }
 .prestige_item {
@@ -2133,7 +2139,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 #inventory_menu {
     padding: 24px;
     width: 100%;
-    max-height: 750px;
+    height: 750px;
     max-width: 985px;
 
     /* background-color: rgba(134, 134, 134, 0.2); */
@@ -2208,6 +2214,50 @@ footer {
 
 }
 
+
+/* Tips menu */
+#tips_menu {
+    width: 500px;
+    height: 640px;
+    overflow-y: auto;
+}
+#tips_list h3 {
+    margin-bottom: 4px;
+    /* border-bottom: 1px solid gray; */
+}
+#tips_list {
+    margin-top: 12px;
+}
+.tip_item {
+    border-bottom: 1px solid var(--darker-bg-color);
+}
+.tip_item {
+    padding: 8px 0;
+    padding-right: 24px;
+    transition: padding 0.15s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.tip_item:hover:not(.secondary_text) {
+    background-color: var(--highlight-color);
+    padding-left: 12px;
+    border-radius: 6px;
+}
+.tip_item.fun::before {
+    content: "☻";
+    font-size: 16pt;
+    transform: translate(19px, -5px);
+    float: right;
+}
+.tip_number {
+    /* font-size: 12pt; */
+    font-weight: bold;
+    padding-right: 8px;
+    color: white;
+}
+
+
+
+
+
 /* Media queries */
 /* Minimum supported width: 362px */
 
@@ -2225,6 +2275,10 @@ footer {
         text-align: center;
         padding-right: 38px;
         padding-left: 38px;
+    }
+    #info_dropdown {
+        padding-top: 18px;
+        vertical-align: middle;
     }
     #Tip {
         margin-left: unset;

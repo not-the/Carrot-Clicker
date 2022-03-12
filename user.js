@@ -36,7 +36,11 @@ function stopMusic() {
     music.currentTime = 0;
 }
 
-
+function menuOpen() {
+    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen)
+    { return true; }
+    return false;
+}
 
 
 
@@ -283,7 +287,7 @@ document.addEventListener('keyup', event => {
         return;
     }
     // Close theme switcher
-    if(themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen) {
+    if(menuOpen()) {
         if(event.key == "Escape"){
             closeDialog();
         }
@@ -553,15 +557,15 @@ function keybindHandler(event, state) {
     }
 
     // Inventory
-    else if(key == settings.keybinds['key_inventory']) {
-        // console.log('inventory');
-        // openDialog('test', 'test');
-        if(inventoryOpen == false) {
-            openInventory();
-        } else {
-            closeDialog();
-        }
-    }
+    // else if(key == settings.keybinds['key_inventory']) {
+    //     // console.log('inventory');
+    //     // openDialog('test', 'test');
+    //     if(inventoryOpen == false) {
+    //         openInventory();
+    //     } else {
+    //         closeDialog();
+    //     }
+    // }
 }
 
 
@@ -573,8 +577,9 @@ function detectKey(bind) {
 function setKeybind(action, key) {
     console.log(`[Settings] Set ${action} to key: ${key}`)
     settings.keybinds[action] = key;
-    localStorage.setObject('settings', settings);
     console.log(action, key);
+    saveSettings();
+    // populateKeyConflicts();
 }
 
 
@@ -821,22 +826,31 @@ function unlock(type, thingToUnlock, subtype, raw) {
     }
     // Carl shop item
     else if(type == 'shop_item') {
-        console.log(raw);
+        // console.log(raw);
         // Theme
         if(subtype == 'theme') {
-            Carl.shop['theme'][thingToUnlock].available = true;
-            console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
+            try {
+                Carl.shop['theme'][thingToUnlock].available = true;
+                console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
+            } catch (error) {
+                console.warn(error);
+            }
         }
         // Cosmetic
         else if(subtype == 'cosmetic') {
             let target = raw.split('/')[1];
             let cosmetic = raw.split('/')[2];
-            Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
-            console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
+            console.log(`${target}/${cosmetic}`);
+            try {
+                Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
+                console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
+            } catch (error) {
+                console.warn(error);
+            }
         }
 
-        toast('', 'Carl: A new item is now available');
-
+        toast('', 'Carl: A new item is now available', '', false, true);
+        // Carl.shop_order.unshift(raw.split(':')[1]);
         populateCarl();
     }
 }
@@ -856,9 +870,9 @@ function purchase(source, type, item, subtype = false) {
     console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
     if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
-        toast('Error', 'You already own this');
+        toast('Whoops', 'You already own this');
 
-        Carl.shop[type][item].bought = true;
+        Carl.shop[type][raw].bought = true;
         populateCarl();
         return;
     }
@@ -868,6 +882,7 @@ function purchase(source, type, item, subtype = false) {
     // let price;
 
     let carlListing = Carl.shop[type][raw];
+    let defaultCarlListing = Default_Carl.shop[type][raw];
 
     // Carl shop
     if(source == 'carl') {
@@ -882,10 +897,10 @@ function purchase(source, type, item, subtype = false) {
         }
 
         // Currency: Cash
-        if(carlListing.currency == 'cash') {
+        if(defaultCarlListing.currency == 'cash') {
             // Buy
-            if(player.cash >= carlListing.price) {
-                player.cash -= carlListing.price;
+            if(player.cash >= defaultCarlListing.price) {
+                player.cash -= defaultCarlListing.price;
                 Carl.shop[type][raw].bought = true;
                 unlock(type, item, subtype);
 
@@ -895,7 +910,7 @@ function purchase(source, type, item, subtype = false) {
             }
             // Can't afford
             else {
-                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ₪${carlListing.price}`, '', false, true);
+                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ₪${defaultCarlListing.price}`, '', false, true);
             }
         } else {
             toast('other currency', 'other currencies aren\'t supported yet');
@@ -1050,11 +1065,23 @@ function resetKeybinds() {
     settings.keybinds = keybinds_default;
     saveSettings();
     populateKeybinds();
-    toast('Settings', 'Keybinds set to defaults')
+    // populateKeyConflicts();
+    toast('Settings', 'Keybinds set to defaults', '', false, true);
 }
 
 
-
+// Loop through object shorthand
+function loopObject(obj, func) {
+    let keys =     Object.keys(obj);
+    for(i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let item = obj[key];
+        func(item, key);
+    }
+}
+function isDebug() {
+    if(location.hash == '#dev' || location.hash == '#developer' || location.hash == '#cheatmode' || store('debug') == 'true') return true;
+}
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
 function onLoad() {
@@ -1070,32 +1097,145 @@ function onLoad() {
 
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
+
+    // List of objects that need to be updated
+    // onu = objects_need_updating
     //#region 
-    if(player.hasOwnProperty('achievements') == false) {
-        console.log('player.achievements check failed, creating property...');
-        player.achievements = {};
-    }
+    var onu = [
+        player,
+        player.prestige,
+        player.lifetime,
+        
+        settings,
+        settings.cosmetics,
+        settings.keybinds,
+
+        Boomer_Bill,
+        Belle_Boomerette,
+        Gregory,
+
+        Charles,
+        Charles.tome,
+        Charles.tome.improveWorkingConditions,
+        Charles.tome.decreaseWages,
+        Charles.tome.betterHoes,
+
+        Carl,
+        Carl.shop,
+        Carl.shop.theme,
+        Carl.shop.cosmetic,
+    ];
+    var onu_templates = [
+        player1,
+        playerPrestigeTemplate,
+        player1.lifetime,
+
+        settings_default,
+        settings_default.cosmetics,
+        settings_default.keybinds,
+
+        Default_Boomer_Bill,
+        Default_Belle_Boomerette,
+        Default_Gregory,
+
+        Default_Charles,
+        Default_Charles.tome,
+        Default_Charles.tome.improveWorkingConditions,
+        Default_Charles.tome.decreaseWages,
+        Default_Charles.tome.betterHoes,
+
+        Default_Carl,
+        Default_Carl.shop,
+        Default_Carl.shop.theme,
+        Default_Carl.shop.cosmetic,
+    ];
+    //#endregion
+
     if(
-    player.hasOwnProperty('themes') == false
-    || player.themes == []
-    || player.themes.length == 0
+        player1.data_version > player.data_version
+        || player.hasOwnProperty('data_version') == false
+        || isDebug() == true
     ) {
-        console.log('player.themes check failed, creating property...');
-        player.themes = [
-            'theme_dark',
-            'theme_light',
-            'theme_oled'
-        ];
+        let p1_keys =     Object.keys(player1);
+        let player_keys = Object.keys(player);
+
+        // Loop through onu array
+        for(oi = 0; oi < onu.length; oi++) {
+            let obj = onu[oi];
+            let template = onu_templates[oi];
+
+            // Loop through template
+            let template_keys = Object.keys(template);
+            for(i = 0; i < template_keys.length; i++) {
+                let key = template_keys[i];
+                let item = obj[key];
+                let t_item = template[key];
+
+                if(obj.hasOwnProperty(key) == false) {
+                    console.log(key + ' property not found, updating save...');
+                }
+            }
+
+        }
+
+        // Check that the players' page count is correct
+        let pagesIntended = 0;
+        for(let i = 0; i < achievementsKeys.length; i++) {
+            let key = achievementsKeys[i];
+            let achieve = achievements[key];
+
+            if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) {
+                pagesIntended += achieve.pages;
+            }
+        }
+
+        if(player.pages !== pagesIntended) {
+            console.warn('Achievement page rewards have been changed');
+            toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange', true);
+
+            if(player.pages) // this doesn't break anything?
+
+            player.pages = pagesIntended;
+        }
+
+        // console.log(pagesIntended);
+
+        // Done
+        console.log(`Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`);
+        if(isDebug() == true) {
+            toast('', `Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`, '', true);
+        }
+        player.data_version = player1.data_version;
     }
-    if(player.hasOwnProperty('cosmetics') == false
-    || player.cosmetics == []
-    || player.cosmetics.length == 0
-    ) {
-        console.log('player.cosmetics check failed, creating property...');
-        player.cosmetics = [
-            'default'
-        ];
-    }
+
+
+    // OLD COMPATIBILITY CHECKS:
+    //#region 
+    // if(player.hasOwnProperty('achievements') == false) {
+    //     console.log('player.achievements check failed, creating property...');
+    //     player.achievements = {};
+    // }
+    // if(
+    // player.hasOwnProperty('themes') == false
+    // || player.themes == []
+    // || player.themes.length == 0
+    // ) {
+    //     console.log('player.themes check failed, creating property...');
+    //     player.themes = [
+    //         'theme_dark',
+    //         'theme_light',
+    //         'theme_oled'
+    //     ];
+    // }
+    // if(player.hasOwnProperty('cosmetics') == false
+    // || player.cosmetics == []
+    // || player.cosmetics.length == 0
+    // ) {
+    //     console.log('player.cosmetics check failed, creating property...');
+    //     player.cosmetics = [
+    //         'default'
+    //     ];
+    // }
 
     // Old lifetime stats
     // LifetimeCarrots: 0,
@@ -1103,41 +1243,41 @@ function onLoad() {
     // LifetimeEquipedHoes: 0,
 
     // Inventory thing
-    if(typeof player.inventory == 'object' &&
-        !Array.isArray(player.inventory) &&
-        player.inventory !== null) {
+    // if(typeof player.inventory == 'object' &&
+    //     !Array.isArray(player.inventory) &&
+    //     player.inventory !== null) {
 
-        console.log('[Player Fix] Object inventory found, fixing...');
-        player.inventory = [];
-    }
+    //     console.log('[Player Fix] Object inventory found, fixing...');
+    //     player.inventory = [];
+    // }
 
-    if(
-    player.hasOwnProperty('LifetimeCarrots') == true
-    || player.hasOwnProperty('LifetimeGoldenCarrots') == true
-    || player.hasOwnProperty('LifetimeEquipedHoes') == true
-    || player.hasOwnProperty('clickSpeedRecord') == false
-    || player.lifetime.hasOwnProperty('clicks') == false
-    || player.hasOwnProperty('characters') == false
-    || player.hasOwnProperty('achievements') == false
-    || player.hasOwnProperty('prestige') == false
-    || player.hasOwnProperty('prestige_available') == false
-    || player.hasOwnProperty('inventory') == false
-    || player.hasOwnProperty('cosmetic') == true
-    || typeof player.cosmetics != 'object'
-    || settings.hasOwnProperty('full_numbers') == false
-    || settings.hasOwnProperty('cosmetics_grid') == false
-    ) {
-        if(store('old_player_object_fix') !== 'true') {
-            toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
-            player.lifetime.carrots = player.LifetimeCarrots;
-            player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
-            player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
+    // if(
+    // player.hasOwnProperty('LifetimeCarrots') == true
+    // || player.hasOwnProperty('LifetimeGoldenCarrots') == true
+    // || player.hasOwnProperty('LifetimeEquipedHoes') == true
+    // || player.hasOwnProperty('clickSpeedRecord') == false
+    // || player.lifetime.hasOwnProperty('clicks') == false
+    // || player.hasOwnProperty('characters') == false
+    // || player.hasOwnProperty('achievements') == false
+    // || player.hasOwnProperty('prestige') == false
+    // || player.hasOwnProperty('prestige_available') == false
+    // || player.hasOwnProperty('inventory') == false
+    // || player.hasOwnProperty('cosmetic') == true
+    // || typeof player.cosmetics != 'object'
+    // || settings.hasOwnProperty('full_numbers') == false
+    // || settings.hasOwnProperty('cosmetics_grid') == false
+    // ) {
+    //     if(store('old_player_object_fix') !== 'true') {
+    //         toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
+    //         player.lifetime.carrots = player.LifetimeCarrots;
+    //         player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
+    //         player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
             
-            store('old_player_object_fix', '1.8.3');
+    //         store('old_player_object_fix', '1.8.3');
 
-            console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
-        }
-    }
+    //         console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
+    //     }
+    // }
     //#endregion
 
     /* --------------- SETTINGS --------------- */
@@ -1216,6 +1356,8 @@ function onLoad() {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
+
+        if(achievement.internal == true) continue;
 
         if(achievement.mystery.list == true) {
             hiddenAchievements++;
@@ -1396,28 +1538,6 @@ function onLoad() {
             unlock('character', key);
         }
     }
-
-    // Check that the players' page count is correct
-    let pagesIntended = 0;
-    for(let i = 0; i < achievementsKeys.length; i++) {
-        let key = achievementsKeys[i];
-        let achieve = achievements[key];
-
-        if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) {
-            pagesIntended += achieve.pages;
-        }
-    }
-
-    if(player.pages !== pagesIntended) {
-        console.warn('Achievement page rewards have been changed');
-        toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange', true);
-
-        if(player.pages) // this doesn't break anything?
-
-        player.pages = pagesIntended;
-    }
-
-    // console.log(pagesIntended);
 
     
     // Disable

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.9.8</title>
+    <title id="page_title">Carrot Clicker dev beta v1.10.0</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -348,14 +348,14 @@
                 <div class="key_column flex_1">
                     <p class="flex_1 no_border"><b class="underline">Interface:</b></p><br>
 
-                    <div class="keybind_item">
+                    <!-- <div class="keybind_item">
                         <label for="key_inventory">
                             <p>Inventory:</p>
                             <button class="edit_keybind" id="key_inventory" onclick="detectKey('key_inventory')">
                                 -
                             </button>
                         </label>
-                    </div>
+                    </div> -->
                     <div class="keybind_item">
                         <label for="key_prestige">
                             <p>Open Prestige dialog:</p>
@@ -438,7 +438,7 @@
         </div>
 
         <!-- Inventory -->
-        <div id="inventory_menu" class="popup_box fancy_switcher">
+        <!-- <div id="inventory_menu" class="popup_box fancy_switcher">
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <h1>Inventory</h1>
             <p><i class="secondary_text">Secondary text</i></p><br>
@@ -448,7 +448,7 @@
             </nav>
 
             <div class="flex">
-                <!-- Inventory slots -->
+                Inventory slots
                 <div id="inventory">
                     <div class="inventory_slot main_bg_color">
                         <img src="./assets/Carrot Clicker.png" alt="Carrot">
@@ -462,7 +462,7 @@
                     <div class="inventory_slot main_bg_color"></div>
                 </div>
     
-                <!-- Preview pane -->
+                Preview pane
                 <div id="inventory_preview">
                     <div class="inventory_slot main_bg_color item_preview">
                         <img src="./assets/Carrot Clicker.png" alt="Carrot">
@@ -474,17 +474,18 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
         <!-- Tips menu -->
         <div id="tips_menu" class="popup_box fancy_switcher">
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
             <h1>Tips</h1>
+            <p class="secondary_text">Game knowledge</p>
 
             <!-- List -->
             <div id="tips_list">
-                <p>Click here to cycle through available tips!</p>
-                <p class="secondary_text">???</p>
+                <p class="tip_item"><span class="tip_number">1</span>Click here to cycle through available tips!</p>
+                <p class="tip_item fun"><span class="tip_number">2</span>JJ broke it</p>
             </div>
         </div>
 
@@ -619,10 +620,10 @@
                 style="position: absolute; transform: translate(-38px, -6px)"
                 title="Carrot Clicker">
 
-                <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" onclick="multibuySpin()" tabindex="0">1x</b><p>
+                <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" title="Multibuy multiplier" onclick="multibuySpin()" tabindex="0">1x</b><p>
 
             <!-- Tips -->
-            <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click The Carrot</div>
+            <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click the carrot</div>
 
             <div id="info_dropdown" tabindex="0">
                 <!-- <svg height="20" width="25">
@@ -708,6 +709,8 @@
         <!-- #region -->
         <div id="left-section">
 
+            <!-- <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('farmable')"> -->
+
             <!-- Falling Carrots -->
             <div id="fallingCarrotsArea"></div>
 
@@ -741,18 +744,18 @@
             <!-- Prestige Section -->
             <div class="main_buttons flex">
                 <!-- Prestige button -->
-                <button onClick="openPrestigeMenu()" title="Prestige" class="prestige_button main_button_item" id="prestige_menu_button" disabled>
+                <button onClick="openPrestigeMenu()" title="???" class="prestige_button main_button_item" id="prestige_menu_button" disabled>
                     <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
                 </button>
 
                 <!-- Inventory button -->
-                <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
+                <!-- <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
                     <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
-                </button>
+                </button> -->
 
                 <!-- Tips button -->
                 <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
-                    <img src="./assets/icons/lightbulb.svg" alt="Inventory" class="main_button_img" id="tips_button_img">
+                    <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
                 </button>
             </div>
             <div id="prestige-section" class="flex">
@@ -811,7 +814,7 @@
                     <div class="bottom hoecontainer">
 
                         <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Level up">
-
+                        
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
                         <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe">
 
@@ -1139,7 +1142,7 @@
     <div id="tripane">
         <!-- Nav buttons -->
         <nav id="tripane-nav">
-            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button><!-- <button class="tab secondary_text" id="dev-panel-button" onclick="panelChange(`dev-panel`)">Dev Tools</button> -->
+            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
         </nav>
 
         <!-- Achievements Panel -->
