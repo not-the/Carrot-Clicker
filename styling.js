@@ -107,7 +107,7 @@ function randomSound(type, ignoreChance = 0) {
     playSound(`crunch${randomNum}.flac`)
 }
 function buttonSound() {
-    if(store('enableSounds') == false) return;
+    if(settings.enableSounds == false) return;
     playSound('click.flac');
 }
 
@@ -284,7 +284,7 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
     }
 
     if(!persistent) {
-        let timeout = store("notificationLength") == null ? 5000 : parseInt(store("notificationLength")) * 1000;
+        let timeout = settings.notificationLength * 1000;
         if(achievement != false ) timeout *= 2;
         // console.log(timeout);
 
@@ -659,7 +659,7 @@ const elTipsList = dom('tips_list');
 function populateTipsMenu() {
     let html = '';
     // Loop
-    for(let i = 0; i < tl.length; i += 0.5) {
+    for(let i = 0; i <= tips.best + 0.5; i += 0.5) {
         let ri = Math.floor(i);
         let type = '';
         if(i % 1 != 0) { type = 'fun_'; }
@@ -680,7 +680,7 @@ function populateTipsMenu() {
             // ???
             else {
                 html += `
-                <p class="tip_item secondary_text"><span class="tip_number">${ii + 1}</span>???</p>`;
+                <p class="tip_item secondary_text${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>???</p>`;
             }
         }
     }
@@ -1034,6 +1034,7 @@ function cosmeticSwitcherCheckmark(target, to, from = false) {
 const elAchievementsList = dom('achievements_list');
 const elAchievementFilter = dom('achievement_filter');
 function populateAchievements() {
+    const filter = dom('achievement_filter').value;
     // Don't populate if not needed
     if(achieveHTMLupdate == false) {return;}
     else {achieveHTMLupdate = false;}
@@ -1052,11 +1053,10 @@ function populateAchievements() {
         let unlocked = achieveQuery(key);
 
         // Filters
-        const achievementFilter = dom('achievement_filter');
-        if(dom('achievement_filter').value == 'unlocked' && unlocked == false) continue;
-        if(dom('achievement_filter').value == 'locked' && unlocked == true) continue;
-        if(dom('achievement_filter').value == 'challenge' && achieve.style != 'challenge') continue;
-        if(dom('achievement_filter').value == 'secret' && achieve.mystery.list != true) continue;
+        if(filter == 'unlocked'  && unlocked == false) continue;
+        if(filter == 'locked'    && unlocked == true) continue;
+        if(filter == 'challenge' && achieve.style != 'challenge') continue;
+        if(filter == 'secret'    && achieve.mystery.list != true) continue;
         if(achieve.mystery.list == true && unlocked == false) continue;
 
         let img = achieve.image != false ? achieve.image : './assets/achievements/missing.png';
@@ -1249,7 +1249,7 @@ function populateAchievements() {
             // cheat: onclick="grantAchievement('${key}')"
             achievementHTML += /* htmla */
             `
-            <div id="${key}" class="achievement_item achievement_locked" >
+            <div id="${key}" class="achievement_item achievement_locked${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}" >
                 <!-- Details -->
                 <div class="achievement_details flex">
                     <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
@@ -1263,24 +1263,18 @@ function populateAchievements() {
         }
     }
 
-    // if(stillLocked > 0) {
-    //     achievementHTML += /* html */
-    //     `<br><center><i>${stillLocked} themes have not been unlocked</i></center>`
-    // }
-
-    if(dom('achievement_filter').value == 'unlocked' && achievementHTML == '') {
+    // Filter by unlocked
+    if(filter == 'unlocked' && achievementHTML == '') {
         achievementHTML =
             `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
     }
-
     // Filter by locked
-    if(dom('achievement_filter').value == 'locked' && achievementHTML == '') {
+    if(filter == 'locked' && achievementHTML == '') {
         achievementHTML =
             `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
     };
-
-    // Filter by locked
-    if(dom('achievement_filter').value == 'secret' && achievementHTML == '') {
+    // Filter by secret
+    if(filter == 'secret' && achievementHTML == '') {
         achievementHTML =
             `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="confetti()"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
     };
@@ -1437,11 +1431,11 @@ function rewardHTML(achieve) {
     }
 }
 
-function achievementProgress() {
+function achievementProgress(element = dom('achievement_progress')) {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
-        dom('achievement_progress'),
-        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
+        element,
+        `${unlockedAchievements.length - internalAchievements}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
     );
 }
 
@@ -1652,20 +1646,26 @@ function carlHTML(internalName, type, name, img, price) {
 }
 
 // Theme/cosmetic NEW indicator
-const carl_theme_button = dom('carl_theme_button');
-const carl_cosmetic_button = dom('carl_cosmetic_button');
+const carl_theme_button =       dom('carl_theme_button');
+const carl_cosmetic_button =    dom('carl_cosmetic_button');
+const theme_tab_button =        dom('theme_tab_button');
+const cosmetic_tab_button =     dom('cosmetic_tab_button');
 function newIndicator(state, type, item, subtype) {
-    let element = type == 'theme' ? carl_theme_button : carl_cosmetic_button;
+    let carl_element = type == 'theme' ? carl_theme_button : carl_cosmetic_button;
+    let tab_element =  type == 'theme' ? theme_tab_button  : cosmetic_tab_button;
     let buttonName = type == 'theme' ? 'Themes' : 'Cosmetics';
+    let html = `${buttonName}<div class="new_indicator">NEW</div>`;
 
+    // Save
+    player[`new_${type}`] = state;
+
+    // Page
     if(state == true) {
-        element.innerHTML =
-        `${buttonName}
-        <div class="new_indicator">
-            NEW
-        </div>`;
+        carl_element.innerHTML = html;
+        tab_element.innerHTML  = html;
     } else {
-        element.innerHTML = buttonName;
+        carl_element.innerHTML = buttonName;
+        tab_element.innerHTML  = buttonName;
     }
 }
 

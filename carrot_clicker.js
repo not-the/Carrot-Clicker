@@ -175,7 +175,7 @@ const playerPrestigeTemplate = {
     },
 }
 const player1 = {
-    data_version: 1, // needs to be incremented by 1 any time any game object is changed
+    data_version: 2, // needs to be incremented by 1 any time any game object is changed
 
     // Progress
     Carrots: 0,
@@ -246,6 +246,9 @@ const player1 = {
         'carl':     ['default'],
         'tools':    ['default'],
     },
+    // New indicators
+    new_theme: false,
+    new_cosmetic: false,
 
     // inventory: [
         
@@ -335,9 +338,10 @@ const Default_Carl = {
                 price: 80,
                 available: false,
                 bought: false,
-            }
+            },
         },
         cosmetic: {
+            // Bundle
             'bundle/cookie': {
                 currency: 'cash',
                 price: 32,
@@ -350,9 +354,23 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+            'bundle/plumber': {
+                currency: 'cash',
+                price: 20,
+                available: false,
+                bought: false,
+            },
+
+            // Farmable
             'farmable/pixel_carrot': {
                 currency: 'cash',
                 price: 16,
+                available: false,
+                bought: false,
+            },
+            'farmable/pixel_golden_carrot': {
+                currency: 'cash',
+                price: 12,
                 available: false,
                 bought: false,
             },
@@ -362,9 +380,9 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
-            'farmable/pixel_golden_carrot': {
+            'farmable/pineapple': {
                 currency: 'cash',
-                price: 12,
+                price: 24,
                 available: false,
                 bought: false,
             },
@@ -380,6 +398,34 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+
+            // Carrot variants
+            'farmable/alien_carrot': {
+                currency: 'cash',
+                price: 3,
+                available: false,
+                bought: false,
+            },
+            'farmable/demon_carrot': {
+                currency: 'cash',
+                price: 3,
+                available: false,
+                bought: false,
+            },
+            'farmable/ghost_carrot': {
+                currency: 'cash',
+                price: 3,
+                available: false,
+                bought: false,
+            },
+            'farmable/rainbow_carrot': {
+                currency: 'cash',
+                price: 3,
+                available: false,
+                bought: false,
+            },
+
+            // Bill
             'bill/business_bill': {
                 currency: 'cash',
                 price: 12,
@@ -392,6 +438,8 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+            
+            // Carl
             'carl/joker_carl': {
                 currency: 'cash',
                 price: 12,
@@ -399,7 +447,6 @@ const Default_Carl = {
                 bought: false,
             },
         }
-
     },
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
@@ -411,9 +458,23 @@ function carlItemsAvailable() {
     let theme_keys = Default_Carl.shop.theme.keys;
     for(i = 0; i < theme_keys.length; i++) { if(Carl.shop.theme[theme_keys[i]].available == true) c++; }
     // Cosmetics
-    // let cosm_keys = Default_Carl.shop.cosmetic.keys;
-    // for(i = 0; i < cosm_keys.length; i++) { if(Carl.shop.cosmetic[cosm_keys[i]].available == true) c++; }
+    let cosm_keys = Default_Carl.shop.cosmetic.keys;
+    for(i = 0; i < cosm_keys.length; i++) { if(Carl.shop.cosmetic[cosm_keys[i]].available == true) c++; }
     return c;
+}
+// Returns true if available or bought
+function carlShopQuery(type, item) {
+    console.warn(`carlShopQuery(${type}, ${item})`);
+    try {
+        if(Carl.shop[type][item].available == true
+            || Carl.shop[type][item].bought == true
+        ) { return true; }
+        else { return false};
+    } catch (error) {
+        console.log('carlShopQuery: invalid query- item or type not found');
+        return false;
+    }
+
 }
 
 //Asigns the Local storage
@@ -446,7 +507,9 @@ if(localStorage.getObject("player") != null ) {
     Carl             = Default_Carl;
 }
 
+var preventSaveGame = false;
 function saveGame() {
+    if(preventSaveGame == true) return;
     // console.log('Saving game...');
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
@@ -456,17 +519,16 @@ function saveGame() {
     localStorage.setObject("Carl", Carl);
     localStorage.setObject("tips_seen", tips);
 }
-var preventSaveGame=false;
 
 // Autosave
 var autosave = 
 setInterval(() => {
-    if(preventSaveGame == false) saveGame();
+    saveGame();
 }, 5000);
 
 // Save before unload (does not work for some browsers/devices)
 window.onbeforeunload = () => {
-    if(preventSaveGame == false) saveGame();
+    saveGame();
 }
 
 //#endregion
@@ -489,6 +551,15 @@ function optionSoundsDisable(state) {
 }
 // Fill out settings page options
 function fillSettingsPage() {
+    // console.log("fillSettingsPage()");
+
+    // Gameplay
+    dom('cosmetic_auto_equip').checked = settings.cosmetic_auto_equip;
+    dom('carl_shop_toasts').checked = settings.carl_shop_toasts;
+    // Fun tips
+    elFunTipsSlider.value = settings.fun_tip_percentage;
+    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value + '%');
+
     dom('full_numbers').checked = settings.full_numbers;
     dom('compact_achievements').checked = settings.compact_achievements;
     dom('achievements_grid').checked = settings.achievements_grid;
@@ -501,7 +572,25 @@ function fillSettingsPage() {
     eInnerText(elVolumeMaster_label, `${settings.master_volume * 100}%`);
     volume = settings.master_volume;
 
-    // console.log("fillSettingsPage()");
+    // Autosave
+    // Update autosave variable
+    if(settings.autosave_interval != settings_default.autosave_interval) {
+        dom('autosave_interval').value = settings.autosave_interval;
+        clearInterval(autosave);
+        autosave = setInterval(() => {
+            saveGame();
+        }, settings.autosave_interval * 1000);
+    }
+
+    // Notification time
+    if(settings.notificationLength != settings_default.notificationLength) {
+        dom('notificationLength').value = settings.notificationLength;
+    }
+
+    // Disable keybinds
+    if(settings.disableKeybinds != settings_default.disableKeybinds) {
+        elDisableKeybinds.checked = settings.disableKeybinds;
+    }
 }
 
 function saveSettings() { localStorage.setObject("settings", settings); }
@@ -542,20 +631,23 @@ keybinds_default['keys'].pop();
 
 // Default settings object
 const settings_default = {
-    notificationLength: 5000,
+    notificationLength: 5,      // number - Time in seconds
     disableKeybinds: false,     // boolean
     autosave_interval: 5,
 
-    master_volume: 1,           // Between 0 and 1
+    cosmetic_auto_equip: false, // boolean
+    carl_shop_toasts: true,     // boolean
+
+    master_volume: 1,           // number - Between 0 and 1
     enableSounds: true,         // boolean
     enableMusic: false,         // boolean
     enableCarrotSounds: false,  // boolean
 
-    full_numbers: false,
-    enableMainProgress: true,
+    full_numbers: false,        // boolean
+    enableMainProgress: true,   // boolean
 
     // UI
-    theme: 'theme_dark',     // string
+    theme: 'theme_dark',        // string
     cosmetics: {
         farmable: 'default',
         bill: 'default',
@@ -563,11 +655,13 @@ const settings_default = {
         greg: 'default',
         charles: 'default',
         carl: 'default',
+        tools: 'default',
     },
     openpanel: null,            // string
-    cosmetics_grid: true,
-    achievements_grid: false,
-    compact_achievements: true,
+    cosmetics_grid: true,       // boolean
+    achievements_grid: false,   // boolean
+    compact_achievements: true, // boolean
+    fun_tip_percentage: 50,     // number - between 0 and 100
 
     keybinds: keybinds_default, // object
 }
@@ -1587,11 +1681,7 @@ function loadStatistics() {
     eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`);
     eInnerText(statsNumbers.stat_cosmetics, `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`);
     let unlockedAchievements = Object.keys(player.achievements);
-    eInnerText(
-        statsNumbers.stat_achievements,
-        `${unlockedAchievements.length}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
-    );
-    
+    achievementProgress(statsNumbers.stat_achievements);
 }
 
 // Refresh statistics
@@ -1604,6 +1694,7 @@ var tips = default_tips;
 try {
     let tips_seen = localStorage.getObject('tips_seen');
     [
+        tips.best,
         tips.s_basic,
         tips.s_beginner,
         tips.s_intermediate,
@@ -1611,6 +1702,7 @@ try {
         tips.s_fun_beginner,
         tips.s_fun_intermediate,
     ] = [
+        tips_seen.best,
         tips_seen.s_basic,
         tips_seen.s_beginner,
         tips_seen.s_intermediate,
@@ -1641,23 +1733,43 @@ function tipchange() {
         tips.tracker = 3;
     }
 
-    // 20% chance a lower level tip will appear
+    // Update best
+    if(tips.tracker > tips.best) { tips.best = tips.tracker; }
+
+    // 20% chance a lower level tip will appear (and another chance within that that a current-level tip will appear)
     // console.log(tips.tracker);
     let roll = Math.floor(Math.random() * 5);
     if(roll == 0) {
-        let t_roll = Math.floor(Math.random() * (tips.tracker - 1));
+        let t_roll = Math.floor(Math.random() * tips.tracker);
         tips.tracker = t_roll;
     }
     // console.log(tips.tracker);
     
     // Decides if the tip will be real or fun.
     tips.random = Math.random();
-    tips.Type = tips.random < tips.TypeModifier ? "fun" : "real";
+    tips.Type = tips.random < settings.fun_tip_percentage / 100 ? "fun" : "real";
 
     // Determine and display the tip
     let type = tips.Type == "fun" ? 'fun_' : '';
     type += tl[tips.tracker];
-    tips.number = Math.floor(Math.random() * tips[type].length);
+
+    // Roll tip
+    var rmax = 0;
+    function tiproll() {
+        let r = Math.floor(Math.random() * tips[type].length);
+        // Repeat, reroll- prevent recursion by stopping at 10 rolls
+        if(tips.number == r && rmax < 3) {
+            rmax++;
+            tiproll();
+            return;
+        };
+        tips.number = r;
+        rmax = 0;
+    }
+    tiproll();
+
+
+    // Page
     eInnerText(elTips, tips[type][tips.number]);
 
     // Mark tip as seen

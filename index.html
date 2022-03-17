@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.10.0</title>
+    <title id="page_title">Carrot Clicker dev beta v1.10.1</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -70,7 +70,7 @@
             <!-- Tabs -->
             <div class="switcher_bar flex">
                 <button class="tab activetab">Themes</button>
-                <button class="tab" onclick="switchSwitchers()">Cosmetics</button>
+                <button class="tab" onclick="switchSwitchers()" id="cosmetic_tab_button">Cosmetics</button>
                 <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)">x</h2>
             </div>
 
@@ -102,7 +102,7 @@
         <div id="cosmetic_menu" class="fancy_switcher popup_box">
             <!-- Tab bar -->
             <div class="switcher_bar flex">
-                <button class="tab" onclick="switchSwitchers()">Themes</button>
+                <button class="tab" onclick="switchSwitchers()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
                 <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)">x</h2>
             </div>
@@ -1266,7 +1266,7 @@
                     Themes: <b id="stat_themes">---</b><br/>
                     <!-- <details class="stat_collapse">
                         <summary> -->
-                            Cosmetics: <b id="stat_cosmetics">---</b> <span class="question_mark" title="This does not include default or secret cosmetics. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default or secret cosmetics. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span>
+                            Cosmetics: <b id="stat_cosmetics">---</b> <span class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span>
                         <!-- </summary>
                         Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
                         Farmable: <b id="stat_cosmetics_farmable">---</b><br/>
@@ -1293,12 +1293,12 @@
             <h1>Settings</h1>
             <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
 
-            <!-- Kal dev panel -->
+            <!-- Developer -->
             <div id="dev"></div>
 
             <!-- Themes -->
             <label for="theme_dropdown">
-                Themes<br>
+                <b>Customization</b><br>
                 <button id="theme_button" onclick="themeSwitcher()">
                     <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
                     Change Theme
@@ -1309,9 +1309,20 @@
             </label>
 
             <!-- Fun Tip Percentage-->
+            <b>Gameplay</b><br>
+            <label for="cosmetic_auto_equip">
+                <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                Auto-equip new cosmetics<br>
+            </label>
+            <label for="carl_shop_toasts" class="carl_related">
+                <input type="checkbox" class="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
+                Carl shop notifications<br><br>
+            </label>
+
             <div class="slidecontainer">
-                <label for="FunTipPercentage" ><b>Percentage of fun tips:</b><br>
-                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><span id="FunTipsSliderLabel">50</span>%<br>
+                <label for="FunTipPercentage" >
+                    Percentage of fun tips:<br>
+                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider" step="10"><span id="FunTipsSliderLabel" class="secondary_text">50%</span><br>
                 </label><br>
             </div>
 
@@ -1337,14 +1348,14 @@
             </label><br><br>
 
             <!-- Disable main progress bar -->
-            <b>Interface:</b><br>
+            <b>Interface</b><br>
             <label for="full_numbers">
                 <input type="checkbox" class="checkbox" id="full_numbers" onclick="setting('full_numbers')">
-                    Full numbers
+                Full numbers
             </label><br>
             <label for="enable_main_progress">
                 <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
-                    Always-on-top progress bar
+                Always-on-top progress bar
             </label><br><br>
 
             <!-- Sounds options -->
@@ -1381,7 +1392,7 @@
                         </div>
                     </td>
                     <td>
-                        <span id="volume_master_percent">100%</span>
+                        <span id="volume_master_percent" class="secondary_text">100%</span>
                     </td>
                 </tr>
                 
@@ -1444,7 +1455,7 @@
             <footer id="settings_footer">
                 <!-- Title -->
                 <div>
-                    <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot">
+                    <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot" onclick="eggUp()">
                     <h1>Carrot Clicker</h1>
                 </div>
 

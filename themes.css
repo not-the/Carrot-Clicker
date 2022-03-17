@@ -93,11 +93,20 @@
     background-color: var(--light-darker-bg-color);
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2) inset;
 }
+.theme_light .char_mini_button {
+    filter: opacity(70%) !important;
+}
 .theme_light .tooltip {
     color: white;
 }
 .theme_light #Greg_Bar {
     background-color: gray;
+}
+.theme_light .greg_crafting_info {
+    background-color: var(--light-darker-bg-color);
+}
+.theme_light .shop_item.cant_afford {
+    filter: brightness(75%) contrast(90%);
 }
 
 .theme_light .achieve_grid .achievement_item .achievement_details h2,
@@ -618,6 +627,7 @@
 .theme_terminal .shop_item,
 .theme_terminal .Basic_Info,
 .theme_terminal #info_dropdown,
+.theme_terminal .hover_menu,
 .theme_terminal #main_progress_container,
 .theme_terminal .popup_box,
 .theme_terminal .theme_item,
@@ -646,7 +656,7 @@
 
 /* Scanline effect */
 /* http://aleclownes.com/2017/02/01/crt-display.html */
-/* .theme_terminal::before {
+.theme_terminal::before {
     content: "";
     display: block;
     position: fixed;
@@ -660,7 +670,7 @@
     pointer-events: none;
 
     backdrop-filter: blur(0.5px);
-} */
+}
 
 
 /* Overlays */
@@ -782,7 +792,7 @@
 .theme_blockgame * {
     font-family: 'Minecraft Regular', 'Courier New', Courier, monospace;
     text-shadow: 0.1em 0.1em black;
-    font-weight: normal;
+    font-weight: normal !important;
 }
 .theme_blockgame {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
@@ -1047,12 +1057,19 @@
 .theme_chatapp:not(.secondary_text) {
     color: #dcddde !important;
 }
-.theme_chatapp {
+.theme_chatapp,
+.theme_chatapp #backdrop {
     background-color: #36393f;
 }
 /* .theme_chatapp .secondary_text {
     color: #72767d;
 } */
+
+/* Overlays */
+.theme_chatapp .popup_box {
+    border-color: transparent;
+    box-shadow: none;
+}
 
 /* Status bar */
 .theme_chatapp .Basic_Info {

@@ -2,13 +2,14 @@
 
 /* ------------------- TIPS ------------------- */
 //#region 
-const tl = ['basic', 'beginner', 'intermediate'/*, 'advanced'*/];
+const tl = ['basic', 'beginner', 'intermediate', 'advanced'];
 const default_tips = {
-    number:0,
+    number: 0,
     // random:0,
-    tracker:0,
+    tracker: 0, // Tip level
+    best: 0, // highest tip level reached (unused atm)
     Type: false,
-    TypeModifier:0.5,
+    TypeModifier: 0.5, // Fun tip chance
 
     // Practical tips
     basic: [ // 0
@@ -17,6 +18,7 @@ const default_tips = {
         "Click the lvl up arrow to level up characters",
         "Long hover over a character to view their description",
         "To buy a Hoe, go to Greg and click the correct type",
+        "If you see a ? near something you can click it to get a more detailed description of what it does",
     ],
     beginner: [ // 1
         "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
@@ -27,12 +29,14 @@ const default_tips = {
     ],
     intermediate: [ // 2
         "When you're ready, click the prestige button. You will start over but gain the ability to buy tomes",
-        // "Golden carrots increase your characters by 10%",
+        // "Golden carrots increase your characters by 10%", // old tip, don't delete
         "Golden carrots can be used to buy tomes, which give you permanent buffs",
         "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
+        "Earning a few special achievements will update the game icon in the top left",
     ],
     advanced: [ // 3
         "Unlocking every theme will make a special theme available",
+        "You've earned more than 1 billion carrots this prestige. That's a lot!"
     ],
 
     // Fun tips
@@ -45,15 +49,16 @@ const default_tips = {
         "Carrot Clicker is mobile-friendly!",
         "Click the carrot, Bill.",
         "Wait for the carrot to grow, Belle.",
+        `Only on ${window.location.href.split('#')[0]}`,
+        "Now in HD",
+    ],
+    fun_beginner: [
         "On the internet",
         "Fun fact: baby carrots are just shaved down regular carrots",
         "\"Game development is hard\" clicker game developer says",
-        `Only on ${window.location.href.split('#')[0]}`,
-        'If you see a ? near something you can click it to get a more detailed description of what it does',
-        'Now in HD',
-    ],
-    fun_beginner: [
         "Carrot?!",
+        "Drink carrot juice",
+        "Spaghetti code!",
     ],
     fun_intermediate: [
         "\"I have night vision now,\" says man who has eaten exclusively carrots for 3 days",
@@ -260,7 +265,7 @@ const cosmetics = {
             'name': 'Festive',
             'preview': './assets/theme/santa_charles.png',
             'image': './assets/theme/santa_charles.png',
-            'desc': 'placeholder',
+            'desc': 'Christmas themed cosmetics',
 
             // 'farmable': 'default',
             'bill':     'ugly_sweater',
@@ -268,6 +273,17 @@ const cosmetics = {
             // 'greg':     'bill',
             'charles':  'santa_charles',
             // 'carl':     'bill',
+        },
+        // Bros
+        'plumber': {
+            'name': 'Boomer Bros',
+            'preview': './assets/theme/plumber_bill.png',
+            'image': './assets/theme/plumber_bill.png',
+            'desc': 'They\'re carpenters',
+
+            'bill': 'plumber',
+            // 'belle': 'grandma_belle',
+            'greg': 'plumber',
         },
         // All Bill
         'bill': {
@@ -354,7 +370,7 @@ const cosmetics = {
         },
         // Minecraft
         'blockgame': {
-            'name': 'Minecraft Carrot',
+            'name': 'Carrot (Minecraft)',
             'preview': './assets/theme/blockgame/carrot.png',
             'desc': 'Hrm',
             'group': 'blockgame',
@@ -364,7 +380,7 @@ const cosmetics = {
             'render_type': 'pixel',
         },
         'blockgame_potato': {
-            'name': 'Minecraft Potato',
+            'name': 'Potato (Minecraft)',
             'preview': './assets/theme/blockgame/potato.png',
             'desc': 'Knishes',
 
@@ -479,6 +495,22 @@ const cosmetics = {
             'rename': 'Bill',
             'image': './assets/characters/Boomer_Bill.png',
         },
+        'biker_bill': {
+            'name': 'Biker Bill',
+            'preview': './assets/theme/biker_bill.png',
+            'desc': 'Actual motorcycle not included',
+
+            'rename': false,
+            'image': './assets/theme/biker_bill.png',
+        },
+        'fancy_bill': {
+            'name': 'Fancy Bill',
+            'preview': './assets/theme/boomer_bill_gates.png',
+            'desc': 'He still doesn\'t get invited to social gatherings',
+
+            'rename': false,
+            'image': './assets/theme/boomer_bill_gates.png',
+        },
         'baker_bill': {
             'name': 'Baker Bill',
             'preview': './assets/theme/cookie/baker_bill.png',
@@ -496,14 +528,6 @@ const cosmetics = {
             'rename': 'Dollar Bill',
             'image': './assets/theme/dollar_bill.png',
         },
-        'fancy_bill': {
-            'name': 'Fancy Bill',
-            'preview': './assets/theme/boomer_bill_gates.png',
-            'desc': 'He still doesn\'t get invited to social gatherings',
-
-            'rename': false,
-            'image': './assets/theme/boomer_bill_gates.png',
-        },
         'business_bill': {
             'name': 'Business Bill',
             'preview': './assets/theme/business_bill.png',
@@ -512,22 +536,23 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/business_bill.png',
         },
-        'biker_bill': {
-            'name': 'Biker Bill',
-            'preview': './assets/theme/biker_bill.png',
-            'desc': 'Actual motorcycle not included',
-
-            'rename': false,
-            'image': './assets/theme/biker_bill.png',
-        },
         'ugly_sweater': {
             'name': 'Ugly Sweater',
             'preview': './assets/theme/bill_ugly_sweater.png',
-            'desc': 'placeholder',
+            'desc': 'Very cozy',
             'group': 'xmas',
 
             'rename': false,
             'image': './assets/theme/bill_ugly_sweater.png',
+        },
+        'plumber': {
+            'name': 'Plumber Bill',
+            'preview': './assets/theme/plumber_bill.png',
+            'desc': 'placeholder',
+            'group': 'plumber',
+
+            'rename': false,
+            'image': './assets/theme/plumber_bill.png',
         },
     },
     belle: {
@@ -572,6 +597,15 @@ const cosmetics = {
 
             'rename': false,
             'image': './assets/theme/safety_greg.png',
+        },
+        'plumber': {
+            'name': 'Plumber Greg',
+            'preview': './assets/theme/plumber_greg.png',
+            'desc': 'placeholder',
+            'group': 'plumber',
+
+            'rename': false,
+            'image': './assets/theme/plumber_greg.png',
         },
         'bill': {
             'name': 'Bill',
@@ -1115,6 +1149,7 @@ const achievements = {
         'reward': [
             'cosmetic:bill/fancy_bill',
             'function:confetti()',
+            'shop:cosmetic/farmable/pineapple',
         ],
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 1000000000],
@@ -1129,7 +1164,10 @@ const achievements = {
         'name': 'Lifetime Supply',
         'desc': 'Earn your 1 trillionth carrot. Phew!',
         'image': './assets/achievements/carrot_pile.png',
-        'reward': 'function:confetti()',
+        'reward': [
+            'shop:cosmetic/bundle/plumber',
+            'function:confetti()',
+        ],
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000],
         'mystery': {
@@ -1239,7 +1277,7 @@ const achievements = {
     },
     '1_undecillion_carrots': {
         'name': 'Carrot God',
-        'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become...',
+        'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become some greater...',
         'image': false,
         'reward': 'function:confetti()',
         'pages': 5,
@@ -1639,7 +1677,13 @@ const achievements = {
         'name': 'Half Way There',
         'desc': 'Reach 50% achievements unlocked',
         'image': './assets/achievements/bronze_medal.gif',
-        'reward': 'function:confetti()',
+        'reward': [
+            'shop:cosmetic/farmable/alien_carrot',
+            'shop:cosmetic/farmable/demon_carrot',
+            'shop:cosmetic/farmable/ghost_carrot',
+            'shop:cosmetic/farmable/rainbow_carrot',
+            'function:confetti()',
+        ],
         'pages': 5,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 50],
 
@@ -1777,6 +1821,22 @@ const achievements = {
             'list': true,
         }
     },
+    'footer_carrot_clicker': {
+        'name': 'footer_carrot_clicker',
+        'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
+        'image': './assets/achievements/footer_carrot.png',
+        'reward': 'function:confetti(2)',
+        'pages': false,
+        'conditions': ['easterEgg', 100],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
+    },
     'pineapple': {
         'name': 'Pineapple',
         'desc': 'Hey that\'s me (Hidden achievement)',
@@ -1852,6 +1912,7 @@ const achievements = {
 const achievementsKeys = Object.keys(achievements);
 var hiddenAchievements = 0;
 var challengeAchievements = 0;
+var internalAchievements = 0;
 //#endregion
 
 

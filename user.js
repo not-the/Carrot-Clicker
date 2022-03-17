@@ -57,7 +57,8 @@ elFunTipsSlider.oninput = () => {
     eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
     
     // Set modifier
-    tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
+    settings.fun_tip_percentage = parseInt(elFunTipsSlider.value);
+    saveSettings();
 }
 
 // Universal checkbox option updater (not used by everything because some options need extra code)
@@ -82,10 +83,11 @@ function setting(option) {
 // Notification length
 notificationLength.addEventListener('input', () => {saveOption('notificationLength')} );
 function saveOption() {
-    let value = notificationLength.value;
+    let value = parseInt(notificationLength.value);
     if(value >= 2 && value <= 15) {
         console.log(`[Settings] Notification length set to: ${value}`);
-        store("notificationLength", value);
+        settings.notificationLength = value;
+        saveSettings();
         toast("Notification time set", `Notifications will disappear after ${value} seconds`,
         '', false, true);
     } else {
@@ -152,6 +154,7 @@ function settingDisableKeybinds() {
     console.log(`disableKeybinds set to ${state}`);
     toast("Settings", `Keybinds are now ${state == true ? 'disabled' : 'enabled'}`,
     '', false, true);
+    toast()
 
     // localStorage
     settings.disableKeybinds = state;
@@ -259,9 +262,6 @@ function volumeSliderHandler(v) {
 
     settings.master_volume = value / 100;
     saveSettings();
-
-    // Set modifier
-    // tips.TypeModifier = parseInt(elFunTipsSlider.value) / 100;
 }
 
 
@@ -310,7 +310,9 @@ const keyCodes = [
     'H U H W H U H ',
 ];
 // Variable achievement(s) test for
-var keyTrigger = []; 
+var keyTrigger = [];
+var easterEgg = 0;
+function eggUp() { easterEgg++; }
 
 function keybindHandler(event, state) {
     let key = interpretKey(event.key);
@@ -676,11 +678,35 @@ function evaluateConditions(key, achievement) {
     }
 }
 
+function rewardBreakdown(achieve, retroactive = false) {
+    console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
+    if(achieve.hasOwnProperty('reward')) {
+        let reward = achieve.reward;
+
+        // Check if there are multiple rewards
+        if(Array.isArray(achieve.reward) == true) {
+            for(let i = 0; i < achieve.reward.length; i++) {
+                giveReward(achieve.reward[i], retroactive);
+            }
+        } else {
+            giveReward(reward, retroactive);
+        }
+    }
+}
+
 // Reward user
-function giveReward(reward) {
-    if(reward == false) return;
-    console.log('Unlocked: ' + reward);
+function giveReward(reward, retroactive = false) {
+    // console.log(reward);
     let [rewardType, rewardName] = reward.split(':');
+    if(
+        retroactive == true
+        &&
+        (rewardType   == 'cash'
+        || rewardType == 'function'
+        || rewardType == 'character')
+    ) { return; }
+    if(reward == false) return;
+    console.log('giveReward(): ' + reward);
     // console.log(rewardType, rewardName);
 
     // Theme reward
@@ -740,18 +766,10 @@ function grantAchievement(key) {
     player.achievements[key] = true;
 
     // Check if there is an award to give
-    if(achieve.hasOwnProperty('reward')) {
-        let reward = achieve.reward;
-
-        // Check if there are multiple rewards
-        if(Array.isArray(achieve.reward) == true) {
-            for(let i = 0; i < achieve.reward.length; i++) {
-                giveReward(achieve.reward[i]);
-            }
-        } else {
-            giveReward(reward);
-        }
+    if(achieve.reward != false) {
+        rewardBreakdown(achieve);
     }
+
 
     // Give pages
     if(achieve.pages != false && achieve.pages != null) {
@@ -771,7 +789,7 @@ function grantAchievement(key) {
 
 // Unlock themes/cosmetics
 function unlock(type, thingToUnlock, subtype, raw) {
-    if(isUnlocked(type, thingToUnlock, subtype)) {
+    if(isUnlocked(type, thingToUnlock, subtype) == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
         return;
     }
@@ -812,6 +830,11 @@ function unlock(type, thingToUnlock, subtype, raw) {
 
         newIndicator(true, 'cosmetic');
         playerCosmeticsCount();
+
+        // Auto equip
+        if(settings.cosmetic_auto_equip == true) {
+            setCosmetic(subtype, thingToUnlock);
+        }
     }
     // Character
     else if(type == 'character') {
@@ -849,7 +872,10 @@ function unlock(type, thingToUnlock, subtype, raw) {
             }
         }
 
-        toast('', 'Carl: A new item is now available', '', false, true);
+        // Toast
+        if(settings.carl_shop_toasts == true) {
+            toast('', 'Carl: A new item is now available', '', false, true);
+        }
         // Carl.shop_order.unshift(raw.split(':')[1]);
         populateCarl();
     }
@@ -969,6 +995,9 @@ function isUnlocked(type = 'theme', key, subtype) {
             }
         }
         return false;
+    }
+    else if(type == 'shop_item') {
+        return carlShopQuery(subtype, key);
     }
     // Does not return anything for characters
 }
@@ -1156,129 +1185,73 @@ function onLoad() {
         || player.hasOwnProperty('data_version') == false
         || isDebug() == true
     ) {
-        let p1_keys =     Object.keys(player1);
-        let player_keys = Object.keys(player);
-
-        // Loop through onu array
-        for(oi = 0; oi < onu.length; oi++) {
-            let obj = onu[oi];
-            let template = onu_templates[oi];
-
-            // Loop through template
-            let template_keys = Object.keys(template);
-            for(i = 0; i < template_keys.length; i++) {
-                let key = template_keys[i];
-                let item = obj[key];
-                let t_item = template[key];
-
-                if(obj.hasOwnProperty(key) == false) {
-                    console.log(key + ' property not found, updating save...');
+        try {
+            // Loop through onu_templates array
+            //#region 
+            for(oi = 0; oi < onu_templates.length; oi++) {
+                let obj = onu[oi];
+                let template = onu_templates[oi];
+    
+                // Loop through template
+                let template_keys = Object.keys(template);
+                for(i = 0; i < template_keys.length; i++) {
+                    let key = template_keys[i];
+                    if(obj.hasOwnProperty(key) == false) {
+                        console.log(key + ' property not found, updating save...');
+                        obj[key] = template[key];
+                    }
                 }
             }
+            //#endregion
+    
+            // Achievements
+            let pagesIntended = 0;
+            for(let i = 0; i < achievementsKeys.length; i++) {
+                let key = achievementsKeys[i];
+                let achieve = achievements[key];
 
-        }
+                // Page count
+                if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) { pagesIntended += achieve.pages; }
 
-        // Check that the players' page count is correct
-        let pagesIntended = 0;
-        for(let i = 0; i < achievementsKeys.length; i++) {
-            let key = achievementsKeys[i];
-            let achieve = achievements[key];
-
-            if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) {
-                pagesIntended += achieve.pages;
+                // Check that the player has recieved all achievement rewards
+                let reward = achieve.reward;
+                // console.log(reward);
+                if(achieveQuery(key) && reward != false) {
+                    console.log(`Re-granting reward for ${key}: ${achieve.reward}`);
+                    rewardBreakdown(achieve, true);
+                }
             }
+            // Check that the players' page count is correct
+            if(player.pages != pagesIntended) {
+                console.log('Achievement page rewards have been changed');
+                toast(
+                    'Page Rewards Changed',
+                    `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`,
+                    'orange',
+                    true
+                );
+    
+                // console.log(pagesIntended);
+                player.pages = pagesIntended;
+            }
+    
+            // Done
+            console.log(`Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`);
+            if(isDebug() == true && player.data_version != player1.data_version) {
+                toast('', `Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`, '', true);
+            }
+
+            player.data_version = player1.data_version;
+            saveGame();
+        } catch (error) {
+            console.error('An object update was attempted but failed. Error info below:');
+            console.error(error);
+            toast('Save file update failed', 'If you run into any issues you may have to delete your save.');
         }
 
-        if(player.pages !== pagesIntended) {
-            console.warn('Achievement page rewards have been changed');
-            toast('Page Rewards Changed', `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange', true);
-
-            if(player.pages) // this doesn't break anything?
-
-            player.pages = pagesIntended;
-        }
-
-        // console.log(pagesIntended);
-
-        // Done
-        console.log(`Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`);
-        if(isDebug() == true) {
-            toast('', `Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`, '', true);
-        }
-        player.data_version = player1.data_version;
     }
 
 
-    // OLD COMPATIBILITY CHECKS:
-    //#region 
-    // if(player.hasOwnProperty('achievements') == false) {
-    //     console.log('player.achievements check failed, creating property...');
-    //     player.achievements = {};
-    // }
-    // if(
-    // player.hasOwnProperty('themes') == false
-    // || player.themes == []
-    // || player.themes.length == 0
-    // ) {
-    //     console.log('player.themes check failed, creating property...');
-    //     player.themes = [
-    //         'theme_dark',
-    //         'theme_light',
-    //         'theme_oled'
-    //     ];
-    // }
-    // if(player.hasOwnProperty('cosmetics') == false
-    // || player.cosmetics == []
-    // || player.cosmetics.length == 0
-    // ) {
-    //     console.log('player.cosmetics check failed, creating property...');
-    //     player.cosmetics = [
-    //         'default'
-    //     ];
-    // }
-
-    // Old lifetime stats
-    // LifetimeCarrots: 0,
-    // LifetimeGoldenCarrots: 0,
-    // LifetimeEquipedHoes: 0,
-
-    // Inventory thing
-    // if(typeof player.inventory == 'object' &&
-    //     !Array.isArray(player.inventory) &&
-    //     player.inventory !== null) {
-
-    //     console.log('[Player Fix] Object inventory found, fixing...');
-    //     player.inventory = [];
-    // }
-
-    // if(
-    // player.hasOwnProperty('LifetimeCarrots') == true
-    // || player.hasOwnProperty('LifetimeGoldenCarrots') == true
-    // || player.hasOwnProperty('LifetimeEquipedHoes') == true
-    // || player.hasOwnProperty('clickSpeedRecord') == false
-    // || player.lifetime.hasOwnProperty('clicks') == false
-    // || player.hasOwnProperty('characters') == false
-    // || player.hasOwnProperty('achievements') == false
-    // || player.hasOwnProperty('prestige') == false
-    // || player.hasOwnProperty('prestige_available') == false
-    // || player.hasOwnProperty('inventory') == false
-    // || player.hasOwnProperty('cosmetic') == true
-    // || typeof player.cosmetics != 'object'
-    // || settings.hasOwnProperty('full_numbers') == false
-    // || settings.hasOwnProperty('cosmetics_grid') == false
-    // ) {
-    //     if(store('old_player_object_fix') !== 'true') {
-    //         toast('Old save file detected', 'Heads up: If you run into any issues you may have to delete your save.', 'orange', true);
-    //         player.lifetime.carrots = player.LifetimeCarrots;
-    //         player.lifetime.golden_carrots = player.LifetimeGoldenCarrots;
-    //         player.lifetime.hoes.equipped[0] = player.LifetimeEquipedHoes;
-            
-    //         store('old_player_object_fix', '1.8.3');
-
-    //         console.warn('Old save file detected: If you run into any issues you may have to delete your save.');
-    //     }
-    // }
-    //#endregion
 
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
@@ -1287,30 +1260,6 @@ function onLoad() {
     // > Settings object moved to carrot_clicker.js <
 
     populateKeybinds();
-
-    // Fun tips
-    elFunTipsSlider.value = 100 * tips.TypeModifier;
-    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
-
-    // Notification length
-    if(store("notificationLength") != null) {
-        notificationLength.value = parseInt(store("notificationLength"));
-    }
-
-    // Autosave
-    // Update autosave variable
-    if(settings.autosave_interval != 2) {
-        dom('autosave_interval').value = settings.autosave_interval;
-        clearInterval(autosave);
-        autosave = setInterval(() => {
-            saveGame();
-        }, settings.autosave_interval * 1000);
-    }
-
-    // Disable keybinds
-    if(settings.disableKeybinds != settings_default.disableKeybinds) {
-        elDisableKeybinds.checked = settings.disableKeybinds;
-    }
 
     // Fill out settings page from settings object
     fillSettingsPage();
@@ -1357,8 +1306,10 @@ function onLoad() {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
 
-        if(achievement.internal == true) continue;
-
+        if(achievement.internal == true) {
+            internalAchievements++;
+            continue;
+        };
         if(achievement.mystery.list == true) {
             hiddenAchievements++;
         }
@@ -1559,6 +1510,8 @@ function onLoad() {
     updateHoePrices();
     updateMainIcon();
     populateCarl();
+    if(player.new_theme == true) { newIndicator(true, 'theme'); }
+    if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
 
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();
@@ -1610,5 +1563,4 @@ function onLoad() {
 }
 
 onLoad();
-
 loadCheck = true;

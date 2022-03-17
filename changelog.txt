@@ -1,4 +1,52 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.10.1
+    3-16-2022
+// ----------------------------------------------------------- //
+
+Save data:
+- Save updating now works- accidentally left out the code that actually does it
+- Rewards added retroactively to achievements you already have can be granted by the save updater (assuming data_version has changed)
+- player.data_version has been increased to 2
+
+Tips:
+- Fixed an issue where tips.tracker could roll a -1 and fail to display a new tip
+- You can no longer get the same tip twice in a row
+- The tips menu will now only show tip levels you have reached
+- Advanced tips will now be listed in the tips menu
+- Fun tips that haven't been unlocked will still have a smiley face next to them
+
+CSS:
+- Fixed an issue where hovering over a cosmetic in grid mode would change the container's size
+- Gave falling carrots and falling carrot +1 popups better drop shadows and increased font size to improve contrast/readability
+- Text in the status bar can no longer be selected (you can spam cycle tips without the selection box now)
+- The dropdown button now needs to be clicked to open, and animates when closing instead of just opening
+- Achievements with unique visuals/colors will also have them while locked
+- Changed the color of the main status bar to make it consistent with Greg's
+- Fixed the jittering effect in the theme and cosmetic menus when hovering
+- Misc theme fixes/improvements
+
+Settings panel:
+- New option: Carl shop notifications- on by default, allows you to disable the notification that appears when carl has a new shop item available
+  + Won't appear until character is unlocked
+- New option: cosmetic_auto_equip- off by default, automatically equips cosmetics when they are unlocked
+- Fun tips percentage is now stored in settings and will persist after a page refresh
+- Fixed notification time and enableSounds not working
+
+Other:
+- New achievement: footer_carrot_clicker
+- New cosmetics: Boomer Bros
+- Pineapple cosmetic is now available from Carl
+- The 4 carrot variants are now available from Carl
+- A cosmetic becoming available now works to unlock Carl
+- Internal achievements no longer count towards your x/total achievements
+- Reordered some cosmetics to be more in line with the order you (generally) unlock them in
+- The theme/cosmetic "NEW" indicators will now appear in the menu tab bars, and will persist after the page is refreshed
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.10.0
     3-12-2022
 // ----------------------------------------------------------- //

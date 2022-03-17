@@ -24,6 +24,7 @@
     --darker-bg-color:  #1f1d1d;
     --border-color:     #4b4747;
     --highlight-color:  #5a5858;
+    --main-shop-hover:  #222020;
 
     /* Text */
     --secondary-text: rgb(196, 196, 196);
@@ -222,7 +223,7 @@ select {
     font-size: 11pt;
 
     width: 100%;
-    max-width: 200px;
+    max-width: 240px;
 }
 select {
     cursor: pointer;
@@ -465,6 +466,7 @@ summary:hover {
 
     display: flex;
     flex-direction: column-reverse;
+    /* flex-direction: column; */
 
     max-height: 100%;
     /* max-height: 400px; */
@@ -658,19 +660,23 @@ p.theme_menu_title {
 
     position: relative;
     cursor: pointer;
-    transition: filter 0.1s ease;
+    transition: background-color 0.1s ease;
 }
 .theme_selected {
     outline: 2px solid var(--generic-blue);
     background-color: var(--main-bg-color);
 }
 .theme_item:hover, .shop_item:hover {
-    filter: brightness(110%);
+    /* filter: brightness(110%); */
+    background-color: var(--main-shop-hover);
     outline: 2px solid white;
 }
 .theme_item:active, .shop_item:active {
     filter: brightness(80%);
     outline: 2px solid white;
+}
+.theme_item p:not(::first-line) {
+    padding-bottom: 10px;
 }
 
 #themes_list .theme_preview {
@@ -727,12 +733,20 @@ body:not(.theme_light) .theme_checkmark {
 .cosmetics_grid .theme_item:hover {
     z-index: 200;
 }
+/* Checkbox */
+.cosmetics_grid .theme_item .theme_checkbox {
+    position: absolute;
+    right: -8px;
+    transform: translateY(-5px) scale(0.5, 0.5);
+    background-color: var(--darker-bg-color);
+}
 .cosmetics_grid .theme_item.achievement_locked .theme_checkbox {
     visibility: hidden;
 }
+/* Grid description */
 .cosmetics_grid .theme_item .description {
     visibility: hidden;
-    position: relative;
+    position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
     /* backdrop-filter: blur(10px); */ /* This doesn't work for some reason */
 
@@ -750,24 +764,17 @@ body:not(.theme_light) .theme_checkmark {
     pointer-events: none;
 }
 .cosmetics_grid .theme_item.desc_fit .description {
-    /* background-color: blue; */
     left: unset;
     right: -3px;
 }
-.cosmetics_grid .theme_item .theme_checkbox {
-    position: absolute;
-    right: -8px;
-    transform: translateY(-5px) scale(0.5, 0.5);
-    background-color: var(--darker-bg-color);
+.cosmetics_grid .theme_item .description h3 {
+    margin-top: 0;
 }
+
+/* Hover */
 .cosmetics_grid .theme_item:hover .description {
     visibility: visible;
     opacity: 1;
-    position: absolute;
-    /* pointer-events: none; */
-}
-.cosmetics_grid .theme_item:hover .description h3 {
-    margin-top: 0;
 }
 
 
@@ -804,9 +811,6 @@ body:not(.theme_light) .theme_checkmark {
     margin-right: 0;
     padding-right: 0;
     border-right: none;
-}
-#keybinds_menu label p {
-    pointer-events: none;
 }
 
 /* Popup animation */
@@ -873,15 +877,16 @@ body:not(.theme_light) .theme_checkmark {
     }
 }
 .clickvisual_falling {
-    font-size: 26pt;
+    font-size: 28pt;
     z-index: 100;
     animation: anim_falling_popup 1.25s linear, clickBonus 1.25s linear forwards;
-    filter: drop-shadow(0px 0px 4px rgb(255, 234, 190));
+    filter: drop-shadow(0px 0px 4px rgb(255, 234, 190)) drop-shadow(0px 0px 8px black);
 }
 .clickvisual_cash {
-    font-size: 26pt;
+    font-size: 28pt;
     z-index: 101;
     color: rgb(204, 64, 64);
+    filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.5));
 }
 @keyframes anim_falling_popup {
     0% {
@@ -909,7 +914,7 @@ body:not(.theme_light) .theme_checkmark {
     top: -72px;
 
     z-index: 110;
-    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(8px 8px 4px rgba(0, 0, 0, 0.5));
     cursor: pointer;
     padding: 12px 10px;
 
@@ -929,7 +934,7 @@ body:not(.theme_light) .theme_checkmark {
     width: 100%;
     position: fixed;
     top: 0;
-    z-index: 99;
+    z-index: 99 !important;
 
     pointer-events: none;
 }
@@ -945,13 +950,14 @@ body:not(.theme_light) .theme_checkmark {
     border-bottom: 1px solid var(--border-color);
     width: 100%;
 
+    position: relative;
     z-index: 99;
 
     padding: 8px 20px;
     padding-right: 50px;
     padding-left: 50px;
 
-    position: relative;
+    user-select: none;
 }
 
 /* Hover info */
@@ -978,38 +984,49 @@ body:not(.theme_light) .theme_checkmark {
 }
 #info_dropdown:hover,
 #info_dropdown:active,
-#info_dropdown:focus-visible {
+#info_dropdown:focus {
     background-color: var(--highlight-color);
+}
+#info_dropdown:focus {
+    pointer-events: none;
 }
 #info_dropdown svg {
     max-height: 36px;
 }
 .hover_menu {
     position: absolute;
+    z-index: -1;
     top: calc(100% - 1px);
     right: 0;
-    visibility: hidden;
 
     background-color: var(--lighter-bg-color);
     border: 1px solid var(--border-color);
     border-top: none;
 
     min-width: 240px;
+
+    transition-property: transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+
+    /* visibility: hidden; */
+    pointer-events: none;
+    transform: translateY(-20px);
+    opacity: 0;
 }
-#info_dropdown:hover .hover_menu,
-#info_dropdown:active .hover_menu {
-    visibility: visible;
-    animation: dropdown_anim 0.2s ease;
+.hover_menu * {
+    pointer-events: none;
 }
-@keyframes dropdown_anim {
-    0% {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0px);
-        opacity: 1;
-    }
+/*#info_dropdown:hover .hover_menu,
+#info_dropdown:active .hover_menu,*/
+#info_dropdown:focus .hover_menu,
+.hover_menu:hover {
+    pointer-events: all;
+    transform: translateY(0px);
+    opacity: 1;
+}
+#info_dropdown:focus .hover_menu * {
+    pointer-events: all;
 }
 .menu_item {
     padding: 8px 12px 8px 36px;
@@ -1041,6 +1058,9 @@ body:not(.theme_light) .theme_checkmark {
 .right_img {
     left: unset;
     right: 8px;
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
 }
 .invert {filter: invert();}
 /* .desaturate {filter: saturate(0%);} */
@@ -1087,7 +1107,10 @@ body:not(.theme_light) .theme_checkmark {
     height: 10px;
     width: calc(100% - 24px);
     margin-left: auto;
-    background-color: gray;
+    /* background-color: gray; */
+    background-color: var(--darker-bg-color);
+    border-radius: 10px;
+    overflow: hidden;
 }
 #Tip {
     margin-left: auto;
@@ -1477,6 +1500,11 @@ body:not(.gp) #golden_carrot_count*/ {
     margin-left: 10px;
 }
 
+/* Greg level hints */
+/* #Greg #greg_stone_hoe.blackedout::after {
+    content: "Greg must be level 25 to craft this";
+} */
+
 /* Full tool slot */
 .toolfull {
     font-size: 11pt !important;
@@ -1821,7 +1849,9 @@ body:not(.gp) #golden_carrot_count*/ {
     z-index: 2;
 }
 .style_challenge {
-    border: 2px solid rgb(177, 44, 44) !important;
+    border: 2px solid rgb(177, 44, 44);
+}
+.style_challenge:not(.achievement_locked) {
     background-color: rgb(85, 43, 43);
 }
 .style_endgame {
@@ -2246,6 +2276,9 @@ footer {
     font-size: 16pt;
     transform: translate(19px, -5px);
     float: right;
+}
+.tip_item.fun.secondary_text::before {
+    opacity: 0.3;
 }
 .tip_number {
     /* font-size: 12pt; */
