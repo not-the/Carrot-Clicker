@@ -1020,7 +1020,10 @@ body:not(.theme_light) .theme_checkmark {
 /*#info_dropdown:hover .hover_menu,
 #info_dropdown:active .hover_menu,*/
 #info_dropdown:focus .hover_menu,
-.hover_menu:hover {
+.hover_menu:hover,
+.hover_menu:active,
+.hover_menu:focus,
+.hover_menu:focus-within {
     pointer-events: all;
     transform: translateY(0px);
     opacity: 1;
@@ -2148,7 +2151,7 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 }
 #prestige_menu {
     width: 100%;
-    height: 260px;
+    height: fit-content;
     max-width: 540px;
 }
 .prestige_item {
@@ -2378,6 +2381,7 @@ footer {
     #prestige_menu .prestige_menu_flex {
         flex-direction: column;
     }
+
     #prestige_menu .half_width {
         width: 100% !important;
     }

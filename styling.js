@@ -285,14 +285,10 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
     if(!persistent) {
         let timeout = settings.notificationLength * 1000;
-        if(achievement != false ) timeout *= 2;
+        // if(achievement != false ) timeout *= 2;
         // console.log(timeout);
 
-        setTimeout(() => {
-            // console.log("Timeout runs: " + toastID);
-            closeToast(id);
-        }, timeout
-        );
+        setTimeout(() => { closeToast(id); }, timeout);
     }
 }
 
@@ -482,8 +478,8 @@ const fallingCarrotsArea = dom('fallingCarrotsArea');
 function fallingCarrot() {
     var element = document.createElement("img");
     
-    // 1% chance the drop is money instead
-    let type = Math.floor(Math.random() * 100) == 0 ? 'cash' : 'carrot';
+    // 2% chance the drop is money instead
+    let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? './assets/Carrot Clicker.png' : './assets/coin.png';
     element.classList.add('falling_carrot');
@@ -500,8 +496,8 @@ function fallingCarrot() {
         amount = Math.round(player.cpc * rewardVariation);
     } else if(type == 'cash') {
         // Cash reward
-        // Between 4 and 12
-        amount = Math.floor((Math.random() * 9)) + 4;
+        // Between 5 and 15
+        amount = Math.floor((Math.random() * 13)) + 5;
     }
 
     // Set onclick function
@@ -1435,7 +1431,7 @@ function achievementProgress(element = dom('achievement_progress')) {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
         element,
-        `${unlockedAchievements.length - internalAchievements}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
+        `${unlockedAchievements.length - player.internal}/${achievementsKeys.length - hiddenAchievements} (${Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements))}%)`
     );
 }
 

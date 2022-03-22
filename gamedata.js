@@ -1069,7 +1069,7 @@ const achievements = {
         'image': false,
         'reward': false,
         'pages': 2,
-        'conditions': ['Gregory.lvl', 15],
+        'conditions': ['Gregory.lvl', 20],
         'mystery': {
             'name': true,
             'desc': false,

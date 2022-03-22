@@ -229,6 +229,7 @@ const player1 = {
 
     // Achievements
     achievements: {},
+    internal: 0,
 
     // Unlockables
     themes: [
@@ -607,7 +608,7 @@ function resetSettings(dialog = false) {
 const keybinds_default = {
     // Gameplay
     key_carrot: 'Spacebar',
-    key_multibuy: 'Shift',
+    key_multibuy: '`',
     key_bill_lvlup: '1',
     key_belle_lvlup: '2',
     key_greg_lvlup: '3',
@@ -617,6 +618,7 @@ const keybinds_default = {
     key_craft_3: '7',
     key_craft_4: '8',
     key_craft_5: '9',
+    // modifier_equip: 'Shift',
 
     // Interface
     key_cleartoasts: 'X',
@@ -631,7 +633,7 @@ keybinds_default['keys'].pop();
 
 // Default settings object
 const settings_default = {
-    notificationLength: 5,      // number - Time in seconds
+    notificationLength: 6,      // number - Time in seconds
     disableKeybinds: false,     // boolean
     autosave_interval: 5,
 
