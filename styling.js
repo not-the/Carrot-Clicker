@@ -25,6 +25,7 @@ var keybindsMenuOpen =      false;
 var prestigeMenuOpen =      false;
 var inventoryOpen =         false;
 var tipsMenuOpen =          false;
+var creditsOpen =           false;
 
 // Don't regenerate achievements list unless necessary
 var achieveHTMLupdate =     true;
@@ -68,10 +69,6 @@ const tipsMenu =      dom('tips_menu');
 
 /*---------------FUNCTIONS-----------------*/
 //#region
-// function testFunction(param) {
-//     console.log("testFunction runs");
-// }
-
 
 // Confetti
 const elConfetti = dom('confetti');
@@ -162,7 +159,7 @@ function closeDialog(doAction, backdrop = false) {
                     earnCarrots(1, 'bonus');
                     break;
                 default:
-                    console.log('Dialog action not listed');
+                    console.error('Dialog action not listed');
                     break;
             };
         };
@@ -208,6 +205,10 @@ function closeDialog(doAction, backdrop = false) {
         tipsMenu.classList.remove('visible');
         tipsMenuOpen = false;
     }
+    if(creditsOpen) {
+        elCredits.classList.remove('visible');
+        creditsOpen = false;
+    }
     //#endregion
 }
 
@@ -215,7 +216,20 @@ function closeDialog(doAction, backdrop = false) {
 // Create Toast notification
 // For the COLOR parameter, options are:
 // gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt"
-function toast(title, desc, color, persistent, replaceable, achievement = false) {
+/**
+ * 
+ * @param {string}   title Title
+ * @param {string}   desc Description
+ * @param {string}   color Toast style
+ * @param {boolean}  persistent Whether or not the toast should stay open indefinitely
+ * @param {boolean}  replaceable If true the toast will close whenever the next toast gets sent
+ * @param {string}   achievement Key correlating to an achievement. If provided the title, desc, color, hide_close, and button_action params will be ignored
+ * @param {boolean}  hide_close Whether or not to hide the X button
+ * @param {function} button_action Provide a function to be run and the toast will get a button with it as an onclick
+ * @param {string}   button_name The name the button will use. Is ignored if button_action isn't specified. Will default to "Done"
+ * @returns {number} Returns the ID of the toast that was created
+ */
+function toast(title = '', desc = '', color = '', persistent, replaceable, achievement = false, hide_close = false, button_action = false, button_name = 'Done') {
     // Replace old if replace is true
     if(toastsList[toastID - 1] == 'replace') {
         closeToast(toastID - 1, false);
@@ -227,43 +241,68 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
     // Normal toast
     if(!achievement) {
-        toastElement.innerHTML =
-        `<div class="toast background_${color}">
-            ${title == '' || title == false || title == undefined ? '' : `<h3>${title}</h3>`}
-            <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-            ${desc == '' || desc == false || desc == undefined ? '' : `<p>${desc}</p>`}
-        </div>`;
+        toastElement.classList = `toast background_${color}`;
+        toastElement.innerHTML = `
+        ${title == '' || title == false || title == undefined ? '' : `<h3>${title}</h3>`}
+        ${ hide_close == true ? '' : `<span class="toast_close" onclick="closeToast(${toastID})">X</span>`}
+        ${desc == '' || desc == false || desc == undefined ? '' : `<p>${desc}</p>`}
+        `;
+
+        // Button
+        if(button_action != false) {
+            var toastButton = document.createElement("button");
+            toastButton.onclick = button_action;
+            toastButton.innerText = button_name;
+            toastElement.append(toastButton);
+        }
     }
     // Achievement toast
     else {
         let achieve = achievements[achievement];
-        let rewardHTMLstring = '';
         let noImg = false;
         if(achieve.image == false || achieve.image == undefined) { noImg = true; }
 
-        if(achieve.reward != false) {
-            rewardHTMLstring =
-            `<div class="rewards_list">
-                ${ rewardHTML(achieve) }
+        toastElement.classList = `toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}`;
+        toastElement.innerHTML =`
+        <!-- Close button -->
+        <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+        <!-- Details -->
+        <div class="achievement_details flex">
+            <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
+            <div>
+                <h3>${achieve.name}</h3>
             </div>
-            `;
-        }
-
-        toastElement.innerHTML =
-        `<div class="toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}">
-            <!-- Close button -->
-            <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-            <!-- Details -->
-            <div class="achievement_details flex">
-                <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
-                <div>
-                    <h2>${achieve.name}</h2>
-                    <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? `\n (+${achieve.pages} pages)` : ''}</p>
-                </div>
-            </div>
-            ${rewardHTMLstring}
         </div>`;
     }
+    // OLD Achievement toast
+    // else {
+    //     let achieve = achievements[achievement];
+    //     let rewardHTMLstring = '';
+    //     let noImg = false;
+    //     if(achieve.image == false || achieve.image == undefined) { noImg = true; }
+
+    //     if(achieve.reward != false) {
+    //         rewardHTMLstring =
+    //         `<div class="rewards_list">
+    //             ${ rewardHTML(achieve) }
+    //         </div>
+    //         `;
+    //     }
+
+    //     toastElement.classList = `toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}`;
+    //     toastElement.innerHTML =`
+    //     <!-- Close button -->
+    //     <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+    //     <!-- Details -->
+    //     <div class="achievement_details flex">
+    //         <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
+    //         <div>
+    //             <h2>${achieve.name}</h2>
+    //             <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? `\n (+${achieve.pages} pages)` : ''}</p>
+    //         </div>
+    //     </div>
+    //     ${rewardHTMLstring}`;
+    // }
 
     toastContainer.prepend(toastElement);
 
@@ -272,11 +311,7 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
     // Increase Toast ID
     activeToasts++;
-    if(toastID <= 100) {
-        toastID++;
-    } else {
-        toastID = 0;
-    }
+    toastID++;
 
     // Clear all button
     if(activeToasts > 2) {
@@ -290,6 +325,9 @@ function toast(title, desc, color, persistent, replaceable, achievement = false)
 
         setTimeout(() => { closeToast(id); }, timeout);
     }
+
+    // Return toast's id
+    return id;
 }
 
 // Delete Toast Notification
@@ -322,6 +360,8 @@ function closeToast(id, animate = true) {
             element.remove();
         }, 300);
     }
+
+    if(activeToasts == 0) { toastId = 0; }
 }
 
 function clearToasts() {
@@ -481,7 +521,7 @@ function fallingCarrot() {
     // 2% chance the drop is money instead
     let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
 
-    element.src = type == 'carrot' ? './assets/Carrot Clicker.png' : './assets/coin.png';
+    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/coin.png';
     element.classList.add('falling_carrot');
     element.id = fallingID;
     fallingID++;
@@ -1079,7 +1119,8 @@ function populateAchievements() {
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
                 for(let i = 0; i < achieve.reward.length; i++) {
-                    let [rewardType, rewardName] = achieve.reward[i].split(':');
+                    let [rewardType, rewardName] =
+                    typeof achieve.reward === 'string' || achieve.reward instanceof String ? achieve.reward.split(':') : ['function', achieve.reward];
                     let subtype = '';
     
                     let informalName;
@@ -1151,8 +1192,9 @@ function populateAchievements() {
             }
 
             // Single reward
-            else if(achieve.reward.split(':')[0] != 'function') {
-                let [rewardType, rewardName] = achieve.reward.split(':');
+            else if(typeof achieve.reward === 'string' || achieve.reward instanceof String) {
+                let [rewardType, rewardName] =
+                typeof achieve.reward === 'string' || achieve.reward instanceof String ? achieve.reward.split(':') : ['function', achieve.reward];
                 let subtype = '';
 
                 let informalName;
@@ -1309,7 +1351,7 @@ function rewardHTML(achieve) {
                 // Cosmetic
                 else if(rewardType == 'cosmetic') {
                     // console.log('vvvvv: ' + target + cosKey);
-                    console.log(cosmetics[target]);
+                    // console.log(cosmetics[target]);
                     informalName = cosmetics[target][cosKey].name;
                     icon = cosmetics[target][cosKey].image;
                 }
@@ -1505,9 +1547,34 @@ function characterInfo(character) {
 
 // Credits scroll
 const elCredits = dom('credits');
+var creditInterval;
 function startCredits() {
+    console.log(`startCredits()`);
+    closeDialog();
+
+    creditsOpen = true;
+
+    elCredits.scrollTop = 0;
     elCredits.classList.add('visible');
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+    creditInterval = setInterval(() => {
+        elCredits.scrollTop += 1;
+        if(elCredits.scrollHeight - elCredits.scrollTop === elCredits.clientHeight) {
+            clearInterval(creditInterval);
+        }
+    }, 20);
+
+    // buttonSound();
 }
+
+// Stop autoscroll is player scrolls
+elCredits.addEventListener('wheel', () => {
+    clearInterval(creditInterval);
+});
+elCredits.addEventListener('mousedown', () => {
+    clearInterval(creditInterval);
+});
 
 
 // Keybinds menu

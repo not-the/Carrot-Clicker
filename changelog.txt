@@ -1,4 +1,40 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.10.3
+    3-25-2022
+// ----------------------------------------------------------- //
+
+- Carl's unlock conditions have been changed so that you also need to earn at least 10 cash before he'll appear
+- The keyboard combo for equipping hoes is now a two step action (Issue #48):
+  + Press alt + 4 (craft hoe key) to enter equip mode
+  + Press 1 or 2 (or whatever your bill/belle upgrade key is)
+- Changed the default multibuy keybind back to Shift
+- The game will no longer save/use localStorage until you have accepted the cookie notice
+- Completing the all_normal_achievements achievement will now prompt you to view game credits
+- Function rewards are now stored within the achievement instead of in string form and parsed later
+- Falling carrots will now change with the cosmetic
+- Credits screen is implemented
+  + Will automatically scroll unless you stop it
+
+Toasts:
+- Set noToast to true for some achievements that already trigger notifications to reduce notification spam
+- Added support for creating toasts without an X button (close all will still work)
+- Added support for giving toasts a button
+- Achievement toasts are now much smaller and are more in-line with normal toasts
+
+Accessibility:
+- Upgrade buttons, hoes, and ? help buttons are now keyboard focusable
+- The main carrot and slider inputs will now have an outline when focused
+- iOS: Holding down on the main carrot will no longer trigger the image popout
+
+Dev tools:
+- Carrots granted by dev tools should behave like normally earned carrots now (triggers achievements properly and calculates prestige potential how you would expect)
+- Removed a bunch of console.log()s that are no longer needed
+- Dev mode now bypasses the cookie notice
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.10.2
     3-22-2022
 // ----------------------------------------------------------- //

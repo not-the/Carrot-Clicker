@@ -548,7 +548,7 @@ const cosmetics = {
         'plumber': {
             'name': 'Plumber Bill',
             'preview': './assets/theme/plumber_bill.png',
-            'desc': 'placeholder',
+            'desc': 'Yahoo',
             'group': 'plumber',
 
             'rename': false,
@@ -601,7 +601,7 @@ const cosmetics = {
         'plumber': {
             'name': 'Plumber Greg',
             'preview': './assets/theme/plumber_greg.png',
-            'desc': 'placeholder',
+            'desc': 'Greg ain\'t afraid of no ghosts',
             'group': 'plumber',
 
             'rename': false,
@@ -831,7 +831,7 @@ const achievements = {
         'name': 'Wibbly Wobbly',
         'desc': 'Prestige ten times',
         'image': './assets/achievements/wobbly.gif',
-        'reward': 'function:confetti',
+        'reward': () => { confetti(); },
         'pages': 5,
         'conditions': ['player.lifetime.prestige_count', 10],
         'mystery': {
@@ -958,14 +958,20 @@ const achievements = {
         'name': 'Paginator',
         'desc': 'Earn a tome page (Tutorial milestone)',
         'image': './assets/achievements/paginator.png',
-        'reward': 'function:tutorialPages()',
+        'reward': () => {
+            toast(
+                "You've earned a tome page!",
+                "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
+                "", true
+            );
+        },
         'pages': false,
         'conditions': ['player.pages', 1],
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
-            'noToast': false, // should probably be true
+            'noToast': true,
         }
     },
 
@@ -975,7 +981,10 @@ const achievements = {
         'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
         'pages': 1,
-        'conditions': ['carlItemsAvailable()', 2],
+        'conditions': [
+            ['carlItemsAvailable()', 2],
+            ['player.cash', 10],
+        ],
         // 'condition_amount': 1,
         'mystery': {
             'name': true,
@@ -1081,7 +1090,11 @@ const achievements = {
         'name': 'Professional Crafter',
         'desc': 'Upgrade Gregory 64 Times',
         'image': './assets/achievements/pixel_block.png',
-        'reward': ['theme:theme_blockgame', 'cosmetic:bundle/blockgame', 'shop:cosmetic/farmable/blockgame_potato'],
+        'reward': [
+            'theme:theme_blockgame',
+            'cosmetic:bundle/blockgame',
+            'shop:cosmetic/farmable/blockgame_potato'
+        ],
         'pages': 5,
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
@@ -1117,7 +1130,7 @@ const achievements = {
         'image': './assets/achievements/401k.png',
         'reward': [
             'shop:theme/theme_camo',
-            'function:confetti()',
+            () => { confetti(); },
         ],
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 401000],
@@ -1132,7 +1145,7 @@ const achievements = {
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
         'image': './assets/achievements/1_million_carrots.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 1000000],
         'mystery': {
@@ -1148,8 +1161,8 @@ const achievements = {
         'image': './assets/theme/boomer_bill_gates.png',
         'reward': [
             'cosmetic:bill/fancy_bill',
-            'function:confetti()',
             'shop:cosmetic/farmable/pineapple',
+            () => { confetti(); },
         ],
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 1000000000],
@@ -1166,7 +1179,7 @@ const achievements = {
         'image': './assets/achievements/carrot_pile.png',
         'reward': [
             'shop:cosmetic/bundle/plumber',
-            'function:confetti()',
+            () => { confetti(); },
         ],
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000],
@@ -1181,7 +1194,7 @@ const achievements = {
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000],
         'mystery': {
@@ -1195,7 +1208,7 @@ const achievements = {
         'name': 'A World Fed',
         'desc': 'Earn your 1 QUINTILLIONTH carrot. Earth\'s hunger problem is now solved.',
         'image': './assets/achievements/earth.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000000n],
         'mystery': {
@@ -1209,7 +1222,7 @@ const achievements = {
         'name': 'Carrot Singularity',
         'desc': 'Earn your 1 SEXTILLIONTH carrot. We\'re on the verge of something beautiful.',
         'image': './assets/achievements/singularity.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
         'mystery': {
@@ -1223,7 +1236,7 @@ const achievements = {
         'name': 'Carrot Nebula',
         'desc': 'Earn your 1 SEPTILLIONTH carrot. The culmination of our efforts.',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
         'mystery': {
@@ -1237,7 +1250,7 @@ const achievements = {
         'name': 'Carrot Galaxy',
         'desc': 'Earn your 1 OCTILLIONTH carrot. Something bigger than us has taken notice.',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
         'mystery': {
@@ -1251,7 +1264,7 @@ const achievements = {
         'name': 'Carrot Universe',
         'desc': 'Earn your 1 NONILLIONTH carrot. There is not a single non-carrot molecule in the universe. Besides you of course.',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000n],
         'mystery': {
@@ -1265,7 +1278,7 @@ const achievements = {
         'name': 'Carrot Multiverse',
         'desc': 'Earn your 1 DECILLIONTH carrot. Finding new places to put them I see.',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000n],
         'mystery': {
@@ -1279,7 +1292,7 @@ const achievements = {
         'name': 'Carrot God',
         'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become some greater...',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000n],
         'mystery': {
@@ -1293,7 +1306,7 @@ const achievements = {
         'name': 'Carrot Big Bang',
         'desc': 'Earn your 1 DUODECILLIONTH carrot. Must create...',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000n],
         'mystery': {
@@ -1307,7 +1320,7 @@ const achievements = {
         'name': 'Carrot Timelines',
         'desc': 'Earn your 1 TREDECILLIONTH carrot. Everywhere and everytime.',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000000n],
         'style': 'endgame',
@@ -1531,7 +1544,11 @@ const achievements = {
         'name': 'Golden',
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
-        'reward': ['cosmetic:farmable/golden_carrot', 'shop:cosmetic/farmable/pixel_golden_carrot', 'function:confetti()'],
+        'reward': [
+            'cosmetic:farmable/golden_carrot',
+            'shop:cosmetic/farmable/pixel_golden_carrot',
+            () => { confetti(); }
+        ],
         'pages': false,
         'conditions': ['player.lifetime.golden_carrots', 50],
         'mystery': {
@@ -1649,14 +1666,14 @@ const achievements = {
         'name': 'The Tools to Victory',
         'desc': 'Craft your first hoe (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
-        'reward': 'function:tutorialHoes()',
+        'reward': () => { tutorialHoes(); },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
-            'noToast': false,
+            'noToast': true,
         }
     },
     '1_netherite_hoe': {
@@ -1682,7 +1699,7 @@ const achievements = {
             'shop:cosmetic/farmable/demon_carrot',
             'shop:cosmetic/farmable/ghost_carrot',
             'shop:cosmetic/farmable/rainbow_carrot',
-            'function:confetti()',
+            () => { confetti();},
         ],
         'pages': 5,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 50],
@@ -1698,7 +1715,9 @@ const achievements = {
         'name': 'All Normal Achievements',
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
-        'reward': 'function:confetti()',
+        'reward': () => {
+            toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(); }, "View credits");
+        },
         'pages': 10,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 3))', 100],
         // 'style': 'endgame',
@@ -1715,7 +1734,7 @@ const achievements = {
         'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
         'image': './assets/achievements/no_falling_carrots.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 5,
         'conditions': ['ex_noBonusCarrots()', true],
         'style': 'challenge',
@@ -1730,7 +1749,7 @@ const achievements = {
         'name': 'You\'re Free to Wait', // Renamed from "Patience is free"
         'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 5,
         'conditions': ['ex_noBill()', true],
         'style': 'challenge',
@@ -1745,7 +1764,7 @@ const achievements = {
         'name': 'Off the Clock',
         'desc': 'Farm 5,000,000 carrots without Belle (Challenge achievement)',
         'image': './assets/achievements/broken_clock.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 5,
         'conditions': ['ex_noBelle()', true],
         'style': 'challenge',
@@ -1760,7 +1779,7 @@ const achievements = {
         'name': 'Nonbeliever',
         'desc': 'Farm 5,000,000 carrots without crafting a single hoe (Challenge achievement)',
         'image': false,
-        'reward': 'function:confetti()',
+        'reward': () => { confetti();},
         'pages': 8,
         'conditions': ['ex_noHoes()', true],
         'style': 'challenge',
@@ -1776,7 +1795,7 @@ const achievements = {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
-        'reward': 'function:confetti(2)',
+        'reward': () => { confetti(2); },
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',
@@ -1809,7 +1828,7 @@ const achievements = {
         'name': 'Easter Egg Hunter',
         'desc': 'Enter the Konami code, at least according to Wikipedia. There are multiple versions, apparently. (Hidden achievement)',
         'image': './assets/achievements/easter_egg.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': false,
         'conditions': ['keyTrigger[0]', 1],
         'style': 'secret',
@@ -1825,7 +1844,7 @@ const achievements = {
         'name': 'footer_carrot_clicker',
         'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
         'image': './assets/achievements/footer_carrot.png',
-        'reward': 'function:confetti(2)',
+        'reward': () => { confetti(2); },
         'pages': false,
         'conditions': ['easterEgg', 100],
         'style': 'secret',
@@ -1857,7 +1876,7 @@ const achievements = {
         'name': 'Not Funny',
         'desc': 'Upgrade all 3 characters to Level 69 (Hidden achievement)',
         'image': './assets/achievements/nice.png',
-        'reward': 'function:confetti()',
+        'reward': () => { confetti(); },
         'pages': false,
         'conditions': ['ex_notFunny()', 1],
         'style': 'secret',

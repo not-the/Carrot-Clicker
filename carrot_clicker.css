@@ -271,6 +271,33 @@ summary:hover {
 
     visibility: hidden;
 }
+
+/* New Popup animation */
+/* .popup_box.visible {
+    animation: popup_anim 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+@keyframes popup_anim {
+    from {
+        transform: translate(-50%, calc(-50% + 30px));
+        opacity: 0;
+    }
+} */
+
+
+/* OLD Popup animation */
+/* .popup_in  {animation: popup_anim 0.2s ease;}
+.popup_out {animation: popup_anim 0.2s ease forwards reverse;}
+@keyframes popup_anim {
+    0% {
+        transform: translate(-50%, calc(-50% + 200px));
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+} */
+
 .transparency_on .popup_box {
     background-color: rgba(134, 134, 134, 0.2);
 }
@@ -494,7 +521,10 @@ summary:hover {
     animation: toast 0.4s;
     pointer-events: initial;
 }
-.toast_out {animation: toast_out 0.25s forwards;}
+.toast_out {
+    animation: toast_out 0.25s forwards;
+    pointer-events: none;
+}
 @keyframes toast {
     from {
         transform: translateY(20px);
@@ -507,6 +537,11 @@ summary:hover {
         transform: translateY(-20px);
         opacity: 0;
     }
+}
+
+/* Toast button */
+.toast button {
+    width: 100%;
 }
 
 .main_bg_color {
@@ -566,12 +601,23 @@ summary:hover {
 
 /* Achievement toast */
 .toast.achievement_item {
-    width: 400px;
-    max-width: 90vw;
+    width: 300px;
+    /* max-width: 90vw; */
     padding: 0;
+    padding-right: 24px; 
     border-color: goldenrod;
     border-radius: 10px !important;
     margin-bottom: 16px;
+}
+.toast.achievement_item h3 {
+    font-size: 16pt !important;
+    padding-top: 2px;
+}
+.toast.achievement_item .achievement_img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px;
+    margin-right: 8px;
 }
 .toast.achievement_item .rewards_list {
     width: 100%;
@@ -813,22 +859,9 @@ body:not(.theme_light) .theme_checkmark {
     border-right: none;
 }
 
-/* Popup animation */
-/* .popup_in  {animation: popup_anim 0.2s ease;}
-.popup_out {animation: popup_anim 0.2s ease forwards reverse;}
-@keyframes popup_anim {
-    0% {
-        transform: translate(-50%, calc(-50% + 200px));
-        opacity: 0;
-    }
-    100% {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-    }
-} */
 
 /* Paint splatter */
-.paint_splash {
+/* .paint_splash {
     position: absolute;
     right: -20px;
     bottom: -120px;
@@ -838,7 +871,7 @@ body:not(.theme_light) .theme_checkmark {
     width: 300px;
 
     filter: brightness(50%) sepia(100) saturate(100) hue-rotate(200deg);
-}
+} */
 .fancy_switcher div {
     z-index: 20;
 }
@@ -1176,17 +1209,16 @@ body:not(.theme_light) .theme_checkmark {
     transition-timing-function: linear;
 
     image-rendering: unset;
-
-    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    /* touch-action: manipulation; */
 }
 #main_carrot:active {
     transform: scale(0.96,0.96);
     filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.3))
             brightness(85%)
             saturate(110%);
-}
-#main_carrot:focus-visible {
-    outline: none;
 }
 
 /* Main buttons */
@@ -2082,10 +2114,8 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
     margin-top: 6px;
 }
-  
-/* Mouse-over effects */
-.slider:hover {
-    background: rgba(255, 255, 255, 0.7);
+.slider:focus-visible {
+    outline: -webkit-focus-ring-color auto 1px;
 }
   
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
@@ -2263,8 +2293,7 @@ footer {
 }
 .tip_item {
     border-bottom: 1px solid var(--darker-bg-color);
-}
-.tip_item {
+    border-radius: 6px;
     padding: 8px 0;
     padding-right: 24px;
     transition: padding 0.15s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -2272,7 +2301,9 @@ footer {
 .tip_item:hover:not(.secondary_text) {
     background-color: var(--highlight-color);
     padding-left: 12px;
-    border-radius: 6px;
+}
+.tip_item.secondary_text .tip_number {
+    color: gray;
 }
 .tip_item.fun::before {
     content: "☻";
@@ -2290,6 +2321,23 @@ footer {
     color: white;
 }
 
+/* Credits */
+#credits {
+    visibility: hidden;
+    width: 100%;
+    /* max-width: 600px; */
+    height: 100vh;
+    padding-top: 40vh;
+    overflow-y: auto;
+
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    white-space: pre-line;
+}
 
 
 

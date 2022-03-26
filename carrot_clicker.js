@@ -9,7 +9,7 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 let loadCheck = false;
 setTimeout(() => {
     if(loadCheck == false) {
-        toast('Game crash', 'The game has taken more than 2 seconds to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true)
+        toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false, true);
     }
 }, 1000);
 
@@ -254,6 +254,8 @@ const player1 = {
     // inventory: [
         
     // ],
+
+    flags: {},
 }
 
 
@@ -510,7 +512,7 @@ if(localStorage.getObject("player") != null ) {
 
 var preventSaveGame = false;
 function saveGame() {
-    if(preventSaveGame == true) return;
+    if(preventSaveGame == true || store("cookies_accepted") != "true") return;
     // console.log('Saving game...');
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
@@ -594,7 +596,10 @@ function fillSettingsPage() {
     }
 }
 
-function saveSettings() { localStorage.setObject("settings", settings); }
+function saveSettings() {
+    if(store("cookies_accepted") != "true") return;
+    localStorage.setObject("settings", settings);
+}
 function resetSettings(dialog = false) {
     settings = settings_default;
     saveSettings();
@@ -608,7 +613,7 @@ function resetSettings(dialog = false) {
 const keybinds_default = {
     // Gameplay
     key_carrot: 'Spacebar',
-    key_multibuy: '`',
+    key_multibuy: 'Shift',
     key_bill_lvlup: '1',
     key_belle_lvlup: '2',
     key_greg_lvlup: '3',
@@ -680,9 +685,8 @@ if(localStorage.getObject("settings") != null) {
 } else {
     // Create from default
     console.log('[Settings] No localStorage object found, creating...');
-    localStorage.setObject("settings", settings_default);
-    settings = settings_default;
     resetSettings();
+    saveSettings();
 }
 
 
@@ -711,7 +715,19 @@ function multibuySpin(){
     updateHoePrices();
     DisplayAllHoes();
 }
-
+// delete save
+/**
+ * Clears local storage
+ * @param {Boolean} disableReload 
+ */
+function ClearLocalStorage(disableReload) {
+    console.log('Clearing local storage');
+    window.scrollTo(0, 0);
+    
+    localStorage.clear();
+    if(disableReload) return;
+    location.reload();
+}
 
 // Store click speed
 var clickSpeed = 0;
@@ -720,6 +736,9 @@ var clickArray = [];
 
 // Earn carrots function
 function earnCarrots(amount, type, useMousePos = false) {
+    // Incredibly cheap anticheat, ignore if window isn't focused, ie the console is open
+    // if(document.hasFocus() == false) return;
+
     if(type == 'bonus') {
         popupHandler(useMousePos, amount, 'falling');
     }
@@ -964,7 +983,6 @@ function clickSpeedHandler(clicked = false) {
 
 // Carrots per second
 function CarrotsPerSecond() {
-
     earnCarrots(player.cps/20, 'idle');
 
     // Might want to change this but it seems to be fine   for now
@@ -1243,7 +1261,8 @@ function gregLevelTest(type, minusone = true, debug) {
 }
 
 function CreateHoe(type=0, amount=1) {
-    console.log(type);
+    // console.log(`CreateHoe(${type}, ${amount})`);
+
     // Greg unlock check
     if(characterQuery('greg') == false) {
         // toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
@@ -1777,7 +1796,9 @@ function tipchange() {
     // Mark tip as seen
     if(tips[`s_${type}`][tips.number] != true) {
         tips[`s_${type}`][tips.number] = true;
-        localStorage.setObject("tips_seen", tips);
+        if(store("cookies_accepted") == "true") {
+            localStorage.setObject("tips_seen", tips);
+        };
     }
     tipsHTMLupdate = true;
 }

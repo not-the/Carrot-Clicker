@@ -37,7 +37,7 @@ function stopMusic() {
 }
 
 function menuOpen() {
-    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen)
+    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen)
     { return true; }
     return false;
 }
@@ -280,6 +280,7 @@ document.addEventListener('keyup', event => {
     if(dialogOpen) {
         if(event.key == "Escape"){
             closeDialog();
+            if(equipWaiting != -1) { cancelHoeEquip(); }
         } else if(event.key == "Enter"){
             closeDialog(true);``
         }
@@ -313,10 +314,17 @@ var keyTrigger = [];
 var easterEgg = 0;
 function eggUp() { easterEgg++; }
 var equipWaiting = -1;
+var equipToastID = false;
 
 function keybindHandler(event, state) {
+    // Ignore if CTRL or meta key was held
+    if(event.ctrlKey == true || event.metaKey == true) return;
+
     let key = interpretKey(event.key);
-    console.log(key);
+    // console.log(key);
+    // console.log(equipWaiting);
+
+
 
     // Custom keybinds
     if(keyWaiting[0] == true) {
@@ -428,13 +436,12 @@ function keybindHandler(event, state) {
     //Level up
     else if(
         key == settings.keybinds['key_bill_lvlup']
-        && event.ctrlKey == false
-        && event.shiftKey == false
+        // && event.shiftKey == false
     ) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Boomer_Bill, equipWaiting, multibuy[multibuySelector]);
-            equipWaiting = -1;
+            cancelHoeEquip()
         }
         // Level up
         else {
@@ -443,14 +450,13 @@ function keybindHandler(event, state) {
     }
     else if(
         key == settings.keybinds['key_belle_lvlup']
-        && event.ctrlKey == false
-        && event.shiftKey == false
+        // && event.shiftKey == false
     ) {
         LevelUp(Belle_Boomerette,multibuy[multibuySelector]);
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Belle_Boomerette, equipWaiting, multibuy[multibuySelector]);
-            equipWaiting = -1;
+            cancelHoeEquip();
         }
         // Level up
         else {
@@ -459,14 +465,13 @@ function keybindHandler(event, state) {
     }
     else if(
         key == settings.keybinds['key_greg_lvlup']
-        && event.ctrlKey == false
-        && event.shiftKey == false
+        // && event.shiftKey == false
     ) {
         LevelUp(Gregory,multibuy[multibuySelector]);
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Gregory, equipWaiting, multibuy[multibuySelector]);
-            equipWaiting = -1;
+            cancelHoeEquip();
         }
         // Level up
         else {
@@ -474,69 +479,26 @@ function keybindHandler(event, state) {
         }
     }
 
-
     // Hoes
     else {
         for(i = 0; i <= 5; i++) {
-            if(key == settings.keybinds[`key_craft_${i}`] && event.ctrlKey == false) {
-                // Equip
-                if(event.shiftKey == true) {
-                    toast('Equipping Hoe', 'Press the character\'s upgrade key to equip', '', true, false);
-                    equipWaiting = i;
-                }
-                // Craft
-                else {
-                    CreateHoe(i, multibuy[multibuySelector]);
-                }
+            // Craft
+            if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == false) {
+                // console.log(`key_craft_${i}: Craft`);
+                CreateHoe(i, multibuy[multibuySelector]);
+            }
+            // Equip
+            else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == true) {
+                // console.log(`key_craft_${i}: Ready to equip hoe #${i}`);
+
+                // No hoes
+                if(Gregory.Hoes[i] < 1) return;
+
+                equipToastID = toast('Equipping Hoe', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelHoeEquip() }, 'Cancel');
+                equipWaiting = i;
             }
         }
     }
-
-
-
-    // else if(key=="4" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,0,multibuy[multibuySelector]);
-    // }
-    // else if(key=="5" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,1,multibuy[multibuySelector]);
-    // }
-    // else if(key=="6" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,2,multibuy[multibuySelector]);
-    // }
-    // else if(key=="7" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,3,multibuy[multibuySelector]);
-    // }
-    // else if(key=="8" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,4,multibuy[multibuySelector]);
-    // }
-    // else if(key=="9" && event.altKey==true && event.ctrlKey==false){
-    //     EquipHoe(Boomer_Bill,5,multibuy[multibuySelector]);
-    // }
-
-    // else if(key=="4" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector]);
-    // }
-    // else if(key=="5" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector]);
-    // }
-    // else if(key=="6" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector]);
-    // }
-    // else if(key=="7" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector]);
-    // }
-    // else if(key=="8" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector]);
-    // }
-    // else if(key=="9" && event.altKey==false && event.ctrlKey==true){
-    //     event.preventDefault();
-    //     EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector]);
-    // }
 
     // Close all Toasts
     if(key == settings.keybinds['key_cleartoasts']) {
@@ -566,6 +528,11 @@ function keybindHandler(event, state) {
     // }
 }
 
+function cancelHoeEquip() {
+    equipWaiting = -1;
+    closeToast(equipToastID);
+}
+
 
 // Custom Keybinds
 var keyWaiting = [false, 'none'];
@@ -575,7 +542,7 @@ function detectKey(bind) {
 function setKeybind(action, key) {
     console.log(`[Settings] Set ${action} to key: ${key}`)
     settings.keybinds[action] = key;
-    console.log(action, key);
+    // console.log(action, key);
     saveSettings();
     // populateKeyConflicts();
 }
@@ -675,7 +642,7 @@ function evaluateConditions(key, achievement) {
 }
 
 function rewardBreakdown(achieve, retroactive = false) {
-    console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
+    // console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
     if(achieve.hasOwnProperty('reward')) {
         let reward = achieve.reward;
 
@@ -693,7 +660,8 @@ function rewardBreakdown(achieve, retroactive = false) {
 // Reward user
 function giveReward(reward, retroactive = false) {
     // console.log(reward);
-    let [rewardType, rewardName] = reward.split(':');
+    let [rewardType, rewardName] =
+    typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
     if(
         retroactive == true
         &&
@@ -702,7 +670,7 @@ function giveReward(reward, retroactive = false) {
         || rewardType == 'character')
     ) { return; }
     if(reward == false) return;
-    console.log('giveReward(): ' + reward);
+    // console.log('giveReward(): ' + reward);
     // console.log(rewardType, rewardName);
 
     // Theme reward
@@ -712,7 +680,7 @@ function giveReward(reward, retroactive = false) {
     // Cosmetic reward
     else if(rewardType == 'cosmetic') {
         let [target, cosmetic] = rewardName.split('/');
-        console.log(rewardName.split('/'));
+        // console.log(rewardName.split('/'));
         unlock(rewardType, cosmetic, target);
     }
     // Shop reward
@@ -727,8 +695,11 @@ function giveReward(reward, retroactive = false) {
     // Function reward
     else if(rewardType == 'function') {
         // Run specified function
-        var rewardFunction = Function(`${rewardName}`);
-        rewardFunction();
+        // var rewardFunction = Function(`${rewardName}`);
+        // rewardFunction();
+
+        console.log(rewardName);
+        rewardName();
     }
 
     // Character reward
@@ -745,7 +716,6 @@ function grantAchievement(key) {
         return;
     }
 
-    console.log('grant: ' + key);
     let achieve = achievements[key];
 
     // Notification
@@ -862,7 +832,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
         else if(subtype == 'cosmetic') {
             let target = raw.split('/')[1];
             let cosmetic = raw.split('/')[2];
-            console.log(`${target}/${cosmetic}`);
+            // console.log(`${target}/${cosmetic}`);
             try {
                 Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
                 console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
@@ -892,7 +862,7 @@ function purchase(source, type, item, subtype = false) {
     // console.log(`purchase(${source}, ${type}, ${item}, ${subtype})`);
 
     // Check if already unlocked or bought
-    console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
+    // console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
     if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
         toast('Whoops', 'You already own this');
@@ -901,7 +871,7 @@ function purchase(source, type, item, subtype = false) {
         populateCarl();
         return;
     }
-    console.log('purchase(): ' + type + ':' + raw);
+    // console.log('purchase(): ' + type + ':' + raw);
 
     // let currency = Carl.shop[type][item].currency;
     // let price;
@@ -971,7 +941,7 @@ function achieveQuery(key) {
 }
 
 // Test if theme is unlocked or not
-                    'cosmetic', 'biker_bill', 'bill'
+                    // 'cosmetic', 'biker_bill', 'bill'
 function isUnlocked(type = 'theme', key, subtype) {
     // Theme
     if(type == 'theme') {
@@ -1009,21 +979,11 @@ function isUnlocked(type = 'theme', key, subtype) {
 
 // External achievement checks
 // After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
-function doNothing() {
-    // Temporary fix because I can't figure out an achievement related bug
-    console.log('doNothing runs');
-}
 function tutorialHoes() {
     // store('tutorial_first_hoe', "done");
     toast(
         "You've created your first hoe!",
         "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).",
-        "", true);
-}
-function tutorialPages() {
-    toast(
-        "You've earned a tome page!",
-        "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
         "", true);
 }
 // use_charles
@@ -1245,7 +1205,7 @@ function onLoad() {
         } catch (error) {
             console.error('An object update was attempted but failed. Error info below:');
             console.error(error);
-            toast('Save file update failed', 'If you run into any issues you may have to delete your save.');
+            toast('Save file update failed', 'If you run into any issues you may have to delete your save.', 'error', true);
         }
 
     }
@@ -1275,7 +1235,7 @@ function onLoad() {
     // Set user theme on page load
     if(settings.theme != 'theme_dark') {
         let theme = settings.theme;
-        console.log(`Theme setting found, switching to: ${theme}`);
+        // console.log(`Theme setting found, switching to: ${theme}`);
         // optionTheme.value = theme;
         setTheme(theme);
     }
@@ -1329,7 +1289,9 @@ function onLoad() {
         settingSounds();
     }
     // Dev tools
-    else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == 'cheatmode') {
+    else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == '#cheatmode') {
+        store("cookies_accepted", "true");
+
         // Register cheat functions globally
         //#region
         window.allCharacters = () => {
@@ -1370,12 +1332,16 @@ function onLoad() {
             allCosmetics();
         }
         window.updateValues = () => {
-            if(parseInt(setCarrotsEl.value)>-0.01){
-                player.Carrots = parseInt(setCarrotsEl.value);
-                player.lifetime.carrots = parseInt(setCarrotsEl.value);
-            }
-            if(parseInt(setGoldenCarrotsEl.value)>-0.01){player.golden_carrots=parseInt(setGoldenCarrotsEl.value)}
-            if(parseInt(setBillLvlEl.value)>-0.01){Boomer_Bill.lvl=parseInt(setBillLvlEl.value)}
+            let cc = parseInt(setCarrotsEl.value);
+            let gcc = parseInt(setGoldenCarrotsEl.value);
+            let lbill = parseInt(setBillLvlEl.value);
+            player.Carrots          = cc;
+            player.lifetime.carrots = cc;
+            player.prestige.carrots = cc;
+
+            player.golden_carrots   = gcc >= 0 ? gcc : player.golden_carrots;
+            Boomer_Bill.lvl         = lbill >= 1 ? lbill : Boomer_Bill.lvl;
+            characterPrices();
         }
         //#endregion
         
@@ -1469,16 +1435,26 @@ function onLoad() {
 
 
     /* --------------- TUTORIAL --------------- */
+    // Cookie usage notification
+    if(store("cookies_accepted") != "true") {
+        let cookieToast = toast(
+            'Cookie Usage',
+            'By playing Carrot Clicker you agree to the usage of cookies to save your progress.',
+            'purple', true, false, false, true,
+            () => {
+                closeToast(cookieToast);
+                store("cookies_accepted", "true");
+            }, 'Accept'
+        );
+    }
+
     // Initial Welcome
-    if(store("tutorial_sample") == null) {
+    if(player.flags.tutorial0 != true) {
         // Welcome message
         toast("Welcome to Carrot Clicker!",
         "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!",
         "", true);
-        store("tutorial_sample", "done");
-
-        // Cookie notification
-        toast('Cookie Usage', 'By playing Carrot Clicker you agree to the usage of cookies to save your progress.', 'purple', true);
+        player.flags.tutorial0 = true;
     }
 
     // Enable unlocked characters
