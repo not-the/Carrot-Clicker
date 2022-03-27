@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.10.4</title>
+    <title id="page_title">Carrot Clicker dev beta v1.11.1</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -229,8 +229,8 @@
             <p class="secondary_text">Dialog accept/select focused: <b class="white">Enter</b></p><br><br>
 
             <p><b>Hoe keybinds:</b></p>
-            <p class="secondary_text">Hold the <b class="white">Alt</b> key to equip to Bill</p>
-            <p class="secondary_text">Hold the <b class="white">Control</b> key to equip to Belle</p>
+            <p class="secondary_text">Hold the <b class="white">Alt</b> + your craft hotkey <b class="white">(4-9 by default)</b> to select a hoe to equip.</p>
+            <p class="secondary_text">Press the respective character's upgrade key <b class="white">(1-2 by default)</b> to equip to that character</p>
             <br/><br/>
 
             <!-- List Keybinds -->
@@ -492,63 +492,59 @@
 
         <!-- Credits scroll -->
         <div id="credits" class="center">
-            <h1>Credits</h1>
+            <h1 class="credits_underline">Credits</h1>
 
-            Original Concept:
-            not-the
+            <span class="secondary_text">Original concept</span>
+            <b>not-the</b>
 
-            Gameplay concept:
-            JJCVIP
+            <span class="secondary_text">Gameplay</span>
+            <b>JJCVIP</b>
+            <b>not-the</b>
 
-            Game balance:
-            JJCVIP
+            <span class="secondary_text">Game balance & clicker game math</span>
+            <b>JJCVIP</b>
+            <b>not-the</b>
 
+            <span class="secondary_text">Character designs & worldbuilding</span>
+            <b>JJCVIP</b>
 
+            <span class="secondary_text">UI/UX</span>
+            <b>not-the</b>
 
-            Easier to read credits because it's just 2 people:
+            <span class="secondary_text">Achievement, statistics, theme, & cosmetic
+                code, descriptions, artwork, & iconography</span>
+            <b>not-the</b>
+            <!-- <span class="secondary_text">Audio Code</span>
+            <b>not-the</b> -->
+            <span class="secondary_text">Sound Effects & Music</span>
+            <b>JJCVIP</b>
 
-            not-the (https://github.com/not-the):
-
-            General page layout/CSS
-            Original concept
-            UI Code
-            Notifications (toasts) system
-            Achievements system
-            Theme & cosmetics systems
-            Achievement, theme, and cosmetic icons and descriptions/"Flavortext"
-            Sound & music code
-            Statistics
-            Tips
-            Character descriptions
-            Visual design
-            General code cleanup
-
-
-            JJCVIP (https://github.com/JJCVIP)
-
-            Main game code
-            Game balance and math
-            Gameplay concepts
-            Game/universe lore
-            Character art/designs
-            Iconography
-            Save file system
-            Music & Sound effects
-            Statistics
-            Tips
-            Achievement concepts & balance
-            Hoes system
-            Prestige system
+            <span class="secondary_text">LocalStorage & Settings Systems</span>
+            <b>not-the</b>
 
 
-            Additional Thanks:
-            - W3Schools
+
+            <h3 class="credits_underline">Special Thanks</h3>
+            <span class="secondary_text">Additional cosmetics & ideas</span>
+            <b>UniverseNarwhal</b>
+
+            <span class="secondary_text">Playtesters</span>
+            <b>UniverseNarwhal</b>
+
+            
+
+            Primary carrot image from <b>Google's Noto Emoji Icons</b>
+            <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener noreferrer" >https://github.com/googlefonts/noto-emoji</a>
+
+            
+            W3Schools, Stack Overflow, MDN Web Docs
+            For being reliable sources of information
             
 
 
 
             <div>
-                <h1 style="margin-bottom: 0;">Carrot Clicker</h1>
+                <h1>Carrot Clicker</h1>
                 <p class="secondary_text">
                     Carrot Clicker Project 2021 - 2022
                 </p>
@@ -605,7 +601,7 @@
                 ▼
                 <div class="hover_menu">
                     <!-- Settings -->
-                    <a href="#settings-panel" onclick="panelChange(`settings-panel`)" tabindex="0">
+                    <a href="#settings" onclick="panelChange(`settings-panel`)" tabindex="0">
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/icons/settings.svg" alt="" class="dropdown_img invert">
                             Settings
@@ -1105,6 +1101,8 @@
 
 
   </div>
+
+  <div id="settings"></div>
 
   <!-- Lower section -->
   <!-- #region -->

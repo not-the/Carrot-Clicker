@@ -27,6 +27,7 @@ document.addEventListener("touchstart", function() {}, true);
 
 // Overlays
 const mcContainer =         dom('mouse_confetti');
+const elInfoDropdown =      dom('info_dropdown');
 
 // Game
 const mainCarrot =      dom("main_carrot");
@@ -182,7 +183,7 @@ const playerPrestigeTemplate = {
 }
 const player1 = {
     data_version: 3, // needs to be incremented by 1 any time any game object is changed
-    time_last_saved: false,
+    // time_last_saved: false,
 
     // Progress
     Carrots: 0,
@@ -522,7 +523,7 @@ var preventSaveGame = false;
 function saveGame() {
     if(preventSaveGame == true || store("cookies_accepted") != "true") return;
     // console.log('Saving game...');
-    player.time_last_saved = Date.now();
+    // player.time_last_saved = Date.now();
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
     localStorage.setObject("Belle", Belle_Boomerette);
@@ -826,6 +827,7 @@ function holdStart(useMousePos = true) {
         holdClock = setInterval(() => {
             if(document.hidden) { clearInterval(holdClock); return; }
             onClick(useMousePos, 'click');
+            // mainCarrot.click(); // alternative
         }, 1000 / 3); // replace 3 with clicks per second
     }, 250);
 }
@@ -851,7 +853,7 @@ function onClick(useMousePos, method='click', source=0) {
         clickMethodTimer = setTimeout(() => { clickMethod = -1; }, 1000);
     }
 
-    console.log(clickMethod, source);
+    // console.log(clickMethod, source);
 
     if(clickMethod != source && clickMethod != -1) return;
 

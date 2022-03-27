@@ -983,7 +983,7 @@ const achievements = {
         'pages': 1,
         'conditions': [
             ['carlItemsAvailable()', 2],
-            ['player.cash', 10],
+            ['player.cash', 6],
         ],
         // 'condition_amount': 1,
         'mystery': {

@@ -296,6 +296,10 @@ document.addEventListener('keyup', event => {
             closeDialog(true);``
         }
         return;
+    } else {
+        if(event.key == "Escape" && equipWaiting != -1){
+            cancelHoeEquip();
+        }
     }
     // Close theme switcher
     if(menuOpen()) {
@@ -858,7 +862,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
         }
 
         // Toast
-        if(settings.carl_shop_toasts == true) {
+        if(settings.carl_shop_toasts == true && characterQuery('carl')) {
             toast('', 'Carl: A new item is now available', '', false, true);
         }
         // Carl.shop_order.unshift(raw.split(':')[1]);
@@ -1527,6 +1531,9 @@ function onLoad() {
     if(player.lifetime.prestige_count > 0) {
         showPrestigeStats();
     }
+
+
+    startCredits();
 
 
 

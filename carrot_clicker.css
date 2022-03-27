@@ -1701,6 +1701,10 @@ body:not(.gp) #golden_carrot_count*/ {
 
     animation: new_indicator_anim 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+.tab .new_indicator {
+    margin-left: 8px;
+    opacity: 0.8;
+}
 @keyframes new_indicator_anim {
     0% {
         /* width: 1px; */
@@ -2368,6 +2372,17 @@ footer {
     transform: translateX(-50%);
 
     white-space: pre-line;
+}
+#credits h1,
+#credits h2,
+#credits h3 {
+    margin: 0;
+}
+#credits .credits_underline {
+    border-bottom: 1px solid var(--border-color);
+    max-width: 300px;
+    padding-bottom: 12px;
+    margin: 0 auto;
 }
 /* #credits.visible { opacity: 1; } */
 

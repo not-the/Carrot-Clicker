@@ -92,7 +92,7 @@ function confetti(type = 1) {
 const confettiColors =  ['red', 'blue', 'cyan', 'purple', 'yellow'];
 const ccGold =          ['goldenrod', 'yellow', 'white', '#e1cfa4', '#dcb276', '#be7e4e'];
 const ccWhite =         ['white'];
-const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01'];
+const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01', '#974810'];
 /**
  * 
  * @param {array} particles Array item one is the minimum amount of particles, item 2 is the maximum.
@@ -110,8 +110,9 @@ function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150) {
         let rot     = r(360);
         let skew    = r(100) - 50;
         let size    = r(4) + 4;
+        // let distance = r(32) + 24;
         let distance = r(32 * time / 150) + 24 * time / 150;
-        let lifespan = r(time / 2) + time / 2; // also effects speed
+        let lifespan = r(time) + time; // also effects speed
         // console.log(color, rot, skew, size, distance);
 
         // Create
@@ -1589,22 +1590,23 @@ function characterInfo(character) {
 const elCredits = dom('credits');
 var creditInterval;
 function startCredits(toast = false) {
-    if(toast != false) { closeToast(toast); }
     console.log(`startCredits()`);
+
     closeDialog();
-
+    if(toast != false) { closeToast(toast); }
+    
     creditsOpen = true;
-
     elCredits.scrollTop = 0;
     elCredits.classList.add('visible');
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
+    clearInterval(creditInterval);
     creditInterval = setInterval(() => {
         elCredits.scrollTop += 1;
         if(elCredits.scrollHeight - elCredits.scrollTop === elCredits.clientHeight) {
             clearInterval(creditInterval);
         }
-    }, 20);
+    }, 30);
 
     // buttonSound();
 }
@@ -1613,9 +1615,9 @@ function startCredits(toast = false) {
 elCredits.addEventListener('wheel', () => {
     clearInterval(creditInterval);
 });
-elCredits.addEventListener('mousedown', () => {
-    clearInterval(creditInterval);
-});
+// elCredits.addEventListener('mousedown', () => {
+//     clearInterval(creditInterval);
+// });
 
 
 // Keybinds menu
