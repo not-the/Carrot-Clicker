@@ -400,6 +400,33 @@ summary:hover {
     overflow: hidden;
     pointer-events: none;
 }
+#mouse_confetti {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    /* bottom: 0; */
+    left: 0;
+    z-index: 300 !important;
+    pointer-events: none !important;
+}
+.small_confetti {
+    background-color: white;
+    position: absolute;
+    transition: transform 200ms ease-out;
+    pointer-events: none !important;
+}
+/* Animated tools */
+#mouse_confetti img  {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+
+    transition-property: transform, height, width;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+}
 
 
 /* Dialog Popup */
@@ -521,6 +548,20 @@ summary:hover {
     animation: toast 0.4s;
     pointer-events: initial;
 }
+#toasts_clear {
+    cursor: pointer;
+    padding: 6px 24px;
+    width: 112px;
+    margin-left: auto;
+    border-radius: 100px;
+
+    visibility: hidden;
+    transition: filter 0.1s;
+}
+#toasts_clear:hover {
+    filter: brightness(125%);
+    text-decoration: underline;
+}
 .toast_out {
     animation: toast_out 0.25s forwards;
     pointer-events: none;
@@ -585,19 +626,7 @@ summary:hover {
     padding: 0;
     margin-bottom: 4px;
 }
-#toasts_clear {
-    cursor: pointer;
-    padding: 6px 24px;
-    width: 112px;
-    margin-left: auto;
-    border-radius: 100px;
 
-    visibility: hidden;
-    transition: filter 0.1s;
-}
-#toasts_clear:hover {
-    filter: brightness(125%);
-}
 
 /* Achievement toast */
 .toast.achievement_item {
@@ -1219,6 +1248,7 @@ body:not(.theme_light) .theme_checkmark {
     filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.3))
             brightness(85%)
             saturate(110%);
+    /* cursor:grabbing; */
 }
 
 /* Main buttons */
@@ -1319,30 +1349,20 @@ body:not(.theme_light) .theme_checkmark {
     max-width: 260px;
     position: absolute;
 
-    /* visibility: hidden; */
     opacity: 0;
-    transition-property: opacity;
-    transition-duration: 0.25s;
+    /* transition-property: opacity; */
+    /* transition-duration: 0.25s; */
     pointer-events: none;
 }
 .charactertooltip {
+    transition-property: transform, opacity;
+    transform: translate(calc(-100% - 30px), -2px);
+    opacity: 0;
+}
+/*.characterbox:hover*/.characterbox.show_info .charactertooltip {
     transform: translate(calc(-100% - 10px), -2px);
-    /* left: 0;
-    top: unset; */
-}
-.characterbox:hover .charactertooltip {
-    visibility: visible;
-    animation: float_in 2s forwards;
-}
-@keyframes float_in {
-    80% {
-        margin-left: -20px;
-        opacity: 0;
-    }
-    100% {
-        margin-left: 0px;
-        opacity: 1;
-    }
+    opacity: 1;
+    transition-duration: 0.5s;
 }
 
 .char_mini_button {
@@ -1353,7 +1373,7 @@ body:not(.theme_light) .theme_checkmark {
     opacity: 0;
 
     position: absolute;
-
+    transition: opacity 0.05s ease;
 }
 .char_custom_button {
     top: 4px;
@@ -1362,9 +1382,16 @@ body:not(.theme_light) .theme_checkmark {
 .char_info_button {
     top: 4px;
     right: 8px;
+    transform-origin: center;
+    transition:  opacity, transform 0.15s ease;
 }
-.char_mini_button:hover {
+.char_mini_button:hover,
+.characterbox.show_info .char_info_button {
     filter: invert();
+    opacity: 1;
+}
+.characterbox.show_info .char_info_button {
+    transform: rotate(90deg) translate(2px);
 }
 .characterbox:hover .char_mini_button,
 #left-section:hover .char_mini_button {
@@ -1631,6 +1658,7 @@ body:not(.gp) #golden_carrot_count*/ {
 
     transition: background-color, filter 0.5s;
     cursor: pointer;
+    user-select: none;
 
     position: relative;
 }
@@ -2324,6 +2352,9 @@ footer {
 /* Credits */
 #credits {
     visibility: hidden;
+    /* opacity: 0; */
+    /* transition: opacity 1s ease; */
+
     width: 100%;
     /* max-width: 600px; */
     height: 100vh;
@@ -2338,6 +2369,7 @@ footer {
 
     white-space: pre-line;
 }
+/* #credits.visible { opacity: 1; } */
 
 
 

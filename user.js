@@ -266,15 +266,26 @@ function volumeSliderHandler(v) {
 
 
 /*------------EVENT LISTENERS--------------*/
-document.addEventListener('keydown', event => {
 
-    if(event.key == " ") {
+// Key Down
+var keyCarrotFiring = false;
+document.addEventListener('keydown', event => {
+    let key = event.key;
+    if(key == " ") {
         event.preventDefault();   
     }
 
+    key = interpretKey(key);
 
+    if(dialogOpen || menuOpen() || settings.disableKeybinds) return;
+    if(key == settings.keybinds['key_carrot'] && keyCarrotFiring == false) {
+        keyCarrotFiring = true;
+        holdStart(false);
+    }
 });
 
+
+// Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
     // Close/Accept dialog
     if(dialogOpen) {
@@ -312,7 +323,10 @@ const keyCodes = [
 // Variable achievement(s) test for
 var keyTrigger = [];
 var easterEgg = 0;
-function eggUp() { easterEgg++; }
+function eggUp() {
+    easterEgg += easterEgg < 100 ? 1 : 0;
+    mouseConfetti([1, easterEgg == 100 ? 5 : Math.floor(easterEgg/5)], ccCarrot);
+}
 var equipWaiting = -1;
 var equipToastID = false;
 
@@ -425,7 +439,9 @@ function keybindHandler(event, state) {
     }
     // Carrot click
     if(key == settings.keybinds['key_carrot']) {
-        onClick(false, 'key');
+        onClick(false, 'click', 1);
+        keyCarrotFiring = false;
+        holdStop();
 
         // Prevent spacebar scrolling (for some reason this works even if the parent if statement resolves to false)
         if(key == "Spacebar") {
@@ -440,42 +456,42 @@ function keybindHandler(event, state) {
     ) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Boomer_Bill, equipWaiting, multibuy[multibuySelector]);
+            EquipHoe(Boomer_Bill, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip()
         }
         // Level up
         else {
-            LevelUp(Boomer_Bill, multibuy[multibuySelector]);
+            LevelUp(Boomer_Bill, multibuy[mbsel]);
         }
     }
     else if(
         key == settings.keybinds['key_belle_lvlup']
         // && event.shiftKey == false
     ) {
-        LevelUp(Belle_Boomerette,multibuy[multibuySelector]);
+        LevelUp(Belle_Boomerette,multibuy[mbsel]);
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Belle_Boomerette, equipWaiting, multibuy[multibuySelector]);
+            EquipHoe(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip();
         }
         // Level up
         else {
-            LevelUp(Belle_Boomerette, multibuy[multibuySelector]);
+            LevelUp(Belle_Boomerette, multibuy[mbsel]);
         }
     }
     else if(
         key == settings.keybinds['key_greg_lvlup']
         // && event.shiftKey == false
     ) {
-        LevelUp(Gregory,multibuy[multibuySelector]);
+        LevelUp(Gregory,multibuy[mbsel]);
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Gregory, equipWaiting, multibuy[multibuySelector]);
+            EquipHoe(Gregory, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip();
         }
         // Level up
         else {
-            LevelUp(Gregory, multibuy[multibuySelector]);
+            LevelUp(Gregory, multibuy[mbsel]);
         }
     }
 
@@ -485,7 +501,7 @@ function keybindHandler(event, state) {
             // Craft
             if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == false) {
                 // console.log(`key_craft_${i}: Craft`);
-                CreateHoe(i, multibuy[multibuySelector]);
+                CreateHoe(i, multibuy[mbsel]);
             }
             // Equip
             else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == true) {
@@ -1176,7 +1192,7 @@ function onLoad() {
                 let reward = achieve.reward;
                 // console.log(reward);
                 if(achieveQuery(key) && reward != false) {
-                    console.log(`Re-granting reward for ${key}: ${achieve.reward}`);
+                    // console.log(`Re-granting reward for ${key}: ${achieve.reward}`);
                     rewardBreakdown(achieve, true);
                 }
             }
@@ -1257,6 +1273,26 @@ function onLoad() {
         cosmeticsView.value = 'grid';
         cosmeticsGridMode();
     }
+    // Restart unfinished crafting job (Greg)
+    if(Gregory.crafting != false) {
+        console.log('[Greg] Restarting unfinished craft job');
+        CreateHoe(...Gregory.crafting);
+    }
+    
+    // OFFLINE EARNINGS
+    // Doesn't work, Date.now() is imprecise
+    // if(player.time_last_saved != false) {
+    //     // Convert to seconds
+    //     let ls = (player.time_last_saved).toFixed(0);
+    //     let now = (Date.now()).toFixed(0);
+    //     console.log(ls, now);
+    //     let difference = now - ls;
+    //     let earned = difference * player.cps;
+    //     toast('Offline Earnings', `${difference} seconds\n${earned} carrots`);
+
+    //     player.time_last_saved == false;
+    // }
+
     //#endregion
     
 

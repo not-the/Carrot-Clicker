@@ -4,7 +4,6 @@
 const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
-const mainCarrot =      dom("main_carrot");
 // var tooltipBill =       dom("billtooltip").style.top;
 // var tooltipBelle =      dom("belletooltip").style.top;
 // var tooltipGreg =       dom("gregtooltip").style.top;
@@ -13,7 +12,6 @@ var mouseY = 0;
 
 // Popup counters (unique IDs so that they are deleted after a set time)
 var toastID =      0;
-var activeToasts = 0;
 var toastsList =  {};
 var bonusID =      0;
 
@@ -70,10 +68,11 @@ const tipsMenu =      dom('tips_menu');
 /*---------------FUNCTIONS-----------------*/
 //#region
 
-// Confetti
+// Screen Confetti (GIF overlay)
 const elConfetti = dom('confetti');
 function confetti(type = 1) {
     console.log('Confetti!');
+    if(!settings.confetti_effects) return;
     let duration = 6760;
     elConfetti.src = `./assets/confetti${type}.gif`;
     elConfetti.classList.add('visible');
@@ -87,6 +86,57 @@ function confetti(type = 1) {
         elConfetti.classList.remove('fade_out');
         elConfetti.classList.remove('visible');
     }, duration);
+}
+
+// Mouse confetti
+const confettiColors =  ['red', 'blue', 'cyan', 'purple', 'yellow'];
+const ccGold =          ['goldenrod', 'yellow', 'white', '#e1cfa4', '#dcb276', '#be7e4e'];
+const ccWhite =         ['white'];
+const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01'];
+/**
+ * 
+ * @param {array} particles Array item one is the minimum amount of particles, item 2 is the maximum.
+ * @param {array} colorArray Array to pull random colors from
+ * @param {number} time Particle lifespan in milliseconds. Will also effect the travel distance of the particles.
+ * @returns 
+ */
+function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150) {
+    if(!settings.confetti_effects) return;
+    let count = r(particles[1] - particles[0] + 1) + particles[0] - 1;
+    // console.log('mouse confetti!');
+    for(i = 0; i < count; i++) {
+        // Random attributes
+        let color   = colorArray[r(colorArray.length)];
+        let rot     = r(360);
+        let skew    = r(100) - 50;
+        let size    = r(4) + 4;
+        let distance = r(32 * time / 150) + 24 * time / 150;
+        let lifespan = r(time / 2) + time / 2; // also effects speed
+        // console.log(color, rot, skew, size, distance);
+
+        // Create
+        let confetti = document.createElement('div');
+        // console.log(confetti);
+        confetti.classList.add('small_confetti');
+        confetti.style.top = `${mouseY}px`;
+        confetti.style.left = `${mouseX}px`;
+        confetti.style.backgroundColor = color;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+    
+        confetti.style.transitionDuration = `${lifespan}ms`;
+        confetti.style.transform = `skewX(${skew}deg) rotate(${rot}deg)`;
+
+        mcContainer.append(confetti);
+
+        // Animate
+        setTimeout(() => {
+            confetti.style.transform = `skewX(${skew}deg) rotate(${rot}deg) translateY(${distance}px)`; 
+        }, 20);
+        setTimeout(() => {
+            confetti.remove();
+        }, lifespan);
+    }
 }
 
 
@@ -231,7 +281,7 @@ function closeDialog(doAction, backdrop = false) {
  */
 function toast(title = '', desc = '', color = '', persistent, replaceable, achievement = false, hide_close = false, button_action = false, button_name = 'Done') {
     // Replace old if replace is true
-    if(toastsList[toastID - 1] == 'replace') {
+    if(toastsList[toastID - 1] != undefined && toastsList[toastID - 1].includes('replace') == true) {
         closeToast(toastID - 1, false);
     }
 
@@ -306,15 +356,15 @@ function toast(title = '', desc = '', color = '', persistent, replaceable, achie
 
     toastContainer.prepend(toastElement);
 
-    let id = toastID;
-    toastsList[toastID] = replaceable == true ? 'replace' : id;
+    let id = `${toastID}`;
+    toastsList[id] = replaceable == true ? 'replace' : id;
+    toastsList[id] += hide_close == true ? '_noclose' : '';
 
     // Increase Toast ID
-    activeToasts++;
     toastID++;
 
     // Clear all button
-    if(activeToasts > 2) {
+    if(Object.keys(toastsList).length > 2) {
         toastsClear.classList.add("visible");
     }
 
@@ -333,40 +383,37 @@ function toast(title = '', desc = '', color = '', persistent, replaceable, achie
 // Delete Toast Notification
 function closeToast(id, animate = true) {
     // console.log(id + " - toast removed");
-    activeToasts--;
-    delete toastsList[id];
-    let element = dom(`toast${id}`);
+    let t = JSON.stringify(toastsList[id]);
+    var element = dom(`toast${id}`);
 
-    // No animation
-    if(animate == false) {
-        element.remove();
-        return;
-    }
-    
     // Clear all button
-    if(activeToasts <= 2) {
+    if(Object.keys(toastsList).length <= 2) {
         toastsClear.classList.remove("visible");
     }
 
-    // Animate
-    // Dismiss Animation
-    if(toastsList[id] != 'replace' && element != null) {
-        element.classList.add("toast_out");
-    }
-    
-    // Delete Element after animation is done
-    if(element != null) {
+    // No animation
+    if(animate == true && element != null) {
+        // Dismiss Animation
+        if(t != undefined && t.includes('replace') == false) {
+            element.classList.add("toast_out");
+        }
+        
+        // Delete Element after animation is done
         setTimeout(() => {
             element.remove();
         }, 300);
+    } else if(element != null) {
+        element.remove();
     }
 
-    if(activeToasts == 0) { toastId = 0; }
+    delete toastsList[id];
 }
 
-function clearToasts() {
+function clearToasts(force = false) {
     for(entry in toastsList) {
         // console.log(entry);
+        let t = toastsList[entry];
+        if(t != undefined && t.includes('noclose') == true && force != true) continue;
         closeToast(entry);
     }
 }
@@ -1526,29 +1573,23 @@ function setTheme(theme) {
 
 
 // Character info
-// function characterInfo(character) {
-//     console.log('characterInfo(): ' + character);
-//     let element = dom(`${character}_box`);
-//     let back = dom(`${character}_bio`);
-
-//     // Front
-//     if(element.classList.contains('charflip')) {
-//         element.classList.remove('charflip');
-//         back.classList.add('charflip_r');
-//     } else {
-//         element.classList.add('charflip');
-//         back.classList.remove('charflip_r');
-//     }
-// }
 function characterInfo(character) {
-    console.log('characterInfo: ' + character)
+    // console.log('characterInfo: ' + character);
+    let charbox = dom(`${character}_box`);
+
+    if(charbox.classList.contains('show_info')) {
+        charbox.classList.remove('show_info');
+    } else {
+        charbox.classList.add('show_info');
+    }
 }
 
 
 // Credits scroll
 const elCredits = dom('credits');
 var creditInterval;
-function startCredits() {
+function startCredits(toast = false) {
+    if(toast != false) { closeToast(toast); }
     console.log(`startCredits()`);
     closeDialog();
 

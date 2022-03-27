@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.10.3</title>
+    <title id="page_title">Carrot Clicker dev beta v1.10.4</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -39,6 +39,7 @@
 
     <!-- Gif overlay -->
     <img src="./assets/blank.png" alt="" id="confetti" class="hidden">
+    <div id="mouse_confetti"></div>
 
     <!-- Dialog Popup -->
     <!-- #region -->
@@ -567,40 +568,6 @@
         <div id="toasts_clear" onclick="clearToasts()">
             Close All
         </div>
-        <!-- <div class="toast background_red" id="toastID">
-            <h3>Title</h3>
-            <span class="toast_close" onclick="closeToast('ID')">X</span>
-            <p>Description</p>
-        </div> -->
-
-
-        <!-- <div id="${SOMETHING ID}" class="toast achievement_item">
-
-
-            <div class="achievement_details flex">
-                <img src="./assets/achievements/21_clicks_per_second.gif" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">
-                <div>
-                    <h2>Bill of The Century</h2>
-                    <p class="secondary_text">Do a thing, then another thing, then... um... something else?</p>
-                </div>
-            </div>
-
-
-            <div class="rewards_list">
-                <div class="reward flex">
-                    <img src="./assets/theme/theme_red.png" alt="${informalName}" class="reward_img">
-                    <div>
-                        <h4>${informalName}</h4>
-                        <p class="secondary_text">
-                            ${capitalizeFL(rewardType)}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-
-
     </div>
     <!-- #endregion -->
 
@@ -720,7 +687,7 @@
             <div id="fallingCarrotsArea"></div>
 
             <!-- Carrot image-->
-            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" onclick="onClick(true, 'click')" role="button" tabindex="0">
+            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" role="button" tabindex="0">
 
             <!-- Numbers/Info Section -->
             <div class="mini_stats">
@@ -818,25 +785,25 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[multibuySelector])" title="Level up" tabindex="0">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[mbsel])" title="Level up" tabindex="0">
                         
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_wooden_hoe" tabindex="0">
+                        <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[mbsel])" class="toolicon blackedout" id="bill_wooden_hoe" tabindex="0">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_stone_hoe" tabindex="0">
+                        <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[mbsel])" class="toolicon blackedout" id="bill_stone_hoe" tabindex="0">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_iron_hoe" tabindex="0">
+                        <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[mbsel])" class="toolicon blackedout" id="bill_iron_hoe" tabindex="0">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_gold_hoe" tabindex="0">
+                        <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[mbsel])" class="toolicon blackedout" id="bill_gold_hoe" tabindex="0">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_diamond_hoe" tabindex="0">
+                        <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[mbsel])" class="toolicon blackedout" id="bill_diamond_hoe" tabindex="0">
 
                         <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[multibuySelector])" class="toolicon blackedout" id="bill_netherite_hoe" tabindex="0">
+                        <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout" id="bill_netherite_hoe" tabindex="0">
                     </div>
 
                     <!-- Bio Card -->
@@ -876,25 +843,25 @@
                     <!-- Bottom -->
                     <div class="bottom hoecontainer">
 
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[multibuySelector])" class="levelupimg" title="Level up" tabindex="0">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_wooden_hoe" tabindex="0">
+                        <img src="./assets/tools/wood_hoe.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[mbsel])" class="toolicon blackedout" id="belle_wooden_hoe" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_stone_hoe" tabindex="0">
+                        <img src="./assets/tools/stone_hoe.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[mbsel])" class="toolicon blackedout" id="belle_stone_hoe" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_iron_hoe" tabindex="0">
+                        <img src="./assets/tools/iron_hoe.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[mbsel])" class="toolicon blackedout" id="belle_iron_hoe" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_gold_hoe" tabindex="0">
+                        <img src="./assets/tools/gold_hoe.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[mbsel])" class="toolicon blackedout" id="belle_gold_hoe" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_diamond_hoe" tabindex="0">
+                        <img src="./assets/tools/diamond_hoe.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[mbsel])" class="toolicon blackedout" id="belle_diamond_hoe" tabindex="0">
 
                         <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[multibuySelector])" class="toolicon blackedout" id="belle_netherite_hoe" tabindex="0">
+                        <img src="./assets/tools/netherite_hoe.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[mbsel])" class="toolicon blackedout" id="belle_netherite_hoe" tabindex="0">
                     </div>
 
                 </div>
@@ -903,7 +870,7 @@
                 <!--Gregory Rendering-->
                 <div class="Greg characterbox char_locked" id="greg_box">
                     <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                        Upgrade Greg to create and store hoes. The maximum amount of hoes you can hold is equal to his level. You only need 80% of a hoe's crafting cost to start crafting.
+                        Upgrade Greg to create and store hoes. The maximum amount of hoes you can hold is equal to his level. You only need 50% of a hoe's cost to start crafting.
                     </div>
                     <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')">
                     <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')">
@@ -938,31 +905,31 @@
                             <img src="./assets/icons/refresh.png" alt="" class="greg_spinny">
                         </div>
 
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[multibuySelector])" class="levelupimg" title="Level up" tabindex="0">
+                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0">
                         
                         <span id="wooden_hoe_price" class="hoe_price greg_margin_fix">Wooden</span>
                         <p class="Greg_Hoe_Number toolnumber greg_margin_fix" id="Greg_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/wood_hoe.png" class="toolicon blackedout greg_margin_fix" onclick="CreateHoe(0,multibuy[multibuySelector])" id="greg_wooden_hoe" tabindex="0">
+                        <img src="./assets/tools/wood_hoe.png" class="toolicon blackedout greg_margin_fix" onclick="CreateHoe(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0">
 
                         <span id="stone_hoe_price" class="hoe_price">Stone</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/stone_hoe.png" class="toolicon blackedout" onclick="CreateHoe(1,multibuy[multibuySelector])" id="greg_stone_hoe" tabindex="0">
+                        <img src="./assets/tools/stone_hoe.png" class="toolicon blackedout" onclick="CreateHoe(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0">
 
                         <span id="iron_hoe_price" class="hoe_price">Iron</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/iron_hoe.png" class="toolicon blackedout" onclick="CreateHoe(2,multibuy[multibuySelector])" id="greg_iron_hoe" tabindex="0">
+                        <img src="./assets/tools/iron_hoe.png" class="toolicon blackedout" onclick="CreateHoe(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0">
 
                         <span id="gold_hoe_price" class="hoe_price">Gold</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/gold_hoe.png" class="toolicon blackedout" onclick="CreateHoe(3,multibuy[multibuySelector])" id="greg_gold_hoe" tabindex="0">
+                        <img src="./assets/tools/gold_hoe.png" class="toolicon blackedout" onclick="CreateHoe(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0">
 
                         <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/diamond_hoe.png" class="toolicon blackedout" onclick="CreateHoe(4,multibuy[multibuySelector])" id="greg_diamond_hoe" tabindex="0">
+                        <img src="./assets/tools/diamond_hoe.png" class="toolicon blackedout" onclick="CreateHoe(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0">
 
                         <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
                         <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/netherite_hoe.png" class="toolicon blackedout" onclick="CreateHoe(5,multibuy[multibuySelector])" id="greg_netherite_hoe" tabindex="0">
+                        <img src="./assets/tools/netherite_hoe.png" class="toolicon blackedout" onclick="CreateHoe(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0">
                         </div>
                         
                         <!-- Progress Bar -->
@@ -1002,7 +969,7 @@
                     <div class="bottom">
                         <!-- Charles' buttons -->
                         <div
-                        onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[multibuySelector])"
+                        onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
                         id="ImproveWorkingConditions_button"
                         class="unbold shop_item pointer flex cant_afford"
                         tabindex="0">
@@ -1015,7 +982,7 @@
                         </div>
                         
                         <div
-                        onclick="BuyTome(Charles.tome.betterHoes,multibuy[multibuySelector])"
+                        onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
                         id="BetterHoes_button"
                         class="unbold shop_item pointer flex cant_afford"
                         tabindex="0">
@@ -1028,7 +995,7 @@
                         </div>
 
                         <div
-                        onclick="BuyTome(Charles.tome.decreaseWages,multibuy[multibuySelector])"
+                        onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
                         id="DecreaseWages_button"
                         class="unbold shop_item pointer flex cant_afford"
                         tabindex="0">
@@ -1360,6 +1327,10 @@
             <label for="enable_main_progress">
                 <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
                 Always-on-top progress bar
+            </label><br>
+            <label for="confetti_effects">
+                <input type="checkbox" class="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
+                Confetti effects
             </label><br><br>
 
             <!-- Sounds options -->

@@ -1716,7 +1716,7 @@ const achievements = {
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
         'reward': () => {
-            toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(); }, "View credits");
+            let sc = toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(sc); }, "View credits");
         },
         'pages': 10,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 3))', 100],
@@ -1795,7 +1795,7 @@ const achievements = {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
-        'reward': () => { confetti(2); },
+        'reward': () => { mouseConfetti(particles=[20,20], colorArray=confettiColors, 300) }, // confetti(2)
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',

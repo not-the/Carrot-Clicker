@@ -24,6 +24,12 @@ var n = 0;
 document.addEventListener("touchstart", function() {}, true);
 
 // Getting InnerHtml
+
+// Overlays
+const mcContainer =         dom('mouse_confetti');
+
+// Game
+const mainCarrot =      dom("main_carrot");
 const elMainPrestigePotential = dom("main_prestige_potential");
 const elPrestigePotential = dom('prestige_potential');
 const Basic_Info =          dom("Basic_Info");
@@ -175,7 +181,8 @@ const playerPrestigeTemplate = {
     },
 }
 const player1 = {
-    data_version: 2, // needs to be incremented by 1 any time any game object is changed
+    data_version: 3, // needs to be incremented by 1 any time any game object is changed
+    time_last_saved: false,
 
     // Progress
     Carrots: 0,
@@ -264,6 +271,7 @@ const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
 const Default_Belle_Boomerette = new Character("Farmer",0,250,[0,0,0,0,0,0]);
 const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0]);
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+Default_Gregory.crafting = false; // whether or not he is currently crafting
 const Default_Charles = {
     name:"Charles",
     type:"Scholar",
@@ -514,6 +522,7 @@ var preventSaveGame = false;
 function saveGame() {
     if(preventSaveGame == true || store("cookies_accepted") != "true") return;
     // console.log('Saving game...');
+    player.time_last_saved = Date.now();
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
     localStorage.setObject("Belle", Belle_Boomerette);
@@ -652,6 +661,7 @@ const settings_default = {
 
     full_numbers: false,        // boolean
     enableMainProgress: true,   // boolean
+    confetti_effects: true,     // boolean
 
     // UI
     theme: 'theme_dark',        // string
@@ -702,16 +712,15 @@ function clearSave() {
 //#region
 
 //multibuy
-const multibuy = [1,10,100];
-var multibuySelector = 0;
-function multibuySpin(){
-    if(multibuy[multibuy.length-1]>multibuy[multibuySelector]){
-        multibuySelector++;
-    } else {
-        multibuySelector=0;
-    }
+const multibuy = [1,10,100]; // multibuy multipliers
+var mbsel = 0;               // multi-buy selector
+function multibuySpin() {
+    if(multibuy[multibuy.length-1] > multibuy[mbsel]) { mbsel++; }
+    else { mbsel=0; }
 
+    // Update page
     characterPrices();
+    characterButtons();
     updateHoePrices();
     DisplayAllHoes();
 }
@@ -729,19 +738,23 @@ function ClearLocalStorage(disableReload) {
     location.reload();
 }
 
+// Random number shorthand
+function r(max) { return Math.floor(Math.random() * max); }
+
 // Store click speed
 var clickSpeed = 0;
 var clickSpeedBest = 0;
 var clickArray = [];
 
 // Earn carrots function
+/**
+ * 
+ * @param {number} amount Amount of carrots to be earned
+ * @param {string} type Can be click, idle, or bonus. For statistics.
+ * @param {boolean} useMousePos If the number popup should appear at mouse position or not
+ */
 function earnCarrots(amount, type, useMousePos = false) {
-    // Incredibly cheap anticheat, ignore if window isn't focused, ie the console is open
-    // if(document.hasFocus() == false) return;
-
-    if(type == 'bonus') {
-        popupHandler(useMousePos, amount, 'falling');
-    }
+    if(type == 'bonus') { popupHandler(useMousePos, amount, 'falling'); }
 
     player.Carrots += amount;
     player.prestige.carrots += amount;
@@ -773,9 +786,15 @@ function earnCarrots(amount, type, useMousePos = false) {
     }
 
     carrotCount();
+    characterButtons();
 }
 
 // Earn currency
+/**
+ * 
+ * @param {number} amount Amount of cash to be earned
+ * @param {string} type 'bonus' will use mouse position
+ */
 function earnCash(amount, type) {
     if(type == 'bonus') {
         popupHandler(true, amount, 'cash');
@@ -794,13 +813,55 @@ function earnCash(amount, type) {
 // var clickMethodLimit = 'none';
 // var clickMethodTimer = 0;
 var fallingCarrotPromiser = 0;
-function onClick(useMousePos, method = 'click') {
+
+// Carrot event listeners
+var holdDelay;
+var holdClock;
+mainCarrot.addEventListener('mousedown',    () => { holdStart(); });
+mainCarrot.addEventListener('touchstart',   () => { holdStart(); });
+function holdStart(useMousePos = true) {
+    clearTimeout(holdDelay);
+    holdDelay = setTimeout(() => {
+        clearInterval(holdClock)
+        holdClock = setInterval(() => {
+            if(document.hidden) { clearInterval(holdClock); return; }
+            onClick(useMousePos, 'click');
+        }, 1000 / 3); // replace 3 with clicks per second
+    }, 250);
+}
+mainCarrot.addEventListener('mouseup',      () => { holdStop(); });
+mainCarrot.addEventListener('mouseout',     () => { holdStop(); });
+mainCarrot.addEventListener('touchend',     () => { holdStop(); });
+mainCarrot.addEventListener('touchcancel',  () => { holdStop(); });
+window.onblur = () => { holdStop(); }
+function holdStop() {
+    clearTimeout(holdDelay);
+    clearInterval(holdClock);
+}
+
+// Carrot click
+mainCarrot.addEventListener('click', () => { onClick(true, 'click'); });
+var clickMethod = -1; // -1 = any, 0 = click, 1 = key
+var clickMethodTimer;
+function onClick(useMousePos, method='click', source=0) {
+    // Prevent click/spacebar at the same time
+    if(clickMethod == -1) {
+        clickMethod = source;
+        clearTimeout(clickMethodTimer);
+        clickMethodTimer = setTimeout(() => { clickMethod = -1; }, 1000);
+    }
+
+    console.log(clickMethod, source);
+
+    if(clickMethod != source && clickMethod != -1) return;
+
     // Grant carrots
     earnCarrots(player.cpc, 'click');
 
     // Page stuff
     carrotCount();
     popupHandler(useMousePos, DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort));
+    mouseConfetti([1, 2], ccCarrot);
 
     // Click speed
     clickSpeedHandler(true);
@@ -841,22 +902,40 @@ function cashCount() {
 }
 function characterPrices() {
     // Update page
-    eInnerText(elCharacterUpCost.bill, `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[multibuySelector], "query"), 1)}`);
-    eInnerText(elCharacterUpCost.belle, `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[multibuySelector], "query"), 1)}`);
-    eInnerText(elCharacterUpCost.greg, `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[multibuySelector], "query"), 1)}`);
+    eInnerText(
+        elCharacterUpCost.bill,
+        `${DisplayRounded(CharacterLevelUpPrice(Boomer_Bill, multibuy[mbsel], "query"), 1)}`,
+    );
+    eInnerText(
+        elCharacterUpCost.belle,
+        `${DisplayRounded(CharacterLevelUpPrice(Belle_Boomerette, multibuy[mbsel], "query"), 1)}`,
+    );
+    eInnerText(
+        elCharacterUpCost.greg,
+        `${DisplayRounded(CharacterLevelUpPrice(Gregory, multibuy[mbsel], "query"), 1)}`,
+    );
     
     // Character levels
     eInnerText(elCharacterLevel.bill, `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`);
     eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
     eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
 }
+function characterButtons() {
+    // Upgrade button style
+    if(player.Carrots >= Boomer_Bill.lvlupPrice) { dom('Bill_level_up').classList.remove('grayedout'); }
+    else { dom('Bill_level_up').classList.add('grayedout'); }
+    if(player.Carrots >= Belle_Boomerette.lvlupPrice) { dom('Belle_level_up').classList.remove('grayedout'); }
+    else { dom('Belle_level_up').classList.add('grayedout'); }
+    if(player.Carrots >= Gregory.lvlupPrice) { dom('Greg_level_up').classList.remove('grayedout'); }
+    else { dom('Greg_level_up').classList.add('grayedout'); }
+}
 function updateHoePrices() {
-    eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[multibuySelector]),1)}`);
-    eInnerText(elHoePrices.stone, `${DisplayRounded(HoeCost(1,multibuy[multibuySelector]),1)}`);
-    eInnerText(elHoePrices.iron, `${DisplayRounded(HoeCost(2,multibuy[multibuySelector]),1)}`);
-    eInnerText(elHoePrices.gold, `${DisplayRounded(HoeCost(3,multibuy[multibuySelector]),1)}`);
-    eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[multibuySelector]),1)}`);
-    eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[multibuySelector]),1)}`);
+    eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[mbsel]),1)}`);
+    eInnerText(elHoePrices.stone, `${DisplayRounded(HoeCost(1,multibuy[mbsel]),1)}`);
+    eInnerText(elHoePrices.iron, `${DisplayRounded(HoeCost(2,multibuy[mbsel]),1)}`);
+    eInnerText(elHoePrices.gold, `${DisplayRounded(HoeCost(3,multibuy[mbsel]),1)}`);
+    eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[mbsel]),1)}`);
+    eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[mbsel]),1)}`);
 }
 function updateCharlesShop() {
     // Highlight when affordable
@@ -879,9 +958,9 @@ function updateCharlesShop() {
     }
 
     // Update tome prices
-    eInnerText(elCharles.prices.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[multibuySelector],"query")} Golden Carrots`);
-    eInnerText(elCharles.prices.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[multibuySelector],"query")} Golden Carrots`);
-    eInnerText(elCharles.prices.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[multibuySelector],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[mbsel],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[mbsel],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query")} Golden Carrots`);
 
     // Update tome counts
     eInnerText(tomeCount.iwc, `x${Charles.tome.improveWorkingConditions.value}`);
@@ -996,7 +1075,7 @@ var cpsInterval = setInterval(CarrotsPerSecond,50);
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     // console.log(`CharacterLevelUpPrice(${characterString(character)}, ${amount}, ${mode})`);
     // console.log(mode + ' !!!!!!');
-    let r=character.lvlupPrice; 
+    let r = character.lvlupPrice; 
     let r2=0;
 
     function multibuyPrice(PriceIncrease) {
@@ -1040,11 +1119,26 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
         }
     }
     // Apply
-    if(mode=="apply") character.lvlupPrice=Math.floor(r);
+    if(mode=="apply") character.lvlupPrice = Math.floor(r);
     // return Math.floor(r2);
-    return character.lvlupPrice;
+    // console.log(r, r2);
+    return amount == 1 ? character.lvlupPrice : r2;
 }
+
+// Bill price debug
+// var billarray = [100, 111, 123, 136, 150, 166, 184, 204, 226, 250, 277, 307, 340, 377, 418, 463, 513, 569, 631, 700, 777, 862, 956, 1061, 1177, 1306, 1449, 1608, 1784, 1980, 2197, 2438, 2706, 3003, 3333, 3699, 4105, 4556, 5057, 5613, 6230, 6915, 7675, 8519, 9456, 10496, 11650, 12931, 14353, 15931, 17683, 19628, 21787, 24183, 26843, 29795, 33072, 36709, 40746, 45228, 50203, 55725, 61854, 68657, 76209, 84591, 93896, 104224, 115688, 128413, 142538, 158217, 175620, 194938, 220279, 248915, 281273, 317838, 359156, 405846, 458605, 518223, 585591, 661717, 747740, 844946, 954788, 1078910, 1219168, 1377659, 1556754, 1759132, 1987819, 2246235, 2538245, 2868216, 3241084, 3662424, 4138539, 4511007];
+// function billDebug(level, from=1) {
+//     let total = 0;
+//     for(i = from; i <= level; i++) {
+//         total += billarray[i - 1];
+//     }
+//     return total;
+// }
+
+// Level up
 function LevelUp(character=Boomer_Bill, amount=1) {
+    // billarray.push(CharacterLevelUpPrice(character,amount));
+    // console.log(billarray);
     if(characterQuery(characterString(character)) == false) {
         // toast('Nice Try', 'That character has not been unlocked');
         return;
@@ -1057,14 +1151,19 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
         // Update page
         characterPrices();
-    } else {
-        toast(
-            'Cannot afford',
-            `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character))}`,
-            '', false, true
-        );
-    }
+        characterButtons();
+
+        // Animation
+        mouseConfetti([2, 3], ccGold);
+    } // else {
+    //     toast(
+    //         'Cannot afford',
+    //         `You need ${DisplayRounded(character.lvlupPrice, 1)} carrots to level up ${ capitalizeFL(characterString(character))}`,
+    //         '', false, true
+    //     );
+    // }
 }
+
 
 
 // Prestige
@@ -1129,6 +1228,7 @@ function Prestige() {
 
     // Update page
     characterPrices();
+    characterButtons();
     updateCharlesShop();
     // updatePrestigeMenu();
     showPrestigeStats();
@@ -1183,7 +1283,8 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
         player.golden_carrots -= CharlesUpgradePrices(tome,amount);
         CharlesUpgradePrices(tome,amount,"apply");
 
-        updateCharlesShop();    
+        updateCharlesShop();
+        mouseConfetti([3, 8], ccWhite) 
     } else {
         toast(
             'Cannot afford',
@@ -1260,7 +1361,7 @@ function gregLevelTest(type, minusone = true, debug) {
     return true;
 }
 
-function CreateHoe(type=0, amount=1) {
+function CreateHoe(type=0, amount=1, progress=0) {
     // console.log(`CreateHoe(${type}, ${amount})`);
 
     // Greg unlock check
@@ -1297,7 +1398,7 @@ function CreateHoe(type=0, amount=1) {
     
     let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
-    if(price>=(player.Carrots*2)){
+    if(price >= player.Carrots * 2){
         toast("Too Expensive!", "That hoe is currently too expensive.",
         '', false, true);
         return;
@@ -1311,8 +1412,8 @@ function CreateHoe(type=0, amount=1) {
         var i = 0;
         if (i == 0) {
             i = 1;
-            var p = 0;
-            var id = setInterval(frame,100);
+            var p = progress;
+            var id = setInterval(frame, 100);
 
             // Main progress bar
             if(settings.enableMainProgress == true) {
@@ -1324,9 +1425,10 @@ function CreateHoe(type=0, amount=1) {
             dom('greg_progress_image').src = hoeImg[type];
             dom('greg_crafting_info').classList.remove('inactive');
             dom('greg_crafting_info').title = 'Crafting...';
+            // mouseConfetti([1, 4], ccWhite);
 
             function frame() {
-                if (p >= price) {
+                if(p >= price) {
                     clearInterval(id);
                     i = 0;
                     player.Carrots+=p-price;
@@ -1341,6 +1443,15 @@ function CreateHoe(type=0, amount=1) {
 
                     Gregory.Hoes[type]+=amount;
                     n=0;
+
+                    // Statistics
+                    player.prestige.hoes.crafted[type] += amount;
+                    player.prestige.hoes.craftedTotal += amount;
+
+                    player.lifetime.hoes.crafted[type] += amount;
+                    player.lifetime.hoes.craftedTotal += amount;
+
+                    Gregory.crafting = false;
                 } else {
                     let adjust = 0.01 * player.Carrots
                     p += adjust;
@@ -1352,17 +1463,12 @@ function CreateHoe(type=0, amount=1) {
                         elMainProgressBar.style.width  = `${100*(p/price)}%`;
                     }
 
+                    // Save crafting progress in case of page refresh
+                    Gregory.crafting = [type, amount, p];
                 }
 
             }
         }
-
-        // Statistics
-        player.prestige.hoes.crafted[type] += amount;
-        player.prestige.hoes.craftedTotal += amount;
-
-        player.lifetime.hoes.crafted[type] += amount;
-        player.lifetime.hoes.craftedTotal += amount;
 
         // Update page
         DisplayAllHoes();
@@ -1378,7 +1484,7 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
     // Greg unlock check
     if(characterQuery('greg') == false) {
         // toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
-       return;
+        return;
     }
 
     if(Gregory.Hoes[type]>=amount){
@@ -1393,6 +1499,36 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
         player.lifetime.hoes.equipped+=1;
         character.Hoes[type]+=amount;
         Gregory.Hoes[type]-=amount;
+
+        // Animate
+        // var from =      elHoes['greg'][type];
+        // var to =        elHoes[characterString(character)][type];
+        // var rect_from = from.getBoundingClientRect();
+        // var rect_to =   to.getBoundingClientRect();
+
+        // // Create
+        // var clone = document.createElement('img');
+        // clone.src = from.src;
+
+        // // Move to start
+        // clone.style.transform = `translate(${rect_from.left}px, ${rect_from.top}px)`;
+        // clone.className = 'toolicon';
+        // mcContainer.append(clone);
+
+        // // Move to destination
+        // setTimeout(() => {
+        //     console.log(clone.style.transform);
+        //     clone.style.transform = `translate(${rect_to.left.toFixed(1)}px, ${rect_to.top.toFixed(1)}px))`;
+        //     console.log(clone.style.transform);
+        //     console.log(`translate(${rect_to.left}px, ${rect_to.top}px))`);
+        //     clone.style.width = '32px';
+        //     clone.style.hoeImg = '32px';
+        // }, 20);
+
+        // Delete
+        // setTimeout(() => {
+        //     clone.remove();
+        // }, 500);
     }
 }
 
@@ -1451,7 +1587,7 @@ function DisplayHoe(character, type) {
         // Can afford and is unlocked
         if(
             !gregLevelTest(type, false)
-            && player.Carrots / 0.8 >= Gregory.HoePrices[type]
+            && player.Carrots >= Gregory.HoePrices[type] / 2
         ) {
             // console.log(type + ': unlocked and CAN afford');
             img.classList.remove('blackedout');
@@ -1477,15 +1613,19 @@ function DisplayHoe(character, type) {
     // Number
     if(character.Hoes[type] == Gregory.lvl && Gregory.lvl != 0) {
         eInnerText(count, 'MAX');
-        count.classList.add('toolfull');
+        img.classList.remove('blackedout');
+        img.classList.remove('grayedout');
+        // count.classList.add('toolfull');
     }
     else if(character.Hoes[type] >= 1) {
         // Not full, show number
-        count.classList.remove('toolfull');
+        // count.classList.remove('toolfull');
+        img.classList.remove('blackedout');
+        img.classList.remove('grayedout');
         eInnerText(count, `x${character.Hoes[type]}`);
     } else {
         // Hide number
-        count.classList.remove('toolfull');
+        // count.classList.remove('toolfull');
         eInnerText(count, '');
     }
 }
@@ -1563,7 +1703,7 @@ function gameLoop() {
     eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
     eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
     //The Basic info for the player, Carrots; Cpc; Cps
-    eInnerText(dom("multibuy"), multibuy[multibuySelector] + "x");
+    eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
 
     // Costs to level up characters
 

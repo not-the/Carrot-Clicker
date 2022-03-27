@@ -1,4 +1,35 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.11.0
+    3-26-2022
+// ----------------------------------------------------------- //
+
+Carrot Clicking:
+- Moved over the main carrot click to an event listener
+- Holding down left click or your carrot keybind will give you a very weak form of autoclicking (3cps)
+- You can no longer click and use the carrot keybind at the same time
+
+Other changes:
+- data_version has been increased to 3
+- Toasts: no_close gives the toast immunity from clearToasts
+- Added a new mouseConfetti() and added it as visual feedback for certain actions like clicking the carrot or upgrading characters
+- New setting: confetti_effects - disables confetti effects
+- Statistics related to hoes crafted will now only increase after Greg is done crafting
+- Character's upgrade buttons will now be greyed out when you can't afford it
+- Clicking a character's info button will bring up their tooltip, clicking it again will hide it
+  + Hovering over a character will no longer bring up the tooltip
+- Hoes now correctly highlight when they can be bought (didn't realize the minimum needed to craft was 50% and not 80%)
+  + Also fixed Greg's tooltip incorrectly saying 80%
+- Fixed an issue where hoes would be blacked out if you had some equipped but none ready to equip
+- Removed the "Cannot afford" toast when clicking the upgrade button
+- The game will now save if you were crafting a hoe and continue when you refresh the page
+- Clicking the "View Credits" toast will now close the toast
+- Left in but commented out some debugging tools for calculating/comparing the accuracy of Bill's multibuy prices
+- Left in but commented out a very basic offline earnings calculator
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.10.3
     3-25-2022
 // ----------------------------------------------------------- //
