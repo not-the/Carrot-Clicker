@@ -1333,12 +1333,12 @@ function HoeCost(type=0,amount=1,mode="query"){
 
 // Hoe images
 const hoeImg = [
-    './assets/tools/wood_hoe.png',
-    './assets/tools/stone_hoe.png',
-    './assets/tools/iron_hoe.png',
-    './assets/tools/gold_hoe.png',
-    './assets/tools/diamond_hoe.png',
-    './assets/tools/netherite_hoe.png',
+    './assets/tools/tool_0.png',
+    './assets/tools/tool_1.png',
+    './assets/tools/tool_2.png',
+    './assets/tools/tool_3.png',
+    './assets/tools/tool_4.png',
+    './assets/tools/tool_5.png',
 ]
 
 function gregLevelTest(type, minusone = true, debug) {

@@ -411,11 +411,11 @@ const cosmetics = {
         // Netherite hoe
         "netherite_hoe": {
             'name': 'Netherite hoe',
-            'preview': './assets/tools/netherite_hoe.png',
+            'preview': './assets/tools/tool_5.png',
             'desc': 'All hail',
 
             'farmable': 'Netherite hoe',
-            'image': './assets/tools/netherite_hoe.png',
+            'image': './assets/tools/tool_5.png',
             'render_type': 'pixel',
         },
         // Cursor
@@ -449,11 +449,11 @@ const cosmetics = {
         },
         "ghost_carrot": {
             'name': 'Ghost Carrot',
-            'preview': './assets/theme/Ghost_carrot.png',
+            'preview': './assets/theme/ghost_carrot.png',
             
-            'desc': 'description',
+            'desc': 'Spooky',
             'farmable': 'Ghost Carrot',
-            'image': './assets/theme/Ghost_carrot.png',
+            'image': './assets/theme/ghost_carrot.png',
         },
         "rainbow_carrot": {
             'name': 'Rainbow Carrot',
@@ -677,7 +677,7 @@ const cosmetics = {
     tools: {
         'default': {
             'name': 'Tools (Default)',
-            'preview': './assets/tools/wood_hoe.png',
+            'preview': './assets/tools/tool_0.png',
             'desc': 'Default tools',
             'group': 'default',
 
@@ -1679,7 +1679,7 @@ const achievements = {
     '1_netherite_hoe': {
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement (Netherite Hoe)',
-        'image': './assets/tools/netherite_hoe.png',
+        'image': './assets/tools/tool_5.png',
         'reward': 'cosmetic:farmable/netherite_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],

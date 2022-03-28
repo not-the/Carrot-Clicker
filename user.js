@@ -1096,7 +1096,8 @@ function onLoad() {
     // console.log('Running onLoad()');
 
     // Flag for early playtesters
-    store('playtest', 'yes');
+    // store('playtest', 'yes');
+    player.flags['playtest', true];
 
 
     // Start music
@@ -1278,9 +1279,11 @@ function onLoad() {
         cosmeticsGridMode();
     }
     // Restart unfinished crafting job (Greg)
-    if(Gregory.crafting != false) {
+    if(typeof Gregory.crafting == 'array' && Array.isArray(Gregory.crafting) && Gregory.crafting.length == 3) {
         console.log('[Greg] Restarting unfinished craft job');
-        CreateHoe(...Gregory.crafting);
+        try { CreateHoe(...Gregory.crafting); }
+        catch (error) { console.error(error); }
+        
     }
     
     // OFFLINE EARNINGS
@@ -1533,7 +1536,7 @@ function onLoad() {
     }
 
 
-    // startCredits();
+    startCredits();
 
 
 
