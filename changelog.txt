@@ -6,6 +6,7 @@
 - Switched over the playtester flag to use the flags system
 - Added additonal checks to prevent a crash when trying to restart an invalid crafting job
 - Fixed character tooltips going offscreen on mobile
+- Some changes/additions to the credits screen
 - Replaced the cookie cosmetic's image
 - Fixed the ghost carrot cosmetic and gave it a description
 - Changed the tools' filenames

@@ -1536,7 +1536,7 @@ function onLoad() {
     }
 
 
-    startCredits();
+    // startCredits();
 
 
 
