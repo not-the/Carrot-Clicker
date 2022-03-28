@@ -1082,48 +1082,80 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
 
     function multibuyPrice(PriceIncrease) {
         r += (1 - DecreaseWagesEffects()) * Math.floor(r * PriceIncrease);
-        r2 += r;
         if(amount==1){
             r2=r;
+            return;
         }
+        r2 += r; 
         // console.log(`multibuyPrice(${PriceIncrease})\nr = ${r}\nr2 = ${r2}`);
     }
     // Multibuy loop
-    for(i=0; i<amount; i++){
+    if(amount==1){
         // Gregory
         if(character==Gregory){
             if(Gregory.lvl+i<50){
-                multibuyPrice(0.14, "character", r, r2);
+                multibuyPrice(0.14);
             }else{
-                multibuyPrice(0.21, "character", r, r2);
+                multibuyPrice(0.21);
             }
         }
         // Belle
         else if(character==Belle_Boomerette){
             if(Belle_Boomerette.lvl+i<75){
-                multibuyPrice(0.11, "character", r, r2);
+                multibuyPrice(0.11);
             }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
-                multibuyPrice(0.12, "character", r, r2)
+                multibuyPrice(0.12)
             }else{
-                multibuyPrice(0.08, "character", r, r2)
+                multibuyPrice(0.08)
             }   
         }
         // Bill
         else if(character==Boomer_Bill){
             if(Boomer_Bill.lvl+i<75){
-                multibuyPrice(0.11, "character", r, r2);
+                multibuyPrice(0.11);
             }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
-                multibuyPrice(0.13, "character", r, r2);
+                multibuyPrice(0.13);
             }else{
-                multibuyPrice(0.09, "character", r, r2);
+                multibuyPrice(0.09);
+            }
+            
+        }
+    }else{
+        for(i=1; i<amount; i++){
+        // Gregory
+        if(character==Gregory){
+            if(Gregory.lvl+i<50){
+                multibuyPrice(0.14);
+            }else{
+                multibuyPrice(0.21);
+            }
+        }
+        // Belle
+        else if(character==Belle_Boomerette){
+            if(Belle_Boomerette.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                multibuyPrice(0.12)
+            }else{
+                multibuyPrice(0.08)
+            }   
+        }
+        // Bill
+        else if(character==Boomer_Bill){
+            if(Boomer_Bill.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                multibuyPrice(0.13);
+            }else{
+                multibuyPrice(0.09);
             }
             
         }
     }
+    }
+    
     // Apply
     if(mode=="apply") character.lvlupPrice = Math.floor(r);
-    // return Math.floor(r2);
-    // console.log(r, r2);
     return amount == 1 ? character.lvlupPrice : r2;
 }
 
@@ -1316,17 +1348,17 @@ function HoeCost(type=0,amount=1,mode="query"){
     var p2 = 0;
     if(amount==1){
         if(mode=="apply"){
-            Gregory.HoePrices[type]+=(0.01*p);
+            Gregory.HoePrices[type]+=(0.02*p);
         }
         return p;
     }
     for(j=0;j<amount;j++){
-        p+=(0.09*p);
+        p+=(0.02*p);
         p2+=p;     
     }
 
     if(mode=="apply"){
-        Gregory.HoePrices[type]=p2;
+        Gregory.HoePrices[type]=p;
     }
     return p2;
 }

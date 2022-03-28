@@ -1097,7 +1097,7 @@ function onLoad() {
 
     // Flag for early playtesters
     // store('playtest', 'yes');
-    player.flags['playtest', true];
+    player.flags['playtest']=true;
 
 
     // Start music
