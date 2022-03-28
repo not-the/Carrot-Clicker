@@ -1533,7 +1533,7 @@ function onLoad() {
     }
 
 
-    startCredits();
+    // startCredits();
 
 
 
