@@ -1,11 +1,33 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.11.4
+    4-2-2022
+// ----------------------------------------------------------- //
+
+- Updated some themes to alter the way confetti looks
+- Misc fixes to theme CSS
+- Removed some unused code
+- Fixed an oversight where the golden carrot explanation you get after prestiging for the first time wouldn't appear
+- Fixed toasts not having a dismiss animation
+- Added to the credits
+- Made overlay elements use 100vh instead of 100% to prevent rescaling on iOS
+- Commented out the custom theme for now
+- Fixed the backdrop not having a blur effect in webkit browsers
+- Carl's shop items will now animate when bought
+- Characters will now animate when unlocked
+- Replaced the image the pineapple cosmetic uses
+- Replaced the image falling cash uses
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.11.3
     3-28-2022
 // ----------------------------------------------------------- //
 
 - Hoe Multibuy System Works(Fingers Crossed)
 - Character Multibuy WIP but the numbers are closer.
--Fixed Kal's typo
+- Fixed Kal's typo
 
 ~ JJ
 

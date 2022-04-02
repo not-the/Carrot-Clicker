@@ -272,7 +272,7 @@ var keyCarrotFiring = false;
 document.addEventListener('keydown', event => {
     let key = event.key;
     if(key == " ") {
-        event.preventDefault();   
+        event.preventDefault();
     }
 
     key = interpretKey(key);
@@ -328,8 +328,9 @@ const keyCodes = [
 var keyTrigger = [];
 var easterEgg = 0;
 function eggUp() {
-    easterEgg += easterEgg < 100 ? 1 : 0;
-    mouseConfetti([1, easterEgg == 100 ? 5 : Math.floor(easterEgg/5)], ccCarrot);
+    easterEgg += easterEgg < 101 ? 1 : 0;
+    mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
+    if(easterEgg == 100) { mouseConfetti([20,20], confettiColors, 300); }
 }
 var equipWaiting = -1;
 var equipToastID = false;
@@ -827,8 +828,10 @@ function unlock(type, thingToUnlock, subtype, raw) {
     }
     // Character
     else if(type == 'character') {
+        let charbox = dom(`${thingToUnlock}_box`);
+        if(characterQuery(thingToUnlock) == false) { charbox.classList.add('char_anim'); }
         player.characters[thingToUnlock] = true;
-        dom(`${thingToUnlock}_box`).classList.remove('char_locked');
+        charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
@@ -885,7 +888,7 @@ function purchase(source, type, item, subtype = false) {
     // console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
     if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
-        toast('Whoops', 'You already own this');
+        toast('Whoops', 'You already own this', '', false, true);
 
         Carl.shop[type][raw].bought = true;
         populateCarl();
@@ -920,8 +923,14 @@ function purchase(source, type, item, subtype = false) {
                 unlock(type, item, subtype);
 
                 cashCount();
-                populateCarl();
                 toast('', `Item bought: ${raw} (${type})`);
+
+                let element = dom(`carl_shop_${raw}`)
+                element.classList.add('shop_out');
+                setTimeout(() => {
+                    populateCarl();
+                    // element.remove();
+                }, 170);
             }
             // Can't afford
             else {
@@ -947,9 +956,7 @@ function allCharQuery() {
         && characterQuery('charles') == true
         && characterQuery('carl') == true
         // And so on
-    ) {
-        return true;
-    }
+    ) { return true; }
     return false;
 }
 
@@ -1389,7 +1396,7 @@ function onLoad() {
         //#endregion
         
         // Put dev panel in settings
-        $('#dev').innerHTML = /* html */
+        $('#devp').innerHTML = /* html */
         `<div class="footer_bottom" style="display: block; padding: 16px 24px;">
             <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
 

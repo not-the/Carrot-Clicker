@@ -702,6 +702,11 @@
 .theme_terminal #tripane nav .tab::before {
     margin-right: -7px;
 }
+.theme_terminal .small_confetti {
+    background-color: white !important;
+    width: 10px !important;
+    height: 10px !important;
+}
 
 /* Main */
 .theme_terminal .Basic_Info {
@@ -760,7 +765,7 @@
     position: absolute;
     left: 0;
 } */
-.theme_terminal .button_icon {
+.theme_terminal .button_icon:not(.char_mini_button) {
     visibility: hidden;
     position: absolute;
 }
@@ -1074,6 +1079,7 @@
 /* Status bar */
 .theme_chatapp .Basic_Info {
     background-color: #202225;
+    border-color: transparent;
 }
 .theme_chatapp .Basic_Info,
 .theme_chatapp #info_dropdown {

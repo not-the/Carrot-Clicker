@@ -345,12 +345,12 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
-            'theme_custom': {
-                currency: 'cash',
-                price: 80,
-                available: false,
-                bought: false,
-            },
+            // 'theme_custom': {
+            //     currency: 'cash',
+            //     price: 80,
+            //     available: false,
+            //     bought: false,
+            // },
         },
         cosmetic: {
             // Bundle
@@ -1256,8 +1256,8 @@ function Prestige() {
     tips.tracker=0;
 
     // Tutorial message
-    if(player.lifetime.prestige_count == 0) {
-        toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.');
+    if(player.lifetime.prestige_count == 1) {
+        let toaster = toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); });
     }
 
     // Update page
@@ -1322,7 +1322,7 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     } else {
         toast(
             'Cannot afford',
-            `You need ${DisplayRounded(tome.price, 1)} Golden Carrots to buy this Tome`,
+            `You need ${DisplayRounded(tome.price, 1)} Golden Carrots to buy this tome`,
             '', false, true
         );
     }
@@ -1401,7 +1401,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
     // Greg unlock check
     if(characterQuery('greg') == false) {
         // toast('Nice try', 'That character hasn\'t been unlocked yet.', 'rgb');
-       return;
+        return;
     }
 
     // Return if a hoe is already in progress

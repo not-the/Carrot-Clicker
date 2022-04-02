@@ -280,7 +280,17 @@ function closeDialog(doAction, backdrop = false) {
  * @param {string}   button_name The name the button will use. Is ignored if button_action isn't specified. Will default to "Done"
  * @returns {number} Returns the ID of the toast that was created
  */
-function toast(title = '', desc = '', color = '', persistent, replaceable, achievement = false, hide_close = false, button_action = false, button_name = 'Done') {
+function toast(
+    title          = '',
+    desc           = '',
+    color          = '',
+    persistent     = false,
+    replaceable    = false,
+    achievement    = false,
+    hide_close     = false,
+    button_action  = false,
+    button_name    = 'Done',
+) {
     // Replace old if replace is true
     if(toastsList[toastID - 1] != undefined && toastsList[toastID - 1].includes('replace') == true) {
         closeToast(toastID - 1, false);
@@ -395,17 +405,10 @@ function closeToast(id, animate = true) {
     // No animation
     if(animate == true && element != null) {
         // Dismiss Animation
-        if(t != undefined && t.includes('replace') == false) {
-            element.classList.add("toast_out");
-        }
-        
-        // Delete Element after animation is done
-        setTimeout(() => {
-            element.remove();
-        }, 300);
-    } else if(element != null) {
-        element.remove();
+        element.classList.add("toast_out");
+        setTimeout(() => { element.remove(); }, 300);
     }
+    else if(element != null) { element.remove(); }
 
     delete toastsList[id];
 }
@@ -430,14 +433,11 @@ const tripane           = dom('tripane');
 const infoPanel         = dom("stats-panel");
 const achievementsPanel = dom("achievements-panel");
 const settingsPanel     = dom("settings-panel");
-// const devPanel          = dom("dev-panel");
 
 // Tab Buttons
 const infoTab         = dom("stats-panel-button");
 const achievementsTab = dom("achievements-panel-button");
 const settingsTab     = dom("settings-panel-button");
-// const devTab          = dom("dev-panel-button");
-// const panelReset = "visibility: hidden; position: absolute; transform: translateY(-100%)";
 
 // Change panel
 function panelChange(to, noSound = false) {
@@ -451,15 +451,11 @@ function panelChange(to, noSound = false) {
         infoTab.classList.remove("activetab");
         achievementsTab.classList.remove("activetab");
         settingsTab.classList.remove("activetab");
-        // devTab.classList.remove("activetab");
-
-        
 
         // Panel clear
         infoPanel.classList.remove('unremove');
         achievementsPanel.classList.remove('unremove');
         settingsPanel.classList.remove('unremove');
-        // devPanel.classList.remove('unremove')
 
         // Unhide selected panel
         dom(to + "-button").classList.add("activetab");
@@ -472,11 +468,6 @@ function panelChange(to, noSound = false) {
         currentPanel = to;
     }
 
-    // Reset Statistics Panel
-    // if(to !== "stats-panel") {
-    //     elStatistics.innerHTML = statLoading;
-    // }
-
     // Update achievements list
     if(to == 'achievements-panel' && achieveHTMLupdate == true) {
         populateAchievements();
@@ -486,11 +477,6 @@ function panelChange(to, noSound = false) {
     } else {
         clearInterval(statsInterval);
     }
-
-    // Change container size
-    // let panelHeight = dom(currentPanel).clientHeight;
-    // console.log(panelHeight);
-    // tripane.style.height = `${panelHeight + 33}px`;
 }
 //#endregion
 
@@ -569,7 +555,7 @@ function fallingCarrot() {
     // 2% chance the drop is money instead
     let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
 
-    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/coin.png';
+    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
     element.id = fallingID;
     fallingID++;
@@ -876,22 +862,6 @@ function setCosmetic(target, to, resetState = false) {
 
 /* ----- Themes ----- */
 //#region 
-// Theme dropdown eventListener
-// const optionTheme = dom('theme_dropdown');
-// optionTheme.addEventListener('change', () => {
-//     setTheme(optionTheme.value);
-// });
-
-// Theme class
-// class theme {
-//     constructor(name, image, desc, cosmetic) {
-//         this.name = name;
-//         this.image = image;
-//         this.desc = desc;
-//         this.cosmetic = cosmetic;
-//     }
-// }
-
 
 // Populate theme switcher list on page load
 function populateThemeList() {

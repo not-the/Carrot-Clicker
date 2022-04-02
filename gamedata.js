@@ -207,13 +207,13 @@ const themes = {
         cosmetic: 'bundle/blockgame',
         accent:   '#3c2a1d'
     },
-    'theme_custom': {
-        name: 'Custom Theme',
-        image: './assets/Carrot Clicker.png',
-        desc: 'Make your own theme!',
-        cosmetic: false,
-        // accent: false
-    }
+    // 'theme_custom': {
+    //     name: 'Custom Theme',
+    //     image: './assets/Carrot Clicker.png',
+    //     desc: 'Make your own theme!',
+    //     cosmetic: false,
+    //     // accent: false
+    // }
 };
 const themesKeys = Object.keys(themes);
 //#endregion
@@ -1795,7 +1795,7 @@ const achievements = {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
-        'reward': () => { mouseConfetti(particles=[20,20], colorArray=confettiColors, 300) }, // confetti(2)
+        'reward': () => { mouseConfetti([20,20], confettiColors, 300) }, // confetti(2)
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',
@@ -1844,7 +1844,7 @@ const achievements = {
         'name': 'footer_carrot_clicker',
         'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
         'image': './assets/achievements/footer_carrot.png',
-        'reward': () => { confetti(2); },
+        'reward': false,
         'pages': false,
         'conditions': ['easterEgg', 100],
         'style': 'secret',
@@ -1910,22 +1910,13 @@ const achievements = {
     },
 
     // Internal achievements- won't appear in game but it's way easier to use the achievements system to trigger certain events
-    'internal_custom_theme_available': {
-        'internal': true,
-        'name': 'internal_custom_theme_available',
-        // 'desc': 'Thanks for playtesting!',
-        // 'image': './assets/achievements/early_playtester.png',
-        'reward': 'shop:theme/theme_custom',
-        'pages': false,
-        'conditions': ['player.themes.length', Object.keys(themes).length - 1],
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': true,
-            'list': true,
-        }
-    },
+    // 'internal_custom_theme_available': {
+    //     'internal': true,
+    //     'name': 'internal_custom_theme_available',
+    //     'reward': 'shop:theme/theme_custom',
+    //     'pages': false,
+    //     'conditions': ['player.themes.length', Object.keys(themes).length - 1],
+    // },
 
 }
 const achievementsKeys = Object.keys(achievements);
