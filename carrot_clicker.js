@@ -23,23 +23,25 @@ var n = 0;
 // https://stackoverflow.com/a/56140328/11039898
 document.addEventListener("touchstart", function() {}, true);
 
-// Getting InnerHtml
+            // Getting InnerHtml
 
 // Overlays
-const mcContainer =         dom('mouse_confetti');
-const elInfoDropdown =      dom('info_dropdown');
+const mcContainer    = dom('mouse_confetti');
+const elInfoDropdown = dom('info_dropdown');
 
 // Game
-const mainCarrot =      dom("main_carrot");
+const mainCarrot              = dom("main_carrot");
 const elMainPrestigePotential = dom("main_prestige_potential");
-const elPrestigePotential = dom('prestige_potential');
-const Basic_Info =          dom("Basic_Info");
-const elCarrotCount =       dom("Carrot_Count");
-const elCPC =               dom("cpc");
-const elCPS =               dom("cps");
-const elCashCount =         dom("cash_count");
-const elGoldenCarrotCount = dom("golden_carrot_count");
-const elTips =              dom("Tip");
+const elPrestigePotential     = dom('prestige_potential');
+const Basic_Info              = dom("Basic_Info");
+const elCarrotCount           = dom("Carrot_Count");
+const elCPC                   = dom("cpc");
+const elCPS                   = dom("cps");
+const elCashCount             = dom("cash_count");
+const elGoldenCarrotCount     = dom("golden_carrot_count");
+const elTips                  = dom("Tip");
+
+//Characters and Hoes
 const elCharacterUpCost = {
     bill:  dom("UpBillCost"),
     belle: dom("UpBelleCost"),
@@ -76,6 +78,7 @@ const elHoes = {
         dom("greg_netherite_hoe")
     ]
 }
+
 const elHoeCount = {
     bill: [
         dom("Bill_Wooden_Hoe_Number"),
@@ -151,9 +154,18 @@ const elEnableMainProgress = dom('enable_main_progress');
 /*-------------Local Storage and Characters-------------*/
 //#region
 
-
 // Creates Characters 
+/**
+ * Creates Character objects
+ */
 class Character{
+    /**
+     * Characters Atributes
+     * @param {String} Type 
+     * @param {Number} lvl 
+     * @param {Number} lvlupPrice 
+     * @param {Array} Hoes 
+     */
     constructor(Type,lvl,lvlupPrice,Hoes){
         this.Type=Type;
         this.lvl=lvl;
@@ -161,6 +173,7 @@ class Character{
         this.Hoes=Hoes;
     }
 }
+
 // Default Values Stored in a Player Object
 const playerPrestigeTemplate = {
     carrots: 0,
@@ -180,8 +193,8 @@ const playerPrestigeTemplate = {
         equipped: [0, 0, 0, 0, 0, 0],
         equippedTotal: 0,
     },
-}
-const player1 = {
+};
+const Default_Player = {
     data_version: 3, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
@@ -224,12 +237,6 @@ const player1 = {
         tomes_bought: 0,
     },
 
-    // Unlocked main buttons
-    // main_buttons: {
-    //     prestige: false,
-    //     inventory: false,
-    // },
-
     // Unlocked characters
     characters: {
         bill: true,
@@ -269,7 +276,7 @@ const player1 = {
 
 // Character Defaults
 const Default_Boomer_Bill      = new Character("Farmer",1,100,[0,0,0,0,0,0]);
-const Default_Belle_Boomerette = new Character("Farmer",0,250,[0,0,0,0,0,0]);
+const Default_Belle_Boomerette = new Character("Farmer",0,200,[0,0,0,0,0,0]);
 const Default_Gregory          = new Character("Blacksmith",0,5000,[0,0,0,0,0,0]);
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 Default_Gregory.crafting = false; // whether or not he is currently crafting
@@ -282,7 +289,7 @@ const Default_Charles = {
             price:1
         },
         decreaseWages:{
-            value:0,
+            value:1,
             price:1
         },
         betterHoes:{
@@ -463,7 +470,11 @@ const Default_Carl = {
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
-// Return number of available shop items
+
+/**
+ * Return number of available shop items
+ * @returns Number
+ */
 function carlItemsAvailable() {
     let c = 0;
     // Themes
@@ -474,7 +485,13 @@ function carlItemsAvailable() {
     for(i = 0; i < cosm_keys.length; i++) { if(Carl.shop.cosmetic[cosm_keys[i]].available == true) c++; }
     return c;
 }
-// Returns true if available or bought
+
+/**
+ * Returns true if available or bought
+ * @param {string} type 
+ * @param {number} item 
+ * @returns Boolean
+ */
 function carlShopQuery(type, item) {
     console.warn(`carlShopQuery(${type}, ${item})`);
     try {
@@ -511,7 +528,7 @@ if(localStorage.getObject("player") != null ) {
 } else {
     // New game, use defaults
     console.log('[Autosave] New game, creating savedata...');
-    player           = player1;
+    player           = Default_Player;
     Boomer_Bill      = Default_Boomer_Bill;
     Belle_Boomerette = Default_Belle_Boomerette;
     Gregory          = Default_Gregory;
@@ -520,9 +537,11 @@ if(localStorage.getObject("player") != null ) {
 }
 
 var preventSaveGame = false;
+/**
+ * Saves objects data to Local Storage
+ */
 function saveGame() {
     if(preventSaveGame == true || store("cookies_accepted") != "true") return;
-    // console.log('Saving game...');
     // player.time_last_saved = Date.now();
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
@@ -571,7 +590,7 @@ function fillSettingsPage() {
     dom('carl_shop_toasts').checked = settings.carl_shop_toasts;
     // Fun tips
     elFunTipsSlider.value = settings.fun_tip_percentage;
-    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value + '%');
+    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
 
     dom('full_numbers').checked = settings.full_numbers;
     dom('compact_achievements').checked = settings.compact_achievements;
@@ -715,6 +734,9 @@ function clearSave() {
 //multibuy
 const multibuy = [1,10,100]; // multibuy multipliers
 var mbsel = 0;               // multi-buy selector
+/**
+ * Changes Multibuy ammount
+ */
 function multibuySpin() {
     if(multibuy[multibuy.length-1] > multibuy[mbsel]) { mbsel++; }
     else { mbsel=0; }
@@ -724,6 +746,7 @@ function multibuySpin() {
     characterButtons();
     updateHoePrices();
     DisplayAllHoes();
+    updateCharlesShop();
 }
 // delete save
 /**
@@ -739,7 +762,11 @@ function ClearLocalStorage(disableReload) {
     location.reload();
 }
 
-// Random number shorthand
+/**
+ * Gives a random numebr between 0 and max
+ * @param {number} max 
+ * @returns Random Number
+ */
 function r(max) { return Math.floor(Math.random() * max); }
 
 // Store click speed
@@ -747,9 +774,8 @@ var clickSpeed = 0;
 var clickSpeedBest = 0;
 var clickArray = [];
 
-// Earn carrots function
 /**
- * 
+ * Earn carrots function
  * @param {number} amount Amount of carrots to be earned
  * @param {string} type Can be click, idle, or bonus. For statistics.
  * @param {boolean} useMousePos If the number popup should appear at mouse position or not
@@ -790,9 +816,8 @@ function earnCarrots(amount, type, useMousePos = false) {
     characterButtons();
 }
 
-// Earn currency
 /**
- * 
+ * Earn currency
  * @param {number} amount Amount of cash to be earned
  * @param {string} type 'bonus' will use mouse position
  */
@@ -820,6 +845,10 @@ var holdDelay;
 var holdClock;
 mainCarrot.addEventListener('mousedown',    () => { holdStart(); });
 mainCarrot.addEventListener('touchstart',   () => { holdStart(); });
+/**
+ * Holding down clicks carrots
+ * @param {Boolean} useMousePos 
+ */
 function holdStart(useMousePos = true) {
     clearTimeout(holdDelay);
     holdDelay = setTimeout(() => {
@@ -836,6 +865,9 @@ mainCarrot.addEventListener('mouseout',     () => { holdStop(); });
 mainCarrot.addEventListener('touchend',     () => { holdStop(); });
 mainCarrot.addEventListener('touchcancel',  () => { holdStop(); });
 window.onblur = () => { holdStop(); }
+/**
+ * Stops Clciking on release
+ */
 function holdStop() {
     clearTimeout(holdDelay);
     clearInterval(holdClock);
@@ -845,6 +877,13 @@ function holdStop() {
 mainCarrot.addEventListener('click', () => { onClick(true, 'click'); });
 var clickMethod = -1; // -1 = any, 0 = click, 1 = key
 var clickMethodTimer;
+/**
+ * Carrot Click
+ * @param {Boolean} useMousePos 
+ * @param {String} method 
+ * @param {Number} source 
+ * @returns 
+ */
 function onClick(useMousePos, method='click', source=0) {
     // Prevent click/spacebar at the same time
     if(clickMethod == -1) {
@@ -889,7 +928,9 @@ function onClick(useMousePos, method='click', source=0) {
 //#region 
 const elPrestigeStats = dom('this_prestige_stats');
 
-// Update carrot count on page
+/**
+ * Update carrot count on page
+ */
 function carrotCount() {
     if(settings.full_numbers != true) {
         count = DisplayRounded(Math.floor(player.Carrots), 3, 1000000);
@@ -899,6 +940,9 @@ function carrotCount() {
 
     eInnerText(elCarrotCount, count);
 }
+/**
+ * Displays player.cash
+ */
 function cashCount() {
     eInnerText(elCashCount, DisplayRounded(player.cash));
 }
@@ -922,8 +966,10 @@ function characterPrices() {
     eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
     eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
 }
+/**
+ * Upgrade button style
+ */
 function characterButtons() {
-    // Upgrade button style
     if(player.Carrots >= Boomer_Bill.lvlupPrice) { dom('Bill_level_up').classList.remove('grayedout'); }
     else { dom('Bill_level_up').classList.add('grayedout'); }
     if(player.Carrots >= Belle_Boomerette.lvlupPrice) { dom('Belle_level_up').classList.remove('grayedout'); }
@@ -931,6 +977,9 @@ function characterButtons() {
     if(player.Carrots >= Gregory.lvlupPrice) { dom('Greg_level_up').classList.remove('grayedout'); }
     else { dom('Greg_level_up').classList.add('grayedout'); }
 }
+/**
+ * Updates Hoe prices on the page
+ */
 function updateHoePrices() {
     eInnerText(elHoePrices.wooden, `${DisplayRounded(HoeCost(0,multibuy[mbsel]),1)}`);
     eInnerText(elHoePrices.stone, `${DisplayRounded(HoeCost(1,multibuy[mbsel]),1)}`);
@@ -939,6 +988,9 @@ function updateHoePrices() {
     eInnerText(elHoePrices.diamond, `${DisplayRounded(HoeCost(4,multibuy[mbsel]),1)}`);
     eInnerText(elHoePrices.netherite, `${DisplayRounded(HoeCost(5,multibuy[mbsel]),1)}`);
 }
+/**
+ * Updates Charles' shop content
+ */
 function updateCharlesShop() {
     // Highlight when affordable
     if(Charles.tome.improveWorkingConditions.price <= player.golden_carrots) {
@@ -970,6 +1022,9 @@ function updateCharlesShop() {
     eInnerText(tomeCount.dww, `x${Charles.tome.decreaseWages.value}`);
 }
 var carlShopData = {};
+/**
+ * Updates Carls shop content
+ */
 function updateCarlsShop() {
     let keys = Object.keys(carlShopData);
     
@@ -985,14 +1040,23 @@ function updateCarlsShop() {
         }
     }
 }
+/**
+ * Displays prestige statistic
+ */
 function showPrestigeStats() {
     elPrestigeStats.classList.add('unremove');
 }
 const elPageCount = dom('page_count');
+/**
+ * Displays number of pages
+ */
 function pagesCount() {
     elPageCount.innerText = player.pages;
 }
 const elMainIcon = dom('main_icon');
+/**
+ * Changes the Icon at the top of the page dynamically
+ */
 function updateMainIcon() {
     // Gold Medal
     if(achieveQuery('all_achievements')) {
@@ -1017,16 +1081,22 @@ function updateMainIcon() {
 }
 const elPrestigeMenuGCCount = dom('prestige_menu_gc_count');
 const elPrestigeMenuTPCount = dom('prestige_menu_tp_count');
+/**
+ * Updates the prestige menu
+ */
 function updatePrestigeMenu() {
     eInnerText(elPrestigeMenuGCCount, numCommas(player.golden_carrots));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
 }
 
 
-// Click speed handler
 setInterval(() => {
     clickSpeedHandler(false);
 }, 1000);
+/**
+ * Click speed handler
+ * @param {boolean} clicked 
+ */
 function clickSpeedHandler(clicked = false) {
     if(clicked == true) {
         clickArray.push(Date.now());
@@ -1062,7 +1132,9 @@ function clickSpeedHandler(clicked = false) {
 
 //#endregion
 
-// Carrots per second
+/**
+ * Carrots per click
+ */
 function CarrotsPerSecond() {
     earnCarrots(player.cps/20, 'idle');
 
@@ -1072,8 +1144,13 @@ function CarrotsPerSecond() {
 }
 var cpsInterval = setInterval(CarrotsPerSecond,50);
 
-
-// Level up characters
+/**
+ * Calculates price for Characters
+ * @param {object} character 
+ * @param {number} amount 
+ * @param {string} mode 
+ * @returns New Character Level up Price
+ */
 function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     // console.log(`CharacterLevelUpPrice(${characterString(character)}, ${amount}, ${mode})`);
     // console.log(mode + ' !!!!!!');
@@ -1159,17 +1236,13 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
     return amount == 1 ? character.lvlupPrice : r2;
 }
 
-// Bill price debug
-// var billarray = [100, 111, 123, 136, 150, 166, 184, 204, 226, 250, 277, 307, 340, 377, 418, 463, 513, 569, 631, 700, 777, 862, 956, 1061, 1177, 1306, 1449, 1608, 1784, 1980, 2197, 2438, 2706, 3003, 3333, 3699, 4105, 4556, 5057, 5613, 6230, 6915, 7675, 8519, 9456, 10496, 11650, 12931, 14353, 15931, 17683, 19628, 21787, 24183, 26843, 29795, 33072, 36709, 40746, 45228, 50203, 55725, 61854, 68657, 76209, 84591, 93896, 104224, 115688, 128413, 142538, 158217, 175620, 194938, 220279, 248915, 281273, 317838, 359156, 405846, 458605, 518223, 585591, 661717, 747740, 844946, 954788, 1078910, 1219168, 1377659, 1556754, 1759132, 1987819, 2246235, 2538245, 2868216, 3241084, 3662424, 4138539, 4511007];
-// function billDebug(level, from=1) {
-//     let total = 0;
-//     for(i = from; i <= level; i++) {
-//         total += billarray[i - 1];
-//     }
-//     return total;
-// }
-
 // Level up
+/**
+ * Levels up characters
+ * @param {Object} character 
+ * @param {Number} amount 
+ * @returns If unable to level up
+ */
 function LevelUp(character=Boomer_Bill, amount=1) {
     // billarray.push(CharacterLevelUpPrice(character,amount));
     // console.log(billarray);
@@ -1201,6 +1274,10 @@ function LevelUp(character=Boomer_Bill, amount=1) {
 
 
 // Prestige
+/**
+ * Gives Golden Carrots and resets attributes
+ * @returns If unable to Prestige
+ */
 function Prestige() {
     console.log('Prestiging...');
 
@@ -1293,24 +1370,62 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
             r2=r;
         }   
     }
-    
-    for(i=0;i<=amount;i++){
+    if(amount==1){
+        //decreaseWages
         if(tome==Charles.tome.decreaseWages){
-           multibuyPrice(0.01); 
+            if(Charles.tome.decreaseWages.price<50){
+                multibuyPrice(0.001);
+            }else{
+                multibuyPrice(0.039);
+            }
         }
-        if(tome==Charles.tome.improveWorkingConditions){
-            multibuyPrice(0.01);
+        //improveWorkingConditions
+        else if(tome==Charles.tome.improveWorkingConditions){
+            if(Charles.tome.improveWorkingConditions+i<75){
+                multibuyPrice(0.11);
+            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                multibuyPrice(0.12)
+            }else{
+                multibuyPrice(0.08)
+            }   
         }
-        if(tome==Charles.tome.betterHoes){
-            multibuyPrice(0.01);
+        //betterHoes
+        else if(tome==Charles.tome.betterHoes){
+            if(Charles.tome.betterHoes.price+i<75){
+                multibuyPrice(0.11);
+            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                multibuyPrice(0.13);
+            }else{
+                multibuyPrice(0.09);
+            }
+            
         }
+    }else{
+        for(i=1; i<amount; i++){
+        
     }
+    }
+    // for(i=0;i<=amount;i++){
+    //     if(tome==Charles.tome.decreaseWages){
+    //        multibuyPrice(0.01); 
+    //     }
+    //     if(tome==Charles.tome.improveWorkingConditions){
+    //         multibuyPrice(0.01);
+    //     }
+    //     if(tome==Charles.tome.betterHoes){
+    //         multibuyPrice(0.01);
+    //     }
+    // }
     if(mode=="apply"){tome.price=r2}
     if(amount==1){return tome.price}
     return r2;
 }
 
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
+    if(Charles.tome.decreaseWages.value+amount>=22026){
+        toast('You can only have 22025 Decrease Wages tomes')
+        return;
+    }
     if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
         tome.value += amount;
         player.lifetime.tomes_bought ++;
@@ -1332,13 +1447,23 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     }
 }
 
-
+/**
+ * Calculates Decrease Wages Effect
+ * @returns Percentage of wage off
+ */
 function DecreaseWagesEffects(){
-    return (Math.sqrt(Charles.tome.decreaseWages.value)/100);
+    if(Charles.tome.decreaseWages.value<1000){
+        return((Math.pow(Math.log(Charles.tome.decreaseWages.value),3)/318.114));
+    }else if(Charles.tome.decreaseWages.value<1000){
+        return((Math.pow(Math.log(Charles.tome.decreaseWages.value),2)/69.077553));
+    }else{
+        return (Math.log(Charles.tome.decreaseWages.value)/10);
+    }
 }
 
 
 //#endregion
+
 /*-----------Hoe Functions--------------*/
 //#region
 

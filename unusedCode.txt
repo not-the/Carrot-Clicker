@@ -80,7 +80,22 @@
     // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
 
 
-
+*In Default_Player object
+    // Unlocked main buttons
+    // main_buttons: {
+    //     prestige: false,
+    //     inventory: false,
+    // },
+*Under CharacterLvlUpPrices
+    // Bill price debug
+    // var billarray = [100, 111, 123, 136, 150, 166, 184, 204, 226, 250, 277, 307, 340, 377, 418, 463, 513, 569, 631, 700, 777, 862, 956, 1061, 1177, 1306, 1449, 1608, 1784, 1980, 2197, 2438, 2706, 3003, 3333, 3699, 4105, 4556, 5057, 5613, 6230, 6915, 7675, 8519, 9456, 10496, 11650, 12931, 14353, 15931, 17683, 19628, 21787, 24183, 26843, 29795, 33072, 36709, 40746, 45228, 50203, 55725, 61854, 68657, 76209, 84591, 93896, 104224, 115688, 128413, 142538, 158217, 175620, 194938, 220279, 248915, 281273, 317838, 359156, 405846, 458605, 518223, 585591, 661717, 747740, 844946, 954788, 1078910, 1219168, 1377659, 1556754, 1759132, 1987819, 2246235, 2538245, 2868216, 3241084, 3662424, 4138539, 4511007];
+    // function billDebug(level, from=1) {
+    //     let total = 0;
+    //     for(i = from; i <= level; i++) {
+    //         total += billarray[i - 1];
+    //     }
+    //     return total;
+    // }
 
 
 /------------User.Js-------------/

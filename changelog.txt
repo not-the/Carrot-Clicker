@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.11.5
+    4-6-2022
+// ----------------------------------------------------------- //
+ - Cleaned and organized page setup JS
+ - Created Documentation for the Character Class
+ - Renamed Player1 object to Default_Player
+ - Moved unused code in the Default_Player object into unusedCode.txt
+ - Lowered Belle Starting price 250 --> 200
+ - Added Documentation to carlItemsAvalible, carlShopQuery, SaveGame, Multibuy Spin,r, HoldStart, HoldStop, onClick, Carrot Count, characterButtons, updateHoePrices, updateCharlesShop, updateCarlsShop, showPrestigeStats, pagesCount, updateMainIcon, updatePrestigeMenu, clickSpeedHandler, CarrotsPerSecond, CharacterLevelUpPrice, LevelUp, and Prestige
+ - Charles multibuy display now works
+ - Credited GuntherTheGod
+ - added Bill to Ugly Sweater cosmetic name
+ - changed Decrese Wages effect(https://www.desmos.com/calculator/glmtmyafqq)
+ - tweaked Charles tome lvling up to be more balanced and consistent with other upgrades(WIP)
+ - percent of fun tips retains the % symbol
+
+ ~ JJ
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.11.4
     4-2-2022
 // ----------------------------------------------------------- //

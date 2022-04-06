@@ -537,7 +537,7 @@ const cosmetics = {
             'image': './assets/theme/business_bill.png',
         },
         'ugly_sweater': {
-            'name': 'Ugly Sweater',
+            'name': 'Ugly Sweater Bill',
             'preview': './assets/theme/bill_ugly_sweater.png',
             'desc': 'Very cozy',
             'group': 'xmas',

@@ -1142,9 +1142,9 @@ function onLoad() {
         Carl.shop.cosmetic,
     ];
     var onu_templates = [
-        player1,
+        Default_Player,
         playerPrestigeTemplate,
-        player1.lifetime,
+        Default_Player.lifetime,
 
         settings_default,
         settings_default.cosmetics,
@@ -1168,7 +1168,7 @@ function onLoad() {
     //#endregion
 
     if(
-        player1.data_version > player.data_version
+        Default_Player.data_version > player.data_version
         || player.hasOwnProperty('data_version') == false
         || isDebug() == true
     ) {
@@ -1223,12 +1223,12 @@ function onLoad() {
             }
     
             // Done
-            console.log(`Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`);
-            if(isDebug() == true && player.data_version != player1.data_version) {
-                toast('', `Player object has been updated (Version ${player.data_version} -> ${player1.data_version})`, '', true);
+            console.log(`Player object has been updated (Version ${player.data_version} -> ${Default_Player.data_version})`);
+            if(isDebug() == true && player.data_version != Default_Player.data_version) {
+                toast('', `Player object has been updated (Version ${player.data_version} -> ${Default_Player.data_version})`, '', true);
             }
 
-            player.data_version = player1.data_version;
+            player.data_version = Default_Player.data_version;
             saveGame();
         } catch (error) {
             console.error('An object update was attempted but failed. Error info below:');
