@@ -4,7 +4,6 @@
 const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
-const elConfetti = dom('confetti');
 // var tooltipBill =       dom("billtooltip").style.top;
 // var tooltipBelle =      dom("belletooltip").style.top;
 // var tooltipGreg =       dom("gregtooltip").style.top;
@@ -68,28 +67,6 @@ const tipsMenu =      dom('tips_menu');
 
 /*---------------FUNCTIONS-----------------*/
 //#region
-
-/** Screen Confetti (GIF overlay)
- * @param {number} type Gif to be used in the overlay
- * @returns 
- */
-function confetti(type = 1) {
-    // console.log('Confetti!');
-    if(!settings.confetti_effects) return;
-    let duration = 6760;
-    elConfetti.src = `./assets/confetti${type}.gif`;
-    elConfetti.classList.add('visible');
-
-    setTimeout(() => {
-        elConfetti.classList.add('fade_out');
-    }, duration - 2000);
-
-    setTimeout(() => {
-        elConfetti.src = './assets/blank.png';
-        elConfetti.classList.remove('fade_out');
-        elConfetti.classList.remove('visible');
-    }, duration);
-}
 
 // Mouse confetti
 const confettiColors =  ['red', 'blue', 'cyan', 'purple', 'yellow'];
@@ -1362,7 +1339,7 @@ function populateAchievements() {
     // Filter by secret
     if(filter == 'secret' && achievementHTML == '') {
         achievementHTML =
-            `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="confetti()"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+            `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
     };
 
     elAchievementsList.innerHTML = achievementHTML;
@@ -1614,12 +1591,7 @@ function startCredits(toast = false) {
 }
 
 // Stop autoscroll is player scrolls
-elCredits.addEventListener('wheel', () => {
-    clearInterval(creditInterval);
-});
-// elCredits.addEventListener('mousedown', () => {
-//     clearInterval(creditInterval);
-// });
+elCredits.addEventListener('wheel', () => { clearInterval(creditInterval); });
 
 
 // Keybinds menu

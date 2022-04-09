@@ -9,6 +9,8 @@
     /* border: 1px solid var(--light-theme-border-color); */
     background-color: whitesmoke;
 }
+.theme_light #credits { color: white; }
+.theme_light #credits .secondary_text { color: var(--secondary-text); }
 .theme_light .main_bg_color {
     background-color: var(--light-darker-bg-color);
 }

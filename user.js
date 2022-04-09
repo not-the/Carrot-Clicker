@@ -386,7 +386,7 @@ function keybindHandler(event, state) {
         // Reward
         switch(combo) {
             case 0:
-                confetti();
+                mouseConfetti([24,24], confettiColors, 300)
                 break;
             case 1:
                 setTheme('theme_retro');

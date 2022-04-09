@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.11.8
+    4-8-2022
+// ----------------------------------------------------------- //
+
+- Added image attributions to the credits
+- Removed the confetti() function and replaced it with mouseConfetti()
+- Replaced the refresh icon with a new one
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.11.6
     4-8-2022
 // ----------------------------------------------------------- //
@@ -17,6 +29,7 @@ Internal changes:
 - Default_Player -> default_player
 
 ~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.11.5
