@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.11.8</title>
+    <title id="page_title">Carrot Clicker dev beta v1.11.9</title>
 
     <!-- Misc -->
     <meta name="theme-color" content="#312e2e" id="theme_color">
@@ -34,10 +34,8 @@
     <!-- On top -->
     <!-- #region -->
 
-    <!-- Number Popup -->
+    <!-- Visual effects -->
     <div id="bonusVisualArea"></div>
-
-    <!-- Gif overlay -->
     <div id="mouse_confetti"></div>
 
     <!-- Dialog Popup -->
@@ -624,13 +622,25 @@
                         </div>
                     </a>
 
-                    <a onclick="themeSwitcher()" tabindex="0">
-                        <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
-                            Change Theme
-                        </div>
-                    </a>
+                    <!-- Theme/cosmetic -->
+                    <div class="flex">
+                        <a onclick="themeSwitcher()" tabindex="0">
+                            <div class="menu_item link_styling secondary_text" style="width: 119px; border-right: 1px solid var(--border-color);">
+                                <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
+                                Themes
+                            </div>
+                        </a>
+    
+                        <a onclick="cosmeticSwitcher()" tabindex="0">
+                            <div class="menu_item link_styling secondary_text" style="width: 119px; padding-left: 0; padding-right: 0; text-align: center;">
+                                <!-- <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert"> -->
+                                Cosmetics
+                            </div>
+                        </a>
+    
+                    </div>
 
+                    <!-- Volume -->
                     <div class="menu_item link_styling secondary_text">
                         <label for="volume_master_dropdown">
                             <img src="./assets/icons/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">

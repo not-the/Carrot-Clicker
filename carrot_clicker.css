@@ -1094,7 +1094,11 @@ body:not(.theme_light) .theme_checkmark {
     transform: translateY(0px);
     opacity: 1;
 }
-#info_dropdown:focus .hover_menu * {
+#info_dropdown:focus .hover_menu *,
+.hover_menu:hover *,
+.hover_menu:active *,
+.hover_menu:focus *,
+.hover_menu:focus-within * {
     pointer-events: all;
 }
 .menu_item {

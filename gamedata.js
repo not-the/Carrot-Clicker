@@ -1941,6 +1941,17 @@ const achievements = {
     },
 
     // Internal achievements- won't appear in game but it's way easier to use the achievements system to trigger certain events
+    'internal_prestige_available': {
+        'internal': true,
+        'name': 'internal_prestige_available',
+        'reward': () => {
+            player.prestige_available = true;
+            saveGame();
+            seePrestige();
+        },
+        'pages': false,
+        'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
+    },
     // 'internal_custom_theme_available': {
     //     'internal': true,
     //     'name': 'internal_custom_theme_available',

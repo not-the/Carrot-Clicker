@@ -199,7 +199,7 @@ const default_player = {
 
     // Progress
     Carrots: 0,
-    cpc: 0,
+    cpc: 1,
     cps: 0,
     EquippedHoes: 0,
     clickSpeedRecord: 0,
@@ -1019,6 +1019,12 @@ function updateCharlesShop() {
     eInnerText(tomeCount.iwc, `x${Charles.tome.improveWorkingConditions.value}`);
     eInnerText(tomeCount.bh, `x${Charles.tome.betterHoes.value}`);
     eInnerText(tomeCount.dww, `x${Charles.tome.decreaseWages.value}`);
+
+    // Debugging tooltip
+    eInnerText(elCharles.charlesTooltip,
+        `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
+        BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
+        DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
 }
 var carlShopData = {};
 /**
@@ -1301,7 +1307,6 @@ function Prestige() {
 
     // Reset prestige potential
     player.prestige_potential = 0;
-    player.prestige_available = false;
 
     // Reset characters to default
     [
@@ -1332,6 +1337,9 @@ function Prestige() {
     player.Carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
     tips.tracker=0;
+
+    // Save
+    saveGame();
 
     // Tutorial message
     if(player.lifetime.prestige_count == 1) {
@@ -1829,10 +1837,6 @@ function gameLoop() {
     //The Basic info for the player, Carrots; Cpc; Cps
     eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
 
-    // Costs to level up characters
-
-    // > Moved to onload() and levelup() functions <
-
     // Hoes
     DisplayAllHoes();
 
@@ -1843,24 +1847,6 @@ function gameLoop() {
     if(prestigeMenuOpen) {
         eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
     }
-
-    // Greg's Hoe Prices
-    // updateHoePrices();
-
-    // Prestige info
-    if(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0) {
-        eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
-        dom("prestige-section").classList.add('visible');
-        dom('prestige_menu_button').disabled = false;
-        dom('prestige_menu_button').title = "Prestige";
-        dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`;
-        player.prestige_available = true;
-    }
-
-    eInnerText(elCharles.charlesTooltip,
-        `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
-        BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
-        DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
 }
 
 setInterval(() => {
@@ -1868,6 +1854,14 @@ setInterval(() => {
     gameLoop();
 }, 100);
 //#endregion
+
+function seePrestige() {
+    eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
+    dom("prestige-section").classList.add('visible');
+    dom('prestige_menu_button').disabled = false;
+    dom('prestige_menu_button').title = "Prestige";
+    dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`;
+}
 
 /*-----------------Statistics-----------------*/
 //#region 

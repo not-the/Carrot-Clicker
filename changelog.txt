@@ -1,3 +1,21 @@
+Upcoming:
+- New default tool sprites
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.9
+    4-8-2022
+// ----------------------------------------------------------- //
+
+- Fixed an issue where the CPC was 0 by default
+- Took some things out of the main game loop
+- Game now saves after a prestige
+- Added support for multiple tags in location.hash
+- Added a new hash: #itch (similar to ach, short for achievement) and #dan (Disable Achievement Notifications) - disables achievement notifications using the no_achievement_toasts flag
+- Added a cosmetics button to the dropdown
+
+~ Kal
+
+
 // ----------------------------------------------------------- //
     VERSION dev beta 1.11.8
     4-8-2022
@@ -28,7 +46,6 @@
 // ----------------------------------------------------------- //
 
 - Tools cosmetic support
-- New default tool sprites
 - Fixed the reset buttons for autosave frequency and notification length being incorrect and/or not working
 - Fixed achievements related to decreaseWages being granted early due to a change to its default value (0 -> 1)
 - Backdrop click getting ignored for themes without transparent backdrops is now a theme property

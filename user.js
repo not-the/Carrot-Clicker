@@ -763,12 +763,14 @@ function grantAchievement(key) {
 
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
-    if(achieve.mystery.noToast !== true) {
+    if(achieve.internal != true && achieve.mystery.noToast != true) {
         // Normal toast
         // toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
 
         // New toast
-        toast('', '', '', false, false, key);
+        if(player.flags['no_achievement_toasts'] != true) {
+            toast('', '', '', false, false, key);
+        }
     }
 
     // Add achievement to player.achievements
@@ -1119,6 +1121,180 @@ function loopObject(obj, func) {
 function isDebug() {
     if(location.hash == '#dev' || location.hash == '#developer' || location.hash == '#cheatmode' || store('debug') == 'true') return true;
 }
+
+// URL hashes
+(function() {
+    onhashchange = hash;
+    function hash() {
+        let list = location.hash.substring(1).split('#');
+        console.log(list);
+
+        // Mute
+        if(list.includes('automute') || list.includes('mute')) {
+            elEnableSounds.checked = false;
+            settingSounds();
+        }
+        // Dev tools
+        if(
+            list.includes('dev')
+            || list.includes('developer')
+            || list.includes('cheatmode')
+            || list.includes('debug')
+        ) {
+            store("cookies_accepted", "true");
+
+            // Register cheat functions globally
+            //#region
+            window.allCharacters = () => {
+                unlock('character', 'belle');
+                unlock('character', 'greg');
+                unlock('character', 'charles');
+                unlock('character', 'carl');
+                toast('All Characters now available', 'Dev tools');
+            }
+            window.allAchievements = () => {
+                for(let i = 0; i < achievementsKeys.length; i++) {
+                grantAchievement(achievementsKeys[i])
+                }
+                toast('All Achievements now unlocked', 'Dev tools');
+            }
+            window.allThemes = () => {
+                for(let i = 0; i < themesKeys.length; i++) {
+                    unlock('theme', themesKeys[i])
+                }
+                toast('All Themes now available', 'Dev tools');
+            }
+            window.allCosmetics = () => {
+                for(let t = 0; t < cosmeticsKeys.length; t++) {
+                    let key = cosmeticsKeys[t];
+                    let target = cosmetics[key];
+            
+                    // Loop through cosmetics
+                    for(let c = 0; c < target['keys'].length; c++) {
+                        unlock('cosmetic', target.keys[c], key);
+                    }
+                }
+                toast('All Cosmetics now available', 'Dev tools');
+            }
+            window.allUnlocks = () => {
+                allCharacters();
+                allAchievements();
+                allThemes();
+                allCosmetics();
+            }
+            window.updateValues = () => {
+                let cc = parseInt(setCarrotsEl.value);
+                let gcc = parseInt(setGoldenCarrotsEl.value);
+                let lbill = parseInt(setBillLvlEl.value);
+                player.Carrots          = cc;
+                player.lifetime.carrots = cc;
+                player.prestige.carrots = cc;
+
+                player.golden_carrots   = gcc >= 0 ? gcc : player.golden_carrots;
+                Boomer_Bill.lvl         = lbill >= 1 ? lbill : Boomer_Bill.lvl;
+                characterPrices();
+            }
+            //#endregion
+            
+            // Put dev panel in settings
+            $('#devp').innerHTML = /* html */
+            `<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+                <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+
+                <button onclick="clearSave()" class="button_red">
+                    Quick Reset
+                </button>
+
+                <h4>Unlock all</h4>
+                <button onclick="allUnlocks()">
+                    Everything
+                </button>
+                <button onclick="allCharacters()">
+                    Characters
+                </button>
+                <button onclick="allAchievements()">
+                    Achievements
+                </button>
+                <button onclick="allThemes()">
+                    Themes
+                </button>
+                <button onclick="allCosmetics()">
+                    Cosmetics
+                </button><br/>
+                
+                <h4>Set Values</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="setting Carrots">
+                                Carrots:
+                            </label>
+                        </td>
+                        <td>
+                            <input id="setCarrot" class="dev_input" type="number" value="500000">
+                        </td>
+                        <td id="setCarrotRounded" class="secondary_text"></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="setting Golden Carrots">
+                                Golden Carrots:
+                            </label>
+                        </td>
+                        <td>
+                            <input id="setGoldenCarrot" class="dev_input" type="number">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="setting Bill's level">
+                                Bill's Level:
+                            </label>
+                        </td>
+                        <td>
+                            <input id="setBillLvl" class="dev_input" type="number">
+                        </td>
+                    </tr>
+                </table>
+                
+                <button onclick="updateValues()">Update Values</button>
+            </div><br>`;
+
+            setCarrotsEl =          dom("setCarrot");
+            setGoldenCarrotsEl =    dom("setGoldenCarrot");
+            setBillLvlEl =          dom("setBillLvl");
+            elSetCarrotRounded =    dom('setCarrotRounded')
+
+            // Enter key updates values
+            document.querySelector('.dev_input').addEventListener('keyup', e => {
+                if(e.key == 'Enter') { updateValues(); }
+            });
+
+            // DisplayRounded preview
+            setCarrotsEl.addEventListener('input', () => {
+                if(setCarrotsEl.value == '') return;
+                elSetCarrotRounded.innerText = `(${DisplayRounded(setCarrotsEl.value)})`;
+            });
+
+            // toast('Dev Tools enabled', false);
+        }
+        // else {
+        //     $('#devp').innerHTML = '';
+        // }
+
+        // Hide achievement toasts
+        if(list.includes('itch') || list.includes('dan')) {
+            player.flags['no_achievement_toasts'] = true;
+        } else {
+            player.flags['no_achievement_toasts'] = false;
+        }
+    }
+    hash();
+})();
+
+
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
 function onLoad() {
@@ -1355,155 +1531,6 @@ function onLoad() {
     }
     achievementProgress();
 
-    // URL hashes
-    if(location.hash == '#automute' || location.hash == '#mute') {
-        elEnableSounds.checked = false;
-        settingSounds();
-    }
-    // Dev tools
-    else if(location.hash == '#dev' || location.hash == '#developer' || location.hash == '#cheatmode') {
-        store("cookies_accepted", "true");
-
-        // Register cheat functions globally
-        //#region
-        window.allCharacters = () => {
-            unlock('character', 'belle');
-            unlock('character', 'greg');
-            unlock('character', 'charles');
-            unlock('character', 'carl');
-            toast('All Characters now available', 'Dev tools');
-        }
-        window.allAchievements = () => {
-            for(let i = 0; i < achievementsKeys.length; i++) {
-               grantAchievement(achievementsKeys[i])
-            }
-            toast('All Achievements now unlocked', 'Dev tools');
-        }
-        window.allThemes = () => {
-            for(let i = 0; i < themesKeys.length; i++) {
-                unlock('theme', themesKeys[i])
-            }
-            toast('All Themes now available', 'Dev tools');
-        }
-        window.allCosmetics = () => {
-            for(let t = 0; t < cosmeticsKeys.length; t++) {
-                let key = cosmeticsKeys[t];
-                let target = cosmetics[key];
-        
-                // Loop through cosmetics
-                for(let c = 0; c < target['keys'].length; c++) {
-                    unlock('cosmetic', target.keys[c], key);
-                }
-            }
-            toast('All Cosmetics now available', 'Dev tools');
-        }
-        window.allUnlocks = () => {
-            allCharacters();
-            allAchievements();
-            allThemes();
-            allCosmetics();
-        }
-        window.updateValues = () => {
-            let cc = parseInt(setCarrotsEl.value);
-            let gcc = parseInt(setGoldenCarrotsEl.value);
-            let lbill = parseInt(setBillLvlEl.value);
-            player.Carrots          = cc;
-            player.lifetime.carrots = cc;
-            player.prestige.carrots = cc;
-
-            player.golden_carrots   = gcc >= 0 ? gcc : player.golden_carrots;
-            Boomer_Bill.lvl         = lbill >= 1 ? lbill : Boomer_Bill.lvl;
-            characterPrices();
-        }
-        //#endregion
-        
-        // Put dev panel in settings
-        $('#devp').innerHTML = /* html */
-        `<div class="footer_bottom" style="display: block; padding: 16px 24px;">
-            <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-
-            <button onclick="clearSave()" class="button_red">
-                Quick Reset
-            </button>
-
-            <h4>Unlock all</h4>
-            <button onclick="allUnlocks()">
-                Everything
-            </button>
-            <button onclick="allCharacters()">
-                Characters
-            </button>
-            <button onclick="allAchievements()">
-                Achievements
-            </button>
-            <button onclick="allThemes()">
-                Themes
-            </button>
-            <button onclick="allCosmetics()">
-                Cosmetics
-            </button><br/>
-            
-            <h4>Set Values</h4>
-            <table>
-                <tr>
-                    <td>
-                        <label for="setting Carrots">
-                            Carrots:
-                        </label>
-                    </td>
-                    <td>
-                        <input id="setCarrot" class="dev_input" type="number" value="500000">
-                    </td>
-                    <td id="setCarrotRounded" class="secondary_text"></td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <label for="setting Golden Carrots">
-                            Golden Carrots:
-                        </label>
-                    </td>
-                    <td>
-                        <input id="setGoldenCarrot" class="dev_input" type="number">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <label for="setting Bill's level">
-                            Bill's Level:
-                        </label>
-                    </td>
-                    <td>
-                        <input id="setBillLvl" class="dev_input" type="number">
-                    </td>
-                </tr>
-            </table>
-            
-            <button onclick="updateValues()">Update Values</button>
-        </div><br>`;
-
-        setCarrotsEl =          dom("setCarrot");
-        setGoldenCarrotsEl =    dom("setGoldenCarrot");
-        setBillLvlEl =          dom("setBillLvl");
-        elSetCarrotRounded =    dom('setCarrotRounded')
-
-        // Enter key updates values
-        document.querySelector('.dev_input').addEventListener('keyup', e => {
-            if(e.key == 'Enter') {
-                updateValues();
-            }
-        });
-
-        // DisplayRounded preview
-        setCarrotsEl.addEventListener('input', () => {
-            if(setCarrotsEl.value == '') return;
-            elSetCarrotRounded.innerText = `(${DisplayRounded(setCarrotsEl.value)})`;
-        });
-
-        // toast('Dev Tools enabled', false);
-    }
-    
 
 
     /* --------------- TUTORIAL --------------- */
@@ -1560,56 +1587,14 @@ function onLoad() {
     if(player.new_theme == true) { newIndicator(true, 'theme'); }
     if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
 
-    if(player.lifetime.prestige_count > 0) {
-        showPrestigeStats();
-    }
-
-
-    // startCredits();
-
+    // Prestige button visibility
+    if(player.prestige_available == true) { seePrestige(); }
+    // Has prestiged before
+    if(player.lifetime.prestige_count > 0) { showPrestigeStats(); }
 
 
 
     // Finished
-//     console.log(`                                                                
-//                                          (( #%@@@           
-//                                         @/@#//*%            
-//                                         %(&//*&   @//&      
-//                                        @/&/(*@  %//**#      
-//                                        %//(/@@///**@        
-//                                       @((((#//**%    /@%(((/
-//                              @#######((((((**(@&#((((%@     
-//                            %#####(###((((/(((((*******@     
-//                          %########((((((/(//@               
-//                        %(#######((((((((////@               
-//                      @((#####((((((*((/////&                
-//                    @#(###(#((((((((//////&                  
-//                  @((####((((((((/*/////@                    
-//                &((###(((((((((//////&                       
-//              &((##(/(((((/(//////@                          
-//            @((#(((((((/(//////#                             
-//           #(#(((((((((//////&                               
-//         @((((((((((//////#(                                 
-//       @(((((((/(//////%(                                    
-//     (((((((((/////#@                                        
-//    @((((((//////@                                           
-//   &/((((/////&                                              
-//  %///////(@                                                 
-// %////(@                                                     
-
-//   _____                     _      _____ _ _      _             
-//  / ____|                   | |    / ____| (_)    | |            
-// | |     __ _ _ __ _ __ ___ | |_  | |    | |_  ___| | _____ _ __ 
-// | |    / _\` | '__| '__/ _ \\| __| | |    | | |/ __| |/ / _ \\ '__|
-// | |___| (_| | |  | | | (_) | |_  | |____| | | (__|   <  __/ |   
-//  \\_____\\__,_|_|  |_|  \\___/ \\__|  \\_____|_|_|\\___|_|\\_\\___|_|   
-                                                                 
-                                                                  
-
-                                                               
-                                                               
-// `)
-
 }
 
 onLoad();
