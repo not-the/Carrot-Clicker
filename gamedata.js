@@ -185,6 +185,7 @@ const themes = {
         desc:     'Become 1337 hax0r',
         cosmetic: 'farmable/ascii',
         accent:   '#0c0c0c',
+        no_backdrop_click: true,
     },
     'theme_chatapp': {
         name:     'Chat App',
@@ -192,6 +193,7 @@ const themes = {
         desc:     '"how do i find #general"',
         cosmetic: false,
         accent:   '#202225',
+        no_backdrop_click: true,
     },
     // 'theme_xp': {
     //     name:     'Doors Experience',
@@ -205,7 +207,8 @@ const themes = {
         image:    './assets/theme/blockgame/grass_block_side.png',
         desc:     'Does it violate copyright if this is just a hobby project with no ads? Genuine question',
         cosmetic: 'bundle/blockgame',
-        accent:   '#3c2a1d'
+        accent:   '#3c2a1d',
+        no_backdrop_click: true,
     },
     // 'theme_custom': {
     //     name: 'Custom Theme',
@@ -259,6 +262,7 @@ const cosmetics = {
 
             // 'theme': 'theme_blockgame',
             'farmable': 'blockgame',
+            'tools': 'blockgame',
         },
         // Christmas
         'xmas': {
@@ -298,6 +302,7 @@ const cosmetics = {
             'greg':     'bill',
             'charles':  'bill',
             'carl':     'bill',
+            'tools':    'bill',
         },
     },
     farmable: {
@@ -681,13 +686,39 @@ const cosmetics = {
             'desc': 'Default tools',
             'group': 'default',
 
-            '0': './',
-            '1': './',
-            '2': './',
-            '3': './',
-            '4': './',
-            '5': './',
-        }
+            '0': './assets/tools/tool_0.png',
+            '1': './assets/tools/tool_1.png',
+            '2': './assets/tools/tool_2.png',
+            '3': './assets/tools/tool_3.png',
+            '4': './assets/tools/tool_4.png',
+            '5': './assets/tools/tool_5.png',
+        },
+        'blockgame': {
+            'name': 'Minecraft Hoes',
+            'preview': './assets/tools/blockgame/tool_0.png',
+            'desc': 'Default tools',
+            'group': 'blockgame',
+
+            '0': './assets/tools/blockgame/tool_0.png',
+            '1': './assets/tools/blockgame/tool_1.png',
+            '2': './assets/tools/blockgame/tool_2.png',
+            '3': './assets/tools/blockgame/tool_3.png',
+            '4': './assets/tools/blockgame/tool_4.png',
+            '5': './assets/tools/blockgame/tool_5.png',
+        },
+        'bill': {
+            'name': 'Bill',
+            'preview': './assets/characters/Boomer_Bill.png',
+            'desc': 'Return to Bill',
+            'group': 'bill',
+
+            '0': './assets/theme/transparent_bill.png',
+            '1': './assets/theme/transparent_bill.png',
+            '2': './assets/theme/transparent_bill.png',
+            '3': './assets/theme/transparent_bill.png',
+            '4': './assets/theme/transparent_bill.png',
+            '5': './assets/theme/transparent_bill.png',
+        },
     }
 }
 // Get keys
@@ -891,7 +922,7 @@ const achievements = {
         'image': './assets/achievements/tome_decrease_wages.png',
         'reward': 'cosmetic:bill/dollar_bill',
         'pages': 2,
-        'conditions': ['Charles.tome.decreaseWages.value', 1],
+        'conditions': ['Charles.tome.decreaseWages.value', 2],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1734,7 +1765,7 @@ const achievements = {
         'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
         'image': './assets/achievements/no_falling_carrots.png',
-        'reward': () => { confetti();},
+        'reward': () => { confetti(); },
         'pages': 5,
         'conditions': ['ex_noBonusCarrots()', true],
         'style': 'challenge',
@@ -1795,7 +1826,7 @@ const achievements = {
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
-        'reward': () => { mouseConfetti([20,20], confettiColors, 300) }, // confetti(2)
+        'reward': () => { mouseConfetti([24,24], confettiColors, 300) }, // confetti(2)
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',

@@ -3,6 +3,7 @@ Users settings, keybind handling, and tutorial handling
 ------------------------------------------------------------- */
 
 /*---------------AUDIO HANDLING-------------------*/
+//#region 
 // Volume variable
 var volume = 1;
 
@@ -35,7 +36,9 @@ function stopMusic() {
     music.pause();
     music.currentTime = 0;
 }
+//#endregion
 
+/** Returns true if any menu or popup is open */
 function menuOpen() {
     if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen)
     { return true; }
@@ -61,7 +64,9 @@ elFunTipsSlider.oninput = () => {
     saveSettings();
 }
 
-// Universal checkbox option updater (not used by everything because some options need extra code)
+/** Universal checkbox option updater (not used by everything because some options need extra code)
+ * @param option Option to update
+*/
 function setting(option) {
     let state = dom(option).checked;
     console.log(`${option} set to ${state}`);
@@ -95,10 +100,13 @@ function saveOption() {
     }
 }
 // Reset notification time to default
-function resetOption() {
-    notificationLength.value = 5;
-    localStorage.removeItem("notificationLength");
-    toast("Notification time reset", `Notifications will disappear after 5 seconds`,
+function resetOption(option = 'notificationLength') {
+    let value = default_settings[option];
+    settings[option] = value;
+    notificationLength.value = value;
+
+    saveSettings();
+    toast("Notification time reset", `Notifications will disappear after ${value} seconds`,
     '', false, true);
 }
 
@@ -129,7 +137,7 @@ function settingText(option) {
     }
 }
 function resetAutosave() {
-    let value = settings_default.autosave_interval;
+    let value = default_settings.autosave_interval;
 
     console.log(`[Settings] Autosave interval reset to: ${value}`);
     dom('autosave_interval').value = value;
@@ -137,7 +145,7 @@ function resetAutosave() {
     settings.autosave_interval = value;
     saveSettings();
 
-    toast("Autosave interval reset", `Game will save every 2 seconds`,
+    toast("Autosave interval reset", `Game will save every ${value} seconds`,
     '', false, true);
 
     // Update autosave variable
@@ -330,7 +338,7 @@ var easterEgg = 0;
 function eggUp() {
     easterEgg += easterEgg < 101 ? 1 : 0;
     mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
-    if(easterEgg == 100) { mouseConfetti([20,20], confettiColors, 300); }
+    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300); }
 }
 var equipWaiting = -1;
 var equipToastID = false;
@@ -347,16 +355,7 @@ function keybindHandler(event, state) {
 
     // Custom keybinds
     if(keyWaiting[0] == true) {
-        let element = dom(keyWaiting[1])
-
-        if(key == 'Escape') key = 'Not set';
-
-        element.innerText = key;
-        element.blur();
-
-        // Set and reset
-        setKeybind(keyWaiting[1], key);
-        keyWaiting = [false, 'none'];
+        doneKeybind(key, true);
         return;
     }
 
@@ -524,7 +523,7 @@ function keybindHandler(event, state) {
     // Close all Toasts
     if(key == settings.keybinds['key_cleartoasts']) {
         event.preventDefault();
-        clearToasts();
+        clearToasts(false);
     }
     
     // Settings and prestige
@@ -549,16 +548,24 @@ function keybindHandler(event, state) {
     // }
 }
 
+
 function cancelHoeEquip() {
     equipWaiting = -1;
     closeToast(equipToastID);
 }
 
 
+
 // Custom Keybinds
 var keyWaiting = [false, 'none'];
+var keyWaitingToast;
 function detectKey(bind) {
     keyWaiting = [true, bind];
+    keyWaitingToast = toast(
+        'Change keybind', `Press a key for "${bind}"`, '',
+        true, false, false, true,
+        () => { doneKeybind('none', false); }, 'Cancel'
+    );
 }
 function setKeybind(action, key) {
     console.log(`[Settings] Set ${action} to key: ${key}`)
@@ -566,6 +573,21 @@ function setKeybind(action, key) {
     // console.log(action, key);
     saveSettings();
     // populateKeyConflicts();
+}
+function doneKeybind(key, set=true) {
+    let element = dom(keyWaiting[1]);
+
+    if(key == 'Escape') key = 'Not set';
+    
+    element.blur();
+    closeToast(keyWaitingToast);
+
+    // Set and reset
+    if(set == true) {
+        element.innerText = key;
+        setKeybind(keyWaiting[1], key);
+    }
+    keyWaiting = [false, 'none'];
 }
 
 
@@ -719,7 +741,7 @@ function giveReward(reward, retroactive = false) {
         // var rewardFunction = Function(`${rewardName}`);
         // rewardFunction();
 
-        console.log(rewardName);
+        // console.log(rewardName);
         rewardName();
     }
 
@@ -1016,9 +1038,9 @@ function tutorialHoes() {
 // use_charles
 function ex_charlesUses() {
     if(
-    Charles.tome.improveWorkingConditions.value > 0
-    || Charles.tome.betterHoes.value > 0
-    || Charles.tome.decreaseWages.value > 0
+    Charles.tome.improveWorkingConditions.value > Default_Charles.tome.improveWorkingConditions.value
+    || Charles.tome.betterHoes.value > Default_Charles.tome.betterHoes.value
+    || Charles.tome.decreaseWages.value > Default_Charles.tome.decreaseWages.value
     ) {
         return 1;
     }
@@ -1142,13 +1164,13 @@ function onLoad() {
         Carl.shop.cosmetic,
     ];
     var onu_templates = [
-        Default_Player,
+        default_player,
         playerPrestigeTemplate,
-        Default_Player.lifetime,
+        default_player.lifetime,
 
-        settings_default,
-        settings_default.cosmetics,
-        settings_default.keybinds,
+        default_settings,
+        default_settings.cosmetics,
+        default_settings.keybinds,
 
         Default_Boomer_Bill,
         Default_Belle_Boomerette,
@@ -1168,7 +1190,7 @@ function onLoad() {
     //#endregion
 
     if(
-        Default_Player.data_version > player.data_version
+        default_player.data_version > player.data_version
         || player.hasOwnProperty('data_version') == false
         || isDebug() == true
     ) {
@@ -1223,12 +1245,12 @@ function onLoad() {
             }
     
             // Done
-            console.log(`Player object has been updated (Version ${player.data_version} -> ${Default_Player.data_version})`);
-            if(isDebug() == true && player.data_version != Default_Player.data_version) {
-                toast('', `Player object has been updated (Version ${player.data_version} -> ${Default_Player.data_version})`, '', true);
+            console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);
+            if(isDebug() == true && player.data_version != default_player.data_version) {
+                toast('', `Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`, '', true);
             }
 
-            player.data_version = Default_Player.data_version;
+            player.data_version = default_player.data_version;
             saveGame();
         } catch (error) {
             console.error('An object update was attempted but failed. Error info below:');

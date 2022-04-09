@@ -340,6 +340,9 @@ summary:hover {
 .color_red {color: var(--warning-red) !important;}
 
 /* Background Colors (Toasts Usually) */
+.background_error {
+    border-color: var(--warning-red) !important;
+}
 .background_white {
     background: rgb(255, 255, 255) !important;
     border: 4px solid rgb(92, 92, 92) !important;
@@ -1486,7 +1489,7 @@ body:not(.theme_light) .theme_checkmark {
     /* filter: opacity(70%); */
 }
 .toolicon {
-    image-rendering: pixelated;
+    /* image-rendering: unset; */
     height: 32px;
     width: auto;
 }

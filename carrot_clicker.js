@@ -9,7 +9,7 @@ The main Game Loop occurs in a setInterval, This loop handles anything that need
 let loadCheck = false;
 setTimeout(() => {
     if(loadCheck == false) {
-        toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false, true);
+        toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false);
     }
 }, 1000);
 
@@ -23,11 +23,11 @@ var n = 0;
 // https://stackoverflow.com/a/56140328/11039898
 document.addEventListener("touchstart", function() {}, true);
 
-            // Getting InnerHtml
+// HTML
 
 // Overlays
-const mcContainer    = dom('mouse_confetti');
-const elInfoDropdown = dom('info_dropdown');
+const mcContainer             = dom('mouse_confetti');
+const elInfoDropdown          = dom('info_dropdown');
 
 // Game
 const mainCarrot              = dom("main_carrot");
@@ -173,7 +173,6 @@ class Character{
         this.Hoes=Hoes;
     }
 }
-
 // Default Values Stored in a Player Object
 const playerPrestigeTemplate = {
     carrots: 0,
@@ -194,7 +193,7 @@ const playerPrestigeTemplate = {
         equippedTotal: 0,
     },
 };
-const Default_Player = {
+const default_player = {
     data_version: 3, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
@@ -528,7 +527,7 @@ if(localStorage.getObject("player") != null ) {
 } else {
     // New game, use defaults
     console.log('[Autosave] New game, creating savedata...');
-    player           = Default_Player;
+    player           = default_player;
     Boomer_Bill      = Default_Boomer_Bill;
     Belle_Boomerette = Default_Belle_Boomerette;
     Gregory          = Default_Gregory;
@@ -606,7 +605,7 @@ function fillSettingsPage() {
 
     // Autosave
     // Update autosave variable
-    if(settings.autosave_interval != settings_default.autosave_interval) {
+    if(settings.autosave_interval != default_settings.autosave_interval) {
         dom('autosave_interval').value = settings.autosave_interval;
         clearInterval(autosave);
         autosave = setInterval(() => {
@@ -615,12 +614,12 @@ function fillSettingsPage() {
     }
 
     // Notification time
-    if(settings.notificationLength != settings_default.notificationLength) {
+    if(settings.notificationLength != default_settings.notificationLength) {
         dom('notificationLength').value = settings.notificationLength;
     }
 
     // Disable keybinds
-    if(settings.disableKeybinds != settings_default.disableKeybinds) {
+    if(settings.disableKeybinds != default_settings.disableKeybinds) {
         elDisableKeybinds.checked = settings.disableKeybinds;
     }
 }
@@ -630,7 +629,7 @@ function saveSettings() {
     localStorage.setObject("settings", settings);
 }
 function resetSettings(dialog = false) {
-    settings = settings_default;
+    settings = default_settings;
     saveSettings();
     fillSettingsPage();
 
@@ -666,7 +665,7 @@ keybinds_default['keys'] = Object.keys(keybinds_default);
 keybinds_default['keys'].pop();
 
 // Default settings object
-const settings_default = {
+const default_settings = {
     notificationLength: 6,      // number - Time in seconds
     disableKeybinds: false,     // boolean
     autosave_interval: 5,
@@ -1423,7 +1422,7 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
 
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     if(Charles.tome.decreaseWages.value+amount>=22026){
-        toast('You can only have 22025 Decrease Wages tomes')
+        toast('', 'You can only have 22025 Decrease Wages tomes', '', false, true);
         return;
     }
     if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
@@ -1489,14 +1488,9 @@ function HoeCost(type=0,amount=1,mode="query"){
 }
 
 // Hoe images
-const hoeImg = [
-    './assets/tools/tool_0.png',
-    './assets/tools/tool_1.png',
-    './assets/tools/tool_2.png',
-    './assets/tools/tool_3.png',
-    './assets/tools/tool_4.png',
-    './assets/tools/tool_5.png',
-]
+function hoeImg(type) {
+    return cosmetics['tools'][settings.cosmetics.tools][type];
+}
 
 function gregLevelTest(type, minusone = true, debug) {
     let modifier = -1;
@@ -1578,10 +1572,10 @@ function CreateHoe(type=0, amount=1, progress=0) {
             if(settings.enableMainProgress == true) {
                 elMainProgressContainer.classList.add('status_tidbit_in');
             }
-            dom('main_progress_image').src = hoeImg[type];
+            dom('main_progress_image').src = hoeImg(type);
             
             // Greg info
-            dom('greg_progress_image').src = hoeImg[type];
+            dom('greg_progress_image').src = hoeImg(type);
             dom('greg_crafting_info').classList.remove('inactive');
             dom('greg_crafting_info').title = 'Crafting...';
             // mouseConfetti([1, 4], ccWhite);

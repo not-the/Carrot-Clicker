@@ -4,6 +4,7 @@
 const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
+const elConfetti = dom('confetti');
 // var tooltipBill =       dom("billtooltip").style.top;
 // var tooltipBelle =      dom("belletooltip").style.top;
 // var tooltipGreg =       dom("gregtooltip").style.top;
@@ -68,10 +69,12 @@ const tipsMenu =      dom('tips_menu');
 /*---------------FUNCTIONS-----------------*/
 //#region
 
-// Screen Confetti (GIF overlay)
-const elConfetti = dom('confetti');
+/** Screen Confetti (GIF overlay)
+ * @param {number} type Gif to be used in the overlay
+ * @returns 
+ */
 function confetti(type = 1) {
-    console.log('Confetti!');
+    // console.log('Confetti!');
     if(!settings.confetti_effects) return;
     let duration = 6760;
     elConfetti.src = `./assets/confetti${type}.gif`;
@@ -93,9 +96,8 @@ const confettiColors =  ['red', 'blue', 'cyan', 'purple', 'yellow'];
 const ccGold =          ['goldenrod', 'yellow', 'white', '#e1cfa4', '#dcb276', '#be7e4e'];
 const ccWhite =         ['white'];
 const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01', '#974810'];
-/**
- * 
- * @param {array} particles Array item one is the minimum amount of particles, item 2 is the maximum.
+/** Confetti effect at mouse position
+ * @param {array} particles Array [0] is the minimum amount of particles, [1] is the maximum.
  * @param {array} colorArray Array to pull random colors from
  * @param {number} time Particle lifespan in milliseconds. Will also effect the travel distance of the particles.
  * @returns 
@@ -160,7 +162,13 @@ function buttonSound() {
 }
 
 
-// Popup Notifications
+/** Popup Dialog
+ * @param {string} title Dialog title
+ * @param {string} desc Dialog description
+ * @param {string} buttonName Name for the accept button
+ * @param {string} buttonStyle Class to be applied to the accept button
+ * @param {string} buttonAction Code to be run if the accept button is pressed
+ */
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     // Close other popup first
     closeDialog();
@@ -178,19 +186,21 @@ function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
     if(desc)        {eInnerText(elDialog.desc, desc);}
     if(buttonName)  {eInnerText(elDialog.buttons.accept, buttonName);}
     
-    if(buttonStyle) {
-        elDialog.buttons.accept.classList.add(buttonStyle);
-    }
+    if(buttonStyle) { elDialog.buttons.accept.classList.add(buttonStyle); }
 
     dialogButtonAction = buttonAction;
 }
 
-// Close dialog
-function closeDialog(doAction, backdrop = false) {
+/** Close all popup menus
+ * @param {boolean} doAction Whether or not to run dialogButtonAction 
+ * @param {boolean} backdrop If the backdrop was clicked to run the function
+ * @returns 
+ */
+function closeDialog(doAction, backdrop=false) {
     buttonSound();
 
-    // Cancel if specific theme is chosen
-    if(backdrop == true && $('body').classList.contains('theme_blockgame')) return;
+    // Some themes have solid backdrops, ignore
+    if(backdrop == true && themes[settings.theme].no_backdrop_click == true) return;
 
     // Reset dialog
     if(dialogOpen) {
@@ -264,11 +274,7 @@ function closeDialog(doAction, backdrop = false) {
 }
 
 
-// Create Toast notification
-// For the COLOR parameter, options are:
-// gray (leave blank), "red", "orange", "gold", "green", "cyan", "blue", "purple", "brown", "dirt"
-/**
- * 
+/** Toast notifications
  * @param {string}   title Title
  * @param {string}   desc Description
  * @param {string}   color Toast style
@@ -391,7 +397,10 @@ function toast(
     return id;
 }
 
-// Delete Toast Notification
+/** Close Toast Notification
+ * @param {number} id ID of the toast you want to close
+ * @param {boolean} animate Whether or not to play a dismiss animation
+ */
 function closeToast(id, animate = true) {
     // console.log(id + " - toast removed");
     let t = JSON.stringify(toastsList[id]);
@@ -413,6 +422,9 @@ function closeToast(id, animate = true) {
     delete toastsList[id];
 }
 
+/** Clear all toasts
+ * @param {boolean} force Forces a clear even if some toasts cannot be closed normally
+ */
 function clearToasts(force = false) {
     for(entry in toastsList) {
         // console.log(entry);
@@ -439,7 +451,11 @@ const infoTab         = dom("stats-panel-button");
 const achievementsTab = dom("achievements-panel-button");
 const settingsTab     = dom("settings-panel-button");
 
-// Change panel
+/** Change Tripane panel
+ * @param {string} to Name of the tripane panel to switch to
+ * @param {boolean} noSound True prevents the button sound from playing
+ * @returns 
+ */
 function panelChange(to, noSound = false) {
     if(currentPanel == to) {
         return;
@@ -481,7 +497,11 @@ function panelChange(to, noSound = false) {
 //#endregion
 
 
-// Click bonus popup
+/** Click number popup
+ * @param {boolean} useMousePos 
+ * @param {string} amount 
+ * @param {string} style Styling to be applied
+ */
 //#region 
 function popupHandler(useMousePos = true, amount, style = 'carrot') {
     // Create Element
@@ -549,6 +569,7 @@ var fallingID = 0;
 var fallingActive = 0;
 var fallingFrenzy = false;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
+/** Creates a falling carrot */
 function fallingCarrot() {
     var element = document.createElement("img");
     
@@ -606,7 +627,7 @@ function fallingCarrot() {
 }
 
 
-// Theme switcher <-> Cosmetic switcher
+/** Theme switcher <-> Cosmetic switcher */
 function switchSwitchers() {
     buttonSound();
 
@@ -624,6 +645,7 @@ function switchSwitchers() {
 }
 
 /* ----- Fancy Theme Switcher ----- */
+/** Opens the theme menu */
 function themeSwitcher() {
     themeSwitcherOpen = true;
     themeMenu.classList.add('visible');
@@ -633,6 +655,7 @@ function themeSwitcher() {
     newIndicator(false, 'theme');
     buttonSound();
 }
+/** Closes the theme menu */
 function closeThemeSwitcher(noOverlay = false) {
     themeMenu.classList.remove('visible');
     if(noOverlay == false) {
@@ -642,6 +665,7 @@ function closeThemeSwitcher(noOverlay = false) {
 
 /* ----- Fancy Cosmetic Switcher ----- */
 var uncollapseNeeded = false;
+/** Opens the cosmetic menu */
 function cosmeticSwitcher(category = false) {
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
@@ -668,6 +692,7 @@ function cosmeticSwitcher(category = false) {
         });
     }
 }
+/** Closes the cosmetic menu */
 function closeCosmeticSwitcher(noOverlay = false) {
     cosmeticMenu.classList.remove('visible');
     if(noOverlay == false) {
@@ -675,7 +700,7 @@ function closeCosmeticSwitcher(noOverlay = false) {
     }
 }
 
-/* ----- Fancy Prestige menu ----- */
+/** Opens the prestige menu */
 function openPrestigeMenu() {
     // Prevent from opening if unavailable
     if(player.lifetime.golden_carrots < 1 && player.prestige_potential < 1) {return};
@@ -760,7 +785,6 @@ function populateTipsMenu() {
 
 
 // Page elements
-const farmableNames = document.querySelectorAll('.farmable_name');
 const characterAvatars = {
     'bill':     dom('bill_avatar'),
     'belle':    dom('belle_avatar'),
@@ -780,17 +804,21 @@ const characterNames = {
     // ...
 }
 
-// Change cosmetic (V2)
+/** Change cosmetics
+ * @param {string} target Cosmetic type
+ * @param {string} to Cosmetic name
+ * @param {boolean} resetState 
+ */
 function setCosmetic(target, to, resetState = false) {
-    // Reset to default first
-    if(resetState == false && to !== 'default')
-    {setCosmetic(target, 'default', true);}
-
     // console.log('Switching ' + target + '\'s cosmetic to: ' + to);
+
+    // Reset to default first
+    if(resetState == false && to != 'default')
+    { setCosmetic(target, 'default', true); }
+    // console.log(`setCosmetic(${target}, ${to}, ${resetState})`);
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
-    // console.log(`cosmetics[${target}][${to}]`)
 
     // Change page
     switch(target) {
@@ -803,7 +831,6 @@ function setCosmetic(target, to, resetState = false) {
                 {setCosmetic(target, cosmetic[target]);}
                 else {setCosmetic(target, 'default');}
             }
-
             break;
         
         case 'farmable':
@@ -817,13 +844,10 @@ function setCosmetic(target, to, resetState = false) {
             // Image render type
             if(cosmetic.hasOwnProperty('render_type') && cosmetic.render_type != false) {
                 // Pixelated
-                if(cosmetic.render_type == 'pixel') {
-                    mainCarrot.classList.add('render_pixelated');
-                }
+                if(cosmetic.render_type == 'pixel') { mainCarrot.classList.add('render_pixelated'); }
             } else {
                 mainCarrot.classList.remove('render_pixelated');
             }
-
             break;
 
         case 'bill':
@@ -831,30 +855,36 @@ function setCosmetic(target, to, resetState = false) {
         case 'greg':
         case 'charles':
         case 'carl':
+            if(!characterQuery(target)) return;
             if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
             {characterAvatars[target]['src'] = cosmetic.image;}
             if(cosmetic.hasOwnProperty('rename') && cosmetic.rename != false)
             {eInnerText(characterNames[target], cosmetic.rename);}
             break;
+
+        case 'tools':
+            for(hi = 0; hi < Default_Gregory.HoePrices.length; hi++) {
+                if(cosmetic.hasOwnProperty(`${hi}`) && cosmetic[`${hi}`] != false) {
+                    document.querySelectorAll(`.tool_${hi}`).forEach(element => {
+                        element.src = cosmetic[hi];
+                    });
+                }
+            }
+            break;
     }
-
-
-    // Image
-
-
-    // Object.hop = property => {return this.hasOwnProperty(property);}
 
     // Loop through page elements containing farmable item name and set accordingly
     function nameLoop(farmable) {
-        farmableNames.forEach(e => {
+        document.querySelectorAll('.farmable_name').forEach(e => {
             e.innerText = farmable + 's';
         });
     }
 
+    // Save
     settings.cosmetics[target] = to;
     saveSettings();
 
-    // Fancy Switcher fix
+    // Update page
     cosmeticSwitcherCheckmark(target, to, from);
 }
 //#endregion
@@ -1502,7 +1532,9 @@ elAchievementFilter.addEventListener('change', () => {
 });
 
 var currentTheme;
-// Set theme
+/** Set theme
+ * @param {string} theme Theme to switch to
+ */
 function setTheme(theme) {
     // var theme = optionTheme.value;
     var theme_color = '#312e2e';
