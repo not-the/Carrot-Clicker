@@ -1258,6 +1258,8 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         // Update page
         characterPrices();
         characterButtons();
+        if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
+        if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
 
         // Animation
         mouseConfetti([2, 3], ccGold);
@@ -1343,6 +1345,37 @@ function Prestige() {
     // updatePrestigeMenu();
     showPrestigeStats();
 }
+/**
+ * Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
+ * @param {Object} character 
+ * @returns Carrots per Click or Carrots per Second
+ */
+function Calculate_Carrots(character){
+    let bH=1+Charles.tome.betterHoes.value/100
+    //Zcheck Checks to see if result in 0 Carrots Per
+    let Zcheck;
+    let Zcheck2;
+    if(character.Hoes[0]==1){Zcheck=1;}else{Zcheck=0}
+    //Calculates Hoe Values
+    let cpHoes = 
+          (1*bH*(character.Hoes[0]+Zcheck))
+        + (10*bH*character.Hoes[1])
+        + (100*bH*character.Hoes[2])
+        + (1000*bH*character.Hoes[3])
+        + (10000*bH*character.Hoes[4])
+        + (100000*bH*character.Hoes[5]);
+
+    
+    if(Charles.tome.improveWorkingConditions.value>0) {Zcheck2=0;}
+    else{Zcheck2=1;}
+    
+    //returns proper value for Carrots Per
+    if(cpHoes>0) {
+        return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl*cpHoes;
+    } else {
+        return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl;
+    }
+}
 
 //#endregion
 
@@ -1372,7 +1405,7 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
     if(amount==1){
         //decreaseWages
         if(tome==Charles.tome.decreaseWages){
-            if(Charles.tome.decreaseWages.price<50){
+            if(Charles.tome.decreaseWages.price+i<=50){
                 multibuyPrice(0.001);
             }else{
                 multibuyPrice(0.039);
@@ -1380,22 +1413,18 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
         }
         //improveWorkingConditions
         else if(tome==Charles.tome.improveWorkingConditions){
-            if(Charles.tome.improveWorkingConditions+i<75){
-                multibuyPrice(0.11);
-            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
-                multibuyPrice(0.12)
+            if(Charles.tome.improveWorkingConditions.price+i<50){
+                multibuyPrice(0.001);
             }else{
-                multibuyPrice(0.08)
-            }   
+                multibuyPrice(0.039);
+            }
         }
         //betterHoes
         else if(tome==Charles.tome.betterHoes){
             if(Charles.tome.betterHoes.price+i<75){
-                multibuyPrice(0.11);
-            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
-                multibuyPrice(0.13);
+                multibuyPrice(0.001);
             }else{
-                multibuyPrice(0.09);
+                multibuyPrice(0.039);
             }
             
         }
@@ -1422,7 +1451,7 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
 
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
     if(Charles.tome.decreaseWages.value+amount>=22026){
-        toast('', 'You can only have 22025 Decrease Wages tomes', '', false, true);
+        toast('You can only have 22025 Decrease Wages tomes')
         return;
     }
     if(player.golden_carrots >= CharlesUpgradePrices(tome,amount)) {
@@ -1432,17 +1461,15 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
         CharlesUpgradePrices(tome,amount,"apply");
 
         updateCharlesShop();
-        mouseConfetti([3, 8], ccWhite) 
+        
+        Calculate_Carrots(Boomer_Bill);Calculate_Carrots(Belle_Boomerette);
+        mouseConfetti([3, 8], ccWhite)
     } else {
         toast(
             'Cannot afford',
             `You need ${DisplayRounded(tome.price, 1)} Golden Carrots to buy this tome`,
             '', false, true
         );
-    }
-
-    if(tome == Charles.tome.betterHoes) {
-        updateHoePrices();
     }
 }
 
@@ -1459,7 +1486,6 @@ function DecreaseWagesEffects(){
         return (Math.log(Charles.tome.decreaseWages.value)/10);
     }
 }
-
 
 //#endregion
 
@@ -1652,6 +1678,8 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
         player.lifetime.hoes.equipped+=1;
         character.Hoes[type]+=amount;
         Gregory.Hoes[type]-=amount;
+        if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
+        if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
 
         // Animate
         // var from =      elHoes['greg'][type];
@@ -1790,64 +1818,7 @@ function DisplayHoe(character, type) {
 //#region
 
 function gameLoop() {
-    // Calculates the CPC
-    var cpcHoes;
-    var cpsHoes;
-    if(Charles.BetterHoes>0){
-        cpcHoes = 
-            (Charles.BetterHoes*1.15)*(Boomer_Bill.Hoes[0])
-            + (10*Boomer_Bill.Hoes[1])
-            + (100*Boomer_Bill.Hoes[2])
-            + (1000*Boomer_Bill.Hoes[3])
-            + (10000*Boomer_Bill.Hoes[4])
-            + (100000*Boomer_Bill.Hoes[5]);
-        
-        cpsHoes =
-            (Charles.BetterHoes*1.15)*(Belle_Boomerette.Hoes[0] 
-            + (10*Belle_Boomerette.Hoes[1])
-            + (100*Belle_Boomerette.Hoes[2])
-            + (1000*Belle_Boomerette.Hoes[3])
-            + (10000*Belle_Boomerette.Hoes[4])
-            + (100000*Belle_Boomerette.Hoes[5])
-            );
-    }else{
-        cpcHoes=
-            (Boomer_Bill.Hoes[0])
-            + (10*Boomer_Bill.Hoes[1])
-            + (100*Boomer_Bill.Hoes[2])
-            + (1000*Boomer_Bill.Hoes[3])
-            + (10000*Boomer_Bill.Hoes[4])
-            + (100000*Boomer_Bill.Hoes[5]);
-        cpsHoes=
-            (Belle_Boomerette.Hoes[0] 
-            + (10*Belle_Boomerette.Hoes[1])
-            + (100*Belle_Boomerette.Hoes[2])
-            + (1000*Belle_Boomerette.Hoes[3])
-            + (10000*Belle_Boomerette.Hoes[4])
-            + (100000*Belle_Boomerette.Hoes[5])
-            );
-    }
-    
-    if(Boomer_Bill.Hoes[0]+cpcHoes>0) {
-        player.cpc=(Boomer_Bill.lvl+Boomer_Bill.lvl*(cpcHoes));
-    } else {
-        player.cpc=Boomer_Bill.lvl;
-    }
-   
-    // Calculates the CPS
-    if(Belle_Boomerette.Hoes[0]+cpsHoes>0) {
-        player.cps=(Belle_Boomerette.lvl+Belle_Boomerette.lvl*(cpsHoes));
-    } else {
-        player.cps=Belle_Boomerette.lvl;
-    }
-    // Add improve working conditions bonus
-    if(Charles.tome.improveWorkingConditions.value>0) {
-        player.cpc = (player.cpc * (1.1 * Charles.tome.improveWorkingConditions.value));
-        player.cps = (player.cps * (1.1 * Charles.tome.improveWorkingConditions.value));
-    }
-    
-
-    // Providing updated information to the player
+   // Providing updated information to the player
 
     //// Update numbers on page ////
 

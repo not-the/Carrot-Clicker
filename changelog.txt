@@ -1,4 +1,5 @@
 // ----------------------------------------------------------- //
+<<<<<<< HEAD
     VERSION dev beta 1.11.8
     4-8-2022
 // ----------------------------------------------------------- //
@@ -9,6 +10,16 @@
 
 ~ Kal
 
+=======
+    VERSION dev beta 1.11.7
+    4-8-2022
+// ----------------------------------------------------------- //
+ - Created Calculate_Carrots to only calculate and update the cpc and cps when necessary
+ - Each Better Hoe tome improves Hoes multiplier by 1%
+ - All Charles upgrades function at a somewhat reasonable price
+   
+ ~JJ
+>>>>>>> 476c2de1e0c825d6ec0f6e95622891f90b45c8a8
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.11.6
