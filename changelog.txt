@@ -1,18 +1,5 @@
 Upcoming:
 - New default tool sprites
-// ----------------------------------------------------------- //
-    VERSION dev beta 1.12
-    4-9-2022
-// ----------------------------------------------------------- //
--fixed prestige potential not resetting
--Belle price scaling
-    + 0-75 0.11--> 0.07
-    + 75-100 0.12-->0.06
--Fixed cpc and cps not updating
--decreaseWages Value is properly set and displayed
--Charles information display changed to better reflect whats actually happening
--Everything Charles is Broken in a whole new way!!1
-~JJ
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.12.1
@@ -34,6 +21,21 @@ Themes:
 - Fixed the close all toasts button being the wrong width sometimes
 
 ~ Kal
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.12
+    4-9-2022
+// ----------------------------------------------------------- //
+
+-fixed prestige potential not resetting
+-Belle price scaling
+    + 0-75 0.11--> 0.07
+    + 75-100 0.12-->0.06
+-Fixed cpc and cps not updating
+-decreaseWages Value is properly set and displayed
+-Charles information display changed to better reflect whats actually happening
+-Everything Charles is Broken in a whole new way!!1
+~JJ
 
 
 // ----------------------------------------------------------- //
