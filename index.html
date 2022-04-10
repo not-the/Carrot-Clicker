@@ -225,8 +225,8 @@
             <p class="secondary_text">Go back/close menu: <b class="white">Escape</b></p>
             <p class="secondary_text">Dialog accept/select focused: <b class="white">Enter</b></p><br>
 
-            <p><b>Hoe keybinds:</b></p>
-            <p class="secondary_text">Hold the <b class="white">Alt</b> + your craft hotkey <b class="white">(4-9 by default)</b> to select a hoe to equip.</p>
+            <p><b>Tool keybinds:</b></p>
+            <p class="secondary_text">Hold the <b class="white">Alt</b> + your craft hotkey <b class="white">(4-9 by default)</b> to select a tool to equip.</p>
             <p class="secondary_text">Press the respective character's upgrade key <b class="white">(1-2 by default)</b> to equip to that character</p>
             <br/><br/>
 
@@ -285,14 +285,14 @@
 
                 </div>
 
-                <!-- Hoes -->
+                <!-- Tools -->
                 <div class="key_column flex_1">
                     
-                    <p class="flex_1 no_border"><b class="underline">Hoes:</b></p><br>
+                    <p class="flex_1 no_border"><b class="underline">Tools:</b></p><br>
 
                     <div class="keybind_item">
                         <label for="key_craft_0">
-                            <p>Craft Wooden hoe:</p>
+                            <p>Craft hoe:</p>
                             <button class="edit_keybind" id="key_craft_0" onclick="detectKey('key_craft_0')">
                                 -
                             </button>
@@ -419,7 +419,7 @@
                 <!-- Next prestige -->
                 <p class="prestigetooltip center half_width" style="padding-top: 6px;">
                     <!-- Prestige button -->
-                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, hoes, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold full_width" title="Prestige">
+                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold full_width" title="Prestige">
                         Prestige
                     </button><br>
                     Prestiging now will result in:<br/>
@@ -531,17 +531,14 @@
 
 
 
-            <b>Image Attribution:</b>
+            <span class="secondary_text">Image Attribution:</span>
             <a target="_blank" href="https://icons8.com/icon/83214/settings">Settings icon</a> from <a target="_blank" href="https://icons8.com">Icons8</a>
             <a href="https://www.flaticon.com/free-icon/medal_1895474">Medal icon</a> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
             <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">Lightbulb Icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">PICOL, PIctorial COmmunication Language</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.svg">Palette icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.svg">Scott de Jonge</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
             <a href="https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg">Speaker Icon</a> and <a href="https://commons.wikimedia.org/wiki/File:Mute_Icon.svg">Mute Icon</a> by Mobius, Public domain, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:About_icon_(The_Noun_Project).svg">About icon</a> made by AnsteyDesign, CC0, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Faenza-input-keyboard-symbolic.svg">Keyboard icon</a> Matthieu James, <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Emojione_2754.svg">Emoji One Question mark SVG</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Refresh_(89382)_-_The_Noun_Project.svg">Refresh icon</a> Nice and Serious, CC0, via Wikimedia Commons
-            <!-- <a href="https://commons.wikimedia.org/wiki/File:Backpack_(2551)_-_The_Noun_Project.svg">Backpack icon</a> by Rémy Médard, CC0, via Wikimedia Commons -->
+            <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.dsvg">Palette icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.svg">Scott de Jonge</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:Faenza-input-keyboard-symbolic.svg">Keyboard icon</a> made by Matthieu James, <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
 
             Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/">https://andersonseedsmn.com/home/dirt-background/</a>
 
@@ -663,7 +660,7 @@
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/icons/refresh.svg" alt="" class="dropdown_img">
                             Changelog
-                            <img src="./assets/icons/external.png" alt="(External)" class="dropdown_img right_img">
+                            <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
                         </div>
                     </a>
 
@@ -672,7 +669,7 @@
                         <div class="menu_item link_styling secondary_text">
                             <img src="./assets/icons/github.png" alt="" class="dropdown_img">
                             Github
-                            <img src="./assets/icons/external.png" alt="(External)" class="dropdown_img right_img">
+                            <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
                         </div>
                     </a>
 
@@ -892,7 +889,7 @@
                 <!--Gregory Rendering-->
                 <div class="Greg characterbox char_locked" id="greg_box">
                     <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                        Upgrade Greg to create and store hoes. The maximum amount of hoes you can hold is equal to his level. You only need 50% of a hoe's cost to start crafting.
+                        Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tools' cost to start crafting.
                     </div>
                     <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')">
                     <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')">
@@ -1010,7 +1007,7 @@
                         tabindex="0">
                             <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
                             <p>
-                                Reduce hoe costs<br/>
+                                High quality tools<br/>
                                 <span id="BetterHoes" class="tome_price">---</span>
                                 <span id="bh_count" class="tome_count">x0</span>
                             </p>
@@ -1221,7 +1218,7 @@
     
                         Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
                         <details class="stat_collapse">
-                            <summary>Hoes crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
+                            <summary>Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
                             Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
                             Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
                             Iron:   <b id="prestige_hoes_crafted_2">---</b><br/>
@@ -1248,7 +1245,7 @@
                     Total Clicks: <b id="lifetime_clicks">---</b><br/>
                     Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
                     <details class="stat_collapse">
-                        <summary>Hoes crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
+                        <summary>Tools crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
                         Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
                         Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>
                         Iron:   <b id="lifetime_hoes_crafted_2">---</b><br/>
@@ -1461,8 +1458,11 @@
                 <div class="footer_bottom">
                     <div class="footer_column">
                         <b>Created by:</b>
-                        <div class="secondary_text">not-the and JJCVIP</div>
-                        <a href="#" class="white" onclick="startCredits()">View Credits</a><br/>
+                        <div class="secondary_text">
+                            <a href="https://www.notkal.com/">not-the</a> and <a href="https://github.com/JJCVIP">JJCVIP</a>
+                            
+                        </div>
+                        <a class="link_styling underline white" role="button" onclick="startCredits()">View Credits</a><br/>
                     </div>
                     <div class="footer_column">
                         <b>These links don't do anything:</b><br/>

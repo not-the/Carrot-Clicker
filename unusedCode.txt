@@ -4,6 +4,14 @@
 
 /------------------------------------/
 
+index.html
+*In credits, image attribution section
+*   credit not required for these
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Refresh_(89382)_-_The_Noun_Project.svg">Refresh icon</a> Nice and Serious, CC0, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:About_icon_(The_Noun_Project).svg">About icon</a> made by AnsteyDesign, CC0, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Emojione_2754.svg">Emoji One Question mark SVG</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Backpack_(2551)_-_The_Noun_Project.svg">Backpack icon</a> by Rémy Médard, CC0, via Wikimedia Commons -->
+
 
 /----------CarrotClicker.Js---------/
 

@@ -17,12 +17,12 @@ const default_tips = {
         "Click here to cycle through available tips!",
         "Click the lvl up arrow to level up characters",
         "Long hover over a character to view their description",
-        "To buy a Hoe, go to Greg and click the correct type",
+        "Greg can craft tools that will buff your other characters",
         "If you see a ? near something you can click it to get a more detailed description of what it does",
     ],
     beginner: [ // 1
-        "To equip a Hoe, you must first buy a Hoe, then click the Hoe type under Bill or Belle",
-        "Each character can only hold up to 1 hoe for every level Greg has reached",
+        "To equip a tool, you must first craft one, then click the corresponding tool type under Bill or Belle",
+        "Each character can only hold up to 1 tool (per type) for every level Greg has reached",
         "By completing achievements you will earn mysterious tome pages.",
         "Completing achievements will give you additional themes and cosmetics to buy",
         "When clicking the carrot, cash will sometimes drop. Make sure to grab it!",
@@ -904,7 +904,7 @@ const achievements = {
     },
     '1_improve_hoe_costs': {
         'name': 'Divine Intervention',
-        'desc': 'Buy a tome that improves hoe costs. Unholy magic, I say.',
+        'desc': 'Buy a tome that improves tool costs. Unholy magic, I say.',
         'image': './assets/achievements/tome_improve_hoe_costs.png',
         'reward': false,
         'pages': 2,
@@ -1695,7 +1695,7 @@ const achievements = {
     // Hoes
     'first_hoe': {
         'name': 'The Tools to Victory',
-        'desc': 'Craft your first hoe (Tutorial milestone)',
+        'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
         'reward': () => { tutorialHoes(); },
         'pages': 1,
@@ -1808,7 +1808,7 @@ const achievements = {
     },
     'no_hoes_challenge': {
         'name': 'Nonbeliever',
-        'desc': 'Farm 5,000,000 carrots without crafting a single hoe (Challenge achievement)',
+        'desc': 'Farm 5,000,000 carrots without crafting a single tool (Challenge achievement)',
         'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 8,
@@ -1872,7 +1872,7 @@ const achievements = {
         }
     },
     'footer_carrot_clicker': {
-        'name': 'footer_carrot_clicker',
+        'name': 'Carrot Clicker Clicker',
         'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
         'image': './assets/achievements/footer_carrot.png',
         'reward': false,

@@ -46,6 +46,14 @@
     --light-darker-bg-color:    rgb(230, 230, 230);
     --light-theme-border-color: rgb(185, 185, 185);
 
+    /* theme_retro */
+    --retro-lightest: #ffffff;
+    --retro-light: #eaf5ca;
+    --retro-mid: #a3af87;
+    --retro-dark: #4c5c49;
+    --retro-darkest: #2c362a;
+    --retro-darkester: #262c25;
+
     /* Dark scrollbar (also changes other unstyled elements */
     /* color-scheme: dark; */
 	
@@ -548,6 +556,7 @@ summary:hover {
     position: relative;
     word-break: break-word;
     max-height: 400px;
+    min-width: fit-content;
 
     animation: toast 0.4s;
     pointer-events: initial;
@@ -2129,6 +2138,11 @@ body:not(.gp) #golden_carrot_count*/ {
     visibility: visible !important;
 }
 
+/* Description adjust */
+.achieve_grid .achievement_item.desc_fit .achievement_details {
+    /* outline: 4px solid red !important; */
+    /* right: -100%; */
+}
 
 
 
@@ -2526,6 +2540,9 @@ footer {
     #tripane .tab .button_icon {
         visibility: hidden;
         position: absolute;
+    }
+    .panel_select {
+        width: 150px;
     }
 }
 

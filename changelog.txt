@@ -2,6 +2,28 @@ Upcoming:
 - New default tool sprites
 
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.12.1
+    4-9-2022
+// ----------------------------------------------------------- //
+
+- Fixed an issue where clicking a keybind, then clicking another would not close the previous (unclosable) toast prompt
+- Some changes to the image attribution section of the credits
+- Replaced the external link icon
+- Fixed the achievement sort dropdown overlapping the title text on smaller screens
+- Fixed belle and greg's level up keybinds leveling by 2 instead of 1
+- Renamed the "Reduce hoe costs" tome to "High quality tools"
+- Replaced the word "hoe" with "tool" from all tips/hints/statistics and made said tips clearer
+
+Themes:
+- Changed the camo theme's background image and gave it some misc color fixes
+- Misc improvements to the OLED and Chat App themes
+- Retro theme overhaul
+- Fixed the close all toasts button being the wrong width sometimes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.11.9
     4-8-2022
 // ----------------------------------------------------------- //
@@ -10,7 +32,7 @@ Upcoming:
 - Took some things out of the main game loop
 - Game now saves after a prestige
 - Added support for multiple tags in location.hash
-- Added a new hash: #itch (similar to ach, short for achievement) and #dan (Disable Achievement Notifications) - disables achievement notifications using the no_achievement_toasts flag
+- Added a new hash: #itch (similar to ach, short for achievement) and #dan (Disable Achievement Notifications): disables achievement notifications using the no_achievement_toasts flag
 - Added a cosmetics button to the dropdown
 
 ~ Kal

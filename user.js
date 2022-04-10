@@ -454,10 +454,7 @@ function keybindHandler(event, state) {
     }
 
     //Level up
-    else if(
-        key == settings.keybinds['key_bill_lvlup']
-        // && event.shiftKey == false
-    ) {
+    else if(key == settings.keybinds['key_bill_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Boomer_Bill, equipWaiting, multibuy[mbsel]);
@@ -468,11 +465,7 @@ function keybindHandler(event, state) {
             LevelUp(Boomer_Bill, multibuy[mbsel]);
         }
     }
-    else if(
-        key == settings.keybinds['key_belle_lvlup']
-        // && event.shiftKey == false
-    ) {
-        LevelUp(Belle_Boomerette,multibuy[mbsel]);
+    else if(key == settings.keybinds['key_belle_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
@@ -483,11 +476,7 @@ function keybindHandler(event, state) {
             LevelUp(Belle_Boomerette, multibuy[mbsel]);
         }
     }
-    else if(
-        key == settings.keybinds['key_greg_lvlup']
-        // && event.shiftKey == false
-    ) {
-        LevelUp(Gregory,multibuy[mbsel]);
+    else if(key == settings.keybinds['key_greg_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             EquipHoe(Gregory, equipWaiting, multibuy[mbsel]);
@@ -499,7 +488,7 @@ function keybindHandler(event, state) {
         }
     }
 
-    // Hoes
+    // Tools
     else {
         for(i = 0; i <= 5; i++) {
             // Craft
@@ -563,7 +552,7 @@ function detectKey(bind) {
     keyWaiting = [true, bind];
     keyWaitingToast = toast(
         'Change keybind', `Press a key for "${bind}"`, '',
-        true, false, false, true,
+        true, true, false, true,
         () => { doneKeybind('none', false); }, 'Cancel'
     );
 }
@@ -1029,12 +1018,12 @@ function isUnlocked(type = 'theme', key, subtype) {
 
 
 // External achievement checks
-// After Greg crafts a hoe for the first time ~~(Called in carrot_clicker.js)~~ Called by first hoe achievement
+// After Greg crafts a tool for the first time ~~(Called in carrot_clicker.js)~~ Called by first tool achievement
 function tutorialHoes() {
     // store('tutorial_first_hoe', "done");
     toast(
-        "You've created your first hoe!",
-        "To equip it, click one of the glowing hoes on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a hoe is irreversible (for now).",
+        "You've created your first tool!",
+        "To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).",
         "", true);
 }
 // use_charles
@@ -1118,28 +1107,33 @@ function loopObject(obj, func) {
         func(item, key);
     }
 }
+var hashlist;
 function isDebug() {
-    if(location.hash == '#dev' || location.hash == '#developer' || location.hash == '#cheatmode' || store('debug') == 'true') return true;
+    if(hashlist.includes('dev')
+    || hashlist.includes('developer')
+    || hashlist.includes('cheatmode')
+    || hashlist.includes('debug')
+    || store('debug') == 'true') return true;
 }
 
 // URL hashes
 (function() {
     onhashchange = hash;
     function hash() {
-        let list = location.hash.substring(1).split('#');
-        console.log(list);
+        hashlist = location.hash.substring(1).split('#');
+        // console.log(hashlist);
 
         // Mute
-        if(list.includes('automute') || list.includes('mute')) {
+        if(hashlist.includes('automute') || hashlist.includes('mute')) {
             elEnableSounds.checked = false;
             settingSounds();
         }
         // Dev tools
         if(
-            list.includes('dev')
-            || list.includes('developer')
-            || list.includes('cheatmode')
-            || list.includes('debug')
+            hashlist.includes('dev')
+            || hashlist.includes('developer')
+            || hashlist.includes('cheatmode')
+            || hashlist.includes('debug')
         ) {
             store("cookies_accepted", "true");
 
@@ -1285,11 +1279,16 @@ function isDebug() {
         // }
 
         // Hide achievement toasts
-        if(list.includes('itch') || list.includes('dan')) {
+        if(hashlist.includes('itch') || hashlist.includes('dan')) {
             player.flags['no_achievement_toasts'] = true;
         } else {
             player.flags['no_achievement_toasts'] = false;
         }
+
+        // Settings
+        // if(hashlist.join('#').includes('$')) {
+        //     console.log('setting hash');
+        // }
     }
     hash();
 })();

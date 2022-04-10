@@ -1345,7 +1345,36 @@ function populateAchievements() {
     elAchievementsList.innerHTML = achievementHTML;
     // eInnerHTML(elAchievementsList, achievementHTML); // doesn't work
 }
+var agAdjusted = false;
+function achieveGridAdjust() {
+    // Size adjust
+    let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if(width > 1166) { width = 1166 - 64; }
+    else { width = dom('achievements_list').offsetWidth; }
+    let item_width = 68;
+    let amount = Math.floor(width / item_width);
+    // console.log(width, amount);
+    
+    var iterate = 1;
+    let list = document.querySelectorAll('#achievements_list .achievement_item');
+    console.log(list);
+    list.forEach(item => {
+        if(iterate > Math.ceil(amount / 2)) {
+            item.classList.add('desc_fit');
+        } else { item.classList.remove('desc_fit'); }
+        // Count
+        if(iterate < amount) {
+            iterate++;
+        } else {
+            iterate = 1;
+        }
+    });
 
+    agAdjusted = true;
+}
+
+
+// Achievement reward HTML
 function rewardHTML(achieve) {
     // Rewards info
     if(achieve.reward != false) {

@@ -191,16 +191,16 @@
 
 
 /* OLED Dark theme */
-.theme_oled {
-    background-color: black;
-}
-.theme_oled .popup_box {
-    background-color: black;
-}
-.theme_oled .Basic_Info {
-    background-color: black;
-}
-.theme_oled .hover_menu {
+.theme_oled,
+.theme_oled .popup_box,
+.theme_oled .Basic_Info,
+.theme_oled .Basic_Info,
+.theme_oled .hover_menu,
+.theme_oled .characterbox,
+.theme_oled .bottom,
+.theme_oled #tripane,
+.theme_oled #tripane nav,
+.theme_oled .edit_keybind:not(:focus) {
     background-color: black;
 }
 .theme_oled #left-section,
@@ -209,28 +209,14 @@
 .theme_oled #tripane {
     box-shadow: none;
 }
-
 .theme_oled #left-section {
     background-color: unset;
-}
-
-.theme_oled .characterbox {
-    background-color: black;
-}
-.theme_oled .bottom {
-    background-color: black;
 }
 .theme_oled .blackedout {
     filter: contrast(0%) brightness(30%);
 }
 
 /* Tri-pane */
-.theme_oled #tripane {
-    background-color: black;
-}
-.theme_oled #tripane nav {
-    background-color: black;
-}
 .theme_oled #tripane nav .tab {
     background-color: rgb(24, 24, 24);
     color: gray;
@@ -241,12 +227,19 @@
     border-bottom: none;
     color: white;
 }
+.theme_oled .panel {
+    border-left: 1px solid var(--brown-darker-color);
+    border-right: 1px solid var(--brown-darker-color);
+}
+/* .theme_oled #settings-panel { border-right-color: white; }
+.theme_oled #achievements-panel { border-left-color: white; } */
 
 /* Achievements */
 .theme_oled .achievement_item,
 .theme_oled .footer_bottom,
 .theme_oled .prestige_item,
-.theme_oled .shop_item {
+.theme_oled .shop_item,
+.theme_oled .theme_item {
     background-color: black;
     box-shadow: none;
     border: 1px solid var(--border-color);
@@ -523,75 +516,168 @@
 
 
 /* Retro theme */
-.theme_retro * {
-    transition: none;
+.theme_retro *:not(.small_confetti) {
     font-family: monospace;
+    transition: none;
+    border-radius: 0;
+    box-shadow: none;
 }
 .theme_retro {
-    background-color: #0f380e;
-    color: #cadca0;
+    background-color: var(--retro-darkest);
+    color: var(--retro-lightest);;
+}
+.theme_retro .main_bg_color {
+    background-color: var(--retro-darkest);
 }
 .theme_retro a {
-    color: #cadca0;
+    color: var(--retro-lightest);
 }
 .theme_retro a:hover,
 .theme_retro .link_styling:hover {
     color: white;
 }
-.theme_retro img,
-.theme_retro #main_carrot {
+.theme_retro img:not(.button_icon),
+.theme_retro #main_carrot,
+.theme_retro #mouse_confetti {
     image-rendering: pixelated;
     filter: saturate(0%)
-            brightness(85%)
+            brightness(80%)
             sepia(100%)
             hue-rotate(54deg)
-            saturate(120%);
-    border-radius: 0;
+            saturate(90%);
+    border-radius: 0 !important;
+}
+.theme_retro img.invert {
+    filter: invert()
+    saturate(0%)
+    brightness(80%)
+    sepia(100%)
+    hue-rotate(54deg)
+    saturate(90%);
 }
 .theme_retro button {
-    border-color: #cadca0;
-    color: #cadca0;
+    border-color: var(--retro-mid);
+    color: var(--retro-lightest);;
     border-radius: 0;
+    box-shadow: 8px 8px 0 var(--retro-darkester);
+    background-color: var(--retro-dark);
+}
+.theme_retro button:hover {
+    color: var(--retro-darkest);
+    background-color: var(--retro-mid);
 }
 .theme_retro input,
 .theme_retro select {
-    background-color: #0f2c0e;
-    color: #cadca0;
+    background-color: var(--retro-darkest);
+    color: var(--retro-lightest);
     border-radius: 0;
 }
+.theme_retro .slider,
+.theme_retro .slider::-webkit-slider-thumb,
+.slider::-moz-range-thumb {
+    background: var(--retro-darkest) !important;
+}
+
+/* Scrollbar */
+.theme_retro * ::-webkit-scrollbar-track {
+	border-radius: 0;
+	background-color: var(--retro-darkest);
+}
+.theme_retro * ::-webkit-scrollbar-thumb {
+	border-radius: 0;
+	background-color: var(--retro-mid);
+    box-shadow: none;
+    border: 3px solid var(--retro-darkest);
+}
+
+/* Overlays */
+.theme_retro #backdrop {
+    background-color: var(--retro-darkester);
+}
+.theme_retro .popup_box {
+    background-color: var(--retro-dark);
+    border-color: transparent;
+}
+.theme_retro .theme_item {
+    background-color: var(--retro-darkest);
+}
+
+/* Number Popup */
 .theme_retro .clickvisual {
-    color: #cadca0;
+    color: var(--retro-lightest);
     font-weight: bolder;
     letter-spacing: -2px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000,
+                 8px 8px 0 var(--retro-darkest);
+    
+    pointer-events: none;
+    animation: clickBonus_retro 1.25s linear forwards;
 }
-.theme_retro .toast {
-    border-radius: 0;
-    background-color: #0f2c0e;
-    border-color: #30622f;
+@keyframes clickBonus_retro {
+    0% {
+        transform: translateY(-20px) translateX(-60%);
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-90px) translateX(-60%);
+        opacity: 0;
+    }
+}
+.theme_retro .toast,
+.theme_retro .toast.achievement_item {
+    border-radius: 0 !important;
+    background-color: var(--retro-darkest);
+    border-color: var(--retro-dark);
 }
 
 
 
-.theme_retro .Basic_Info {
-    background-color: #30622f;
+.theme_retro .Basic_Info,
+.theme_retro .hover_menu {
+    background-color: var(--retro-dark);
+}
+.theme_retro #info_dropdown:hover,
+.theme_retro #info_dropdown:focus,
+.theme_retro .menu_item:hover {
+    background-color: var(--retro-mid);
+    color: var(--retro-darkest);
 }
 .theme_retro #left-section {
-    background-color: #0f2c0e;
+    background-color: var(--retro-darkest);
     box-shadow: none;
     border-radius: 0;
 }
+.theme_retro #main_carrot {
+    transition: none;
+    filter: saturate(0%)
+        brightness(80%)
+        sepia(100%)
+        hue-rotate(54deg)
+        saturate(90%)
+        drop-shadow(8px 8px 0 var(--retro-darkester));
+}
+.theme_retro #main_carrot:active {
+    transform: translateY(4px);
+}
 .theme_retro .characterbox {
-    background-color: #30622f;
-    border-color: #30622f;
+    background-color: var(--retro-dark);
+    border-color: var(--retro-dark);
     border-radius: 0;
-    box-shadow: 8px 8px 0 #0f380e;
+    box-shadow: 8px 8px 0 var(--retro-darkester);
 }
 .theme_retro .bottom {
-    background-color: #0f380e;
+    background-color: var(--retro-darkest);
     border-radius: 0;
 }
 .theme_retro #Greg_Bar {
-    background-color: #0f2c0e;
+    background-color: var(--retro-darkest);
+    border-radius: 0;
+}
+.theme_retro .greg_crafting_info {
+    background-color: var(--retro-darkest);
+    box-shadow: none;
     border-radius: 0;
 }
 /* .theme_retro #Greg .toolicon {
@@ -601,16 +687,23 @@
 
 /* Tri-pane */
 .theme_retro #tripane {
-    background-color: #30622f;
+    background-color: var(--retro-dark);
 }
 .theme_retro #tripane nav {
-    background-color: #0f380e;
+    background-color: var(--retro-darkest) !important;
 }
-.theme_retro #tripane .tab {
-    background-color: #0f380e;
+.theme_retro .tab {
+    background-color: var(--retro-darkest) !important;
 }
-.theme_retro #tripane .activetab {
-    background-color: #30622f;
+.theme_retro .tab:hover { color: white; }
+.theme_retro .activetab {
+    background-color: var(--retro-dark) !important;
+}
+
+.theme_retro .footer_bottom,
+.theme_retro .shop_item,
+.theme_retro .achievement_item {
+    background-color: var(--retro-darkester);
 }
 
 
@@ -641,8 +734,7 @@
 .theme_terminal .reward,
 .theme_terminal .toast,
 .theme_terminal .footer_bottom,
-.theme_terminal #backdrop
- {
+.theme_terminal #backdrop {
     background-color: #0c0c0c;
     border-color: transparent;
     animation: none !important;
@@ -1031,15 +1123,23 @@
 
 /* Camo theme */
 .theme_camo {
+    image-rendering: pixelated;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 url('./assets/theme/camo/camo.png');
-    background-size: 900px;
+    background-size: 1200px;
+}
+.theme_camo .Basic_Info,
+.theme_camo .hover_menu {
+    background-color: #464b31;
+    border-color: gray;
 }
 .theme_camo #left-section {
     background-color: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(7px);
+    /* backdrop-filter: blur(7px); */
 }
-.theme_camo .characterbox {
+.theme_camo .characterbox,
+.theme_camo .shop_item,
+.theme_camo .greg_crafting_info {
     background-color: var(--brown-bg-color);
     border-color:  var(--brown-bg-color);
 }
@@ -1128,7 +1228,8 @@
 .theme_chatapp select,
 .theme_chatapp #left-section,
 .theme_chatapp .theme_item,
-.theme_chatapp .footer_bottom {
+.theme_chatapp .footer_bottom,
+.theme_chatapp .greg_crafting_info {
     background-color: #2f3136;
     border: 1px solid #202225;
     box-shadow: none;
