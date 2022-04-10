@@ -212,7 +212,7 @@ const default_player = {
     prestige_available: false,
 
     // Current prestige
-    prestige: playerPrestigeTemplate,
+    prestige: JSON.parse(JSON.stringify(playerPrestigeTemplate)),
 
     // Lifetime stats
     lifetime: {
@@ -288,7 +288,7 @@ const Default_Charles = {
             price:1
         },
         decreaseWages:{
-            value:1,
+            value:0,
             price:1
         },
         betterHoes:{
@@ -1022,10 +1022,11 @@ function updateCharlesShop() {
 
     // Debugging tooltip
     eInnerText(elCharles.charlesTooltip,
-        `IWC: ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
+        ` ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
         BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
-        DWW: ${Math.floor(Charles.tome.decreaseWages.value)}%`);
+        DWW: ${(DecreaseWagesEffects()*100).toFixed(2)}%`);
 }
+
 var carlShopData = {};
 /**
  * Updates Carls shop content
@@ -1209,15 +1210,15 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
             if(Gregory.lvl+i<50){
                 multibuyPrice(0.14);
             }else{
-                multibuyPrice(0.21);
+                multibuyPrice(0.22);
             }
         }
         // Belle
         else if(character==Belle_Boomerette){
             if(Belle_Boomerette.lvl+i<75){
-                multibuyPrice(0.11);
+                multibuyPrice(0.07);
             }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
-                multibuyPrice(0.12)
+                multibuyPrice(0.06)
             }else{
                 multibuyPrice(0.08)
             }   
@@ -1298,15 +1299,11 @@ function Prestige() {
     clearInterval(cpsInterval);
 
     // Statistics
-    player.prestige = playerPrestigeTemplate;
-
+    player.prestige = JSON.parse(JSON.stringify(playerPrestigeTemplate));
     // Give golden carrots
     player.golden_carrots += player.prestige_potential;
     player.lifetime.golden_carrots += player.prestige_potential;
     player.lifetime.prestige_count += 1;
-
-    // Reset prestige potential
-    player.prestige_potential = 0;
 
     // Reset characters to default
     [
@@ -1352,6 +1349,10 @@ function Prestige() {
     updateCharlesShop();
     // updatePrestigeMenu();
     showPrestigeStats();
+
+    //calculate CPC and CPS
+    player.cpc=Calculate_Carrots(Boomer_Bill);
+    player.cps=Calculate_Carrots(Belle_Boomerette);
 }
 /**
  * Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
@@ -1487,11 +1488,11 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
  */
 function DecreaseWagesEffects(){
     if(Charles.tome.decreaseWages.value<1000){
-        return((Math.pow(Math.log(Charles.tome.decreaseWages.value),3)/318.114));
+        return((Math.pow(Math.log(Charles.tome.decreaseWages.value+1),3)/318.114));
     }else if(Charles.tome.decreaseWages.value<1000){
-        return((Math.pow(Math.log(Charles.tome.decreaseWages.value),2)/69.077553));
+        return((Math.pow(Math.log(Charles.tome.decreaseWages.value+1),2)/69.077553));
     }else{
-        return (Math.log(Charles.tome.decreaseWages.value)/10);
+        return (Math.log(Charles.tome.decreaseWages.value+1)/10);
     }
 }
 
@@ -1842,7 +1843,7 @@ function gameLoop() {
 
     //The Prestige Potential
     // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    player.prestige_potential = Math.floor( 5 * Math.pow(0.0000001 * player.prestige.carrots, 0.37) * (1 + (player.pages/100)) );
+    player.prestige_potential = Math.floor( 5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages/100)) );
     eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
     if(prestigeMenuOpen) {
         eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
