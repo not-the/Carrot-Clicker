@@ -4,6 +4,14 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 */
 
+// Game version
+(() => {
+    const game_version = 'dev beta v1.13';
+
+    dom('page_title').innerText = `Carrot Clicker ${game_version}`;
+    dom('footer_version').innerText = `Version ${game_version} - Unstable`;
+})()
+
 // Error message if game hasnt loaded in 1 second
 let loadCheck = false;
 setTimeout(() => {
@@ -537,7 +545,7 @@ var preventSaveGame = false;
  * Saves objects data to Local Storage
  */
 function saveGame() {
-    if(preventSaveGame == true || store("cookies_accepted") != "true") return;
+    if(preventSaveGame == true || player.flags['cookies_accepted'] != true) return;
     // player.time_last_saved = Date.now();
     localStorage.setObject("player", player);
     localStorage.setObject("Bill", Boomer_Bill);
@@ -555,10 +563,7 @@ setInterval(() => {
 }, 5000);
 
 // Save before unload (does not work for some browsers/devices)
-window.addEventListener('beforeunload', () => {
-    player.flags.unloadtest = true;
-    saveGame();
-});
+window.addEventListener('beforeunload', () => { saveGame(); });
 
 //#endregion
 
@@ -623,7 +628,7 @@ function fillSettingsPage() {
 }
 
 function saveSettings() {
-    if(store("cookies_accepted") != "true") return;
+    if(player.flags['cookies_accepted'] != true) return;
     localStorage.setObject("settings", settings);
 }
 function resetSettings(dialog = false) {
@@ -2112,7 +2117,7 @@ function tipchange() {
     // Mark tip as seen
     if(tips[`s_${type}`][tips.number] != true) {
         tips[`s_${type}`][tips.number] = true;
-        if(store("cookies_accepted") == "true") {
+        if(player.flags['cookies_accepted'] == true) {
             localStorage.setObject("tips_seen", tips);
         };
     }

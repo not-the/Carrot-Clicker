@@ -1,4 +1,15 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.0.1
+    4-13-2022
+// ----------------------------------------------------------- //
+
+- Game version is now also in the footer and is updated in carrot_clicker.js
+- Cookie agreement now uses the flags system- will need to agree again for your game to save
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13
     4-13-2022
 // ----------------------------------------------------------- //

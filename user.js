@@ -1142,7 +1142,7 @@ function isDebug() {
             || hashlist.includes('cheatmode')
             || hashlist.includes('debug')
         ) {
-            store("cookies_accepted", "true");
+            player.flags['cookies_accepted'] = true;
 
             // Register cheat functions globally
             //#region
@@ -1307,8 +1307,7 @@ function onLoad() {
     // console.log('Running onLoad()');
 
     // Flag for early playtesters
-    // store('playtest', 'yes');
-    player.flags['playtest']=true;
+    player.flags['playtest'] = true;
 
 
     // Start music
@@ -1541,14 +1540,15 @@ function onLoad() {
 
     /* --------------- TUTORIAL --------------- */
     // Cookie usage notification
-    if(store("cookies_accepted") != "true") {
+    if(player.flags['cookies_accepted'] != true) {
         let cookieToast = toast(
             'Cookie Usage',
             'By playing Carrot Clicker you agree to the usage of cookies to save your progress.',
             'purple', true, false, false, true,
             () => {
                 closeToast(cookieToast);
-                store("cookies_accepted", "true");
+                player.flags['cookies_accepted'] = true;
+                saveGame();
             }, 'Accept'
         );
     }
