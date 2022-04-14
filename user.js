@@ -313,6 +313,8 @@ document.addEventListener('keyup', event => {
     if(menuOpen()) {
         if(event.key == "Escape"){
             closeDialog();
+        } else if(prestigeMenuOpen && event.key == "Enter") {
+            prestigeDialog();
         }
     }
 
@@ -365,7 +367,7 @@ function keybindHandler(event, state) {
         || dialogOpen == true
         || document.activeElement.nodeName == 'TEXTAREA'
         || document.activeElement.nodeName == 'INPUT'
-        || keybindsMenuOpen
+        || menuOpen()
     ) return;
 
 
@@ -422,7 +424,12 @@ function keybindHandler(event, state) {
 
     // Browser keyboard navigation enter acts as click
     if(key == "Enter"){
-        document.activeElement.click();
+        let tag = document.activeElement.tagName;
+        if(
+            tag != 'SUMMARY'
+        ) {
+            document.activeElement.click();
+        }
     }
 
     
@@ -516,11 +523,11 @@ function keybindHandler(event, state) {
     }
     
     // Settings and prestige
-    else if(key=="Backspace" && event.altKey==false && event.ctrlKey==true){
+    else if((key=="Backspace" || key=="Delete") && isDebug()) {
         event.preventDefault();
         openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave');
     }
-    else if(key == settings.keybinds['key_prestige']){
+    else if(key == settings.keybinds['key_prestige']) {
         openPrestigeMenu();
         // openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
     }
@@ -935,7 +942,7 @@ function purchase(source, type, item, subtype = false) {
                 Carl.shop[type][raw].bought = true;
                 unlock(type, item, subtype);
 
-                cashCount();
+                cashCount(false);
                 toast('', `Item bought: ${raw} (${type})`);
 
                 let element = dom(`carl_shop_${raw}`)
@@ -1180,7 +1187,7 @@ function isDebug() {
                 let cc = parseInt(setCarrotsEl.value);
                 let gcc = parseInt(setGoldenCarrotsEl.value);
                 let lbill = parseInt(setBillLvlEl.value);
-                player.Carrots          = cc;
+                player.carrots          = cc;
                 player.lifetime.carrots = cc;
                 player.prestige.carrots = cc;
 
@@ -1483,7 +1490,7 @@ function onLoad() {
         cosmeticsGridMode();
     }
     // Restart unfinished crafting job (Greg)
-    if(typeof Gregory.crafting == 'array' && Array.isArray(Gregory.crafting) && Gregory.crafting.length == 3) {
+    if(Gregory.crafting != false) {
         console.log('[Greg] Restarting unfinished craft job');
         try { CreateHoe(...Gregory.crafting); }
         catch (error) { console.error(error); }
@@ -1575,10 +1582,12 @@ function onLoad() {
     /* -------------------- Fill out page -------------------- */
     // Put things on page
     carrotCount();
-    cashCount();
+    updateCPC();
+    cashCount(false);
     characterPrices();
     updateCharlesShop();
     pagesCount();
+    calculatePrestigePotential();
     DisplayAllHoes();
     updateHoePrices();
     updateMainIcon();

@@ -476,7 +476,7 @@
 .theme_bw #left-section,
 .theme_bw .status_bar,
 .theme_bw .characterbox,
-.theme_bw .information-area,
+.theme_bw #tripane,
 .theme_bw .popup_box,
 .theme_bw .clickvisual {
     filter: saturate(0);
@@ -536,7 +536,7 @@
 .theme_retro .link_styling:hover {
     color: white;
 }
-.theme_retro img:not(.button_icon),
+.theme_retro img:not(.button_icon):not(.theme_checkmark):not(.invert),
 .theme_retro #main_carrot,
 .theme_retro #mouse_confetti {
     image-rendering: pixelated;
@@ -1123,7 +1123,7 @@
 
 /* Camo theme */
 .theme_camo {
-    image-rendering: pixelated;
+    image-rendering: pixelated !important;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 url('./assets/theme/camo/camo.png');
     background-size: 1200px;

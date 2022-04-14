@@ -2,7 +2,6 @@
 The Base of the Game is the Objects used to easily store data. 
 The core Object is the player. The player object Stores Global Variables not Atributed to another character.
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
-The main Game Loop occurs in a setInterval, This loop handles anything that needs to be Constantly checked, Displayed, Or Run.
 */
 
 // Error message if game hasnt loaded in 1 second
@@ -18,10 +17,6 @@ var n = 0;
 
 /*------------Page Setup---------------*/
 //#region
-
-// Hacky solution to carrot not animating on mobile
-// https://stackoverflow.com/a/56140328/11039898
-document.addEventListener("touchstart", function() {}, true);
 
 // HTML
 
@@ -41,7 +36,7 @@ const elCashCount             = dom("cash_count");
 const elGoldenCarrotCount     = dom("golden_carrot_count");
 const elTips                  = dom("Tip");
 
-//Characters and Hoes
+// Characters and Hoes
 const elCharacterUpCost = {
     bill:  dom("UpBillCost"),
     belle: dom("UpBelleCost"),
@@ -155,9 +150,7 @@ const elEnableMainProgress = dom('enable_main_progress');
 //#region
 
 // Creates Characters 
-/**
- * Creates Character objects
- */
+/** Creates Character objects */
 class Character{
     /**
      * Characters Atributes
@@ -189,19 +182,17 @@ const playerPrestigeTemplate = {
     hoes: {
         crafted: [0, 0, 0, 0, 0, 0],
         craftedTotal: 0,
-        equipped: [0, 0, 0, 0, 0, 0],
-        equippedTotal: 0,
     },
 };
 const default_player = {
-    data_version: 3, // needs to be incremented by 1 any time any game object is changed
+    data_version: 4, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
-    Carrots: 0,
+    carrots: 0,
     cpc: 1,
     cps: 0,
-    EquippedHoes: 0,
+    equippedHoes: 0,
     clickSpeedRecord: 0,
     cash: 0,
 
@@ -230,8 +221,6 @@ const default_player = {
         hoes: {
             crafted: [0, 0, 0, 0, 0, 0],
             craftedTotal: 0,
-            equipped: [0, 0, 0, 0, 0, 0],
-            equippedTotal: 0,
         },
         tomes_bought: 0,
     },
@@ -464,6 +453,14 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+
+            // Tools
+            'tools/fertilizer': {
+                currency: 'cash',
+                price: 12,
+                available: false,
+                bought: false,
+            },
         }
     },
 }
@@ -558,9 +555,10 @@ setInterval(() => {
 }, 5000);
 
 // Save before unload (does not work for some browsers/devices)
-window.onbeforeunload = () => {
+window.addEventListener('beforeunload', () => {
+    player.flags.unloadtest = true;
     saveGame();
-}
+});
 
 //#endregion
 
@@ -696,7 +694,7 @@ const default_settings = {
     openpanel: null,            // string
     cosmetics_grid: true,       // boolean
     achievements_grid: false,   // boolean
-    compact_achievements: true, // boolean
+    compact_achievements: false,// boolean
     fun_tip_percentage: 50,     // number - between 0 and 100
 
     keybinds: keybinds_default, // object
@@ -746,6 +744,7 @@ function multibuySpin() {
     updateHoePrices();
     DisplayAllHoes();
     updateCharlesShop();
+    eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
 }
 // delete save
 /**
@@ -782,7 +781,7 @@ var clickArray = [];
 function earnCarrots(amount, type, useMousePos = false) {
     if(type == 'bonus') { popupHandler(useMousePos, amount, 'falling'); }
 
-    player.Carrots += amount;
+    player.carrots += amount;
     player.prestige.carrots += amount;
     player.lifetime.carrots += amount;
 
@@ -813,6 +812,8 @@ function earnCarrots(amount, type, useMousePos = false) {
 
     carrotCount();
     characterButtons();
+    // DisplayAllHoes();
+    calculatePrestigePotential();
 }
 
 /**
@@ -906,9 +907,10 @@ function onClick(useMousePos, method='click', source=0) {
     // Click speed
     clickSpeedHandler(true);
 
-    // Falling carrots
-    let roll = Math.floor((Math.random() * 50));
-    if(roll == 1 && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser > 50) {
+    // Falling carrot (2% chance, 3% later)
+    let roll = Math.floor((Math.random() * 100));
+    let rollchance = player.lifetime.carrots >= 1000000000 ? 2 : 1;
+    if(roll <= 1 && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 50) {
         fallingCarrotPromiser = 0;
         fallingCarrot();
     } else {
@@ -923,27 +925,91 @@ function onClick(useMousePos, method='click', source=0) {
     randomSound('crunch', 95);
 }
 
+// Falling carrots
+var fallingID = 0;
+var fallingActive = 0;
+var fallingFrenzy = false;
+const fallingCarrotsArea = dom('fallingCarrotsArea');
+/** Creates a falling carrot */
+function fallingCarrot() {
+    var element = document.createElement("img");
+    
+    // 2% chance the drop is money instead
+    let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
+
+    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
+    element.classList.add('falling_carrot');
+    element.id = fallingID;
+    fallingID++;
+    fallingActive++;
+
+    let amount;
+
+    if(type == 'carrot') {
+        // Carrot reward
+        // Between 500% and 2000% of player's CPC
+        let rewardVariation = (Math.floor((Math.random() * 1500)) + 500) / 100;
+        amount = Math.round(player.cpc * rewardVariation);
+    } else if(type == 'cash') {
+        // Cash reward
+        // Between 5 and 15, or 8 and 18 later
+        let min = player.lifetime.carrots >= 1000000000000000 ? 8 : 5;
+        amount = Math.floor((Math.random() * 13)) + min;
+    }
+
+    // Set onclick function
+    element.onclick = () => { catchCarrot(element.id, type, amount); };
+
+    // Positioning
+    let randomX = Math.floor((Math.random() * 324));
+    element.style.left = randomX - 30 + "px";
+
+    // To page
+    fallingCarrotsArea.append(element);
+
+    element.classList.add('bright_200');
+
+    setTimeout(() => {
+        if(dom(element.id) != null) {
+            dom(element.id).remove();
+            fallingActive--;
+        }
+    }, 2600);
+
+    /** Grant reward when falling carrot is caught */
+    function catchCarrot(id, type, amount) {
+        dom(id).remove();
+        fallingActive--;
+
+        if(type == 'carrot') {
+            earnCarrots( amount, 'bonus', true);
+        } else if(type == 'cash') {
+            earnCash(amount, 'bonus');
+        }
+    }
+}
+
 /* ----------------------Page Manipulation Functions------------------------*/
 //#region 
 const elPrestigeStats = dom('this_prestige_stats');
 
-/**
- * Update carrot count on page
- */
+/** Update carrot count on page */
 function carrotCount() {
     if(settings.full_numbers != true) {
-        count = DisplayRounded(Math.floor(player.Carrots), 3, 1000000);
+        count = DisplayRounded(Math.floor(player.carrots), 3, 1000000);
     } else {
-        count = numCommas(Math.floor(player.Carrots));
+        count = numCommas(Math.floor(player.carrots));
     }
-
     eInnerText(elCarrotCount, count);
 }
-/**
- * Displays player.cash
- */
-function cashCount() {
+/** Updates player.cash on the page */
+function cashCount(flash = true) {
     eInnerText(elCashCount, DisplayRounded(player.cash));
+
+    // Flash
+    if(flash != true) return;
+    dom('list_cash').classList.add('flash_cash');
+    setTimeout(() => { dom('list_cash').classList.remove('flash_cash'); }, 2000);
 }
 function characterPrices() {
     // Update page
@@ -965,15 +1031,19 @@ function characterPrices() {
     eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
     eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
 }
+function updateCPC() {
+    eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
+    eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
+}
 /**
  * Upgrade button style
  */
 function characterButtons() {
-    if(player.Carrots >= Boomer_Bill.lvlupPrice) { dom('Bill_level_up').classList.remove('grayedout'); }
+    if(player.carrots >= Boomer_Bill.lvlupPrice) { dom('Bill_level_up').classList.remove('grayedout'); }
     else { dom('Bill_level_up').classList.add('grayedout'); }
-    if(player.Carrots >= Belle_Boomerette.lvlupPrice) { dom('Belle_level_up').classList.remove('grayedout'); }
+    if(player.carrots >= Belle_Boomerette.lvlupPrice) { dom('Belle_level_up').classList.remove('grayedout'); }
     else { dom('Belle_level_up').classList.add('grayedout'); }
-    if(player.Carrots >= Gregory.lvlupPrice) { dom('Greg_level_up').classList.remove('grayedout'); }
+    if(player.carrots >= Gregory.lvlupPrice) { dom('Greg_level_up').classList.remove('grayedout'); }
     else { dom('Greg_level_up').classList.add('grayedout'); }
 }
 /**
@@ -1138,17 +1208,16 @@ function clickSpeedHandler(clicked = false) {
 
 //#endregion
 
-/**
- * Carrots per click
- */
+/** Carrots per click */
 function CarrotsPerSecond() {
+    if(player.cps <= 0) return;
     earnCarrots(player.cps/20, 'idle');
 
     // Might want to change this but it seems to be fine   for now
     // Note: this being here is the only reason the counter gets updated immediately, if this gets removed it needs to go in every function that changes carrot count or in the main game loop
     carrotCount();
 }
-var cpsInterval = setInterval(CarrotsPerSecond,50);
+var cpsInterval = setInterval(CarrotsPerSecond, 50);
 
 /**
  * Calculates price for Characters
@@ -1257,14 +1326,15 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         return;
     }
 
-    if(player.Carrots >= CharacterLevelUpPrice(character, amount)) {
+    if(player.carrots >= CharacterLevelUpPrice(character, amount)) {
         character.lvl+=amount;
-        player.Carrots-=CharacterLevelUpPrice(character,amount);
+        player.carrots-=CharacterLevelUpPrice(character,amount);
         CharacterLevelUpPrice(character,amount,"apply");
 
         // Update page
         characterPrices();
         characterButtons();
+        updateCPC();
         if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
         if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
 
@@ -1330,8 +1400,8 @@ function Prestige() {
         Gregory.Hoes[i]=0;
         Gregory.HoePrices[i] = Default_Gregory.HoePrices[i];
     }
-    player.EquippedHoes=0;
-    player.Carrots = 0;
+    player.equippedHoes=0;
+    player.carrots = 0;
     cpsInterval = setInterval(CarrotsPerSecond,100);
     tips.tracker=0;
 
@@ -1383,6 +1453,15 @@ function Calculate_Carrots(character){
         return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl*cpHoes;
     } else {
         return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl;
+    }
+}
+
+/** Calculates the prestige potential and updates the page */
+function calculatePrestigePotential() {
+    player.prestige_potential = Math.floor( 5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages/100)) );
+    elMainPrestigePotential.innerText = DisplayRounded(player.prestige_potential.toFixed(0),2);
+    if(prestigeMenuOpen) {
+        elPrestigePotential.innerText = DisplayRounded(player.prestige_potential.toFixed(0),2);
     }
 }
 
@@ -1469,9 +1548,10 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
         player.golden_carrots -= CharlesUpgradePrices(tome,amount);
         CharlesUpgradePrices(tome,amount,"apply");
 
+        // Update page
         updateCharlesShop();
-        
         Calculate_Carrots(Boomer_Bill);Calculate_Carrots(Belle_Boomerette);
+        updateCPC();
         mouseConfetti([3, 8], ccWhite)
     } else {
         toast(
@@ -1560,8 +1640,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
 
     // Return if a hoe is already in progress
     if(n==1){
-        toast("Greg is busy", "Wait until he is done crafting",
-        '', false, true);
+        toast("Greg is busy", "Wait until he is done crafting", '', false, true);
         return;
     }
 
@@ -1586,7 +1665,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
     
     let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
-    if(price >= player.Carrots * 2){
+    if(price >= player.carrots * 2){
         toast("Too Expensive!", "That hoe is currently too expensive.",
         '', false, true);
         return;
@@ -1619,7 +1698,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
                 if(p >= price) {
                     clearInterval(id);
                     i = 0;
-                    player.Carrots+=p-price;
+                    player.carrots+=p-price;
                     p=0;
                     elGregProgress.style.width = 0 + "%";
                     if(settings.enableMainProgress == true) {
@@ -1641,9 +1720,9 @@ function CreateHoe(type=0, amount=1, progress=0) {
 
                     Gregory.crafting = false;
                 } else {
-                    let adjust = 0.01 * player.Carrots
+                    let adjust = 0.01 * player.carrots
                     p += adjust;
-                    player.Carrots -= adjust;
+                    player.carrots -= adjust;
 
                     // Progress bar
                     elGregProgress.style.width = `${100*(p/price)}%`;
@@ -1682,13 +1761,15 @@ function EquipHoe(character=Boomer_Bill, type=0, amount){
             n=0;
             return;
         }
-        player.EquippedHoes+=1;
-        player.prestige.hoes.equipped+=1;
-        player.lifetime.hoes.equipped+=1;
-        character.Hoes[type]+=amount;
-        Gregory.Hoes[type]-=amount;
+        player.equippedHoes += amount;
+        character.Hoes[type] += amount;
+        Gregory.Hoes[type] -= amount;
         if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
         if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
+
+        // Update page
+        updateCPC();
+        DisplayAllHoes();
 
         // Animate
         // var from =      elHoes['greg'][type];
@@ -1749,6 +1830,7 @@ function characterString(character, reverse = false) {
 
 // Update hoe on page
 function DisplayAllHoes() {
+    // console.warn(`DisplayAllHoes()`);
     for(i = 0; i < 6; i++) {
         DisplayHoe(Boomer_Bill, i);
         DisplayHoe(Belle_Boomerette, i);
@@ -1777,7 +1859,7 @@ function DisplayHoe(character, type) {
         // Can afford and is unlocked
         if(
             !gregLevelTest(type, false)
-            && player.Carrots >= Gregory.HoePrices[type] / 2
+            && player.carrots >= Gregory.HoePrices[type] / 2
         ) {
             // console.log(type + ': unlocked and CAN afford');
             img.classList.remove('blackedout');
@@ -1820,42 +1902,7 @@ function DisplayHoe(character, type) {
     }
 }
 
-
-//#endregion
-
-/*---------------Main Game Loop---------------- */
-//#region
-
-function gameLoop() {
-   // Providing updated information to the player
-
-    //// Update numbers on page ////
-
-    // New display
-    // Carrot counter moved to functions that update it
-    eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
-    eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
-    //The Basic info for the player, Carrots; Cpc; Cps
-    eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
-
-    // Hoes
-    DisplayAllHoes();
-
-    //The Prestige Potential
-    // let achieve_percent = Math.round(percentage(Object.keys(player.achievements).length, Object.keys(achievements).length));
-    player.prestige_potential = Math.floor( 5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages/100)) );
-    eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
-    if(prestigeMenuOpen) {
-        eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
-    }
-}
-
-setInterval(() => {
-    // Yes I know this looks silly but it prevents the rest of the code from stopping if the game loop throws an error
-    gameLoop();
-}, 100);
-//#endregion
-
+/** Makes the prestige button visible to the player */
 function seePrestige() {
     eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
     dom("prestige-section").classList.add('visible');
@@ -1863,6 +1910,16 @@ function seePrestige() {
     dom('prestige_menu_button').title = "Prestige";
     dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`;
 }
+
+
+//#endregion
+
+// Game loop (temporary)
+setInterval(() => {
+    updateCPC();
+    DisplayAllHoes();
+}, 250);
+
 
 /*-----------------Statistics-----------------*/
 //#region 
@@ -1991,7 +2048,7 @@ try {
         tips_seen.s_fun_intermediate,
     ];
 } catch (error) {
-    console.warn(error);
+    console.error(error);
 }
 
 
@@ -2005,7 +2062,7 @@ function tipchange() {
     tipInterval = setInterval(() => {tipchange()}, 15000);
     
     // Tracker - determine tips level
-    if(player.EquippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) {
+    if(player.equippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) {
         tips.tracker = 1;
     } else if(player.prestige.carrots > 1000000 && tips.tracker == 1) {
         tips.tracker = 2;

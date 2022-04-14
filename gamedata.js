@@ -16,7 +16,7 @@ const default_tips = {
         "Tip: Click the carrot",
         "Click here to cycle through available tips!",
         "Click the lvl up arrow to level up characters",
-        "Long hover over a character to view their description",
+        "Click a character's \"i\" symbol to learn more about them",
         "Greg can craft tools that will buff your other characters",
         "If you see a ? near something you can click it to get a more detailed description of what it does",
     ],
@@ -177,7 +177,7 @@ const themes = {
         image:    './assets/theme/theme_retro.png',
         desc:     ':D',
         cosmetic: false,
-        accent:   '#30622f',
+        accent:   '#4c5c49',
     },
     'theme_terminal': {
         name:     'Terminal',
@@ -692,6 +692,18 @@ const cosmetics = {
             '3': './assets/tools/tool_3.png',
             '4': './assets/tools/tool_4.png',
             '5': './assets/tools/tool_5.png',
+        },
+        'fertilizer': {
+            'name': 'Fertilizer',
+            'preview': './assets/tools/fertilizer/tool_0.png',
+            'desc': 'placeholder',
+
+            '0': './assets/tools/fertilizer/tool_0.png',
+            '1': './assets/tools/fertilizer/tool_1.png',
+            '2': './assets/tools/fertilizer/tool_2.png',
+            '3': './assets/tools/fertilizer/tool_3.png',
+            '4': './assets/tools/fertilizer/tool_4.png',
+            '5': './assets/tools/fertilizer/tool_5.png',
         },
         'blockgame': {
             'name': 'Minecraft Hoes',
@@ -1225,7 +1237,10 @@ const achievements = {
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
         'image': false,
-        'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
+        'reward': [
+            'shop:cosmetic/tools/fertilizer',
+            () => { mouseConfetti([24,24], confettiColors, 300) },
+        ],
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000],
         'mystery': {

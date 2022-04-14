@@ -1,22 +1,18 @@
-<!----------Header---------->
-<!--#region -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page_title">Carrot Clicker dev beta v1.12.1</title>
 
-    <!-- Misc -->
+    <!-- Main -->
+    <title id="page_title">Carrot Clicker dev beta v1.13</title>
+    <link rel="shortcut icon" type="image/png" href="./assets/carrot small.png"/>
     <meta name="theme-color" content="#312e2e" id="theme_color">
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="carrot_clicker.css">
     <link rel="stylesheet" type="text/css" href="themes.css">
-
-    <!-- Page icon -->
-    <link rel="shortcut icon" type="image/png" href="./assets/carrot small.png"/>
 
     <!-- Social metadata (link preview) -->
     <!-- https://stackoverflow.com/a/54266944/11039898 -->
@@ -27,20 +23,875 @@
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
     <!-- <meta name="twitter:card" content="summary_large_image"> -->
 </head>
-<!--#endregion-->
-
 <body>
-
-    <!-- On top -->
-    <!-- #region -->
-
     <!-- Visual effects -->
     <div id="bonusVisualArea"></div>
     <div id="mouse_confetti"></div>
 
-    <!-- Dialog Popup -->
-    <!-- #region -->
-    <!-- Optional classes: dramatic -->
+    <!-- Corner Toasts -->
+    <div id="toast_container">
+        <div id="toasts_clear" onclick="clearToasts()">
+            Close All
+        </div>
+    </div>
+
+    <!-- Main page -->
+    <main id="main">
+        <!-- Status bar -->
+        <div class="status_bar">
+            <!-- Display when Javascript is turned off -->
+            <noscript>
+                <div class="noscript center">
+                    <b><u>Notice:</u></b> Javascript is required to play Carrot Clicker.<br/>
+                    You'll need to enable Javascript for this site in your browser's settings
+                </div>
+            </noscript>
+
+            <!-- Status bar -->
+            <div class="Basic_Info flex">
+                <!-- Info -->
+                <p id="Basic_Info">
+                    <!-- Main Icon -->
+                    <img src="./assets/pixel_carrot_32x.png" alt="" id="main_icon"
+                    style="position: absolute; transform: translate(-38px, -6px)"
+                    title="Carrot Clicker">
+
+                    <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" title="Purchase multiplier - Click to cycle" onclick="multibuySpin()" tabindex="0">1x</b><p>
+
+                <!-- Tips -->
+                <div id="Tip" class="link_styling" onclick="tipchange()" tabindex="0" role="button">Tip: Click the carrot</div>
+
+                <div id="info_dropdown" tabindex="0">
+                    <!-- <svg height="20" width="25">
+                        <polygon points="0,0 25,0 12.5,10" style="fill:white;" />
+                    </svg> -->
+                    <!-- ☰ -->
+                    ▼
+                    <div class="hover_menu">
+                        <!-- Settings -->
+                        <a href="#settings" onclick="panelChange(`settings-panel`)" tabindex="0">
+                            <div class="menu_item link_styling secondary_text">
+                                <img src="./assets/icons/settings.svg" alt="" class="dropdown_img invert">
+                                Settings
+                            </div>
+                        </a>
+
+                        <!-- Theme/cosmetic -->
+                        <div class="flex">
+                            <a onclick="themeSwitcher()" tabindex="0">
+                                <div class="menu_item link_styling secondary_text" style="width: 119px; border-right: 1px solid var(--border-color);">
+                                    <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
+                                    Themes
+                                </div>
+                            </a>
+        
+                            <a onclick="cosmeticSwitcher()" tabindex="0">
+                                <div class="menu_item link_styling secondary_text" style="width: 119px; padding-left: 0; padding-right: 0; text-align: center;">
+                                    <!-- <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert"> -->
+                                    Cosmetics
+                                </div>
+                            </a>
+        
+                        </div>
+
+                        <!-- Volume -->
+                        <div class="menu_item link_styling secondary_text">
+                            <label for="volume_master_dropdown">
+                                <img src="./assets/icons/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
+                                <div class="slidecontainer">
+                                    <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- View credits -->
+                        <a tabindex="0" onclick="startCredits()">
+                            <div class="menu_item link_styling secondary_text">
+                                <img src="./assets/blank.png" alt="" class="dropdown_img">
+                                Credits
+                            </div>
+                        </a>
+
+                        <!-- Changelog -->
+                        <a href="./changelog/" target="_blank" rel="noopener noreferrer" tabindex="0">
+                            <div class="menu_item link_styling secondary_text">
+                                <img src="./assets/icons/refresh.svg" alt="" class="dropdown_img">
+                                Changelog
+                                <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
+                            </div>
+                        </a>
+
+                        <!-- Github -->
+                        <a href="https://github.com/JJCVIP/Carrot-Clicker" target="_blank" rel="noopener noreferrer" tabindex="0">
+                            <div class="menu_item link_styling secondary_text">
+                                <img src="./assets/icons/github.png" alt="" class="dropdown_img">
+                                Github
+                                <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div id="main_progress_container" class="status_progress_bar">
+                <!-- Image -->
+                <img src="./assets/tools/tool_0.png" alt="" id="main_progress_image" class="main_progress_image">
+                <div id="main_progress" class="status_progress">
+                    <!-- Progress -->
+                    <div id="main_progress_bar" class="progress" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <!-- Multibuy Indicator -->
+            <!-- <div id="multibuy_button" class="link_styling pointer" onclick="multibuySpin()">
+                1x
+            </div> -->
+
+        </div>
+
+        
+        <!-- Carrot / Characters -->
+        <div id="container" class="flex">
+            <!-- Left Section -->
+            <div id="left-section">
+
+                <!-- <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('farmable')"> -->
+
+                <!-- Falling Carrots -->
+                <div id="fallingCarrotsArea"></div>
+
+                <!-- Carrot image-->
+                <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" role="button" tabindex="0">
+
+                <!-- Numbers/Info Section -->
+                <div class="mini_stats">
+                    <p class="Carrot_Count">
+                        <span id="Carrot_Count"></span> <span class="farmable_name">Carrots</span>
+                    </p>
+                    <p class="secondary_text">
+                        <span id="click_speed">0/0</span> clicks per second
+                    </p><br>
+                    <p class="secondary_text">
+                        <span class="farmable_name">Carrots</span> per click: <span id="cpc">Loading...</span>
+                    </p>
+                    <p class="secondary_text">
+                        <span class="farmable_name">Carrots</span> per second: <span id="cps">Loading...</span>
+                    </p><br/>
+                    <p id="list_cash" class="secondary_text" style="margin-right:-24px">
+                        Coins: <span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!" onclick="toast('Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', '', true, true)">?</span></p>
+                    <p class="secondary_text" style="margin-right:-24px">
+                        Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!', '', true, true)">?</span>
+                    </p>
+                    <p class="secondary_text">
+                        <span id="golden_carrot_count"></span>
+                    </p><br>
+                </div>
+                
+                <!-- Prestige Section -->
+                <div class="main_buttons flex">
+                    <!-- Prestige button -->
+                    <button onClick="openPrestigeMenu()" title="???" class="prestige_button main_button_item" id="prestige_menu_button" disabled>
+                        <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
+                    </button>
+
+                    <!-- Inventory button -->
+                    <!-- <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
+                        <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
+                    </button> -->
+
+                    <!-- Tips button -->
+                    <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
+                        <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
+                    </button>
+                </div>
+                <div id="prestige-section" class="flex">
+
+                    <p class="prestigetooltip secondary_text" style="padding-top: 6px;">
+                        Prestige potential: <span id="main_prestige_potential">0</span>
+                    </p>
+
+                    <!-- <p class="prestigetooltip" style="padding-top: 6px;">
+                        Prestiging now will result in:<br>
+                        <span id="Prestige">0</span> Golden Carrots
+                    </p> -->
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Right Section -->
+            <div id="right-section" class="character_column">
+                <!-- Character column 1 -->
+                <div class="character_column">
+
+                    <!--Boomer Bill Rendering-->
+                    <!-- #region -->
+                    <div class="Bill characterbox" id="bill_box">
+                        <div class="billtooltip charactertooltip tooltip" id="billtooltip">
+                            Upgrading Bill will increase your carrots per click (CPC) by one.
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('bill')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('bill')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                            src="./assets/characters/Boomer_Bill.png"
+                            alt="Boomer Bill"
+                            id="bill_avatar"
+                            class="characterimg"
+                            title="Boomer Bill">
+
+                            <div class="characterdesc">
+                                <b id="bill_name" class="character_name">Bill</b>
+                                <p class="secondary_text">
+                                    Cost to upgrade Bill: <span id="UpBillCost"></span>
+                                </p>
+                                <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
+                            </div>
+
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom hoecontainer">
+
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[mbsel])" title="Level up" tabindex="0" role="button">
+                            
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="bill_wooden_hoe" tabindex="0" role="button">
+
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="bill_stone_hoe" tabindex="0" role="button">
+
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="bill_iron_hoe" tabindex="0" role="button">
+
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="bill_gold_hoe" tabindex="0" role="button">
+
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="bill_diamond_hoe" tabindex="0" role="button">
+
+                            <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="bill_netherite_hoe" tabindex="0" role="button">
+                        </div>
+
+                        <!-- Bio Card -->
+                        <div class="bio_card" id="bill_bio">
+                            Hello there
+                        </div>
+
+                    </div>
+                    <!-- #endregion -->
+
+                    <!--Belle Boomerette Rendering-->
+                    <!-- #region -->
+                    <div class="Belle characterbox char_locked" id="belle_box">
+                        <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('belle')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('belle')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                            src="./assets/characters/BelleBommerette.png"
+                            alt="Belle Boomerette"
+                            id="belle_avatar"
+                            class="characterimg"
+                            title="Boomer Belle">
+                            <div class="characterdesc">
+                            <b id="belle_name" class="character_name">
+                                Belle
+                            </b>
+                            <p class="secondary_text">
+                                Cost to upgrade Belle: <span id="UpBelleCost"></span>
+                            </p>
+                            <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom hoecontainer">
+
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="belle_wooden_hoe" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="belle_stone_hoe" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="belle_iron_hoe" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="belle_gold_hoe" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="belle_diamond_hoe" tabindex="0" role="button">
+
+                            <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="belle_netherite_hoe" tabindex="0" role="button">
+                        </div>
+
+                    </div>
+                    <!-- #endregion -->
+                    
+                    <!--Gregory Rendering-->
+                    <div class="Greg characterbox char_locked" id="greg_box">
+                        <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
+                            Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tools' cost to start crafting.
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                            src="./assets/characters/Gregory.png"
+                            alt="Gregory"
+                            id="greg_avatar"
+                            class="characterimg"
+                            title="Gregory">
+                            <div class="characterdesc">
+                                <b id="greg_name" class="character_name">Greg</b>
+                                <p class="secondary_text">
+                                    Cost to Upgrade Greg: <span id="UpGregCost"></span>
+                                </p>
+                                <figcaption id="Greg_lvl" class="characterlevel secondary_text">
+                                    Lvl: 0
+                                </figcaption>
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom secondary_text">
+                            <div class="Greg_Hoe_Container hoecontainer">
+                            <!-- <span class="hoe_price">Prices:</span> -->
+
+                            <!-- Crafting display -->
+                            <div class="greg_crafting_info inactive" title="Idle" id="greg_crafting_info">
+                                <img src="./assets/tools/tool_0.png" alt="" id="greg_progress_image" class="main_progress_image">
+                                <img src="./assets/icons/refresh.svg" alt="" class="greg_spinny">
+                            </div>
+
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
+                            
+                            <span id="wooden_hoe_price" class="hoe_price greg_margin_fix">Wooden</span>
+                            <p class="Greg_Hoe_Number toolnumber greg_margin_fix" id="Greg_Wooden_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_0.png" class="toolicon blackedout greg_margin_fix tool_0" onclick="CreateHoe(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0" role="button">
+
+                            <span id="stone_hoe_price" class="hoe_price">Stone</span>
+                            <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_1.png" class="toolicon blackedout tool_1" onclick="CreateHoe(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0" role="button">
+
+                            <span id="iron_hoe_price" class="hoe_price">Iron</span>
+                            <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_2.png" class="toolicon blackedout tool_2" onclick="CreateHoe(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0" role="button">
+
+                            <span id="gold_hoe_price" class="hoe_price">Gold</span>
+                            <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_3.png" class="toolicon blackedout tool_3" onclick="CreateHoe(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0" role="button">
+
+                            <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
+                            <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_4.png" class="toolicon blackedout tool_4" onclick="CreateHoe(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0" role="button">
+
+                            <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
+                            <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
+                            <img src="./assets/tools/tool_5.png" class="toolicon blackedout tool_5" onclick="CreateHoe(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0" role="button">
+                            </div>
+                            
+                            <!-- Progress Bar -->
+                            <div id="Greg_Bar">
+                                <div id="Greg_Progress" class="progress"></div>
+                            </div>
+                        
+                        </div>
+                    </div>
+
+                    <!--Charles Rendering-->
+                    <div class="Charles characterbox char_locked" id="charles_box">
+                        <div class="charlestooltip charactertooltip tooltip" id="charlestooltip">
+                            Charles Tooltip
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('charles')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('charles')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                                src="./assets/characters/Charles.png"
+                                alt="Charles"
+                                id="charles_avatar"
+                                class="characterimg"
+                                title="Charles">
+                            <div class="characterdesc">
+                                <b id="charles_name" class="character_name">Charles</b>
+                                <p class="secondary_text">
+                                    Golden Carrot research<br/>
+                                    Sells tomes
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom">
+                            <!-- Charles' buttons -->
+                            <div
+                            onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
+                            id="ImproveWorkingConditions_button"
+                            class="unbold shop_item pointer flex cant_afford"
+                            tabindex="0"
+                            role="button">
+                                <img src="./assets/characters/working_conditions.png" alt="" class="charles_icon">
+                                <p>
+                                    Improve working conditions<br/>
+                                    <span id="ImproveWorkingConditions" class="tome_price">---</span>
+                                    <span id="iwc_count" class="tome_count">x0</span>
+                                </p>
+                            </div>
+                            
+                            <div
+                            onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
+                            id="BetterHoes_button"
+                            class="unbold shop_item pointer flex cant_afford"
+                            tabindex="0"
+                            role="button">
+                                <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
+                                <p>
+                                    High quality tools<br/>
+                                    <span id="BetterHoes" class="tome_price">---</span>
+                                    <span id="bh_count" class="tome_count">x0</span>
+                                </p>
+                            </div>
+
+                            <div
+                            onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
+                            id="DecreaseWages_button"
+                            class="unbold shop_item pointer flex cant_afford"
+                            tabindex="0"
+                            role="button">
+                                <img src="./assets/characters/decrease_wages.png" alt="" class="charles_icon">
+                                <p>
+                                    Decrease worker wages<br/>
+                                    <span id="DecreaseWages" class="tome_price">---</span>
+                                    <span id="dww_count" class="tome_count">x0</span>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Character column 2 -->
+                <!-- #region -->
+                <div class="character_column">
+
+                    <!--Carl Rendering-->
+                    <div class="carl characterbox char_locked" id="carl_box">
+                        <div class="carltooltip charactertooltip tooltip" id="carl">
+                            The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('carl')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                                src="./assets/characters/Carl.png"
+                                alt="Carl"
+                                id="carl_avatar"
+                                class="characterimg"
+                                title="Carl">
+                            <div class="characterdesc flex">
+                                <div>
+                                    <b id="carl_name" class="character_name">Carl</b>
+                                    <div class="flex" style="margin-top: 2px;">
+                                        <button id="carl_theme_button" class="carl_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
+                                            Themes
+                                        </button>
+                                        <button id="carl_cosmetic_button" class="carl_button" onclick="cosmeticSwitcher()" style="width: 140px">
+                                            Cosmetics
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
+                                    Custom
+                                </button> -->
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom" id="cosmetic_shop"></div>
+                    </div>
+
+                    <!-- More characters tooltip -->
+                    <br>
+                    <p class="secondary_text center" id="more_chars_tooltip">
+                        Progress through the game to unlock additional characters!
+                    </p>
+                
+                </div>
+                <!-- #endregion -->
+
+            </div>
+            <!-- End Right section -->
+        </div>
+
+
+        <!-- Tripane -->
+        <div id="settings"></div>
+        <div id="tripane">
+            <nav>
+                <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
+            </nav>
+
+            <!-- Achievements Panel -->
+            <div id="achievements-panel" class="panel remove unremove">
+                <h1>Achievements</h1>
+                
+                <!-- Filter dropdown -->
+                <select name="achievement_filter" id="achievement_filter" class="panel_select">
+                    <option value="all">
+                        All (Default)
+                    </option>
+                    <option value="unlocked">
+                        Unlocked
+                    </option>
+                    <option value="locked">
+                        Locked
+                    </option>
+                    <option value="challenge">
+                        Challenge Achievements
+                    </option>
+                    <option value="secret">
+                        Secret Achievements
+                    </option>
+                </select>
+
+                <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
+                <p class="secondary_text">
+                    Progress: <span id="achievement_progress">-/- (0%)</span>
+                    <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true)">?</span>
+                </p><br>
+                <label for="compact_achievements">
+                    <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
+                </label>
+                <label for="achievements_grid">
+                    <input type="checkbox" class="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view
+                </label><br><br>
+                
+                <div id="achievements_list">
+                    <!-- Old achievement notification -->
+                    <!-- <div class="info-item">
+                        <img src="./assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
+                        <div>
+                        <h1>Achievement earned: Click the carrot</h1>
+                        <p>Click the carrot</p>
+                        </div>
+                    </div>-->
+
+                    <!-- Loading carrot -->
+                    <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+                </div>
+            </div>
+
+            <!-- Statistics Panel -->
+            <div id="stats-panel" class="panel remove">
+                <div id="info-inner">
+                    <h1>Statistics</h1>
+                    <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
+                    <i class="secondary_text">Updates every second</i><br/><br/>
+
+                    <!-- Filter -->
+                    <!-- <select name="statistics_filter" id="statistics_filter" class="panel_select">
+                        <option value="prestige">Current Prestige</option>
+                        <option value="lifetime">Lifetime</option>
+                    </select> -->
+
+
+                    <!-- Statistics -->
+                    <div id="statistics">
+                        <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
+
+                        <!-- Prestige -->
+                        <div id="this_prestige_stats" class='remove'>
+                            <h3>This prestige:</h3>
+                            <details class="stat_collapse">
+                                <summary>Carrots earned: <b id="prestige_carrots">---</b></summary>
+                                From clicking: <b id="prestige_carrots_clicked">---</b><br>
+                                From CPS: <b id="prestige_carrots_idled">---</b><br>
+                                From bonus carrots: <b id="prestige_carrots_bonus">---</b><br>
+                            </details>
+
+                            Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
+                            <details class="stat_collapse">
+                                <summary>Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
+                                Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
+                                Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
+                                Iron:   <b id="prestige_hoes_crafted_2">---</b><br/>
+                                Golden: <b id="prestige_hoes_crafted_3">---</b><br/>
+                                Diamond: <b id="prestige_hoes_crafted_4">---</b><br/>
+                                Netherite: <b id="prestige_hoes_crafted_5">---</b><br/>
+                            </details><br/>
+                        </div>
+
+                        <!-- Lifetime -->
+                        <h3>Lifetime:</h3>
+                        <details class="stat_collapse">
+                            <summary>Carrots earned: <b id="lifetime_carrots">---</b></summary>
+                            From clicking: <b id="lifetime_carrots_clicked">---</b><br>
+                            From CPS: <b id="lifetime_carrots_idled">---</b><br>
+                            From bonus carrots: <b id="lifetime_carrots_bonus">---</b><br>
+                        </details>
+                        Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
+                        Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
+                        Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
+
+                        Cash earned: <b id="lifetime_cash">---</b><br>
+                        Cash spent: <b id="lifetime_cash_spent">---</b><br>
+                        Total Clicks: <b id="lifetime_clicks">---</b><br/>
+                        Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
+                        <details class="stat_collapse">
+                            <summary>Tools crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
+                            Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
+                            Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>
+                            Iron:   <b id="lifetime_hoes_crafted_2">---</b><br/>
+                            Golden: <b id="lifetime_hoes_crafted_3">---</b><br/>
+                            Diamond: <b id="lifetime_hoes_crafted_4">---</b><br/>
+                            Netherite: <b id="lifetime_hoes_crafted_5">---</b><br/>
+                        </details><br/>
+
+                        Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b><br/><br/>
+
+                        Themes: <b id="stat_themes">---</b><br/>
+                        <!-- <details class="stat_collapse">
+                            <summary> -->
+                                Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span>
+                            <!-- </summary>
+                            Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
+                            Farmable: <b id="stat_cosmetics_farmable">---</b><br/>
+                            Bill:     <b id="stat_cosmetics_bill">---</b><br/>
+                            Belle:    <b id="stat_cosmetics_belle">---</b><br/>
+                            Greg:     <b id="stat_cosmetics_greg">---</b><br/>
+                            Charles:  <b id="stat_cosmetics_charles">---</b><br/>
+                            Carl:     <b id="stat_cosmetics_carl">---</b><br/>
+                            Tools:    <b id="stat_cosmetics_tools">---</b><br/>
+                        </details> -->
+                        
+                        <br/><br/>
+
+                        Achievements: <b id="stat_achievements">---</b><br/>
+                    </div>
+
+                </div> 
+            </div>
+
+            <!-- Settings Panel -->
+            <div id="settings-panel" class="panel remove">
+                <h1>Settings</h1>
+                <p class="secondary_text"><i>Customize Carrot Clicker</i></p><br>
+                <!-- <p class="secondary_text"><i>Optionally opt into or optimize options</i></p><br> -->
+
+                <!-- Developer -->
+                <div id="devp"></div>
+
+                <!-- Themes -->
+                <label for="theme_dropdown">
+                    <b>Customization</b><br>
+                    <button id="theme_button" onclick="themeSwitcher()">
+                        <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
+                        Themes
+                    </button>
+                    <button id="cosmetic_button" onclick="cosmeticSwitcher()">
+                        Cosmetics
+                    </button><br><br>
+                </label>
+
+                
+                <b>Gameplay</b><br>
+                <label for="cosmetic_auto_equip">
+                    <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                    Auto-equip new cosmetics<br>
+                </label>
+                <label for="carl_shop_toasts">
+                    <input type="checkbox" class="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
+                    Carl shop notifications<br><br>
+                </label>
+
+                <!-- Fun Tip Percentage-->
+                <div class="slidecontainer">
+                    <label for="FunTipPercentage" >
+                        Percentage of fun tips:<br>
+                        <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider" step="10"><span id="FunTipsSliderLabel" class="secondary_text">50</span><span class="secondary_text">%</span><br>
+                    </label><br>
+                </div>
+
+                <!-- Options item -->
+                <b>Keybinds:</b><br>
+                <label for="disable_keybinds">
+                <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
+                    Disable keybinds
+                </label><br>
+                <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
+                    <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
+                    Edit Keybinds
+                </button><br><br>
+
+                <!-- Autosave -->
+                <label for="autosave_interval"><b>Autosave Frequency:</b><br>
+                    <p class="secondary_text">Game will also save when closed in supported browsers</p>
+
+                    <input type="number" id="autosave_interval" min="1" max="60" value="5"/>
+                    <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
+                    <button onclick="resetAutosave()">Reset</button>
+                </label><br><br>
+
+                <!-- Disable main progress bar -->
+                <b>Interface</b><br>
+                <label for="full_numbers">
+                    <input type="checkbox" class="checkbox" id="full_numbers" onclick="setting('full_numbers')">
+                    Full numbers
+                </label><br>
+                <label for="enable_main_progress">
+                    <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
+                    Always-on-top progress bar
+                </label><br>
+                <label for="confetti_effects">
+                    <input type="checkbox" class="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
+                    Confetti effects
+                </label><br><br>
+
+                <!-- Sounds options -->
+                <b>Sounds:</b><br>
+                <!-- All sounds -->
+                <label for="enable_sounds">
+                    <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
+                        Sounds
+                </label><br>
+                <!-- Music toggle -->
+                <label for="enable_music">
+                    <input type="checkbox" class="checkbox" id="enable_music" onclick="settingMusic()">
+                        Beta music
+                </label><br>
+                <!-- Carrot sounds -->
+                <label for="enable_carrot_sounds">
+                    <input type="checkbox" class="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
+                        Beta carrot sounds
+                </label><br>
+
+                <!-- Volume sliders -->
+                <!-- <b>Sound Volume:</b> -->
+                <table>
+                    <!-- Master Volume -->
+                    <tr>
+                        <td>
+                            <label for="volume_master">
+                                Volume:
+                            </label>
+                        </td>
+                        <td>
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_master">
+                            </div>
+                        </td>
+                        <td>
+                            <span id="volume_master_percent" class="secondary_text">100%</span>
+                        </td>
+                    </tr>
+                    
+                    <!-- Music Volume -->
+                    <!-- <tr>
+                        <td>
+                            <label for="volume_music" >
+                                Music:
+                            </label>
+                        </td>
+                        <td>
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_music">
+                            </div>
+                        </td>
+                        <td>
+                            <span id="volume_music_percent">100%</span>
+                        </td>
+                    </tr> -->
+
+                    <!-- Other Volume -->
+                    <!-- <tr>
+                        <td>
+                            <label for="volume_misc" >
+                                Other:
+                            </label>
+                        </td>
+                        <td>
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_misc">
+                            </div>
+                        </td>
+                        <td>
+                            <span id="volume_misc_percent">100%</span>
+                        </td>
+                    </tr> -->
+                </table><br>
+
+                
+
+                <!-- Notification Length -->
+                <label for="notificationLength">Notification Length:<br>
+                    <p class="secondary_text">Time (in seconds) that notifications will stay on your screen for</p>
+                    
+                    <input type="number" id="notificationLength" min="2" max="15" value="6"/>
+                    <button onclick="resetOption()">Reset</button>
+                </label><br><br>
+                
+                <!-- Options item -->
+                <p>Danger Zone:</p>
+                <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
+                    Delete Save Data
+                </button>
+                <!-- Reset button -->
+                <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings</button>
+                <br><br><hr><br>
+
+                <footer>
+                    <!-- Title -->
+                    <div>
+                        <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot" onclick="eggUp()" tabindex="0" role="button">
+                        <h1>Carrot Clicker</h1>
+                    </div>
+
+                    <!-- Footer things -->
+                    <div class="footer_bottom">
+                        <div class="footer_column">
+                            <b>Created by:</b>
+                            <div class="secondary_text">
+                                <a href="https://www.notkal.com/">not-the</a> and <a href="https://github.com/JJCVIP">JJCVIP</a>
+                                
+                            </div>
+                            <a class="link_styling underline white" tabindex="0" role="button" onclick="startCredits()">View Credits</a><br/>
+                        </div>
+                        <div class="footer_column">
+                            <b>These links don't do anything:</b><br/>
+                            <a href="#" class="white">About</a><br/>
+                            <a href="#" class="white">Contact</a><br/>
+                        </div>
+                    </div>
+
+                </footer>
+            </div>
+        </div>
+    </main>
+  
+    <!-- Popup menus -->
     <div id="overlay" class="dramatic">
         <!-- Backdrop -->
         <div id="backdrop" onclick="closeDialog(false, true, true)"></div>
@@ -69,7 +920,7 @@
             <div class="switcher_bar flex">
                 <button class="tab activetab">Themes</button>
                 <button class="tab" onclick="switchSwitchers()" id="cosmetic_tab_button">Cosmetics</button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             </div>
 
             <!-- Title -->
@@ -102,11 +953,8 @@
             <div class="switcher_bar flex">
                 <button class="tab" onclick="switchSwitchers()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             </div>
-            
-            <!-- Paint splatter -->
-            <!-- <img src="./assets/paint_splash.png" alt="" class="paint_splash"> -->
             
             <!-- Title -->
             <div>
@@ -126,85 +974,53 @@
         
             <!-- Cosmetic items -->
             <div id="cosmetics_list" class="fancy_list">
-                <!-- Javascript will do all the work -->
-                <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
-
+                <!-- Bundle -->
                 <details open class="cosmetic_collapse" id="collapse_bundle">
                     <summary class="h3">All:</summary>
                     <div id="bundle_cosmetics" class="cosmetics_mini">
                         <i class="center color_red">
                             If you're seeing this something is wrong. Please let us know!
                         </i>
-                        
-                        <!-- Sample item -->
-                        <!-- <div class="theme_item flex active" title="Dark Theme" onclick="setCosmetic('farmable', 'default')">
-                            <img src="./assets/Carrot Clicker.png" alt="img" class="theme_preview" id="theme">
-                            <div class="description">
-                                <h3>Carrot</h3>
-                                <p class="secondary_text">Default</p>
-                            </div>
-                            <div class="theme_checkbox">
-                                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="cosmetic_default_checkmark">
-                            </div>
-                        </div> -->
-    
-                        <!-- Sample item -->
-                        <!-- <div class="theme_item flex" title="Dark Theme" onclick="setCosmetic('farmable', 'default')">
-                            <img src="./assets/Carrot Clicker.png" alt="img" class="theme_preview" id="theme">
-                            <div class="description">
-                                <h3>Carrot</h3>
-                                <p class="secondary_text">Default</p>
-                            </div>
-                            <div class="theme_checkbox">
-                                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark" id="cosmetic_default_checkmark">
-                            </div>
-                        </div> -->
-    
                     </div>
                 </details>
-                
 
-
+                <!-- Farmable -->
                 <details open class="cosmetic_collapse" id="collapse_farmable">
                     <summary class="h3">Farmable:</summary>
                     <div id="farmable_cosmetics" class="cosmetics_mini"></div>
                 </details>
                 
-                
-
+                <!-- Bill -->
                 <details open class="cosmetic_collapse bill_related" id="collapse_bill">
                     <summary class="h3">Bill:</summary>
                     <div id="bill_cosmetics" class="cosmetics_mini"></div>
                 </details>
                 
-                
-
+                <!-- Belle -->
                 <details open class="cosmetic_collapse belle_related" id="collapse_belle">
                     <summary class="h3">Belle:</summary>
                     <div id="belle_cosmetics" class="cosmetics_mini"></div>
                 </details>
                 
-                
-
+                <!-- Greg -->
                 <details open class="cosmetic_collapse greg_related" id="collapse_greg">
                     <summary class="h3">Greg:</summary>
                     <div id="greg_cosmetics" class="cosmetics_mini"></div>
                 </details>
                 
-                
-
+                <!-- Charles -->
                 <details open class="cosmetic_collapse charles_related" id="collapse_charles">
                     <summary class="h3">Charles:</summary>
                     <div id="charles_cosmetics" class="cosmetics_mini"></div>
                 </details>
                 
-                
-
+                <!-- Carl -->
                 <details open class="cosmetic_collapse carl_related" id="collapse_carl">
                     <summary class="h3">Carl:</summary>
                     <div id="carl_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
+                <!-- Tools -->
                 <details open class="cosmetic_collapse" id="collapse_tools">
                     <summary class="h3">Tools:</summary>
                     <div id="tools_cosmetics" class="cosmetics_mini"></div>
@@ -215,7 +1031,7 @@
 
         <!-- Keybinds menu -->
         <div id="keybinds_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <button onclick="resetKeybinds()" id="key_reset">Reset to defaults</button>
             <h1>Edit Keybinds</h1>
             <p><i class="secondary_text" id="keybinds_blurb">Keybinds are disabled while this menu is open</i></p><br>
@@ -379,7 +1195,7 @@
 
         <!-- Fancy Prestige menu -->
         <div id="prestige_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <h1>Prestige</h1>
 
             <div class="prestige_menu_flex flex">
@@ -419,7 +1235,7 @@
                 <!-- Next prestige -->
                 <p class="prestigetooltip center half_width" style="padding-top: 6px;">
                     <!-- Prestige button -->
-                    <button onClick="openDialog('Are you Sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige')" class="button_gold full_width" title="Prestige">
+                    <button onClick="prestigeDialog()" class="button_gold full_width" title="Prestige">
                         Prestige
                     </button><br>
                     Prestiging now will result in:<br/>
@@ -436,7 +1252,7 @@
 
         <!-- Inventory -->
         <!-- <div id="inventory_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <h1>Inventory</h1>
             <p><i class="secondary_text">Secondary text</i></p><br>
 
@@ -475,7 +1291,7 @@
 
         <!-- Tips menu -->
         <div id="tips_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <h1>Tips</h1>
             <p class="secondary_text">Game knowledge</p>
 
@@ -566,927 +1382,14 @@
 
         
     </div>
-    <!-- #endregion -->
- 
 
-    <!-- Corner Toasts -->
+    <!-- Javascript -->
     <!-- #region -->
-    <div id="toast_container">
-        <div id="toasts_clear" onclick="clearToasts()">
-            Close All
-        </div>
-    </div>
+    <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
+    <script src="gamedata.js"></script>
+    <script src="carrot_clicker.js"></script>
+    <script src="styling.js"></script>
+    <script src="user.js"></script>
     <!-- #endregion -->
-
-    <!-- #endregion -->
-
-    <!--Basic Info Carrots; Cpc; Cps-->
-    <div class="status_bar">
-        <!-- Display when Javascript is turned off -->
-        <noscript>
-            <div class="noscript center">
-                <b><u>Notice:</u></b> Javascript is required to play Carrot Clicker.<br/>
-                You'll need to enable Javascript for this site in your browser's settings
-            </div>
-        </noscript>
-
-        <!-- Status bar -->
-        <div class="Basic_Info flex">
-            <!-- Info -->
-            <p id="Basic_Info">
-                <!-- Main Icon -->
-                <img src="./assets/pixel_carrot_32x.png" alt="" id="main_icon"
-                style="position: absolute; transform: translate(-38px, -6px)"
-                title="Carrot Clicker">
-
-                <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" title="Purchase multiplier - Click to cycle" onclick="multibuySpin()" tabindex="0">1x</b><p>
-
-            <!-- Tips -->
-            <div id="Tip" class="link_styling" onclick="tipchange()">Tip: Click the carrot</div>
-
-            <div id="info_dropdown" tabindex="0">
-                <!-- <svg height="20" width="25">
-                    <polygon points="0,0 25,0 12.5,10" style="fill:white;" />
-                </svg> -->
-                <!-- ☰ -->
-                ▼
-                <div class="hover_menu">
-                    <!-- Settings -->
-                    <a href="#settings" onclick="panelChange(`settings-panel`)" tabindex="0">
-                        <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/icons/settings.svg" alt="" class="dropdown_img invert">
-                            Settings
-                        </div>
-                    </a>
-
-                    <!-- Theme/cosmetic -->
-                    <div class="flex">
-                        <a onclick="themeSwitcher()" tabindex="0">
-                            <div class="menu_item link_styling secondary_text" style="width: 119px; border-right: 1px solid var(--border-color);">
-                                <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
-                                Themes
-                            </div>
-                        </a>
-    
-                        <a onclick="cosmeticSwitcher()" tabindex="0">
-                            <div class="menu_item link_styling secondary_text" style="width: 119px; padding-left: 0; padding-right: 0; text-align: center;">
-                                <!-- <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert"> -->
-                                Cosmetics
-                            </div>
-                        </a>
-    
-                    </div>
-
-                    <!-- Volume -->
-                    <div class="menu_item link_styling secondary_text">
-                        <label for="volume_master_dropdown">
-                            <img src="./assets/icons/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
-                            <div class="slidecontainer">
-                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
-                            </div>
-                        </label>
-                    </div>
-
-                    <!-- View credits -->
-                    <a tabindex="0" onclick="startCredits()">
-                        <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/blank.png" alt="" class="dropdown_img">
-                            Credits
-                        </div>
-                    </a>
-
-                    <!-- Changelog -->
-                    <a href="./changelog/" target="_blank" rel="noopener noreferrer" tabindex="0">
-                        <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/icons/refresh.svg" alt="" class="dropdown_img">
-                            Changelog
-                            <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
-                        </div>
-                    </a>
-
-                    <!-- Github -->
-                    <a href="https://github.com/JJCVIP/Carrot-Clicker" target="_blank" rel="noopener noreferrer" tabindex="0">
-                        <div class="menu_item link_styling secondary_text">
-                            <img src="./assets/icons/github.png" alt="" class="dropdown_img">
-                            Github
-                            <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Progress bar -->
-        <div id="main_progress_container" class="status_progress_bar">
-            <!-- Image -->
-            <img src="./assets/tools/tool_0.png" alt="" id="main_progress_image" class="main_progress_image">
-            <div id="main_progress" class="status_progress">
-                <!-- Progress -->
-                <div id="main_progress_bar" class="progress" style="width: 50%"></div>
-            </div>
-        </div>
-
-        <!-- Multibuy Indicator -->
-        <!-- <div id="multibuy_button" class="link_styling pointer" onclick="multibuySpin()">
-            1x
-        </div> -->
-
-    </div>
-
-  
-    <div id="container" class="flex">
-        <!-- Left Section -->
-        <!-- #region -->
-        <div id="left-section">
-
-            <!-- <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('farmable')"> -->
-
-            <!-- Falling Carrots -->
-            <div id="fallingCarrotsArea"></div>
-
-            <!-- Carrot image-->
-            <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" role="button" tabindex="0">
-
-            <!-- Numbers/Info Section -->
-            <div class="mini_stats">
-                <p class="Carrot_Count">
-                    <span id="Carrot_Count"></span> <span class="farmable_name">Carrots</span>
-                </p>
-                <p class="secondary_text">
-                    <span id="click_speed">0/0</span> clicks per second
-                </p><br>
-                <p class="secondary_text">
-                    <span class="farmable_name">Carrots</span> per click: <span id="cpc">Loading...</span>
-                </p>
-                <p class="secondary_text">
-                    <span class="farmable_name">Carrots</span> per second: <span id="cps">Loading...</span>
-                </p><br/>
-                <p class="secondary_text" style="margin-right:-24px">
-                    Shekels: ₪<span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that shekels will drop instead of carrots. Make sure to grab them!" onclick="toast('Info: Shekels', 'While clicking the carrot there is a chance that shekels will drop instead of carrots. Make sure to grab them!', '', true, true)">?</span></p>
-                <p class="secondary_text" style="margin-right:-24px">
-                    Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!', '', true, true)">?</span>
-                </p>
-                <p class="secondary_text">
-                    <span id="golden_carrot_count"></span>
-                </p><br>
-            </div>
-            
-            <!-- Prestige Section -->
-            <div class="main_buttons flex">
-                <!-- Prestige button -->
-                <button onClick="openPrestigeMenu()" title="???" class="prestige_button main_button_item" id="prestige_menu_button" disabled>
-                    <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
-                </button>
-
-                <!-- Inventory button -->
-                <!-- <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
-                    <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
-                </button> -->
-
-                <!-- Tips button -->
-                <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
-                    <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
-                </button>
-            </div>
-            <div id="prestige-section" class="flex">
-
-                <p class="prestigetooltip secondary_text" style="padding-top: 6px;">
-                    Prestige potential: <span id="main_prestige_potential">0</span>
-                </p>
-
-                <!-- <p class="prestigetooltip" style="padding-top: 6px;">
-                    Prestiging now will result in:<br>
-                    <span id="Prestige">0</span> Golden Carrots
-                </p> -->
-
-            </div>
-
-        </div>
-        <!-- #endregion -->
-
-
-
-        <!-- Right Section -->
-        <!-- #region -->
-        <div id="right-section" class="character_column">
-            <!-- Character column 1 -->
-            <div class="character_column">
-
-                <!--Boomer Bill Rendering-->
-                <!-- #region -->
-                <div class="Bill characterbox" id="bill_box">
-                    <div class="billtooltip charactertooltip tooltip" id="billtooltip">
-                        Upgrading Bill will increase your carrots per click (CPC) by one.
-                    </div>
-                    <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('bill')">
-                    <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('bill')">
-
-                    <!-- Top -->
-                    <div class="top flex">
-                        <img
-                        src="./assets/characters/Boomer_Bill.png"
-                        alt="Boomer Bill"
-                        id="bill_avatar"
-                        class="characterimg"
-                        title="Boomer Bill">
-
-                        <div class="characterdesc">
-                            <b id="bill_name" class="character_name">Bill</b>
-                            <p class="secondary_text">
-                                Cost to upgrade Bill: <span id="UpBillCost"></span>
-                            </p>
-                            <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
-                        </div>
-
-                    </div>
-
-                    <!-- Bottom -->
-                    <div class="bottom hoecontainer">
-
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[mbsel])" title="Level up" tabindex="0">
-                        
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="bill_wooden_hoe" tabindex="0">
-
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="bill_stone_hoe" tabindex="0">
-
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="bill_iron_hoe" tabindex="0">
-
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="bill_gold_hoe" tabindex="0">
-
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="bill_diamond_hoe" tabindex="0">
-
-                        <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="bill_netherite_hoe" tabindex="0">
-                    </div>
-
-                    <!-- Bio Card -->
-                    <div class="bio_card" id="bill_bio">
-                        Hello there
-                    </div>
-
-                </div>
-                <!-- #endregion -->
-
-                <!--Belle Boomerette Rendering-->
-                <!-- #region -->
-                <div class="Belle characterbox char_locked" id="belle_box">
-                    <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
-                    <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('belle')">
-                    <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('belle')">
-
-                    <!-- Top -->
-                    <div class="top flex">
-                        <img
-                        src="./assets/characters/BelleBommerette.png"
-                        alt="Belle Boomerette"
-                        id="belle_avatar"
-                        class="characterimg"
-                        title="Boomer Belle">
-                        <div class="characterdesc">
-                        <b id="belle_name" class="character_name">
-                            Belle
-                        </b>
-                        <p class="secondary_text">
-                            Cost to upgrade Belle: <span id="UpBelleCost"></span>
-                        </p>
-                        <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
-                        </div>
-                    </div>
-
-                    <!-- Bottom -->
-                    <div class="bottom hoecontainer">
-
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="belle_wooden_hoe" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="belle_stone_hoe" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="belle_iron_hoe" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="belle_gold_hoe" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="belle_diamond_hoe" tabindex="0">
-
-                        <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="belle_netherite_hoe" tabindex="0">
-                    </div>
-
-                </div>
-                <!-- #endregion -->
-                
-                <!--Gregory Rendering-->
-                <div class="Greg characterbox char_locked" id="greg_box">
-                    <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                        Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tools' cost to start crafting.
-                    </div>
-                    <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')">
-                    <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')">
-
-                    <!-- Top -->
-                    <div class="top flex">
-                        <img
-                        src="./assets/characters/Gregory.png"
-                        alt="Gregory"
-                        id="greg_avatar"
-                        class="characterimg"
-                        title="Gregory">
-                        <div class="characterdesc">
-                            <b id="greg_name" class="character_name">Greg</b>
-                            <p class="secondary_text">
-                                Cost to Upgrade Greg: <span id="UpGregCost"></span>
-                            </p>
-                            <figcaption id="Greg_lvl" class="characterlevel secondary_text">
-                                Lvl: 0
-                            </figcaption>
-                        </div>
-                    </div>
-
-                    <!-- Bottom -->
-                    <div class="bottom secondary_text">
-                        <div class="Greg_Hoe_Container hoecontainer">
-                        <!-- <span class="hoe_price">Prices:</span> -->
-
-                        <!-- Crafting display -->
-                        <div class="greg_crafting_info inactive" title="Idle" id="greg_crafting_info">
-                            <img src="./assets/tools/tool_0.png" alt="" id="greg_progress_image" class="main_progress_image">
-                            <img src="./assets/icons/refresh.svg" alt="" class="greg_spinny">
-                        </div>
-
-                        <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0">
-                        
-                        <span id="wooden_hoe_price" class="hoe_price greg_margin_fix">Wooden</span>
-                        <p class="Greg_Hoe_Number toolnumber greg_margin_fix" id="Greg_Wooden_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_0.png" class="toolicon blackedout greg_margin_fix tool_0" onclick="CreateHoe(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0">
-
-                        <span id="stone_hoe_price" class="hoe_price">Stone</span>
-                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_1.png" class="toolicon blackedout tool_1" onclick="CreateHoe(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0">
-
-                        <span id="iron_hoe_price" class="hoe_price">Iron</span>
-                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_2.png" class="toolicon blackedout tool_2" onclick="CreateHoe(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0">
-
-                        <span id="gold_hoe_price" class="hoe_price">Gold</span>
-                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_3.png" class="toolicon blackedout tool_3" onclick="CreateHoe(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0">
-
-                        <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
-                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_4.png" class="toolicon blackedout tool_4" onclick="CreateHoe(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0">
-
-                        <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
-                        <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
-                        <img src="./assets/tools/tool_5.png" class="toolicon blackedout tool_5" onclick="CreateHoe(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0">
-                        </div>
-                        
-                        <!-- Progress Bar -->
-                        <div id="Greg_Bar">
-                            <div id="Greg_Progress" class="progress"></div>
-                        </div>
-                    
-                    </div>
-                </div>
-
-                <!--Charles Rendering-->
-                <div class="Charles characterbox char_locked" id="charles_box">
-                    <div class="charlestooltip charactertooltip tooltip" id="charlestooltip">
-                        Charles Tooltip
-                    </div>
-                    <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('charles')">
-                    <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('charles')">
-
-                    <!-- Top -->
-                    <div class="top flex">
-                        <img
-                            src="./assets/characters/Charles.png"
-                            alt="Charles"
-                            id="charles_avatar"
-                            class="characterimg"
-                            title="Charles">
-                        <div class="characterdesc">
-                            <b id="charles_name" class="character_name">Charles</b>
-                            <p class="secondary_text">
-                                Golden Carrot research<br/>
-                                Sells tomes
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Bottom -->
-                    <div class="bottom">
-                        <!-- Charles' buttons -->
-                        <div
-                        onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
-                        id="ImproveWorkingConditions_button"
-                        class="unbold shop_item pointer flex cant_afford"
-                        tabindex="0">
-                            <img src="./assets/characters/working_conditions.png" alt="" class="charles_icon">
-                            <p>
-                                Improve working conditions<br/>
-                                <span id="ImproveWorkingConditions" class="tome_price">---</span>
-                                <span id="iwc_count" class="tome_count">x0</span>
-                            </p>
-                        </div>
-                        
-                        <div
-                        onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
-                        id="BetterHoes_button"
-                        class="unbold shop_item pointer flex cant_afford"
-                        tabindex="0">
-                            <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
-                            <p>
-                                High quality tools<br/>
-                                <span id="BetterHoes" class="tome_price">---</span>
-                                <span id="bh_count" class="tome_count">x0</span>
-                            </p>
-                        </div>
-
-                        <div
-                        onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
-                        id="DecreaseWages_button"
-                        class="unbold shop_item pointer flex cant_afford"
-                        tabindex="0">
-                            <img src="./assets/characters/decrease_wages.png" alt="" class="charles_icon">
-                            <p>
-                                Decrease worker wages<br/>
-                                <span id="DecreaseWages" class="tome_price">---</span>
-                                <span id="dww_count" class="tome_count">x0</span>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- Character column 2 -->
-            <!-- #region -->
-            <div class="character_column">
-
-                <!--Carl Rendering-->
-                <div class="carl characterbox char_locked" id="carl_box">
-                    <div class="carltooltip charactertooltip tooltip" id="carl">
-                        The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
-                    </div>
-                    <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')">
-                    <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('carl')">
-
-                    <!-- Top -->
-                    <div class="top flex">
-                        <img
-                            src="./assets/characters/Carl.png"
-                            alt="Carl"
-                            id="carl_avatar"
-                            class="characterimg"
-                            title="Carl">
-                        <div class="characterdesc flex">
-                            <div>
-                                <b id="carl_name" class="character_name">Carl</b>
-                                <!-- <p class="secondary_text"> -->
-                                    <!-- &gt; IN DEVELOPMENT &lt;<br> -->
-                                    <!-- Purchase Cosmetics
-                                </p> -->
-
-                                <div class="flex" style="margin-top: 2px;">
-                                    <button id="carl_theme_button" class="carl_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
-                                        Themes
-                                    </button>
-                                    <button id="carl_cosmetic_button" class="carl_button" onclick="cosmeticSwitcher()" style="width: 140px">
-                                        Cosmetics
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
-                                Custom
-                            </button> -->
-                        </div>
-                    </div>
-
-                    <!-- Bottom -->
-                    <div class="bottom" id="cosmetic_shop">
-                        <!-- <div class="flex">
-
-                        </div> -->
-
-
-
-                        <!-- Shop item -->
-                        <!-- <div id="carl_shop_theme_classic" class="shop_item" onclick="purchase('carl', 'theme', 'theme_classic')">
-                            <div class="flex">
-                                <img src="./assets/theme/theme_classic.png" alt="" class="shop_img">
-                                <div class="info">
-                                    <b class="underline">Carrot Clicker Classic</b>
-                                    <p class="secondary_text">Theme</p>
-
-                                    <div class="shop_price">
-                                        ₪10
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- <p class="padding-5px secondary_text center">That's all for now. Come back later for more things to buy!</p> -->
-
-
-                    </div>
-                </div>
-
-                <!-- More characters tooltip -->
-                <br>
-                <p class="secondary_text center" id="more_chars_tooltip">
-                    Progress through the game to unlock additional characters!
-                </p>
-            
-            </div>
-            <!-- #endregion -->
-
-        </div>
-        <!-- #endregion -->
-        <!-- End Right section -->
-
-
-        </div>
-    </div>
-    <!-- #endregion -->
-
-
-  </div>
-
-  <div id="settings"></div>
-
-  <!-- Lower section -->
-  <!-- #region -->
-  <div class="information-area">
-    <!-- Info section -->
-    <!-- <div class="row-break"></div> -->
-    <div id="tripane">
-        <!-- Nav buttons -->
-        <nav id="tripane-nav">
-            <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
-        </nav>
-
-        <!-- Achievements Panel -->
-        <div id="achievements-panel" class="panel remove unremove">
-            <h1>Achievements</h1>
-            
-            <!-- Filter dropdown -->
-            <select name="achievement_filter" id="achievement_filter" class="panel_select">
-                <option value="all">
-                    All (Default)
-                </option>
-                <option value="unlocked">
-                    Unlocked
-                </option>
-                <option value="locked">
-                    Locked
-                </option>
-                <option value="challenge">
-                    Challenge Achievements
-                </option>
-                <option value="secret">
-                    Secret Achievements
-                </option>
-            </select>
-
-            <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
-            <p class="secondary_text">
-                Progress: <span id="achievement_progress">-/- (0%)</span>
-                <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true)">?</span>
-            </p><br>
-            <label for="compact_achievements">
-                <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')" checked> Compact mode
-            </label>
-            <label for="achievements_grid">
-                <input type="checkbox" class="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view (WIP)
-            </label><br><br>
-            
-            <div id="achievements_list">
-                <!-- Old achievement notification -->
-                <!-- <div class="info-item">
-                    <img src="./assets/Carrot Clicker.png" alt="carrot" class="achievement-img">
-                    <div>
-                    <h1>Achievement earned: Click the carrot</h1>
-                    <p>Click the carrot</p>
-                    </div>
-                </div>-->
-
-                <!-- Loading carrot -->
-                <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
-            </div>
-        </div>
-
-        <!-- Statistics Panel -->
-        <div id="stats-panel" class="panel remove">
-            <div id="info-inner">
-                <h1>Statistics</h1>
-                <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
-                <i class="secondary_text">Updates every second</i><br/><br/>
-
-                <!-- Filter -->
-                <!-- <select name="statistics_filter" id="statistics_filter" class="panel_select">
-                    <option value="prestige">Current Prestige</option>
-                    <option value="lifetime">Lifetime</option>
-                </select> -->
-
-
-                <!-- Statistics -->
-                <div id="statistics">
-                    <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
-
-                    <!-- Prestige -->
-                    <div id="this_prestige_stats" class='remove'>
-                        <h3>This prestige:</h3>
-                        <details class="stat_collapse">
-                            <summary>Carrots earned: <b id="prestige_carrots">---</b></summary>
-                            From clicking: <b id="prestige_carrots_clicked">---</b><br>
-                            From CPS: <b id="prestige_carrots_idled">---</b><br>
-                            From bonus carrots: <b id="prestige_carrots_bonus">---</b><br>
-                        </details>
-    
-                        Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
-                        <details class="stat_collapse">
-                            <summary>Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
-                            Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
-                            Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
-                            Iron:   <b id="prestige_hoes_crafted_2">---</b><br/>
-                            Golden: <b id="prestige_hoes_crafted_3">---</b><br/>
-                            Diamond: <b id="prestige_hoes_crafted_4">---</b><br/>
-                            Netherite: <b id="prestige_hoes_crafted_5">---</b><br/>
-                        </details><br/>
-                    </div>
-
-                    <!-- Lifetime -->
-                    <h3>Lifetime:</h3>
-                    <details class="stat_collapse">
-                        <summary>Carrots earned: <b id="lifetime_carrots">---</b></summary>
-                        From clicking: <b id="lifetime_carrots_clicked">---</b><br>
-                        From CPS: <b id="lifetime_carrots_idled">---</b><br>
-                        From bonus carrots: <b id="lifetime_carrots_bonus">---</b><br>
-                    </details>
-                    Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
-                    Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
-                    Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
-
-                    Cash earned: <b id="lifetime_cash">---</b><br>
-                    Cash spent: <b id="lifetime_cash_spent">---</b><br>
-                    Total Clicks: <b id="lifetime_clicks">---</b><br/>
-                    Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
-                    <details class="stat_collapse">
-                        <summary>Tools crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
-                        Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
-                        Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>
-                        Iron:   <b id="lifetime_hoes_crafted_2">---</b><br/>
-                        Golden: <b id="lifetime_hoes_crafted_3">---</b><br/>
-                        Diamond: <b id="lifetime_hoes_crafted_4">---</b><br/>
-                        Netherite: <b id="lifetime_hoes_crafted_5">---</b><br/>
-                    </details><br/>
-
-                    Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b><br/><br/>
-
-                    Themes: <b id="stat_themes">---</b><br/>
-                    <!-- <details class="stat_collapse">
-                        <summary> -->
-                            Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span>
-                        <!-- </summary>
-                        Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
-                        Farmable: <b id="stat_cosmetics_farmable">---</b><br/>
-                        Bill:     <b id="stat_cosmetics_bill">---</b><br/>
-                        Belle:    <b id="stat_cosmetics_belle">---</b><br/>
-                        Greg:     <b id="stat_cosmetics_greg">---</b><br/>
-                        Charles:  <b id="stat_cosmetics_charles">---</b><br/>
-                        Carl:     <b id="stat_cosmetics_carl">---</b><br/>
-                        Tools:    <b id="stat_cosmetics_tools">---</b><br/>
-                    </details> -->
-                    
-                    <br/><br/>
-
-                    Achievements: <b id="stat_achievements">---</b><br/>
-                </div>
-
-            </div> 
-        </div>
-
-
-
-        <!-- Settings Panel -->
-        <div id="settings-panel" class="panel remove">
-            <h1>Settings</h1>
-            <p class="secondary_text"><i>Your game progress will always be saved.</i></p><br>
-
-            <!-- Developer -->
-            <div id="devp"></div>
-
-            <!-- Themes -->
-            <label for="theme_dropdown">
-                <b>Customization</b><br>
-                <button id="theme_button" onclick="themeSwitcher()">
-                    <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
-                    Themes
-                </button>
-                <button id="cosmetic_button" onclick="cosmeticSwitcher()">
-                    Cosmetics
-                </button><br><br>
-            </label>
-
-            
-            <b>Gameplay</b><br>
-            <label for="cosmetic_auto_equip">
-                <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
-                Auto-equip new cosmetics<br>
-            </label>
-            <label for="carl_shop_toasts">
-                <input type="checkbox" class="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
-                Carl shop notifications<br><br>
-            </label>
-
-            <!-- Fun Tip Percentage-->
-            <div class="slidecontainer">
-                <label for="FunTipPercentage" >
-                    Percentage of fun tips:<br>
-                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider" step="10"><span id="FunTipsSliderLabel" class="secondary_text">50</span><span class="secondary_text">%</span><br>
-                </label><br>
-            </div>
-
-            <!-- Options item -->
-            <b>Keybinds:</b><br>
-            <label for="disable_keybinds">
-            <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
-                Disable keybinds
-            </label><br>
-            <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
-                <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
-                Edit Keybinds
-            </button><br><br>
-
-            <!-- Autosave -->
-            <label for="autosave_interval"><b>Autosave Frequency:</b><br>
-                <p class="secondary_text">Default is 5 seconds</p>
-
-                <input type="number" id="autosave_interval" min="1" max="60" value="5"/>
-                <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
-                <button onclick="resetAutosave()">Reset</button>
-            </label><br><br>
-
-            <!-- Disable main progress bar -->
-            <b>Interface</b><br>
-            <label for="full_numbers">
-                <input type="checkbox" class="checkbox" id="full_numbers" onclick="setting('full_numbers')">
-                Full numbers
-            </label><br>
-            <label for="enable_main_progress">
-                <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
-                Always-on-top progress bar
-            </label><br>
-            <label for="confetti_effects">
-                <input type="checkbox" class="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
-                Confetti effects
-            </label><br><br>
-
-            <!-- Sounds options -->
-            <b>Sounds:</b><br>
-            <!-- All sounds -->
-            <label for="enable_sounds">
-                <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
-                    Sounds
-            </label><br>
-            <!-- Music toggle -->
-            <label for="enable_music">
-                <input type="checkbox" class="checkbox" id="enable_music" onclick="settingMusic()">
-                    Beta music
-            </label><br>
-            <!-- Carrot sounds -->
-            <label for="enable_carrot_sounds">
-                <input type="checkbox" class="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
-                    Beta carrot sounds
-            </label><br>
-
-            <!-- Volume sliders -->
-            <!-- <b>Sound Volume:</b> -->
-            <table>
-                <!-- Master Volume -->
-                <tr>
-                    <td>
-                        <label for="volume_master">
-                            Volume:
-                        </label>
-                    </td>
-                    <td>
-                        <div class="slidecontainer">
-                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_master">
-                        </div>
-                    </td>
-                    <td>
-                        <span id="volume_master_percent" class="secondary_text">100%</span>
-                    </td>
-                </tr>
-                
-                <!-- Music Volume -->
-                <!-- <tr>
-                    <td>
-                        <label for="volume_music" >
-                            Music:
-                        </label>
-                    </td>
-                    <td>
-                        <div class="slidecontainer">
-                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_music">
-                        </div>
-                    </td>
-                    <td>
-                        <span id="volume_music_percent">100%</span>
-                    </td>
-                </tr> -->
-
-                <!-- Other Volume -->
-                <!-- <tr>
-                    <td>
-                        <label for="volume_misc" >
-                            Other:
-                        </label>
-                    </td>
-                    <td>
-                        <div class="slidecontainer">
-                            <input type="range" min="0" max="100" value="100" class="slider" id="volume_misc">
-                        </div>
-                    </td>
-                    <td>
-                        <span id="volume_misc_percent">100%</span>
-                    </td>
-                </tr> -->
-            </table><br>
-
-            
-
-            <!-- Notification Length -->
-            <label for="notificationLength">Notification Length:<br>
-                <p class="secondary_text">Time (in seconds) that notifications will stay on your screen for</p>
-                
-                <input type="number" id="notificationLength" min="2" max="15" value="6"/>
-                <button onclick="resetOption()">Reset</button>
-            </label><br><br>
-            
-            <!-- Options item -->
-            <p>Danger Zone:</p>
-            <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
-                Delete Save Data
-            </button>
-            <!-- Reset button -->
-            <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings</button>
-            <br><br><hr><br>
-
-            <footer id="settings_footer">
-                <!-- Title -->
-                <div>
-                    <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot" onclick="eggUp()">
-                    <h1>Carrot Clicker</h1>
-                </div>
-
-                <!-- Footer things -->
-                <div class="footer_bottom">
-                    <div class="footer_column">
-                        <b>Created by:</b>
-                        <div class="secondary_text">
-                            <a href="https://www.notkal.com/">not-the</a> and <a href="https://github.com/JJCVIP">JJCVIP</a>
-                            
-                        </div>
-                        <a class="link_styling underline white" role="button" onclick="startCredits()">View Credits</a><br/>
-                    </div>
-                    <div class="footer_column">
-                        <b>These links don't do anything:</b><br/>
-                        <a href="#" class="white">About</a><br/>
-                        <a href="#" class="white">Contact</a><br/>
-                    </div>
-                </div>
-
-            </footer>
-        </div>
-    <!-- End Info section -->
-  </div>
-<!-- #endregion -->
-  
-
-
-  <!-- Javascript -->
-  <!-- #region -->
-  <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
-  <script src="gamedata.js"></script>
-  <script src="carrot_clicker.js"></script>
-  <script src="styling.js"></script>
-  <script src="user.js"></script>
-  <!-- #endregion -->
-
 </body>
 </html>

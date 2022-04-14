@@ -218,7 +218,7 @@ function closeDialog(doAction, backdrop=false) {
     dialogButtonAction = 'none';
 
     // Hide other popup menus
-    //#region 
+    //#region
     if(themeSwitcherOpen) {
         themeMenu.classList.remove('visible');
         themeSwitcherOpen = false;
@@ -247,7 +247,19 @@ function closeDialog(doAction, backdrop=false) {
         elCredits.classList.remove('visible');
         creditsOpen = false;
     }
+
+    // Enable keyboard navigation for main page
+    dom('main').ariaHidden = false;
+    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main a').forEach(element => {
+        element.tabIndex = 0;
+    });
     //#endregion
+}
+
+// Dialog templates
+/** Opens the prestige dialog */
+function prestigeDialog() {
+    openDialog('Are you Sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige');
 }
 
 
@@ -314,7 +326,7 @@ function toast(
         <div class="achievement_details flex">
             <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
             <div>
-                <h3>${achieve.name}</h3>
+                <a href="#${achievement}" class="link_styling white" onclick="panelChange('achievements-panel')"><h3>${achieve.name}</h3></a>
             </div>
         </div>`;
     }
@@ -518,7 +530,7 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
     }
     // Cash
     else if(style == 'cash') {
-        eInnerText(clickVisualElement, `₪${amount}`);
+        eInnerText(clickVisualElement, `⚬${amount}`);
         clickVisualElement.classList.add("clickvisual_cash");
     }
     
@@ -541,67 +553,6 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 //#endregion
 
 
-// Falling carrots
-var fallingID = 0;
-var fallingActive = 0;
-var fallingFrenzy = false;
-const fallingCarrotsArea = dom('fallingCarrotsArea');
-/** Creates a falling carrot */
-function fallingCarrot() {
-    var element = document.createElement("img");
-    
-    // 2% chance the drop is money instead
-    let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
-
-    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
-    element.classList.add('falling_carrot');
-    element.id = fallingID;
-    fallingID++;
-    fallingActive++;
-
-    let amount;
-
-    if(type == 'carrot') {
-        // Carrot reward
-        // Between 500% and 2000% of player's CPC
-        let rewardVariation = (Math.floor((Math.random() * 1500)) + 500) / 100;
-        amount = Math.round(player.cpc * rewardVariation);
-    } else if(type == 'cash') {
-        // Cash reward
-        // Between 5 and 15
-        amount = Math.floor((Math.random() * 13)) + 5;
-    }
-
-    // Set onclick function
-    element.onclick = () => {
-        dom(element.id).remove();
-        fallingActive--;
-    
-        if(type == 'carrot') {
-            earnCarrots( amount, 'bonus', true);
-        } else if(type == 'cash') {
-            earnCash(amount, 'bonus');
-        }
-    };
-
-
-
-    // Positioning
-    let randomX = Math.floor((Math.random() * 324));
-    element.style.left = randomX - 30 + "px";
-
-    // To page
-    fallingCarrotsArea.append(element);
-
-    element.classList.add('bright_200');
-
-    setTimeout(() => {
-        if(dom(element.id) != null) {
-            dom(element.id).remove();
-            fallingActive--;
-        }
-    }, 2600);
-}
 
 
 /** Theme switcher <-> Cosmetic switcher */
@@ -626,8 +577,7 @@ function switchSwitchers() {
 function themeSwitcher() {
     themeSwitcherOpen = true;
     themeMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+    openMenu();
 
     newIndicator(false, 'theme');
     buttonSound();
@@ -646,8 +596,7 @@ var uncollapseNeeded = false;
 function cosmeticSwitcher(category = false) {
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+    openMenu();
 
     newIndicator(false, 'cosmetic');
     buttonSound();
@@ -677,17 +626,27 @@ function closeCosmeticSwitcher(noOverlay = false) {
     }
 }
 
+// Always run when a menu is open
+function openMenu() {
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+
+    // Disable keyboard navigation for main page
+    dom('main').ariaHidden = true;
+    document.querySelectorAll('#main *[tabindex="0"], #main button, #main input, #main a').forEach(element => {
+        element.tabIndex = -1;
+    });
+}
+
 /** Opens the prestige menu */
 function openPrestigeMenu() {
     // Prevent from opening if unavailable
-    if(player.lifetime.golden_carrots < 1 && player.prestige_potential < 1) {return};
+    if(player.prestige_available != true) {return};
     
     closeDialog();
     prestigeMenuOpen = true;
     prestigeMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
-
+    openMenu();
     updatePrestigeMenu();
 
     buttonSound();
@@ -703,13 +662,6 @@ function openPrestigeMenu() {
 
 //     buttonSound();
 // }
-// Unused, use closeDialog() instead
-// function closeInventory(noOverlay = false) {
-//     themeMenu.classList.remove('visible');
-//     if(noOverlay == false) {
-//         overlay.classList.remove("visible");
-//     }
-// }
 
 /* ----- Tips Menu ----- */
 function openTipsMenu() {
@@ -722,8 +674,7 @@ function openTipsMenu() {
 
     tipsMenuOpen = true;
     tipsMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+    openMenu();
 
     buttonSound();
 }
@@ -885,7 +836,7 @@ function populateThemeList() {
             // Locked HTML
             themeHTML += /* html */
             `
-            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This theme has not been unlocked', '', false, true)">
+            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This theme has not been unlocked', '', false, true)" tabindex="0" role="button">
                 <img src="./assets/locked_transparent.png" alt="img" class="theme_preview">
                 <div>
                     <h3>???</h3>
@@ -900,7 +851,7 @@ function populateThemeList() {
         let imgsrc = theme.image !== false ? theme.image : './assets/Carrot Clicker.png';
         themeHTML += /* html */
         `
-        <div class="theme_item flex" title="${theme.name}" onclick="setTheme('${key}')">
+        <div class="theme_item flex" title="${theme.name}" onclick="setTheme('${key}')" tabindex="0" role="button">
             <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
             <div>
                 <h3>${theme.name}</h3>
@@ -974,8 +925,8 @@ function populateCosmeticsList(target) {
             populateCosmeticsList(cosmeticsKeys[i]);
         }
 
+        // Size adjust
         setTimeout(() => {
-            // Size adjust
             let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
             if(width > 632) { width = 632 - 68; }
             else { width = width - 68; }
@@ -1012,9 +963,6 @@ function populateCosmeticsList(target) {
     var cosmeticHTML = '';
     var stillLocked = 0;
     let list = cosmetics[target];
-    // console.log('gg: ' + target);
-
-    // console.log(list['keys']);
     for(let i = 0; i < list['keys'].length; i++) {
         let key = list['keys'][i];
         let cosmetic = list[key];
@@ -1024,12 +972,10 @@ function populateCosmeticsList(target) {
         if(isUnlocked('cosmetic', key, target) == false) {
             // Test if hidden
             if(cosmetic.hidden == true) continue;
-
-            // console.log(key + ' is not unlocked!');
             stillLocked++;
             cosmeticHTML += /* html */
             `
-            <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)">
+            <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)" tabindex="0" role="button">
                 <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}">
                 <div class="description">
                     <h3>???</h3>
@@ -1042,10 +988,10 @@ function populateCosmeticsList(target) {
 
         let imgsrc = cosmetic.hasOwnProperty('preview') ? cosmetic.preview : (cosmetic.hasOwnProperty('image') ? cosmetic.image : './assets/Carrot Clicker.png');
     
-        // console.log('aaa::: ' + `setCosmetic('${target}', '${key}')`);
+        // HTML
         cosmeticHTML += /* html */
         `
-        <div class="theme_item cosmetic_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}">
+        <div class="theme_item cosmetic_item flex" title="${cosmetic.name}" onclick="setCosmetic('${target}', '${key}')" id="${target}_cosmetic_${key}" tabindex="0" role="button">
             <img src="${imgsrc}" alt="img" class="theme_preview" id="cosmetic_${key}">
             <div class="description">
                 <h3>${cosmetic.name}</h3>
@@ -1058,21 +1004,9 @@ function populateCosmeticsList(target) {
         `;
     }
 
-    // if(stillLocked > 0) {
-    //     cosmeticHTML += /* html */
-    //     `<br><center><i>${stillLocked} cosmetics have not been unlocked</i></center>`;
-    // } else {
-    //     cosmeticHTML += /* html */
-    //     `<br><center><p>You've unlocked every cosmetic!</p></center>`;
-    // }
 
     dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
-
-
 }
-// function cosmeticsPercent() {
-//     return percentage(Object.keys(player.cosmetics).length - 1, Object.keys(cosmetics).length - 1);
-// }
 
 
 // Theme switcher checkmark fix
@@ -1196,7 +1130,7 @@ function populateAchievements() {
                         }
                     } else if(rewardType == 'cash') {
                         icon = './assets/piggy_bank.png';
-                        informalName = `x${rewardName} shekels`;
+                        informalName = `${rewardName} coins`;
                     } else if(rewardType == 'shop') {
                         continue;
                     }
@@ -1259,7 +1193,7 @@ function populateAchievements() {
                     }
                 } else if(rewardType == 'cash') {
                     icon = './assets/piggy_bank.png';
-                    informalName = `x${rewardName} shekels`;
+                    informalName = `${rewardName} coins`;
                 } else if(rewardType == 'shop') {
                     continue;
                 }
@@ -1332,32 +1266,32 @@ function populateAchievements() {
             `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
     }
     // Filter by locked
-    if(filter == 'locked' && achievementHTML == '') {
+    else if(filter == 'locked' && achievementHTML == '') {
         achievementHTML =
             `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
-    };
+    }
     // Filter by secret
-    if(filter == 'secret' && achievementHTML == '') {
+    else if(filter == 'secret' && achievementHTML == '') {
         achievementHTML =
             `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
-    };
+    }
 
     elAchievementsList.innerHTML = achievementHTML;
-    // eInnerHTML(elAchievementsList, achievementHTML); // doesn't work
+    setTimeout(() => {achieveGridAdjust()}, 50);
 }
-var agAdjusted = false;
-function achieveGridAdjust() {
+function achieveGridAdjust(ov) {
+    console.log(`achieveGridAdjust(${ov})`);
+    // if(settings.compact_achievements == false && ov != true) return;
+
     // Size adjust
     let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     if(width > 1166) { width = 1166 - 64; }
     else { width = dom('achievements_list').offsetWidth; }
     let item_width = 68;
     let amount = Math.floor(width / item_width);
-    // console.log(width, amount);
     
     var iterate = 1;
     let list = document.querySelectorAll('#achievements_list .achievement_item');
-    console.log(list);
     list.forEach(item => {
         if(iterate > Math.ceil(amount / 2)) {
             item.classList.add('desc_fit');
@@ -1369,8 +1303,6 @@ function achieveGridAdjust() {
             iterate = 1;
         }
     });
-
-    agAdjusted = true;
 }
 
 
@@ -1432,7 +1364,7 @@ function rewardHTML(achieve) {
                     }
                 } else if(rewardType == 'cash') {
                     icon = './assets/piggy_bank.png';
-                    informalName = `x${rewardName} shekels`;
+                    informalName = `${rewardName} coins`;
                 } else if(rewardType == 'shop') {
                     continue;
                 }
@@ -1495,7 +1427,7 @@ function rewardHTML(achieve) {
                 }
             } else if(rewardType == 'cash') {
                 icon = './assets/piggy_bank.png';
-                informalName = `x${rewardName} shekels`;
+                informalName = `${rewardName} coins`;
             } else if(rewardType == 'shop') {
                 return '';
             }
@@ -1606,8 +1538,7 @@ function startCredits(toast = false) {
     creditsOpen = true;
     elCredits.scrollTop = 0;
     elCredits.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+    openMenu();
     clearInterval(creditInterval);
     creditInterval = setInterval(() => {
         elCredits.scrollTop += 1;
@@ -1630,8 +1561,7 @@ let keyBlurbText = elKeybindsBlurb.innerHTML;
 function keybindsMenu() {
     keybindsMenuOpen = true;
     elKeybindsMenu.classList.add('visible');
-    overlay.classList.add("visible");
-    elBody.classList.add('overflow_hidden');
+    openMenu();
 
     if(elDisableKeybinds.checked == true) {
         elKeybindsBlurb.classList.add('color_red');
@@ -1722,7 +1652,7 @@ function populateCarl() {
 
         let [ca, cb] = name.split('/');
         let cosmetic = cosmetics[ca][cb];
-        let img = cosmetic.image;
+        let img = cosmetic.image || cosmetic.preview;
 
         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
     }
@@ -1736,23 +1666,26 @@ function populateCarl() {
         carlShop.innerHTML = html;
     }
     updateCarlsShop();
-}
-function carlHTML(internalName, type, name, img, price) {
-    return `
-    <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
-        <div class="flex">
-            <img src="${img}" alt="" class="shop_img">
-            <div class="info" style="margin-top: 4px;">
-                <b>${name}</b>
-                <p class="secondary_text">${capitalizeFL(type)}</p>
 
-                <div class="shop_price">
-                    ₪${price}
+    // Carl HTML template
+    function carlHTML(internalName, type, name, img, price) {
+        return `
+        <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
+            <div class="flex">
+                <img src="${img}" alt="" class="shop_img">
+                <div class="info" style="margin-top: 4px;">
+                    <b>${name}</b>
+                    <p class="secondary_text">${capitalizeFL(type)}</p>
+    
+                    <div class="shop_price">
+                        ${price} coins
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>`;
+        </div>`;
+    }
 }
+
 
 // Theme/cosmetic NEW indicator
 const carl_theme_button =       dom('carl_theme_button');
@@ -1792,11 +1725,13 @@ function achieveGridMode(state) {
     } else {
         elAchievementsList.classList.remove('achieve_grid');
     }
+
+    achieveGridAdjust();
 }
 
 // Title changer
 // setInterval(() => {
-//     dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.Carrots)} carrots`;
+//     dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.carrots)} carrots`;
 // }, 2000);
 
 

@@ -1,5 +1,60 @@
-Upcoming:
-- New default tool sprites
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13
+    4-13-2022
+// ----------------------------------------------------------- //
+
+- Some new default tool sprites (only tools 0 and 2 atm)
+- New tools cosmetic: fertilizer
+- Gave tool count numbers an outline for better contrast
+- Changed the delete save data keybind to be backspace or delete, and to only work if isDebug() resolves to true
+- Pressing enter while in the prestige menu will open the prestige dialog (P -> Enter -> Enter to prestige)
+- Fixed Gregory crafting jobs not continuing on page load
+- onbeforeunload will now work in supported browsers (unfortunately not enough browsers to justify removing autosave)
+- Changed the cash popup color from red to yellow
+- Renamed cash (Shekels -> Coins)
+- Coin count will breifly light up after you've earned coins
+- Earning the 1_billion_carrots achievement will increase the odds of a falling carrot being cash (2% -> 3%)
+- Earning the 1_quadrillion_carrots achievement will increase both the minimum and maximum amount of cash you can get from a drop by 3
+  + Normally: 5 minimum, 15 max
+  + After: 8 minimum, 18 max
+  + Technically this calculation uses the same conditions as the achievemensts instead of checking for the achievements themselves.
+- Changed tip: "Long hover over a character to view their description" -> "Click a character's "i" symbol to learn more about them"
+- Carl shop items will now fallback to using cosmetic.preview if cosmetic.image doesn't exist
+- Game related keybinds will now be ignored if any menu is open
+
+Internal changes:
+- Cleaned up the HTML and removed a bunch of unused code
+- Moved the remaining code out of the main game loop
+- Renamed:
+  + player.Carrots -> player.carrots
+  + player.EquippedHoes -> equippedHoes
+- Removed unused statistics:
+  + player.prestige.hoes.equipped
+  + player.prestige.hoes.equippedTotal
+  + player.lifetime.hoes.equipped
+  + player.lifetime.hoes.equippedTotal
+- player.data_version bumped to 4
+
+Accessibility:
+- Added role="button" to a number of clickable elements
+- Made a ton of elements keyboard focusable (status bar tip, themes, cosmetics, character mini buttons, footer carrot, footer "view credits")
+- Opening any kind of popup will disable keyboard navigation for the rest of the page
+- Fixed an issue where when pressing enter on focused summary elements they would not stay open (had to make an exception for summaries since they already accept enter as a way to open them)
+
+Achievements:
+- Achievement grid view has recieved the same treatment as the cosmetic menu, item descriptions near the right side will hopefully no longer go off the screen
+  + Grid mode will look the same regardless of compact mode
+  + Grid mode is no longer marked as WIP
+- Achievement compact mode is no longer the default, however they will still look the same with it off as they previously did with it on
+  + Compact mode on is now even smaller, using the same look as achievement toasts
+- Clicking an achievement toast will link to that achievement
+
+Themes:
+- Fixed theme_retro having the wrong accent color, and certain icons being black
+- The camo theme background is no longer blurry for some browsers
+
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.12.1
@@ -22,6 +77,7 @@ Themes:
 
 ~ Kal
 
+
 // ----------------------------------------------------------- //
     VERSION dev beta 1.12
     4-9-2022
@@ -35,6 +91,7 @@ Themes:
 -decreaseWages Value is properly set and displayed
 -Charles information display changed to better reflect whats actually happening
 -Everything Charles is Broken in a whole new way!!1
+
 ~JJ
 
 

@@ -62,10 +62,6 @@
 }
 
 /* Scrollbar */
-/* ::-webkit-scrollbar-track {
-    background-color: lawngreen;
-    width: 100px;
-} */
 ::-webkit-scrollbar {
 	width: 16px;
 }
@@ -80,22 +76,6 @@
     /* Fake margins from https://stackoverflow.com/a/45420691/11039898 */
     box-shadow: inset 0 0 10px 10px var(--border-color);
     border: 3px solid var(--main-bg-color);
-}
-/* Tri-pane section scrollbar */
-.information-area ::-webkit-scrollbar {
-	width: 16px;
-}
-.information-area ::-webkit-scrollbar-track {
-	border-radius: 10px;
-	background-color: var(--brown-darker-color);
-}
-.information-area ::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background-color: var(--brown-bg-color);
-
-    /* Fake margins from https://stackoverflow.com/a/45420691/11039898 */
-    box-shadow: inset 0 0 10px 10px var(--brown-lighter-color);
-    border: 3px solid var(--brown-darker-color);
 }
 
 
@@ -131,11 +111,6 @@ h4 {
 .half_width {width: 50% !important;}
 .full_width {width: 100% !important;}
 .overflow_hidden {overflow: hidden !important;}
-/* .fixed {
-    position: fixed;
-    top: 0;
-    width: 100%;
-} */
 .center {
     text-align: center;
 }
@@ -655,12 +630,6 @@ summary:hover {
     font-size: 16pt !important;
     padding-top: 2px;
 }
-.toast.achievement_item .achievement_img {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 8px;
-    margin-right: 8px;
-}
 .toast.achievement_item .rewards_list {
     width: 100%;
 }
@@ -903,20 +872,7 @@ body:not(.theme_light) .theme_checkmark {
 
 
 /* Paint splatter */
-/* .paint_splash {
-    position: absolute;
-    right: -20px;
-    bottom: -120px;
-    z-index: 10;
-
-    opacity: 0.4;
-    width: 300px;
-
-    filter: brightness(50%) sepia(100) saturate(100) hue-rotate(200deg);
-} */
-.fancy_switcher div {
-    z-index: 20;
-}
+.fancy_switcher div { z-index: 20; }
 .fancy_switcher summary {
     transform: translateX(20px);
     padding-bottom: 8px;
@@ -960,8 +916,8 @@ body:not(.theme_light) .theme_checkmark {
 .clickvisual_cash {
     font-size: 28pt;
     z-index: 101;
-    color: rgb(204, 64, 64);
-    filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.5));
+    color: goldenrod;
+    filter: drop-shadow(0px 0px 8px black);
 }
 @keyframes anim_falling_popup {
     0% {
@@ -1218,7 +1174,7 @@ body:not(.theme_light) .theme_checkmark {
     filter: brightness(125%);
 } */
 
-
+/* Mini stats */
 .Carrot_Count {
     font-size: 20pt;
     text-align: center;
@@ -1238,6 +1194,12 @@ body:not(.theme_light) .theme_checkmark {
     overflow: hidden;
     background-color: var(--darker-bg-color);
 }
+.flash_cash { animation: flash_cash 2s ease-in; }
+@keyframes flash_cash {
+    from { color: goldenrod; }
+}
+
+/* Carrot */
 #main_carrot {
     margin: 10px;
     margin-right: 20px;
@@ -1336,13 +1298,14 @@ body:not(.theme_light) .theme_checkmark {
     z-index: 10;
 
     outline: transparent;
-    transition-property: box-shadow, border, background, outline;
+    transition-property: box-shadow, border, background-color, outline;
     transition-duration: 0.15s;
 
     /* 3D */
     transform: perspective(800px);
 }
 .characterbox:hover,
+.characterbox:focus-within,
 .characterbox.show_info {
     /* border: 3px solid #6d6565; */
     outline: 1px solid #4b4747;
@@ -1385,7 +1348,8 @@ body:not(.theme_light) .theme_checkmark {
     transform: translate(calc(-100% - 30px), -2px);
     opacity: 0;
 }
-/*.characterbox:hover*/.characterbox.show_info .charactertooltip {
+/* .characterbox:hover .charactertooltip */
+.characterbox.show_info .charactertooltip {
     transform: translate(calc(-100% - 10px), -2px);
     opacity: 1;
 }
@@ -1419,6 +1383,7 @@ body:not(.theme_light) .theme_checkmark {
     transform: rotate(90deg) translate(2px);
 }
 .characterbox:hover .char_mini_button,
+.characterbox:focus-within .char_mini_button,
 #left-section:hover .char_mini_button {
     opacity: 1;
 }
@@ -1516,12 +1481,17 @@ body:not(.theme_light) .theme_checkmark {
     filter: brightness(70%);
 }
 .toolnumber {
+    color: white;
     display: inline-block;
     position: absolute;
     z-index: 1;
     font-size: 11pt;
     transform: translateX(16px) translateY(20px);
-    text-shadow: 0 0 4px black;
+    text-shadow: 0 0 4px black,
+                 1px 1px 0 black,
+                 -1px 1px 0 black,
+                 1px -1px 0 black,
+                 -1px -1px 0 black;
 
     pointer-events: none;
 }
@@ -1646,7 +1616,7 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 
 
-/* Charles */
+/* Charles + Carl */
 .Charles button {
     width: calc(100% - 10px);
 }
@@ -1844,6 +1814,9 @@ body:not(.gp) #golden_carrot_count*/ {
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
     border-radius: 16px 16px 0 0;
 }
+#tripane h1 {
+    margin-bottom: 8px;
+}
 #tripane hr {
     border: none;
     height: 1px;
@@ -1942,6 +1915,9 @@ body:not(.gp) #golden_carrot_count*/ {
     width: 200px;
 }
 
+
+
+
 .achievement_item {
     width: 100%;
     margin-bottom: 8px;
@@ -1950,10 +1926,12 @@ body:not(.gp) #golden_carrot_count*/ {
 
     border-radius: 20px;
     position: relative;
-    /* overflow: hidden; */
 }
 .achievement_item:hover {
     z-index: 2;
+}
+.achievement_item:target {
+    outline: 4px solid var(--generic-blue);
 }
 .style_challenge {
     border: 2px solid rgb(177, 44, 44);
@@ -2004,10 +1982,13 @@ body:not(.gp) #golden_carrot_count*/ {
     background-color: rgb(61, 49, 61);
 }
 
+
+
+
 /* Achievement details */
 .achievement_item .achievement_img {
-    height: 75px;
-    width: 75px;
+    height: 50px;
+    width: 50px;
 
     margin-right: 16px;
     
@@ -2016,23 +1997,35 @@ body:not(.gp) #golden_carrot_count*/ {
     transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
     transition-property: transform, margin, border-radius;
 }
-.compact .achievement_item .achievement_img,
+/* .compact:not(.achieve_grid) {
+    display: flex;
+    flex-wrap: wrap;
+}
+.compact:not(.achieve_grid) .achievement_item {
+    width: calc(33% - 8px);
+    margin-right: 8px;
+} */
+.compact:not(.achieve_grid) .achievement_item .achievement_img,
 .toast.achievement_item .achievement_img {
-    height: 50px;
-    width: 50px;
+    height: 32px;
+    width: 32px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+.compact:not(.achieve_grid) .achievement_item p.secondary_text,
+.compact:not(.achieve_grid) .achievement_item .rewards_list {
+    visibility: hidden;
+    position: absolute;
 }
 .achievement_locked .achievement_img {
     opacity: 0.7;
     filter: saturate(0%);
 }
 .achievement_item:not(.achievement_locked):not(.toast) .achievement_img:hover {
-    /* transform: scale(1.8, 1.8) translateX(12px); */
     transform: scale(2.2, 2.2) translateX(10px);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
-    /* margin-right: 68px; */
     margin-right: 64px;
     border-radius: 4px;
-    /* position: absolute; */
 }
 .achievement_details {
     padding: 7px;
@@ -2047,7 +2040,12 @@ body:not(.gp) #golden_carrot_count*/ {
     margin: 6px 0 8px 0;
     font-size: 20pt;
 }
-.compact .achievement_details h2,
+.achievement_details h2,
+.toast.achievement_item .achievement_details h2  {
+    margin: 0;
+    font-size: 18pt;
+}
+.compact:not(.achieve_grid) .achievement_details h2,
 .toast.achievement_item .achievement_details h2  {
     margin: 0;
     font-size: 18pt;
@@ -2055,20 +2053,19 @@ body:not(.gp) #golden_carrot_count*/ {
 
 .achieve_pages {
     position: absolute;
-    top: 16px;
+    float: right;
+    top: 12px;
     right: 16px;
 }
 .achievement_item h4 {
     margin: 0;
 }
 .rewards_list {
-    /* background-color: var(--brown-darker-color); */
     background-color: #00000033;
     display: flex;
     border-radius: 0 0 16px 16px;
 }
 .reward {
-    /* background-color: var(--brown-darker-color); */
     padding: 8px 10px;
     border-right: 1px solid var(--brown-darkest-color);
     flex: 1;
@@ -2095,20 +2092,12 @@ body:not(.gp) #golden_carrot_count*/ {
     justify-content: center;
 }
 .achieve_grid .achievement_item {
-    width: 95px;
-    height: 95px;
-    margin-right: 8px;
-}
-.achieve_grid .achievement_item .reward {
-    display: none;
-}
-.achieve_grid.compact .achievement_item {
     width: 64px;
     height: 64px;
     margin-right: 4px;
 }
-.achieve_grid.compact .achievement_item .achievement_details {
-    padding: 5px;
+.achieve_grid .achievement_item .reward {
+    display: none;
 }
 .achieve_grid .achievement_img:hover {
     transform: none !important;
@@ -2116,11 +2105,13 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 .achieve_grid .achievement_item .achievement_details {
     position: absolute !important;
-    min-width: 400px;
+    width: max-content;
+    max-width: 400px;
+    padding: 5px;
     top: 0;
     background-color: rgba(0, 0, 0, 0.8);
     border: 2px solid gray;
-    /* backdrop-filter: blur(10px); */
+    /* backdrop-filter: blur(4px); */
 }
 .achieve_grid .achievement_item .achievement_details,
 .achieve_grid .rewards_list,
@@ -2140,9 +2131,19 @@ body:not(.gp) #golden_carrot_count*/ {
 
 /* Description adjust */
 .achieve_grid .achievement_item.desc_fit .achievement_details {
-    /* outline: 4px solid red !important; */
-    /* right: -100%; */
+    right: -100%;
+    margin-right: 64px;
+    flex-direction: row-reverse;
 }
+.achieve_grid .achievement_item.desc_fit .achievement_details .achievement_img {
+    margin-right: 0;
+    margin-left: 16px;
+}
+.achieve_grid .achievement_item.desc_fit .achievement_details .achieve_pages   { margin-right: 68px; }
+
+
+
+
 
 
 
