@@ -947,6 +947,7 @@ function purchase(source, type, item, subtype = false) {
 
                 let element = dom(`carl_shop_${raw}`)
                 element.classList.add('shop_out');
+                updateCarlsShop();
                 setTimeout(() => {
                     populateCarl();
                     // element.remove();
@@ -1388,7 +1389,7 @@ function onLoad() {
                     let key = template_keys[i];
                     if(obj.hasOwnProperty(key) == false) {
                         console.log(key + ' property not found, updating save...');
-                        obj[key] = template[key];
+                        obj[key] = JSON.parse(JSON.stringify(template[key]));
                     }
                 }
             }
@@ -1582,9 +1583,10 @@ function onLoad() {
     /* -------------------- Fill out page -------------------- */
     // Put things on page
     carrotCount();
-    updateCPC();
+    updateCPC(false);
     cashCount(false);
     characterPrices();
+    characterButtons();
     updateCharlesShop();
     pagesCount();
     calculatePrestigePotential();

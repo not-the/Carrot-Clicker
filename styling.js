@@ -250,7 +250,7 @@ function closeDialog(doAction, backdrop=false) {
 
     // Enable keyboard navigation for main page
     dom('main').ariaHidden = false;
-    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main a').forEach(element => {
+    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main select, #main a').forEach(element => {
         element.tabIndex = 0;
     });
     //#endregion
@@ -633,7 +633,7 @@ function openMenu() {
 
     // Disable keyboard navigation for main page
     dom('main').ariaHidden = true;
-    document.querySelectorAll('#main *[tabindex="0"], #main button, #main input, #main a').forEach(element => {
+    document.querySelectorAll('#main *[tabindex="0"], #main button, #main input, #main select, #main a').forEach(element => {
         element.tabIndex = -1;
     });
 }
@@ -1588,38 +1588,6 @@ function populateCarl() {
     let html = '';
     carlShopData = {};
 
-    // Loop through shop_order
-    // for(let i = 0; i < Carl.shop_order.length; i++) {
-    //     let raw = Carl.shop_order[i];
-    //     console.log('aaaaaaaa: ' + raw);
-    //     let [type, name] = raw.includes(':') == false ? ['theme', raw] : raw.split(':');
-    //     let item = Carl.shop[type][name];
-    //     if(
-    //         item.available == false ||
-    //         item.bought == true
-    //     ) continue;
-
-    //     carlShopData[name] = item.price;
-
-    //     // Theme
-    //     if(type == 'theme') {
-    //         // let theme_keys = Carl.shop.theme.keys;
-    //         let theme = themes[name];
-    //         let img = theme.image;
-    
-    //         html += carlHTML(name, 'theme', theme.name, img, item.price);
-    //     }
-    //     // Cosmetic
-    //     else if(type == 'cosmetic') {
-    //         // let cosm_keys = Carl.shop.cosmetic.keys;
-    //         let [ca, cb] = name.split('/');
-    //         let cosmetic = cosmetics[ca][cb];
-    //         let img = cosmetic.image;
-    
-    //         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
-    //     }
-    // }
-
     // Loop through themes
     let theme_keys = Carl.shop.theme.keys;
     for(let ti = 0; ti < theme_keys.length; ti++) {
@@ -1711,28 +1679,15 @@ function newIndicator(state, type, item, subtype) {
     }
 }
 
-// Achievement list CSS modes
+/** Enable/disable compact achievement CSS */
 function achieveCompactMode(state) {
-    if(state == true) {
-        elAchievementsList.classList.add('compact');
-    } else {
-        elAchievementsList.classList.remove('compact');
-    }
+    style(elAchievementsList, 'compact', state);
 }
+/** Enable/disable achievement grid CSS */
 function achieveGridMode(state) {
-    if(state == true) {
-        elAchievementsList.classList.add('achieve_grid');
-    } else {
-        elAchievementsList.classList.remove('achieve_grid');
-    }
-
+    style(elAchievementsList, 'achieve_grid', state);
     achieveGridAdjust();
 }
-
-// Title changer
-// setInterval(() => {
-//     dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.carrots)} carrots`;
-// }, 2000);
 
 
 

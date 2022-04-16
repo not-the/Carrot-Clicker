@@ -513,13 +513,12 @@ summary:hover {
     /* max-height: 400px; */
     overflow: auto;
 
-    pointer-events: none;
+    pointer-events: painted;
 }
 .toast {
     width: 300px;
 }
-.toast,
-#toasts_clear {
+.toast, #toasts_clear {
     margin: 16px;
     margin-top: 0;
     margin-left: auto;
@@ -562,7 +561,6 @@ summary:hover {
 }
 @keyframes toast_out {
     to {
-        /* max-height: 0; */
         transform: translateY(-20px);
         opacity: 0;
     }
@@ -1197,6 +1195,10 @@ body:not(.theme_light) .theme_checkmark {
 .flash_cash { animation: flash_cash 2s ease-in; }
 @keyframes flash_cash {
     from { color: goldenrod; }
+}
+.flash_white { animation: flash_white 2s ease-in; }
+@keyframes flash_white {
+    from { color: white; }
 }
 
 /* Carrot */
@@ -2113,6 +2115,9 @@ body:not(.gp) #golden_carrot_count*/ {
     border: 2px solid gray;
     /* backdrop-filter: blur(4px); */
 }
+.achieve_grid .achievement_item .achievement_details h2 {
+    padding-right: 72px;
+}
 .achieve_grid .achievement_item .achievement_details,
 .achieve_grid .rewards_list,
 .achieve_grid .reward {
@@ -2139,7 +2144,9 @@ body:not(.gp) #golden_carrot_count*/ {
     margin-right: 0;
     margin-left: 16px;
 }
-.achieve_grid .achievement_item.desc_fit .achievement_details .achieve_pages   { margin-right: 68px; }
+.achieve_grid .achievement_item.desc_fit .achievement_details .achieve_pages {
+    margin-right: 48px;
+}
 
 
 
@@ -2545,6 +2552,9 @@ footer {
     }
     .panel_select {
         width: 150px;
+    }
+    .achieve_grid .achievement_item .achievement_details {
+        max-width: 55vw;
     }
 }
 

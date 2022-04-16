@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.1
+    4-14-2022
+// ----------------------------------------------------------- //
+
+- Fixed select elements still being keyboard focusable when the main page is obstructed
+- Fixed character buttons being lit up until the carrot is clicked
+- Fixed the "Older changes" button on the changelog page linking incorrectly
+- Fixed achievement names and page counts sometimes overlapping in grid view
+- Fixed grid view descriptions going off the screen on mobile
+- If there are enough toasts to not fit on the screen they will now be scrollable
+
+Internal changes:
+- Gave characters nickname properties and removed the characterString() function
+- Gave even more functions JSDoc comments
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.0.1
     4-13-2022
 // ----------------------------------------------------------- //
@@ -35,7 +54,7 @@
 
 Internal changes:
 - Cleaned up the HTML and removed a bunch of unused code
-- Moved the remaining code out of the main game loop
+- Moved more code out of the main game loop
 - Renamed:
   + player.Carrots -> player.carrots
   + player.EquippedHoes -> equippedHoes
