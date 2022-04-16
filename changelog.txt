@@ -1,6 +1,30 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.2
+    4-16-2022
+// ----------------------------------------------------------- //
+
+- Made the view credits button in settings an actual button
+- Unlock all tips button added to the dev panel
+- Reorganised statistics to make a little more sense and gave it some new CSS
+- Some basic infrastructure for a hardmode
+  + Support and visuals for negative number popups
+- Bumped data_version to 5 (forgot to do it last update)
+
+Big numbers
+- left-section will no longer change width when extremely long numbers are in it
+- Character levels will display with numCommas() instead of DisplayRounded()
+- Falling carrot popups will now DisplayRounded instead of using the raw number
+- Game now uses a local copy of carrot_utilities.js
+- DisplayRounded now supports rounding numbers up to 999 vigintillion
+- player.prestige.falling_carrots_grabbed can now be seen in statistics
+- Some statistics now have icons
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.1
-    4-14-2022
+    4-15-2022
 // ----------------------------------------------------------- //
 
 - Fixed select elements still being keyboard focusable when the main page is obstructed

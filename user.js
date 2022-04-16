@@ -1178,11 +1178,16 @@ function isDebug() {
                 }
                 toast('All Cosmetics now available', 'Dev tools');
             }
+            window.allTips = () => {
+                player.flags['all_tips'] = true;
+                populateTipsMenu();
+            }
             window.allUnlocks = () => {
                 allCharacters();
                 allAchievements();
                 allThemes();
                 allCosmetics();
+                allTips();
             }
             window.updateValues = () => {
                 let cc = parseInt(setCarrotsEl.value);
@@ -1200,7 +1205,7 @@ function isDebug() {
             
             // Put dev panel in settings
             $('#devp').innerHTML = /* html */
-            `<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+            `<div class="footer_bottom brown_darker_color" style="display: block; padding: 16px 24px;">
                 <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
 
                 <button onclick="clearSave()" class="button_red">
@@ -1222,6 +1227,9 @@ function isDebug() {
                 </button>
                 <button onclick="allCosmetics()">
                     Cosmetics
+                </button>
+                <button onclick="allTips()">
+                    Tips
                 </button><br/>
                 
                 <h4>Set Values</h4>

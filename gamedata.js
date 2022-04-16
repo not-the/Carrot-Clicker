@@ -45,7 +45,7 @@ const default_tips = {
         "Only YOU can save the carrots!",
         "Carrots have been proven to improve eyesight by 150%. It's true!",
         "Carrots are your friend",
-        "JJ broke it",
+        "JJ broke it", // "Only the best code",
         "Carrot Clicker is mobile-friendly!",
         "Click the carrot, Bill.",
         "Wait for the carrot to grow, Belle.",

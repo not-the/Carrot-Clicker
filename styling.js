@@ -79,7 +79,7 @@ const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01', '#974810'];
  * @param {number} time Particle lifespan in milliseconds. Will also effect the travel distance of the particles.
  * @returns 
  */
-function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150) {
+function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150, size_min=4) {
     if(!settings.confetti_effects) return;
     let count = r(particles[1] - particles[0] + 1) + particles[0] - 1;
     // console.log('mouse confetti!');
@@ -88,7 +88,7 @@ function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150) {
         let color   = colorArray[r(colorArray.length)];
         let rot     = r(360);
         let skew    = r(100) - 50;
-        let size    = r(4) + 4;
+        let size    = r(4) + size_min;
         // let distance = r(32) + 24;
         let distance = r(32 * time / 150) + 24 * time / 150;
         let lifespan = r(time) + time; // also effects speed
@@ -519,18 +519,22 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
 
+    // Negative number
+    let sign = amount[0] == '-' ? '' : '+';
+    if(sign == '') { clickVisualElement.classList.add('clickvisual_negative'); }
+
     // Carrot
     if(style == 'carrot') {
-        eInnerText(clickVisualElement, `+${amount}`); 
+        clickVisualElement.innerText = `${sign}${amount}`; 
     }
     // Falling carrot
     else if(style == 'falling') {
-        eInnerText(clickVisualElement, `+${amount}`);
+        clickVisualElement.innerText = `${sign}${amount}`;
         clickVisualElement.classList.add("clickvisual_falling");
     }
     // Cash
     else if(style == 'cash') {
-        eInnerText(clickVisualElement, `⚬${amount}`);
+        clickVisualElement.innerText = `⚬${amount}`;
         clickVisualElement.classList.add("clickvisual_cash");
     }
     
@@ -681,8 +685,10 @@ function openTipsMenu() {
 const elTipsList = dom('tips_list');
 function populateTipsMenu() {
     let html = '';
+    let best = player.flags['all_tips'] == true ? tl.length - 1 : tips.best;
+    console.log(tips.best);
     // Loop
-    for(let i = 0; i <= tips.best + 0.5; i += 0.5) {
+    for(let i = 0; i <= best + 0.5; i += 0.5) {
         let ri = Math.floor(i);
         let type = '';
         if(i % 1 != 0) { type = 'fun_'; }
@@ -696,7 +702,7 @@ function populateTipsMenu() {
         for(ii = 0; ii < cat.length; ii++) {
             // console.log(cat[ii]);
             // Normal
-            if(tips[`s_${id}`][ii] == true) {
+            if(tips[`s_${id}`][ii] == true || player.flags['all_tips'] == true) {
                 html += `
                 <p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
             }
@@ -711,6 +717,18 @@ function populateTipsMenu() {
     elTipsList.innerHTML = html;
 }
 
+/** Open difficulty menu */
+// function openDifficultyMenu() {
+//     if(player.flags['hardcore'] != true) {
+//         player.flags['hardcore'] = true;
+//         toast('Hardmode enabled', '', 'error', false, true);
+//     } else {
+//         player.flags['hardcore'] = false;
+//         toast('Hardmode disabled', '', '', false, true);
+//     }
+//     updateMainIcon();
+// }
+
 
 // Page elements
 const characterAvatars = {
@@ -721,15 +739,11 @@ const characterAvatars = {
     'carl':     dom('carl_avatar'),
 }
 const characterNames = {
-    // Nametag
     'bill':     dom('bill_name'),
     'belle':    dom('belle_name'),
     'greg':     dom('greg_name'),
     'charles':  dom('charles_name'),
     'carl':     dom('carl_name'),
-
-    // Cost to upgrade:
-    // ...
 }
 
 /** Change cosmetics
@@ -743,7 +757,6 @@ function setCosmetic(target, to, resetState = false) {
     // Reset to default first
     if(resetState == false && to != 'default')
     { setCosmetic(target, 'default', true); }
-    // console.log(`setCosmetic(${target}, ${to}, ${resetState})`);
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];

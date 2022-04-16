@@ -192,7 +192,7 @@
                 <!-- Prestige Section -->
                 <div class="main_buttons flex">
                     <!-- Prestige button -->
-                    <button onClick="openPrestigeMenu()" title="???" class="prestige_button main_button_item" id="prestige_menu_button" disabled>
+                    <button onClick="openPrestigeMenu()" title="???" class="main_button_item" id="prestige_menu_button" disabled>
                         <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
                     </button>
 
@@ -205,20 +205,17 @@
                     <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
                         <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
                     </button>
-                </div>
-                <div id="prestige-section" class="flex">
 
-                    <p class="prestigetooltip secondary_text" style="padding-top: 6px;">
-                        Prestige potential: <span id="main_prestige_potential">0</span>
-                    </p>
-
-                    <!-- <p class="prestigetooltip" style="padding-top: 6px;">
-                        Prestiging now will result in:<br>
-                        <span id="Prestige">0</span> Golden Carrots
-                    </p> -->
-
+                    <!-- Hardmode button -->
+                    <!-- <button onClick="openDifficultyMenu()" title="Hardmode" class="main_button_item button_red" id="difficulty_menu_button">
+                        <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
+                    </button> -->
                 </div>
 
+                <!-- Prestige potential -->
+                <p id="prestige-section" class="secondary_text center" style="padding-top: 6px;">
+                    Prestige potential: <span id="main_prestige_potential">-</span>
+                </p>
             </div>
 
 
@@ -344,7 +341,7 @@
                     <!--Gregory Rendering-->
                     <div class="Greg characterbox char_locked" id="greg_box">
                         <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                            Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tools' cost to start crafting.
+                            Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tool's cost to start crafting.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')" tabindex="0" role="button">
@@ -551,7 +548,7 @@
         <div id="settings"></div>
         <div id="tripane">
             <nav>
-                <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon invert"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
+                <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
             </nav>
 
             <!-- Achievements Panel -->
@@ -608,74 +605,64 @@
             <div id="stats-panel" class="panel remove">
                 <div id="info-inner">
                     <h1>Statistics</h1>
-                    <!-- <p>Lifetime statistics will go here (when they've been implemented)</p><br> -->
                     <i class="secondary_text">Updates every second</i><br/><br/>
-
-                    <!-- Filter -->
-                    <!-- <select name="statistics_filter" id="statistics_filter" class="panel_select">
-                        <option value="prestige">Current Prestige</option>
-                        <option value="lifetime">Lifetime</option>
-                    </select> -->
-
 
                     <!-- Statistics -->
                     <div id="statistics">
-                        <!-- <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot"> -->
-
                         <!-- Prestige -->
                         <div id="this_prestige_stats" class='remove'>
                             <h3>This prestige:</h3>
                             <details class="stat_collapse">
-                                <summary>Carrots earned: <b id="prestige_carrots">---</b></summary>
-                                From clicking: <b id="prestige_carrots_clicked">---</b><br>
-                                From CPS: <b id="prestige_carrots_idled">---</b><br>
-                                From bonus carrots: <b id="prestige_carrots_bonus">---</b><br>
+                                <summary><img src="./assets/stats/carrot.png" alt="" class="stats_icon button_icon"> Carrots earned: <b id="prestige_carrots">---</b></summary>
+                                <p>From clicking: <b id="prestige_carrots_clicked">---</b></p>
+                                <p>From CPS: <b id="prestige_carrots_idled">---</b></p>
+                                <p>From falling carrots: <b id="prestige_carrots_bonus">---</b></p>
                             </details>
-
-                            Total Clicks: <b id="prestige_clicks">---</b><br/><br/>
+                            <p><img src="./assets/stats/pointer.png" alt="" class="stats_icon button_icon"> Total Clicks: <b id="prestige_clicks">---</b></p>
                             <details class="stat_collapse">
-                                <summary>Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
-                                Wooden: <b id="prestige_hoes_crafted_0">---</b><br/>
-                                Stone:  <b id="prestige_hoes_crafted_1">---</b><br/>
-                                Iron:   <b id="prestige_hoes_crafted_2">---</b><br/>
-                                Golden: <b id="prestige_hoes_crafted_3">---</b><br/>
-                                Diamond: <b id="prestige_hoes_crafted_4">---</b><br/>
-                                Netherite: <b id="prestige_hoes_crafted_5">---</b><br/>
-                            </details><br/>
+                                <summary><img src="./assets/tools/tool_0.png" alt="" class="stats_icon button_icon"> Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
+                                <p>Wooden: <b id="prestige_hoes_crafted_0">---</b></p>
+                                <p>Stone:  <b id="prestige_hoes_crafted_1">---</b></p>
+                                <p>Iron:   <b id="prestige_hoes_crafted_2">---</b></p>
+                                <p>Golden: <b id="prestige_hoes_crafted_3">---</b></p>
+                                <p>Diamond: <b id="prestige_hoes_crafted_4">---</b></p>
+                                <p>Netherite: <b id="prestige_hoes_crafted_5">---</b></p>
+                            </details>
+                            <p>Falling Carrots grabbed: <b id="prestige_falling_carrots_grabbed">---</b></p>
                         </div>
 
                         <!-- Lifetime -->
                         <h3>Lifetime:</h3>
                         <details class="stat_collapse">
-                            <summary>Carrots earned: <b id="lifetime_carrots">---</b></summary>
-                            From clicking: <b id="lifetime_carrots_clicked">---</b><br>
-                            From CPS: <b id="lifetime_carrots_idled">---</b><br>
-                            From bonus carrots: <b id="lifetime_carrots_bonus">---</b><br>
+                            <summary><img src="./assets/stats/carrot.png" alt="" class="stats_icon button_icon"> Carrots earned: <b id="lifetime_carrots">---</b></summary>
+                            <p>From clicking: <b id="lifetime_carrots_clicked">---</b></p>
+                            <p>From CPS: <b id="lifetime_carrots_idled">---</b></p>
+                            <p>From falling carrots: <b id="lifetime_carrots_bonus">---</b></p>
                         </details>
-                        Golden Carrots earned: <b id="lifetime_golden_carrots">---</b><br/>
-                        Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b><br/>
-                        Prestiges: <b id="lifetime_prestige">---</b><br/><br/>
-
-                        Cash earned: <b id="lifetime_cash">---</b><br>
-                        Cash spent: <b id="lifetime_cash_spent">---</b><br>
-                        Total Clicks: <b id="lifetime_clicks">---</b><br/>
-                        Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b><br/><br/>
+                        <p><img src="./assets/stats/pointer.png" alt="" class="stats_icon button_icon"> Total Clicks: <b id="lifetime_clicks">---</b></p>
                         <details class="stat_collapse">
                             <summary>Tools crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
-                            Wooden: <b id="lifetime_hoes_crafted_0">---</b><br/>
-                            Stone:  <b id="lifetime_hoes_crafted_1">---</b><br/>
-                            Iron:   <b id="lifetime_hoes_crafted_2">---</b><br/>
-                            Golden: <b id="lifetime_hoes_crafted_3">---</b><br/>
-                            Diamond: <b id="lifetime_hoes_crafted_4">---</b><br/>
-                            Netherite: <b id="lifetime_hoes_crafted_5">---</b><br/>
-                        </details><br/>
+                            <p>Wooden: <b id="lifetime_hoes_crafted_0">---</b></p>
+                            <p>Stone:  <b id="lifetime_hoes_crafted_1">---</b></p>
+                            <p>Iron:   <b id="lifetime_hoes_crafted_2">---</b></p>
+                            <p>Golden: <b id="lifetime_hoes_crafted_3">---</b></p>
+                            <p>Diamond: <b id="lifetime_hoes_crafted_4">---</b></p>
+                            <p>Netherite: <b id="lifetime_hoes_crafted_5">---</b></p>
+                        </details>
+                        <p>Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b></p><br/>
 
-                        Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b><br/><br/>
+                        <p>Prestiges: <b id="lifetime_prestige">---</b></p>
+                        <p><img src="./assets/stats/golden_carrot.png" alt="" class="stats_icon button_icon"> Golden Carrots earned: <b id="lifetime_golden_carrots">---</b></p>
+                        <p><img src="./assets/stats/golden_carrot_spent.png" alt="" class="stats_icon button_icon"> Golden Carrots spent: <b id="lifetime_golden_carrots_spent">---</b></p>
+                        <p>Coins earned: <b id="lifetime_cash">---</b></p>
+                        <p>Coins spent: <b id="lifetime_cash_spent">---</b></p><br>
 
-                        Themes: <b id="stat_themes">---</b><br/>
+                        <p>Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b></p><br/>
+
+                        <p>Themes: <b id="stat_themes">---</b></p>
                         <!-- <details class="stat_collapse">
                             <summary> -->
-                                Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span>
+                                <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span></p> 
                             <!-- </summary>
                             Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
                             Farmable: <b id="stat_cosmetics_farmable">---</b><br/>
@@ -687,11 +674,10 @@
                             Tools:    <b id="stat_cosmetics_tools">---</b><br/>
                         </details> -->
                         
-                        <br/><br/>
+                        <br/>
 
-                        Achievements: <b id="stat_achievements">---</b><br/>
+                        <p>Achievements: <b id="stat_achievements">---</b></p>
                     </div>
-
                 </div> 
             </div>
 
@@ -871,20 +857,19 @@
                     </div>
 
                     <!-- Footer things -->
-                    <div class="footer_bottom">
+                    <div class="footer_bottom brown_darker_color">
                         <div class="footer_column">
                             <b>Created by:</b>
                             <div class="secondary_text">
                                 <a href="https://www.notkal.com/">not-the</a> and <a href="https://github.com/JJCVIP">JJCVIP</a>
-                                
                             </div>
-                            <a class="link_styling underline white" tabindex="0" role="button" onclick="startCredits()">View Credits</a><br/>
+                            <button onclick="startCredits()" style="margin-top: 8px;">View Credits</button>
                         </div>
-                        <div class="footer_column">
-                            <b>These links don't do anything:</b><br/>
-                            <a href="#" class="white">About</a><br/>
-                            <a href="#" class="white">Contact</a><br/>
-                        </div>
+                        <!-- <div class="footer_column">
+                            <b>Links:</b><br/>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="white">About</a><br/>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="white">Contact</a><br/>
+                        </div> -->
                     </div>
 
                 </footer>
@@ -1386,7 +1371,8 @@
 
     <!-- Javascript -->
     <!-- #region -->
-    <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script>
+    <!-- <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script> -->
+    <script src="carrot_utilities.js"></script>
     <script src="gamedata.js"></script>
     <script src="carrot_clicker.js"></script>
     <script src="styling.js"></script>

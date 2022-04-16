@@ -574,6 +574,9 @@ summary:hover {
 .main_bg_color {
     background-color: var(--main-bg-color);
 }
+.brown_darker_color {
+    background-color: var(--brown-darker-color);
+}
 .toast_close {
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     /* font-weight: bold; */
@@ -931,6 +934,22 @@ body:not(.theme_light) .theme_checkmark {
         color: rgb(120, 127, 141);
     }
 }
+.clickvisual_negative {
+    color: var(--warning-red) !important;
+    animation: clickBonusNegative 1.25s linear forwards;
+}
+@keyframes clickBonusNegative {
+    0% {
+        transform: translateY(-20px) translateX(-60%);
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(30px) translateX(-60%);
+        opacity: 0;
+    }
+}
 
 /* Falling carrots */
 .falling_carrot {
@@ -956,6 +975,9 @@ body:not(.theme_light) .theme_checkmark {
     100% {
         transform: translateY(790px);
     }
+}
+.mirror {
+    transform: scaleX(-1);
 }
 
 /* Status Bar */
@@ -1181,6 +1203,7 @@ body:not(.theme_light) .theme_checkmark {
     text-align: center;
 }
 #left-section {
+    max-width: 388px;
     /* width: 420px; */
     /* margin-left: auto; */
     margin-right: 20px;
@@ -1272,9 +1295,6 @@ body:not(.theme_light) .theme_checkmark {
     background-color: var(--golden-carrot);
     color: black;
     border: 2px solid var(--golden-carrot);
-}
-.prestigetooltip {
-    margin-left: 8px;
 }
 
 
@@ -2155,7 +2175,28 @@ body:not(.gp) #golden_carrot_count*/ {
 
 
 /* Statistics */
-/* Nothing here */
+#statistics p, #statistics summary {
+    color: var(--secondary-text);
+    font-style: italic;
+    padding-right: 8px;
+}
+#statistics b {
+    color: white;
+    font-style: normal;
+    float: right;
+}
+#statistics h3 {
+    border-bottom: 1px solid var(--brown-darkest-color);
+    padding-bottom: 4px;
+    padding-top: 24px;
+    margin: 0;
+}
+#statistics .stats_icon {
+    /* box-sizing: content-box;
+    transform: scale(1.5, 1.5) translateY(1px);
+    padding: 0 4px; */
+    display: none;
+}
 
 /* Settings */
 .button_red {
@@ -2352,7 +2393,6 @@ footer {
     margin-top: 24px;
     display: flex;
 
-    background-color: var(--brown-darker-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset;
     border-radius: 16px;
 }

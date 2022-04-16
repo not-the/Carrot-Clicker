@@ -126,7 +126,7 @@
 
 .theme_light .achievement_item,
 .theme_light .shop_item,
-.theme_light .footer_bottom {
+.theme_light .brown_darker_color {
     background-color: white;
 }
 .theme_light .achievement_item h2 {
@@ -236,7 +236,7 @@
 
 /* Achievements */
 .theme_oled .achievement_item,
-.theme_oled .footer_bottom,
+.theme_oled .brown_darker_color,
 .theme_oled .prestige_item,
 .theme_oled .shop_item,
 .theme_oled .theme_item {
@@ -322,7 +322,7 @@
 .theme_classic .achievement_item {
     border: 1px solid goldenrod;
 }
-.theme_classic .footer_bottom {
+.theme_classic .brown_darker_color {
     background-color: transparent;
     box-shadow: none;
 }
@@ -700,7 +700,7 @@
     background-color: var(--retro-dark) !important;
 }
 
-.theme_retro .footer_bottom,
+.theme_retro .brown_darker_color,
 .theme_retro .shop_item,
 .theme_retro .achievement_item {
     background-color: var(--retro-darkester);
@@ -733,7 +733,7 @@
 .theme_terminal .achievement_details,
 .theme_terminal .reward,
 .theme_terminal .toast,
-.theme_terminal .footer_bottom,
+.theme_terminal .brown_darker_color,
 .theme_terminal #backdrop {
     background-color: #0c0c0c;
     border-color: transparent;
@@ -1027,7 +1027,7 @@
 .theme_blockgame #Greg_Bar,
 .theme_blockgame .achievement_item,
 .theme_blockgame .achievement_img,
-.theme_blockgame .footer_bottom,
+.theme_blockgame .brown_darker_color,
 .theme_blockgame .theme_item,
 .theme_blockgame .shop_item {
     border-radius: 0;
@@ -1094,7 +1094,7 @@
     image-rendering: pixelated;
 }
 .theme_blockgame .achievement_item,
-.theme_blockgame .footer_bottom {
+.theme_blockgame .brown_darker_color {
     background: rgba(0, 0, 0, 0.3);
 }
 .theme_blockgame .theme_item {
@@ -1228,7 +1228,7 @@
 .theme_chatapp select,
 .theme_chatapp #left-section,
 .theme_chatapp .theme_item,
-.theme_chatapp .footer_bottom,
+.theme_chatapp .brown_darker_color,
 .theme_chatapp .greg_crafting_info {
     background-color: #2f3136;
     border: 1px solid #202225;

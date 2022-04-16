@@ -6,7 +6,7 @@ The Character Class Object stores information on each Ingame Character. Currentl
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.13.1';
+    const game_version = 'dev beta v1.13.2';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -194,7 +194,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 4, // needs to be incremented by 1 any time any game object is changed
+    data_version: 5, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -270,6 +270,8 @@ const default_player = {
     flags: {},
 }
 
+// Tool durability values (hardmode)
+const toolDurability = [140, 800, 3200, 12000, 24000, 64000];
 
 // Character Defaults
 const Default_Boomer_Bill      = new Character("bill","Farmer",1,100,[0,0,0,0,0,0]);
@@ -513,6 +515,7 @@ function carlShopQuery(type, item) {
     }
 
 }
+
 
 // Assigns the Local storage
 var player;
@@ -785,7 +788,7 @@ var clickArray = [];
  * @param {boolean} useMousePos If the number popup should appear at mouse position or not
  */
 function earnCarrots(amount, type, useMousePos = false) {
-    if(type == 'bonus') { popupHandler(useMousePos, amount, 'falling'); }
+    if(type == 'bonus') { popupHandler(useMousePos, DisplayRounded(amount), 'falling'); }
 
     player.carrots += amount;
     player.prestige.carrots += amount;
@@ -938,6 +941,7 @@ function fallingCarrot() {
 
     element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
+    if(Math.floor(Math.random() * 2) == 0) { element.classList.add('mirror'); }
     element.id = fallingID;
     fallingID++;
     fallingActive++;
@@ -961,7 +965,7 @@ function fallingCarrot() {
 
     // Positioning
     let randomX = Math.floor((Math.random() * 324));
-    element.style.left = randomX - 30 + "px";
+    element.style.left = randomX + "px";
 
     // To page
     fallingCarrotsArea.append(element);
@@ -981,6 +985,7 @@ function fallingCarrot() {
         fallingActive--;
 
         if(type == 'carrot') {
+            if(player.flags['hardcore']) amount *= -1;
             earnCarrots( amount, 'bonus', true);
         } else if(type == 'cash') {
             earnCash(amount, 'bonus');
@@ -1027,9 +1032,9 @@ function characterPrices() {
     );
     
     // Character levels
-    eInnerText(elCharacterLevel.bill, `Lvl: ${DisplayRounded(Boomer_Bill.lvl,1)}`);
-    eInnerText(elCharacterLevel.belle, `Lvl: ${DisplayRounded(Belle_Boomerette.lvl,1)}`);
-    eInnerText(elCharacterLevel.greg, `Lvl: ${DisplayRounded(Gregory.lvl)}`);
+    eInnerText(elCharacterLevel.bill, `Lvl: ${numCommas(Boomer_Bill.lvl,1)}`);
+    eInnerText(elCharacterLevel.belle, `Lvl: ${numCommas(Belle_Boomerette.lvl,1)}`);
+    eInnerText(elCharacterLevel.greg, `Lvl: ${numCommas(Gregory.lvl)}`);
 }
 /** Updates CPC and CPS values on the page */
 function updateCPC(flash = true) {
@@ -1126,8 +1131,12 @@ function pagesCount() {
 const elMainIcon = dom('main_icon');
 /** Changes the Icon at the top of the page dynamically */
 function updateMainIcon() {
+    if(player.flags['hardcore'] == true) {
+        elMainIcon.src = './assets/easter_egg.png';
+        elMainIcon.title = 'Hardmode';
+    }
     // Gold Medal
-    if(achieveQuery('all_achievements')) {
+    else if(achieveQuery('all_achievements')) {
         elMainIcon.src = './assets/medal_spin.gif';
         elMainIcon.title = '100% Completion';
     }
@@ -1145,13 +1154,16 @@ function updateMainIcon() {
     else if(achieveQuery('1_prestige')) {
         elMainIcon.src = './assets/theme/pixel_golden_carrot.png';
         elMainIcon.title = 'Prestiged';
+    } else {
+        elMainIcon.src = './assets/pixel_carrot_32x.png';
+        elMainIcon.title = 'Carrot Clicker';
     }
 }
 const elPrestigeMenuGCCount = dom('prestige_menu_gc_count');
 const elPrestigeMenuTPCount = dom('prestige_menu_tp_count');
 /** Updates the prestige menu */
 function updatePrestigeMenu() {
-    eInnerText(elPrestigeMenuGCCount, numCommas(player.golden_carrots));
+    eInnerText(elPrestigeMenuGCCount, DisplayRounded(player.golden_carrots));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
 }
 
@@ -1381,7 +1393,7 @@ function Prestige() {
 
     // Tutorial message
     if(player.lifetime.prestige_count == 1) {
-        let toaster = toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); });
+        let toaster = toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
     }
 
     // Update page
@@ -1890,6 +1902,7 @@ const statsNumbers = {
     prestige_carrots_idled:      dom('prestige_carrots_idled'),
     prestige_carrots_bonus:      dom('prestige_carrots_bonus'),
     prestige_clicks:             dom('prestige_clicks'),
+    prestige_falling_carrots_grabbed: dom('prestige_falling_carrots_grabbed'),
     prestige_hoes_crafted_total: dom('prestige_hoes_crafted_total'),
     prestige_hoes_crafted_0:     dom('prestige_hoes_crafted_0'),
     prestige_hoes_crafted_1:     dom('prestige_hoes_crafted_1'),
@@ -1940,6 +1953,7 @@ function loadStatistics() {
     eInnerText(prestige_carrots_idled, numCommas(player.prestige.idle_carrots.toFixed(0)) );
     eInnerText(prestige_carrots_bonus, numCommas(player.prestige.bonus_carrots.toFixed(0)) );
     eInnerText(prestige_clicks, numCommas(player.prestige.clicks) );
+    eInnerText(statsNumbers.prestige_falling_carrots_grabbed, numCommas(player.prestige.falling_carrots_grabbed));
     eInnerText(prestige_hoes_crafted_total, numCommas(player.prestige.hoes.craftedTotal) );
     eInnerText(prestige_hoes_crafted_0, numCommas(player.prestige.hoes.crafted[0]) );
     eInnerText(prestige_hoes_crafted_1, numCommas(player.prestige.hoes.crafted[1]) );
