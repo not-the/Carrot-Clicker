@@ -1040,11 +1040,6 @@ function characterPrices() {
 function updateCPC(flash = true) {
     eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
     eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
-    // Flash
-    if(flash != true) return;
-    dom('list_cash').classList.add('flash_white');
-    setTimeout(() => { dom('list_cpc').classList.remove('flash_white'); }, 2000);
-    eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
 }
 /** Updates character's upgrade buttons to be grayed out if it's too expensive */
 function characterButtons() {
