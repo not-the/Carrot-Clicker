@@ -138,7 +138,7 @@
             <div id="main_progress_container" class="status_progress_bar">
                 <!-- Image -->
                 <img src="./assets/tools/tool_0.png" alt="" id="main_progress_image" class="main_progress_image">
-                <div id="main_progress" class="status_progress">
+                <div id="main_progress" class="pbar status_progress">
                     <!-- Progress -->
                     <div id="main_progress_bar" class="progress" style="width: 50%"></div>
                 </div>
@@ -181,7 +181,7 @@
                     </p><br/>
                     <p id="list_cash" class="secondary_text" style="margin-right:-24px">
                         Coins: <span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!" onclick="toast('Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', '', true, true)">?</span></p>
-                    <p class="secondary_text" style="margin-right:-24px">
+                    <p id="list_pages" class="secondary_text" style="margin-right:-24px">
                         Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!', '', true, true)">?</span>
                     </p>
                     <p class="secondary_text">
@@ -404,7 +404,7 @@
                             </div>
                             
                             <!-- Progress Bar -->
-                            <div id="Greg_Bar">
+                            <div id="Greg_Bar" class="pbar">
                                 <div id="Greg_Progress" class="progress"></div>
                             </div>
                         

@@ -2,17 +2,16 @@
 
 /* ------------------- TIPS ------------------- */
 //#region 
-const tl = ['basic', 'beginner', 'intermediate', 'advanced'];
+const tl = ['starter', 'beginner', 'intermediate', 'advanced'];
 const default_tips = {
     number: 0,
     // random:0,
     tracker: 0, // Tip level
-    best: 0, // highest tip level reached (unused atm)
-    Type: false,
-    TypeModifier: 0.5, // Fun tip chance
+    best: 0, // highest tip level reached
+    type: false,
 
     // Practical tips
-    basic: [ // 0
+    starter: [ // 0
         "Tip: Click the carrot",
         "Click here to cycle through available tips!",
         "Click the lvl up arrow to level up characters",
@@ -33,14 +32,15 @@ const default_tips = {
         "Golden carrots can be used to buy tomes, which give you permanent buffs",
         "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
         "Earning a few special achievements will update the game icon in the top left",
+        "The more tools the better!",
     ],
     advanced: [ // 3
         "Unlocking every theme will make a special theme available",
-        "You've earned more than 1 billion carrots this prestige. That's a lot!"
+        "You've earned more than 1 billion carrots this prestige. That's a lot!",
     ],
 
     // Fun tips
-    fun_basic: [
+    fun_starter: [
         "Carrots can end world hunger",
         "Only YOU can save the carrots!",
         "Carrots have been proven to improve eyesight by 150%. It's true!",
@@ -88,7 +88,7 @@ const default_tips = {
 
 
     // Mark as seen
-    s_basic: {
+    s_starter: {
         0: true,
     },
     s_beginner: {},
@@ -96,7 +96,7 @@ const default_tips = {
     s_advanced: {},
 
     // Fun tips
-    s_fun_basic: {},
+    s_fun_starter: {},
     s_fun_beginner: {},
     s_fun_intermediate: {},
     s_fun_advanced: {},
@@ -630,13 +630,6 @@ const cosmetics = {
             'rename': 'Charles',
             'image': './assets/characters/Charles.png',
         },
-        'special_charles': {
-            'name': 'Potato Charles',
-            'desc': 'God is he alright?',
-
-            'rename': 'chrles',
-            'image': './assets/theme/special_charles.png',
-        },
         'santa_charles': {
             'name': 'Santa Charles',
             'desc': 'He accidentally left the gifts at home',
@@ -644,6 +637,13 @@ const cosmetics = {
 
             'rename': 'Santa Charles',
             'image': './assets/theme/santa_charles.png',
+        },
+        'special_charles': {
+            'name': 'Potato Charles',
+            'desc': 'God is he alright?',
+
+            'rename': 'chrles',
+            'image': './assets/theme/special_charles.png',
         },
         'bill': {
             'name': 'Bill',
@@ -888,7 +888,11 @@ const achievements = {
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/achievements/tome animated.gif',
-        'reward': false,
+        'reward': [
+            'shop:theme/theme_terminal',
+            'shop:cosmetic/farmable/ascii',
+            'shop:cosmetic/farmable/ascii_color',
+        ],
         'pages': 1,
         'conditions': ['ex_charlesUses()', 1],
         'mystery': {
@@ -904,7 +908,7 @@ const achievements = {
         'name': 'OSHA Violator',
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
         'image': './assets/achievements/working_conditions.png',
-        'reward': 'cosmetic:greg/safety_greg',
+        'reward': 'shop:cosmetic/greg/safety_greg',
         'pages': 2,
         'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
         'mystery': {
@@ -916,7 +920,7 @@ const achievements = {
     },
     '1_improve_hoe_costs': {
         'name': 'Divine Intervention',
-        'desc': 'Buy a tome that improves tool costs. Unholy magic, I say.',
+        'desc': 'Buy a tome that improves tool quality. Unholy magic, I say.',
         'image': './assets/achievements/tome_improve_hoe_costs.png',
         'reward': false,
         'pages': 2,
@@ -932,7 +936,7 @@ const achievements = {
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
         'image': './assets/achievements/tome_decrease_wages.png',
-        'reward': 'cosmetic:bill/dollar_bill',
+        'reward': 'shop:cosmetic/bill/dollar_bill',
         'pages': 2,
         'conditions': ['Charles.tome.decreaseWages.value', 2],
         'mystery': {
@@ -1023,7 +1027,7 @@ const achievements = {
         'desc': 'Gain the attention of the artist',
         'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
-        'pages': 1,
+        'pages': false,
         'conditions': [
             ['carlItemsAvailable()', 2],
             ['player.cash', 6],
@@ -1087,11 +1091,7 @@ const achievements = {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
         'image': false,
-        'reward': [
-            'shop:theme/theme_terminal',
-            'shop:cosmetic/farmable/ascii',
-            'shop:cosmetic/farmable/ascii_color',
-        ],
+        'reward': false,
         'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
         'mystery': {
@@ -1203,7 +1203,7 @@ const achievements = {
         'desc': 'Earn your 1 billionth carrot',
         'image': './assets/theme/boomer_bill_gates.png',
         'reward': [
-            'cosmetic:bill/fancy_bill',
+            'shop:cosmetic/bill/fancy_bill',
             'shop:cosmetic/farmable/pineapple',
             () => { mouseConfetti([24,24], confettiColors, 300) },
         ],
@@ -1511,6 +1511,35 @@ const achievements = {
             'noToast': false,
         }
     },
+    '3_falling_consecutive': {
+        'name': 'Match 3',
+        'desc': 'Grab 3 falling carrots in a row',
+        'image': false,
+        'reward': 'cash:12',
+        'pages': false,
+        'conditions': ['player.fallingConsecRecord', 3],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    // Commented out for now since it's not doable without fallingFrenzy
+    // '10_falling_consecutive': { 
+    //     'name': '10_falling_consecutive',
+    //     'desc': 'Grab 10 falling carrots in a row',
+    //     'image': false,
+    //     'reward': false,
+    //     'pages': false,
+    //     'conditions': ['player.fallingConsecRecord', 10],
+    //     'mystery': {
+    //         'name': true,
+    //         'desc': false,
+    //         'image': false,
+    //         'noToast': false,
+    //     }
+    // },
 
     // Clicks
     '500_clicks': {
@@ -1687,7 +1716,7 @@ const achievements = {
         'conditions': ['player.clickSpeedRecord', 13],
         'mystery': {
             'name': true,
-            'desc': true,
+            'desc': false,
             'image': true,
             'noToast': false,
         }

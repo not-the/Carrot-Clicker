@@ -943,19 +943,18 @@ function purchase(source, type, item, subtype = false) {
                 unlock(type, item, subtype);
 
                 cashCount(false);
-                toast('', `Item bought: ${raw} (${type})`);
+                // toast('', `Item bought: ${raw} (${type})`, '', false, true);
 
                 let element = dom(`carl_shop_${raw}`)
                 element.classList.add('shop_out');
                 updateCarlsShop();
                 setTimeout(() => {
                     populateCarl();
-                    // element.remove();
                 }, 170);
             }
             // Can't afford
             else {
-                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ₪${defaultCarlListing.price}`, '', false, true);
+                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ${defaultCarlListing.price} coins`, '', false, true);
             }
         } else {
             toast('other currency', 'other currencies aren\'t supported yet');
@@ -983,9 +982,8 @@ function allCharQuery() {
 
 // Test if player has an achievement - True = yes, False = no
 function achieveQuery(key) {
-    if(player.achievements[key] == true) {
-        return true
-    } else return false;
+    if(player.achievements[key] != undefined) return true;
+    else return false;
 }
 
 // Test if theme is unlocked or not
@@ -1125,7 +1123,7 @@ function isDebug() {
 }
 
 // URL hashes
-(function() {
+(() => {
     onhashchange = hash;
     function hash() {
         hashlist = location.hash.substring(1).split('#');
@@ -1190,16 +1188,31 @@ function isDebug() {
                 allTips();
             }
             window.updateValues = () => {
+                // Carrots
                 let cc = parseInt(setCarrotsEl.value);
-                let gcc = parseInt(setGoldenCarrotsEl.value);
-                let lbill = parseInt(setBillLvlEl.value);
-                player.carrots          = cc;
-                player.lifetime.carrots = cc;
-                player.prestige.carrots = cc;
-
-                player.golden_carrots   = gcc >= 0 ? gcc : player.golden_carrots;
-                Boomer_Bill.lvl         = lbill >= 1 ? lbill : Boomer_Bill.lvl;
-                characterPrices();
+                player.carrots          = 0;
+                player.lifetime.carrots = 0;
+                player.prestige.carrots = 0;
+                earnCarrots(cc);
+                // Cash
+                if(setCashEl.value != '') {
+                    let coinc = parseInt(setCashEl.value);
+                    player.cash             = 0;
+                    player.lifetime.cash    = 0;
+                    earnCash(coinc);
+                }
+                // Golden carrots
+                if(setGoldenCarrotsEl.value != '') {
+                    let gcc = parseInt(setGoldenCarrotsEl.value);
+                    player.golden_carrots = gcc
+                    updateGC();
+                }
+                // Levels
+                if(setBillLvlEl.value != '') {
+                    let lbill = parseInt(setBillLvlEl.value);
+                    Boomer_Bill.lvl = lbill;
+                    characterPrices();
+                }
             }
             //#endregion
             
@@ -1236,9 +1249,7 @@ function isDebug() {
                 <table>
                     <tr>
                         <td>
-                            <label for="setting Carrots">
-                                Carrots:
-                            </label>
+                            <label for="setCarrot">Carrots:</label>
                         </td>
                         <td>
                             <input id="setCarrot" class="dev_input" type="number" value="500000">
@@ -1248,9 +1259,7 @@ function isDebug() {
 
                     <tr>
                         <td>
-                            <label for="setting Golden Carrots">
-                                Golden Carrots:
-                            </label>
+                            <label for="setGoldenCarrot">Golden Carrots:</label>
                         </td>
                         <td>
                             <input id="setGoldenCarrot" class="dev_input" type="number">
@@ -1259,9 +1268,16 @@ function isDebug() {
 
                     <tr>
                         <td>
-                            <label for="setting Bill's level">
-                                Bill's Level:
-                            </label>
+                            <label for="setCash">Coins:</label>
+                        </td>
+                        <td>
+                            <input id="setCash" class="dev_input" type="number">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="setBillLvl">Bill's Level:</label>
                         </td>
                         <td>
                             <input id="setBillLvl" class="dev_input" type="number">
@@ -1272,14 +1288,17 @@ function isDebug() {
                 <button onclick="updateValues()">Update Values</button>
             </div><br>`;
 
-            setCarrotsEl =          dom("setCarrot");
-            setGoldenCarrotsEl =    dom("setGoldenCarrot");
-            setBillLvlEl =          dom("setBillLvl");
-            elSetCarrotRounded =    dom('setCarrotRounded')
+            window.setCarrotsEl =   dom("setCarrot");
+            window.setGoldenCarrotsEl =    dom("setGoldenCarrot");
+            window.setCashEl =             dom("setCash");
+            window.setBillLvlEl =          dom("setBillLvl");
+            window.elSetCarrotRounded =    dom('setCarrotRounded')
 
             // Enter key updates values
-            document.querySelector('.dev_input').addEventListener('keyup', e => {
-                if(e.key == 'Enter') { updateValues(); }
+            document.querySelectorAll('.dev_input').forEach(element => {
+                element.addEventListener('keyup', e => {
+                    if(e.key == 'Enter') { updateValues(); }
+                });
             });
 
             // DisplayRounded preview
@@ -1312,16 +1331,11 @@ function isDebug() {
 
 /* --------------- On page load --------------- */
 // Runs on startup, after JS is loaded
-function onLoad() {
-    // console.log('Running onLoad()');
+(() => {
+    // console.log('Running onLoad');
 
     // Flag for early playtesters
     player.flags['playtest'] = true;
-
-
-    // Start music
-    // playMusic('music.m4a');
-
 
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
@@ -1509,8 +1523,8 @@ function onLoad() {
     // Doesn't work, Date.now() is imprecise
     // if(player.time_last_saved != false) {
     //     // Convert to seconds
-    //     let ls = (player.time_last_saved).toFixed(0);
-    //     let now = (Date.now()).toFixed(0);
+    //     let ls = (player.time_last_saved / 1000).toFixed(0);
+    //     let now = (Date.now() / 1000).toFixed(0);
     //     console.log(ls, now);
     //     let difference = now - ls;
     //     let earned = difference * player.cps;
@@ -1596,7 +1610,7 @@ function onLoad() {
     characterPrices();
     characterButtons();
     updateCharlesShop();
-    pagesCount();
+    pagesCount(false);
     calculatePrestigePotential();
     DisplayAllHoes();
     updateHoePrices();
@@ -1611,9 +1625,9 @@ function onLoad() {
     if(player.lifetime.prestige_count > 0) { showPrestigeStats(); }
 
 
-
+    console.log(Date());
     // Finished
-}
+})();
 
-onLoad();
+
 loadCheck = true;

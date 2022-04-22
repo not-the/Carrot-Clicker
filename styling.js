@@ -849,7 +849,7 @@ function populateThemeList() {
             // Locked HTML
             themeHTML += /* html */
             `
-            <div class="theme_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This theme has not been unlocked', '', false, true)" tabindex="0" role="button">
+            <div class="theme_item flex achievement_locked" title="Locked" tabindex="0" role="button">
                 <img src="./assets/locked_transparent.png" alt="img" class="theme_preview">
                 <div>
                     <h3>???</h3>
@@ -988,7 +988,7 @@ function populateCosmeticsList(target) {
             stillLocked++;
             cosmeticHTML += /* html */
             `
-            <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" onclick="toast('Locked', 'This cosmetic has not been unlocked', '', false, true)" tabindex="0" role="button">
+            <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" tabindex="0" role="button">
                 <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}">
                 <div class="description">
                     <h3>???</h3>

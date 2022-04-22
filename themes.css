@@ -137,6 +137,13 @@
     color: white !important;
 }
 
+/* Statistics */
+.theme_light #statistics p,
+.theme_light #statistics summary {
+    color: rgb(70, 70, 70);
+}
+.theme_light #statistics b { color: black; }
+
 /* Dialog box/toasts */
 .theme_light .toast {
     color: white;
@@ -836,8 +843,8 @@
     visibility: hidden;
     margin-right: -64px;
 }
-.theme_terminal #Greg_Bar {
-    border-radius: 0;
+.theme_terminal .pbar {
+    border-radius: 0 !important;
 }
 .theme_terminal #Greg_Progress,
 .theme_terminal #main_progress_bar {

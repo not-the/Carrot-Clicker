@@ -6,7 +6,7 @@ The Character Class Object stores information on each Ingame Character. Currentl
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.13.2';
+    const game_version = 'dev beta v1.13.3';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -202,8 +202,11 @@ const default_player = {
     cpc: 1,
     cps: 0,
     equippedHoes: 0,
-    clickSpeedRecord: 0,
     cash: 0,
+
+    // Best
+    clickSpeedRecord: 0,
+    fallingConsecRecord: 0,
 
     // Prestige
     pages: 0,
@@ -788,7 +791,7 @@ var clickArray = [];
  * @param {boolean} useMousePos If the number popup should appear at mouse position or not
  */
 function earnCarrots(amount, type, useMousePos = false) {
-    if(type == 'bonus') { popupHandler(useMousePos, DisplayRounded(amount), 'falling'); }
+    if(type == 'bonus') { popupHandler(useMousePos, DisplayRounded(amount, 1), 'falling'); }
 
     player.carrots += amount;
     player.prestige.carrots += amount;
@@ -893,13 +896,11 @@ function onClick(useMousePos, method='click', source=0) {
         clearTimeout(clickMethodTimer);
         clickMethodTimer = setTimeout(() => { clickMethod = -1; }, 1000);
     }
-
-    // console.log(clickMethod, source);
-
     if(clickMethod != source && clickMethod != -1) return;
 
     // Grant carrots
     earnCarrots(player.cpc, 'click');
+    fallingConsecutive = 0;
 
     // Page stuff
     carrotCount();
@@ -909,15 +910,8 @@ function onClick(useMousePos, method='click', source=0) {
     // Click speed
     clickSpeedHandler(true);
 
-    // Falling carrot (2% chance, 3% later)
-    let roll = Math.floor((Math.random() * 100));
-    let rollchance = player.lifetime.carrots >= 1000000000 ? 2 : 1;
-    if(roll <= 1 && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 50) {
-        fallingCarrotPromiser = 0;
-        fallingCarrot();
-    } else {
-        fallingCarrotPromiser++;
-    }
+    // Falling carrots
+    fallingCarrot();
 
     // Sound effect
     if(
@@ -931,9 +925,21 @@ function onClick(useMousePos, method='click', source=0) {
 var fallingID = 0;
 var fallingActive = 0;
 var fallingFrenzy = false;
+var fallingConsecutive = 0;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
 function fallingCarrot() {
+    // Roll
+    let roll = Math.floor((Math.random() * 100));
+    let rollchance = player.lifetime.carrots >= 1000000000 ? 2 : 1; // (2% chance, 3% later)
+    if(!(roll <= rollchance && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 50)) {
+        fallingCarrotPromiser++;
+        return;
+    } else {
+        fallingCarrotPromiser = 0;
+    }
+    
+    // Create element
     var element = document.createElement("img");
     
     // 2% chance the drop is money instead
@@ -955,9 +961,17 @@ function fallingCarrot() {
         amount = Math.round(player.cpc * rewardVariation);
     } else if(type == 'cash') {
         // Cash reward
-        // Between 5 and 15, or 8 and 18 later
-        let min = player.lifetime.carrots >= 1000000000000000 ? 8 : 5;
-        amount = Math.floor((Math.random() * 13)) + min;
+        // Starts between:    5-10
+        // After 1b lifetime: 5-13
+        // After 1t lifetime: 8-16
+        // After 1q lifetime: 12-24
+        let max = 5; // maximum, minus the minimum
+        let min = 5; // minimum, added after
+        if(player.lifetime.carrots >= 1000000000)       { max =  8; }
+        if(player.lifetime.carrots >= 1000000000000)    { min =  8; }
+        if(player.lifetime.carrots >= 1000000000000000) { min = 12; max = 12; }
+        amount = Math.ceil((Math.random() * max)) + min;
+        console.log(amount);
     }
 
     // Set onclick function
@@ -983,13 +997,20 @@ function fallingCarrot() {
     function catchCarrot(id, type, amount) {
         dom(id).remove();
         fallingActive--;
+        fallingConsecutive++;
+        if(fallingConsecutive > player.fallingConsecRecord || player.fallingConsecRecord == undefined) {
+            player.fallingConsecRecord = fallingConsecutive;
+        }
 
         if(type == 'carrot') {
             if(player.flags['hardcore']) amount *= -1;
-            earnCarrots( amount, 'bonus', true);
+            earnCarrots(amount, 'bonus', true);
         } else if(type == 'cash') {
             earnCash(amount, 'bonus');
         }
+
+        // Roll again
+        fallingCarrot();
     }
 }
 
@@ -1037,7 +1058,7 @@ function characterPrices() {
     eInnerText(elCharacterLevel.greg, `Lvl: ${numCommas(Gregory.lvl)}`);
 }
 /** Updates CPC and CPS values on the page */
-function updateCPC(flash = true) {
+function updateCPC(flash=true) {
     eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
     eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
 }
@@ -1096,6 +1117,10 @@ function updateCharlesShop() {
         BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
         DWW: ${(DecreaseWagesEffects()*100).toFixed(2)}%`);
 }
+function updateGC() {
+    if(player.prestige_available != true) return;
+    eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
+}
 
 var carlShopData = {};
 /** Updates Carl's shop affordability highlighting */
@@ -1120,8 +1145,13 @@ function showPrestigeStats() {
 }
 const elPageCount = dom('page_count');
 /** Displays number of pages */
-function pagesCount() {
+function pagesCount(flash=true) {
     elPageCount.innerText = player.pages;
+
+    // Flash
+    if(flash != true) return;
+    dom('list_pages').classList.add('flash_white');
+    setTimeout(() => { dom('list_pages').classList.remove('flash_white'); }, 2000);
 }
 const elMainIcon = dom('main_icon');
 /** Changes the Icon at the top of the page dynamically */
@@ -1320,6 +1350,7 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         CharacterLevelUpPrice(character,amount,"apply");
 
         // Update page
+        carrotCount();
         characterPrices();
         characterButtons();
         updateCPC();
@@ -1391,19 +1422,23 @@ function Prestige() {
         let toaster = toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
     }
 
+    // Recalculate & update prestige potential
+    calculatePrestigePotential();
+    seePrestige();
+
     // Update page
+    carrotCount();
     characterPrices();
     characterButtons();
     updateCharlesShop();
     // updatePrestigeMenu();
     showPrestigeStats();
 
-    //calculate CPC and CPS
-    player.cpc=Calculate_Carrots(Boomer_Bill);
-    player.cps=Calculate_Carrots(Belle_Boomerette);
+    // calculate CPC and CPS
+    player.cpc = Calculate_Carrots(Boomer_Bill);
+    player.cps = Calculate_Carrots(Belle_Boomerette);
 }
-/**
- * Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
+/** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
  * @param {Object} character 
  * @returns Carrots per Click or Carrots per Second
  */
@@ -1536,15 +1571,12 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
 
         // Update page
         updateCharlesShop();
-        Calculate_Carrots(Boomer_Bill);Calculate_Carrots(Belle_Boomerette);
+        Calculate_Carrots(Boomer_Bill);
+        Calculate_Carrots(Belle_Boomerette);
         updateCPC();
-        mouseConfetti([3, 8], ccWhite)
-    } else {
-        toast(
-            'Cannot afford',
-            `You need ${DisplayRounded(tome.price, 1)} Golden Carrots to buy this tome`,
-            '', false, true
-        );
+        updateGC();
+        
+        mouseConfetti([3, 8], ccWhite);
     }
 }
 
@@ -1650,7 +1682,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
     
     let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
-    if(price >= player.carrots * 2){
+    if((price >= player.carrots * 2) || progress != 0){
         toast("Too Expensive!", "That hoe is currently too expensive.",
         '', false, true);
         return;
@@ -1867,7 +1899,7 @@ function DisplayHoe(character, type) {
 
 /** Makes the prestige button visible to the player */
 function seePrestige() {
-    eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
+    updateGC();
     dom("prestige-section").classList.add('visible');
     dom('prestige_menu_button').disabled = false;
     dom('prestige_menu_button').title = "Prestige";
@@ -1879,6 +1911,7 @@ function seePrestige() {
 
 // Game loop (temporary)
 setInterval(() => {
+    carrotCount();
     updateCPC();
     DisplayAllHoes();
 }, 250);
@@ -2049,10 +2082,10 @@ function tipchange() {
     
     // Decides if the tip will be real or fun.
     tips.random = Math.random();
-    tips.Type = tips.random < settings.fun_tip_percentage / 100 ? "fun" : "real";
+    tips.type = tips.random < settings.fun_tip_percentage / 100 ? "fun" : "real";
 
     // Determine and display the tip
-    let type = tips.Type == "fun" ? 'fun_' : '';
+    let type = tips.type == "fun" ? 'fun_' : '';
     type += tl[tips.tracker];
 
     // Roll tip
@@ -2083,10 +2116,5 @@ function tipchange() {
     }
     tipsHTMLupdate = true;
 }
-
-/*------Dev Tools---------*/
-var setCarrotsEl;
-var setGoldenCarrotsEl;
-var setBillLvlEl;
 
 //#endregion

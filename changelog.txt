@@ -1,4 +1,39 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.3
+    4-21-2022
+// ----------------------------------------------------------- //
+
+- Tips: changed "Basic" to "Starter"
+- Fixed a bug where an unfinished crafting job would still check if you could afford it at full price before restarting
+- New (internal) statistic: player.fallingConsecutive
+  + Catching multiple falling carrots without clicking the main carrot in between will count
+- New achievement: Match 3 (3_falling_consecutive)
+- Earning pages will now make the pages count flash like the coin count does
+- Moved more achievement rewards to being Carl shop item unlocks instead
+- Dev panel: Added a cash input and fixed some other issues
+
+CSS:
+- Fixed statistics not being readable in light theme
+- Fixed terminal theme's progress bars having rounded edges
+
+Numbers:
+- Fixed prestige potential not resetting after a prestige, and the carrot count + golden carrot count not getting updated on the page
+- Fixed golden carrot count not updating on the page when tomes are bought
+- A number of other misc fixes related to page manipulation/numbers on the page not getting updated
+
+Falling carrots:
+- Falling carrots have a 50% chance of being visually reversed
+- Clicking a falling carrot also gives a chance of dropping another falling carrot so going out of your way to click them has less disadvantages compared to clicking the carrot itself
+- Changed cash rewards so that you earn less cash early game, and more later. Actual chance of cash dropping is unchanged:
+  + Starts between:     5-15 -> 5-10
+  + After 1b lifetime:       -> 5-13
+  + After 1t lifetime:       -> 8-16
+  + After 1q lifetime:  8-18 -> 12-24
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.2.1
     4-16-2022
 // ----------------------------------------------------------- //
