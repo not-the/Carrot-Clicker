@@ -6,7 +6,7 @@ The Character Class Object stores information on each Ingame Character. Currentl
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.13.3';
+    const game_version = 'dev beta v1.13.4';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -167,9 +167,10 @@ class Character{
      * @param {Number} lvlupPrice Starting level up price
      * @param {Array} Hoes Blank hoe array
      */
-    constructor(nickname, Type, lvl, lvlupPrice, Hoes) {
+    constructor(nickname, Type, img, lvl, lvlupPrice, Hoes) {
         this.nickname=nickname;
         this.Type=Type;
+        this.img=img;
         this.lvl=lvl;
         this.lvlupPrice=lvlupPrice;
         this.Hoes=Hoes;
@@ -194,7 +195,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 5, // needs to be incremented by 1 any time any game object is changed
+    data_version: 6, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -274,12 +275,23 @@ const default_player = {
 }
 
 // Tool durability values (hardmode)
-const toolDurability = [140, 800, 3200, 12000, 24000, 64000];
+// const toolDurability = [140, 800, 3200, 12000, 24000, 64000];
+
+// Temporary shorthand function
+function getCharObj(char) {
+    switch(char) {
+        case 'bill':    return Default_Boomer_Bill;
+        case 'belle':   return Default_Belle_Boomerette;
+        case 'greg':    return Default_Gregory;
+        case 'charles': return Default_Charles;
+        case 'carl':    return Default_Carl;
+    }
+}
 
 // Character Defaults
-const Default_Boomer_Bill      = new Character("bill","Farmer",1,100,[0,0,0,0,0,0]);
-const Default_Belle_Boomerette = new Character("belle","Farmer",0,200,[0,0,0,0,0,0]);
-const Default_Gregory          = new Character("greg","Blacksmith",0,5000,[0,0,0,0,0,0]);
+const Default_Boomer_Bill      = new Character("bill","Farmer",'./assets/characters/Boomer_Bill.png',1,100,[0,0,0,0,0,0]);
+const Default_Belle_Boomerette = new Character("belle","Farmer",'./assets/characters/BelleBommerette.png',0,200,[0,0,0,0,0,0]);
+const Default_Gregory          = new Character("greg","Blacksmith",'./assets/characters/Gregory.png',0,5000,[0,0,0,0,0,0]);
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 Default_Gregory.crafting = false; // whether or not he is currently crafting
 const Default_Charles = {
@@ -287,6 +299,7 @@ const Default_Charles = {
     name:"Charles",
     nickname: "charles",
     type:"Scholar",
+    img:'./assets/characters/Charles.png',
 
     // Shop
     tome:{
@@ -307,6 +320,7 @@ const Default_Charles = {
 const Default_Carl = {
     nickname: "carl",
     type: "Artist",
+    img: './assets/characters/Carl.png',
 
     // Shop
     shop: {

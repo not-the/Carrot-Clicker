@@ -330,35 +330,6 @@ function toast(
             </div>
         </div>`;
     }
-    // OLD Achievement toast
-    // else {
-    //     let achieve = achievements[achievement];
-    //     let rewardHTMLstring = '';
-    //     let noImg = false;
-    //     if(achieve.image == false || achieve.image == undefined) { noImg = true; }
-
-    //     if(achieve.reward != false) {
-    //         rewardHTMLstring =
-    //         `<div class="rewards_list">
-    //             ${ rewardHTML(achieve) }
-    //         </div>
-    //         `;
-    //     }
-
-    //     toastElement.classList = `toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}`;
-    //     toastElement.innerHTML =`
-    //     <!-- Close button -->
-    //     <span class="toast_close" onclick="closeToast(${toastID})">X</span>
-    //     <!-- Details -->
-    //     <div class="achievement_details flex">
-    //         <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
-    //         <div>
-    //             <h2>${achieve.name}</h2>
-    //             <p class="secondary_text">${achieve.desc}${achieve.pages != false && achieve.pages != null ? `\n (+${achieve.pages} pages)` : ''}</p>
-    //         </div>
-    //     </div>
-    //     ${rewardHTMLstring}`;
-    // }
 
     toastContainer.prepend(toastElement);
 
@@ -827,6 +798,18 @@ function setCosmetic(target, to, resetState = false) {
 
     // Update page
     cosmeticSwitcherCheckmark(target, to, from);
+    /** Theme switcher checkmarks */
+    function cosmeticSwitcherCheckmark(target, to, from = false) {
+        var elCosmetic = dom(`${target}_cosmetic_${to}_checkmark`);
+
+        // Uncheck previous
+        if(from == false || !dom(`${target}_cosmetic_${to}_checkmark`)) return;
+        dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
+
+        // Check new
+        if(!elCosmetic) return;
+        elCosmetic.classList.remove('opacity0');
+    }
 }
 //#endregion
 
@@ -886,19 +869,6 @@ function populateThemeList() {
     // }
 
     themesList.innerHTML = themeHTML;
-}
-
-// Theme switcher checkmark fix
-function themeSwitcherCheckmark(theme, from = false) {
-    var elTheme = dom(`${theme}_checkmark`);
-
-    // Uncheck previous
-    if(from == false || !dom(`${from}_checkmark`)) return;
-    dom(`${from}_checkmark`).classList.add('opacity0');
-
-    // Check new
-    if(!elTheme) return;
-    elTheme.classList.remove('opacity0');
 }
 
 /* Populate cosmetics */
@@ -1020,20 +990,6 @@ function populateCosmeticsList(target) {
 
     dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
 }
-
-
-// Theme switcher checkmark fix
-function cosmeticSwitcherCheckmark(target, to, from = false) {
-    var elCosmetic = dom(`${target}_cosmetic_${to}_checkmark`);
-
-    // Uncheck previous
-    if(from == false || !dom(`${target}_cosmetic_${to}_checkmark`)) return;
-    dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
-
-    // Check new
-    if(!elCosmetic) return;
-    elCosmetic.classList.remove('opacity0');
-}
 //#endregion
 
 
@@ -1044,249 +1000,110 @@ const elAchievementFilter = dom('achievement_filter');
 function populateAchievements() {
     const filter = dom('achievement_filter').value;
     // Don't populate if not needed
-    if(achieveHTMLupdate == false) {return;}
-    else {achieveHTMLupdate = false;}
+    if(!achieveHTMLupdate) return;
+    achieveHTMLupdate = false;
     
     var achievementHTML = '';
-    var rewardHTML = '';
+    var rewardsHTML = '';
 
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achieve = achievements[key];
 
-        // Skip if internal
-        if(achieve.internal == true) continue;
-
         // Test if unlocked
         let unlocked = achieveQuery(key);
 
         // Filters
-        if(filter == 'unlocked'  && unlocked == false) continue;
-        if(filter == 'locked'    && unlocked == true) continue;
-        if(filter == 'challenge' && achieve.style != 'challenge') continue;
-        if(filter == 'secret'    && achieve.mystery.list != true) continue;
-        if(achieve.mystery.list == true && unlocked == false) continue;
+        if(
+            achieve.internal == true ||
+            filter == 'unlocked'  && unlocked == false ||
+            filter == 'locked'    && unlocked == true ||
+            filter == 'challenge' && achieve.style != 'challenge' || 
+            filter == 'secret'    && achieve.mystery.list != true ||
+            achieve.mystery.list == true && unlocked == false
+        ) continue;
 
-        let img = achieve.image != false ? achieve.image : './assets/achievements/missing.png';
-
-        // Plain text list w/ achievement names
-        //#region 
-        // if(unlocked == true) {
-        //     achievementHTML += /* html */
-        //     `
-        //         <b>Unlocked: ${achieve.name}</b><br>
-        //     `;
-        // } else {
-        //     achievementHTML += /* html */
-        //     `
-        //         Not unlocked: ${achieve.name}<br>
-        //     `;
-        // }
-        //#endregion
 
         // Rewards info
         if(achieve.reward != false && unlocked == true) {
-
             let inner = '';
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
                 for(let i = 0; i < achieve.reward.length; i++) {
-                    let [rewardType, rewardName] =
-                    typeof achieve.reward === 'string' || achieve.reward instanceof String ? achieve.reward.split(':') : ['function', achieve.reward];
-                    let subtype = '';
-    
-                    let informalName;
-                    let icon;
-    
-                    // Exceptions
-                    if(rewardType == 'function') continue;
-    
-    
-                    // Get reward info
-                    if(rewardType == 'theme') {
-                        informalName = themes[rewardName].name;
-                        icon = themes[rewardName].image
-                    }
-                    // Cosmetic
-                    else if(rewardType == 'cosmetic') {
-                        [subtype, rewardName] = rewardName.split('/');
-                        
-    
-                        // console.log(` cosmetics[${subtype}][${rewardName}].preview`);
-
-                        informalName = cosmetics[subtype][rewardName].name;
-                        if(cosmetics[subtype][rewardName].hasOwnProperty('preview') == false) {
-                            icon = cosmetics[subtype][rewardName].image;
-                        } else {
-                            icon = cosmetics[subtype][rewardName].preview;
-                        }
-                        
-                    } else if(rewardType == 'character') {
-                        informalName = capitalizeFL(rewardName);
-                        // Get image
-                        switch(rewardName) {
-                            case 'bill':
-                                icon = './assets/characters/Boomer_Bill.png'
-                                break;
-                            case 'belle':
-                                icon = './assets/characters/BelleBommerette.png'
-                                break;
-                            case 'greg':
-                                icon = './assets/characters/Gregory.png'
-                                break;
-                            case 'charles':
-                                icon = './assets/characters/Charles.png'
-                                break;
-                            case 'carl':
-                                icon = './assets/characters/Carl.png'
-                                break;
-                        }
-                    } else if(rewardType == 'cash') {
-                        icon = './assets/piggy_bank.png';
-                        informalName = `${rewardName} coins`;
-                    } else if(rewardType == 'shop') {
-                        continue;
-                    }
-
-                    inner += 
-                    `
-                    <div class="reward flex">
-                        <img src="${icon}" alt="${informalName}" class="reward_img">
-                        <div>
-                            <h4>${informalName}</h4>
-                            <p class="secondary_text">
-                                ${capitalizeFL(rewardType)}
-                            </p>
-                        </div>
-                    </div>
-                    `;
+                    let reward = achieve.reward[i];
+                    inner += rewardHTML(reward);
                 }
             }
-
             // Single reward
             else if(typeof achieve.reward === 'string' || achieve.reward instanceof String) {
-                let [rewardType, rewardName] =
-                typeof achieve.reward === 'string' || achieve.reward instanceof String ? achieve.reward.split(':') : ['function', achieve.reward];
-                let subtype = '';
-
-                let informalName;
-                let icon;
-
-
-                // Get reward info
-                if(rewardType == 'theme') {
-                    informalName = themes[rewardName].name;
-                    icon = themes[rewardName].image
-                }
-                // Cosmetic
-                else if(rewardType == 'cosmetic') {
-                    [subtype, rewardName] = rewardName.split('/');
-
-                    informalName = cosmetics[subtype][rewardName].name;
-                    icon = cosmetics[subtype][rewardName].image;
-                } else if(rewardType == 'character') {
-                    informalName = capitalizeFL(rewardName);
-                    // Get image
-                    switch(rewardName) {
-                        case 'bill':
-                            icon = './assets/characters/Boomer_Bill.png'
-                            break;
-                        case 'belle':
-                            icon = './assets/characters/BelleBommerette.png'
-                            break;
-                        case 'greg':
-                            icon = './assets/characters/Gregory.png'
-                            break;
-                        case 'charles':
-                            icon = './assets/characters/Charles.png'
-                            break;
-                        case 'carl':
-                            icon = './assets/characters/Carl.png'
-                            break;
-                    }
-                } else if(rewardType == 'cash') {
-                    icon = './assets/piggy_bank.png';
-                    informalName = `${rewardName} coins`;
-                } else if(rewardType == 'shop') {
-                    continue;
-                }
-
-
-                inner = 
-                `<div class="reward flex">
-                    <img src="${icon}" alt="${informalName}" class="reward_img">
-                    <div>
-                        <h4>${informalName}</h4>
-                        <p class="secondary_text">
-                            ${capitalizeFL(rewardType)}
-                        </p>
-                    </div>
-                </div>
-                `;
+                let reward = achieve.reward;
+                inner += rewardHTML(reward);
             }
             
             // Export HTML
-            rewardHTML =
+            rewardsHTML =
             `<!-- Rewards -->
             <div class="rewards_list">
                 ${inner}
             </div>`;
-            inner = '';
         } else {
-            rewardHTML = '';
+            rewardsHTML = '';
         }
 
         // Achievement info
-        if(unlocked == true) {
-            achievementHTML += /* htmla */
-            `
-            <div id="${key}" class="achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}">
-                <!-- Details -->
-                <div class="achievement_details flex">
-                    ${achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : ''}
-                    
+        // cheat: onclick="grantAchievement('${key}')"
+        let pagesHTML = unlocked && achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
+        let name = unlocked || achieve.mystery.name != true ? achieve.name : '???';
+        let desc = unlocked || achieve.mystery.desc != true ? achieve.desc : '???';
+        let img = achieve.image || './assets/achievements/missing.png';
+        img  =  unlocked || achieve.mystery.image == false ? img : './assets/achievements/locked.png';
+        let title = name == '???' ? 'This achievement has not been unlocked' : name;
 
-                    <img src="${img}" alt="${achieve.name}" id="${key}_img" class="achievement_img" title="${achieve.name}">
-                    <div>
-                        <h2>${achieve.name}</h2>
-                        <p class="secondary_text">${achieve.desc}</p>
-                    </div>
+        // Create
+        achievementHTML += /* htmla */ `
+        <div
+            id="${key}"
+            class="achievement_item 
+            ${unlocked ? '' : 'achievement_locked'}
+            ${achieve.mystery.list != true ? '' : ' achievement_secret'}
+            ${achieve.style != false ? ' style_' + achieve.style : ''}"
+        >
+            <!-- Details -->
+            <div class="achievement_details flex">
+                ${pagesHTML}
+                <img
+                    src="${img}"
+                    alt="${name}"
+                    id="${key}_img"
+                    class="achievement_img"
+                    title="${title}"
+                >
+                <div>
+                    <h2>${name}</h2>
+                    <p class="secondary_text">${desc}</p>
                 </div>
-                ${rewardHTML}
             </div>
-            `;
-        } else {
-            // cheat: onclick="grantAchievement('${key}')"
-            achievementHTML += /* htmla */
-            `
-            <div id="${key}" class="achievement_item achievement_locked${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}" >
-                <!-- Details -->
-                <div class="achievement_details flex">
-                    <img src="${achieve.mystery.image == false ? achieve.image : './assets/achievements/locked.png'}" alt="?" id="${key}_img" class="achievement_img" title="This achievement has not been unlocked">
-                    <div>
-                        <h2>${achieve.mystery.name == true ? '???' : achieve.name}</h2>
-                        <p class="secondary_text">${achieve.mystery.desc == true ? '????' : achieve.desc}</p>
-                    </div>
-                </div>
-            </div>
-            `;
-        }
+            ${rewardsHTML}
+        </div>
+        `;
     }
 
     // Filter by unlocked
-    if(filter == 'unlocked' && achievementHTML == '') {
-        achievementHTML =
-            `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
-    }
-    // Filter by locked
-    else if(filter == 'locked' && achievementHTML == '') {
-        achievementHTML =
-            `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
-    }
-    // Filter by secret
-    else if(filter == 'secret' && achievementHTML == '') {
-        achievementHTML =
-            `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+    if(achievementHTML == '') {
+        if(filter == 'unlocked') {
+            achievementHTML =
+                `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
+        }
+        // Filter by locked
+        else if(filter == 'locked') {
+            achievementHTML =
+                `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
+        }
+        // Filter by secret
+        else if(filter == 'secret') {
+            achievementHTML =
+                `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+        }
     }
 
     elAchievementsList.innerHTML = achievementHTML;
@@ -1320,154 +1137,51 @@ function achieveGridAdjust(ov) {
 
 
 // Achievement reward HTML
-function rewardHTML(achieve) {
-    // Rewards info
-    if(achieve.reward != false) {
-        let rewardHTML = '';
-        let inner = '';
-        // Multiple rewards
-        if(Array.isArray(achieve.reward) == true) {
-            for(let i = 0; i < achieve.reward.length; i++) {
-                let [rewardType, rewardName] = achieve.reward[i].split(':');
-                let target = '';
-                let cosKey = '';
+function rewardHTML(reward) {
+    let [rewardType, rewardName] =
+    typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
+    let subtype;
 
-                let informalName;
-                let icon;
+    let informalName;
+    let icon;
 
-                // Exceptions
-                if(rewardType == 'cosmetic') {
-                    [target, cosKey] = rewardName.split('/');
-                }
-                else if(rewardType == 'function') continue;
+    // Don't show function rewards
+    if(rewardType == 'function' || rewardType == 'shop') return '';
 
-
-                // Get reward info
-                if(rewardType == 'theme') {
-                    informalName = themes[rewardName].name;
-                    icon = themes[rewardName].image
-                }
-                // Cosmetic
-                else if(rewardType == 'cosmetic') {
-                    // console.log('vvvvv: ' + target + cosKey);
-                    // console.log(cosmetics[target]);
-                    informalName = cosmetics[target][cosKey].name;
-                    icon = cosmetics[target][cosKey].image;
-                }
-                // Character
-                else if(rewardType == 'character') {
-                    informalName = capitalizeFL(rewardName);
-                    // Get image
-                    switch(rewardName) {
-                        case 'bill':
-                            icon = './assets/characters/Boomer_Bill.png'
-                            break;
-                        case 'belle':
-                            icon = './assets/characters/BelleBommerette.png'
-                            break;
-                        case 'greg':
-                            icon = './assets/characters/Gregory.png'
-                            break;
-                        case 'charles':
-                            icon = './assets/characters/Charles.png'
-                            break;
-                        case 'carl':
-                            icon = './assets/characters/Carl.png'
-                            break;
-                    }
-                } else if(rewardType == 'cash') {
-                    icon = './assets/piggy_bank.png';
-                    informalName = `${rewardName} coins`;
-                } else if(rewardType == 'shop') {
-                    continue;
-                }
-
-                inner += 
-                `
-                <div class="reward flex">
-                    <img src="${icon}" alt="${informalName}" class="reward_img">
-                    <div>
-                        <h4>${informalName}</h4>
-                        <p class="secondary_text">
-                            ${capitalizeFL(rewardType)}
-                        </p>
-                    </div>
-                </div>
-                `;
-            }
-        }
-
-        // Single reward
-        else if(achieve.reward.split(':')[0] != 'function') {
-            let [rewardType, rewardName] = achieve.reward.split(':');
-            let subtype = '';
-
-            let informalName;
-            let icon;
-
-            // Get reward info
-            if(rewardType == 'theme') {
-                informalName = themes[rewardName].name;
-                icon = themes[rewardName].image;
-            }
-            // Cosmetic
-            else if(rewardType == 'cosmetic') {
-                [subtype, rewardName] = rewardName.split('/');
-
-                informalName = cosmetics[subtype][rewardName].name;
-                icon = cosmetics[subtype][rewardName].image;
-            }
-            // Character
-            else if(rewardType == 'character') {
-                informalName = capitalizeFL(rewardName);
-                // Get image
-                switch(rewardName) {
-                    case 'bill':
-                        icon = './assets/characters/Boomer_Bill.png'
-                        break;
-                    case 'belle':
-                        icon = './assets/characters/BelleBommerette.png'
-                        break;
-                    case 'greg':
-                        icon = './assets/characters/Gregory.png'
-                        break;
-                    case 'charles':
-                        icon = './assets/characters/Charles.png'
-                        break;
-                    case 'carl':
-                        icon = './assets/characters/Carl.png'
-                        break;
-                }
-            } else if(rewardType == 'cash') {
-                icon = './assets/piggy_bank.png';
-                informalName = `${rewardName} coins`;
-            } else if(rewardType == 'shop') {
-                return '';
-            }
-
-            inner = 
-            `<div class="reward flex">
-                <img src="${icon}" alt="${informalName}" class="reward_img">
-                <div>
-                    <h4>${informalName}</h4>
-                    <p class="secondary_text">
-                        ${capitalizeFL(rewardType)}
-                    </p>
-                </div>
-            </div>
-            `;
-        }
-        
-        rewardHTML =
-        `<!-- Rewards -->
-        <div class="rewards_list">
-            ${inner}
-        </div>`;
-
-        return rewardHTML;
+    // Get reward info
+    if(rewardType == 'theme') {
+        informalName = themes[rewardName].name;
+        icon = themes[rewardName].image
     }
-}
+    // Cosmetic
+    else if(rewardType == 'cosmetic') {
+        [subtype, rewardName] = rewardName.split('/');
+        informalName = cosmetics[subtype][rewardName].name;
+        icon = cosmetics[subtype][rewardName].image || cosmetics[subtype][rewardName].preview;
+    }
+    // Character
+    else if(rewardType == 'character') {
+        informalName = capitalizeFL(rewardName);
+        icon = getCharObj(rewardName).img; // Get image
+    }
+    // Cash
+    else if(rewardType == 'cash') {
+        icon = './assets/piggy_bank.png';
+        informalName = `${rewardName} coins`;
+    }
 
+    return `
+    <div class="reward flex">
+        <img src="${icon}" alt="${informalName}" class="reward_img">
+        <div>
+            <h4>${informalName}</h4>
+            <p class="secondary_text">
+                ${capitalizeFL(rewardType)}
+            </p>
+        </div>
+    </div>
+    `;
+}
 function achievementProgress(element = dom('achievement_progress')) {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
@@ -1521,6 +1235,18 @@ function setTheme(theme) {
 
     // Fancy Switcher fix
     themeSwitcherCheckmark(theme, from);
+    /** Theme switcher checkmarks */
+    function themeSwitcherCheckmark(theme, from = false) {
+        var elTheme = dom(`${theme}_checkmark`);
+
+        // Uncheck previous
+        if(from == false || !dom(`${from}_checkmark`)) return;
+        dom(`${from}_checkmark`).classList.add('opacity0');
+
+        // Check new
+        if(!elTheme) return;
+        elTheme.classList.remove('opacity0');
+    }
 }
 //#endregion
 

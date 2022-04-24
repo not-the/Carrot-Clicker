@@ -1,4 +1,17 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.4
+    4-24-2022
+// ----------------------------------------------------------- //
+
+- Greatly reduced the amount of code the achievements system uses
+- Fixed achievement rewards disappearing when there are more than 1
+- Fixed some achievements not being listed
+- Fixed a bug where locked achievements that don't have images will not use missing.png
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.3
     4-21-2022
 // ----------------------------------------------------------- //

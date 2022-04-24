@@ -7,6 +7,11 @@ Users settings, keybind handling, and tutorial handling
 // Volume variable
 var volume = 1;
 
+/** Plays a sound from the sound folder
+ * @param {*} file Filename
+ * @param {*} path Only specify if file is outside of './assets/sounds/'
+ * @returns 
+ */
 function playSound(file, path = './assets/sounds/') {
     if(settings.enableSounds == false) return;
     var audio = new Audio(path + file);
@@ -38,14 +43,14 @@ function stopMusic() {
 }
 //#endregion
 
+
+
 /** Returns true if any menu or popup is open */
 function menuOpen() {
     if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen)
     { return true; }
     return false;
 }
-
-
 
 
 
@@ -587,168 +592,123 @@ function doneKeybind(key, set=true) {
 }
 
 
-// User-friendly key translation
+/** Returns user-friendly keybind names when given event.key */
 function interpretKey(key) {
-    if(key == ' ') {
-        return 'Spacebar';
-    }
-
-
+    if(key == ' ') return 'Spacebar';
     return capitalizeFL(key);
 }
-
-
 //#endregion
+
+
 
 // Test achievement conditions every 5 seconds
 setInterval(() => {
-    // if(achieve.hasOwnProperty('conditions') || achieve.conditions !== false) {
-    //     console.log( achieve.conditions.split('/') );
-    // }
-
-    // Loop through achievements test if player has earned them
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
 
-        // Skip if already unlocked
-        if(achieveQuery(key) == true) continue;
-
-        // console.log(achievement.name);
-        evaluateConditions(key, achievement);
+        if(achieveQuery(key)) continue; // Skip if already unlocked
+        evaluateConditions(key, achievement); // Evaluate
     }
 }, 1000);
 
-// Achievement Conditions converter
+/** Achievement Conditions evaluator */
 function evaluateConditions(key, achievement) {
-    let multicondition = false;
+    let multicondition = Array.isArray(achievement.conditions[0]);
     var multiamount = 1;
     var multifulfilled = 0;
+    
+    // 1 condition
+    if(!multicondition) {
+        tests(key, achievement.conditions);
+    }
+    // Multiple conditions
+    else if(multicondition) {
+        // Amount that need to be fulfilled
+        multiamount = achievement.hasOwnProperty('condition_amount') ? achievement.condition_amount : achievement.conditions.length;
+        // Loop
+        for(let i = 0; i < achievement.conditions.length; i++) {
+            tests(key, achievement.conditions[i]);
+        }
+    }
 
     // Run tests
     function tests(key, conditions) {
-
-        // console.log(`Running tests on [${key}]`)
-        let getVar =        Function(`return ${conditions[0]}`);
-        let variable =      getVar();
+        let variable =      Function(`return ${conditions[0]}`)();
         let requirement =   conditions[1];
-        // let operator =    achievement.conditions[2];
-        let alreadyEarned = achieveQuery(key);
 
         // Grant achievement if reached requirement
         // console.log(`${key}: ${variable} >= ${requirement}`);
-        if(variable >= requirement && alreadyEarned == false) {
-            // console.log(key + ' passed tests!');
+        if(variable >= requirement) {
             multifulfilled++;
-
-            if(multicondition == true && multiamount <= multifulfilled) {
-                // console.log('Multicondition: ' + multifulfilled + ' / ' + multiamount);
-                grantAchievement(key);
-            } else if(multicondition == false) {
-                // console.log(`${key}: not multi - ${multifulfilled} / ${multiamount}`);
+            if((multicondition && multiamount <= multifulfilled) || !multicondition) {
                 grantAchievement(key);
             }
         }
-
-    }
-
-    // Check if there are multiple conditions
-    if(Array.isArray(achievement.conditions[0])) {
-        // console.log('Multicondition: ' + key);
-        multicondition = true;
-    }
-    
-    // 1 condition
-    if(multicondition == false) {
-        tests(key, achievement.conditions);
-    }
-
-    // Multiple conditions
-    else if(multicondition == true) {
-        // Amount that need to be fulfilled
-        if(achievement.hasOwnProperty('condition_amount')) {
-            multiamount = achievement.condition_amount;
-        } else {
-            multiamount = achievement.conditions.length;
-        }
-
-        for(let i = 0; i < achievement.conditions.length; i++) {
-            // console.log(achievement.conditions[i]);
-            tests(key, achievement.conditions[i]);
-        }
-        // console.log(`${key}: ${multifulfilled}/${multiamount}`);
     }
 }
 
+/** Takes in achievement and grants rewards */
 function rewardBreakdown(achieve, retroactive = false) {
     // console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
-    if(achieve.hasOwnProperty('reward')) {
-        let reward = achieve.reward;
+    let reward = achieve?.reward;
+    if(reward == undefined) return;
 
-        // Check if there are multiple rewards
-        if(Array.isArray(achieve.reward) == true) {
-            for(let i = 0; i < achieve.reward.length; i++) {
-                giveReward(achieve.reward[i], retroactive);
-            }
-        } else {
-            giveReward(reward, retroactive);
+    // Check if there are multiple rewards
+    if(Array.isArray(reward) == true) {
+        for(let i = 0; i < reward.length; i++) {
+            giveReward(reward[i], retroactive);
+        }
+    } else {
+        giveReward(reward, retroactive);
+    }
+
+    // Reward user
+    function giveReward(reward, retroactive = false) {
+        // console.log(reward);
+        let [rewardType, rewardName] =
+        typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
+        if(
+            retroactive == true
+            &&
+            (rewardType   == 'cash'
+            || rewardType == 'function'
+            || rewardType == 'character')
+        ) { return; }
+        if(reward == false) return;
+
+        // Theme reward
+        if(rewardType == 'theme') {
+            unlock(rewardType, rewardName);
+        }
+        // Cosmetic reward
+        else if(rewardType == 'cosmetic') {
+            let [target, cosmetic] = rewardName.split('/');
+            unlock(rewardType, cosmetic, target);
+        }
+        // Shop reward
+        else if(rewardType == 'shop') {
+            let [target, item] = rewardName.split('/');
+            unlock("shop_item", item, target, reward);
+        }
+        // Cash reward
+        else if(rewardType == 'cash') {
+            earnCash(parseInt(rewardName), 'achievement');
+        }
+        // Function reward
+        else if(rewardType == 'function') {
+            rewardName();
+        }
+
+        // Character reward
+        else if(rewardType == 'character') {
+            console.log('Character unlocked: ' + rewardName);
+            unlock('character', rewardName);
         }
     }
 }
 
-// Reward user
-function giveReward(reward, retroactive = false) {
-    // console.log(reward);
-    let [rewardType, rewardName] =
-    typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
-    if(
-        retroactive == true
-        &&
-        (rewardType   == 'cash'
-        || rewardType == 'function'
-        || rewardType == 'character')
-    ) { return; }
-    if(reward == false) return;
-    // console.log('giveReward(): ' + reward);
-    // console.log(rewardType, rewardName);
-
-    // Theme reward
-    if(rewardType == 'theme') {
-        unlock(rewardType, rewardName);
-    }
-    // Cosmetic reward
-    else if(rewardType == 'cosmetic') {
-        let [target, cosmetic] = rewardName.split('/');
-        // console.log(rewardName.split('/'));
-        unlock(rewardType, cosmetic, target);
-    }
-    // Shop reward
-    else if(rewardType == 'shop') {
-        let [target, item] = rewardName.split('/');
-        unlock("shop_item", item, target, reward);
-    }
-    // Cash reward
-    else if(rewardType == 'cash') {
-        earnCash(parseInt(rewardName), 'achievement');
-    }
-    // Function reward
-    else if(rewardType == 'function') {
-        // Run specified function
-        // var rewardFunction = Function(`${rewardName}`);
-        // rewardFunction();
-
-        // console.log(rewardName);
-        rewardName();
-    }
-
-    // Character reward
-    else if(rewardType == 'character') {
-        console.log('Character unlocked: ' + rewardName);
-        unlock('character', rewardName);
-    }
-}
-
-// Grant Achievement (Takes in object key)
+/** Grant Achievement (Takes in object key) */
 function grantAchievement(key) {
     if(achieveQuery(key)) {
         console.warn(key + ' achievement already unlocked');
@@ -793,6 +753,7 @@ function grantAchievement(key) {
         populateAchievements();
     }
 
+    // Update page
     achievementProgress();
     updateMainIcon();
 }
@@ -1484,7 +1445,6 @@ function isDebug() {
     // Theme Switcher
     populateThemeList();
     populateCosmeticsList('all');
-    themeSwitcherCheckmark(settings.theme);
 
     // Set user theme on page load
     if(settings.theme != 'theme_dark') {
