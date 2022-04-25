@@ -730,7 +730,7 @@ function grantAchievement(key) {
     }
 
     // Add achievement to player.achievements
-    player.achievements[key] = true;
+    player.achievements[key] = Date.now();
     if(achieve.internal == true) {
         player.internal++;
     }
@@ -1353,7 +1353,6 @@ function isDebug() {
         Default_Carl.shop.cosmetic,
     ];
     //#endregion
-
     if(
         default_player.data_version > player.data_version
         || player.hasOwnProperty('data_version') == false
@@ -1484,7 +1483,7 @@ function isDebug() {
     // if(player.time_last_saved != false) {
     //     // Convert to seconds
     //     let ls = (player.time_last_saved / 1000).toFixed(0);
-    //     let now = (Date.now() / 1000).toFixed(0);
+    //     let now = (parseInt(JSON.stringify(Date.now())) / 1000).toFixed(0);
     //     console.log(ls, now);
     //     let difference = now - ls;
     //     let earned = difference * player.cps;

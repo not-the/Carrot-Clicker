@@ -1,5 +1,14 @@
 // Game data
 
+// Game version
+(() => {
+    const game_version = 'dev beta v1.13.5';
+
+    dom('page_title').innerText = `Carrot Clicker ${game_version}`;
+    dom('footer_version').innerText = `Version ${game_version} - Unstable`;
+})()
+
+
 /* ------------------- TIPS ------------------- */
 //#region 
 const tl = ['starter', 'beginner', 'intermediate', 'advanced'];

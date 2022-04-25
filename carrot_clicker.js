@@ -4,14 +4,6 @@ The core Object is the player. The player object Stores Global Variables not Atr
 The Character Class Object stores information on each Ingame Character. Currently the active Characters are Boomer_Bill, Belle_Boomerette, and Gregory
 */
 
-// Game version
-(() => {
-    const game_version = 'dev beta v1.13.4';
-
-    dom('page_title').innerText = `Carrot Clicker ${game_version}`;
-    dom('footer_version').innerText = `Version ${game_version} - Unstable`;
-})()
-
 // Error message if game hasnt loaded in 1 second
 let loadCheck = false;
 setTimeout(() => {
@@ -1019,12 +1011,13 @@ function fallingCarrot() {
         if(type == 'carrot') {
             if(player.flags['hardcore']) amount *= -1;
             earnCarrots(amount, 'bonus', true);
+            mouseConfetti([6, 8], ccCarrot, 300);
         } else if(type == 'cash') {
             earnCash(amount, 'bonus');
+            mouseConfetti([8, 10], ccGold, 300);
         }
 
-        // Roll again
-        fallingCarrot();
+        fallingCarrot(); // Roll again
     }
 }
 
@@ -1034,11 +1027,8 @@ const elPrestigeStats = dom('this_prestige_stats');
 
 /** Updates carrot count on the page */
 function carrotCount() {
-    if(settings.full_numbers != true) {
-        count = DisplayRounded(Math.floor(player.carrots), 3, 1000000);
-    } else {
-        count = numCommas(Math.floor(player.carrots));
-    }
+    count = settings.full_numbers != true ?
+    DisplayRounded(Math.floor(player.carrots), 3, 1000000) : numCommas(Math.floor(player.carrots));
     eInnerText(elCarrotCount, count);
 }
 /** Updates player.cash on the page */
@@ -1073,8 +1063,17 @@ function characterPrices() {
 }
 /** Updates CPC and CPS values on the page */
 function updateCPC(flash=true) {
-    eInnerText(elCPC, `${DisplayRounded(Math.floor(player.cpc),2)}`);
-    eInnerText(elCPS, `${DisplayRounded(Math.floor(player.cps),2)}`);
+    let cpc;
+    let cps;
+    if(settings.full_numbers != true) {
+        cpc = DisplayRounded(Math.floor(player.cpc),2);
+        cps = DisplayRounded(Math.floor(player.cps),2);
+    } else {
+        cpc = numCommas(Math.floor(player.cpc));
+        cps = numCommas(Math.floor(player.cps));
+    }
+    eInnerText(elCPC, cpc);
+    eInnerText(elCPS, cps);
 }
 /** Updates character's upgrade buttons to be grayed out if it's too expensive */
 function characterButtons() {
@@ -1116,9 +1115,9 @@ function updateCharlesShop() {
     }
 
     // Update tome prices
-    eInnerText(elCharles.prices.improveWorkingConditions, `${CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[mbsel],"query")} Golden Carrots`);
-    eInnerText(elCharles.prices.betterHoes, `${CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[mbsel],"query")} Golden Carrots`);
-    eInnerText(elCharles.prices.decreaseWages, `${CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query")} Golden Carrots`);
+    eInnerText(elCharles.prices.improveWorkingConditions, `${numCommas(CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[mbsel],"query"))} Golden Carrots`);
+    eInnerText(elCharles.prices.betterHoes, `${numCommas(CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[mbsel],"query"))} Golden Carrots`);
+    eInnerText(elCharles.prices.decreaseWages, `${numCommas(CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query"))} Golden Carrots`);
 
     // Update tome counts
     eInnerText(tomeCount.iwc, `x${Charles.tome.improveWorkingConditions.value}`);
@@ -1235,7 +1234,10 @@ function clickSpeedHandler(clicked = false) {
     clickSpeed = clickArray.length;
     if(clickSpeedBest < clickSpeed) {
         clickSpeedBest = clickSpeed;
-        player.clickSpeedRecord = clickSpeed;
+    }
+    // Record
+    if(clickSpeedBest > player.clickSpeedRecord) {
+        player.clickSpeedRecord = clickSpeedBest;
     }
 
     // Reset best on 0
@@ -1486,9 +1488,14 @@ function Calculate_Carrots(character){
 /** Calculates the prestige potential and updates the page */
 function calculatePrestigePotential() {
     player.prestige_potential = Math.floor( 5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages/100)) );
-    elMainPrestigePotential.innerText = DisplayRounded(player.prestige_potential.toFixed(0),2);
+    if(!settings.full_numbers) {
+        eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
+    } else {
+        eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0)));
+    }
+    
     if(prestigeMenuOpen) {
-        elPrestigePotential.innerText = DisplayRounded(player.prestige_potential.toFixed(0),2);
+        eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
     }
 }
 
@@ -1671,7 +1678,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
 
     // Return if a hoe is already in progress
     if(n==1){
-        toast("Greg is busy", "Wait until he is done crafting", '', false, true);
+        // toast("Greg is busy", "Wait until he is done crafting", '', false, true);
         return;
     }
 
@@ -1696,8 +1703,8 @@ function CreateHoe(type=0, amount=1, progress=0) {
     
     let price = HoeCost(type,amount);
     //Checks if Hoe is Too expensive
-    if((price >= player.carrots * 2) || progress != 0){
-        toast("Too Expensive!", "That hoe is currently too expensive.",
+    if((price >= player.carrots * 2) && progress == 0){
+        toast("Too Expensive!", "That tool is currently too expensive.",
         '', false, true);
         return;
     }
@@ -1990,45 +1997,45 @@ const statsNumbers = {
 function loadStatistics() {
 
     // Prestige
-    eInnerText(prestige_carrots, numCommas(player.prestige.carrots) );
-    eInnerText(prestige_carrots_clicked, numCommas(player.prestige.click_carrots.toFixed(0)) );
-    eInnerText(prestige_carrots_idled, numCommas(player.prestige.idle_carrots.toFixed(0)) );
-    eInnerText(prestige_carrots_bonus, numCommas(player.prestige.bonus_carrots.toFixed(0)) );
-    eInnerText(prestige_clicks, numCommas(player.prestige.clicks) );
-    eInnerText(statsNumbers.prestige_falling_carrots_grabbed, numCommas(player.prestige.falling_carrots_grabbed));
-    eInnerText(prestige_hoes_crafted_total, numCommas(player.prestige.hoes.craftedTotal) );
-    eInnerText(prestige_hoes_crafted_0, numCommas(player.prestige.hoes.crafted[0]) );
-    eInnerText(prestige_hoes_crafted_1, numCommas(player.prestige.hoes.crafted[1]) );
-    eInnerText(prestige_hoes_crafted_2, numCommas(player.prestige.hoes.crafted[2]) );
-    eInnerText(prestige_hoes_crafted_3, numCommas(player.prestige.hoes.crafted[3]) );
-    eInnerText(prestige_hoes_crafted_4, numCommas(player.prestige.hoes.crafted[4]) );
-    eInnerText(prestige_hoes_crafted_5, numCommas(player.prestige.hoes.crafted[5]) );
+    statsNumbers.prestige_carrots.innerText                 = numCommas(player.prestige.carrots);
+    statsNumbers.prestige_carrots_clicked.innerText         = numCommas(player.prestige.click_carrots.toFixed(0));
+    statsNumbers.prestige_carrots_idled.innerText           = numCommas(player.prestige.idle_carrots.toFixed(0));
+    statsNumbers.prestige_carrots_bonus.innerText           = numCommas(player.prestige.bonus_carrots.toFixed(0));
+    statsNumbers.prestige_clicks.innerText                  = numCommas(player.prestige.clicks);
+    statsNumbers.prestige_falling_carrots_grabbed.innerText = numCommas(player.prestige.falling_carrots_grabbed);
+    statsNumbers.prestige_hoes_crafted_total.innerText      = numCommas(player.prestige.hoes.craftedTotal);
+    statsNumbers.prestige_hoes_crafted_0.innerText          = numCommas(player.prestige.hoes.crafted[0]);
+    statsNumbers.prestige_hoes_crafted_1.innerText          = numCommas(player.prestige.hoes.crafted[1]);
+    statsNumbers.prestige_hoes_crafted_2.innerText          = numCommas(player.prestige.hoes.crafted[2]);
+    statsNumbers.prestige_hoes_crafted_3.innerText          = numCommas(player.prestige.hoes.crafted[3]);
+    statsNumbers.prestige_hoes_crafted_4.innerText          = numCommas(player.prestige.hoes.crafted[4]);
+    statsNumbers.prestige_hoes_crafted_5.innerText          = numCommas(player.prestige.hoes.crafted[5]);
 
     // Lifetime
-    eInnerText(statsNumbers.lifetime_carrots, numCommas(player.lifetime.carrots.toFixed(0)));
-    eInnerText(statsNumbers.lifetime_carrots_clicked, numCommas(player.lifetime.click_carrots.toFixed(0)) );
-    eInnerText(statsNumbers.lifetime_carrots_idled, numCommas(player.lifetime.idle_carrots.toFixed(0)));
-    eInnerText(statsNumbers.lifetime_carrots_bonus, numCommas(player.lifetime.bonus_carrots.toFixed(0)));
+    statsNumbers.lifetime_carrots.innerText                 = numCommas(player.lifetime.carrots.toFixed(0));
+    statsNumbers.lifetime_carrots_clicked.innerText         = numCommas(player.lifetime.click_carrots.toFixed(0)) ;
+    statsNumbers.lifetime_carrots_idled.innerText           = numCommas(player.lifetime.idle_carrots.toFixed(0));
+    statsNumbers.lifetime_carrots_bonus.innerText           = numCommas(player.lifetime.bonus_carrots.toFixed(0));
 
-    eInnerText(statsNumbers.lifetime_golden_carrots, numCommas(player.lifetime.golden_carrots));
-    eInnerText(statsNumbers.lifetime_golden_carrots_spent, numCommas(player.lifetime.golden_carrots - player.golden_carrots));
-    eInnerText(statsNumbers.lifetime_prestige, numCommas(player.lifetime.prestige_count));
+    statsNumbers.lifetime_golden_carrots.innerText          = numCommas(player.lifetime.golden_carrots);
+    statsNumbers.lifetime_golden_carrots_spent.innerText    = numCommas(player.lifetime.golden_carrots - player.golden_carrots);
+    statsNumbers.lifetime_prestige.innerText                = numCommas(player.lifetime.prestige_count);
     
-    eInnerText(statsNumbers.lifetime_cash, numCommas(player.lifetime.cash));
-    eInnerText(statsNumbers.lifetime_cash_spent, numCommas(player.lifetime.cash - player.cash));
-    eInnerText(statsNumbers.lifetime_clicks, numCommas(player.lifetime.clicks));
-    eInnerText(statsNumbers.lifetime_falling_carrots_grabbed, numCommas(player.lifetime.falling_carrots_grabbed));
-    eInnerText(statsNumbers.lifetime_hoes_crafted_total, player.lifetime.hoes.craftedTotal);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_0, player.lifetime.hoes.crafted[0]);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_1, player.lifetime.hoes.crafted[1]);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_2, player.lifetime.hoes.crafted[2]);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_3, player.lifetime.hoes.crafted[3]);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_4, player.lifetime.hoes.crafted[4]);
-    eInnerText(statsNumbers.lifetime_hoes_crafted_5, player.lifetime.hoes.crafted[5]);
-    eInnerText(statsNumbers.lifetime_clickspeedrecord, player.clickSpeedRecord);
+    statsNumbers.lifetime_cash.innerText                    = numCommas(player.lifetime.cash);
+    statsNumbers.lifetime_cash_spent.innerText              = numCommas(player.lifetime.cash - player.cash);
+    statsNumbers.lifetime_clicks.innerText                  = numCommas(player.lifetime.clicks);
+    statsNumbers.lifetime_falling_carrots_grabbed.innerText = numCommas(player.lifetime.falling_carrots_grabbed);
+    statsNumbers.lifetime_hoes_crafted_total.innerText      = player.lifetime.hoes.craftedTotal;
+    statsNumbers.lifetime_hoes_crafted_0.innerText          = player.lifetime.hoes.crafted[0];
+    statsNumbers.lifetime_hoes_crafted_1.innerText          = player.lifetime.hoes.crafted[1];
+    statsNumbers.lifetime_hoes_crafted_2.innerText          = player.lifetime.hoes.crafted[2];
+    statsNumbers.lifetime_hoes_crafted_3.innerText          = player.lifetime.hoes.crafted[3];
+    statsNumbers.lifetime_hoes_crafted_4.innerText          = player.lifetime.hoes.crafted[4];
+    statsNumbers.lifetime_hoes_crafted_5.innerText          = player.lifetime.hoes.crafted[5];
+    statsNumbers.lifetime_clickspeedrecord.innerText        = player.clickSpeedRecord;
 
-    eInnerText(statsNumbers.stat_themes, `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`);
-    eInnerText(statsNumbers.stat_cosmetics, `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`);
+    statsNumbers.stat_themes.innerText = `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`;
+    statsNumbers.stat_cosmetics.innerText =  `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`;
     let unlockedAchievements = Object.keys(player.achievements);
     achievementProgress(statsNumbers.stat_achievements);
 }

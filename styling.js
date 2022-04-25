@@ -1051,7 +1051,8 @@ function populateAchievements() {
         }
 
         // Achievement info
-        // cheat: onclick="grantAchievement('${key}')"
+        // cheat:       onclick="grantAchievement('${key}')"
+        // unlock date: onclick="toast('', new Date(player.achievements['${key}']), '', true, true)"
         let pagesHTML = unlocked && achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
         let name = unlocked || achieve.mystery.name != true ? achieve.name : '???';
         let desc = unlocked || achieve.mystery.desc != true ? achieve.desc : '???';

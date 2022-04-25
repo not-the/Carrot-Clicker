@@ -1,4 +1,20 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.5
+    4-25-2022
+// ----------------------------------------------------------- //
+
+- Moved game version to gamedata.js
+- Fixed "Clicks per second (Best)" being recorded incorrectly
+- Progress bar movement is now smoother
+- Fixed incomplete craft jobs not continuing on page load ("Too Expensive")
+- "Full Numbers" setting now effects CPC, CPS, and prestige potential
+- Falling carrots & cash now create confetti
+- Game now internally takes note of when an achievement was earned
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.4
     4-24-2022
 // ----------------------------------------------------------- //

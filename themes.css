@@ -485,7 +485,8 @@
 .theme_bw .characterbox,
 .theme_bw #tripane,
 .theme_bw .popup_box,
-.theme_bw .clickvisual {
+.theme_bw .clickvisual,
+.theme_bw #mouse_confetti {
     filter: saturate(0);
 }
 .theme_bw .status_bar {
