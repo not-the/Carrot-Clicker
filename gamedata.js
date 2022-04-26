@@ -688,6 +688,16 @@ const cosmetics = {
             'image': './assets/characters/Boomer_Bill.png',
         },
     },
+    six: {
+        'default': {
+            'name': 'six (Default)',
+            'desc': 'placeholder',
+            'group': 'default',
+
+            'rename': 'six',
+            'image': './assets/achievements/missing.png',
+        },
+    },
     tools: {
         'default': {
             'name': 'Tools (Default)',
@@ -991,15 +1001,15 @@ const achievements = {
             'noToast': false,
         }
     },
-    '48_tomes': {
+    '140_tomes': {
         'name': 'Infinite Library',
-        'desc': 'Obtain 48 tomes',
+        'desc': 'Obtain 140 tomes',
         'image': false,
         'reward': false,
         'pages': 5,
         'conditions': [
             'player.lifetime.tomes_bought',
-            48
+            140
         ],
         'mystery': {
             'name': true,
@@ -1388,6 +1398,20 @@ const achievements = {
     },
 
     // Misc
+    '1_trillion_carrots_at_once': {
+        'name': '1_trillion_carrots_at_once',
+        'desc': 'Have 1 trillion carrots at once',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': ['player.carrots', 1000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
     '5000000_idle_carrots': {
         'name': 'On the Clock',
         'desc': 'Earn 5,000,000 carrots with CPS',
@@ -1402,34 +1426,36 @@ const achievements = {
             'noToast': false,
         }
     },
-    // 'basic_tips': {
-    //     'name': 'Tip of the Iceberg',
-    //     'desc': 'View all basic tips',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': 1,
-    //     'conditions': ['', 1],
-    //     'mystery': {
-    //         'name': false,
-    //         'desc': false,
-    //         'image': false,
-    //         'noToast': false,
-    //     }
-    // },
-    // 'all_tips': {
-    //     'name': 'all_tips',
-    //     'desc': 'View every tip',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': 5,
-    //     'conditions': ['', 1],
-    //     'mystery': {
-    //         'name': true,
-    //         'desc': false,
-    //         'image': false,
-    //         'noToast': false,
-    //     }
-    // },
+
+    // Tips
+    'basic_tips': {
+        'name': 'Tip of the Iceberg',
+        'desc': 'Read all basic tips. Carrot Clicker Iceberg Explained.',
+        'image': false,
+        'reward': false,
+        'pages': 1,
+        'conditions': ['ex_allTips()', 1],
+        'mystery': {
+            'name': false,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    'all_tips': {
+        'name': 'Professor',
+        'desc': 'Read every tip',
+        'image': false,
+        'reward': false,
+        'pages': 5,
+        'conditions': ['ex_allTips()', tl.length],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
 
     // CPC
     '9000_cpc': {
@@ -1446,6 +1472,22 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1_billion_cpc': {
+        'name': '1_billion_cpc',
+        'desc': 'Get your Carrots Per Click (CPC) to 1 billion',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': ['player.cpc', 1000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
+    // CPS
     '1000_cps': {
         'name': 'Time is Hungry',
         'desc': 'Produce 1,000 carrots every second',
@@ -1460,8 +1502,6 @@ const achievements = {
             'noToast': false,
         }
     },
-
-    // CPS
     '100000_cps': {
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
@@ -1750,7 +1790,9 @@ const achievements = {
         'name': 'The Tools to Victory',
         'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
-        'reward': () => { tutorialHoes(); },
+        'reward': () => {
+            toast("You've created your first tool!", "To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true);
+        },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
         'mystery': {
@@ -2021,7 +2063,65 @@ var internalAchievements = 0;
 //#endregion
 
 
+// External achievement checks
+//#region 
+/** use_charles */
+function ex_charlesUses() {
+    if(
+    Charles.tome.improveWorkingConditions.value > Default_Charles.tome.improveWorkingConditions.value
+    || Charles.tome.betterHoes.value > Default_Charles.tome.betterHoes.value
+    || Charles.tome.decreaseWages.value > Default_Charles.tome.decreaseWages.value
+    ) return true;
+    return false;
+}
+/** No falling carrots challenge */
+function ex_noBonusCarrots() {
+    if(player.prestige.carrots >= 500000 && player.prestige.falling_carrots_grabbed == 0) return true;
+    return false;
+}
+/** No Bill challenge */
+function ex_noBill() {
+    if(Boomer_Bill.lvl == 1 && player.prestige.carrots >= 2500000) return true;
+    return false;
+}
+/** No Belle challenge */
+function ex_noBelle() {
+    if(Belle_Boomerette.lvl == 0 && player.prestige.carrots >= 5000000) return true;
+    return false;
+}
+/** No hoes challenge */
+function ex_noHoes() {
+    if(player.prestige.hoes.craftedTotal == 0 && player.prestige.carrots >= 5000000) return true;
+    return false;
+}
 
+/** Not funny */
+function ex_notFunny() {
+    if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
+    return 0;
+}
+/** All tips (basic_tips, all_tips) */
+function ex_allTips() {
+    let tally = 0;
+    for(i = 0; i < tl.length; i++) {
+        let type = tl[i];
+        if(Object.keys(tips[`s_${type}`]).length == default_tips[type].length && Object.keys(tips[`s_fun_${type}`]).length == default_tips[`fun_${type}`].length
+        ) {
+            tally++;
+        }
+    }
+    return tally;
+}
+
+/** Get total cosmetics count */
+function playerCosmeticsCount() {
+    let a = 0;
+    for(i = 0; i < cosmeticsKeys.length; i++) {
+        a += player.cosmetics[cosmeticsKeys[i]].length - 1;
+    }
+    return a;
+}
+//#endregion
 
 
 
@@ -2030,6 +2130,7 @@ var internalAchievements = 0;
 
 
 /* Item/crafting system */
+//#region 
 // const items = {
 //     'carrot_pot_pie': {
 //         'name': 'Carrot Pot Pie',
@@ -2049,3 +2150,4 @@ var internalAchievements = 0;
 //         // Crafting this unlocks Cookie cosmetic, or maybe you can craft the cookie cosmetic with these
 //     }
 // }
+//#endregion

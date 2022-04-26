@@ -530,6 +530,38 @@
                         <div class="bottom" id="cosmetic_shop"></div>
                     </div>
 
+                    <!--SIX Rendering-->
+                    <div class="six characterbox char_locked" id="six_box">
+                        <div class="sixtooltip charactertooltip tooltip" id="six">
+                            ????
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('six')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('six')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                                src="./assets/achievements/missing.png"
+                                alt="six"
+                                id="six_avatar"
+                                class="characterimg"
+                                title="six">
+                            <div class="characterdesc flex">
+                                <div>
+                                    <b id="six_name" class="character_name">?????</b>
+                                    <p class="secondary_text">
+                                        ???
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom shop" id="six_shop">
+                            
+                        </div>
+                    </div>
+
                     <!-- More characters tooltip -->
                     <br>
                     <p class="secondary_text center" id="more_chars_tooltip">
@@ -1004,6 +1036,12 @@
                 <details open class="cosmetic_collapse carl_related" id="collapse_carl">
                     <summary class="h3">Carl:</summary>
                     <div id="carl_cosmetics" class="cosmetics_mini"></div>
+                </details>
+
+                <!-- six -->
+                <details open class="cosmetic_collapse six_related" id="collapse_six">
+                    <summary class="h3">six:</summary>
+                    <div id="six_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
                 <!-- Tools -->

@@ -1533,7 +1533,8 @@ body:not(.theme_light) .theme_checkmark {
 body:not(.c_belle) .belle_related,
 body:not(.c_carl) .carl_related,
 body:not(.c_greg) .greg_related,
-body:not(.c_charles) .charles_related/*,
+body:not(.c_charles) .charles_related,
+body:not(.c_six) .six_related/*,
 body:not(.gp) #golden_carrot_count*/ {
     display: none;
 }

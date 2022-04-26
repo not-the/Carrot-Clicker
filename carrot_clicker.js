@@ -253,6 +253,7 @@ const default_player = {
         'greg':     ['default'],
         'charles':  ['default'],
         'carl':     ['default'],
+        'six':      ['default'],
         'tools':    ['default'],
     },
     // New indicators
@@ -268,17 +269,6 @@ const default_player = {
 
 // Tool durability values (hardmode)
 // const toolDurability = [140, 800, 3200, 12000, 24000, 64000];
-
-// Temporary shorthand function
-function getCharObj(char) {
-    switch(char) {
-        case 'bill':    return Default_Boomer_Bill;
-        case 'belle':   return Default_Belle_Boomerette;
-        case 'greg':    return Default_Gregory;
-        case 'charles': return Default_Charles;
-        case 'carl':    return Default_Carl;
-    }
-}
 
 // Character Defaults
 const Default_Boomer_Bill      = new Character("bill","Farmer",'./assets/characters/Boomer_Bill.png',1,100,[0,0,0,0,0,0]);
@@ -491,6 +481,27 @@ const Default_Carl = {
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
+
+/** Temporary (?) shorthand function */
+function getCharObj(char) {
+    switch(char) {
+        case 'bill':    return Default_Boomer_Bill;
+        case 'belle':   return Default_Belle_Boomerette;
+        case 'greg':    return Default_Gregory;
+        case 'charles': return Default_Charles;
+        case 'carl':    return Default_Carl;
+    }
+}
+
+// Used when determining how many characters there are
+const chars = [
+    'bill',
+    'belle',
+    'greg',
+    'charles',
+    'carl',
+    // 'six',
+];
 
 /** Return number of available shop items
  * @returns Number
@@ -1214,36 +1225,21 @@ setInterval(() => {
  * @param {boolean} clicked 
  */
 function clickSpeedHandler(clicked = false) {
-    if(clicked == true) {
-        clickArray.push(Date.now());
-    }
+    if(clicked == true) { clickArray.push(Date.now()); }
 
     // Purge clicks older than 1 second
     for(let i = 0; i < clickArray.length; i++) {
         if(clickArray[i] < Date.now() - 1000) {
             // Check if there is only 1 left or not because splice doesn't work with arrays with 1 value
-            if(clickArray.length !== 1) {
-                clickArray.splice(i, i);
-            } else {
-                clickArray = [];
-            }
+            if(clickArray.length != 1) { clickArray.splice(i, i); }
+            else { clickArray = []; }
         };
     }
 
-    // Update click speed
-    clickSpeed = clickArray.length;
-    if(clickSpeedBest < clickSpeed) {
-        clickSpeedBest = clickSpeed;
-    }
-    // Record
-    if(clickSpeedBest > player.clickSpeedRecord) {
-        player.clickSpeedRecord = clickSpeedBest;
-    }
-
-    // Reset best on 0
-    if(clickSpeed == 0) {
-        clickSpeedBest = 0;
-    }
+    clickSpeed = clickArray.length; // Update click speed
+    if(clickSpeedBest < clickSpeed) { clickSpeedBest = clickSpeed; }
+    if(clickSpeedBest > player.clickSpeedRecord) { player.clickSpeedRecord = clickSpeedBest; } // Record
+    if(clickSpeed == 0) { clickSpeedBest = 0; } // Reset best on 0
 
     // Update page
     eInnerText(dom('click_speed'), clickSpeed + '/' + clickSpeedBest);
@@ -1262,8 +1258,7 @@ function CarrotsPerSecond() {
 }
 var cpsInterval = setInterval(CarrotsPerSecond, 50);
 
-/**
- * Calculates price for Characters
+/** Calculates price for Characters
  * @param {object} character 
  * @param {number} amount 
  * @param {string} mode 
@@ -1316,36 +1311,36 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
         }
     }else{
         for(i=1; i<amount; i++){
-        // Gregory
-        if(character==Gregory){
-            if(Gregory.lvl+i<50){
-                multibuyPrice(0.14);
-            }else{
-                multibuyPrice(0.22);
+            // Gregory
+            if(character==Gregory){
+                if(Gregory.lvl+i<50){
+                    multibuyPrice(0.14);
+                }else{
+                    multibuyPrice(0.22);
+                }
+            }
+            // Belle
+            else if(character==Belle_Boomerette){
+                if(Belle_Boomerette.lvl+i<75){
+                    multibuyPrice(0.07);
+                }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                    multibuyPrice(0.06)
+                }else{
+                    multibuyPrice(0.08)
+                }   
+            }
+            // Bill
+            else if(character==Boomer_Bill){
+                if(Boomer_Bill.lvl+i<75){
+                    multibuyPrice(0.11);
+                }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                    multibuyPrice(0.13);
+                }else{
+                    multibuyPrice(0.09);
+                }
+                
             }
         }
-        // Belle
-        else if(character==Belle_Boomerette){
-            if(Belle_Boomerette.lvl+i<75){
-                multibuyPrice(0.07);
-            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
-                multibuyPrice(0.06)
-            }else{
-                multibuyPrice(0.08)
-            }   
-        }
-        // Bill
-        else if(character==Boomer_Bill){
-            if(Boomer_Bill.lvl+i<75){
-                multibuyPrice(0.11);
-            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
-                multibuyPrice(0.13);
-            }else{
-                multibuyPrice(0.09);
-            }
-            
-        }
-    }
     }
     
     // Apply
@@ -2051,18 +2046,18 @@ try {
     let tips_seen = localStorage.getObject('tips_seen');
     [
         tips.best,
-        tips.s_basic,
+        tips.s_starter,
         tips.s_beginner,
         tips.s_intermediate,
-        tips.s_fun_basic,
+        tips.s_fun_starter,
         tips.s_fun_beginner,
         tips.s_fun_intermediate,
     ] = [
         tips_seen.best,
-        tips_seen.s_basic,
+        tips_seen.s_starter,
         tips_seen.s_beginner,
         tips_seen.s_intermediate,
-        tips_seen.s_fun_basic,
+        tips_seen.s_fun_starter,
         tips_seen.s_fun_beginner,
         tips_seen.s_fun_intermediate,
     ];
@@ -2126,7 +2121,7 @@ function tipchange() {
 
 
     // Page
-    eInnerText(elTips, tips[type][tips.number]);
+    elTips.innerText = tips[type][tips.number];
 
     // Mark tip as seen
     if(tips[`s_${type}`][tips.number] != true) {

@@ -1,4 +1,21 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.6
+    4-26-2022
+// ----------------------------------------------------------- //
+
+- Internal prep for another character
+- Fixed a bug where starter tips wouldn't remember if they were seen
+- New achievements:
+  + 1_trillion_carrots_at_once
+  + 1_billion_cpc
+  + basic_tips
+  + all_tips
+- Infinite library achievement's requirement changed from 48 -> 140
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.5
     4-25-2022
 // ----------------------------------------------------------- //

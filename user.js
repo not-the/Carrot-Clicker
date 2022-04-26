@@ -571,9 +571,7 @@ function detectKey(bind) {
 function setKeybind(action, key) {
     console.log(`[Settings] Set ${action} to key: ${key}`)
     settings.keybinds[action] = key;
-    // console.log(action, key);
     saveSettings();
-    // populateKeyConflicts();
 }
 function doneKeybind(key, set=true) {
     let element = dom(keyWaiting[1]);
@@ -925,30 +923,26 @@ function purchase(source, type, item, subtype = false) {
     }
 }
 
-// Test if a character is unlocked
+/** Test if a character is unlocked */
 function characterQuery(char) {
     if(player.characters.hasOwnProperty(char)) return true;
     return false;
 }
+/** Test if all characters are unlocked */
 function allCharQuery() {
-    if(
-        characterQuery('belle') == true
-        && characterQuery('greg') == true
-        && characterQuery('charles') == true
-        && characterQuery('carl') == true
-        // And so on
-    ) { return true; }
+    let c = 0;
+    for(i=0; i<chars.length; i++) { if(characterQuery(chars[i])) c++; }
+    if(c == chars.length) return true;
     return false;
 }
 
-// Test if player has an achievement - True = yes, False = no
+/** Test if player has an achievement - True = yes, False = no */
 function achieveQuery(key) {
     if(player.achievements[key] != undefined) return true;
     else return false;
 }
 
-// Test if theme is unlocked or not
-                    // 'cosmetic', 'biker_bill', 'bill'
+/** Test if theme is unlocked or not: params example: 'cosmetic', 'biker_bill', 'bill' */
 function isUnlocked(type = 'theme', key, subtype) {
     // Theme
     if(type == 'theme') {
@@ -966,9 +960,7 @@ function isUnlocked(type = 'theme', key, subtype) {
 
         for(let i = 0; i < player.cosmetics[subtype].length; i++) {
             // console.log(key == player.cosmetics[subtype][i]);
-            if(key == player.cosmetics[subtype][i]) {
-                return true;
-            }
+            if(key == player.cosmetics[subtype][i]) return true;
         }
         return false;
     }
@@ -978,71 +970,7 @@ function isUnlocked(type = 'theme', key, subtype) {
     // Does not return anything for characters
 }
 
-// Fill inventory
-// function populateInventory() {
-//     console.log('populateInventory() runs');
-// }
-
-
-// External achievement checks
-// After Greg crafts a tool for the first time ~~(Called in carrot_clicker.js)~~ Called by first tool achievement
-function tutorialHoes() {
-    // store('tutorial_first_hoe', "done");
-    toast(
-        "You've created your first tool!",
-        "To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).",
-        "", true);
-}
-// use_charles
-function ex_charlesUses() {
-    if(
-    Charles.tome.improveWorkingConditions.value > Default_Charles.tome.improveWorkingConditions.value
-    || Charles.tome.betterHoes.value > Default_Charles.tome.betterHoes.value
-    || Charles.tome.decreaseWages.value > Default_Charles.tome.decreaseWages.value
-    ) {
-        return 1;
-    }
-
-    return 0;
-}
-// No falling carrots challenge
-function ex_noBonusCarrots() {
-    if(player.prestige.carrots >= 500000 && player.prestige.falling_carrots_grabbed == 0) return true;
-    return false;
-}
-// No Bill challenge
-function ex_noBill() {
-    if(Boomer_Bill.lvl == 1 && player.prestige.carrots >= 2500000) return true;
-    return false;
-}
-// No Belle challenge
-function ex_noBelle() {
-    if(Belle_Boomerette.lvl == 0 && player.prestige.carrots >= 5000000) return true;
-    return false;
-}
-// No hoes challenge
-function ex_noHoes() {
-    if(player.prestige.hoes.craftedTotal == 0 && player.prestige.carrots >= 5000000) return true;
-    return false;
-}
-
-// Not funny
-function ex_notFunny() {
-    if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
-    return 0;
-}
-
-// Get total cosmetics count
-function playerCosmeticsCount() {
-    let a = 0;
-    for(i = 0; i < cosmeticsKeys.length; i++) {
-        a += player.cosmetics[cosmeticsKeys[i]].length - 1;
-    }
-    return a;
-}
-
-
-// Fill out keybinds menu
+/** Fill out keybinds menu */
 function populateKeybinds() {
     for(i = 0; i < settings.keybinds.keys.length; i++) {
         let keybindName =   settings.keybinds.keys[i];
@@ -1056,11 +984,12 @@ function populateKeybinds() {
         }
     }
 }
+
+/** Reset keybinds to defaults */
 function resetKeybinds() {
-    settings.keybinds = keybinds_default;
+    settings.keybinds = JSON.parse(JSON.stringify(keybinds_default));
     saveSettings();
     populateKeybinds();
-    // populateKeyConflicts();
     toast('Settings', 'Keybinds set to defaults', '', false, true);
 }
 
@@ -1111,6 +1040,7 @@ function isDebug() {
                 unlock('character', 'greg');
                 unlock('character', 'charles');
                 unlock('character', 'carl');
+                // unlock('character', 'six');
                 toast('All Characters now available', 'Dev tools');
             }
             window.allAchievements = () => {
