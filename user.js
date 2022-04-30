@@ -338,7 +338,52 @@ const keyCodes = [
     'J J C V I P ',
     'P I N E A P P L E ',
     'H U H W H U H ',
+    'C O N F E T T I ',
+    'B O R I N G ',
 ];
+const keyCodesCode = {
+    0: () => { mouseConfetti([24,24], confettiColors, 300); },
+    1: () => {
+        setTheme('theme_retro');
+        mouseConfetti([24,24], ['gray'], 300);
+    },
+    2: () => {
+        openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip');
+        mouseConfetti([24,24], ccCarrot, 600);
+    },
+    3: () => { setCosmetic('farmable', 'pineapple'); },
+    4: () => {
+        toast('huh', 'huh whuh', 'blue', true);
+        unlock('cosmetic', 'huhwhuh', 'farmable');
+        setCosmetic('farmable', 'huhwhuh');
+    },
+    5: () => {
+        function randomConfetti() {
+            let hex = '0123456789abcdef';
+            // mouseConfetti([64,64], ['orange', 'teal', 'coral', 'goldenrod', 'whitesmoke'], 600);
+            function rhex() { return hex[r(16) + 1]; }
+            let c = '#';
+            let cs = [];
+            // Loop across number of colors
+            for(i = 0; i < 5; i++) {
+                // Loop across individual characters
+                for(ii = 0; ii < 6; ii++) { c += rhex(); }
+                cs.push(c);
+                c = '#';
+            }
+            mouseConfetti([100,100], cs, 600);
+        }
+        
+        randomConfetti();
+        toast('Confetti?', '', '', true, false, false, false, () => {
+            randomConfetti();
+        }, 'Confetti!');
+    },
+    6: () => {
+        setTheme('theme_dark');
+        setCosmetic('bundle', 'default');
+    },
+}
 // Variable achievement(s) test for
 var keyTrigger = [];
 var easterEgg = 0;
@@ -366,50 +411,18 @@ function keybindHandler(event, state) {
         return;
     }
 
-    // Stop if keybinds need to be ignored
-    if(
-        settings.disableKeybinds == "true"
-        || dialogOpen == true
-        || document.activeElement.nodeName == 'TEXTAREA'
-        || document.activeElement.nodeName == 'INPUT'
-        || menuOpen()
-    ) return;
-
-
-    keyCombo += key + ' ';
     // Keyboard combos //
     //#region 
+    keyCombo += key + ' ';
     for(let ci = 0; ci < keyCodes.length; ci++) {
-        if(keyCombo == keyCodes[ci]) {
-            keyComboHandler(ci);
-        }
+        if(keyCombo == keyCodes[ci]) { keyComboHandler(ci); }
     }
 
     function keyComboHandler(combo) {
         console.log(`keyComboHandler(${combo})`);
         keyCombo = '';
         keyTrigger[combo] = true;
-
-        // Reward
-        switch(combo) {
-            case 0:
-                mouseConfetti([24,24], confettiColors, 300)
-                break;
-            case 1:
-                setTheme('theme_retro');
-                break;
-            case 2:
-                openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip');
-                break;
-            case 3:
-                setCosmetic('farmable', 'pineapple');
-                break;
-            case 4:
-                toast('huh', 'huh whuh', 'blue');
-                unlock('huhwhuh', 'cosmetic', 'farmable');
-                setCosmetic('farmable', 'huhwhuh');
-                break;
-        }
+        keyCodesCode[combo](); // Reward
     }
     //#endregion
 
@@ -419,7 +432,9 @@ function keybindHandler(event, state) {
         && keyCombo[i] != keyCodes[1][i]
         && keyCombo[i] != keyCodes[2][i]
         && keyCombo[i] != keyCodes[3][i]
-        && keyCombo[i] != keyCodes[4][i]) {
+        && keyCombo[i] != keyCodes[4][i]
+        && keyCombo[i] != keyCodes[5][i]
+        && keyCombo[i] != keyCodes[6][i]) {
             keyCombo = '';
             break;
         }
@@ -430,16 +445,17 @@ function keybindHandler(event, state) {
     // Browser keyboard navigation enter acts as click
     if(key == "Enter"){
         let tag = document.activeElement.tagName;
-        if(
-            tag != 'SUMMARY'
-        ) {
-            document.activeElement.click();
-        }
+        if(tag != 'SUMMARY') { document.activeElement.click(); }
     }
 
-    
-    // End function if keybinds are disabled, a dialog box is open, or an input field is focused
-    if(settings.disableKeybinds == "true" || dialogOpen == true || document.activeElement.id == 'notificationLength') return;
+    // Stop if keybinds need to be ignored
+    if(
+        settings.disableKeybinds == "true"
+        || dialogOpen == true
+        || document.activeElement.nodeName == 'TEXTAREA'
+        || document.activeElement.nodeName == 'INPUT'
+        || menuOpen()
+    ) return;
 
     // if(state != 'keyup') return;
 
@@ -852,19 +868,19 @@ function unlock(type, thingToUnlock, subtype, raw) {
     }
 }
 
-// Shop
-function purchase(source, type, item, subtype = false) {
+/** Carl purchase item */
+function purchase(type, item, subtype = false) {
     let raw = item;
+    let carlListing = Carl.shop[type][raw];
+    let defaultCarlListing = Default_Carl.shop[type][raw];
+
     // Fix input data for cosmetics
     if(type[type.length - 1] == 'c') {
         type = 'cosmetic';
         [subtype, item] = item.split('/');
     };
 
-    // console.log(`purchase(${source}, ${type}, ${item}, ${subtype})`);
-
     // Check if already unlocked or bought
-    // console.log(`isUnlocked(${type}, ${item}, ${subtype})`);
     if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
         toast('Whoops', 'You already own this', '', false, true);
@@ -873,53 +889,34 @@ function purchase(source, type, item, subtype = false) {
         populateCarl();
         return;
     }
-    // console.log('purchase(): ' + type + ':' + raw);
 
-    // let currency = Carl.shop[type][item].currency;
-    // let price;
+    // Check if Carl is unlocked
+    if(!characterQuery('carl') || !carlListing.available) return;
 
-    let carlListing = Carl.shop[type][raw];
-    let defaultCarlListing = Default_Carl.shop[type][raw];
+    // Currency: Cash
+    if(defaultCarlListing.currency == 'cash') {
+        // Buy
+        if(player.cash >= defaultCarlListing.price) {
+            player.cash -= defaultCarlListing.price;
+            Carl.shop[type][raw].bought = true;
+            unlock(type, item, subtype);
 
-    // Carl shop
-    if(source == 'carl') {
-        // Check if Carl is unlocked (anticheat)
-        if(characterQuery('carl') == false) {
-            // toast('Nice Try', 'That character has not been unlocked');
-            return;
+            cashCount(false);
+            // toast('', `Item bought: ${raw} (${type})`, '', false, true);
+
+            let element = dom(`carl_shop_${raw}`)
+            element.classList.add('shop_out');
+            updateCarlsShop();
+            setTimeout(() => {
+                populateCarl();
+            }, 170);
         }
-        if(carlListing.available == false) {
-            toast('Nice Try', 'This item isn\'t available yet');
-            return;
+        // Can't afford
+        else {
+            toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ${defaultCarlListing.price} coins`, '', false, true);
         }
-
-        // Currency: Cash
-        if(defaultCarlListing.currency == 'cash') {
-            // Buy
-            if(player.cash >= defaultCarlListing.price) {
-                player.cash -= defaultCarlListing.price;
-                Carl.shop[type][raw].bought = true;
-                unlock(type, item, subtype);
-
-                cashCount(false);
-                // toast('', `Item bought: ${raw} (${type})`, '', false, true);
-
-                let element = dom(`carl_shop_${raw}`)
-                element.classList.add('shop_out');
-                updateCarlsShop();
-                setTimeout(() => {
-                    populateCarl();
-                }, 170);
-            }
-            // Can't afford
-            else {
-                toast('Can\'t Afford', `Carl wouldn\'t dare let this piece go for less than ${defaultCarlListing.price} coins`, '', false, true);
-            }
-        } else {
-            toast('other currency', 'other currencies aren\'t supported yet');
-        }
-
-
+    } else {
+        toast('other currency', 'other currencies aren\'t supported yet');
     }
 }
 
@@ -1040,7 +1037,7 @@ function isDebug() {
                 unlock('character', 'greg');
                 unlock('character', 'charles');
                 unlock('character', 'carl');
-                // unlock('character', 'six');
+                unlock('character', 'six');
                 toast('All Characters now available', 'Dev tools');
             }
             window.allAchievements = () => {
@@ -1305,9 +1302,11 @@ function isDebug() {
                     }
                 }
             }
+            Six.shop = JSON.parse(JSON.stringify(Default_Six.shop));
             //#endregion
     
             // Achievements
+            //#region 
             let pagesIntended = 0;
             for(let i = 0; i < achievementsKeys.length; i++) {
                 let key = achievementsKeys[i];
@@ -1327,16 +1326,14 @@ function isDebug() {
             // Check that the players' page count is correct
             if(player.pages != pagesIntended) {
                 console.log('Achievement page rewards have been changed');
-                toast(
+                let toaster = toast(
                     'Page Rewards Changed',
-                    `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`,
-                    'orange',
-                    true
+                    `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange',
+                    true, false, false, true, () => { closeToast(toaster); }, 'Got it'
                 );
-    
-                // console.log(pagesIntended);
                 player.pages = pagesIntended;
             }
+            //#endregion
     
             // Done
             console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);
@@ -1359,13 +1356,6 @@ function isDebug() {
     /* --------------- SETTINGS --------------- */
     // Set default settings if not found in localstorage
     //#region 
-
-    // > Settings object moved to carrot_clicker.js <
-
-    populateKeybinds();
-
-    // Fill out settings page from settings object
-    fillSettingsPage();
 
     // Achievement list CSS
     achieveCompactMode(settings.compact_achievements);
@@ -1429,17 +1419,12 @@ function isDebug() {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
-
         if(achievement.internal == true) {
             internalAchievements++;
             continue;
         };
-        if(achievement.mystery.list == true) {
-            hiddenAchievements++;
-        }
-        if(achievement.style == 'challenge') {
-            challengeAchievements++;
-        }
+        if(achievement.mystery.list == true) { hiddenAchievements++; }
+        if(achievement.style == 'challenge') { challengeAchievements++; }
     }
 
     // Populate achievements if said tab is open
@@ -1482,17 +1467,11 @@ function isDebug() {
         }
     }
 
-    
-    // Disable
-    optionSoundsDisable(settings.enableSounds);
-
-    // Make golden carrot count visible
-
-
-
 
     /* -------------------- Fill out page -------------------- */
-    // Put things on page
+    populateKeybinds();
+    fillSettingsPage(); // Fill out settings page from settings object
+
     carrotCount();
     updateCPC(false);
     cashCount(false);
@@ -1509,12 +1488,10 @@ function isDebug() {
     if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
 
     // Prestige button visibility
-    if(player.prestige_available == true) { seePrestige(); }
+    if(player.prestige_available == true) { seeButton('prestige'); }
     // Has prestiged before
     if(player.lifetime.prestige_count > 0) { showPrestigeStats(); }
 
-
-    console.log(Date());
     // Finished
 })();
 

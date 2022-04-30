@@ -689,16 +689,16 @@ function populateTipsMenu() {
 }
 
 /** Open difficulty menu */
-// function openDifficultyMenu() {
-//     if(player.flags['hardcore'] != true) {
-//         player.flags['hardcore'] = true;
-//         toast('Hardmode enabled', '', 'error', false, true);
-//     } else {
-//         player.flags['hardcore'] = false;
-//         toast('Hardmode disabled', '', '', false, true);
-//     }
-//     updateMainIcon();
-// }
+function openDifficultyMenu() {
+    if(player.flags['hardcore'] != true) {
+        player.flags['hardcore'] = true;
+        toast('Hardmode enabled', '', 'error', false, true);
+    } else {
+        player.flags['hardcore'] = false;
+        toast('Hardmode disabled', '', '', false, true);
+    }
+    updateMainIcon();
+}
 
 
 // Page elements
@@ -804,7 +804,11 @@ function setCosmetic(target, to, resetState = false) {
 
         // Uncheck previous
         if(from == false || !dom(`${target}_cosmetic_${to}_checkmark`)) return;
-        dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
+        try {
+            dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
+        } catch (error) {
+            console.error(error);
+        }
 
         // Check new
         if(!elCosmetic) return;
@@ -1321,9 +1325,8 @@ function closeKeybindsMenu(noOverlay = false) {
 }
 
 
-// Populate Carls' shop
 const carlShop = dom('cosmetic_shop');
-// let carlHTMLStore = {};
+/** Populate Carls' shop */
 function populateCarl() {
     let html = '';
     carlShopData = {};
@@ -1375,8 +1378,47 @@ function populateCarl() {
     }
     updateCarlsShop();
 
-    // Carl HTML template
+    /** Carl HTML template */
     function carlHTML(internalName, type, name, img, price) {
+        return `
+        <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
+            <div class="flex">
+                <img src="${img}" alt="" class="shop_img">
+                <div class="info" style="margin-top: 4px;">
+                    <b>${name}</b>
+                    <p class="secondary_text">${capitalizeFL(type)}</p>
+    
+                    <div class="shop_price">
+                        ${price} coins
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+}
+
+const sixShop = dom('six_shop');
+/** Populate six's shop */
+function populateSix() {
+    let html = '';
+
+    let keys = Default_Six.shop.keys;
+    for(i = 0; i < keys.length; i++) {
+        let item = Default_Six.shop[keys[i]];
+        let data = Six.data?.[keys[i]];
+        if(!data.available || data == undefined) continue;
+        html += sixHTML();
+    }
+
+    if(html == '') {
+        sixShop.innerHTML = ``;
+    } else {
+        carlShop.innerHTML = html;
+    }
+    // updateSixsShop();
+
+    /** Six HTML template */
+    function sixHTML(internalName, type, name, img, price) {
         return `
         <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
             <div class="flex">

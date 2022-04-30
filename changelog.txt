@@ -1,4 +1,18 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.13.7
+    4-30-2022
+// ----------------------------------------------------------- //
+
+- Added new keyboard combo easter eggs: "confetti" and "boring"
+- Fixed prestige potential in the prestige menu not updating
+- Reduced the amount of code autosave uses and removed the need to restart your game if a new character or object has been added to autosave
+- More internal work on character six
+- Misc fixes/improvements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.6
     4-26-2022
 // ----------------------------------------------------------- //

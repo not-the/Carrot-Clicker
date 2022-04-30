@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.13.5';
+    const game_version = 'dev beta v1.13.7';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -1398,20 +1398,6 @@ const achievements = {
     },
 
     // Misc
-    '1_trillion_carrots_at_once': {
-        'name': '1_trillion_carrots_at_once',
-        'desc': 'Have 1 trillion carrots at once',
-        'image': false,
-        'reward': false,
-        'pages': 3,
-        'conditions': ['player.carrots', 1000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
     '5000000_idle_carrots': {
         'name': 'On the Clock',
         'desc': 'Earn 5,000,000 carrots with CPS',
@@ -1426,6 +1412,20 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1_trillion_carrots_at_once': {
+        'name': 'Trillionwhere?',
+        'desc': 'Have 1 trillion carrots at once',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': ['player.carrots', 1000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
 
     // Tips
     'basic_tips': {
@@ -1433,7 +1433,7 @@ const achievements = {
         'desc': 'Read all basic tips. Carrot Clicker Iceberg Explained.',
         'image': false,
         'reward': false,
-        'pages': 1,
+        'pages': false,
         'conditions': ['ex_allTips()', 1],
         'mystery': {
             'name': false,
@@ -2042,7 +2042,7 @@ const achievements = {
         'reward': () => {
             player.prestige_available = true;
             saveGame();
-            seePrestige();
+            seeButton('prestige');
         },
         'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
