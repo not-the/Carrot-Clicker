@@ -1,4 +1,35 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14
+    5-1-2022
+// ----------------------------------------------------------- //
+
+Character six
+
+- Character six has html, css, and feature-complete code (more or less)
+  + Currently has 5 unique trinkets with functionality
+  + Isn't currently unlockable without cheating
+  + Needs related achievement(s)
+  + Still needs a name and artwork
+- Special styling for cash rewards in achievements list
+- Made Charles and Carls' shop CSS consistent
+- Gave Charles' shop items hover tooltips
+- Opening a character info tooltip will close all others
+- Fixed a bug where CPS would run at half speed after a prestige
+- New achievements:
+  + 100_falling_consecutive (Secret achievement)
+  + bill_lvl_1000
+  + belle_lvl_500
+- Reduced the prices of some of carls' shop items
+- Fixed some bugs introduced in dev beta 1.13.7
+  + Carl not working
+  + Player getting charged the wrong price for character upgrades and then going into negative carrot)
+- Misc fixes/improvements
+- Data version has been bumped to 7
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.13.7
     4-30-2022
 // ----------------------------------------------------------- //

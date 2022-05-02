@@ -1149,6 +1149,7 @@ function rewardHTML(reward) {
 
     let informalName;
     let icon;
+    let extraClass = '';
 
     // Don't show function rewards
     if(rewardType == 'function' || rewardType == 'shop') return '';
@@ -1173,10 +1174,12 @@ function rewardHTML(reward) {
     else if(rewardType == 'cash') {
         icon = './assets/piggy_bank.png';
         informalName = `${rewardName} coins`;
+        rewardType = '';
+        extraClass = 'rcash';
     }
 
     return `
-    <div class="reward flex">
+    <div class="reward flex ${extraClass}">
         <img src="${icon}" alt="${informalName}" class="reward_img">
         <div>
             <h4>${informalName}</h4>
@@ -1258,11 +1261,16 @@ function setTheme(theme) {
 
 
 // Character info
-function characterInfo(character) {
-    // console.log('characterInfo: ' + character);
+function characterInfo(character, state=undefined) {
+    // Close all others
+    if(state == undefined) {
+        for(i = 0; i < chars.length; i++) {
+            if(chars[i] == character) continue;
+            characterInfo(chars[i], false);
+        }
+    }
     let charbox = dom(`${character}_box`);
-
-    if(charbox.classList.contains('show_info')) {
+    if(charbox.classList.contains('show_info') || state == false) {
         charbox.classList.remove('show_info');
     } else {
         charbox.classList.add('show_info');
@@ -1376,15 +1384,15 @@ function populateCarl() {
     } else {
         carlShop.innerHTML = html;
     }
-    updateCarlsShop();
+    cashCount(false);
 
     /** Carl HTML template */
     function carlHTML(internalName, type, name, img, price) {
         return `
-        <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
+        <div id="carl_shop_${internalName}" class="shop_item" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
             <div class="flex">
                 <img src="${img}" alt="" class="shop_img">
-                <div class="info" style="margin-top: 4px;">
+                <div class="info">
                     <b>${name}</b>
                     <p class="secondary_text">${capitalizeFL(type)}</p>
     
@@ -1401,37 +1409,45 @@ const sixShop = dom('six_shop');
 /** Populate six's shop */
 function populateSix() {
     let html = '';
-
     let keys = Default_Six.shop.keys;
     for(i = 0; i < keys.length; i++) {
-        let item = Default_Six.shop[keys[i]];
-        let data = Six.data?.[keys[i]];
+        let key = keys[i];
+        let item = Default_Six.shop[key];
+        let data = Six.data?.[key];
         if(!data.available || data == undefined) continue;
-        html += sixHTML();
+
+        // Segment bar
+        let segments = '';
+        for(si = 1; si <= item.price.length; si++) {
+            segments += `<div class="segment ${data.level >= si ? 'filled' : ''}"></div>`;
+        }
+        let price = item.price[data.level] || '✓ Done';
+        let currency = '';
+        let styles = 'complete';
+        if(price != '✓ Done') {
+            currency = 'coins';
+            styles = '';
+        }
+        let value = item.written.split('@').join(data.value);
+        html += sixHTML(key, item.img, item.name, item.desc, price, currency, segments, styles, value);
     }
 
-    if(html == '') {
-        sixShop.innerHTML = ``;
-    } else {
-        carlShop.innerHTML = html;
-    }
-    // updateSixsShop();
+    if(html == '') { sixShop.innerHTML = `Empty`; }
+    else { sixShop.innerHTML = html; }
+    cashCount(false);
 
     /** Six HTML template */
-    function sixHTML(internalName, type, name, img, price) {
+    function sixHTML(id, src, name, desc, price, currency, segments, styles, value) {
         return `
-        <div id="carl_shop_${internalName}" class="shop_item" onclick="purchase('carl', '${type}', '${internalName}')">
-            <div class="flex">
-                <img src="${img}" alt="" class="shop_img">
-                <div class="info" style="margin-top: 4px;">
-                    <b>${name}</b>
-                    <p class="secondary_text">${capitalizeFL(type)}</p>
-    
-                    <div class="shop_price">
-                        ${price} coins
-                    </div>
-                </div>
+        <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buySix('${id}')" tabindex="0" role="button">
+            <img src="${src}" alt="" class="shop_img">
+            <div class="info">
+                <b>${name}</b>
+                <div class="segment_bar">${segments}</div>
+                <div class="shop_value secondary_text">${value}</div>
+                <div class="shop_price">${price} ${currency}</div>
             </div>
+            <div class="shop_tooltip">${desc}</div>
         </div>`;
     }
 }

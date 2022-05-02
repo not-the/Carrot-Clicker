@@ -281,9 +281,9 @@ summary:hover {
     }
 } */
 
-.transparency_on .popup_box {
+/* .transparency_on .popup_box {
     background-color: rgba(134, 134, 134, 0.2);
-}
+} */
 .loading_carrot {
     height: 80px;
     width: 80px;
@@ -321,6 +321,7 @@ summary:hover {
 .white {color: white !important;}
 .golden {color: var(--golden-carrot) !important;}
 .color_red {color: var(--warning-red) !important;}
+.color_cash { color: goldenrod; }
 
 /* Background Colors (Toasts Usually) */
 .background_error {
@@ -714,10 +715,16 @@ p.theme_menu_title {
     outline: 2px solid var(--generic-blue);
     background-color: var(--main-bg-color);
 }
-.theme_item:hover, .shop_item:hover {
+.theme_item:hover,
+.theme_item:focus,
+.theme_item:focus-within,
+.shop_item:hover,
+.shop_item:focus,
+.shop_item:focus-within {
     /* filter: brightness(110%); */
     background-color: var(--main-shop-hover);
     outline: 2px solid white;
+    z-index: 3;
 }
 .theme_item:active, .shop_item:active {
     filter: brightness(80%);
@@ -795,16 +802,17 @@ body:not(.theme_light) .theme_checkmark {
 .cosmetics_grid .theme_item .description {
     visibility: hidden;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* backdrop-filter: blur(10px); */ /* This doesn't work for some reason */
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
     border: 1px solid rgba(88, 88, 88, 0.8);
 
     left: -3px;
     top: 105%;
 
-    min-width: 260px;
-    padding: 24px;
+    min-width: 280px;
+    padding: 12px 16px;
 
     opacity: 0;
     transition: opacity 0.2s;
@@ -817,6 +825,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 .cosmetics_grid .theme_item .description h3 {
     margin-top: 0;
+    margin-bottom: 2px;
 }
 
 /* Hover */
@@ -1185,6 +1194,8 @@ body:not(.theme_light) .theme_checkmark {
     filter: brightness(125%);
 } */
 
+/* Main */
+
 /* Mini stats */
 .Carrot_Count {
     font-size: 20pt;
@@ -1226,7 +1237,7 @@ body:not(.theme_light) .theme_checkmark {
     height: auto;
     z-index: 0;
     cursor: pointer;
-    padding: 16px;
+    padding: 20px;
 
     filter: drop-shadow(12px 12px 5px rgba(0, 0, 0, 0.3));
 
@@ -1345,17 +1356,17 @@ body:not(.theme_light) .theme_checkmark {
 }
 /* Character tooltips */
 .tooltip {
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px 14px;
+    background-color: rgba(0, 0, 0, 0.7);
     border: 1px solid rgba(88, 88, 88, 0.8);
+    border-radius: 4px;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
     max-width: 260px;
     position: absolute;
 
     opacity: 0;
-    /* transition-property: opacity; */
-    /* transition-duration: 0.25s; */
     pointer-events: none;
 }
 .charactertooltip {
@@ -1630,35 +1641,31 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 
 
-/* Charles + Carl */
-.Charles button {
-    width: calc(100% - 10px);
-}
+/* Charles, Carl, Six */
 .Charles .shop_item {
     padding-bottom: 0;
+    padding-top: 0;
 }
-.charles_icon {
-    width: 40px;
-    height: 40px;
-    
-    margin-right: 8px;
-}
-.Charles .bottom,
-.carl .bottom {
+.shop_bottom {
     padding: 5px;
     max-height: 220px;
     overflow-y: auto;
+}
+.Charles .shop_bottom {
+    /* min-height: 215px; */
+}
+#cosmetic_shop {
+    min-height: 58px;
 }
 .carl_button {
     height: 32px;
     padding: 6px 0;
 }
-.Charles .tome_price {
-    position: absolute;
-    right: 8px;
+.six .shop_bottom {
+    max-height: 400px;
 }
 
-/* Carl */
+/* Character shops */
 .shop_item {
     padding: 5px;
     border-radius: 5px;
@@ -1671,6 +1678,7 @@ body:not(.gp) #golden_carrot_count*/ {
 
     position: relative;
     z-index: 1;
+    display: flex;
 }
 .shop_item.shop_out {
     animation: shop_out 0.17s ease forwards;
@@ -1686,6 +1694,34 @@ body:not(.gp) #golden_carrot_count*/ {
         transform: scale(0.8, 0.8);
     }
 }
+.shop_item .info {
+    margin-top: 4px;
+}
+.shop_item .shop_tooltip {
+    visibility: hidden;
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    width: 100%;
+    /* width: calc(100% - 56px); */
+    top: 100%;
+    /* top: 50%; */
+    /* margin-left: 56px; */
+
+    background-color: var(--lighter-bg-color);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 4px;
+
+    pointer-events: none;
+}
+.shop_item:hover .shop_tooltip,
+.shop_item:focus .shop_tooltip,
+.shop_item:focus-within .shop_tooltip {
+    visibility: visible;
+}
+
 .shop_item:last-of-type {
     margin-bottom: 0;
 }
@@ -1698,11 +1734,17 @@ body:not(.gp) #golden_carrot_count*/ {
 .shop_price {
     position: absolute;
     right: 8px;
-    bottom: 5px;
+    bottom: 8px;
+}
+.shop_value {
+    position: absolute;
+    right: 8px;
+    top: 8px;
 }
 .padding-5px {
     padding: 5px;
 }
+/* Can't afford */
 .shop_item.cant_afford {
     filter: brightness(50%) contrast(90%);
     background-color: var(--darker-bg-color);
@@ -1712,6 +1754,41 @@ body:not(.gp) #golden_carrot_count*/ {
 .shop_item.cant_afford img {
     filter: saturate(0%);
 }
+/* Completed */
+.shop_item.complete {
+    background-color: transparent;
+    filter: brightness(85%);
+}
+
+/* Six segments */
+.segment_bar {
+    display: flex;
+    background-color: var(--darker-bg-color);
+    height: 10px;
+    width: 190px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.segment {
+    flex: 1;
+    border-right: 1px solid var(--lighter-bg-color);
+}
+.segment.filled {
+    background-color: gray;
+    transition: 0.1s background-color ease;
+}
+.six:hover .segment.filled {
+    background-color: rgb(94, 209, 94);
+}
+/* .carl .shop_img {
+    filter: saturate(0%);
+    transition: 0.1s filter ease;
+}
+.carl:hover .shop_img {
+    filter: none;
+} */
+
 
 .new_indicator {
     font-size: 9pt;
@@ -2087,6 +2164,9 @@ body:not(.gp) #golden_carrot_count*/ {
 .reward:last-of-type {
     border: none;
 }
+.reward.rcash h4 {
+    transform: translateY(8px);
+}
 .reward_img {
     height: 36px;
     width: 36px;
@@ -2442,14 +2522,10 @@ footer {
 /* Credits */
 #credits {
     visibility: hidden;
-    /* opacity: 0; */
-    /* transition: opacity 1s ease; */
 
     width: 100%;
-    /* max-width: 600px; */
     height: 100vh;
-    padding-top: 40vh;
-    padding-bottom: 120px;
+    padding: 40vh 16px 120px;
     overflow-y: auto;
 
     z-index: 1000;
@@ -2588,6 +2664,14 @@ footer {
     .achieve_grid .achievement_item .achievement_details {
         max-width: 55vw;
     }
+    #keybinds_list {
+        display: block;
+    }
+    .key_column {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
 }
 
 /* 400px - very small*/
@@ -2603,13 +2687,5 @@ footer {
     #tripane .button_icon {
         visibility: hidden;
         position: absolute;
-    }
-    #keybinds_list {
-        display: block;
-    }
-    .key_column {
-        border: none;
-        padding: 0;
-        margin: 0;
     }
 }

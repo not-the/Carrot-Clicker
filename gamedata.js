@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.13.7';
+    const game_version = 'dev beta v1.14';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -666,7 +666,7 @@ const cosmetics = {
     carl: {
         'default': {
             'name': 'Carl (Default)',
-            'desc': 'Carl likes to paint almost as much as he likes carrots. (The person writing this description was unable to come up with something to positive to say, so just made something up. It is unknown if he actually likes carrots.)',
+            'desc': 'Carl likes to paint almost as much as he likes carrots.',
             'group': 'default',
 
             'rename': 'Carl',
@@ -1078,6 +1078,7 @@ const achievements = {
             'noToast': false,
         }
     },
+    // Bill level
     'bill_lvl_10': {
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill 10 times',
@@ -1097,7 +1098,7 @@ const achievements = {
         'desc': 'Upgrade Bill 100 times',
         'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
         'reward': 'cosmetic:bundle/bill',
-        'pages': 5,
+        'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 100],
         'mystery': {
             'name': true,
@@ -1106,6 +1107,21 @@ const achievements = {
             'noToast': false,
         }
     },
+    'bill_lvl_1000': {
+        'name': 'bill_lvl_1000',
+        'desc': 'Upgrade Bill 1000 times',
+        'image': false,
+        'reward': false,
+        'pages': 5,
+        'conditions': ['Boomer_Bill.lvl', 1000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    // Belle level
     'belle_lvl_15': {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle 15 times',
@@ -1125,6 +1141,20 @@ const achievements = {
         'desc': 'Upgrade Belle 100 times',
         'image': false,
         'reward': false,
+        'pages': 3,
+        'conditions': ['Belle_Boomerette.lvl', 100],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'belle_lvl_500': {
+        'name': 'belle_lvl_500',
+        'desc': 'Upgrade Belle 500 times',
+        'image': false,
+        'reward': false,
         'pages': 5,
         'conditions': ['Belle_Boomerette.lvl', 100],
         'mystery': {
@@ -1134,13 +1164,14 @@ const achievements = {
             'noToast': false,
         }
     },
-    'greg_lvl_20': {
+    // Greg level
+    'greg_lvl_25': {
         'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
-        'desc': 'Upgrade Gregory 20 times',
+        'desc': 'Upgrade Gregory 25 times',
         'image': false,
         'reward': false,
         'pages': 2,
-        'conditions': ['Gregory.lvl', 20],
+        'conditions': ['Gregory.lvl', 25],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1714,7 +1745,7 @@ const achievements = {
     // Cash
     '100_lifetime_cash': {
         'name': 'Penny Pincher',
-        'desc': 'Earn 100 cash',
+        'desc': 'Earn 100 coins',
         'image': false,
         'reward': false,
         'pages': 1,
@@ -1728,7 +1759,7 @@ const achievements = {
     },
     '50_cash': {
         'name': 'Savings Account',
-        'desc': 'Have 50 cash in the bank without spending it',
+        'desc': 'Have 50 coins in the bank without spending them',
         'image': false,
         'reward': false,
         'pages': 1,
@@ -1934,6 +1965,22 @@ const achievements = {
     },
 
     // Secret Achievements
+    '100_falling_consecutive': {
+        'name': 'Juggle Master',
+        'desc': 'Grab 100 falling carrots in a row',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.fallingConsecRecord', 100],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+            'list': true,
+        }
+    },
     '1000000_clicks': {
         'name': 'Clicker God',
         'desc': 'Click the carrot 1 million times (Hidden achievement)',

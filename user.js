@@ -830,9 +830,12 @@ function unlock(type, thingToUnlock, subtype, raw) {
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
-        if(playerCharKeys.length == 5) {
+        if(playerCharKeys.length >= chars.length) {
             dom('more_chars_tooltip').classList.add('char_locked');
         }
+
+        // if(thingToUnlock == 'carl') { populateCarl(); }
+        // if(thingToUnlock == 'six')  { populateSix(); }
     }
     // Carl shop item
     else if(type == 'shop_item') {
@@ -866,13 +869,19 @@ function unlock(type, thingToUnlock, subtype, raw) {
         // Carl.shop_order.unshift(raw.split(':')[1]);
         populateCarl();
     }
+    else if(type == 'trinket'){
+        try {
+            Six.data[thingToUnlock].available = true;
+            populateSix();
+        } catch (error) {
+            console.warn(`[Unlock] Trinket "${thingToUnlock}" doesn't exist`);
+        }   
+    }
 }
 
-/** Carl purchase item */
-function purchase(type, item, subtype = false) {
+/** Carl buy item */
+function buyCarl(type, item, subtype = false) {
     let raw = item;
-    let carlListing = Carl.shop[type][raw];
-    let defaultCarlListing = Default_Carl.shop[type][raw];
 
     // Fix input data for cosmetics
     if(type[type.length - 1] == 'c') {
@@ -891,6 +900,8 @@ function purchase(type, item, subtype = false) {
     }
 
     // Check if Carl is unlocked
+    let carlListing = Carl.shop[type][raw];
+    let defaultCarlListing = Default_Carl.shop[type][raw];
     if(!characterQuery('carl') || !carlListing.available) return;
 
     // Currency: Cash
@@ -906,7 +917,6 @@ function purchase(type, item, subtype = false) {
 
             let element = dom(`carl_shop_${raw}`)
             element.classList.add('shop_out');
-            updateCarlsShop();
             setTimeout(() => {
                 populateCarl();
             }, 170);
@@ -918,6 +928,26 @@ function purchase(type, item, subtype = false) {
     } else {
         toast('other currency', 'other currencies aren\'t supported yet');
     }
+}
+
+/** Six buy */
+function buySix(id) {
+    let item = Default_Six.shop[id];
+    let data = Six.data[id];
+    let price = item.price[data.level];
+    if(!data.available || price > player.cash || item.currency != 'cash' || data.level >= item.price.length) return;
+
+    player.cash -= price;
+    data.level++;
+    console.log(data.level);
+    data.value = item.value[data.level - 1];
+    
+    // Update page
+    populateSix();
+    mouseConfetti([3,3], ccWhite, 150, 1);
+
+    // Extra
+    if(id == 'page_bonus') { calculatePrestigePotential(); }
 }
 
 /** Test if a character is unlocked */
@@ -1029,6 +1059,7 @@ function isDebug() {
             || hashlist.includes('debug')
         ) {
             player.flags['cookies_accepted'] = true;
+            unlock('character', 'six');
 
             // Register cheat functions globally
             //#region
@@ -1254,6 +1285,10 @@ function isDebug() {
         Carl.shop,
         Carl.shop.theme,
         Carl.shop.cosmetic,
+
+        Six,
+        Six.shop,
+        Six.data,
     ];
     var onu_templates = [
         default_player,
@@ -1278,6 +1313,10 @@ function isDebug() {
         Default_Carl.shop,
         Default_Carl.shop.theme,
         Default_Carl.shop.cosmetic,
+
+        Default_Six,
+        Default_Six.shop,
+        Default_Six.data,
     ];
     //#endregion
     if(
@@ -1302,7 +1341,7 @@ function isDebug() {
                     }
                 }
             }
-            Six.shop = JSON.parse(JSON.stringify(Default_Six.shop));
+            // Six.shop = JSON.parse(JSON.stringify(Default_Six.shop));
             //#endregion
     
             // Achievements
@@ -1484,6 +1523,7 @@ function isDebug() {
     updateHoePrices();
     updateMainIcon();
     populateCarl();
+    populateSix();
     if(player.new_theme == true) { newIndicator(true, 'theme'); }
     if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
 

@@ -429,42 +429,49 @@
                                 title="Charles">
                             <div class="characterdesc">
                                 <b id="charles_name" class="character_name">Charles</b>
-                                <p class="secondary_text">
-                                    Golden Carrot research<br/>
-                                    Sells tomes
-                                </p>
+                                <div class="flex" style="margin-top: 2px;">
+                                    <button id="carl_theme_button" class="carl_button" onclick="openPrestigeMenu()" style="width: 280px; margin-left: 2px;">
+                                        Prestige info
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Bottom -->
-                        <div class="bottom">
+                        <div class="bottom shop_bottom">
                             <!-- Charles' buttons -->
                             <div
                             onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
                             id="ImproveWorkingConditions_button"
-                            class="unbold shop_item pointer flex cant_afford"
+                            class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/working_conditions.png" alt="" class="charles_icon">
-                                <p>
+                                <img src="./assets/characters/working_conditions.png" alt="" class="shop_img">
+                                <div class="info">
                                     Improve working conditions<br/>
-                                    <span id="ImproveWorkingConditions" class="tome_price">---</span>
                                     <span id="iwc_count" class="tome_count">x0</span>
-                                </p>
+                                    <span id="ImproveWorkingConditions" class="shop_price">---</span>
+                                </div>
+                                <div class="shop_tooltip">
+                                    Improves character efficiency
+                                </div>
                             </div>
                             
                             <div
                             onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
                             id="BetterHoes_button"
-                            class="unbold shop_item pointer flex cant_afford"
+                            class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/hoe_costs.png" alt="" class="charles_icon">
-                                <p>
+                                <img src="./assets/characters/hoe_costs.png" alt="" class="shop_img">
+                                <div class="info">
                                     High quality tools<br/>
-                                    <span id="BetterHoes" class="tome_price">---</span>
                                     <span id="bh_count" class="tome_count">x0</span>
-                                </p>
+                                    <span id="BetterHoes" class="shop_price">---</span>
+                                </div>
+                                <div class="shop_tooltip">
+                                    Increases the power of equipped tools
+                                </div>
                             </div>
 
                             <div
@@ -473,13 +480,20 @@
                             class="unbold shop_item pointer flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/decrease_wages.png" alt="" class="charles_icon">
-                                <p>
+                                <img src="./assets/characters/decrease_wages.png" alt="" class="shop_img">
+                                <div class="info">
                                     Decrease worker wages<br/>
-                                    <span id="DecreaseWages" class="tome_price">---</span>
                                     <span id="dww_count" class="tome_count">x0</span>
-                                </p>
+                                    <span id="DecreaseWages" class="shop_price">---</span>
+                                </div>
+                                <div class="shop_tooltip">
+                                    Decreases the prices of upgradeable characters
+                                </div>
                             </div>
+
+                            <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
+                                Golden carrot research - Buy tomes
+                            </p>
 
                         </div>
                     </div>
@@ -493,7 +507,7 @@
 
                     <!--Carl Rendering-->
                     <div class="carl characterbox char_locked" id="carl_box">
-                        <div class="carltooltip charactertooltip tooltip" id="carl">
+                        <div class="carltooltip charactertooltip tooltip" id="carltooltip">
                             The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')" tabindex="0" role="button">
@@ -527,13 +541,13 @@
                         </div>
 
                         <!-- Bottom -->
-                        <div class="bottom" id="cosmetic_shop"></div>
+                        <div class="bottom shop_bottom" id="cosmetic_shop"></div>
                     </div>
 
                     <!--SIX Rendering-->
                     <div class="six characterbox char_locked" id="six_box">
-                        <div class="sixtooltip charactertooltip tooltip" id="six">
-                            ????
+                        <div class="sixtooltip charactertooltip tooltip" id="sixtooltip">
+                            Sells trinkets that grant special abilities. Trinkets are kept when you prestige.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('six')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('six')" tabindex="0" role="button">
@@ -548,17 +562,36 @@
                                 title="six">
                             <div class="characterdesc flex">
                                 <div>
-                                    <b id="six_name" class="character_name">?????</b>
+                                    <b id="six_name" class="character_name">? (WIP)</b>
                                     <p class="secondary_text">
-                                        ???
+                                        Trinket shop
                                     </p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Bottom -->
-                        <div class="bottom shop" id="six_shop">
-                            
+                        <div class="bottom shop_bottom">
+                            <!-- Shop -->
+                            <div id="six_shop">
+                                <!-- <div id="six_shop_clickrate" class="shop_item" onclick="buySix('clickrate')" tabindex="0" role="button">
+                                    <img src="./assets/achievements/missing.png" alt="" class="shop_img">
+                                    <div class="info">
+                                        <b>Golden Mouse</b>
+                                        <p class="secondary_text">desc</p>
+                                        <div class="shop_price">
+                                            10 coins
+                                        </div>
+                                    </div>
+                                    <div class="shop_tooltip">
+                                        Increases hold-to-click speed by 1
+                                    </div>
+                                </div> -->
+                            </div>
+                            <!-- Info line -->
+                            <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
+                                Check back later for more trinkets
+                            </p>
                         </div>
                     </div>
 
@@ -1372,6 +1405,8 @@
 
 
             <span class="secondary_text">Image Attribution:</span>
+            Carrot, money bag, cookie, and pineapple images from <b>Google's Noto Emoji Icons</b> (Apache License 2.0)
+            <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener noreferrer" >https://github.com/googlefonts/noto-emoji</a>
             <a target="_blank" href="https://icons8.com/icon/83214/settings">Settings icon</a> from <a target="_blank" href="https://icons8.com">Icons8</a>
             <a href="https://www.flaticon.com/free-icon/medal_1895474">Medal icon</a> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
             <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">Lightbulb Icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">PICOL, PIctorial COmmunication Language</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
@@ -1381,14 +1416,10 @@
             <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
 
             Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/">https://andersonseedsmn.com/home/dirt-background/</a>
-
-
-            Carrot, money bag, cookie, and pineapple images from <b>Google's Noto Emoji Icons</b> (Apache License 2.0)
-            <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener noreferrer" >https://github.com/googlefonts/noto-emoji</a>
             
 
-            
-            W3Schools, Stack Overflow, MDN Web Docs
+            <span class="secondary_text">And thanks to:</span>
+            W3Schools, Stack Overflow, and MDN Web Docs
             For being reliable sources of information
             
 
