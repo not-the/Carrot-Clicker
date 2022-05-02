@@ -8,7 +8,11 @@ The Character Class Object stores information on each Ingame Character. Currentl
 let loadCheck = false;
 setTimeout(() => {
     if(loadCheck == false) {
-        toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false);
+        toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false, false, () => {
+            openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')
+        },
+        'Delete Save Data',
+        );
     }
 }, 1000);
 
@@ -555,15 +559,15 @@ const Default_Six = {
             value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
             written:   '+@%/page',
         },
-        'fake_trophy': {
-            name:      'Fake Trophy',
-            desc:      'It\'s plastic.',
-            img:       './assets/achievements/missing.png',
-            currency:  'cash',
-            price:     [350],
-            value:     [true],
-            written:   '',
-        },
+        // 'fake_trophy': {
+        //     name:      'Fake Trophy',
+        //     desc:      'It\'s plastic.',
+        //     img:       './assets/achievements/missing.png',
+        //     currency:  'cash',
+        //     price:     [350],
+        //     value:     [true],
+        //     written:   '',
+        // },
         // Dreamcatcher?
     },
     // Shop player data
@@ -598,11 +602,11 @@ const Default_Six = {
             level: 0,
             value: 1,
         },
-        'fake_trophy': {
-            available: false,
-            level: 0,
-            value: false,
-        },
+        // 'fake_trophy': {
+        //     available: false,
+        //     level: 0,
+        //     value: false,
+        // },
     },
 }
 Default_Six.shop.keys =    Object.keys(Default_Six.shop);
@@ -659,7 +663,19 @@ function carlShopQuery(type, item) {
         console.log('carlShopQuery: invalid query- item or type not found');
         return false;
     }
+}
 
+/** Returns completion of trinkets */
+function sixCompletion() {
+    let keys = Default_Six.shop.keys;
+    let comTotal = 0;
+    let maxTotal = 0;
+    for(i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        comTotal += Six?.data[key]?.level;
+        maxTotal += Default_Six.shop[key].price.length;
+    }
+    return `${comTotal}/${maxTotal}`;
 }
 
 
@@ -888,6 +904,12 @@ function multibuySpin() {
     DisplayAllHoes();
     updateCharlesShop();
     eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
+
+    // Tutorial message
+    if(player.flags['tutorial_multibuy'] != true) {
+        toast('Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', false, true,);
+        player.flags['tutorial_multibuy'] = true;
+    }
 }
 
 /** Clears localStorage
@@ -1377,14 +1399,14 @@ function clickSpeedHandler(clicked = false) {
 
     // Purge clicks older than 1 second
     for(let i = 0; i < clickArray.length; i++) {
-        if(clickArray[i] < Date.now() - 1000) {
+        if(clickArray[i] < Date.now() - 3000) {
             // Check if there is only 1 left or not because splice doesn't work with arrays with 1 value
             if(clickArray.length != 1) { clickArray.splice(i, i); }
             else { clickArray = []; }
         };
     }
 
-    clickSpeed = clickArray.length; // Update click speed
+    clickSpeed = Math.floor(clickArray.length / 3); // Update click speed
     if(clickSpeedBest < clickSpeed) { clickSpeedBest = clickSpeed; }
     if(clickSpeedBest > player.clickSpeedRecord) { player.clickSpeedRecord = clickSpeedBest; } // Record
     if(clickSpeed == 0) { clickSpeedBest = 0; } // Reset best on 0
@@ -2129,6 +2151,7 @@ const statsNumbers = {
 
     stat_themes:                      dom('stat_themes'),
     stat_cosmetics:                   dom('stat_cosmetics'),
+    stat_trinkets:                    dom('stat_trinkets'),
     // stat_cosmetics_bundle:            dom('stat_cosmetics_bundle'),
     // stat_cosmetics_farmable:          dom('stat_cosmetics_farmable'),
     // stat_cosmetics_bill:              dom('stat_cosmetics_bill'),
@@ -2182,6 +2205,7 @@ function loadStatistics() {
 
     statsNumbers.stat_themes.innerText = `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`;
     statsNumbers.stat_cosmetics.innerText =  `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`;
+    statsNumbers.stat_trinkets.innerText = `${sixCompletion()} (${percentage(...sixCompletion().split('/')).toFixed(0)}%)`;
     let unlockedAchievements = Object.keys(player.achievements);
     achievementProgress(statsNumbers.stat_achievements);
 }

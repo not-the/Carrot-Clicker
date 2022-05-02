@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.14';
+    const game_version = 'dev beta v1.14.1';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -1771,6 +1771,21 @@ const achievements = {
             'noToast': false,
         }
     },
+    // 'all_trinkets': { // six
+    //     'name': 'Complete Collection',
+    //     'desc': 'Buy and fully upgrade every trinket',
+    //     'image': false,
+    //     'reward': false,
+    //     'pages': 10,
+    //     'conditions': ['percentage(...sixCompletion().split('/'))', 100],
+    //     'style': 'endgame',
+    //     'mystery': {
+    //         'name': true,
+    //         'desc': false,
+    //         'image': true,
+    //         'noToast': false,
+    //     }
+    // },
 
     // Misc
     '9_clicks_per_second': {

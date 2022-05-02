@@ -147,16 +147,12 @@ function buttonSound() {
  * @param {string} buttonAction Code to be run if the accept button is pressed
  */
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
-    // Close other popup first
-    closeDialog();
-
+    closeDialog(); // Close other popups first
+    openMenu();
     buttonSound();
 
     dialogOpen = true;
-    overlay.classList.add('visible');
-    elBody.classList.add('overflow_hidden');
     elDialog.main.classList.add('visible');
-    // elDialog.main.classList.add("dialog_animate");
 
     // Fill out dialog text, if applicable
     if(title)       {eInnerText(elDialog.title, title);}
@@ -310,6 +306,13 @@ function toast(
             toastButton.onclick = button_action;
             toastButton.innerText = button_name;
             toastElement.append(toastButton);
+        }
+        // Secondary line // disable tutorial messages
+        if(title.toUpperCase().includes('TUTORIAL')) {
+            var secondary_line = document.createElement("p");
+            secondary_line.className = 'link_styling center';
+            secondary_line.onclick = () => {console.log('disable tutorial messages');};
+            toastElement.append(secondary_line);
         }
     }
     // Achievement toast

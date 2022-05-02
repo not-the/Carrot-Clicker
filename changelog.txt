@@ -1,4 +1,17 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14.1
+    5-1-2022
+// ----------------------------------------------------------- //
+
+- The clicks per second indicator should now be accurate, but slower to update. Its sample size is now 3 seconds long instead of 1 (Issue #56)
+- Added a trinkets completion statistic to statistics
+- New achievement (currently disabled): all_trinkets
+- Misc CSS improvements/fixes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14
     5-1-2022
 // ----------------------------------------------------------- //

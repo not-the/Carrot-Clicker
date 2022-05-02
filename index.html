@@ -430,7 +430,7 @@
                             <div class="characterdesc">
                                 <b id="charles_name" class="character_name">Charles</b>
                                 <div class="flex" style="margin-top: 2px;">
-                                    <button id="carl_theme_button" class="carl_button" onclick="openPrestigeMenu()" style="width: 280px; margin-left: 2px;">
+                                    <button id="charles_prestige_button" onclick="openPrestigeMenu()" style="width: 280px; margin-left: 2px;">
                                         Prestige info
                                     </button>
                                 </div>
@@ -525,10 +525,10 @@
                                 <div>
                                     <b id="carl_name" class="character_name">Carl</b>
                                     <div class="flex" style="margin-top: 2px;">
-                                        <button id="carl_theme_button" class="carl_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
+                                        <button id="carl_theme_button" class="char_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
                                             Themes
                                         </button>
-                                        <button id="carl_cosmetic_button" class="carl_button" onclick="cosmeticSwitcher()" style="width: 140px">
+                                        <button id="carl_cosmetic_button" class="char_button" onclick="cosmeticSwitcher()" style="width: 140px">
                                             Cosmetics
                                         </button>
                                     </div>
@@ -738,6 +738,7 @@
                             Carl:     <b id="stat_cosmetics_carl">---</b><br/>
                             Tools:    <b id="stat_cosmetics_tools">---</b><br/>
                         </details> -->
+                        <p class="six_related">Trinkets: <b id="stat_trinkets">---</b></p>
                         
                         <br/>
 
@@ -1088,8 +1089,8 @@
 
         <!-- Keybinds menu -->
         <div id="keybinds_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <button onclick="resetKeybinds()" id="key_reset">Reset to defaults</button>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             <h1>Edit Keybinds</h1>
             <p><i class="secondary_text" id="keybinds_blurb">Keybinds are disabled while this menu is open</i></p><br>
 
