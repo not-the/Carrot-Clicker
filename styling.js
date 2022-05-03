@@ -282,6 +282,10 @@ function toast(
     button_action  = false,
     button_name    = 'Done',
 ) {
+    // Cancel if tutorial message, and tutorial messages are disabled
+    // let istutorial = (title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER'))
+    // if(istutorial && settings.disable_tutorials == true) return;
+
     // Replace old if replace is true
     if(toastsList[toastID - 1] != undefined && toastsList[toastID - 1].includes('replace') == true) {
         closeToast(toastID - 1, false);
@@ -308,12 +312,19 @@ function toast(
             toastElement.append(toastButton);
         }
         // Secondary line // disable tutorial messages
-        if(title.toUpperCase().includes('TUTORIAL')) {
-            var secondary_line = document.createElement("p");
-            secondary_line.className = 'link_styling center';
-            secondary_line.onclick = () => {console.log('disable tutorial messages');};
-            toastElement.append(secondary_line);
-        }
+        // if(title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER')) {
+        //     console.log('TUTORIAL LINE');
+        //     var secondary_line = document.createElement("p");
+        //     secondary_line.innerText = `Disable tutorial messages`;
+        //     secondary_line.className = 'secondary_text link_styling center';
+        //     secondary_line.style.margin = '0';
+        //     secondary_line.onclick = () => {
+        //         settings.disable_tutorials = true;
+        //         closeToast(toastID);
+        //         console.log('e');
+        //     };
+        //     toastElement.append(secondary_line);
+        // }
     }
     // Achievement toast
     else {

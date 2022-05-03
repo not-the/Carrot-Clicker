@@ -1770,13 +1770,11 @@ body:not(.gp) #golden_carrot_count*/ {
 .segment {
     flex: 1;
     border-right: 1px solid var(--lighter-bg-color);
-    transition: 0.5s background-color ease;
 }
 .segment:last-of-type { border: none; }
 .segment.filled {
     /* background-color: gray; */
-    background-color: rgb(94, 209, 94);
-    transition: 0.1s background-color ease;
+    background-color: rgb(94, 209, 94)
 }
 /* .six:hover .segment.filled {
     background-color: rgb(94, 209, 94);

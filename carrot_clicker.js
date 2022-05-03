@@ -35,6 +35,7 @@ const elMainPrestigePotential = dom("main_prestige_potential");
 const elPrestigePotential     = dom('prestige_potential');
 const Basic_Info              = dom("Basic_Info");
 const elCarrotCount           = dom("Carrot_Count");
+const elClickSpeed            = dom("click_speed");
 const elCPC                   = dom("cpc");
 const elCPS                   = dom("cps");
 const elCashCount             = dom("cash_count");
@@ -532,15 +533,6 @@ const Default_Six = {
             value:     [20, 40, 60, 80, 100],
             written:   '+@%',
         },
-        'spacebar_click': {
-            name:      'Magic Keyboard',
-            desc:      'Allows the use of spacebar and click at the same time',
-            img:       './assets/achievements/missing.png',
-            currency:  'cash',
-            price:     [100],
-            value:     [true],
-            written:   '',
-        },
         // 'greg_slots': {
         //     name:      'greg_slots',
         //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
@@ -550,6 +542,15 @@ const Default_Six = {
         //     value:     [2],
         //     written:   '@ slots',
         // },
+        'greg_speed': {
+            name:      'greg craft speed',
+            desc:      'Increases crafting speeds',
+            img:       './assets/achievements/missing.png',
+            currency:  'cash',
+            price:     [  38,  53,   74, 85,   92, 121, 133, 169],
+            value:     [1.25, 1.5, 1.75,  2, 2.25, 2.5, 2.75,  3],
+            written:   '@x',
+        },
         'page_bonus': {
             name:      'Origami',
             desc:      'Increases the prestige buff from tome pages',
@@ -558,6 +559,15 @@ const Default_Six = {
             price:     [ 50,  55,  60,  65,  70,  75,  80,  90, 100, 120],
             value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
             written:   '+@%/page',
+        },
+        'spacebar_click': {
+            name:      'Magic Keyboard',
+            desc:      'Allows the use of spacebar and click at the same time',
+            img:       './assets/achievements/missing.png',
+            currency:  'cash',
+            price:     [100],
+            value:     [true],
+            written:   '',
         },
         // 'fake_trophy': {
         //     name:      'Fake Trophy',
@@ -587,20 +597,25 @@ const Default_Six = {
             level: 0,
             value: 0,
         },
-        'spacebar_click': {
-            available: true,
-            level: 0,
-            value: false,
-        },
         // 'greg_slots': {
         //     available: true,
         //     level: 0,
         //     value: 1,
         // },
+        'greg_speed': {
+            available: true,
+            level: 0,
+            value: 1,
+        },
         'page_bonus': {
             available: true,
             level: 0,
             value: 1,
+        },
+        'spacebar_click': {
+            available: true,
+            level: 0,
+            value: false,
         },
         // 'fake_trophy': {
         //     available: false,
@@ -857,6 +872,7 @@ const default_settings = {
     achievements_grid: false,   // boolean
     compact_achievements: false,// boolean
     fun_tip_percentage: 50,     // number - between 0 and 100
+    // disable_tutorials: false,
 
     keybinds: keybinds_default, // object
 }
@@ -1412,7 +1428,8 @@ function clickSpeedHandler(clicked = false) {
     if(clickSpeed == 0) { clickSpeedBest = 0; } // Reset best on 0
 
     // Update page
-    eInnerText(dom('click_speed'), clickSpeed + '/' + clickSpeedBest);
+    // if(n != 0) return;
+    eInnerText(elClickSpeed, `${clickSpeed}/${clickSpeedBest} clicks per second`);
 }
 
 //#endregion
@@ -1606,7 +1623,7 @@ function Prestige() {
 
     // Tutorial message
     if(player.lifetime.prestige_count == 1) {
-        let toaster = toast('Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
+        let toaster = toast('Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
     }
 
     // Recalculate & update prestige potential
@@ -1898,6 +1915,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
             // mouseConfetti([1, 4], ccWhite);
 
             function frame() {
+                // Done crafting
                 if(p >= price) {
                     clearInterval(id);
                     i = 0;
@@ -1922,8 +1940,10 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     player.lifetime.hoes.craftedTotal += amount;
 
                     Gregory.crafting = false;
-                } else {
-                    let adjust = 0.01 * player.carrots
+                }
+                // While crafting
+                else {
+                    let adjust = ((Six.data.greg_speed.value / 100) || 0.01) * player.carrots;
                     p += adjust;
                     player.carrots -= adjust;
 
@@ -1932,6 +1952,8 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     if(settings.enableMainProgress == true) {
                         elMainProgressBar.style.width  = `${100*(p/price)}%`;
                     }
+                    console.log(price, p);
+                    // eInnerText(elClickSpeed, `${DisplayRounded(p)} remaining`);
 
                     // Save crafting progress in case of page refresh
                     Gregory.crafting = [type, amount, p];

@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.14.1';
+    const game_version = 'dev beta v1.14.1.1';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
