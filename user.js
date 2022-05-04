@@ -76,7 +76,7 @@ function setting(option) {
     let state = dom(option).checked;
     console.log(`${option} set to ${state}`);
 
-    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} is now ${state == true ? 'enabled' : 'disabled'}`,
+    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state == true ? 'enabled' : 'disabled'}`,
     '', false, true);
 
     settings[option] = state;
@@ -158,19 +158,6 @@ function resetAutosave() {
     autosave = setInterval(() => {
         saveGame();
     }, value * 1000);
-}
-
-// Disable keybinds setting
-
-function settingDisableKeybinds() {
-    let state = elDisableKeybinds.checked;
-    console.log(`disableKeybinds set to ${state}`);
-    toast("Settings", `Keybinds are now ${state == true ? 'disabled' : 'enabled'}`,
-    '', false, true);
-
-    // localStorage
-    settings.disableKeybinds = state;
-    saveSettings();
 }
 
 // Interface settings

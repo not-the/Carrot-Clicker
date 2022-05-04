@@ -45,6 +45,7 @@
     --light-highlight-color:    white;
     --light-darker-bg-color:    rgb(230, 230, 230);
     --light-theme-border-color: rgb(185, 185, 185);
+    --light-theme-secondary-text: rgb(70, 70, 70);
 
     /* theme_retro */
     --retro-lightest: #ffffff;
@@ -117,6 +118,7 @@ h4 {
 
 img {
     user-select: none;
+    -webkit-user-select: none;
     -webkit-user-drag: none;
 
     touch-action: manipulation;
@@ -716,8 +718,12 @@ p.theme_menu_title {
     background-color: var(--main-bg-color);
 }
 .theme_item:hover,
+.theme_item:focus,
+.theme_item:focus-within,
 .theme_item:focus-visible,
 .shop_item:hover,
+.shop_item:focus,
+.shop_item:focus-within,
 .shop_item:focus-visible {
     filter: brightness(110%);
     /* background-color: var(--main-shop-hover); */
@@ -1007,6 +1013,8 @@ body:not(.theme_light) .theme_checkmark {
     padding-left: 50px;
 
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 
 /* Hover info */
@@ -1660,7 +1668,7 @@ body:not(.gp) #golden_carrot_count*/ {
     padding: 6px 0;
 }
 .six .shop_bottom {
-    max-height: 400px;
+    max-height: 301px;
 }
 
 /* Character shops */
@@ -1673,6 +1681,8 @@ body:not(.gp) #golden_carrot_count*/ {
     transition: background-color, filter 0.5s;
     cursor: pointer;
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 
     position: relative;
     z-index: 1;
@@ -1715,6 +1725,8 @@ body:not(.gp) #golden_carrot_count*/ {
     pointer-events: none;
 }
 .shop_item:hover .shop_tooltip,
+.shop_item:focus .shop_tooltip,
+.shop_item:focus-within .shop_tooltip,
 .shop_item:focus-visible .shop_tooltip {
     visibility: visible;
 }
@@ -1754,6 +1766,7 @@ body:not(.gp) #golden_carrot_count*/ {
 /* Completed */
 .shop_item.complete {
     /* background-color: transparent; */
+    /* background-color: #2a2727; */
     filter: brightness(85%);
 }
 

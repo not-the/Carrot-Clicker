@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14.2
+    5-3-2022
+// ----------------------------------------------------------- //
+
+Trinket shop:
+- Some items now have images
+- Synergy drink maximmum changed from 200% -> 250% and prices changed
+- greg_speed maximum changed from 3x -> 5x and prices changed
+
+- Tutorial toasts will now ask you if you want to disable tutorial messages
+  + Option is also available in settings
+- Fixed a bug where clicking the carrot would make CPS appear to be 0
+- The toast notifications that appear when clicking checkboxes in settings will now be gramatically correct (will use are instead of is when appropriate)
+- Misc light theme fixes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14.1.1
     5-2-2022
 // ----------------------------------------------------------- //

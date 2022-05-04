@@ -1,4 +1,6 @@
 /* ---------------- Light theme ------------------- */
+/* #region */
+
 /* Universal */
 .theme_light {
     background-color: whitesmoke;
@@ -25,7 +27,7 @@
     border: 1px solid var(--border-color);
 }
 .theme_light .secondary_text {
-    color: rgb(70, 70, 70);
+    color: var(--light-theme-secondary-text);
 }
 .theme_light .white {
     color: black !important;
@@ -110,6 +112,12 @@
 .theme_light .shop_item.cant_afford {
     filter: brightness(75%) contrast(90%);
 }
+/* Main */
+.theme_light .shop_item .shop_tooltip {
+    background-color: white;
+}
+.theme_light .segment {border-color: white }
+.theme_light .segment:not(.filled) { background-color: var(--light-darker-bg-color); }
 
 .theme_light .achieve_grid .achievement_item .achievement_details h2,
 .theme_light .achieve_grid .achievement_item .achievement_details .secondary_text {
@@ -140,13 +148,16 @@
 /* Statistics */
 .theme_light #statistics p,
 .theme_light #statistics summary {
-    color: rgb(70, 70, 70);
+    color: var(--light-theme-secondary-text);
 }
 .theme_light #statistics b { color: black; }
 
 /* Dialog box/toasts */
 .theme_light .toast {
     color: white;
+}
+.theme_light .toast .secondary_text {
+    color: var(--secondary-text);
 }
 .theme_light .dialog_close {
     background-color: var(--light-darker-bg-color);
@@ -175,6 +186,9 @@
 .theme_light #tripane nav .activetab {
     background-color: white;
 }
+.theme_light .footer_bottom {
+    background-color: var(--light-darker-bg-color);
+}
 
 .theme_light .switcher_bar .tab:not(.activetab),
 .theme_light #dialog_close {
@@ -187,7 +201,7 @@
 .theme_light .hover_menu {
     background-color: white;
 }
-
+/* #endregion */
 
 
 
@@ -198,6 +212,7 @@
 
 
 /* OLED Dark theme */
+/* #region */
 .theme_oled,
 .theme_oled .popup_box,
 .theme_oled .Basic_Info,
@@ -254,6 +269,7 @@
 .theme_oled hr {
     background-color: var(--border-color) !important;
 }
+/* #endregion */
 
 
 
@@ -268,6 +284,7 @@
 
 
 /* Classic theme */
+/* #region */
 .theme_classic .popup_box {
     border-radius: 0;
     box-shadow: none;
@@ -337,6 +354,7 @@
 .theme_classic .popup_box {
     border-color: transparent;
 }
+/* #endregion */
 
 
 
@@ -349,6 +367,7 @@
 
 
 /* Red theme */
+/* #region */
 .theme_red {
     background-color: rgb(63, 20, 20);
 }
@@ -380,7 +399,7 @@
     background-color: var(--lighter-bg-color);
     color: white;
 }
-
+/* #endregion */
 
 
 
@@ -393,6 +412,7 @@
 
 
 /* Green theme */
+/* #region */
 .theme_green {
     background-color: rgb(37, 49, 34);
 }
@@ -424,7 +444,7 @@
     background-color: var(--lighter-bg-color);
     color: white;
 }
-
+/* #endregion */
 
 
 
@@ -437,6 +457,7 @@
 
 
 /* Blue theme */
+/* #region */
 .theme_blue {
     background-color: rgb(40, 50, 70);
 }
@@ -468,6 +489,7 @@
     background-color: var(--lighter-bg-color);
     color: white;
 }
+/* #endregion */
 
 
 
@@ -477,6 +499,7 @@
 
 
 /* Black & White theme */
+/* #region */
 /* .theme_bw * {
     filter: saturate(0);
 } */
@@ -510,6 +533,7 @@
 .theme_bw .bottom {
     background-color: rgb(44, 44, 44);
 } */
+/* #endregion */
 
 
 
@@ -524,6 +548,7 @@
 
 
 /* Retro theme */
+/* #region */
 .theme_retro *:not(.small_confetti) {
     font-family: monospace;
     transition: none;
@@ -713,7 +738,7 @@
 .theme_retro .achievement_item {
     background-color: var(--retro-darkester);
 }
-
+/* #endregion */
 
 
 
@@ -723,6 +748,7 @@
 
 
 /* Terminal theme */
+/* #region */
 .theme_terminal,
 .theme_terminal #left-section,
 .theme_terminal .characterbox,
@@ -883,6 +909,7 @@
     transform: none;
     color: white;
 }
+/* #region */
 
 
 
@@ -894,8 +921,8 @@
 
 
 
-
-/* Minecraft theme */
+/* Blockgame theme */
+/* #region */
 .theme_blockgame * {
     font-family: 'Minecraft Regular', 'Courier New', Courier, monospace;
     text-shadow: 0.1em 0.1em black;
@@ -1112,11 +1139,7 @@
 .theme_blockgame .shop_item {
     background-color: #8b8b8b;
 }
-
-
-
-
-
+/* #endregion */
 
 
 
@@ -1130,6 +1153,7 @@
 
 
 /* Camo theme */
+/* #region */
 .theme_camo {
     image-rendering: pixelated !important;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
@@ -1154,7 +1178,7 @@
 .theme_camo .bottom {
     background-color: var(--brown-darkest-color);   
 }
-
+/* #endregion */
 
 
 
@@ -1166,6 +1190,7 @@
 
 
 /* Chat app theme */
+/* #region */
 .theme_chatapp * {
     font-family: "Helvetica Neue", Helvetica,Arial,sans-serif;
 }
@@ -1272,7 +1297,7 @@
 .theme_chatapp .panel {
     background-color: #36393f;
 }
-
+/* #endregion */
 
 
 
@@ -1302,7 +1327,7 @@
 
 
 
-/* Hoe positioning fix */
+/* Tool positioning fix */
 .theme_blockgame .greg_margin_fix,
 .theme_retro .greg_margin_fix {
     margin-left: 0;

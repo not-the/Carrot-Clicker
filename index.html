@@ -446,7 +446,7 @@
                             class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/working_conditions.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_wc.png" alt="" class="shop_img">
                                 <div class="info">
                                     Improve working conditions<br/>
                                     <span id="iwc_count" class="tome_count">x0</span>
@@ -463,7 +463,7 @@
                             class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/hoe_costs.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_tools.png" alt="" class="shop_img">
                                 <div class="info">
                                     High quality tools<br/>
                                     <span id="bh_count" class="tome_count">x0</span>
@@ -480,7 +480,7 @@
                             class="unbold shop_item pointer flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/characters/decrease_wages.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_dw.png" alt="" class="shop_img">
                                 <div class="info">
                                     Decrease worker wages<br/>
                                     <span id="dww_count" class="tome_count">x0</span>
@@ -504,45 +504,6 @@
                 <!-- Character column 2 -->
                 <!-- #region -->
                 <div class="character_column">
-
-                    <!--Carl Rendering-->
-                    <div class="carl characterbox char_locked" id="carl_box">
-                        <div class="carltooltip charactertooltip tooltip" id="carltooltip">
-                            The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
-                        </div>
-                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')" tabindex="0" role="button">
-                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('carl')" tabindex="0" role="button">
-
-                        <!-- Top -->
-                        <div class="top flex">
-                            <img
-                                src="./assets/characters/Carl.png"
-                                alt="Carl"
-                                id="carl_avatar"
-                                class="characterimg"
-                                title="Carl">
-                            <div class="characterdesc flex">
-                                <div>
-                                    <b id="carl_name" class="character_name">Carl</b>
-                                    <div class="flex" style="margin-top: 2px;">
-                                        <button id="carl_theme_button" class="char_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
-                                            Themes
-                                        </button>
-                                        <button id="carl_cosmetic_button" class="char_button" onclick="cosmeticSwitcher()" style="width: 140px">
-                                            Cosmetics
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
-                                    Custom
-                                </button> -->
-                            </div>
-                        </div>
-
-                        <!-- Bottom -->
-                        <div class="bottom shop_bottom" id="cosmetic_shop"></div>
-                    </div>
 
                     <!--SIX Rendering-->
                     <div class="six characterbox char_locked" id="six_box">
@@ -588,11 +549,46 @@
                                     </div>
                                 </div> -->
                             </div>
-                            <!-- Info line -->
-                            <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
-                                Check back later for more trinkets
-                            </p>
                         </div>
+                    </div>
+
+                    <!--Carl Rendering-->
+                    <div class="carl characterbox char_locked" id="carl_box">
+                        <div class="carltooltip charactertooltip tooltip" id="carltooltip">
+                            The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
+                        </div>
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('carl')" tabindex="0" role="button">
+
+                        <!-- Top -->
+                        <div class="top flex">
+                            <img
+                                src="./assets/characters/Carl.png"
+                                alt="Carl"
+                                id="carl_avatar"
+                                class="characterimg"
+                                title="Carl">
+                            <div class="characterdesc flex">
+                                <div>
+                                    <b id="carl_name" class="character_name">Carl</b>
+                                    <div class="flex" style="margin-top: 2px;">
+                                        <button id="carl_theme_button" class="char_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
+                                            Themes
+                                        </button>
+                                        <button id="carl_cosmetic_button" class="char_button" onclick="cosmeticSwitcher()" style="width: 140px">
+                                            Cosmetics
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- <button id="carl_custom_button" class="half_width" onclick="confetti()">
+                                    Custom
+                                </button> -->
+                            </div>
+                        </div>
+
+                        <!-- Bottom -->
+                        <div class="bottom shop_bottom" id="cosmetic_shop"></div>
                     </div>
 
                     <!-- More characters tooltip -->
@@ -770,6 +766,10 @@
 
                 
                 <b>Gameplay</b><br>
+                <label for="tutorial_messages">
+                    <input type="checkbox" class="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
+                    Tutorial messages<br>
+                </label>
                 <label for="cosmetic_auto_equip">
                     <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
                     Auto-equip new cosmetics<br>
@@ -790,7 +790,7 @@
                 <!-- Options item -->
                 <b>Keybinds:</b><br>
                 <label for="disable_keybinds">
-                <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="settingDisableKeybinds()">
+                <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="setting('disable_keybinds')"">
                     Disable keybinds
                 </label><br>
                 <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">

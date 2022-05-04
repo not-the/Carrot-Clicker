@@ -283,8 +283,8 @@ function toast(
     button_name    = 'Done',
 ) {
     // Cancel if tutorial message, and tutorial messages are disabled
-    // let istutorial = (title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER'))
-    // if(istutorial && settings.disable_tutorials == true) return;
+    let istutorial = (title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER'))
+    if(istutorial && settings.tutorial_messages == false) return;
 
     // Replace old if replace is true
     if(toastsList[toastID - 1] != undefined && toastsList[toastID - 1].includes('replace') == true) {
@@ -294,6 +294,7 @@ function toast(
     // Create element with parameters filled in
     var toastElement = document.createElement("div");
     toastElement.id = `toast${toastID}`;
+    let id = `${toastID}`;
 
     // Normal toast
     if(!achievement) {
@@ -312,19 +313,15 @@ function toast(
             toastElement.append(toastButton);
         }
         // Secondary line // disable tutorial messages
-        // if(title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER')) {
-        //     console.log('TUTORIAL LINE');
-        //     var secondary_line = document.createElement("p");
-        //     secondary_line.innerText = `Disable tutorial messages`;
-        //     secondary_line.className = 'secondary_text link_styling center';
-        //     secondary_line.style.margin = '0';
-        //     secondary_line.onclick = () => {
-        //         settings.disable_tutorials = true;
-        //         closeToast(toastID);
-        //         console.log('e');
-        //     };
-        //     toastElement.append(secondary_line);
-        // }
+        if(istutorial) {
+            console.log('TUTORIAL LINE');
+            var secondary_line = document.createElement("p");
+            secondary_line.innerText = `Disable tutorial messages`;
+            secondary_line.className = 'secondary_text link_styling center';
+            secondary_line.style.margin = '0';
+            secondary_line.onclick = () => { disableTutorials(id); };
+            toastElement.append(secondary_line);
+        }
     }
     // Achievement toast
     else {
@@ -346,8 +343,6 @@ function toast(
     }
 
     toastContainer.prepend(toastElement);
-
-    let id = `${toastID}`;
     toastsList[id] = replaceable == true ? 'replace' : id;
     toastsList[id] += hide_close == true ? '_noclose' : '';
 
@@ -369,6 +364,15 @@ function toast(
 
     // Return toast's id
     return id;
+    
+    /** Disable tutorial toasts */
+    function disableTutorials(toastID) {
+        settings.tutorial_messages = false;
+        dom('tutorial_messages').checked = false;
+        saveSettings();
+        closeToast(toastID, false);
+        toast('', 'Tutorial messages disabled. They can be reenabled in settings.');
+    }
 }
 
 /** Close Toast Notification
@@ -376,6 +380,7 @@ function toast(
  * @param {boolean} animate Whether or not to play a dismiss animation
  */
 function closeToast(id, animate = true) {
+    console.log(id);
     // console.log(id + " - toast removed");
     let t = JSON.stringify(toastsList[id]);
     var element = dom(`toast${id}`);
@@ -1355,6 +1360,7 @@ function populateCarl() {
 
     // Loop through themes
     let theme_keys = Carl.shop.theme.keys;
+    // let column = 0;
     for(let ti = 0; ti < theme_keys.length; ti++) {
         let name = theme_keys[ti];
         let item = Carl.shop.theme[name];
@@ -1368,7 +1374,10 @@ function populateCarl() {
         let theme = themes[theme_keys[ti]];
         let img = theme.image;
 
+        // if(column == 0) { html += `<div class="shop_column">`; }
         html += carlHTML(name, 'theme', theme.name, img, item.price);
+        // if(column == 2) { html += `</div>`; }
+        // column += column == 2 ? -2 : 1;
     }
 
     // Loop through cosmetics
@@ -1387,7 +1396,10 @@ function populateCarl() {
         let cosmetic = cosmetics[ca][cb];
         let img = cosmetic.image || cosmetic.preview;
 
+        // if(column == 0) { html += `<div class="shop_column">`; }
         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+        // if(column == 2) { html += `</div>`; }
+        // column += column == 2 ? -2 : 1;
     }
 
     if(html == '') {
@@ -1433,7 +1445,8 @@ function populateSix() {
         // Segment bar
         let segments = '';
         for(si = 1; si <= item.price.length; si++) {
-            segments += `<div class="segment ${data.level >= si ? 'filled' : ''}"></div>`;
+            let styles = data.level >= si ? 'filled' : '';
+            segments += `<div class="segment ${styles}"></div>`;
         }
         let price = item.price[data.level] || '✓ Done';
         let currency = '';
@@ -1445,9 +1458,11 @@ function populateSix() {
         let value = item.written.split('@').join(data.value);
         html += sixHTML(key, item.img, item.name, item.desc, price, currency, segments, styles, value);
     }
-
-    if(html == '') { sixShop.innerHTML = `Empty`; }
-    else { sixShop.innerHTML = html; }
+    html += `
+    <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
+        Check back later for more trinkets
+    </p>`;
+    sixShop.innerHTML = html;
     cashCount(false);
 
     /** Six HTML template */

@@ -499,17 +499,17 @@ Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
 const Default_Six = {
     // Info
-    // name: "",
-    // nickname: "",
-    // type: "",
-    // img: './assets/characters/???.png',
+    name: "",
+    nickname: "",
+    type: "",
+    img: './assets/characters/???.png',
 
     // Shop info (Static)
     shop: {
         'clickrate': {
             name:      'Golden Mouse',
             desc:      'Increases hold-to-click speed by 1',
-            img:       './assets/achievements/missing.png',
+            img:       './assets/items/mouse_2.png',
             currency:  'cash',
             price:     [10, 20, 30, 45, 60, 85, 100],
             value:     [3,  4,  5,  6,  7,  8,  9 ],
@@ -518,19 +518,19 @@ const Default_Six = {
         'belle_bonus': {
             name:      'Synergy Drink',
             desc:      'Increases belle\'s output while the carrot is being clicked',
-            img:       './assets/achievements/missing.png',
+            img:       './assets/items/synergy.png',
             currency:  'cash',
-            price:     [24, 32, 40, 60,  75,  84,  90,  120 ],
-            value:     [25, 50, 75, 100, 125, 150, 175, 200],
+            price:     [24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
+            value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
             written:   '+@%',
         },
         'falling_bonus': {
-            name:      'Favorable Weather',
-            desc:      'Increases the amount falling carrots will give',
+            name:      'Cistern',
+            desc:      'Increases falling carrot rewards',
             img:       './assets/achievements/missing.png',
             currency:  'cash',
             price:     [20, 46, 90, 100, 160],
-            value:     [20, 40, 60, 80, 100],
+            value:     [20, 40, 60, 80,  100],
             written:   '+@%',
         },
         // 'greg_slots': {
@@ -543,12 +543,12 @@ const Default_Six = {
         //     written:   '@ slots',
         // },
         'greg_speed': {
-            name:      'greg craft speed',
-            desc:      'Increases crafting speeds',
+            name:      'Propane Tank',
+            desc:      'Increases Greg\'s crafting speed',
             img:       './assets/achievements/missing.png',
             currency:  'cash',
-            price:     [  38,  53,   74, 85,   92, 121, 133, 169],
-            value:     [1.25, 1.5, 1.75,  2, 2.25, 2.5, 2.75,  3],
+            price:     [ 38, 53,  74, 92, 121, 133, 169, 204],
+            value:     [1.5,  2, 2.5,  3, 3.5,   4, 4.5,   5],
             written:   '@x',
         },
         'page_bonus': {
@@ -563,7 +563,7 @@ const Default_Six = {
         'spacebar_click': {
             name:      'Magic Keyboard',
             desc:      'Allows the use of spacebar and click at the same time',
-            img:       './assets/achievements/missing.png',
+            img:       './assets/items/keyboard_2.png',
             currency:  'cash',
             price:     [100],
             value:     [true],
@@ -759,6 +759,7 @@ function optionSoundsDisable(state) {
 /** Fill out settings page options */
 function fillSettingsPage() {
     // Gameplay
+    dom('tutorial_messages').checked = settings.tutorial_messages;
     dom('cosmetic_auto_equip').checked = settings.cosmetic_auto_equip;
     dom('carl_shop_toasts').checked = settings.carl_shop_toasts;
     // Fun tips
@@ -844,6 +845,7 @@ const default_settings = {
     disableKeybinds: false,     // boolean
     autosave_interval: 5,
 
+    tutorial_messages: false,   // boolean
     cosmetic_auto_equip: false, // boolean
     carl_shop_toasts: true,     // boolean
 
@@ -872,7 +874,6 @@ const default_settings = {
     achievements_grid: false,   // boolean
     compact_achievements: false,// boolean
     fun_tip_percentage: 50,     // number - between 0 and 100
-    // disable_tutorials: false,
 
     keybinds: keybinds_default, // object
 }
@@ -1138,7 +1139,6 @@ function fallingCarrot() {
         let rewardVariation = (Math.ceil((Math.random() * 1500)) + 500) / 100;
         rewardVariation *= ((Six.data.falling_bonus.value / 100) + 1) || 1;
         amount = Math.round(player.cpc * rewardVariation);
-        console.log(amount);
     } else if(type == 'cash') {
         // Cash reward
         // Starts between:    5-10
@@ -1151,7 +1151,6 @@ function fallingCarrot() {
         if(player.lifetime.carrots >= 1000000000000)    { min =  8; }
         if(player.lifetime.carrots >= 1000000000000000) { min = 12; max = 12; }
         amount = Math.ceil((Math.random() * max)) + min;
-        console.log(amount);
     }
 
     // Set onclick function
@@ -1240,19 +1239,21 @@ function characterPrices() {
 /** Updates CPC and CPS values on the page */
 function updateCPC(flash=true) {
     let cpc;
-    let cpsbefore;
     let cps;
+
+    // Belle bonus display
     let star = '';
-    if(cpsbuff == 0) { cpsbefore = player.cps; }
-    else if(player.cps != 0 && Six.data.belle_bonus.value != 0) {
-        cpsbefore = player.cps * ((Six.data.belle_bonus.value / 100) + 1) || 0;
-        star = '*';
+    if(cpsbuff == 0 || Six.data.belle_bonus.value == 0) {
+        cps = player.cps;
     } else {
-        cpsbefore = 0;
+        cps = player.cps * ((Six.data.belle_bonus.value / 100) + 1) || 0;
+        star = '*';
     }
+
+    // Full numbers or not
     if(settings.full_numbers != true) {
         cpc = DisplayRounded(Math.floor(player.cpc),2);
-        cps = DisplayRounded(Math.floor(cpsbefore),2) + star;
+        cps = DisplayRounded(Math.floor(cps),2) + star;
     } else {
         cpc = numCommas(Math.floor(player.cpc));
         cps = numCommas(Math.floor(cpsbefore)) + star;;
@@ -1952,7 +1953,6 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     if(settings.enableMainProgress == true) {
                         elMainProgressBar.style.width  = `${100*(p/price)}%`;
                     }
-                    console.log(price, p);
                     // eInnerText(elClickSpeed, `${DisplayRounded(p)} remaining`);
 
                     // Save crafting progress in case of page refresh
@@ -2329,5 +2329,4 @@ function tipchange() {
     }
     tipsHTMLupdate = true;
 }
-
 //#endregion

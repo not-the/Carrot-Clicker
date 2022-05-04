@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.14.1.1';
+    const game_version = 'dev beta v1.14.2';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -727,7 +727,7 @@ const cosmetics = {
         'blockgame': {
             'name': 'Minecraft Hoes',
             'preview': './assets/tools/blockgame/tool_0.png',
-            'desc': 'Default tools',
+            'desc': 'Yes',
             'group': 'blockgame',
 
             '0': './assets/tools/blockgame/tool_0.png',
@@ -1156,7 +1156,7 @@ const achievements = {
         'image': false,
         'reward': false,
         'pages': 5,
-        'conditions': ['Belle_Boomerette.lvl', 100],
+        'conditions': ['Belle_Boomerette.lvl', 500],
         'mystery': {
             'name': true,
             'desc': false,
