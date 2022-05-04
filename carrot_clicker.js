@@ -196,7 +196,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 7, // needs to be incremented by 1 any time any game object is changed
+    data_version: 8, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -845,7 +845,7 @@ const default_settings = {
     disableKeybinds: false,     // boolean
     autosave_interval: 5,
 
-    tutorial_messages: false,   // boolean
+    tutorial_messages: true,    // boolean
     cosmetic_auto_equip: false, // boolean
     carl_shop_toasts: true,     // boolean
 

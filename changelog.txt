@@ -1,4 +1,15 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14.2.1
+    5-3-2022
+// ----------------------------------------------------------- //
+
+- Fixed tutorial messages being off by default
+- Bumped data_version to 8
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14.2
     5-3-2022
 // ----------------------------------------------------------- //
@@ -12,7 +23,7 @@ Trinket shop:
   + Option is also available in settings
 - Fixed a bug where clicking the carrot would make CPS appear to be 0
 - The toast notifications that appear when clicking checkboxes in settings will now be gramatically correct (will use are instead of is when appropriate)
-- Misc light theme fixes
+- Misc light theme fixes 
 
 ~ Kal
 
