@@ -24,10 +24,6 @@
     <!-- <meta name="twitter:card" content="summary_large_image"> -->
 </head>
 <body>
-    <!-- Visual effects -->
-    <div id="bonusVisualArea"></div>
-    <div id="mouse_confetti"></div>
-
     <!-- Corner Toasts -->
     <div id="toast_container">
         <div id="toasts_clear" onclick="clearToasts()">
@@ -195,17 +191,14 @@
                     <button onClick="openPrestigeMenu()" title="???" class="main_button_item" id="prestige_menu_button" disabled>
                         <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
                     </button>
-
                     <!-- Inventory button -->
                     <!-- <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
                         <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
                     </button> -->
-
                     <!-- Tips button -->
                     <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
                         <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
                     </button>
-
                     <!-- Hardmode button -->
                     <button onClick="openDifficultyMenu()" title="Hardmode" class="main_button_item button_red" id="difficulty_menu_button">
                         <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
@@ -446,10 +439,10 @@
                             class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/items/tome_wc.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
                                 <div class="info">
-                                    Improve working conditions<br/>
-                                    <span id="iwc_count" class="tome_count">x0</span>
+                                    <p>Improve working conditions</p>
+                                    <span id="iwc_count" class="secondary_text">x0</span>
                                     <span id="ImproveWorkingConditions" class="shop_price">---</span>
                                 </div>
                                 <div class="shop_tooltip">
@@ -463,10 +456,10 @@
                             class="unbold shop_item flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/items/tome_tools.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
                                 <div class="info">
-                                    High quality tools<br/>
-                                    <span id="bh_count" class="tome_count">x0</span>
+                                    <p>High quality tools</p>
+                                    <span id="bh_count" class="secondary_text">x0</span>
                                     <span id="BetterHoes" class="shop_price">---</span>
                                 </div>
                                 <div class="shop_tooltip">
@@ -480,10 +473,10 @@
                             class="unbold shop_item pointer flex cant_afford"
                             tabindex="0"
                             role="button">
-                                <img src="./assets/items/tome_dw.png" alt="" class="shop_img">
+                                <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
                                 <div class="info">
-                                    Decrease worker wages<br/>
-                                    <span id="dww_count" class="tome_count">x0</span>
+                                    <p>Decrease worker wages</p>
+                                    <span id="dww_count" class="secondary_text">x0</span>
                                     <span id="DecreaseWages" class="shop_price">---</span>
                                 </div>
                                 <div class="shop_tooltip">
@@ -770,13 +763,13 @@
                     <input type="checkbox" class="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
                     Tutorial messages<br>
                 </label>
-                <label for="cosmetic_auto_equip">
-                    <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
-                    Auto-equip new cosmetics<br>
-                </label>
                 <label for="carl_shop_toasts">
                     <input type="checkbox" class="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
                     Carl shop notifications<br><br>
+                </label>
+                <label for="cosmetic_auto_equip">
+                    <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                    Auto-equip new cosmetics<br>
                 </label>
 
                 <!-- Fun Tip Percentage-->
@@ -1282,7 +1275,7 @@
 
                     <!-- Tome page count -->
                     <div class="flex prestige_item main_bg_color">
-                        <img src="./assets/icons/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
+                        <img src="./assets/items/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
                         <div>
                             <h6 class="prestige_number" id="prestige_menu_tp_count">Loading...</h6>
                             <p>Tome Pages</p>
@@ -1438,6 +1431,10 @@
 
         
     </div>
+
+    <!-- Visual effects -->
+    <div id="bonusVisualArea"></div>
+    <div id="mouse_confetti"></div>
 
     <!-- Javascript -->
     <!-- #region -->

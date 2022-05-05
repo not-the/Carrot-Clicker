@@ -196,7 +196,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 8, // needs to be incremented by 1 any time any game object is changed
+    data_version: 9, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -302,16 +302,19 @@ const Default_Charles = {
     // Shop
     tome:{
         improveWorkingConditions:{
-            value:0,
-            price:1
+            value: 0,
+            price: 1,
+            max:   22025,
         },
         decreaseWages:{
-            value:0,
-            price:1
+            value: 0,
+            price: 1,
+            max:   false,
         },
         betterHoes:{
-            value:0,
-            price:1
+            value: 0,
+            price: 1,
+            max:   false,
         }
     }
 }
@@ -524,15 +527,6 @@ const Default_Six = {
             value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
             written:   '+@%',
         },
-        'falling_bonus': {
-            name:      'Cistern',
-            desc:      'Increases falling carrot rewards',
-            img:       './assets/achievements/missing.png',
-            currency:  'cash',
-            price:     [20, 46, 90, 100, 160],
-            value:     [20, 40, 60, 80,  100],
-            written:   '+@%',
-        },
         // 'greg_slots': {
         //     name:      'greg_slots',
         //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
@@ -551,10 +545,19 @@ const Default_Six = {
             value:     [1.5,  2, 2.5,  3, 3.5,   4, 4.5,   5],
             written:   '@x',
         },
+        'falling_bonus': {
+            name:      'Cistern',
+            desc:      'Increases falling carrot rewards',
+            img:       './assets/items/cistern.png',
+            currency:  'cash',
+            price:     [20, 46, 90, 100, 160],
+            value:     [20, 40, 60, 80,  100],
+            written:   '+@%',
+        },
         'page_bonus': {
             name:      'Origami',
             desc:      'Increases the prestige buff from tome pages',
-            img:       './assets/achievements/missing.png',
+            img:       './assets/items/origami.png',
             currency:  'cash',
             price:     [ 50,  55,  60,  65,  70,  75,  80,  90, 100, 120],
             value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
@@ -592,11 +595,6 @@ const Default_Six = {
             level: 0,
             value: 0,
         },
-        'falling_bonus': {
-            available: true,
-            level: 0,
-            value: 0,
-        },
         // 'greg_slots': {
         //     available: true,
         //     level: 0,
@@ -606,6 +604,11 @@ const Default_Six = {
             available: true,
             level: 0,
             value: 1,
+        },
+        'falling_bonus': {
+            available: true,
+            level: 0,
+            value: 0,
         },
         'page_bonus': {
             available: true,
@@ -760,8 +763,8 @@ function optionSoundsDisable(state) {
 function fillSettingsPage() {
     // Gameplay
     dom('tutorial_messages').checked = settings.tutorial_messages;
-    dom('cosmetic_auto_equip').checked = settings.cosmetic_auto_equip;
     dom('carl_shop_toasts').checked = settings.carl_shop_toasts;
+    dom('cosmetic_auto_equip').checked = settings.cosmetic_auto_equip;
     // Fun tips
     elFunTipsSlider.value = settings.fun_tip_percentage;
     eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
@@ -846,8 +849,8 @@ const default_settings = {
     autosave_interval: 5,
 
     tutorial_messages: true,    // boolean
-    cosmetic_auto_equip: false, // boolean
     carl_shop_toasts: true,     // boolean
+    cosmetic_auto_equip: false, // boolean
 
     master_volume: 1,           // number - Between 0 and 1
     enableSounds: true,         // boolean
@@ -1243,7 +1246,7 @@ function updateCPC(flash=true) {
 
     // Belle bonus display
     let star = '';
-    if(cpsbuff == 0 || Six.data.belle_bonus.value == 0) {
+    if(cpsbuff == 0 || Six.data.belle_bonus.value == 0 || player.cps == 0) {
         cps = player.cps;
     } else {
         cps = player.cps * ((Six.data.belle_bonus.value / 100) + 1) || 0;
@@ -1306,9 +1309,9 @@ function updateCharlesShop() {
     eInnerText(elCharles.prices.decreaseWages, `${numCommas(CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query"))} Golden Carrots`);
 
     // Update tome counts
-    eInnerText(tomeCount.iwc, `x${Charles.tome.improveWorkingConditions.value}`);
-    eInnerText(tomeCount.bh, `x${Charles.tome.betterHoes.value}`);
-    eInnerText(tomeCount.dww, `x${Charles.tome.decreaseWages.value}`);
+    eInnerText(tomeCount.iwc, `Owned: ${Charles.tome.improveWorkingConditions.value}`);
+    eInnerText(tomeCount.bh, `Owned: ${Charles.tome.betterHoes.value}`);
+    eInnerText(tomeCount.dww, `Owned: ${Charles.tome.decreaseWages.value}`);
 
     // Debugging tooltip
     eInnerText(elCharles.charlesTooltip,
@@ -1685,6 +1688,14 @@ function calculatePrestigePotential() {
     if(prestigeMenuOpen) {
         eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
     }
+
+    // Make button glow if prestiging will double lifetime
+    if(
+        (player.lifetime.golden_carrots == 0 && player.prestige_potential >= 20)
+        || (player.lifetime.golden_carrots != 0 && player.prestige_potential > player.lifetime.golden_carrots)
+    )
+    { dom('prestige_menu_button').classList.add('glowing'); }
+    else { dom('prestige_menu_button').classList.remove('glowing'); }
 }
 
 //#endregion
@@ -1768,7 +1779,7 @@ function CharlesUpgradePrices(tome=Charles.tome.improveWorkingConditions, amount
  * @returns 
  */
 function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
-    if(Charles.tome.decreaseWages.value+amount>=22026){
+    if(tome.max != undefined && tome.max != false && tome.value + amount > tome.max) {
         toast('Maximum tomes reached', 'You can only have 22025 Decrease Wages tomes', '', false, true);
         return;
     }

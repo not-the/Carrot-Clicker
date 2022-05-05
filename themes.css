@@ -326,11 +326,14 @@
 }
 .theme_classic .levelupimg {
     content: url("./assets/icons/lvl_up_arrow_old.png");
-    /* transform: scale(1.2, 1) translateX(2px); */
 }
 .theme_classic .shop_item {
     background-color: transparent;
 }
+.theme_classic .tome_iwc   { content: url("./assets/items/old/tome_iwc.png"); }
+.theme_classic .tome_tools { content: url("./assets/items/old/tome_tools.png"); }
+.theme_classic .tome_dww   { content: url("./assets/items/old/tome_dww.png"); }
+tome_dww
 .theme_classic #Greg_Bar {
     background-color: gray;
     border-radius: 0;

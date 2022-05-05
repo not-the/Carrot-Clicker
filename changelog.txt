@@ -1,4 +1,21 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14.3
+    5-4-2022
+// ----------------------------------------------------------- //
+
+- Charles' tomes have new artwork based on the related achievements
+  + Original sprites will still appear in the classic theme
+- More trinkets have sprites
+- Fixed shop tooltips not appearing on mobile
+- The prestige button will now glow when your prestige potential is greater than your lifetime GC
+- Fixed a bug where the IWC tome cap would also prevent other tome types from being bought
+  + Maximum per tome type is now stored within charles instead of hardcoded into BuyTome()
+- data_version bumped to 9
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14.2.1
     5-3-2022
 // ----------------------------------------------------------- //

@@ -314,7 +314,6 @@ function toast(
         }
         // Secondary line // disable tutorial messages
         if(istutorial) {
-            console.log('TUTORIAL LINE');
             var secondary_line = document.createElement("p");
             secondary_line.innerText = `Disable tutorial messages`;
             secondary_line.className = 'secondary_text link_styling center';
@@ -380,8 +379,6 @@ function toast(
  * @param {boolean} animate Whether or not to play a dismiss animation
  */
 function closeToast(id, animate = true) {
-    console.log(id);
-    // console.log(id + " - toast removed");
     let t = JSON.stringify(toastsList[id]);
     var element = dom(`toast${id}`);
 

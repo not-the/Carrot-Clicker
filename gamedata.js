@@ -2,7 +2,7 @@
 
 // Game version
 (() => {
-    const game_version = 'dev beta v1.14.2.1';
+    const game_version = 'dev beta v1.14.3';
 
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
@@ -37,15 +37,14 @@ const default_tips = {
     ],
     intermediate: [ // 2
         "When you're ready, click the prestige button. You will start over but gain the ability to buy tomes",
-        // "Golden carrots increase your characters by 10%", // old tip, don't delete
-        "Golden carrots can be used to buy tomes, which give you permanent buffs",
+        "Golden carrots can be used to buy tomes, which give you permanent buffs", // "Golden carrots increase your characters by 10%", // old tip, don't delete
         "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
         "Earning a few special achievements will update the game icon in the top left",
         "The more tools the better!",
     ],
     advanced: [ // 3
-        "Unlocking every theme will make a special theme available",
         "You've earned more than 1 billion carrots this prestige. That's a lot!",
+        // "Unlocking every theme will make a special theme available",
     ],
 
     // Fun tips
@@ -1026,8 +1025,8 @@ const achievements = {
         'image': './assets/achievements/paginator.png',
         'reward': () => {
             toast(
-                "You've earned a tome page!",
-                "For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
+                "Tutorial: Tome pages",
+                "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
                 "", true
             );
         },
@@ -1837,7 +1836,7 @@ const achievements = {
         'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
         'reward': () => {
-            toast("You've created your first tool!", "To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true);
+            toast("Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true);
         },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
