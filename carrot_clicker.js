@@ -334,7 +334,7 @@ const Default_Carl = {
             },
             'theme_bw': {
                 currency: 'cash',
-                price: 8,
+                price: 6,
                 available: false,
                 bought: false,
             },
@@ -352,7 +352,7 @@ const Default_Carl = {
             },
             'theme_camo': {
                 currency: 'cash',
-                price: 4,
+                price: 3,
                 available: false,
                 bought: false,
             },
@@ -385,7 +385,7 @@ const Default_Carl = {
             // Bundle
             'bundle/cookie': {
                 currency: 'cash',
-                price: 32,
+                price: 16,
                 available: false,
                 bought: false,
             },
@@ -397,7 +397,7 @@ const Default_Carl = {
             },
             'bundle/plumber': {
                 currency: 'cash',
-                price: 20,
+                price: 16,
                 available: false,
                 bought: false,
             },
@@ -405,25 +405,25 @@ const Default_Carl = {
             // Farmable
             'farmable/pixel_carrot': {
                 currency: 'cash',
-                price: 16,
+                price: 8,
                 available: false,
                 bought: false,
             },
             'farmable/pixel_golden_carrot': {
                 currency: 'cash',
-                price: 12,
+                price: 10,
                 available: false,
                 bought: false,
             },
             'farmable/blockgame_potato': {
                 currency: 'cash',
-                price: 12,
+                price: 5,
                 available: false,
                 bought: false,
             },
             'farmable/pineapple': {
                 currency: 'cash',
-                price: 24,
+                price: 20,
                 available: false,
                 bought: false,
             },
@@ -469,13 +469,13 @@ const Default_Carl = {
             // Bill
             'bill/business_bill': {
                 currency: 'cash',
-                price: 12,
+                price: 5,
                 available: false,
                 bought: false,
             },
             'bill/biker_bill': {
                 currency: 'cash',
-                price: 6,
+                price: 5,
                 available: false,
                 bought: false,
             },
@@ -483,7 +483,7 @@ const Default_Carl = {
             // Carl
             'carl/joker_carl': {
                 currency: 'cash',
-                price: 12,
+                price: 8,
                 available: false,
                 bought: false,
             },
@@ -491,7 +491,7 @@ const Default_Carl = {
             // Tools
             'tools/fertilizer': {
                 currency: 'cash',
-                price: 12,
+                price: 5,
                 available: false,
                 bought: false,
             },
@@ -514,8 +514,8 @@ const Default_Six = {
             desc:      'Increases hold-to-click speed by 1',
             img:       './assets/items/mouse_2.png',
             currency:  'cash',
-            price:     [10, 20, 30, 45, 60, 85, 100],
-            value:     [3,  4,  5,  6,  7,  8,  9 ],
+            price:     [5, 10, 25, 45, 70, 100, 120],
+            value:     [3,  4,  5,  6,  7,   8,   9],
             written:   '@ clicks/s',
         },
         'belle_bonus': {
@@ -559,7 +559,7 @@ const Default_Six = {
             desc:      'Increases the prestige buff from tome pages',
             img:       './assets/items/origami.png',
             currency:  'cash',
-            price:     [ 50,  55,  60,  65,  70,  75,  80,  90, 100, 120],
+            price:     [ 60,  70,  80,  90, 100, 120, 140, 160, 180, 200],
             value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
             written:   '+@%/page',
         },
@@ -572,6 +572,15 @@ const Default_Six = {
             value:     [true],
             written:   '',
         },
+        // 'paperclip': {
+        //     name:      'Paperclip',
+        //     desc:      '???',
+        //     img:       './assets/achievements/missing.png',
+        //     currency:  'cash',
+        //     price:     [20, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+        //     value:     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        //     written:   '',
+        // },
         // 'fake_trophy': {
         //     name:      'Fake Trophy',
         //     desc:      'It\'s plastic.',
@@ -620,6 +629,11 @@ const Default_Six = {
             level: 0,
             value: false,
         },
+        // 'paperclip': {
+        //     available: true,
+        //     level: 0,
+        //     value: 0,
+        // },
         // 'fake_trophy': {
         //     available: false,
         //     level: 0,
@@ -1058,7 +1072,6 @@ function holdStop() {
 }
 
 // Carrot click
-var fallingCarrotPromiser = 0;
 mainCarrot.addEventListener('click', () => { onClick(true, 'click'); });
 var clickMethod = -1; // -1 = any, 0 = click, 1 = key
 var clickMethodTimer;
@@ -1104,6 +1117,7 @@ function onClick(useMousePos, method='click', source=0) {
 }
 
 // Falling carrots
+var fallingCarrotPromiser = 0;
 var fallingID = 0;
 var fallingActive = 0;
 var fallingFrenzy = false;
@@ -1112,20 +1126,20 @@ const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
 function fallingCarrot() {
     // Roll
-    let roll = Math.floor((Math.random() * 100));
-    let rollchance = player.lifetime.carrots >= 1000000000 ? 2 : 1; // (2% chance, 3% later)
-    if(!(roll <= rollchance && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 50)) {
+    let roll = Math.ceil((Math.random() * 100));
+    let rollchance = 1; // 1% chance
+    if(roll <= rollchance && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 100) {
+        fallingCarrotPromiser = 0;
+    } else {
         fallingCarrotPromiser++;
         return;
-    } else {
-        fallingCarrotPromiser = 0;
     }
     
     // Create element
     var element = document.createElement("img");
     
-    // 2% chance the drop is money instead
-    let type = Math.floor(Math.random() * 50) == 0 ? 'cash' : 'carrot';
+    // 8% chance the drop is money instead
+    let type = Math.ceil(Math.random() * 100) <= 8 ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
@@ -1193,6 +1207,7 @@ function fallingCarrot() {
             mouseConfetti([8, 10], ccGold, 300);
         }
 
+        clickSpeedHandler(true);
         fallingCarrot(); // Roll again
     }
 }
@@ -1295,9 +1310,9 @@ function updateCharlesShop() {
     eInnerText(elCharles.prices.decreaseWages, `${numCommas(CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query"))} Golden Carrots`);
 
     // Update tome counts
-    eInnerText(tomeCount.iwc, `Owned: ${Charles.tome.improveWorkingConditions.value}`);
-    eInnerText(tomeCount.bh, `Owned: ${Charles.tome.betterHoes.value}`);
-    eInnerText(tomeCount.dww, `Owned: ${Charles.tome.decreaseWages.value}`);
+    eInnerText(tomeCount.iwc, `Owned: ${numCommas(Charles.tome.improveWorkingConditions.value)}`);
+    eInnerText(tomeCount.bh, `Owned: ${numCommas(Charles.tome.betterHoes.value)}`);
+    eInnerText(tomeCount.dww, `Owned: ${numCommas(Charles.tome.decreaseWages.value)}`);
 
     // Debugging tooltip
     eInnerText(elCharles.charlesTooltip,
@@ -1355,6 +1370,7 @@ function pagesCount(flash=true) {
 const elMainIcon = dom('main_icon');
 /** Changes the Icon at the top of the page dynamically */
 function updateMainIcon() {
+    // Harmode
     if(player.flags['hardcore'] == true) {
         elMainIcon.src   = './assets/easter_egg.png';
         elMainIcon.title = 'Hardmode';
@@ -1378,7 +1394,14 @@ function updateMainIcon() {
     else if(achieveQuery('1_prestige')) {
         elMainIcon.src   = './assets/theme/pixel_golden_carrot.png';
         elMainIcon.title = 'Prestiged';
-    } else {
+    }
+    // Dev mode
+    else if(isDebug()) {
+        elMainIcon.src   = './assets/items/keyboard_2.png';
+        elMainIcon.title = 'Dev mode';
+    }
+    // Default
+    else {
         elMainIcon.src   = './assets/pixel_carrot_32x.png';
         elMainIcon.title = 'Carrot Clicker';
     }

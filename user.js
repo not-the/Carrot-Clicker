@@ -336,7 +336,7 @@ const keyCodesCode = {
     },
     2: () => {
         openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip');
-        mouseConfetti([24,24], ccCarrot, 600);
+        // mouseConfetti([24,24], ccCarrot, 600);
     },
     3: () => { setCosmetic('farmable', 'pineapple'); },
     4: () => {
@@ -924,9 +924,9 @@ function buySix(id) {
     let price = item.price[data.level];
     if(!data.available || price > player.cash || item.currency != 'cash' || data.level >= item.price.length) return;
 
+    // Upgrade
     player.cash -= price;
     data.level++;
-    console.log(data.level);
     data.value = item.value[data.level - 1];
     
     // Update page
@@ -1051,19 +1051,19 @@ function isDebug() {
                 unlock('character', 'charles');
                 unlock('character', 'carl');
                 unlock('character', 'six');
-                toast('All Characters now available', 'Dev tools');
+                toast('', 'Devtools: All Characters now available');
             }
             window.allAchievements = () => {
                 for(let i = 0; i < achievementsKeys.length; i++) {
                 grantAchievement(achievementsKeys[i])
                 }
-                toast('All Achievements now unlocked', 'Dev tools');
+                toast('', 'Devtools: All Achievements now unlocked');
             }
             window.allThemes = () => {
                 for(let i = 0; i < themesKeys.length; i++) {
                     unlock('theme', themesKeys[i])
                 }
-                toast('All Themes now available', 'Dev tools');
+                toast('', 'Devtools: All Themes now available');
             }
             window.allCosmetics = () => {
                 for(let t = 0; t < cosmeticsKeys.length; t++) {
@@ -1075,17 +1075,33 @@ function isDebug() {
                         unlock('cosmetic', target.keys[c], key);
                     }
                 }
-                toast('All Cosmetics now available', 'Dev tools');
+                toast('', 'Devtools: All Cosmetics now available');
+            }
+            window.allTrinkets = () => {
+                let keys = Default_Six.shop.keys;
+                for(i = 0; i < keys.length; i++) {
+                    let key = keys[i];
+                    let item = Default_Six.shop[key];
+                    let data = Six.data?.[key];
+                    if(data == undefined) continue;
+                    let prices = item.price;
+                    data.level = prices.length;
+                    data.value = item.value[data.level - 1];
+                }
+                populateSix();
+                toast('', 'Devtools: All Trinkets now available');
             }
             window.allTips = () => {
                 player.flags['all_tips'] = true;
                 populateTipsMenu();
+                toast('', 'Devtools: All Tips now visible');
             }
             window.allUnlocks = () => {
                 allCharacters();
                 allAchievements();
                 allThemes();
                 allCosmetics();
+                allTrinkets();
                 allTips();
             }
             window.updateValues = () => {
@@ -1135,12 +1151,15 @@ function isDebug() {
                 </button>
                 <button onclick="allAchievements()">
                     Achievements
-                </button>
+                </button><br/>
                 <button onclick="allThemes()">
                     Themes
                 </button>
                 <button onclick="allCosmetics()">
                     Cosmetics
+                </button>
+                <button onclick="allTrinkets()">
+                    Trinkets
                 </button>
                 <button onclick="allTips()">
                     Tips
@@ -1225,6 +1244,9 @@ function isDebug() {
         // if(hashlist.join('#').includes('$')) {
         //     console.log('setting hash');
         // }
+
+        // Update page
+        updateMainIcon();
     }
     hash();
 })();

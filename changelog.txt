@@ -1,4 +1,29 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.14.4
+    5-5-2022
+// ----------------------------------------------------------- //
+
+- Made a number of cosmetics Carl sells cheaper
+- Added an unlock all trinkets button to the dev panel
+- Dev mode main icon
+- Misc fixes/improvements
+
+Falling carrot changes
+- Reduced falling carrot drop chance (2% -> 1%)
+  + Made it so that reaching 1t lifetime carrots no longer increases it to 3%
+  + Changed the threshold for pity carrots (maximum amount of clicks before you are guaranteed a falling carrot): 50 -> 100
+- Cash changes:
+  + The odds that a falling carrot will be cash have been changed (2% -> 8%) which is technically double what it was before
+- Clicking a falling carrot will count as a click for the clicks per second indicator
+
+Trinkets:
+- Golden mouse prices have been adjusted to be slightly cheaper
+- Origami prices have been adjusted to be more expensive
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14.3
     5-4-2022
 // ----------------------------------------------------------- //

@@ -1770,21 +1770,21 @@ const achievements = {
             'noToast': false,
         }
     },
-    // 'all_trinkets': { // six
-    //     'name': 'Complete Collection',
-    //     'desc': 'Buy and fully upgrade every trinket',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': 10,
-    //     'conditions': ['percentage(...sixCompletion().split('/'))', 100],
-    //     'style': 'endgame',
-    //     'mystery': {
-    //         'name': true,
-    //         'desc': false,
-    //         'image': true,
-    //         'noToast': false,
-    //     }
-    // },
+    'all_trinkets': { // six
+        'name': 'Complete Collection',
+        'desc': 'Buy and fully upgrade every trinket',
+        'image': false,
+        'reward': false,
+        'pages': 10,
+        'conditions': ['percentage(...sixCompletion().split('/'))', 100],
+        'style': 'endgame',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
 
     // Misc
     '9_clicks_per_second': {
@@ -2027,22 +2027,6 @@ const achievements = {
             'list': true,
         }
     },
-    'footer_carrot_clicker': {
-        'name': 'Carrot Clicker Clicker',
-        'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
-        'image': './assets/achievements/footer_carrot.png',
-        'reward': false,
-        'pages': false,
-        'conditions': ['easterEgg', 100],
-        'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
     'pineapple': {
         'name': 'Pineapple',
         'desc': 'Hey that\'s me (Hidden achievement)',
@@ -2059,9 +2043,25 @@ const achievements = {
             'list': true,
         }
     },
+    'footer_carrot_clicker': {
+        'name': 'Carrot Clicker Clicker',
+        'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
+        'image': './assets/achievements/footer_carrot.png',
+        'reward': false,
+        'pages': false,
+        'conditions': ['easterEgg', 100],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
+    },
     'not_funny': {
         'name': 'Not Funny',
-        'desc': 'Upgrade all 3 characters to Level 69 (Hidden achievement)',
+        'desc': 'Upgrade Bill, Belle, and Greg to Level 69 (Hidden achievement)',
         'image': './assets/achievements/nice.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': false,
