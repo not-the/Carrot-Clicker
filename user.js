@@ -533,7 +533,7 @@ function keybindHandler(event, state) {
     // Settings and prestige
     else if((key=="Backspace" || key=="Delete") && isDebug()) {
         event.preventDefault();
-        openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave');
+        openDialog(...dialog.clearsave);
     }
     else if(key == settings.keybinds['key_prestige']) {
         openPrestigeMenu();
@@ -1039,12 +1039,7 @@ function isDebug() {
             settingSounds();
         }
         // Dev tools
-        if(
-            hashlist.includes('dev')
-            || hashlist.includes('developer')
-            || hashlist.includes('cheatmode')
-            || hashlist.includes('debug')
-        ) {
+        if(isDebug()) {
             player.flags['cookies_accepted'] = true;
             unlock('character', 'six');
 

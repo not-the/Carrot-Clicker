@@ -138,6 +138,12 @@ function buttonSound() {
     playSound('click.flac');
 }
 
+// Dialog templates
+const dialog = {
+    clearsave: ['Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave'],
+    settings_reset: ['Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings'],
+}
+
 
 /** Popup Dialog
  * @param {string} title Dialog title

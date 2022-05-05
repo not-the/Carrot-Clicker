@@ -900,11 +900,11 @@
                 
                 <!-- Options item -->
                 <p>Danger Zone:</p>
-                <button id="clear_save_data" class="button_red" onClick="openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')">
+                <button id="clear_save_data" class="button_red" onClick="openDialog(...dialog.clearsave)">
                     Delete Save Data
                 </button>
                 <!-- Reset button -->
-                <button onClick="openDialog('Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings')">Reset Settings</button>
+                <button onClick="openDialog(...dialog.settings_reset)">Reset Settings</button>
                 <br><br><hr><br>
 
                 <footer>

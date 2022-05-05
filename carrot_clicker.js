@@ -9,7 +9,7 @@ let loadCheck = false;
 setTimeout(() => {
     if(loadCheck == false) {
         toast('Game crash', 'The game has taken more than 1 second to load. It\'s likely that an error has occured, causing either a partial or full game crash. Feel free to contact us if you see this.', 'red', true, false, false, false, () => {
-            openDialog('Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave')
+            openDialog(...dialog.clearsave)
         },
         'Delete Save Data',
         );
@@ -1285,23 +1285,9 @@ function updateHoePrices() {
 /** Updates Charles' shop content */
 function updateCharlesShop() {
     // Highlight when affordable
-    if(Charles.tome.improveWorkingConditions.price <= player.golden_carrots) {
-        elCharles.shop.improveWorkingConditions.classList.remove('cant_afford');
-    } else {
-        elCharles.shop.improveWorkingConditions.classList.add('cant_afford');
-    }
-
-    if(Charles.tome.betterHoes.price <= player.golden_carrots) {
-        elCharles.shop.betterHoes.classList.remove('cant_afford');
-    } else {
-        elCharles.shop.betterHoes.classList.add('cant_afford');
-    }
-
-    if(Charles.tome.decreaseWages.price <= player.golden_carrots) {
-        elCharles.shop.decreaseWages.classList.remove('cant_afford');
-    } else {
-        elCharles.shop.decreaseWages.classList.add('cant_afford');
-    }
+    style(elCharles.shop.improveWorkingConditions, 'cant_afford', (Charles.tome.improveWorkingConditions.price >= player.golden_carrots));
+    style(elCharles.shop.betterHoes, 'cant_afford', (Charles.tome.betterHoes.price >= player.golden_carrots));
+    style(elCharles.shop.decreaseWages, 'cant_afford', (Charles.tome.decreaseWages.price >= player.golden_carrots));
 
     // Update tome prices
     eInnerText(elCharles.prices.improveWorkingConditions, `${numCommas(CharlesUpgradePrices(Charles.tome.improveWorkingConditions,multibuy[mbsel],"query"))} Golden Carrots`);
@@ -1320,7 +1306,7 @@ function updateCharlesShop() {
         DWW: ${(DecreaseWagesEffects()*100).toFixed(2)}%`);
 }
 
-/** Updates golden carrot count on the page. Won't if prestige_available is false */
+/** Updates golden carrot count on the page. Won't run if prestige_available is false */
 function updateGC() {
     if(player.prestige_available != true) return;
     eInnerText(elGoldenCarrotCount, 'Golden Carrots: ' + DisplayRounded(player.golden_carrots, 2));
