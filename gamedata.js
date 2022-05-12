@@ -1,12 +1,29 @@
 // Game data
-
 // Game version
 (() => {
-    const game_version = 'dev beta v1.14.3';
-
+    const game_version = 'dev beta v1.15';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
+
+// Mesage templates
+//#region
+// Dialog templates
+const dialog = {
+    prestige_confirm: ['Are you sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige'],
+    clearsave: ['Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave'],
+    settings_reset: ['Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings'],
+    jjcvip: ['Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip'],
+}
+// Toast templates
+const toasts = {
+    // Info blurbs
+    info_coins: ['Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', '', true, true],
+    info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, '', true, true],
+    info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true],
+    info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true],
+}
+//#endregion
 
 
 /* ------------------- TIPS ------------------- */
@@ -27,6 +44,7 @@ const default_tips = {
         "Click a character's \"i\" symbol to learn more about them",
         "Greg can craft tools that will buff your other characters",
         "If you see a ? near something you can click it to get a more detailed description of what it does",
+        "You can also press amd hold the carrot as a slower alternative to clicking",
     ],
     beginner: [ // 1
         "To equip a tool, you must first craft one, then click the corresponding tool type under Bill or Belle",
@@ -111,7 +129,6 @@ const default_tips = {
     
 }
 //#endregion
-
 
 
 /* ----------------- THEMES ----------------- */
@@ -927,7 +944,7 @@ const achievements = {
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
         'image': './assets/achievements/working_conditions.png',
         'reward': 'shop:cosmetic/greg/safety_greg',
-        'pages': 2,
+        'pages': false,
         'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
         'mystery': {
             'name': true,
@@ -941,7 +958,7 @@ const achievements = {
         'desc': 'Buy a tome that improves tool quality. Unholy magic, I say.',
         'image': './assets/achievements/tome_improve_hoe_costs.png',
         'reward': false,
-        'pages': 2,
+        'pages': false,
         'conditions': ['Charles.tome.betterHoes.value', 1],
         'mystery': {
             'name': true,
@@ -955,8 +972,8 @@ const achievements = {
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
         'image': './assets/achievements/tome_decrease_wages.png',
         'reward': 'shop:cosmetic/bill/dollar_bill',
-        'pages': 2,
-        'conditions': ['Charles.tome.decreaseWages.value', 2],
+        'pages': false,
+        'conditions': ['Charles.tome.decreaseWages.value', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1096,8 +1113,8 @@ const achievements = {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill 100 times',
         'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
-        'reward': 'cosmetic:bundle/bill',
-        'pages': 3,
+        'reward': false,
+        'pages': 1,
         'conditions': ['Boomer_Bill.lvl', 100],
         'mystery': {
             'name': true,
@@ -1107,11 +1124,11 @@ const achievements = {
         }
     },
     'bill_lvl_1000': {
-        'name': 'bill_lvl_1000',
+        'name': 'Milennial Bill',
         'desc': 'Upgrade Bill 1000 times',
         'image': false,
-        'reward': false,
-        'pages': 5,
+        'reward': 'cosmetic:bundle/bill',
+        'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
         'mystery': {
             'name': true,
@@ -1140,7 +1157,7 @@ const achievements = {
         'desc': 'Upgrade Belle 100 times',
         'image': false,
         'reward': false,
-        'pages': 3,
+        'pages': 1,
         'conditions': ['Belle_Boomerette.lvl', 100],
         'mystery': {
             'name': true,
@@ -1150,11 +1167,11 @@ const achievements = {
         }
     },
     'belle_lvl_500': {
-        'name': 'belle_lvl_500',
+        'name': 'Um-belle-ifer Sellerer',
         'desc': 'Upgrade Belle 500 times',
         'image': false,
         'reward': false,
-        'pages': 5,
+        'pages': 3,
         'conditions': ['Belle_Boomerette.lvl', 500],
         'mystery': {
             'name': true,
@@ -1187,7 +1204,7 @@ const achievements = {
             'cosmetic:bundle/blockgame',
             'shop:cosmetic/farmable/blockgame_potato'
         ],
-        'pages': 5,
+        'pages': 1,
         'conditions': ['Gregory.lvl', 64],
         'mystery': {
             'name': true,
@@ -1385,11 +1402,12 @@ const achievements = {
     },
     '1_undecillion_carrots': {
         'name': 'Carrot God',
-        'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become some greater...',
+        'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become something greater...',
         'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000n],
+        'style': 'endgame',
         'mystery': {
             'name': true,
             'desc': false,
@@ -1404,11 +1422,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
+            'list': true,
         }
     },
     '1_tredecillion_carrots': {
@@ -1419,11 +1439,13 @@ const achievements = {
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000000n],
         'style': 'endgame',
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
-            'image': true,
+            'image': false,
             'noToast': false,
+            'list': true,
         }
     },
 
@@ -1464,7 +1486,7 @@ const achievements = {
         'image': false,
         'reward': false,
         'pages': false,
-        'conditions': ['ex_allTips()', 1],
+        'conditions': ['ex_allTips()', 2],
         'mystery': {
             'name': false,
             'desc': false,
@@ -1567,7 +1589,7 @@ const achievements = {
         'desc': 'Grab 250 falling carrots',
         'image': false,
         'reward': 'shop:cosmetic/bundle/cookie',
-        'pages': 2,
+        'pages': 1,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 250],
         'mystery': {
             'name': true,
@@ -1677,21 +1699,6 @@ const achievements = {
             'noToast': false,
         }
     },
-    // 'too_many_clicks': {
-    //     'name': 'Destroyer of Mice',
-    //     'desc': 'Click the carrot 10,000,000 times',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': 4,
-    //     'conditions': ['player.lifetime.clicks', 10000000],
-    //     'mystery': {
-    //         'name': true,
-    //         'desc': false,
-    //         'image': false,
-    //         'noToast': false,
-    //     }
-    // },
-
 
     // Golden Carrots
     '50_golden_carrots': {
@@ -1742,13 +1749,13 @@ const achievements = {
     },
 
     // Cash
-    '100_lifetime_cash': {
+    '500_lifetime_cash': {
         'name': 'Penny Pincher',
-        'desc': 'Earn 100 coins',
+        'desc': 'Earn 500 coins',
         'image': false,
         'reward': false,
         'pages': 1,
-        'conditions': ['player.lifetime.cash', 100],
+        'conditions': ['player.lifetime.cash', 500],
         'mystery': {
             'name': false,
             'desc': false,
@@ -1756,13 +1763,13 @@ const achievements = {
             'noToast': false,
         }
     },
-    '50_cash': {
+    '250_cash': {
         'name': 'Savings Account',
-        'desc': 'Have 50 coins in the bank without spending them',
+        'desc': 'Have 250 coins in the bank without spending them',
         'image': false,
         'reward': false,
         'pages': 1,
-        'conditions': ['player.cash', 50],
+        'conditions': ['player.cash', 250],
         'mystery': {
             'name': false,
             'desc': false,
@@ -1770,6 +1777,8 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Trinkets
     'all_trinkets': { // six
         'name': 'Complete Collection',
         'desc': 'Buy and fully upgrade every trinket',

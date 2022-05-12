@@ -210,9 +210,8 @@ select {
     width: 100%;
     max-width: 240px;
 }
-select {
-    cursor: pointer;
-}
+select { cursor: pointer; }
+textarea { border-radius: 4px; }
 
 /* Fancy toggle */
 /* fancy toggle goes here */
@@ -961,11 +960,15 @@ body:not(.theme_light) .theme_checkmark {
     box-sizing: unset;
 
     top: -72px;
+    z-index: 98;
 
-    z-index: 110;
     filter: drop-shadow(8px 8px 4px rgba(0, 0, 0, 0.5));
     cursor: pointer;
     padding: 12px 10px;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 
     animation: falling_carrot 2.5s ease-in forwards;
 }
@@ -1661,9 +1664,8 @@ body:not(.gp) #golden_carrot_count*/ {
     padding-bottom: 1px;
     padding-top: 1px;
     padding-left: 3px;
-    /* padding-bottom: 2px; */
-    /* padding-top: 2px; */
 }
+.Charles .shop_item .shop_value { top: 5px; }
 .shop_bottom {
     padding: 5px;
     max-height: 220px;
@@ -1692,6 +1694,7 @@ body:not(.gp) #golden_carrot_count*/ {
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
+    touch-action: manipulation;
 
     position: relative;
     z-index: 1;
@@ -2107,7 +2110,7 @@ body:not(.gp) #golden_carrot_count*/ {
     flex-wrap: wrap;
 }
 .compact:not(.achieve_grid) .achievement_item {
-    width: calc(33% - 8px);
+    width: calc(50% - 8px);
     margin-right: 8px;
 } */
 .compact:not(.achieve_grid) .achievement_item .achievement_img,

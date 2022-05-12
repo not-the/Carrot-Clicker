@@ -138,13 +138,6 @@ function buttonSound() {
     playSound('click.flac');
 }
 
-// Dialog templates
-const dialog = {
-    clearsave: ['Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave'],
-    settings_reset: ['Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings'],
-}
-
-
 /** Popup Dialog
  * @param {string} title Dialog title
  * @param {string} desc Dialog description
@@ -261,7 +254,7 @@ function closeDialog(doAction, backdrop=false) {
 // Dialog templates
 /** Opens the prestige dialog */
 function prestigeDialog() {
-    openDialog('Are you Sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige');
+    openDialog(...dialog.prestige_confirm);
 }
 
 

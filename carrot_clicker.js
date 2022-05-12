@@ -130,6 +130,11 @@ const elCharles = {
         decreaseWages:            dom("DecreaseWages_button"),
     }
 }
+const tomeEffect = {
+    iwc: dom('iwc_effect'),
+    bh:  dom('bh_effect'),
+    dww: dom('dww_effect'),
+}
 const tomeCount = {
     iwc: dom('iwc_count'),
     bh:  dom('bh_count'),
@@ -196,7 +201,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 9, // needs to be incremented by 1 any time any game object is changed
+    data_version: 10, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -514,7 +519,7 @@ const Default_Six = {
             desc:      'Increases hold-to-click speed by 1',
             img:       './assets/items/mouse_2.png',
             currency:  'cash',
-            price:     [5, 10, 25, 45, 70, 100, 120],
+            price:     [5, 10, 25, 45, 70, 100, 135],
             value:     [3,  4,  5,  6,  7,   8,   9],
             written:   '@ clicks/s',
         },
@@ -539,19 +544,28 @@ const Default_Six = {
         'greg_speed': {
             name:      'Propane Tank',
             desc:      'Increases Greg\'s crafting speed',
-            img:       './assets/achievements/missing.png',
+            img:       './assets/items/propane.png',
             currency:  'cash',
             price:     [ 38, 53,  74, 92, 121, 133, 169, 204],
             value:     [1.5,  2, 2.5,  3, 3.5,   4, 4.5,   5],
             written:   '@x',
+        },
+        'greg_min_start': {
+            name:      'Credit Card',
+            desc:      'Allows Greg to craft a tool before you can afford it. Percent value is how much of the tool\'s cost you need to start crafting.',
+            img:       './assets/items/credit.png',
+            currency:  'cash',
+            price:     [40, 47, 54, 61, 68],
+            value:     [90, 80, 70, 60, 50],
+            written:   '@%',
         },
         'falling_bonus': {
             name:      'Cistern',
             desc:      'Increases falling carrot rewards',
             img:       './assets/items/cistern.png',
             currency:  'cash',
-            price:     [20, 46, 90, 100, 160],
-            value:     [20, 40, 60, 80,  100],
+            price:     [60, 112, 163, 252, 309],
+            value:     [20,  40,  60,  80, 100],
             written:   '+@%',
         },
         'page_bonus': {
@@ -559,7 +573,7 @@ const Default_Six = {
             desc:      'Increases the prestige buff from tome pages',
             img:       './assets/items/origami.png',
             currency:  'cash',
-            price:     [ 60,  70,  80,  90, 100, 120, 140, 160, 180, 200],
+            price:     [100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
             value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
             written:   '+@%/page',
         },
@@ -568,7 +582,7 @@ const Default_Six = {
             desc:      'Allows the use of spacebar and click at the same time',
             img:       './assets/items/keyboard_2.png',
             currency:  'cash',
-            price:     [100],
+            price:     [200],
             value:     [true],
             written:   '',
         },
@@ -577,7 +591,7 @@ const Default_Six = {
         //     desc:      '???',
         //     img:       './assets/achievements/missing.png',
         //     currency:  'cash',
-        //     price:     [20, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+        //     price:     [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
         //     value:     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         //     written:   '',
         // },
@@ -613,6 +627,11 @@ const Default_Six = {
             available: true,
             level: 0,
             value: 1,
+        },
+        'greg_min_start': {
+            available: true,
+            level: 0,
+            value: 100,
         },
         'falling_bonus': {
             available: true,
@@ -731,20 +750,28 @@ Charles          = localStorage.getObject("Charles") || Default_Charles;
 Carl             = localStorage.getObject("Carl")    || Default_Carl;
 Six              = localStorage.getObject("Six")     || Default_Six;
 
-
+// Objects to save in localstorage
+const saveList = {
+    "player":    player,
+    "Bill":      Boomer_Bill,
+    "Belle":     Belle_Boomerette,
+    "Greg":      Gregory,
+    "Charles":   Charles,
+    "Carl":      Carl,
+    "Six":       Six,
+    "tips_seen": tips,
+}
+const saveListKeys = Object.keys(saveList);
 var preventSaveGame = false;
 /** Saves objects data to Local Storage */
 function saveGame() {
     if(preventSaveGame == true || player.flags['cookies_accepted'] != true) return;
     // player.time_last_saved = Date.now();
-    localStorage.setObject("player", player);
-    localStorage.setObject("Bill", Boomer_Bill);
-    localStorage.setObject("Belle", Belle_Boomerette);
-    localStorage.setObject("Greg", Gregory);
-    localStorage.setObject("Charles", Charles);
-    localStorage.setObject("Carl", Carl);
-    localStorage.setObject("Six", Six);
-    localStorage.setObject("tips_seen", tips);
+    for(let i = 0; i < saveListKeys.length; i++) {
+        let key = saveListKeys[i];
+        let obj = saveList[key];
+        localStorage.setObject(key, obj);
+    }
 }
 
 // Autosave
@@ -790,7 +817,10 @@ function fillSettingsPage() {
     dom('confetti_effects').checked = settings.confetti_effects;
     elEnableSounds.checked = settings.enableSounds;
     optionSoundsDisable(settings.enableSounds);
-    elVolumeMaster.value = settings.master_volume * 100;
+
+    let vol = settings.master_volume * 100
+    elVolumeMaster.value = vol;
+    volumeMasterDropdown.value = vol;
     elEnableMusic.checked = settings.enableMusic;
     elEnableCarrotSounds.checked = settings.enableCarrotSounds;
     eInnerText(elVolumeMaster_label, `${settings.master_volume * 100}%`);
@@ -866,7 +896,7 @@ const default_settings = {
     carl_shop_toasts: true,     // boolean
     cosmetic_auto_equip: false, // boolean
 
-    master_volume: 1,           // number - Between 0 and 1
+    master_volume: 0.8,           // number - Between 0 and 1
     enableSounds: true,         // boolean
     enableMusic: false,         // boolean
     enableCarrotSounds: false,  // boolean
@@ -1138,8 +1168,8 @@ function fallingCarrot() {
     // Create element
     var element = document.createElement("img");
     
-    // 8% chance the drop is money instead
-    let type = Math.ceil(Math.random() * 100) <= 8 ? 'cash' : 'carrot';
+    // 6% chance the drop is money instead
+    let type = Math.ceil(Math.random() * 100) <= 6 ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
@@ -1274,7 +1304,7 @@ function updateCPC(flash=true) {
         cps = DisplayRounded(Math.floor(cps),2) + star;
     } else {
         cpc = numCommas(Math.floor(player.cpc));
-        cps = numCommas(Math.floor(cpsbefore)) + star;;
+        cps = numCommas(Math.floor(cps)) + star;;
     }
     eInnerText(elCPC, cpc);
     eInnerText(elCPS, cps);
@@ -1309,9 +1339,14 @@ function updateCharlesShop() {
     eInnerText(elCharles.prices.betterHoes, `${numCommas(CharlesUpgradePrices(Charles.tome.betterHoes,multibuy[mbsel],"query"))} Golden Carrots`);
     eInnerText(elCharles.prices.decreaseWages, `${numCommas(CharlesUpgradePrices(Charles.tome.decreaseWages,multibuy[mbsel],"query"))} Golden Carrots`);
 
+    // Update tome effects
+    eInnerText(tomeEffect.iwc, `+${110 * Charles.tome.improveWorkingConditions.value}%`);
+    eInnerText(tomeEffect.bh,  `+?%`);
+    eInnerText(tomeEffect.dww, `-?%`);
+
     // Update tome counts
     eInnerText(tomeCount.iwc, `Owned: ${numCommas(Charles.tome.improveWorkingConditions.value)}`);
-    eInnerText(tomeCount.bh, `Owned: ${numCommas(Charles.tome.betterHoes.value)}`);
+    eInnerText(tomeCount.bh,  `Owned: ${numCommas(Charles.tome.betterHoes.value)}`);
     eInnerText(tomeCount.dww, `Owned: ${numCommas(Charles.tome.decreaseWages.value)}`);
 
     // Debugging tooltip
@@ -1660,25 +1695,17 @@ function Prestige() {
  * @returns Carrots per Click or Carrots per Second
  */
 function Calculate_Carrots(character) {
-    let bH=1+Charles.tome.betterHoes.value/100
-    //Zcheck Checks to see if result in 0 Carrots Per
-    let Zcheck;
-    let Zcheck2;
-    if(character.Hoes[0]==1){Zcheck=1;}else{Zcheck=0}
-    //Calculates Hoe Values
-    let cpHoes = 
-          (1*bH*(character.Hoes[0]+Zcheck))
-        + (10*bH*character.Hoes[1])
-        + (100*bH*character.Hoes[2])
-        + (1000*bH*character.Hoes[3])
-        + (10000*bH*character.Hoes[4])
-        + (100000*bH*character.Hoes[5]);
-
+    let bH=1+Charles.tome.betterHoes.value/100 // Calculate betterHoes bonus
+    let Zcheck2 = Charles.tome.improveWorkingConditions.value > 0 ? 0:1; // Zcheck Checks to see if result in 0 Carrots Per
+    // Calculates Hoe Values
+    let modifier = 10;
+    let cpHoes = (1*bH*(character.Hoes[0]) + 1);
+    for(let i = 1; i < character.Hoes.length; i++) {
+        cpHoes += (modifier*bH*character.Hoes[i]);
+        modifier *= 10;
+    }
     
-    if(Charles.tome.improveWorkingConditions.value>0) {Zcheck2=0;}
-    else{Zcheck2=1;}
-    
-    //returns proper value for Carrots Per
+    // Returns proper value for Carrots Per
     if(cpHoes>0) return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl*cpHoes;
     else return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl;
 }
@@ -1688,15 +1715,11 @@ function calculatePrestigePotential() {
     player.prestige_potential = Math.floor(
         5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages * (Six.data.page_bonus.value || 1)/100))
     );
-    if(!settings.full_numbers) {
-        eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
-    } else {
-        eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0)));
-    }
-    
-    if(prestigeMenuOpen) {
-        eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
-    }
+
+    // Update page
+    if(!settings.full_numbers) { eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2)); }
+    else { eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0))); }
+    if(prestigeMenuOpen) { eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2)); }
 
     // Make button glow if prestiging will double lifetime
     if(
@@ -1799,8 +1822,8 @@ function BuyTome(tome=Charles.tome.improveWorkingConditions, amount=1) {
         CharlesUpgradePrices(tome,amount,"apply");
 
         // Recalculate
-        Calculate_Carrots(Boomer_Bill);
-        Calculate_Carrots(Belle_Boomerette);
+        player.cpc = Calculate_Carrots(Boomer_Bill);
+        player.cps = Calculate_Carrots(Belle_Boomerette);
 
         // Update page
         updateCharlesShop();
@@ -1906,9 +1929,8 @@ function CreateHoe(type=0, amount=1, progress=0) {
     
     let price = HoeCost(type,amount);
     // Checks if Hoe is Too expensive
-    if((price >= player.carrots * 2) && progress == 0){
-        toast("Too expensive!", "That tool is currently too expensive",
-        '', false, true);
+    if(price * ((Six.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) {
+        toast("Too expensive!", "That tool is currently too expensive", '', false, true);
         return;
     }
 
@@ -1941,10 +1963,10 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     clearInterval(id);
                     i = 0;
                     player.carrots+=p-price;
-                    p=0;
-                    elGregProgress.style.width = 0 + "%";
+                    p = 0;
+                    elGregProgress.style.width = "0%";
                     if(settings.enableMainProgress == true) {
-                        elMainProgressBar.style.width = 0 + "%";
+                        elMainProgressBar.style.width = "0%";
                     }
                     elMainProgressContainer.classList.remove('status_tidbit_in');
                     dom('greg_crafting_info').classList.add('inactive');
@@ -1969,14 +1991,12 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     player.carrots -= adjust;
 
                     // Progress bar
-                    elGregProgress.style.width = `${100*(p/price)}%`;
+                    elGregProgress.style.width = `${Math.ceil(100*(p/price))}%`;
                     if(settings.enableMainProgress == true) {
-                        elMainProgressBar.style.width  = `${100*(p/price)}%`;
+                        elMainProgressBar.style.width  = `${Math.ceil(100*(p/price))}%`;
                     }
-                    // eInnerText(elClickSpeed, `${DisplayRounded(p)} remaining`);
-
-                    // Save crafting progress in case of page refresh
-                    Gregory.crafting = [type, amount, p];
+                    // eInnerText(elClickSpeed, `${DisplayRounded(p)}/${DisplayRounded(price)}`);
+                    Gregory.crafting = [type, amount, p]; // Save crafting progress in case of page refresh
                 }
 
             }
@@ -1988,8 +2008,8 @@ function CreateHoe(type=0, amount=1, progress=0) {
     }
 }
 
-/** Equips A Hoe To a Character
- * @param {*} character Character's variable
+/** Equips a tool to a Character
+ * @param {object} character Character object
  * @param {number} type Tool ID
  * @param {number} amount 
  * @returns If there is any reason that hoe type can't be equipped
@@ -2050,15 +2070,15 @@ function EquipHoe(character=Boomer_Bill, type=0, amount=1){
     }
 }
 
-// Update hoe on page
+/** Update all tools on page */
 function DisplayAllHoes() {
-    // console.warn(`DisplayAllHoes()`);
     for(i = 0; i < 6; i++) {
         DisplayHoe(Boomer_Bill, i);
         DisplayHoe(Belle_Boomerette, i);
         DisplayHoe(Gregory, i);
     }
 }
+/** Updates tool affordability highlighting */
 function DisplayHoe(character, type) {
     let charString = character.nickname;
     let count = elHoeCount[charString][type];
@@ -2081,24 +2101,19 @@ function DisplayHoe(character, type) {
         // Can afford and is unlocked
         if(
             !gregLevelTest(type, false)
-            && player.carrots >= Gregory.HoePrices[type] / 2
+            && Gregory.HoePrices[type] * ((Six.data.greg_min_start.value || 100) / 100) <= player.carrots
         ) {
-            // console.log(type + ': unlocked and CAN afford');
             img.classList.remove('blackedout');
             img.classList.remove('grayedout');
             eInnerText(count, '');
         }
         // Greg's lvl is sufficient but can't afford
-        else if(
-            !gregLevelTest(type, false)
-        ) {
-            // console.log(type + ': unlocked but can\'t afford');
+        else if(!gregLevelTest(type, false)) {
             img.classList.add('grayedout');
             img.classList.remove('blackedout');
         }
         // Blacked out
         else {
-            // console.log(type + ': other');
             img.classList.add('blackedout');
         }
     }
@@ -2133,7 +2148,8 @@ function seeButton(button = 'prestige') {
         dom('prestige_menu_button').title = "Prestige";
         dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`; 
     } else if(button == 'hardmode') {
-
+        dom('difficulty_menu_button').classList.remove('hidden');
+        dom('difficulty_menu_button').classList.remove('position_absolute');
     }
 }
 

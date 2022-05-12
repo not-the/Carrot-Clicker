@@ -136,7 +136,7 @@
                 <img src="./assets/tools/tool_0.png" alt="" id="main_progress_image" class="main_progress_image">
                 <div id="main_progress" class="pbar status_progress">
                     <!-- Progress -->
-                    <div id="main_progress_bar" class="progress" style="width: 50%"></div>
+                    <div id="main_progress_bar" class="progress"></div>
                 </div>
             </div>
 
@@ -176,9 +176,9 @@
                         <span class="farmable_name">Carrots</span> per second: <span id="cps">Loading...</span>
                     </p><br/>
                     <p id="list_cash" class="secondary_text" style="margin-right:-24px">
-                        Coins: <span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!" onclick="toast('Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', '', true, true)">?</span></p>
+                        Coins: <span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!" onclick="toast(...toasts.info_coins)">?</span></p>
                     <p id="list_pages" class="secondary_text" style="margin-right:-24px">
-                        Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast('Info: Tome Pages', 'For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!', '', true, true)">?</span>
+                        Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast(...toasts.info_pages)">?</span>
                     </p>
                     <p class="secondary_text">
                         <span id="golden_carrot_count"></span>
@@ -200,7 +200,7 @@
                         <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
                     </button>
                     <!-- Hardmode button -->
-                    <button onClick="openDifficultyMenu()" title="Hardmode" class="main_button_item button_red" id="difficulty_menu_button">
+                    <button onClick="openDifficultyMenu()" title="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
                         <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
                     </button>
                 </div>
@@ -334,7 +334,7 @@
                     <!--Gregory Rendering-->
                     <div class="Greg characterbox char_locked" id="greg_box">
                         <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
-                            Upgrade Greg to create and store tools. The maximum amount of tools you can hold is equal to his level. You only need 50% of a tool's cost to start crafting.
+                            Upgrade Greg to create and store tools. The maximum amount of tools he and the other characters can hold can hold is equal to his level.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')" tabindex="0" role="button">
@@ -442,6 +442,7 @@
                                 <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
                                 <div class="info">
                                     <p>Improve working conditions</p>
+                                    <div id="iwc_effect" class="shop_value secondary_text"></div>
                                     <span id="iwc_count" class="secondary_text">x0</span>
                                     <span id="ImproveWorkingConditions" class="shop_price">---</span>
                                 </div>
@@ -459,6 +460,7 @@
                                 <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
                                 <div class="info">
                                     <p>High quality tools</p>
+                                    <div id="bh_effect" class="shop_value secondary_text"></div>
                                     <span id="bh_count" class="secondary_text">x0</span>
                                     <span id="BetterHoes" class="shop_price">---</span>
                                 </div>
@@ -476,6 +478,7 @@
                                 <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
                                 <div class="info">
                                     <p>Decrease worker wages</p>
+                                    <div id="dww_effect" class="shop_value secondary_text"></div>
                                     <span id="dww_count" class="secondary_text">x0</span>
                                     <span id="DecreaseWages" class="shop_price">---</span>
                                 </div>
@@ -631,7 +634,7 @@
                 <!-- <p>Achievements will go here (when they've been implemented)</p><br> -->
                 <p class="secondary_text">
                     Progress: <span id="achievement_progress">-/- (0%)</span>
-                    <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast('Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true)">?</span>
+                    <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast(...toasts.info_achieve_percent)">?</span>
                 </p><br>
                 <label for="compact_achievements">
                     <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
@@ -716,7 +719,7 @@
                         <p>Themes: <b id="stat_themes">---</b></p>
                         <!-- <details class="stat_collapse">
                             <summary> -->
-                                <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast('Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true)">?</span></p> 
+                                <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast(...toasts.info_cosmetic_percent)">?</span></p> 
                             <!-- </summary>
                             Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
                             Farmable: <b id="stat_cosmetics_farmable">---</b><br/>

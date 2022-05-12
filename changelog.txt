@@ -1,4 +1,47 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15
+    5-12-2022
+// ----------------------------------------------------------- //
+
+Changes:
+- You can now import/export save data through the developer panel
+  + Importing/exporting save files using this tool will not transfer settings or tip data
+- The hardmode button will no longer appear unless you're in dev mode
+- Reduced the chances of a falling carrot being cash (8% -> 6%)
+- Master volume now defaults to 80% and the dropdown slider will now be correct on page load
+- You now need 100% of the cost of a tool to start crafting, but this can be reduced with the credit card
+- Support for listing tome effects (note: the numbers aren't accurate yet since tome effects are currently inconsistent/arbitrary)
+
+Trinkets:
+- New trinket: Credit Card
+- Trinket price changes, mostly increases
+- Propane Tank now has a texture and golden mouse's texture has been updated
+
+Achievements:
+- Fixed the 1_decrease_wages achievement requiring 2 instead of 1
+- Increased "Penny Pincher" and "Savings Account" to require 500 and 250 cash respectively
+- Tip of the iceberg is now harder to get (now needs 2 complete tip types instead of 1)
+- The achievements 1_duodecillion_carrots and 1_tredecillion_carrots have been changed to be hidden achievements
+  + Apparently mobile safari can't handle numbers higher than undecillion, and aside from that I don't think either of them are achievable
+- Gave some unnamed achievements names
+- Reduced/removed page rewards for some achievements
+
+Bug fixes:
+- Fixed a crash when loading the page with full_numbers enabled
+- Fixed a bug where CPC/CPS wouldn't immediately recalculate when buying tomes (Issue #54)
+- Fixed a bug where the second wooden hoe you equip wouldn't do anything (Issue #52)
+- Fixed falling carrots rendering on top of the status bar
+- Fixed a mobile safari issue where you could long press on a falling carrot and it would appear to duplicate (touch callout)
+- Quickly tapping a shop item on mobile will no longer zoom the screen
+
+Internal changes:
+- Condensed the Calculate_Carrots() function
+- data_version bumped to 10
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.14.4
     5-5-2022
 // ----------------------------------------------------------- //

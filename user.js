@@ -8,8 +8,8 @@ Users settings, keybind handling, and tutorial handling
 var volume = 1;
 
 /** Plays a sound from the sound folder
- * @param {*} file Filename
- * @param {*} path Only specify if file is outside of './assets/sounds/'
+ * @param {string} file Filename
+ * @param {string} path Only specify if file is outside of './assets/sounds/'
  * @returns 
  */
 function playSound(file, path = './assets/sounds/') {
@@ -20,7 +20,7 @@ function playSound(file, path = './assets/sounds/') {
 
 // Play Music
 var music;
-function playMusic(file = 'music.m4a', loop = false, path='assets/music/') {
+function playMusic(file = 'music.m4a', loop = false, path='./assets/music/') {
     // Return if sounds are disabled
     if(settings.enableSounds == false || settings.enableMusic == false) return;
 
@@ -335,7 +335,7 @@ const keyCodesCode = {
         mouseConfetti([24,24], ['gray'], 300);
     },
     2: () => {
-        openDialog('Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip');
+        openDialog(...dialog.jjcvip);
         // mouseConfetti([24,24], ccCarrot, 600);
     },
     3: () => { setCosmetic('farmable', 'pineapple'); },
@@ -535,15 +535,10 @@ function keybindHandler(event, state) {
         event.preventDefault();
         openDialog(...dialog.clearsave);
     }
-    else if(key == settings.keybinds['key_prestige']) {
-        openPrestigeMenu();
-        // openDialog('Are you Sure you want to Prestige?', 'Your carrots, characters, and upgrades will be lost, but you will gain a permanent earnings boost.', 'Prestige', 'button_gold', 'prestige');
-    }
+    else if(key == settings.keybinds['key_prestige']) { openPrestigeMenu(); }
 
     // Inventory
     // else if(key == settings.keybinds['key_inventory']) {
-    //     // console.log('inventory');
-    //     // openDialog('test', 'test');
     //     if(inventoryOpen == false) {
     //         openInventory();
     //     } else {
@@ -552,7 +547,7 @@ function keybindHandler(event, state) {
     // }
 }
 
-
+/** Cancel tool equip */
 function cancelHoeEquip() {
     equipWaiting = -1;
     closeToast(equipToastID);
@@ -563,6 +558,7 @@ function cancelHoeEquip() {
 // Custom Keybinds
 var keyWaiting = [false, 'none'];
 var keyWaitingToast;
+/** Awaits the next key press to use as keybind */
 function detectKey(bind) {
     keyWaiting = [true, bind];
     keyWaitingToast = toast(
@@ -571,11 +567,7 @@ function detectKey(bind) {
         () => { doneKeybind('none', false); }, 'Cancel'
     );
 }
-function setKeybind(action, key) {
-    console.log(`[Settings] Set ${action} to key: ${key}`)
-    settings.keybinds[action] = key;
-    saveSettings();
-}
+/** Runs when keybind is set or cancelled */
 function doneKeybind(key, set=true) {
     let element = dom(keyWaiting[1]);
 
@@ -590,6 +582,13 @@ function doneKeybind(key, set=true) {
         setKeybind(keyWaiting[1], key);
     }
     keyWaiting = [false, 'none'];
+
+    /** Sets the keybind */
+    function setKeybind(action, key) {
+        console.log(`[Settings] Set ${action} to key: ${key}`)
+        settings.keybinds[action] = key;
+        saveSettings();
+    }
 }
 
 
@@ -606,20 +605,19 @@ function interpretKey(key) {
 setInterval(() => {
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
-        let achievement = achievements[key];
-
         if(achieveQuery(key)) continue; // Skip if already unlocked
-        evaluateConditions(key, achievement); // Evaluate
+        evaluateConditions(key); // Evaluate
     }
 }, 1000);
 
 /** Achievement Conditions evaluator */
-function evaluateConditions(key, achievement) {
+function evaluateConditions(key) {
+    let achievement = achievements[key];
     let multicondition = Array.isArray(achievement.conditions[0]);
     var multiamount = 1;
     var multifulfilled = 0;
     
-    // 1 condition
+    // One condition
     if(!multicondition) {
         tests(key, achievement.conditions);
     }
@@ -740,7 +738,6 @@ function grantAchievement(key) {
     if(achieve.reward != false) {
         rewardBreakdown(achieve);
     }
-
 
     // Give pages
     if(achieve.pages != false && achieve.pages != null) {
@@ -935,6 +932,7 @@ function buySix(id) {
 
     // Extra
     if(id == 'page_bonus') { calculatePrestigePotential(); }
+    else if(id == 'greg_min_start') { DisplayAllHoes(); }
 }
 
 /** Test if a character is unlocked */
@@ -1041,21 +1039,22 @@ function isDebug() {
         // Dev tools
         if(isDebug()) {
             player.flags['cookies_accepted'] = true;
+
+            // In development
             unlock('character', 'six');
+            seeButton('hardmode');
 
             // Register cheat functions globally
             //#region
             window.allCharacters = () => {
-                unlock('character', 'belle');
-                unlock('character', 'greg');
-                unlock('character', 'charles');
-                unlock('character', 'carl');
-                unlock('character', 'six');
+                for(let ci = 0; ci < chars.length; ci++) {
+                    unlock('character', chars[ci]);
+                }
                 toast('', 'Devtools: All Characters now available');
             }
             window.allAchievements = () => {
                 for(let i = 0; i < achievementsKeys.length; i++) {
-                grantAchievement(achievementsKeys[i])
+                    grantAchievement(achievementsKeys[i])
                 }
                 toast('', 'Devtools: All Achievements now unlocked');
             }
@@ -1089,7 +1088,7 @@ function isDebug() {
                     data.value = item.value[data.level - 1];
                 }
                 populateSix();
-                toast('', 'Devtools: All Trinkets now available');
+                toast('', 'Devtools: All Trinkets now maxed');
             }
             window.allTips = () => {
                 player.flags['all_tips'] = true;
@@ -1133,11 +1132,48 @@ function isDebug() {
             }
             //#endregion
             
+            // Register savedata functions globally
+            //#region 
+            window.importSave = () => {
+                let imported = dom('import_export').value;
+                // Textarea is empty
+                if(imported == '') {
+                    toast('Savedata manager', 'Please input exported savedata', '', false, true);
+                    return;
+                }
+                imported = imported.split('//+//');
+                try {
+                    for(let i = 0; i < saveListKeys.length; i++) {
+                        let key = saveListKeys[i];
+                        if(key == 'tips_seen') continue; // tips_seen is handled differently, ignore
+                        let obj_import = JSON.parse(imported[i]);
+                        saveList[key] = obj_import;
+                    }
+                    saveGame();
+                    setTimeout(() => { location.reload(); }, 50); // Reload after a delay
+                } catch (error) {
+                    console.error(error);
+                    toast('Import error', error);
+                }
+            }
+            window.exportSave = () => {
+                let exported = '';
+                for(let i = 0; i < saveListKeys.length; i++) {
+                    let key = saveListKeys[i];
+                    let obj = saveList[key];
+                    if(key == 'tips_seen') continue; // tips_seen is handled differently, ignore
+                    exported += JSON.stringify(obj);
+                    if(i == saveListKeys.length - 1) break;
+                    exported += '//+//';
+                }
+                dom('import_export').value = exported;
+            }
+            //#endregion
+
             // Put dev panel in settings
             $('#devp').innerHTML = /* html */
             `<div class="footer_bottom brown_darker_color" style="display: block; padding: 16px 24px;">
                 <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-
                 <button onclick="clearSave()" class="button_red">
                     Quick Reset
                 </button>
@@ -1204,15 +1240,19 @@ function isDebug() {
                         </td>
                     </tr>
                 </table>
-                
                 <button onclick="updateValues()">Update Values</button>
+                
+                <h4>Savedata management</h4>
+                <textarea name="import_export" id="import_export" cols="40" rows="3" style="max-width: 100%; min-width: 100%;" onclick="this.focus();this.select()"></textarea><br/>
+                <button onclick="exportSave()" style="width: 159px;">🠹 Export</button>
+                <button onclick="importSave()" style="width: 159px;">🠻 Import</button>
             </div><br>`;
 
-            window.setCarrotsEl =   dom("setCarrot");
-            window.setGoldenCarrotsEl =    dom("setGoldenCarrot");
-            window.setCashEl =             dom("setCash");
-            window.setBillLvlEl =          dom("setBillLvl");
-            window.elSetCarrotRounded =    dom('setCarrotRounded')
+            window.setCarrotsEl       = dom("setCarrot");
+            window.setGoldenCarrotsEl = dom("setGoldenCarrot");
+            window.setCashEl          = dom("setCash");
+            window.setBillLvlEl       = dom("setBillLvl");
+            window.elSetCarrotRounded = dom('setCarrotRounded')
 
             // Enter key updates values
             document.querySelectorAll('.dev_input').forEach(element => {
@@ -1400,6 +1440,14 @@ function isDebug() {
     // Set default settings if not found in localstorage
     //#region 
 
+    // Enable unlocked characters
+    for(i = 0; i < playerCharKeys.length; i++) {
+        let key = playerCharKeys[i];
+        if(player.characters[key] == true) {
+            unlock('character', key);
+        }
+    }
+
     // Achievement list CSS
     achieveCompactMode(settings.compact_achievements);
     achieveGridMode(settings.achievements_grid);
@@ -1501,15 +1549,6 @@ function isDebug() {
         "", true);
         player.flags.tutorial0 = true;
     }
-
-    // Enable unlocked characters
-    for(i = 0; i < playerCharKeys.length; i++) {
-        let key = playerCharKeys[i];
-        if(player.characters[key] == true) {
-            unlock('character', key);
-        }
-    }
-
 
     /* -------------------- Fill out page -------------------- */
     populateKeybinds();
