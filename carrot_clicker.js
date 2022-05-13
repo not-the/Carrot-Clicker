@@ -1595,11 +1595,17 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
  * @returns If unable to level up
  */
 function LevelUp(character=Boomer_Bill, amount=1) {
+    // var array=[];
+    // var multiplier = 1.11;
+    // for(i=1;i<=amount;i++){
+    //     array.push((1-DecreaseWagesEffects)*(multiplier*array[i-1]))
+    // }
+    
     if(characterQuery(character.nickname) == false) return;
-    if(player.carrots >= CharacterLevelUpPrice(character, amount)) {
+    if(player.carrots >= r) {
         character.lvl += amount;
-        player.carrots -= CharacterLevelUpPrice(character,amount);
-        CharacterLevelUpPrice(character, amount, "apply");
+        player.carrots -= r;
+        character.lvlupPrice=array[amount];
 
         // Update page
         carrotCount();
