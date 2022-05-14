@@ -1595,17 +1595,11 @@ function CharacterLevelUpPrice(character=Boomer_Bill, amount=1, mode="query"){
  * @returns If unable to level up
  */
 function LevelUp(character=Boomer_Bill, amount=1) {
-    // var array=[];
-    // var multiplier = 1.11;
-    // for(i=1;i<=amount;i++){
-    //     array.push((1-DecreaseWagesEffects)*(multiplier*array[i-1]))
-    // }
-    
     if(characterQuery(character.nickname) == false) return;
-    if(player.carrots >= r) {
+    if(player.carrots >= CharacterLevelUpPrice(character, amount)) {
         character.lvl += amount;
-        player.carrots -= r;
-        character.lvlupPrice=array[amount];
+        player.carrots -= CharacterLevelUpPrice(character,amount);
+        CharacterLevelUpPrice(character, amount, "apply");
 
         // Update page
         carrotCount();
@@ -1619,6 +1613,31 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         mouseConfetti([2, 3], ccGold);
     }
 }
+// function LevelUp(character=Boomer_Bill, amount=1) {
+//     // var array=[];
+//     // var multiplier = 1.11;
+//     // for(i=1;i<=amount;i++){
+//     //     array.push((1-DecreaseWagesEffects)*(multiplier*array[i-1]))
+//     // }
+    
+//     if(characterQuery(character.nickname) == false) return;
+//     if(player.carrots >= r) {
+//         character.lvl += amount;
+//         player.carrots -= r;
+//         character.lvlupPrice=array[amount];
+
+//         // Update page
+//         carrotCount();
+//         characterPrices();
+//         characterButtons();
+//         updateCPC();
+//         if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
+//         if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
+
+//         // Animation
+//         mouseConfetti([2, 3], ccGold);
+//     }
+// }
 
 /** Performs a prestige, which gives Golden Carrots and resets attributes
  * @returns If unable to Prestige
