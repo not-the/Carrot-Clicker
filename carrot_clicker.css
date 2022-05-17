@@ -99,6 +99,21 @@ a:hover {filter: brightness(120%);}
 h4 {
     margin: 10px 0 0 0;
 }
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color)
+}
+img {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
+    touch-action: manipulation;
+
+    image-rendering: pixelated;
+    object-fit: cover;
+}
 
 .noscript {
     width: 100%;
@@ -116,16 +131,6 @@ h4 {
     text-align: center;
 }
 
-img {
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
-
-    touch-action: manipulation;
-
-    image-rendering: pixelated;
-    object-fit: cover;
-}
 #container {
     justify-content: center;
     flex-wrap: wrap;
@@ -452,6 +457,9 @@ summary:hover {
         transform: translate(-50%, calc(-50% + 20px));
     }
 }
+h2 {
+    margin: 0;
+}
 #dialog h2, #dialog p {
     margin: 0;
     padding: 0;
@@ -490,7 +498,7 @@ summary:hover {
 /* Toasts */
 #toast_container {
     position: fixed;
-    z-index: 201;
+    z-index: 300;
     bottom: 0;
     right: 0;
     margin-bottom: 0px;
@@ -721,7 +729,9 @@ p.theme_menu_title {
 .theme_item:focus-within,
 .shop_item:hover,
 .shop_item:focus,
-.shop_item:focus-within {
+.shop_item:focus-within,
+.shop_nav_item:hover,
+.shop_nav_item:focus-visible {
     filter: brightness(110%);
     /* background-color: var(--main-shop-hover); */
     outline: 2px solid white;
@@ -1307,6 +1317,9 @@ body:not(.theme_light) .theme_checkmark {
 
     justify-content: center;
 }
+.characterbox.glowing {
+    filter: drop-shadow(0 0 4px rgba(255, 229, 145, 0.6));
+}
 
 
 .button_gold {
@@ -1349,13 +1362,6 @@ body:not(.theme_light) .theme_checkmark {
     /* 3D */
     transform: perspective(800px);
 }
-.characterbox:hover,
-.characterbox:focus-visible,
-.characterbox.show_info {
-    /* border: 3px solid #6d6565; */
-    outline: 1px solid #4b4747;
-    z-index: 11;
-}
 .characterbox:hover .character_name {
     text-decoration: underline;
 }
@@ -1372,7 +1378,54 @@ body:not(.theme_light) .theme_checkmark {
     border-end-start-radius: 10px;
     border-end-end-radius: 10px;
 }
-/* Character tooltips */
+
+/* Character bio */
+.characterbox:hover,
+.characterbox:focus-visible,
+.characterbox.show_info {
+    outline: 1px solid #4b4747;
+    z-index: 11;
+}
+.characterbox.show_info {
+    /* width: 400px; */
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-362px, -50%);
+    z-index: 201;
+}
+.characterbox.show_info .shop_bottom:not(#charles_shop) {
+    height: 560px;
+    max-height: 560px;
+}
+.characterbox .char_info {
+    width: 100%;
+    max-width: 362px;
+    height: fit-content;
+    min-height: 100%;
+    
+    padding: 12px 24px;
+    border: 1px solid var(--border-color);
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+
+    position: absolute;
+    left: calc(100% + 0px);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+.characterbox:not(.show_info) .char_info {
+    visibility: hidden;
+    opacity: 0;
+}
+.characterbox .char_info button {
+    width: calc(100% - 48px);
+    position: absolute;
+    bottom: 12px;
+}
+
+/* Tooltips */
 .tooltip {
     padding: 10px 14px;
     background-color: rgba(0, 0, 0, 0.7);
@@ -1386,17 +1439,6 @@ body:not(.theme_light) .theme_checkmark {
 
     opacity: 0;
     pointer-events: none;
-}
-.charactertooltip {
-    transition-property: transform, opacity;
-    transition-duration: 0.5s;
-    transform: translate(calc(-100% - 30px), -2px);
-    opacity: 0;
-}
-/* .characterbox:hover .charactertooltip */
-.characterbox.show_info .charactertooltip {
-    transform: translate(calc(-100% - 10px), -2px);
-    opacity: 1;
 }
 
 .char_mini_button {
@@ -1420,12 +1462,8 @@ body:not(.theme_light) .theme_checkmark {
     transition:  opacity, transform 0.15s ease;
 }
 .char_mini_button:hover,
-.characterbox.show_info .char_info_button {
-    filter: invert();
+.characterbox.show_info .char_mini_button {
     opacity: 1;
-}
-.characterbox.show_info .char_info_button {
-    transform: rotate(90deg) translate(2px);
 }
 .characterbox:hover .char_mini_button,
 .characterbox:focus-within .char_mini_button,
@@ -1437,53 +1475,6 @@ body:not(.theme_light) .theme_checkmark {
     bottom: 24px;
     right: 16px;
 } */
-
-/* Character in-depth card */
-.bio_card {
-    height: 100%;
-    width: 100%;
-    background-color: var(--darker-bg-color);
-    border-radius: 8px;
-    padding: 8px;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    visibility: hidden;
-}
-/* Old */
-/* .bio_card {
-    height: 100%;
-    width: 100%;
-    background-color: green;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    opacity: 0;
-    pointer-events: none;
-    transform: perspective(800px) rotateY(180deg);
-}
-.charflip {animation: charflip 1s forwards;}
-.charflip_r {animation: charflip 1s forwards reverse;}
-@keyframes charflip {
-    0% {
-        transform: perspective(800px);
-        filter: brightness(100%);
-        opacity: 1 !important;
-        z-index: 55;
-        pointer-events: unset;
-    }
-    100% {
-        transform: perspective(800px) rotateY(180deg);
-        filter: brightness(50%);
-        opacity: 0 !important;
-        z-index: 54;
-        pointer-events: none;
-    }
-} */
-
 
 /* Character info */
 .characterdesc {
@@ -1671,7 +1662,23 @@ body:not(.gp) #golden_carrot_count*/ {
     max-height: 220px;
     overflow-y: auto;
 }
-#cosmetic_shop {
+
+/* Shop navigation */
+.shop_nav {
+    display: flex;
+    margin-top: 8px;
+}
+.shop_nav_item {
+    padding: 2px 16px;
+    background-color: var(--lighter-bg-color);
+    cursor: pointer;
+    border-radius: 5px;
+}
+.shop_nav p {
+    padding: 2px 8px 0;
+}
+.carl .shop_bottom {
+    /* max-height: unset; */
     min-height: 58px;
 }
 .char_button {
@@ -1925,11 +1932,7 @@ body:not(.gp) #golden_carrot_count*/ {
 #tripane h1 {
     margin-bottom: 8px;
 }
-#tripane hr {
-    border: none;
-    height: 1px;
-    background-color: var(--brown-darkest-color);
-}
+#tripane hr { background-color: var(--brown-darkest-color); }
 #tripane nav {
     margin: 0 auto;
     background-color: var(--brown-bg-color);
@@ -2581,6 +2584,27 @@ footer {
 
 /* 848px - mobile layout*/
 @media only screen and (max-width: 848px) {
+    /* Overlays */
+    .characterbox.show_info {
+        top: 12px;
+        transform: translateX(-50%);
+        max-width: 100%;
+    }
+    .characterbox .char_info {
+        max-width: 100%;
+        max-height: 50vh;
+        left: 0;
+        bottom: 12px;
+        top: 100%;
+        border: 1px solid var(--border-color);
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+    }
+    .characterbox.show_info .shop_bottom:not(#charles_shop) {
+        height: 40vh;
+        max-height: 40vh;
+    }
+
     /* Status bar */
     .Basic_Info {
         flex-direction: column;
@@ -2617,16 +2641,6 @@ footer {
     /* Right */
     #right-section {
         border: none;
-    }
-    .charactertooltip {
-        background: black;
-        backdrop-filter: none;
-
-        bottom: 0;
-        transform: translate(0px, calc(100% + 30px));
-    }
-    .characterbox.show_info .charactertooltip {
-        transform: translate(0px, calc(100% + 10px));
     }
 
     /* Tripane */

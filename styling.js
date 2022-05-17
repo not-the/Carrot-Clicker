@@ -17,6 +17,7 @@ var bonusID =      0;
 
 // Menu state
 var dialogOpen =            false;
+var charInfoOpen =          false;
 var themeSwitcherOpen =     false;
 var cosmeticSwitcherOpen =  false;
 var keybindsMenuOpen =      false;
@@ -146,7 +147,6 @@ function buttonSound() {
  * @param {string} buttonAction Code to be run if the accept button is pressed
  */
 function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
-    closeDialog(); // Close other popups first
     openMenu();
     buttonSound();
 
@@ -214,6 +214,10 @@ function closeDialog(doAction, backdrop=false) {
 
     // Hide other popup menus
     //#region
+    if(charInfoOpen != false) {
+        dom(`${charInfoOpen}_box`).classList.remove('show_info');
+        charInfoOpen = false;
+    }
     if(themeSwitcherOpen) {
         themeMenu.classList.remove('visible');
         themeSwitcherOpen = false;
@@ -565,9 +569,9 @@ function switchSwitchers() {
 /* ----- Fancy Theme Switcher ----- */
 /** Opens the theme menu */
 function themeSwitcher() {
+    openMenu();
     themeSwitcherOpen = true;
     themeMenu.classList.add('visible');
-    openMenu();
 
     newIndicator(false, 'theme');
     buttonSound();
@@ -584,9 +588,9 @@ function closeThemeSwitcher(noOverlay = false) {
 var uncollapseNeeded = false;
 /** Opens the cosmetic menu */
 function cosmeticSwitcher(category = false) {
+    openMenu();
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
-    openMenu();
 
     newIndicator(false, 'cosmetic');
     buttonSound();
@@ -618,6 +622,7 @@ function closeCosmeticSwitcher(noOverlay = false) {
 
 // Always run when a menu is open
 function openMenu() {
+    closeDialog();
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
 
@@ -633,12 +638,10 @@ function openPrestigeMenu() {
     // Prevent from opening if unavailable
     if(player.prestige_available != true) {return};
     
-    closeDialog();
+    openMenu();
     prestigeMenuOpen = true;
     prestigeMenu.classList.add('visible');
-    openMenu();
     updatePrestigeMenu();
-
     buttonSound();
 }
 
@@ -655,17 +658,13 @@ function openPrestigeMenu() {
 
 /* ----- Tips Menu ----- */
 function openTipsMenu() {
-    closeDialog();
-
     if(tipsHTMLupdate == true) {
         populateTipsMenu();
         tipsHTMLupdate = false;
     }
-
+    openMenu();
     tipsMenuOpen = true;
     tipsMenu.classList.add('visible');
-    openMenu();
-
     buttonSound();
 }
 const elTipsList = dom('tips_list');
@@ -1277,18 +1276,14 @@ function setTheme(theme) {
 
 // Character info
 function characterInfo(character, state=undefined) {
-    // Close all others
-    if(state == undefined) {
-        for(i = 0; i < chars.length; i++) {
-            if(chars[i] == character) continue;
-            characterInfo(chars[i], false);
-        }
-    }
     let charbox = dom(`${character}_box`);
     if(charbox.classList.contains('show_info') || state == false) {
         charbox.classList.remove('show_info');
+        closeDialog();
     } else {
+        openMenu();
         charbox.classList.add('show_info');
+        charInfoOpen = character;
     }
 }
 
@@ -1296,16 +1291,13 @@ function characterInfo(character, state=undefined) {
 // Credits scroll
 const elCredits = dom('credits');
 var creditInterval;
+/** Opens the credits with autoscroll */
 function startCredits(toast = false) {
-    console.log(`startCredits()`);
-
-    closeDialog();
     if(toast != false) { closeToast(toast); }
-    
+    openMenu();
     creditsOpen = true;
     elCredits.scrollTop = 0;
     elCredits.classList.add('visible');
-    openMenu();
     clearInterval(creditInterval);
     creditInterval = setInterval(() => {
         elCredits.scrollTop += 1;
@@ -1313,11 +1305,9 @@ function startCredits(toast = false) {
             clearInterval(creditInterval);
         }
     }, 30);
-
-    // buttonSound();
 }
 
-// Stop autoscroll is player scrolls
+// Stop autoscroll if player scrolls
 elCredits.addEventListener('wheel', () => { clearInterval(creditInterval); });
 
 
@@ -1325,10 +1315,11 @@ elCredits.addEventListener('wheel', () => { clearInterval(creditInterval); });
 const elKeybindsMenu = dom('keybinds_menu');
 const elKeybindsBlurb = dom('keybinds_blurb');
 let keyBlurbText = elKeybindsBlurb.innerHTML;
+/** Opens the keybind menu */
 function keybindsMenu() {
+    openMenu();
     keybindsMenuOpen = true;
     elKeybindsMenu.classList.add('visible');
-    openMenu();
 
     if(elDisableKeybinds.checked == true) {
         elKeybindsBlurb.classList.add('color_red');
@@ -1340,23 +1331,17 @@ function keybindsMenu() {
 
     buttonSound();
 }
-function closeKeybindsMenu(noOverlay = false) {
-    elKeybindsMenu.classList.remove('visible');
-    if(noOverlay == false) {
-        overlay.classList.remove("visible"); 
-    }
-}
 
-
-const carlShop = dom('cosmetic_shop');
+const carlShop = dom('carl_shop');
+// var pageCarl = 1;
 /** Populate Carls' shop */
 function populateCarl() {
     let html = '';
     carlShopData = {};
+    // let count = 0;
 
     // Loop through themes
     let theme_keys = Carl.shop.theme.keys;
-    // let column = 0;
     for(let ti = 0; ti < theme_keys.length; ti++) {
         let name = theme_keys[ti];
         let item = Carl.shop.theme[name];
@@ -1370,10 +1355,8 @@ function populateCarl() {
         let theme = themes[theme_keys[ti]];
         let img = theme.image;
 
-        // if(column == 0) { html += `<div class="shop_column">`; }
         html += carlHTML(name, 'theme', theme.name, img, item.price);
-        // if(column == 2) { html += `</div>`; }
-        // column += column == 2 ? -2 : 1;
+        // count++;
     }
 
     // Loop through cosmetics
@@ -1392,20 +1375,18 @@ function populateCarl() {
         let cosmetic = cosmetics[ca][cb];
         let img = cosmetic.image || cosmetic.preview;
 
-        // if(column == 0) { html += `<div class="shop_column">`; }
         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
-        // if(column == 2) { html += `</div>`; }
-        // column += column == 2 ? -2 : 1;
+        // count++;
     }
 
+    // Update page
     if(html == '') {
-        carlShop.innerHTML = `
+        html = `
         <p class="padding-5px secondary_text center">
             That's all for now. Complete more achievements for more things to buy!
         </p>`;
-    } else {
-        carlShop.innerHTML = html;
     }
+    carlShop.innerHTML = html;
     cashCount(false);
 
     /** Carl HTML template */

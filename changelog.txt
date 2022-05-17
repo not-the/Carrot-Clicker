@@ -1,4 +1,18 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15.1
+    5-17-2022
+// ----------------------------------------------------------- //
+
+- Complete overhaul/replacement of character tooltips- instead the character box is enlarged with a space for a biography on the side
+
+Charles:
+- The game will now automatically open Charles' bio screen after a prestige to prompt you to spend your carrots
+- His character box will also glow when you can afford a tome
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15
     5-12-2022
 // ----------------------------------------------------------- //

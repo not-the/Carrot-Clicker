@@ -221,7 +221,10 @@
                     <!--Boomer Bill Rendering-->
                     <!-- #region -->
                     <div class="Bill characterbox" id="bill_box">
-                        <div class="billtooltip charactertooltip tooltip" id="billtooltip">
+                        <div class="char_info" id="bill_info">
+                            <h2>Bill</h2>
+                            <p class="secondary_text">- Farmer -</p>
+                            <hr>
                             Upgrading Bill will increase your carrots per click (CPC) by one.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('bill')" tabindex="0" role="button">
@@ -269,19 +272,18 @@
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="bill_netherite_hoe" tabindex="0" role="button">
                         </div>
-
-                        <!-- Bio Card -->
-                        <div class="bio_card" id="bill_bio">
-                            Hello there
-                        </div>
-
                     </div>
                     <!-- #endregion -->
 
                     <!--Belle Boomerette Rendering-->
                     <!-- #region -->
                     <div class="Belle characterbox char_locked" id="belle_box">
-                        <div class="belletooltip charactertooltip tooltip" id="belletooltip">Upgrading Belle will increase your carrots per second (CPS) by one.</div>
+                        <div  class="char_info" id="belle_info">
+                            <h2>Belle</h2>
+                            <p class="secondary_text">- Farmer -</p>
+                            <hr>
+                            Upgrading Belle will increase your carrots per second (CPS) by one.
+                        </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('belle')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('belle')" tabindex="0" role="button">
 
@@ -294,13 +296,13 @@
                             class="characterimg"
                             title="Boomer Belle">
                             <div class="characterdesc">
-                            <b id="belle_name" class="character_name">
-                                Belle
-                            </b>
-                            <p class="secondary_text">
-                                Cost to upgrade Belle: <span id="UpBelleCost"></span>
-                            </p>
-                            <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
+                                <b id="belle_name" class="character_name">
+                                    Belle
+                                </b>
+                                <p class="secondary_text">
+                                    Cost to upgrade Belle: <span id="UpBelleCost"></span>
+                                </p>
+                                <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
                         </div>
 
@@ -333,7 +335,10 @@
                     
                     <!--Gregory Rendering-->
                     <div class="Greg characterbox char_locked" id="greg_box">
-                        <div class="billtooltip charactertooltip tooltip" id="gregtooltip">
+                        <div class="char_info" id="greg_info">
+                            <h2>Greg</h2>
+                            <p class="secondary_text">- Blacksmith -</p>
+                            <hr>
                             Upgrade Greg to create and store tools. The maximum amount of tools he and the other characters can hold can hold is equal to his level.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')" tabindex="0" role="button">
@@ -406,8 +411,13 @@
 
                     <!--Charles Rendering-->
                     <div class="Charles characterbox char_locked" id="charles_box">
-                        <div class="charlestooltip charactertooltip tooltip" id="charlestooltip">
-                            Charles Tooltip
+                        <div class="char_info" id="charles_info">
+                            <h2>Charles</h2>
+                            <p class="secondary_text">- Scholar -</p>
+                            <hr>
+                            <div id="charles_debug"></div>
+
+                            <button onclick="closeDialog()">Done</button>
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('charles')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('charles')" tabindex="0" role="button">
@@ -431,7 +441,7 @@
                         </div>
 
                         <!-- Bottom -->
-                        <div class="bottom shop_bottom">
+                        <div class="bottom shop_bottom" id="charles_shop">
                             <!-- Charles' buttons -->
                             <div
                             onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
@@ -503,7 +513,10 @@
 
                     <!--SIX Rendering-->
                     <div class="six characterbox char_locked" id="six_box">
-                        <div class="sixtooltip charactertooltip tooltip" id="sixtooltip">
+                        <div class="char_info" id="six_info">
+                            <h2>Six</h2>
+                            <p class="secondary_text">- ??? -</p>
+                            <hr>
                             Sells trinkets that grant special abilities. Trinkets are kept when you prestige.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('six')" tabindex="0" role="button">
@@ -517,40 +530,26 @@
                                 id="six_avatar"
                                 class="characterimg"
                                 title="six">
-                            <div class="characterdesc flex">
-                                <div>
-                                    <b id="six_name" class="character_name">? (WIP)</b>
-                                    <p class="secondary_text">
-                                        Trinket shop
-                                    </p>
-                                </div>
+                            <div class="characterdesc">
+                                <b id="six_name" class="character_name">? (WIP)</b>
+                                <p class="secondary_text">
+                                    Trinket shop
+                                </p>
                             </div>
                         </div>
 
                         <!-- Bottom -->
                         <div class="bottom shop_bottom">
-                            <!-- Shop -->
-                            <div id="six_shop">
-                                <!-- <div id="six_shop_clickrate" class="shop_item" onclick="buySix('clickrate')" tabindex="0" role="button">
-                                    <img src="./assets/achievements/missing.png" alt="" class="shop_img">
-                                    <div class="info">
-                                        <b>Golden Mouse</b>
-                                        <p class="secondary_text">desc</p>
-                                        <div class="shop_price">
-                                            10 coins
-                                        </div>
-                                    </div>
-                                    <div class="shop_tooltip">
-                                        Increases hold-to-click speed by 1
-                                    </div>
-                                </div> -->
-                            </div>
+                            <div id="six_shop"></div>
                         </div>
                     </div>
 
                     <!--Carl Rendering-->
                     <div class="carl characterbox char_locked" id="carl_box">
-                        <div class="carltooltip charactertooltip tooltip" id="carltooltip">
+                        <div class="char_info" id="carl_info">
+                            <h2>Carl</h2>
+                            <p class="secondary_text">- Artist -</p>
+                            <hr>
                             The artist. Ever get tired of farming carrots? Of course not, but you can still change it up if you so choose.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('carl')" tabindex="0" role="button">
@@ -584,7 +583,14 @@
                         </div>
 
                         <!-- Bottom -->
-                        <div class="bottom shop_bottom" id="cosmetic_shop"></div>
+                        <div class="bottom shop_bottom">
+                            <div id="carl_shop"></div>
+                            <!-- <div class="shop_nav">
+                                <div class="shop_nav_item nav_prev" tabindex="0" role="button" onclick="populateCarl(-1)">⯇</div>
+                                <p class="secondary_text" id="carl_page_indicator">1/4</p>
+                                <div class="shop_nav_item nav_prev" tabindex="0" role="button" onclick="populateCarl(1)">⯈</div>
+                            </div> -->
+                        </div>
                     </div>
 
                     <!-- More characters tooltip -->

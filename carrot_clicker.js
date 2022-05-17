@@ -118,7 +118,7 @@ const elMainProgressContainer = dom('main_progress_container');
 const elMainProgressBar = dom('main_progress_bar');
 const elGregProgress = dom("Greg_Progress");
 const elCharles = {
-    charlesTooltip: dom("charlestooltip"),
+    debug: dom("charles_debug"),
     prices: {
         improveWorkingConditions: dom("ImproveWorkingConditions"),
         betterHoes:               dom("BetterHoes"),
@@ -1348,10 +1348,17 @@ function updateCharlesShop() {
     eInnerText(tomeCount.iwc, `Owned: ${numCommas(Charles.tome.improveWorkingConditions.value)}`);
     eInnerText(tomeCount.bh,  `Owned: ${numCommas(Charles.tome.betterHoes.value)}`);
     eInnerText(tomeCount.dww, `Owned: ${numCommas(Charles.tome.decreaseWages.value)}`);
+    
+    // Make Charles glow
+    style(dom('charles_box'), 'glowing', (
+        Charles.tome.improveWorkingConditions.price <= player.golden_carrots
+        || Charles.tome.betterHoes.price <= player.golden_carrots
+        || Charles.tome.decreaseWages.price <= player.golden_carrots
+    ));
 
     // Debugging tooltip
-    eInnerText(elCharles.charlesTooltip,
-        ` ${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
+    eInnerText(elCharles.debug,
+        `${Math.floor(Charles.tome.improveWorkingConditions.value)}%\n
         BH: ${Math.floor(Charles.tome.betterHoes.value)}%\n
         DWW: ${(DecreaseWagesEffects()*100).toFixed(2)}%`);
 }
@@ -1368,6 +1375,7 @@ function updateCarlsShop() {
     let keys = Object.keys(carlShopData);
     for(let sd = 0; sd < keys.length; sd++) {
         let element = dom(`carl_shop_${keys[sd]}`);
+        if(element == null) continue;
         let price = carlShopData[keys[sd]];
         style(element, 'cant_afford', (player.cash < price));
     }
@@ -1696,7 +1704,7 @@ function Prestige() {
 
     // Tutorial message
     if(player.lifetime.prestige_count == 1) {
-        let toaster = toast('Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you.', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
+        let toaster = toast('Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming,', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
     }
 
     // Recalculate & update prestige potential
@@ -1714,6 +1722,11 @@ function Prestige() {
     // calculate CPC and CPS
     player.cpc = Calculate_Carrots(Boomer_Bill);
     player.cps = Calculate_Carrots(Belle_Boomerette);
+
+    // Prompt player to use Charles (should maybe only be first time?)
+    setTimeout(() => {
+        characterInfo('charles'); 
+    }, 100);
 }
 /** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
  * @param {Object} character 
@@ -1738,7 +1751,8 @@ function Calculate_Carrots(character) {
 /** Calculates the prestige potential and updates the page */
 function calculatePrestigePotential() {
     player.prestige_potential = Math.floor(
-        5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) * (1 + (player.pages * (Six.data.page_bonus.value || 1)/100))
+        5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) // Initial value
+        * (1 + (player.pages * (Six.data.page_bonus.value || 1)/100)) // Tome page bonus
     );
 
     // Update page
@@ -2327,6 +2341,7 @@ try {
 // Automatically change tips
 var tipInterval = setInterval(() => {tipchange()}, 15000);
 
+/** Randomly choose a new tip to display in the status bar */
 function tipchange() {
     if(menuOpen()) return;
     
@@ -2335,11 +2350,11 @@ function tipchange() {
     
     // Tracker - determine tips level
     if(player.equippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) {
-        tips.tracker = 1;
+        tips.tracker = 1; // 1 tool equipped or 100k
     } else if(player.prestige.carrots > 1000000 && tips.tracker == 1) {
-        tips.tracker = 2;
+        tips.tracker = 2; // 1 million
     } else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) {
-        tips.tracker = 3;
+        tips.tracker = 3; // 1 billion
     }
 
     // Update best

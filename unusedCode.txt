@@ -363,3 +363,99 @@ setInterval(() => {
                                                                
                                                                
 // `)
+
+
+
+
+
+
+
+* populateCarl function
+populateCarl w/ pages
+function populateCarl(page_dir=0) {
+    // Get keys
+    let theme_keys = Carl.shop.theme.keys;
+    let cosm_keys = Carl.shop.cosmetic.keys;
+    let pageMax = Math.ceil(Object.keys(carlShopData).length / 3);
+
+    // Pages
+    pageCarl += page_dir;
+    if(pageCarl < 1 || pageCarl > pageMax) {
+        pageCarl += page_dir * -1
+        return;
+    };
+    carl_page_indicator.innerText = `${pageCarl}/${pageMax}`;
+
+    let html = '';
+    carlShopData = {};
+    let count = 1;
+
+    // Loop through themes
+    for(let ti = 0; ti < theme_keys.length; ti++) {
+        let name = theme_keys[ti];
+        let item = Carl.shop.theme[name];
+        // Skip if unavailable
+        if(
+            item.available == false ||
+            item.bought == true
+        ) continue;
+        // Add to shop data
+        carlShopData[name] = item.price;
+        // Skip if out of page range
+        if(count > pageCarl * 3 || count < (pageCarl * 3) - 3) continue;
+
+        let theme = themes[theme_keys[ti]];
+        let img = theme.image;
+
+        html += carlHTML(name, 'theme', theme.name, img, item.price);
+        count++;
+    }
+
+    // Loop through cosmetics
+    for(let ti = 0; ti < cosm_keys.length; ti++) {
+        let name = cosm_keys[ti];
+        let item = Carl.shop.cosmetic[name];
+        if(
+            item.available == false ||
+            item.bought == true ||
+            count > pageCarl * 3
+        ) continue;
+
+        carlShopData[name] = item.price;
+
+        let [ca, cb] = name.split('/');
+        let cosmetic = cosmetics[ca][cb];
+        let img = cosmetic.image || cosmetic.preview;
+
+        html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+        count++;
+    }
+
+    // Update page
+    if(html == '') {
+        html = `
+        <p class="padding-5px secondary_text center">
+            That's all for now. Complete more achievements for more things to buy!
+        </p>`;
+    }
+    carlShop.innerHTML = html;
+    cashCount(false);
+
+    /** Carl HTML template */
+    function carlHTML(internalName, type, name, img, price) {
+        return `
+        <div id="carl_shop_${internalName}" class="shop_item" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
+            <div class="flex">
+                <img src="${img}" alt="" class="shop_img">
+                <div class="info">
+                    <b>${name}</b>
+                    <p class="secondary_text">${capitalizeFL(type)}</p>
+    
+                    <div class="shop_price">
+                        ${price} coins
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+}

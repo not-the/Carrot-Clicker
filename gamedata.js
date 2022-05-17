@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15';
+    const game_version = 'dev beta v1.15.1';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -62,6 +62,7 @@ const default_tips = {
     ],
     advanced: [ // 3
         "You've earned more than 1 billion carrots this prestige. That's a lot!",
+        "Good luck!", // placeholder?
         // "Unlocking every theme will make a special theme available",
     ],
 
