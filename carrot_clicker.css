@@ -1659,6 +1659,7 @@ body:not(.gp) #golden_carrot_count*/ {
 .Charles .shop_item .shop_value { top: 5px; }
 .shop_bottom {
     padding: 5px;
+    min-height: 58px;
     max-height: 220px;
     overflow-y: auto;
 }
@@ -1677,16 +1678,12 @@ body:not(.gp) #golden_carrot_count*/ {
 .shop_nav p {
     padding: 2px 8px 0;
 }
-.carl .shop_bottom {
-    /* max-height: unset; */
-    min-height: 58px;
-}
 .char_button {
     height: 32px;
     padding: 6px 0;
 }
 .six .shop_bottom {
-    max-height: 301px;
+    /* max-height: 301px; */
 }
 
 /* Character shops */
