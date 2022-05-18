@@ -1128,10 +1128,7 @@ function populateAchievements() {
     elAchievementsList.innerHTML = achievementHTML;
     setTimeout(() => {achieveGridAdjust()}, 50);
 }
-function achieveGridAdjust(ov) {
-    console.log(`achieveGridAdjust(${ov})`);
-    // if(settings.compact_achievements == false && ov != true) return;
-
+function achieveGridAdjust() {
     // Size adjust
     let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     if(width > 1166) { width = 1166 - 64; }
