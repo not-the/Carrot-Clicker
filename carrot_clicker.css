@@ -40,12 +40,15 @@
     --golden-carrot:    #fae100;
     --warning-red:      rgb(255, 65, 65);
 
-    /* Theme colors */
+    /* Light theme */
     --light-main-bg-color:      whitesmoke;
     --light-highlight-color:    white;
     --light-darker-bg-color:    rgb(230, 230, 230);
     --light-theme-border-color: rgb(185, 185, 185);
     --light-theme-secondary-text: rgb(70, 70, 70);
+
+    /* RGB themes */
+    --red-main: rgb(63, 20, 20);
 
     /* theme_retro */
     --retro-lightest: #ffffff;
@@ -102,7 +105,7 @@ h4 {
 hr {
     border: none;
     height: 1px;
-    background-color: var(--border-color)
+    background-color: var(--border-color);
 }
 img {
     user-select: none;
@@ -136,6 +139,9 @@ img {
     flex-wrap: wrap;
 
     margin-top: 80px;
+}
+.bold {
+    font-weight: bold;
 }
 .unbold {
     font-weight: unset;
@@ -457,7 +463,7 @@ summary:hover {
         transform: translate(-50%, calc(-50% + 20px));
     }
 }
-h2 {
+h2, h3 {
     margin: 0;
 }
 #dialog h2, #dialog p {
@@ -497,23 +503,19 @@ h2 {
 
 /* Toasts */
 #toast_container {
+    margin-bottom: 0px;
+    padding-top: 20px;
+    padding-left: 2px;
+    max-height: 100vh;
+
     position: fixed;
     z-index: 300;
     bottom: 0;
     right: 0;
-    margin-bottom: 0px;
-    padding-top: 20px;
-    padding-left: 2px;
 
     display: flex;
     flex-direction: column-reverse;
-    /* flex-direction: column; */
-
-    max-height: 100vh;
-    /* max-height: 400px; */
     overflow: auto;
-
-    pointer-events: painted;
 }
 .toast {
     width: 300px;
@@ -873,17 +875,13 @@ body:not(.theme_light) .theme_checkmark {
 .key_column {
     margin-right: 8px;
     padding-right: 8px;
-    border-right: 1px solid var(--border-color);
 }
 .key_column:last-of-type {
     margin-right: 0;
     padding-right: 0;
-    border-right: none;
 }
 
-
-/* Paint splatter */
-.fancy_switcher div { z-index: 20; }
+/* Cosmetic category */
 .fancy_switcher summary {
     transform: translateX(20px);
     padding-bottom: 8px;
@@ -1192,25 +1190,6 @@ body:not(.theme_light) .theme_checkmark {
     /* white-space: pre; */
 }
 
-/* Multibuy indicator */
-/* #multibuy_button {
-    font-size: 14pt;
-    font-weight: bolder;
-    background-color: var(--lighter-bg-color);
-    color: white;
-    border: 1px solid var(--border-color);
-    border-top: none;
-    padding: 4px 0 8px;
-    margin-left: 8px;
-    margin-top: -31px;
-    width: 54px;
-    text-align: center;
-    border-radius: 0 0 16px 16px;
-}
-#multibuy_button:hover {
-    filter: brightness(125%);
-} */
-
 /* Main */
 
 /* Mini stats */
@@ -1341,13 +1320,15 @@ body:not(.theme_light) .theme_checkmark {
 }
 
 /* Characters */
-.characterbox {
+.characterbox,
+#powers_container {
     background: var(--lighter-bg-color);
     border: 3px solid var(--lighter-bg-color);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 
     width: 362px;
+    max-width: 100%;
     margin: 0px;
     margin-bottom: 8px;
     margin-right: 10px;
@@ -1379,6 +1360,38 @@ body:not(.theme_light) .theme_checkmark {
     border-end-end-radius: 10px;
 }
 
+/* Powers */
+#powers_container {
+    font-size: 12pt;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.power_item {
+    background-color: var(--main-bg-color);
+    box-shadow: 0 0 12px rgb(0 0 0 / 30%) inset;
+    text-align: center;
+
+    min-width: 54px;
+    padding: 4px 8px;
+    border-radius: 8px;
+
+    display: inline-block;
+}
+.power_item:hover { box-shadow: none; }
+.power_item:not(#multibuy) { padding-left: 32px; }
+.power_item:not(:last-of-type) { margin-right: 5px; }
+.power_item img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    transform: translate(-28px, -3px);
+}
+.mb_vr {
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid var(--darker-bg-color);
+}
+
 /* Character bio */
 .characterbox:hover,
 .characterbox:focus-visible,
@@ -1397,7 +1410,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 .characterbox.show_info .shop_bottom:not(#charles_shop) {
     height: 560px;
-    max-height: 560px;
+    max-height: calc(100vh - 100px);
 }
 .characterbox .char_info {
     width: 100%;
@@ -1416,10 +1429,9 @@ body:not(.theme_light) .theme_checkmark {
     transition: opacity 0.2s ease;
 }
 .characterbox:not(.show_info) .char_info {
-    visibility: hidden;
-    opacity: 0;
-    width: 0;
-    height: 0;
+    visibility: hidden;  opacity: 0;
+    left: 0;             top: 0;
+    width: 0;            height: 0;
 }
 .characterbox .char_info button {
     width: calc(100% - 48px);
@@ -1444,7 +1456,7 @@ body:not(.theme_light) .theme_checkmark {
 }
 
 .char_mini_button {
-    width: 15px;
+    width: 16px;
     filter: invert() opacity(70%);
     cursor: pointer;
 
@@ -1488,7 +1500,7 @@ body:not(.theme_light) .theme_checkmark {
     image-rendering: pixelated;
     border-top-left-radius: 9px;
 
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 /* Tools/upgrades */
 .levelupimg, .toolicon {
@@ -1561,14 +1573,13 @@ body:not(.gp) #golden_carrot_count*/ {
     transform: translateX(22px) translateY(24px);
 }
 .greg_crafting_info {
-    background-color: var(--darker-bg-color);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
     border-radius: 7px;
     position: absolute;
     top: 105px;
     left: 3px;
     width: 44px;
     height: 26px;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
 }
 .greg_crafting_info.inactive .greg_spinny {
     visibility: hidden;
@@ -1684,9 +1695,7 @@ body:not(.gp) #golden_carrot_count*/ {
     height: 32px;
     padding: 6px 0;
 }
-.six .shop_bottom {
-    /* max-height: 301px; */
-}
+/* .six .shop_bottom { max-height: 301px; } */
 
 /* Character shops */
 .shop_item {
@@ -1783,9 +1792,11 @@ body:not(.gp) #golden_carrot_count*/ {
     filter: brightness(85%);
 }
 /* Six segments */
+.darker_bg_color {
+    background-color: var(--darker-bg-color);
+}
 .segment_bar {
     display: flex;
-    background-color: var(--darker-bg-color);
     height: 10px;
     width: 190px;
     border-radius: 4px;
@@ -2357,6 +2368,11 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 }
 
 /* Keybinds Menu */
+.key_header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2px;
+    margin-bottom: 6px;
+}
 .keybind_item {
     padding-bottom: 12px;
 }
@@ -2582,7 +2598,7 @@ footer {
 }
 
 /* 848px - mobile layout*/
-@media only screen and (max-width: 848px) {
+@media only screen and (max-width: 800px) {
     /* Overlays */
     .characterbox.show_info {
         top: 12px;
@@ -2698,7 +2714,6 @@ footer {
         display: block;
     }
     .key_column {
-        border: none;
         padding: 0;
         margin: 0;
     }

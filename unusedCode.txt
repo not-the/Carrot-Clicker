@@ -12,6 +12,27 @@ index.html
 <!-- <a href="https://commons.wikimedia.org/wiki/File:Emojione_2754.svg">Emoji One Question mark SVG</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons -->
 <!-- <a href="https://commons.wikimedia.org/wiki/File:Backpack_(2551)_-_The_Noun_Project.svg">Backpack icon</a> by Rémy Médard, CC0, via Wikimedia Commons -->
 
+carrot_clicker.css
+* unused multibuy indicator
+/* Multibuy indicator */
+#multibuy_button {
+    font-size: 14pt;
+    font-weight: bolder;
+    background-color: var(--lighter-bg-color);
+    color: white;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    padding: 4px 0 8px;
+    margin-left: 8px;
+    margin-top: -31px;
+    width: 54px;
+    text-align: center;
+    border-radius: 0 0 16px 16px;
+}
+#multibuy_button:hover {
+    filter: brightness(125%);
+}
+
 
 /----------CarrotClicker.Js---------/
 

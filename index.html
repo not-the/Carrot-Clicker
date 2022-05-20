@@ -7,7 +7,7 @@
 
     <!-- Main -->
     <title id="page_title">Carrot Clicker</title>
-    <link rel="shortcut icon" type="image/png" href="./assets/carrot small.png"/>
+    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png"/>
     <meta name="theme-color" content="#312e2e" id="theme_color">
 
     <!-- CSS -->
@@ -52,7 +52,7 @@
                     style="position: absolute; transform: translate(-38px, -6px)"
                     title="Carrot Clicker">
 
-                    <b>Carrot Clicker</b> - <b id="multibuy" class="link_styling" title="Purchase multiplier - Click to cycle" onclick="multibuySpin()" tabindex="0">1x</b><p>
+                    <b style="padding-left: 2px;">Carrot Clicker</b>
 
                 <!-- Tips -->
                 <div id="Tip" class="link_styling" onclick="tipchange()" tabindex="0" role="button">Tip: Click the carrot</div>
@@ -140,11 +140,6 @@
                 </div>
             </div>
 
-            <!-- Multibuy Indicator -->
-            <!-- <div id="multibuy_button" class="link_styling pointer" onclick="multibuySpin()">
-                1x
-            </div> -->
-
         </div>
 
         
@@ -152,8 +147,6 @@
         <div id="container" class="flex">
             <!-- Left Section -->
             <div id="left-section">
-
-                <!-- <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('farmable')"> -->
 
                 <!-- Falling Carrots -->
                 <div id="fallingCarrotsArea"></div>
@@ -175,6 +168,7 @@
                     <p class="secondary_text" id="list_cps">
                         <span class="farmable_name">Carrots</span> per second: <span id="cps">Loading...</span>
                     </p><br/>
+
                     <p id="list_cash" class="secondary_text" style="margin-right:-24px">
                         Coins: <span id="cash_count">Loading...</span> <span tabindex="0" class="question_mark" title="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!" onclick="toast(...toasts.info_coins)">?</span></p>
                     <p id="list_pages" class="secondary_text" style="margin-right:-24px">
@@ -185,7 +179,7 @@
                     </p><br>
                 </div>
                 
-                <!-- Prestige Section -->
+                <!-- Buttons -->
                 <div class="main_buttons flex">
                     <!-- Prestige button -->
                     <button onClick="openPrestigeMenu()" title="???" class="main_button_item" id="prestige_menu_button" disabled>
@@ -215,8 +209,26 @@
 
             <!-- Right Section -->
             <div id="right-section" class="character_column">
+                
                 <!-- Character column 1 -->
                 <div class="character_column">
+
+                    <!-- Powers -->
+                    <div id="powers_container" class="flex">
+                        <div class="mb_vr">
+                            <div id="multibuy" class="power_item link_styling bold secondary_text" title="Purchase multiplier - Click to cycle" onclick="multibuySpin()" tabindex="0" role="button">
+                                1x
+                            </div>
+                        </div>
+
+                        <!-- <div class="power_item">
+                            <img src="./assets/pixel_carrot_32x.png" alt=""><span id="power_0">-:--</span>
+                        </div> -->
+
+                        <div id="no_powers" class="power_item" style="width: 100%; background: none; box-shadow: none; padding-left: 0">
+                            No active boosts
+                        </div>
+                    </div>
 
                     <!--Boomer Bill Rendering-->
                     <!-- #region -->
@@ -237,12 +249,13 @@
                             alt="Boomer Bill"
                             id="bill_avatar"
                             class="characterimg"
-                            title="Boomer Bill">
+                            title="Boomer Bill"
+                            onclick="characterInfo('bill')">
 
                             <div class="characterdesc">
                                 <b id="bill_name" class="character_name">Bill</b>
                                 <p class="secondary_text">
-                                    Cost to upgrade Bill: <span id="UpBillCost"></span>
+                                    Upgrade cost: <span id="UpBillCost" class="upgrade_cost"></span>
                                 </p>
                                 <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
@@ -294,13 +307,15 @@
                             alt="Belle Boomerette"
                             id="belle_avatar"
                             class="characterimg"
-                            title="Boomer Belle">
+                            title="Boomer Belle"
+                            onclick="characterInfo('belle')">
+
                             <div class="characterdesc">
                                 <b id="belle_name" class="character_name">
                                     Belle
                                 </b>
                                 <p class="secondary_text">
-                                    Cost to upgrade Belle: <span id="UpBelleCost"></span>
+                                    Upgrade cost: <span id="UpBelleCost" class="upgrade_cost"></span>
                                 </p>
                                 <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
@@ -351,15 +366,14 @@
                             alt="Gregory"
                             id="greg_avatar"
                             class="characterimg"
-                            title="Gregory">
+                            title="Gregory"
+                            onclick="characterInfo('greg')">
                             <div class="characterdesc">
                                 <b id="greg_name" class="character_name">Greg</b>
                                 <p class="secondary_text">
-                                    Cost to Upgrade Greg: <span id="UpGregCost"></span>
+                                    Upgrade cost: <span id="UpGregCost" class="upgrade_cost"></span>
                                 </p>
-                                <figcaption id="Greg_lvl" class="characterlevel secondary_text">
-                                    Lvl: 0
-                                </figcaption>
+                                <figcaption id="Greg_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
                         </div>
 
@@ -369,7 +383,7 @@
                             <!-- <span class="hoe_price">Prices:</span> -->
 
                             <!-- Crafting display -->
-                            <div class="greg_crafting_info inactive" title="Idle" id="greg_crafting_info">
+                            <div class="greg_crafting_info darker_bg_color inactive" title="Idle" id="greg_crafting_info">
                                 <img src="./assets/tools/tool_0.png" alt="" id="greg_progress_image" class="main_progress_image">
                                 <img src="./assets/icons/refresh.svg" alt="" class="greg_spinny">
                             </div>
@@ -429,7 +443,8 @@
                                 alt="Charles"
                                 id="charles_avatar"
                                 class="characterimg"
-                                title="Charles">
+                                title="Charles"
+                                onclick="characterInfo('charles')">
                             <div class="characterdesc">
                                 <b id="charles_name" class="character_name">Charles</b>
                                 <div class="flex" style="margin-top: 2px;">
@@ -457,7 +472,7 @@
                                     <span id="ImproveWorkingConditions" class="shop_price">---</span>
                                 </div>
                                 <div class="shop_tooltip">
-                                    Improves character efficiency
+                                    Increases Bill and Belle's output
                                 </div>
                             </div>
                             
@@ -493,7 +508,7 @@
                                     <span id="DecreaseWages" class="shop_price">---</span>
                                 </div>
                                 <div class="shop_tooltip">
-                                    Decreases the prices of upgradeable characters
+                                    Decreases the rate at which character prices increase
                                 </div>
                             </div>
 
@@ -529,7 +544,8 @@
                                 alt="six"
                                 id="six_avatar"
                                 class="characterimg"
-                                title="six">
+                                title="six"
+                                onclick="characterInfo('six')">
                             <div class="characterdesc">
                                 <b id="six_name" class="character_name">? (WIP)</b>
                                 <p class="secondary_text">
@@ -562,7 +578,8 @@
                                 alt="Carl"
                                 id="carl_avatar"
                                 class="characterimg"
-                                title="Carl">
+                                title="Carl"
+                                onclick="characterInfo('carl')">
                             <div class="characterdesc flex">
                                 <div>
                                     <b id="carl_name" class="character_name">Carl</b>
@@ -790,7 +807,7 @@
                 </div>
 
                 <!-- Options item -->
-                <b>Keybinds:</b><br>
+                <b>Keybinds</b><br>
                 <label for="disable_keybinds">
                 <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="setting('disable_keybinds')"">
                     Disable keybinds
@@ -825,7 +842,7 @@
                 </label><br><br>
 
                 <!-- Sounds options -->
-                <b>Sounds:</b><br>
+                <b>Sounds</b><br>
                 <!-- All sounds -->
                 <label for="enable_sounds">
                     <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
@@ -848,9 +865,7 @@
                     <!-- Master Volume -->
                     <tr>
                         <td>
-                            <label for="volume_master">
-                                Volume:
-                            </label>
+                            <label for="volume_master">Volume:</label>
                         </td>
                         <td>
                             <div class="slidecontainer">
@@ -900,7 +915,7 @@
                 
 
                 <!-- Notification Length -->
-                <label for="notificationLength">Notification Length:<br>
+                <label for="notificationLength"><b>Notification Length</b><br>
                     <p class="secondary_text">Time (in seconds) that notifications will stay on your screen for</p>
                     
                     <input type="number" id="notificationLength" min="2" max="15" value="6"/>
@@ -908,7 +923,7 @@
                 </label><br><br>
                 
                 <!-- Options item -->
-                <p>Danger Zone:</p>
+                <b>Danger Zone</b><br/>
                 <button id="clear_save_data" class="button_red" onClick="openDialog(...dialog.clearsave)">
                     Delete Save Data
                 </button>
@@ -1112,7 +1127,7 @@
                 <!-- Gameplay -->
                 <div class="key_column flex_1">
                     
-                    <p class="flex_1 no_border"><b class="underline">General:</b></p><br>
+                    <h3 class="key_header">General</h3>
 
                     <!-- Gameplay -->
                     <div class="keybind_item">
@@ -1157,6 +1172,16 @@
                                 -
                             </button>
                         </label>
+                    </div><br/>
+
+                    <h3 class="key_header">Settings</h3>
+                    <div class="keybind_item">
+                        <label for="key_full_numbers">
+                            <p>Toggle full numbers:</p>
+                            <button class="edit_keybind" id="key_full_numbers" onclick="detectKey('key_full_numbers')">
+                                -
+                            </button>
+                        </label>
                     </div>
 
                 </div>
@@ -1164,7 +1189,7 @@
                 <!-- Tools -->
                 <div class="key_column flex_1">
                     
-                    <p class="flex_1 no_border"><b class="underline">Tools:</b></p><br>
+                    <h3 class="key_header">Tools</h3>
 
                     <div class="keybind_item">
                         <label for="key_craft_0">
@@ -1219,8 +1244,24 @@
 
                 <!-- Interface -->
                 <div class="key_column flex_1">
-                    <p class="flex_1 no_border"><b class="underline">Interface:</b></p><br>
+                    <h3 class="key_header">Interface</h3>
 
+                    <div class="keybind_item">
+                        <label for="key_cleartoasts">
+                            <p>Clear notifications:</p>
+                            <button class="edit_keybind" id="key_cleartoasts" onclick="detectKey('key_cleartoasts')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_prestige">
+                            <p>Prestige menu:</p>
+                            <button class="edit_keybind" id="key_prestige" onclick="detectKey('key_prestige')">
+                                -
+                            </button>
+                        </label>
+                    </div>
                     <!-- <div class="keybind_item">
                         <label for="key_inventory">
                             <p>Inventory:</p>
@@ -1230,17 +1271,50 @@
                         </label>
                     </div> -->
                     <div class="keybind_item">
-                        <label for="key_prestige">
-                            <p>Open Prestige dialog:</p>
-                            <button class="edit_keybind" id="key_prestige" onclick="detectKey('key_prestige')">
+                        <label for="key_tips_menu">
+                            <p>Tips menu:</p>
+                            <button class="edit_keybind" id="key_tips_menu" onclick="detectKey('key_tips_menu')">
                                 -
                             </button>
                         </label>
                     </div>
                     <div class="keybind_item">
-                        <label for="key_cleartoasts">
-                            <p>Clear notifications:</p>
-                            <button class="edit_keybind" id="key_cleartoasts" onclick="detectKey('key_cleartoasts')">
+                        <label for="key_themes">
+                            <p>Themes menu:</p>
+                            <button class="edit_keybind" id="key_themes" onclick="detectKey('key_themes')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_cosmetics">
+                            <p>Cosmetics menu:</p>
+                            <button class="edit_keybind" id="key_cosmetics" onclick="detectKey('key_cosmetics')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+
+                    <div class="keybind_item">
+                        <label for="key_pane_achievements">
+                            <p>Achievements panel:</p>
+                            <button class="edit_keybind" id="key_pane_achievements" onclick="detectKey('key_pane_achievements')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_pane_statistics">
+                            <p>Statistics panel:</p>
+                            <button class="edit_keybind" id="key_pane_statistics" onclick="detectKey('key_pane_statistics')">
+                                -
+                            </button>
+                        </label>
+                    </div>
+                    <div class="keybind_item">
+                        <label for="key_pane_settings">
+                            <p>Settings panel:</p>
+                            <button class="edit_keybind" id="key_pane_settings" onclick="detectKey('key_pane_settings')">
                                 -
                             </button>
                         </label>

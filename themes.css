@@ -365,6 +365,127 @@ tome_dww
 
 
 
+/* Original/Classic-er theme */
+/* #region */
+.theme_original,
+.theme_original button,
+.theme_original #backdrop,
+.theme_original .Basic_Info,
+.theme_original .hover_menu,
+.theme_original .shop_bottom {
+    background-color: #291c11 !important;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.theme_original * {
+    box-shadow: none !important;
+    background-color: unset !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+}
+.theme_original b,
+.theme_original h1,
+.theme_original h2,
+.theme_original h3,
+.theme_original button {
+    letter-spacing: 0.03em;
+}
+.theme_original button:hover {
+    color: white;
+    filter: brightness(125%);
+}
+.theme_original button,
+.theme_original input,
+.theme_original textarea,
+.theme_original .toast,
+.theme_original .characterbox,
+.theme_original #powers_container,
+.theme_original .tooltip,
+.theme_original .shop_tooltip,
+.theme_original .description,
+.theme_original .achievement_item,
+.theme_original .achievement_details,
+.theme_original .theme_item,
+.theme_original #info_dropdown:hover,
+.theme_original #info_dropdown:focus,
+.theme_original .menu_item:hover {
+    background-color: #442f1e !important;
+    color: white;
+}
+.theme_original .upgrade_cost {
+    color: greenyellow;
+}
+.theme_original .upgrade_cost::before {
+    content: "$";
+}
+.theme_original #main_carrot {
+    content: url('./assets/theme/theme_original/carrot.png');
+    filter: none;
+    transition: none;
+    padding: 0;
+    margin: 0;
+}
+.theme_original #main_carrot:active {
+    transform: scale(0.9, 0.9) !important;
+}
+.theme_original .segment {
+    background-color: #160f09 !important;
+}
+.theme_original .segment.filled {
+    background-color: greenyellow !important;
+}
+/* #endregion */
+
+
+
+
+
+
+
+/* Tripane - All color themes */
+.theme_red #tripane,
+.theme_green #tripane,
+.theme_blue #tripane,
+.theme_grey #tripane {
+    background-color: var(--lighter-bg-color);
+}
+.theme_red #tripane nav,
+.theme_green #tripane nav,
+.theme_blue #tripane nav,
+.theme_grey #tripane nav {
+    background-color: var(--main-bg-color);
+}
+.theme_red #tripane nav .tab,
+.theme_green #tripane nav .tab,
+.theme_blue #tripane nav .tab,
+.theme_grey #tripane nav .tab {
+    background-color: var(--main-bg-color);
+    color: gray;
+}
+.theme_red #tripane nav .activetab,
+.theme_green #tripane nav .activetab,
+.theme_blue #tripane nav .activetab,
+.theme_grey #tripane nav .activetab {
+    background-color: var(--lighter-bg-color);
+    color: white;
+}
+.theme_red .achievement_item,
+.theme_green .achievement_item,
+.theme_blue .achievement_item,
+.theme_grey .achievement_item,
+
+.theme_red .footer_bottom,
+.theme_green .footer_bottom,
+.theme_blue .footer_bottom,
+.theme_grey .footer_bottom {
+    background-color: var(--darker-bg-color);
+}
+
+
+
+
+
+
 
 
 
@@ -372,35 +493,26 @@ tome_dww
 /* Red theme */
 /* #region */
 .theme_red {
-    background-color: rgb(63, 20, 20);
+    background-color: rgb(112, 37, 37);
 }
 .theme_red .Basic_Info {
     background-color: #913535;
 }
 .theme_red #left-section {
-    background-color: rgb(112, 37, 37);
+    background-color: var(--red-main);
 }
 .theme_red .characterbox {
     background-color: rgb(145, 53, 53);
-    border-color: rgb(112, 37, 37);
+    border-color: rgb(145, 53, 53);
 }
 .theme_red .bottom {
     background-color: rgb(112, 37, 37);
 }
-/* Tri-pane */
-.theme_red #tripane {
-    background-color: var(--lighter-bg-color);
+.theme_red .shop_item {
+    background-color: rgb(145, 53, 53);
 }
-.theme_red #tripane nav {
-    background-color: var(--main-bg-color);
-}
-.theme_red #tripane nav .tab {
-    background-color: var(--main-bg-color);
-    color: gray;
-}
-.theme_red #tripane nav .activetab {
-    background-color: var(--lighter-bg-color);
-    color: white;
+.theme_red .darker_bg_color {
+    background-color: var(--red-main);
 }
 /* #endregion */
 
@@ -432,20 +544,11 @@ tome_dww
 .theme_green .bottom {
     background-color: rgb(37, 49, 34);
 }
-/* Tri-pane */
-.theme_green #tripane {
-    background-color: var(--lighter-bg-color);
+.theme_green .shop_item {
+    background-color:  rgb(76, 105, 73);
 }
-.theme_green #tripane nav {
-    background-color: var(--main-bg-color);
-}
-.theme_green #tripane nav .tab {
-    background-color: var(--main-bg-color);
-    color: gray;
-}
-.theme_green #tripane nav .activetab {
-    background-color: var(--lighter-bg-color);
-    color: white;
+.theme_green .darker_bg_color {
+    background-color: rgb(25, 34, 22);
 }
 /* #endregion */
 
@@ -477,20 +580,11 @@ tome_dww
 .theme_blue .bottom {
     background-color:rgb(40, 50, 70);
 }
-/* Tri-pane */
-.theme_blue #tripane {
-    background-color: var(--lighter-bg-color);
+.theme_blue .shop_item {
+    background-color:  rgb(69, 87, 121);
 }
-.theme_blue #tripane nav {
-    background-color: var(--main-bg-color);
-}
-.theme_blue #tripane nav .tab {
-    background-color: var(--main-bg-color);
-    color: gray;
-}
-.theme_blue #tripane nav .activetab {
-    background-color: var(--lighter-bg-color);
-    color: white;
+.theme_blue .darker_bg_color {
+    background-color: rgb(24, 30, 48);
 }
 /* #endregion */
 

@@ -47,7 +47,7 @@ function stopMusic() {
 
 /** Returns true if any menu or popup is open */
 function menuOpen() {
-    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen)
+    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen || charInfoOpen)
     { return true; }
     return false;
 }
@@ -345,6 +345,13 @@ const keyCodesCode = {
         setCosmetic('farmable', 'huhwhuh');
     },
     5: () => {
+        // toast('Confetti?', '', '', true, false, false, false, () => {
+        //     randomConfetti();
+        // }, 'Confetti!');
+        randomConfetti();
+        document.onclick = randomConfetti;
+        
+        /** Create confetti with randomized colors */
         function randomConfetti() {
             let hex = '0123456789abcdef';
             // mouseConfetti([64,64], ['orange', 'teal', 'coral', 'goldenrod', 'whitesmoke'], 600);
@@ -358,13 +365,8 @@ const keyCodesCode = {
                 cs.push(c);
                 c = '#';
             }
-            mouseConfetti([100,100], cs, 600);
+            mouseConfetti([40,50], cs, 400);
         }
-        
-        randomConfetti();
-        toast('Confetti?', '', '', true, false, false, false, () => {
-            randomConfetti();
-        }, 'Confetti!');
     },
     6: () => {
         setTheme('theme_dark');
@@ -535,7 +537,24 @@ function keybindHandler(event, state) {
         event.preventDefault();
         openDialog(...dialog.clearsave);
     }
-    else if(key == settings.keybinds['key_prestige']) { openPrestigeMenu(); }
+
+    // Menus
+    else if(key == settings.keybinds['key_tips_menu'])         { openTipsMenu(); }
+    else if(key == settings.keybinds['key_prestige'])          { openPrestigeMenu(); }
+    else if(key == settings.keybinds['key_themes'])            { themeSwitcher(); }
+    else if(key == settings.keybinds['key_cosmetics'])         { cosmeticSwitcher(); }
+
+    // Tripane
+    else if(key == settings.keybinds['key_pane_achievements']) { panelChange(`achievements-panel`); }
+    else if(key == settings.keybinds['key_pane_statistics'])   { panelChange(`stats-panel`); }
+    else if(key == settings.keybinds['key_pane_settings'])     { panelChange(`settings-panel`); }
+
+    // Settings
+    else if(key == settings.keybinds['key_full_numbers']) {
+        let element = dom('full_numbers');
+        element.checked = !element.checked
+        setting('full_numbers');
+    }
 
     // Inventory
     // else if(key == settings.keybinds['key_inventory']) {
@@ -916,7 +935,7 @@ function buyCarl(type, item, subtype = false) {
 
 /** Six buy */
 function buySix(id) {
-    let item = Default_Six.shop[id];
+    let item = sixShop[id];
     let data = Six.data[id];
     let price = item.price[data.level];
     if(!data.available || price > player.cash || item.currency != 'cash' || data.level >= item.price.length) return;
@@ -1077,10 +1096,10 @@ function isDebug() {
                 toast('', 'Devtools: All Cosmetics now available');
             }
             window.allTrinkets = () => {
-                let keys = Default_Six.shop.keys;
+                let keys = sixShop.keys;
                 for(i = 0; i < keys.length; i++) {
                     let key = keys[i];
-                    let item = Default_Six.shop[key];
+                    let item = sixShop[key];
                     let data = Six.data?.[key];
                     if(data == undefined) continue;
                     let prices = item.price;
@@ -1145,7 +1164,6 @@ function isDebug() {
                 try {
                     for(let i = 0; i < saveListKeys.length; i++) {
                         let key = saveListKeys[i];
-                        if(key == 'tips_seen') continue; // tips_seen is handled differently, ignore
                         let obj_import = JSON.parse(imported[i]);
                         saveList[key] = obj_import;
                     }
@@ -1161,7 +1179,6 @@ function isDebug() {
                 for(let i = 0; i < saveListKeys.length; i++) {
                     let key = saveListKeys[i];
                     let obj = saveList[key];
-                    if(key == 'tips_seen') continue; // tips_seen is handled differently, ignore
                     exported += JSON.stringify(obj);
                     if(i == saveListKeys.length - 1) break;
                     exported += '//+//';
@@ -1331,7 +1348,6 @@ function isDebug() {
         Carl.shop.cosmetic,
 
         Six,
-        Six.shop,
         Six.data,
     ];
     var onu_templates = [
@@ -1341,7 +1357,7 @@ function isDebug() {
 
         default_settings,
         default_settings.cosmetics,
-        default_settings.keybinds,
+        keybinds_default,
 
         Default_Boomer_Bill,
         Default_Belle_Boomerette,
@@ -1359,7 +1375,6 @@ function isDebug() {
         Default_Carl.shop.cosmetic,
 
         Default_Six,
-        Default_Six.shop,
         Default_Six.data,
     ];
     //#endregion
@@ -1385,7 +1400,6 @@ function isDebug() {
                     }
                 }
             }
-            // Six.shop = JSON.parse(JSON.stringify(Default_Six.shop));
             //#endregion
     
             // Achievements
@@ -1427,7 +1441,7 @@ function isDebug() {
             player.data_version = default_player.data_version;
             saveGame();
         } catch (error) {
-            console.error('An object update was attempted but failed. Error info below:');
+            console.warn('An object update was attempted but failed. Error info below:');
             console.error(error);
             toast('Save file update failed', 'If you run into any issues you may have to delete your save.', 'error', true);
         }
@@ -1577,6 +1591,45 @@ function isDebug() {
 
     // Finished
 })();
+
+
+
+
+
+
+// Timer demo
+// let target_time = Date.now() + (15 * 60 * 1000);
+// var boostTimer = setInterval(timer, 1000);
+// function timer() {
+//     // Get the date
+//     let now = Date.now();
+//     let remaining_ms = target_time - now;
+//     let hours = Math.floor(remaining_ms / (1000 * 60 * 60));
+//     let minutes = Math.floor((remaining_ms % (1000 * 60 * 60)) / (1000 * 60));
+//     let seconds = Math.floor((remaining_ms % (1000 * 60)) / 1000);
+
+//     // Add zero to left
+//     if(seconds.toString().length == 1) { seconds = `0${seconds}`; }
+
+//     // Show hours when applicable
+//     if(hours != 0) {
+//         hours = `${hours}:`;
+//         if(minutes.toString().length == 1) { minutes = `0${minutes}`; }
+//     } else {
+//         hours = '';
+//     }
+
+//     // Update page
+//     dom('power_0').innerText = `${hours}${minutes}:${seconds}`;
+
+//     // Check if time is up
+//     if(remaining_ms <= 0) {
+//         dom('power_0').innerText = 'Done';
+//         clearInterval(boostTimer);
+//     }
+// }
+
+
 
 
 loadCheck = true;

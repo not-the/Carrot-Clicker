@@ -1,4 +1,41 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15.3
+    5-19-2022
+// ----------------------------------------------------------- //
+
+- Buffed propane tank and changed its scaling to double each upgrade
+- Max speed craft jobs are now nearly instantaneous
+- Carrot related numbers in statistics now DisplayRounded() instead of the full number
+- Updated the confetti easter egg to activate whenever you click until the page is resfreshed
+- Clicking on a character's avatar will now open their bio pane
+- Multibuy button has been moved from the status bar to above bill
+- Escape key now closes character bios
+- Additional keybinds can now be set for:
+  + Tips menu (H)
+  + Themes menu
+  + Cosmetics menu
+  + Achievements panel (A)
+  + Statistics (S)
+  + Settings panels (D)
+  + Toggling full numbers (F)
+- data_version has been bumped to 11
+
+LocalStorage improvements:
+- Fixed tips_seen not saving correctly and made it no longer store unused information in localStorage
+- Character Six' static shop data is no longer stored in localStorage
+
+CSS
+- Max screen width for mobile layout is now smaller
+- Fixed horizontal scrollbar appearing (again)
+- General fixes/consistency changes to the red, green, and blue themes
+- New themes (CSS only for the moment, not unlockable):
+  + theme_grey (Makes tripane section grey)
+  + theme_original (based on my original version of Carrot Clicker)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15.2.1
     5-17-2022
 // ----------------------------------------------------------- //
@@ -26,7 +63,7 @@
 - Complete overhaul/replacement of character tooltips- instead the character box is enlarged with a space for a biography on the side
 
 Charles:
-- The game will now automatically open Charles' bio screen after a prestige to prompt you to spend your carrots
+- The game will now automatically open Charles' bio screen after a prestige to prompt you to spend your golden carrots
 - His character box will also glow when you can afford a tome
 
 ~ Kal

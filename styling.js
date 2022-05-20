@@ -687,7 +687,7 @@ function populateTipsMenu() {
         for(ii = 0; ii < cat.length; ii++) {
             // console.log(cat[ii]);
             // Normal
-            if(tips[`s_${id}`][ii] == true || player.flags['all_tips'] == true) {
+            if(tips.seen[id][ii] == true || player.flags['all_tips'] == true) {
                 html += `
                 <p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
             }
@@ -1405,14 +1405,14 @@ function populateCarl() {
     }
 }
 
-const sixShop = dom('six_shop');
+const elSixShop = dom('six_shop');
 /** Populate six's shop */
 function populateSix() {
     let html = '';
-    let keys = Default_Six.shop.keys;
+    let keys = sixShop.keys;
     for(i = 0; i < keys.length; i++) {
         let key = keys[i];
-        let item = Default_Six.shop[key];
+        let item = sixShop[key];
         let data = Six.data?.[key];
         if(!data.available || data == undefined) continue;
 
@@ -1429,14 +1429,14 @@ function populateSix() {
             currency = 'coins';
             styles = '';
         }
-        let value = item.written.split('@').join(data.value);
+        let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
         html += sixHTML(key, item.img, item.name, item.desc, price, currency, segments, styles, value);
     }
     html += `
     <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
         Check back later for more trinkets
     </p>`;
-    sixShop.innerHTML = html;
+    elSixShop.innerHTML = html;
     cashCount(false);
 
     /** Six HTML template */
@@ -1446,7 +1446,7 @@ function populateSix() {
             <img src="${src}" alt="" class="shop_img">
             <div class="info">
                 <b>${name}</b>
-                <div class="segment_bar">${segments}</div>
+                <div class="segment_bar darker_bg_color">${segments}</div>
                 <div class="shop_value secondary_text">${value}</div>
                 <div class="shop_price">${price} ${currency}</div>
             </div>

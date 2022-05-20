@@ -165,16 +165,14 @@ const elEnableMainProgress = dom('enable_main_progress');
 class Character{
     /** Characters Atributes
      * @param {String} nickname Shortened name
-     * @param {String} Type Character profession
      * @param {String} img 
      * @param {Number} lvl Starting level
      * @param {Number} lvlupPrice Starting level up price
-     * @param {*} scaling The way level up prices scale
+     * @param {object} scaling The way level up prices scale
      * @param {Array} Hoes Blank hoe array
      */
-    constructor(nickname, type, img, lvl, lvlupPrice, scaling, Hoes) {
+    constructor(nickname, img, lvl, lvlupPrice, scaling, Hoes) {
         this.nickname=nickname;
-        this.type=type;
         this.img=img;
         this.lvl=lvl;
         this.lvlupPrice=lvlupPrice;
@@ -201,7 +199,7 @@ const playerPrestigeTemplate = {
     },
 };
 const default_player = {
-    data_version: 10, // needs to be incremented by 1 any time any game object is changed
+    data_version: 11, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -286,22 +284,17 @@ const default_player = {
 
 // Character Defaults
 const Default_Boomer_Bill = new Character(
-    "bill", "Farmer", './assets/characters/Boomer_Bill.png',
-    1, 100,
-    {
-
-    },
-    [0,0,0,0,0,0],
+    "bill", './assets/characters/Boomer_Bill.png',
+    1, 100, {}, [0,0,0,0,0,0],
 );
-const Default_Belle_Boomerette = new Character("belle","Farmer",'./assets/characters/BelleBommerette.png',0,200,{},[0,0,0,0,0,0]);
-const Default_Gregory          = new Character("greg","Blacksmith",'./assets/characters/Gregory.png',0,5000,{},[0,0,0,0,0,0]);
+const Default_Belle_Boomerette = new Character("belle",'./assets/characters/BelleBommerette.png',0,200,{},[0,0,0,0,0,0]);
+const Default_Gregory          = new Character("greg",'./assets/characters/Gregory.png',0,5000,{},[0,0,0,0,0,0]);
 Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
 Default_Gregory.crafting = false; // whether or not he is currently crafting
 const Default_Charles = {
     // Info
     name: "Charles",
     nickname: "charles",
-    type: "Scholar",
     img: './assets/characters/Charles.png',
 
     // Shop
@@ -324,8 +317,8 @@ const Default_Charles = {
     }
 }
 const Default_Carl = {
+    name: "Carl",
     nickname: "carl",
-    type: "Artist",
     img: './assets/characters/Carl.png',
 
     // Shop
@@ -509,103 +502,8 @@ const Default_Six = {
     // Info
     name: "",
     nickname: "",
-    type: "",
     img: './assets/characters/???.png',
 
-    // Shop info (Static)
-    shop: {
-        'clickrate': {
-            name:      'Golden Mouse',
-            desc:      'Increases hold-to-click speed by 1',
-            img:       './assets/items/mouse_2.png',
-            currency:  'cash',
-            price:     [5, 10, 25, 45, 70, 100, 135],
-            value:     [3,  4,  5,  6,  7,   8,   9],
-            written:   '@ clicks/s',
-        },
-        'belle_bonus': {
-            name:      'Synergy Drink',
-            desc:      'Increases belle\'s output while the carrot is being clicked',
-            img:       './assets/items/synergy.png',
-            currency:  'cash',
-            price:     [24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
-            value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
-            written:   '+@%',
-        },
-        // 'greg_slots': {
-        //     name:      'greg_slots',
-        //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
-        //     img:       './assets/achievements/missing.png',
-        //     currency:  'cash',
-        //     price:     [200],
-        //     value:     [2],
-        //     written:   '@ slots',
-        // },
-        'greg_speed': {
-            name:      'Propane Tank',
-            desc:      'Increases Greg\'s crafting speed',
-            img:       './assets/items/propane.png',
-            currency:  'cash',
-            price:     [ 38, 53,  74, 92, 121, 133, 169, 204],
-            value:     [1.5,  2, 2.5,  3, 3.5,   4, 4.5,   5],
-            written:   '@x',
-        },
-        'greg_min_start': {
-            name:      'Credit Card',
-            desc:      'Allows Greg to craft a tool before you can afford it. Percent value is how much of the tool\'s cost you need to start crafting.',
-            img:       './assets/items/credit.png',
-            currency:  'cash',
-            price:     [40, 47, 54, 61, 68],
-            value:     [90, 80, 70, 60, 50],
-            written:   '@%',
-        },
-        'falling_bonus': {
-            name:      'Cistern',
-            desc:      'Increases falling carrot rewards',
-            img:       './assets/items/cistern.png',
-            currency:  'cash',
-            price:     [60, 112, 163, 252, 309],
-            value:     [20,  40,  60,  80, 100],
-            written:   '+@%',
-        },
-        'page_bonus': {
-            name:      'Origami',
-            desc:      'Increases the prestige buff from tome pages',
-            img:       './assets/items/origami.png',
-            currency:  'cash',
-            price:     [100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
-            value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
-            written:   '+@%/page',
-        },
-        'spacebar_click': {
-            name:      'Magic Keyboard',
-            desc:      'Allows the use of spacebar and click at the same time',
-            img:       './assets/items/keyboard_2.png',
-            currency:  'cash',
-            price:     [200],
-            value:     [true],
-            written:   '',
-        },
-        // 'paperclip': {
-        //     name:      'Paperclip',
-        //     desc:      '???',
-        //     img:       './assets/achievements/missing.png',
-        //     currency:  'cash',
-        //     price:     [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-        //     value:     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        //     written:   '',
-        // },
-        // 'fake_trophy': {
-        //     name:      'Fake Trophy',
-        //     desc:      'It\'s plastic.',
-        //     img:       './assets/achievements/missing.png',
-        //     currency:  'cash',
-        //     price:     [350],
-        //     value:     [true],
-        //     written:   '',
-        // },
-        // Dreamcatcher?
-    },
     // Shop player data
     data: {
         'clickrate': {
@@ -660,7 +558,6 @@ const Default_Six = {
         // },
     },
 }
-Default_Six.shop.keys =    Object.keys(Default_Six.shop);
 
 /** Temporary (?) shorthand function */
 function getCharObj(char) {
@@ -718,13 +615,13 @@ function carlShopQuery(type, item) {
 
 /** Returns completion of trinkets */
 function sixCompletion() {
-    let keys = Default_Six.shop.keys;
+    let keys = sixShop.keys;
     let comTotal = 0;
     let maxTotal = 0;
     for(i = 0; i < keys.length; i++) {
         let key = keys[i];
         comTotal += Six?.data[key]?.level;
-        maxTotal += Default_Six.shop[key].price.length;
+        maxTotal += sixShop[key].price.length;
     }
     return `${comTotal}/${maxTotal}`;
 }
@@ -759,7 +656,6 @@ const saveList = {
     "Charles":   Charles,
     "Carl":      Carl,
     "Six":       Six,
-    "tips_seen": tips,
 }
 const saveListKeys = Object.keys(saveList);
 var preventSaveGame = false;
@@ -866,23 +762,38 @@ function resetSettings(dialog=false) {
 // Default keybinds
 const keybinds_default = {
     // Gameplay
-    key_carrot: 'Spacebar',
-    key_multibuy: 'Shift',
-    key_bill_lvlup: '1',
-    key_belle_lvlup: '2',
-    key_greg_lvlup: '3',
-    key_craft_0: '4',
-    key_craft_1: '5',
-    key_craft_2: '6',
-    key_craft_3: '7',
-    key_craft_4: '8',
-    key_craft_5: '9',
+    key_carrot:         'Spacebar',
+    key_multibuy:       'Shift',
+    key_bill_lvlup:     '1',
+    key_belle_lvlup:    '2',
+    key_greg_lvlup:     '3',
+
+    // Tools
+    key_craft_0:        '4',
+    key_craft_1:        '5',
+    key_craft_2:        '6',
+    key_craft_3:        '7',
+    key_craft_4:        '8',
+    key_craft_5:        '9',
     // modifier_equip: 'Shift',
 
+    // Settings
+    key_full_numbers:   'F',
+
     // Interface
-    key_cleartoasts: 'X',
-    key_prestige: 'P',
-    key_inventory: 'E',
+    key_cleartoasts:    'X',
+
+    // Menus
+    key_tips_menu:      'H',
+    key_prestige:       'P',
+    key_inventory:      'E',
+    key_themes:         'Not set',
+    key_cosmetics:      'Not set',
+
+    // Tripane
+    key_pane_achievements: 'A',
+    key_pane_statistics:   'S',
+    key_pane_settings:     'D',
 }
 keybinds_default['keys'] = Object.keys(keybinds_default);
 
@@ -971,7 +882,7 @@ function multibuySpin() {
 
     // Tutorial message
     if(player.flags['tutorial_multibuy'] != true) {
-        toast('Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', false, true,);
+        toast(...toasts.tutorial_multibuy);
         player.flags['tutorial_multibuy'] = true;
     }
 }
@@ -1280,9 +1191,9 @@ function characterPrices() {
     );
     
     // Character levels
-    eInnerText(elCharacterLevel.bill, `Lvl: ${numCommas(Boomer_Bill.lvl,1)}`);
-    eInnerText(elCharacterLevel.belle, `Lvl: ${numCommas(Belle_Boomerette.lvl,1)}`);
-    eInnerText(elCharacterLevel.greg, `Lvl: ${numCommas(Gregory.lvl)}`);
+    eInnerText(elCharacterLevel.bill, `Level: ${numCommas(Boomer_Bill.lvl,1)}`);
+    eInnerText(elCharacterLevel.belle, `Level: ${numCommas(Belle_Boomerette.lvl,1)}`);
+    eInnerText(elCharacterLevel.greg, `Level: ${numCommas(Gregory.lvl)}`);
 }
 /** Updates CPC and CPS values on the page */
 function updateCPC(flash=true) {
@@ -1382,13 +1293,13 @@ function updateCarlsShop() {
 }
 /** Updates Six's shop affordability highlighting */
 function updateSixsShop() {
-    let keys = Default_Six.shop.keys;
+    let keys = sixShop.keys;
     try {
         for(i = 0; i < keys.length; i++) {
             let key = keys[i];
             if(!Six.data[key].available) continue;
             var element = dom(`six_shop_${keys[i]}`);
-            let price = Default_Six.shop[key].price[Six.data[key].level];
+            let price = sixShop[key].price[Six.data[key].level];
             style(element, 'cant_afford', (player.cash < price));
         }
     } catch (error) {
@@ -1973,7 +1884,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
         return;
     }
 
-    // Craft hoe
+    // Craft tool
     if(n==0){
         n=1; 
         HoeCost(type,amount,"apply"); 
@@ -1982,7 +1893,6 @@ function CreateHoe(type=0, amount=1, progress=0) {
         if (i == 0) {
             i = 1;
             var p = progress;
-            var id = setInterval(frame, 100);
 
             // Main progress bar
             if(settings.enableMainProgress == true) {
@@ -1996,35 +1906,11 @@ function CreateHoe(type=0, amount=1, progress=0) {
             dom('greg_crafting_info').title = 'Crafting...';
             // mouseConfetti([1, 4], ccWhite);
 
+            // Run crafting loop
+            var id = setInterval(frame, 100);
             function frame() {
-                // Done crafting
-                if(p >= price) {
-                    clearInterval(id);
-                    i = 0;
-                    player.carrots+=p-price;
-                    p = 0;
-                    elGregProgress.style.width = "0%";
-                    if(settings.enableMainProgress == true) {
-                        elMainProgressBar.style.width = "0%";
-                    }
-                    elMainProgressContainer.classList.remove('status_tidbit_in');
-                    dom('greg_crafting_info').classList.add('inactive');
-                    dom('greg_crafting_info').title = 'Idle';
-
-                    Gregory.Hoes[type]+=amount;
-                    n=0;
-
-                    // Statistics
-                    player.prestige.hoes.crafted[type] += amount;
-                    player.prestige.hoes.craftedTotal += amount;
-
-                    player.lifetime.hoes.crafted[type] += amount;
-                    player.lifetime.hoes.craftedTotal += amount;
-
-                    Gregory.crafting = false;
-                }
                 // While crafting
-                else {
+                if(p < price) {
                     let adjust = ((Six.data.greg_speed.value / 100) || 0.01) * player.carrots;
                     p += adjust;
                     player.carrots -= adjust;
@@ -2036,6 +1922,29 @@ function CreateHoe(type=0, amount=1, progress=0) {
                     }
                     // eInnerText(elClickSpeed, `${DisplayRounded(p)}/${DisplayRounded(price)}`);
                     Gregory.crafting = [type, amount, p]; // Save crafting progress in case of page refresh
+                }
+                // Done crafting
+                if(p >= price) {
+                    clearInterval(id);
+                    i = 0;
+                    player.carrots+=p-price;
+                    p = 0;
+                    elGregProgress.style.width = "0%";
+                    if(settings.enableMainProgress == true) { elMainProgressBar.style.width = "0%"; }
+                    elMainProgressContainer.classList.remove('status_tidbit_in');
+                    dom('greg_crafting_info').classList.add('inactive');
+                    dom('greg_crafting_info').title = 'Idle';
+
+                    // Give item and reset
+                    Gregory.Hoes[type] += amount;
+                    n = 0;
+
+                    // Statistics
+                    player.prestige.hoes.crafted[type] += amount;
+                    player.prestige.hoes.craftedTotal  += amount;
+                    player.lifetime.hoes.crafted[type] += amount;
+                    player.lifetime.hoes.craftedTotal  += amount;
+                    Gregory.crafting = false;
                 }
 
             }
@@ -2263,10 +2172,10 @@ const statsNumbers = {
 function loadStatistics() {
 
     // Prestige
-    statsNumbers.prestige_carrots.innerText                 = numCommas(player.prestige.carrots.toFixed(0));
-    statsNumbers.prestige_carrots_clicked.innerText         = numCommas(player.prestige.click_carrots.toFixed(0));
-    statsNumbers.prestige_carrots_idled.innerText           = numCommas(player.prestige.idle_carrots.toFixed(0));
-    statsNumbers.prestige_carrots_bonus.innerText           = numCommas(player.prestige.bonus_carrots.toFixed(0));
+    statsNumbers.prestige_carrots.innerText                 = DisplayRounded(player.prestige.carrots.toFixed(0));
+    statsNumbers.prestige_carrots_clicked.innerText         = DisplayRounded(player.prestige.click_carrots.toFixed(0));
+    statsNumbers.prestige_carrots_idled.innerText           = DisplayRounded(player.prestige.idle_carrots.toFixed(0));
+    statsNumbers.prestige_carrots_bonus.innerText           = DisplayRounded(player.prestige.bonus_carrots.toFixed(0));
     statsNumbers.prestige_clicks.innerText                  = numCommas(player.prestige.clicks);
     statsNumbers.prestige_falling_carrots_grabbed.innerText = numCommas(player.prestige.falling_carrots_grabbed);
     statsNumbers.prestige_hoes_crafted_total.innerText      = numCommas(player.prestige.hoes.craftedTotal);
@@ -2278,10 +2187,10 @@ function loadStatistics() {
     statsNumbers.prestige_hoes_crafted_5.innerText          = numCommas(player.prestige.hoes.crafted[5]);
 
     // Lifetime
-    statsNumbers.lifetime_carrots.innerText                 = numCommas(player.lifetime.carrots.toFixed(0));
-    statsNumbers.lifetime_carrots_clicked.innerText         = numCommas(player.lifetime.click_carrots.toFixed(0)) ;
-    statsNumbers.lifetime_carrots_idled.innerText           = numCommas(player.lifetime.idle_carrots.toFixed(0));
-    statsNumbers.lifetime_carrots_bonus.innerText           = numCommas(player.lifetime.bonus_carrots.toFixed(0));
+    statsNumbers.lifetime_carrots.innerText                 = DisplayRounded(player.lifetime.carrots.toFixed(0));
+    statsNumbers.lifetime_carrots_clicked.innerText         = DisplayRounded(player.lifetime.click_carrots.toFixed(0)) ;
+    statsNumbers.lifetime_carrots_idled.innerText           = DisplayRounded(player.lifetime.idle_carrots.toFixed(0));
+    statsNumbers.lifetime_carrots_bonus.innerText           = DisplayRounded(player.lifetime.bonus_carrots.toFixed(0));
 
     statsNumbers.lifetime_golden_carrots.innerText          = numCommas(player.lifetime.golden_carrots);
     statsNumbers.lifetime_golden_carrots_spent.innerText    = numCommas(player.lifetime.golden_carrots - player.golden_carrots);
@@ -2315,27 +2224,9 @@ var statsInterval;
 //#region
 var tips = default_tips;
 try {
-    let tips_seen = localStorage.getObject('tips_seen');
-    [
-        tips.best,
-        tips.s_starter,
-        tips.s_beginner,
-        tips.s_intermediate,
-        tips.s_fun_starter,
-        tips.s_fun_beginner,
-        tips.s_fun_intermediate,
-    ] = [
-        tips_seen.best,
-        tips_seen.s_starter,
-        tips_seen.s_beginner,
-        tips_seen.s_intermediate,
-        tips_seen.s_fun_starter,
-        tips_seen.s_fun_beginner,
-        tips_seen.s_fun_intermediate,
-    ];
-} catch (error) {
-    console.error(error);
+    tips.seen = localStorage.getObject('tips_seen') || tips.seen;
 }
+catch (error) { console.error(error); }
 
 
 // Automatically change tips
@@ -2397,10 +2288,10 @@ function tipchange() {
     elTips.innerText = tips[type][tips.number];
 
     // Mark tip as seen
-    if(tips[`s_${type}`][tips.number] != true) {
-        tips[`s_${type}`][tips.number] = true;
+    if(tips.seen[type][tips.number] != true) {
+        tips.seen[type][tips.number] = true;
         if(player.flags['cookies_accepted'] == true) {
-            localStorage.setObject("tips_seen", tips);
+            localStorage.setObject('tips_seen', tips.seen);
         };
     }
     tipsHTMLupdate = true;

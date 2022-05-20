@@ -1,12 +1,12 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.2.1';
+    const game_version = 'dev beta v1.15.3';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
 
-// Mesage templates
+// Message templates
 //#region
 // Dialog templates
 const dialog = {
@@ -22,6 +22,12 @@ const toasts = {
     info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, '', true, true],
     info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true],
     info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true],
+
+    // Tutorials
+    tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
+    tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
+    tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', false, true],
+    // tutorial_golden_carrots is in carrot_clicker.js
 }
 //#endregion
 
@@ -115,19 +121,20 @@ const default_tips = {
 
 
     // Mark as seen
-    s_starter: {
-        0: true,
-    },
-    s_beginner: {},
-    s_intermediate: {},
-    s_advanced: {},
-
-    // Fun tips
-    s_fun_starter: {},
-    s_fun_beginner: {},
-    s_fun_intermediate: {},
-    s_fun_advanced: {},
+    seen: {
+        starter: {
+            0: true,
+        },
+        beginner: {},
+        intermediate: {},
+        advanced: {},
     
+        // Fun tips
+        fun_starter: {},
+        fun_beginner: {},
+        fun_intermediate: {},
+        fun_advanced: {},
+    }
 }
 //#endregion
 
@@ -163,6 +170,13 @@ const themes = {
         cosmetic: false,
         accent:   '#4e3f34',
     },
+    'theme_original': {
+        name:     'Carrot Clicker CLASSIC-ER',
+        image:    false,
+        desc:     'The ORIGINAL original look of carrot clicker',
+        cosmetic: false,
+        accent:   '#4e3f34',
+    },
     'theme_red': {
         name:     'Red Theme',
         image:    './assets/theme/theme_red.png',
@@ -183,6 +197,13 @@ const themes = {
         desc:     'For when you get tired of gray',
         cosmetic: false,
         accent:   '#455779'
+    },
+    'theme_grey': {
+        name:     'Grey theme',
+        image:    './assets/theme/theme_grey.png', // NEEDS ICON
+        desc:     'For when you get tired of blue. Gives the tripane the same color scheme as the rest of the game',
+        cosmetic: false,
+        accent:   '#455779', // NEEDS ACCENT
     },
     'theme_camo': {
         name:     'Camo',
@@ -1042,11 +1063,7 @@ const achievements = {
         'desc': 'Earn a tome page (Tutorial milestone)',
         'image': './assets/achievements/paginator.png',
         'reward': () => {
-            toast(
-                "Tutorial: Tome pages",
-                "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!",
-                "", true
-            );
+            toast(...toasts.tutorial_pages);
         },
         'pages': false,
         'conditions': ['player.pages', 1],
@@ -1124,11 +1141,25 @@ const achievements = {
             'noToast': false,
         }
     },
+    'bill_lvl_500': {
+        'name': 'Billtona 500',
+        'desc': 'Upgrade Bill 500 times',
+        'image': false,
+        'reward': 'cosmetic:bundle/bill',
+        'pages': 2,
+        'conditions': ['Boomer_Bill.lvl', 500],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
     'bill_lvl_1000': {
         'name': 'Milennial Bill',
         'desc': 'Upgrade Bill 1000 times',
         'image': false,
-        'reward': 'cosmetic:bundle/bill',
+        'reward': false,
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
         'mystery': {
@@ -1846,7 +1877,7 @@ const achievements = {
         'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
         'reward': () => {
-            toast("Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true);
+            toast(...toasts.tutorial_tools);
         },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
@@ -2027,7 +2058,7 @@ const achievements = {
         'image': './assets/achievements/easter_egg.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': false,
-        'conditions': ['keyTrigger[0]', 1],
+        'conditions': ['keyTrigger[0]', true],
         'style': 'secret',
         'mystery': {
             'name': true,
@@ -2043,7 +2074,23 @@ const achievements = {
         'image': './assets/achievements/pineapple_achieve.png',
         'reward': 'cosmetic:farmable/pineapple',
         'pages': false,
-        'conditions': ['keyTrigger[3]', 1],
+        'conditions': ['keyTrigger[3]', true],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': true,
+            'image': true,
+            'noToast': false,
+            'list': true,
+        }
+    },
+    'egg_confetti': {
+        'name': 'Confetti mode',
+        'desc': 'Enable party mode by typing "confetti" (Hidden achievement)',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['keyTrigger[5]', true],
         'style': 'secret',
         'mystery': {
             'name': true,
@@ -2176,8 +2223,7 @@ function ex_allTips() {
     let tally = 0;
     for(i = 0; i < tl.length; i++) {
         let type = tl[i];
-        if(Object.keys(tips[`s_${type}`]).length == default_tips[type].length && Object.keys(tips[`s_fun_${type}`]).length == default_tips[`fun_${type}`].length
-        ) {
+        if(Object.keys(tips.seen[type]).length == default_tips[type].length && Object.keys(tips.seen[`fun_${type}`]).length == default_tips[`fun_${type}`].length) {
             tally++;
         }
     }
@@ -2195,6 +2241,109 @@ function playerCosmeticsCount() {
 //#endregion
 
 
+
+
+
+
+
+// Static character data
+//#region 
+// Shop info (Static)
+const sixShop = {
+    'clickrate': {
+        name:      'Golden Mouse',
+        desc:      'Increases hold-to-click speed by 1',
+        img:       './assets/items/mouse_2.png',
+        currency:  'cash',
+        price:     [5, 10, 25, 45, 70, 100, 135],
+        value:     [3,  4,  5,  6,  7,   8,   9],
+        written:   '@ clicks/s',
+    },
+    'belle_bonus': {
+        name:      'Synergy Drink',
+        desc:      'Increases Belle\'s output while the carrot is being clicked',
+        img:       './assets/items/synergy.png',
+        currency:  'cash',
+        price:     [24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
+        value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
+        written:   '+@%',
+    },
+    // 'greg_slots': { // scrapped
+    //     name:      'greg_slots',
+    //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
+    //     img:       './assets/achievements/missing.png',
+    //     currency:  'cash',
+    //     price:     [200],
+    //     value:     [2],
+    //     written:   '@ slots',
+    // },
+    'greg_speed': {
+        name:      'Propane Tank',
+        desc:      'Increases Greg\'s crafting speed',
+        img:       './assets/items/propane.png',
+        currency:  'cash',
+        price:     [ 38, 53,  74, 92, 121, 176, 204],
+        value:     [1.5,  2,   4,  8,  16,  32, 64],
+        written:   'x@',
+    },
+    'greg_min_start': {
+        name:      'Credit Card',
+        desc:      'Allows Greg to craft a tool before you can afford it. Percent value is how much of the tool\'s cost you need to start crafting.',
+        img:       './assets/items/credit.png',
+        currency:  'cash',
+        price:     [40, 47, 54, 61, 68],
+        value:     [90, 80, 70, 60, 50],
+        written:   '@%',
+    },
+    'falling_bonus': {
+        name:      'Cistern',
+        desc:      'Increases falling carrot rewards',
+        img:       './assets/items/cistern.png',
+        currency:  'cash',
+        price:     [60, 112, 163, 252, 309],
+        value:     [20,  40,  60,  80, 100],
+        written:   '+@%',
+    },
+    'page_bonus': {
+        name:      'Origami',
+        desc:      'Increases your tome pages\' prestige buff',
+        img:       './assets/items/origami.png',
+        currency:  'cash',
+        price:     [100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
+        value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
+        written:   '+@%/page',
+    },
+    'spacebar_click': {
+        name:      'Magic Keyboard',
+        desc:      'Allows the use of spacebar and click at the same time',
+        img:       './assets/items/keyboard_2.png',
+        currency:  'cash',
+        price:     [200],
+        value:     [true],
+        written:   '',
+    },
+    // 'paperclip': {
+    //     name:      'Paperclip',
+    //     desc:      '???',
+    //     img:       './assets/achievements/missing.png',
+    //     currency:  'cash',
+    //     price:     [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    //     value:     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    //     written:   '',
+    // },
+    // 'fake_trophy': {
+    //     name:      'Fake Trophy',
+    //     desc:      'It\'s plastic.',
+    //     img:       './assets/achievements/missing.png',
+    //     currency:  'cash',
+    //     price:     [350],
+    //     value:     [true],
+    //     written:   '',
+    // },
+    // Dreamcatcher?
+}
+sixShop.keys = Object.keys(sixShop);
+//#endregion
 
 
 
