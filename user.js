@@ -5,7 +5,7 @@ Users settings, keybind handling, and tutorial handling
 /*---------------AUDIO HANDLING-------------------*/
 //#region 
 // Volume variable
-var volume = 1;
+var volume = 0.8;
 
 /** Plays a sound from the sound folder
  * @param {string} file Filename
@@ -72,12 +72,9 @@ elFunTipsSlider.oninput = () => {
 /** Universal checkbox option updater (not used by everything because some options need extra code)
  * @param option Option to update
 */
-function setting(option) {
+function setting(option, notif=true) {
     let state = dom(option).checked;
     console.log(`${option} set to ${state}`);
-
-    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state == true ? 'enabled' : 'disabled'}`,
-    '', false, true);
 
     settings[option] = state;
     saveSettings();
@@ -87,6 +84,11 @@ function setting(option) {
     } else if(option == 'achievements_grid') {
         achieveGridMode(state);
     }
+
+    // Toast
+    if(notif != true) return;
+    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
 }
 
 
@@ -178,11 +180,9 @@ function settingMainProgress() {
 
 
 // Enable sounds
-function settingSounds() {
+function settingSounds(notif=true) {
     let state = elEnableSounds.checked;
     console.log(`enableSounds set to ${state}`);
-    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`,
-    '', false, true);
 
     // localStorage
     settings.enableSounds = state;
@@ -190,6 +190,11 @@ function settingSounds() {
 
     optionSoundsDisable(state);
     settingMusic(true);
+
+    // Toast
+    if(notif != true) return;
+    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`,
+    '', false, true);
 }
 
 
@@ -952,6 +957,9 @@ function buySix(id) {
     // Extra
     if(id == 'page_bonus') { calculatePrestigePotential(); }
     else if(id == 'greg_min_start') { DisplayAllHoes(); }
+    else if(id == 'level_up_discount') { 
+        recalculatePrices();
+    }
 }
 
 /** Test if a character is unlocked */
@@ -1053,7 +1061,7 @@ function isDebug() {
         // Mute
         if(hashlist.includes('automute') || hashlist.includes('mute')) {
             elEnableSounds.checked = false;
-            settingSounds();
+            settingSounds(false);
         }
         // Dev tools
         if(isDebug()) {
@@ -1244,7 +1252,7 @@ function isDebug() {
                             <label for="setCash">Coins:</label>
                         </td>
                         <td>
-                            <input id="setCash" class="dev_input" type="number">
+                            <input id="setCash" class="dev_input" type="number" value="9999">
                         </td>
                     </tr>
 
@@ -1293,6 +1301,10 @@ function isDebug() {
         // Hide achievement toasts
         if(hashlist.includes('itch') || hashlist.includes('dan')) {
             player.flags['no_achievement_toasts'] = true;
+            dom('tutorial_messages').checked = false;
+            setting('tutorial_messages', false);
+            dom('carl_shop_toasts').checked = false;
+            setting('carl_shop_toasts', false);
         } else {
             player.flags['no_achievement_toasts'] = false;
         }
@@ -1592,11 +1604,6 @@ function isDebug() {
     // Finished
 })();
 
-
-
-
-
-
 // Timer demo
 // let target_time = Date.now() + (15 * 60 * 1000);
 // var boostTimer = setInterval(timer, 1000);
@@ -1628,8 +1635,5 @@ function isDebug() {
 //         clearInterval(boostTimer);
 //     }
 // }
-
-
-
 
 loadCheck = true;

@@ -126,6 +126,120 @@ carrot_clicker.css
     //     return total;
     // }
 
+*Old CharacterLvlUpPrices() function
+function getLevelPrice(character=Boomer_Bill, amount=1, mode="query"){
+    // console.log(`getLevelPrice(${character.nickname}, ${amount}, ${mode})`);
+    let r = character.lvlupPrice;
+    let r2=0;
+
+    function multibuyPrice(PriceIncrease) {
+        console.log(`${character.nickname} r: ${r}`);
+        console.log(`${character.nickname} r * PriceIncrease: ${r * PriceIncrease}`);
+        r += (1 - DecreaseWagesEffects()) * Math.floor(r * PriceIncrease);
+        if(amount==1){
+            r2=r;
+            return;
+        }
+        r2 += r; 
+        // console.log(`multibuyPrice(${PriceIncrease})\nr = ${r}\nr2 = ${r2}`);
+    }
+    // Multibuy loop
+    if(amount==1){
+        // Gregory
+        if(character==Gregory){
+            if(Gregory.lvl+i<50){
+                multibuyPrice(0.14);
+            }else{
+                multibuyPrice(0.21);
+            }
+        }
+        // Belle
+        else if(character==Belle_Boomerette){
+            if(Belle_Boomerette.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                multibuyPrice(0.12)
+            }else{
+                multibuyPrice(0.08)
+            }   
+        }
+        // Bill
+        else if(character==Boomer_Bill){
+            if(Boomer_Bill.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                multibuyPrice(0.13);
+            }else{
+                multibuyPrice(0.09);
+            }
+            
+        }
+    }else{
+        for(i=1; i<amount; i++){
+            // Gregory
+            if(character==Gregory){
+                if(Gregory.lvl+i<50){
+                    multibuyPrice(0.14);
+                }else{
+                    multibuyPrice(0.22);
+                }
+            }
+            // Belle
+            else if(character==Belle_Boomerette){
+                if(Belle_Boomerette.lvl+i<75){
+                    multibuyPrice(0.07);
+                }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                    multibuyPrice(0.06)
+                }else{
+                    multibuyPrice(0.08)
+                }   
+            }
+            // Bill
+            else if(character==Boomer_Bill){
+                if(Boomer_Bill.lvl+i<75){
+                    multibuyPrice(0.11);
+                }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                    multibuyPrice(0.13);
+                }else{
+                    multibuyPrice(0.09);
+                }
+                
+            }
+        }
+    }
+    
+    // Apply
+    if(mode=="apply") character.lvlupPrice = Math.floor(r);
+    return amount == 1 ? character.lvlupPrice : r2;
+}
+
+*JJ WIP LevelUp() overhaul
+// function LevelUp(character=Boomer_Bill, amount=1) {
+//     // var array=[];
+//     // var multiplier = 1.11;
+//     // for(i=1;i<=amount;i++){
+//     //     array.push((1-DecreaseWagesEffects)*(multiplier*array[i-1]))
+//     // }
+    
+//     if(characterQuery(character.nickname) == false) return;
+//     if(player.carrots >= r) {
+//         character.lvl += amount;
+//         player.carrots -= r;
+//         character.lvlupPrice=array[amount];
+
+//         // Update page
+//         carrotCount();
+//         characterPrices();
+//         characterButtons();
+//         updateCPC();
+//         if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
+//         if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
+
+//         // Animation
+//         mouseConfetti([2, 3], ccGold);
+//     }
+// }
+
 
 
 /------------styling.js-------------/

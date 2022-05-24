@@ -11,8 +11,17 @@
     /* border: 1px solid var(--light-theme-border-color); */
     background-color: whitesmoke;
 }
-.theme_light #credits { color: white; }
-.theme_light #credits .secondary_text { color: var(--secondary-text); }
+.theme_light #credits,
+.theme_light .char_info {
+    color: white;
+}
+.theme_light #credits .secondary_text,
+.theme_light .char_info .secondary_text {
+    color: var(--secondary-text);
+}
+.theme_light .char_info {
+    border-color: var(--secondary-text)
+}
 .theme_light .main_bg_color {
     background-color: var(--light-darker-bg-color);
 }
@@ -84,7 +93,12 @@
 .theme_light .main_button_img {
     filter: invert();
 }
-.theme_light .characterbox {
+.theme_light .power_item,
+.theme_light #greg_crafting_info {
+    background-color: var(--light-main-bg-color);
+}
+.theme_light .characterbox,
+.theme_light #powers_container {
     background-color: white;
     border-color: white;
 
@@ -106,11 +120,12 @@
 .theme_light #Greg_Bar {
     background-color: gray;
 }
-.theme_light .greg_crafting_info {
-    background-color: var(--light-darker-bg-color);
-}
 .theme_light .shop_item.cant_afford {
+    background-color: white;
     filter: brightness(75%) contrast(90%);
+}
+.theme_light .shop_tooltip {
+    color: white;
 }
 /* Main */
 .theme_light .shop_item .shop_tooltip {
@@ -305,15 +320,11 @@
     box-shadow: none;
     background-color: transparent;
 }
-.theme_classic #main_carrot {
-    filter: none;
-}
-.theme_classic #main_carrot:active {
-    filter: none;
-}
+.theme_classic #main_carrot { filter: none; }
+.theme_classic #main_carrot:active { filter: none; }
 
 .theme_classic .characterbox {
-    background-color: transparent;
+    background-color: var(--main-bg-color);
     border-radius: 0;
     border: 2px solid rgb(29, 248, 0);
     box-shadow: none;
@@ -324,27 +335,13 @@
 .theme_classic .characterimg {
     border-radius: 0;
 }
-.theme_classic .levelupimg {
-    content: url("./assets/icons/lvl_up_arrow_old.png");
-}
 .theme_classic .shop_item {
     background-color: transparent;
 }
-.theme_classic .tome_iwc   { content: url("./assets/items/old/tome_iwc.png"); }
-.theme_classic .tome_tools { content: url("./assets/items/old/tome_tools.png"); }
-.theme_classic .tome_dww   { content: url("./assets/items/old/tome_dww.png"); }
-tome_dww
+
 .theme_classic #Greg_Bar {
     background-color: gray;
     border-radius: 0;
-}
-.theme_classic .greg_crafting_info {
-    visibility: hidden;
-    transform: translateY(4px);
-}
-.theme_classic .greg_crafting_info::before {
-    content: "Prices:";
-    visibility: visible;
 }
 .theme_classic .achievement_item {
     border: 1px solid goldenrod;
@@ -353,10 +350,29 @@ tome_dww
     background-color: transparent;
     box-shadow: none;
 }
-
 .theme_classic .popup_box {
     border-color: transparent;
 }
+/* Content replacement */
+.theme_classic .levelupimg { content: url("./assets/icons/lvl_up_arrow_old.png"); }
+.theme_classic .tome_iwc   { content: url("./assets/items/old/tome_iwc.png"); }
+.theme_classic .tome_tools { content: url("./assets/items/old/tome_tools.png"); }
+.theme_classic .tome_dww   { content: url("./assets/items/old/tome_dww.png"); }
+
+.theme_classic #greg_crafting_info {
+    visibility: hidden;
+    transform: translateY(4px);
+}
+.theme_classic #greg_crafting_info::before {
+    content: "Prices:";
+    visibility: visible !important;
+}
+/* .theme_classic .text_upgrade_cost {
+    visibility: hidden;
+}
+.theme_classic #bill_box .text_upgrade_cost::before {
+    content: "Cost to upgrade Bill: ";
+} */
 /* #endregion */
 
 
@@ -805,7 +821,7 @@ tome_dww
     background-color: var(--retro-darkest);
     border-radius: 0;
 }
-.theme_retro .greg_crafting_info {
+.theme_retro #greg_crafting_info {
     background-color: var(--retro-darkest);
     box-shadow: none;
     border-radius: 0;
@@ -1268,7 +1284,7 @@ tome_dww
 }
 .theme_camo .characterbox,
 .theme_camo .shop_item,
-.theme_camo .greg_crafting_info {
+.theme_camo #greg_crafting_info {
     background-color: var(--brown-bg-color);
     border-color:  var(--brown-bg-color);
 }
@@ -1359,7 +1375,7 @@ tome_dww
 .theme_chatapp #left-section,
 .theme_chatapp .theme_item,
 .theme_chatapp .brown_darker_color,
-.theme_chatapp .greg_crafting_info {
+.theme_chatapp #greg_crafting_info {
     background-color: #2f3136;
     border: 1px solid #202225;
     box-shadow: none;

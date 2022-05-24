@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.3';
+    const game_version = 'dev beta v1.15.4';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -26,7 +26,7 @@ const toasts = {
     // Tutorials
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
     tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
-    tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', false, true],
+    tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
     // tutorial_golden_carrots is in carrot_clicker.js
 }
 //#endregion
@@ -1115,7 +1115,7 @@ const achievements = {
     // Bill level
     'bill_lvl_10': {
         'name': 'Here\'s the Bill',
-        'desc': 'Upgrade Bill 10 times',
+        'desc': 'Upgrade Bill to level 10',
         'image': false,
         'reward': 'shop:cosmetic/bill/biker_bill',
         'pages': false,
@@ -1129,7 +1129,7 @@ const achievements = {
     },
     'bill_lvl_100': {
         'name': 'Bill of the Century',
-        'desc': 'Upgrade Bill 100 times',
+        'desc': 'Upgrade Bill to level 100',
         'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
         'reward': false,
         'pages': 1,
@@ -1143,7 +1143,7 @@ const achievements = {
     },
     'bill_lvl_500': {
         'name': 'Billtona 500',
-        'desc': 'Upgrade Bill 500 times',
+        'desc': 'Upgrade Bill to level 500',
         'image': false,
         'reward': 'cosmetic:bundle/bill',
         'pages': 2,
@@ -1157,7 +1157,7 @@ const achievements = {
     },
     'bill_lvl_1000': {
         'name': 'Milennial Bill',
-        'desc': 'Upgrade Bill 1000 times',
+        'desc': 'Upgrade Bill to level 1000',
         'image': false,
         'reward': false,
         'pages': 3,
@@ -1172,7 +1172,7 @@ const achievements = {
     // Belle level
     'belle_lvl_15': {
         'name': 'Saved by the Belle',
-        'desc': 'Upgrade Belle 15 times',
+        'desc': 'Upgrade Belle to level 15',
         'image': false,
         'reward': false,
         'pages': false,
@@ -1186,7 +1186,7 @@ const achievements = {
     },
     'belle_lvl_100': {
         'name': 'Tough Belle',
-        'desc': 'Upgrade Belle 100 times',
+        'desc': 'Upgrade Belle to level 100',
         'image': false,
         'reward': false,
         'pages': 1,
@@ -1200,7 +1200,7 @@ const achievements = {
     },
     'belle_lvl_500': {
         'name': 'Um-belle-ifer Sellerer',
-        'desc': 'Upgrade Belle 500 times',
+        'desc': 'Upgrade Belle to level 500',
         'image': false,
         'reward': false,
         'pages': 3,
@@ -1215,7 +1215,7 @@ const achievements = {
     // Greg level
     'greg_lvl_25': {
         'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
-        'desc': 'Upgrade Gregory 25 times',
+        'desc': 'Upgrade Gregory to level 25',
         'image': false,
         'reward': false,
         'pages': 2,
@@ -1229,7 +1229,7 @@ const achievements = {
     },
     'greg_lvl_64': {
         'name': 'Professional Crafter',
-        'desc': 'Upgrade Gregory 64 Times',
+        'desc': 'Upgrade Gregory to level 64',
         'image': './assets/achievements/pixel_block.png',
         'reward': [
             'theme:theme_blockgame',
@@ -1355,6 +1355,7 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000000n],
+        'style': 'endgame',
         'mystery': {
             'name': true,
             'desc': false,
@@ -1369,11 +1370,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_septillion_carrots': {
@@ -1383,11 +1386,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_octillion_carrots': {
@@ -1397,11 +1402,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_nonillion_carrots': {
@@ -1411,11 +1418,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_decillion_carrots': {
@@ -1425,11 +1434,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000n],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_undecillion_carrots': {
@@ -1439,12 +1450,13 @@ const achievements = {
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000n],
-        'style': 'endgame',
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     '1_duodecillion_carrots': {
@@ -1510,6 +1522,20 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1_quadrillion_carrots_at_once': {
+        'name': 'Quadraphonic ',
+        'desc': 'Have 1 quadrillion carrots at once',
+        'image': false,
+        'reward': false,
+        'pages': 4,
+        'conditions': ['player.carrots', 1000000000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
 
     // Tips
     'basic_tips': {
@@ -1563,6 +1589,20 @@ const achievements = {
         'reward': false,
         'pages': 3,
         'conditions': ['player.cpc', 1000000000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    '1_trillion_cpc': {
+        'name': 'Trilobite',
+        'desc': 'Get your Carrots Per Click (CPC) to 1 trillion',
+        'image': false,
+        'reward': false,
+        'pages': 4,
+        'conditions': ['player.cpc', 1000000000000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -2259,6 +2299,15 @@ const sixShop = {
         value:     [3,  4,  5,  6,  7,   8,   9],
         written:   '@ clicks/s',
     },
+    // 'level_up_discount': {
+    //     name:      'level_up_discount',
+    //     desc:      'Decreases level up prices by a percentage',
+    //     img:       false,
+    //     currency:  'cash',
+    //     price:     [89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
+    //     value:     [95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
+    //     written:   '@%',
+    // },
     'belle_bonus': {
         name:      'Synergy Drink',
         desc:      'Increases Belle\'s output while the carrot is being clicked',

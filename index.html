@@ -255,7 +255,7 @@
                             <div class="characterdesc">
                                 <b id="bill_name" class="character_name">Bill</b>
                                 <p class="secondary_text">
-                                    Upgrade cost: <span id="UpBillCost" class="upgrade_cost"></span>
+                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpBillCost" class="upgrade_cost white"></span>
                                 </p>
                                 <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
@@ -315,7 +315,7 @@
                                     Belle
                                 </b>
                                 <p class="secondary_text">
-                                    Upgrade cost: <span id="UpBelleCost" class="upgrade_cost"></span>
+                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpBelleCost" class="upgrade_cost white"></span>
                                 </p>
                                 <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
@@ -371,7 +371,7 @@
                             <div class="characterdesc">
                                 <b id="greg_name" class="character_name">Greg</b>
                                 <p class="secondary_text">
-                                    Upgrade cost: <span id="UpGregCost" class="upgrade_cost"></span>
+                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpGregCost" class="upgrade_cost white"></span>
                                 </p>
                                 <figcaption id="Greg_lvl" class="characterlevel secondary_text"></figcaption>
                             </div>
@@ -383,7 +383,7 @@
                             <!-- <span class="hoe_price">Prices:</span> -->
 
                             <!-- Crafting display -->
-                            <div class="greg_crafting_info darker_bg_color inactive" title="Idle" id="greg_crafting_info">
+                            <div class="darker_bg_color inactive" title="Idle" id="greg_crafting_info">
                                 <img src="./assets/tools/tool_0.png" alt="" id="greg_progress_image" class="main_progress_image">
                                 <img src="./assets/icons/refresh.svg" alt="" class="greg_spinny">
                             </div>
@@ -457,61 +457,70 @@
 
                         <!-- Bottom -->
                         <div class="bottom shop_bottom" id="charles_shop">
-                            <!-- Charles' buttons -->
-                            <div
-                            onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
-                            id="ImproveWorkingConditions_button"
-                            class="unbold shop_item flex cant_afford"
-                            tabindex="0"
-                            role="button">
-                                <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
-                                <div class="info">
-                                    <p>Improve working conditions</p>
-                                    <div id="iwc_effect" class="shop_value secondary_text"></div>
-                                    <span id="iwc_count" class="secondary_text">x0</span>
-                                    <span id="ImproveWorkingConditions" class="shop_price">---</span>
+                            <!-- Charles' tomes -->
+                            <div class="tooltip_area">
+                                <div
+                                onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
+                                id="ImproveWorkingConditions_button"
+                                class="unbold shop_item flex cant_afford"
+                                tabindex="0"
+                                role="button">
+                                    <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
+                                    <div class="info">
+                                        <p>Improve working conditions</p>
+                                        <div id="iwc_effect" class="shop_value secondary_text"></div>
+                                        <span id="iwc_count" class="secondary_text">x0</span>
+                                        <span id="ImproveWorkingConditions" class="shop_price">---</span>
+                                    </div>
                                 </div>
+
                                 <div class="shop_tooltip">
                                     Increases Bill and Belle's output
                                 </div>
                             </div>
-                            
-                            <div
-                            onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
-                            id="BetterHoes_button"
-                            class="unbold shop_item flex cant_afford"
-                            tabindex="0"
-                            role="button">
-                                <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
-                                <div class="info">
-                                    <p>High quality tools</p>
-                                    <div id="bh_effect" class="shop_value secondary_text"></div>
-                                    <span id="bh_count" class="secondary_text">x0</span>
-                                    <span id="BetterHoes" class="shop_price">---</span>
+
+                            <div class="tooltip_area">
+                                <div
+                                onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
+                                id="BetterHoes_button"
+                                class="unbold shop_item flex cant_afford"
+                                tabindex="0"
+                                role="button">
+                                    <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
+                                    <div class="info">
+                                        <p>High quality tools</p>
+                                        <div id="bh_effect" class="shop_value secondary_text"></div>
+                                        <span id="bh_count" class="secondary_text">x0</span>
+                                        <span id="BetterHoes" class="shop_price">---</span>
+                                    </div>
                                 </div>
+
                                 <div class="shop_tooltip">
                                     Increases the power of equipped tools
                                 </div>
                             </div>
 
-                            <div
-                            onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
-                            id="DecreaseWages_button"
-                            class="unbold shop_item pointer flex cant_afford"
-                            tabindex="0"
-                            role="button">
-                                <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
-                                <div class="info">
-                                    <p>Decrease worker wages</p>
-                                    <div id="dww_effect" class="shop_value secondary_text"></div>
-                                    <span id="dww_count" class="secondary_text">x0</span>
-                                    <span id="DecreaseWages" class="shop_price">---</span>
+                            <div class="tooltip_area">
+                                <div
+                                onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
+                                id="DecreaseWages_button"
+                                class="unbold shop_item pointer flex cant_afford"
+                                tabindex="0"
+                                role="button">
+                                    <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
+                                    <div class="info">
+                                        <p>Decrease worker wages</p>
+                                        <div id="dww_effect" class="shop_value secondary_text"></div>
+                                        <span id="dww_count" class="secondary_text">x0</span>
+                                        <span id="DecreaseWages" class="shop_price">---</span>
+                                    </div>
                                 </div>
                                 <div class="shop_tooltip">
                                     Decreases the rate at which character prices increase
                                 </div>
                             </div>
 
+                            <!-- Info -->
                             <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
                                 Golden carrot research - Buy tomes
                             </p>

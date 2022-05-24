@@ -1,4 +1,35 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15.4
+    5-24-2022
+// ----------------------------------------------------------- //
+
+Game calculations & multibuy
+- Rewrote the function that calculates level up costs
+  + Not sure why but prices are slightly different- but the difference is negligible
+  + Multibuy works perfectly at lower levels and becomes wildly innacurate at higher levels, will try to fix
+- Implemented "Multibuy should let you transfer tools, even if there aren't enough (if you have 7 tools and x10 enabled it won't transfer the them)"
+- Character level up button highlighting now works with multibuy
+- Buying Decrease Wages tomes after upgrading characters will now retroactively effect level up prices
+
+Achievements:
+- Made all big number achievements past "A World Fed" hidden by default, at least until they are obtainable without cheating
+- New achievements: 1_quadrillion_carrots_at_once, 1_trillion_cpc
+
+Misc
+- Shop tooltips will no longer take on any CSS filters that are applied to the shop item (ei, getting darker when you can't afford it)
+- Fixed shop tooltips not rendering on top/not being visible on mobile
+- Tools will no longer glow if they are maxed and can't equip another
+- Greg now tells you what level the next tool will unlock at
+- "Disable tutorial messages" button is now keyboard focusable
+- New trinket: level_up_discount (currently commented out)
+- #dan hash now disables tutorial messages and carl notifications
+- Misc light theme & classic theme fixes
+- data_version bumped to 12
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15.3
     5-19-2022
 // ----------------------------------------------------------- //
@@ -6,9 +37,9 @@
 - Buffed propane tank and changed its scaling to double each upgrade
 - Max speed craft jobs are now nearly instantaneous
 - Carrot related numbers in statistics now DisplayRounded() instead of the full number
-- Updated the confetti easter egg to activate whenever you click until the page is resfreshed
+- Updated the confetti easter egg to activate whereever you click, until the page is resfreshed
 - Clicking on a character's avatar will now open their bio pane
-- Multibuy button has been moved from the status bar to above bill
+- Multibuy button has been moved from the status bar to above Bill
 - Escape key now closes character bios
 - Additional keybinds can now be set for:
   + Tips menu (H)
@@ -22,7 +53,7 @@
 
 LocalStorage improvements:
 - Fixed tips_seen not saving correctly and made it no longer store unused information in localStorage
-- Character Six' static shop data is no longer stored in localStorage
+- Character Six's static shop data is no longer stored in localStorage
 
 CSS
 - Max screen width for mobile layout is now smaller

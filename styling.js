@@ -320,6 +320,8 @@ function toast(
             var secondary_line = document.createElement("p");
             secondary_line.innerText = `Disable tutorial messages`;
             secondary_line.className = 'secondary_text link_styling center';
+            secondary_line.role = 'button';
+            secondary_line.tabIndex = '0';
             secondary_line.style.margin = '0';
             secondary_line.onclick = () => { disableTutorials(id); };
             toastElement.append(secondary_line);
@@ -1179,7 +1181,7 @@ function rewardHTML(reward) {
     // Character
     else if(rewardType == 'character') {
         informalName = capitalizeFL(rewardName);
-        icon = getCharObj(rewardName).img; // Get image
+        icon = defaultChar[rewardName].img; // Get image
     }
     // Cash
     else if(rewardType == 'cash') {
@@ -1389,8 +1391,7 @@ function populateCarl() {
     /** Carl HTML template */
     function carlHTML(internalName, type, name, img, price) {
         return `
-        <div id="carl_shop_${internalName}" class="shop_item" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
-            <div class="flex">
+            <div id="carl_shop_${internalName}" class="shop_item flex" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
                 <img src="${img}" alt="" class="shop_img">
                 <div class="info">
                     <b>${name}</b>
@@ -1401,7 +1402,7 @@ function populateCarl() {
                     </div>
                 </div>
             </div>
-        </div>`;
+        `;
     }
 }
 
@@ -1430,7 +1431,7 @@ function populateSix() {
             styles = '';
         }
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
-        html += sixHTML(key, item.img, item.name, item.desc, price, currency, segments, styles, value);
+        html += sixHTML(key, item.img||'./assets/achievements/missing.png', item.name, item.desc, price, currency, segments, styles, value);
     }
     html += `
     <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
@@ -1442,13 +1443,15 @@ function populateSix() {
     /** Six HTML template */
     function sixHTML(id, src, name, desc, price, currency, segments, styles, value) {
         return `
-        <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buySix('${id}')" tabindex="0" role="button">
-            <img src="${src}" alt="" class="shop_img">
-            <div class="info">
-                <b>${name}</b>
-                <div class="segment_bar darker_bg_color">${segments}</div>
-                <div class="shop_value secondary_text">${value}</div>
-                <div class="shop_price">${price} ${currency}</div>
+        <div class="tooltip_area">
+            <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buySix('${id}')" tabindex="0" role="button">
+                <img src="${src}" alt="" class="shop_img">
+                <div class="info">
+                    <b>${name}</b>
+                    <div class="segment_bar darker_bg_color">${segments}</div>
+                    <div class="shop_value secondary_text">${value}</div>
+                    <div class="shop_price">${price} ${currency}</div>
+                </div>
             </div>
             <div class="shop_tooltip">${desc}</div>
         </div>`;

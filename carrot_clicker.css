@@ -500,6 +500,7 @@ h2, h3 {
 .opacity0 {opacity: 0 !important;}
 .position_absolute {position: absolute;}
 .position_unset {position: unset;}
+.transition_none { transition: none !important; }
 
 /* Toasts */
 #toast_container {
@@ -726,12 +727,20 @@ p.theme_menu_title {
     outline: 2px solid var(--generic-blue);
     background-color: var(--main-bg-color);
 }
+.tooltip_area:hover,
+.tooltip_area:focus,
+.tooltip_area:focus-within {
+    z-index: 3;
+}
 .theme_item:hover,
 .theme_item:focus,
 .theme_item:focus-within,
 .shop_item:hover,
 .shop_item:focus,
 .shop_item:focus-within,
+.tooltip_area:hover .shop_item,
+.tooltip_area:focus .shop_item,
+.tooltip_area:focus-within .shop_item,
 .shop_nav_item:hover,
 .shop_nav_item:focus-visible {
     filter: brightness(110%);
@@ -739,7 +748,7 @@ p.theme_menu_title {
     outline: 2px solid white;
     z-index: 3;
 }
-.theme_item:active, .shop_item:active {
+.theme_item:active, .tooltip_area:active .shop_item {
     filter: brightness(80%);
     outline: 2px solid white;
 }
@@ -885,6 +894,9 @@ body:not(.theme_light) .theme_checkmark {
 .fancy_switcher summary {
     transform: translateX(20px);
     padding-bottom: 8px;
+}
+.fancy_switcher details:not([open]) summary {
+    color: var(--secondary-text);
 }
 
 /* Number Popup */
@@ -1507,6 +1519,7 @@ body:not(.theme_light) .theme_checkmark {
     transition-property: transform, filter;
     transition-duration: 0.25s;
     cursor: pointer;
+    z-index: 1;
 }
 .levelupimg {
     margin-bottom: -6px;
@@ -1572,7 +1585,7 @@ body:not(.gp) #golden_carrot_count*/ {
     font-size: 14pt;
     transform: translateX(22px) translateY(24px);
 }
-.greg_crafting_info {
+#greg_crafting_info {
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
     border-radius: 7px;
     position: absolute;
@@ -1581,10 +1594,10 @@ body:not(.gp) #golden_carrot_count*/ {
     width: 44px;
     height: 26px;
 }
-.greg_crafting_info.inactive .greg_spinny {
+#greg_crafting_info.inactive .greg_spinny {
     visibility: hidden;
 }
-.greg_crafting_info.inactive #greg_progress_image {
+#greg_crafting_info.inactive #greg_progress_image {
     transform: translateX(8px);
     filter: brightness(0%);
     opacity: 0.4;
@@ -1639,7 +1652,10 @@ body:not(.gp) #golden_carrot_count*/ {
     overflow: hidden;
 }
 .progress {
-    transition: width 100ms linear;
+    transition-property: width;
+    transition-duration: 100ms;
+    transition-timing-function: linear;
+
     width: 0%;
     max-width: 100%;
     height: 100%;
@@ -1732,7 +1748,10 @@ body:not(.gp) #golden_carrot_count*/ {
 .shop_item .info {
     margin-top: 4px;
 }
-.shop_item .shop_tooltip {
+.tooltip_area {
+    position: relative;
+}
+.shop_tooltip {
     visibility: hidden;
     position: absolute;
     z-index: 5;
@@ -1751,9 +1770,9 @@ body:not(.gp) #golden_carrot_count*/ {
 
     pointer-events: none;
 }
-.shop_item:hover .shop_tooltip,
-.shop_item:focus .shop_tooltip,
-.shop_item:focus-within .shop_tooltip {
+.tooltip_area:hover .shop_tooltip,
+.tooltip_area:focus .shop_tooltip,
+.tooltip_area:focus-within .shop_tooltip {
     visibility: visible;
 }
 
@@ -1780,7 +1799,7 @@ body:not(.gp) #golden_carrot_count*/ {
     padding: 5px;
 }
 /* Can't afford */
-.shop_item.cant_afford {
+.tooltip_area .shop_item.cant_afford {
     filter: brightness(50%) contrast(90%);
     background-color: var(--darker-bg-color);
     /* cursor: not-allowed; */
@@ -2252,7 +2271,6 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 /* Unhide details */
 .achieve_grid .achievement_item:hover .achievement_details {
-    position: absolute;
     visibility: visible !important;
 }
 
@@ -2519,6 +2537,7 @@ footer {
 }
 #tips_list h3 {
     margin-bottom: 4px;
+    padding-top: 24px;
     /* border-bottom: 1px solid gray; */
 }
 #tips_list {
