@@ -1048,6 +1048,7 @@ function isDebug() {
     || hashlist.includes('developer')
     || hashlist.includes('cheatmode')
     || hashlist.includes('debug')
+    || player.flags['debug'] == true
     || store('debug') == 'true') return true;
 }
 
@@ -1294,12 +1295,9 @@ function isDebug() {
 
             // toast('Dev Tools enabled', false);
         }
-        // else {
-        //     $('#devp').innerHTML = '';
-        // }
 
-        // Hide achievement toasts
-        if(hashlist.includes('itch') || hashlist.includes('dan')) {
+        // Disable Annoying Notifications
+        if(hashlist.includes('dan')) {
             player.flags['no_achievement_toasts'] = true;
             dom('tutorial_messages').checked = false;
             setting('tutorial_messages', false);
@@ -1603,37 +1601,5 @@ function isDebug() {
 
     // Finished
 })();
-
-// Timer demo
-// let target_time = Date.now() + (15 * 60 * 1000);
-// var boostTimer = setInterval(timer, 1000);
-// function timer() {
-//     // Get the date
-//     let now = Date.now();
-//     let remaining_ms = target_time - now;
-//     let hours = Math.floor(remaining_ms / (1000 * 60 * 60));
-//     let minutes = Math.floor((remaining_ms % (1000 * 60 * 60)) / (1000 * 60));
-//     let seconds = Math.floor((remaining_ms % (1000 * 60)) / 1000);
-
-//     // Add zero to left
-//     if(seconds.toString().length == 1) { seconds = `0${seconds}`; }
-
-//     // Show hours when applicable
-//     if(hours != 0) {
-//         hours = `${hours}:`;
-//         if(minutes.toString().length == 1) { minutes = `0${minutes}`; }
-//     } else {
-//         hours = '';
-//     }
-
-//     // Update page
-//     dom('power_0').innerText = `${hours}${minutes}:${seconds}`;
-
-//     // Check if time is up
-//     if(remaining_ms <= 0) {
-//         dom('power_0').innerText = 'Done';
-//         clearInterval(boostTimer);
-//     }
-// }
 
 loadCheck = true;

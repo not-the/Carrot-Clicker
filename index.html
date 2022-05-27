@@ -24,6 +24,8 @@
     <!-- <meta name="twitter:card" content="summary_large_image"> -->
 </head>
 <body>
+    <!-- <div id="debug">Debug</div> -->
+    
     <!-- Corner Toasts -->
     <div id="toast_container">
         <div id="toasts_clear" onclick="clearToasts()">
@@ -221,13 +223,20 @@
                             </div>
                         </div>
 
-                        <!-- <div class="power_item">
-                            <img src="./assets/pixel_carrot_32x.png" alt=""><span id="power_0">-:--</span>
-                        </div> -->
+                        <!-- Active boosts -->
+                        <div id="boosts" class="flex">
+                            <!-- <div class="power_item" id="boost_0">
+                                <img src="./assets/pixel_carrot_32x.png" alt=""><span id="time_boost_0">-:--</span>
+                            </div> -->
+                        </div>
 
+                        <!-- None active -->
                         <div id="no_powers" class="power_item" style="width: 100%; background: none; box-shadow: none; padding-left: 0">
                             No active boosts
                         </div>
+
+                        <!-- Info button -->
+                        <span tabindex="0" class="question_mark" title="Boosts will not be remembered if you restart the game" onclick="toast(...toasts.info_boosts)" style="padding-right: 10px; margin-left: auto;">?</span>
                     </div>
 
                     <!--Boomer Bill Rendering-->

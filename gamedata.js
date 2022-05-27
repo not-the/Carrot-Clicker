@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.4';
+    const game_version = 'dev beta v1.15.5';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -22,6 +22,7 @@ const toasts = {
     info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, '', true, true],
     info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true],
     info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true],
+    info_boosts: ['Info: Boosts', 'Boosts will not be remembered if you restart the game', '', true, true],
 
     // Tutorials
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
@@ -2299,15 +2300,15 @@ const sixShop = {
         value:     [3,  4,  5,  6,  7,   8,   9],
         written:   '@ clicks/s',
     },
-    // 'level_up_discount': {
-    //     name:      'level_up_discount',
-    //     desc:      'Decreases level up prices by a percentage',
-    //     img:       false,
-    //     currency:  'cash',
-    //     price:     [89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
-    //     value:     [95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
-    //     written:   '@%',
-    // },
+    'level_up_discount': {
+        name:      'level_up_discount',
+        desc:      'Decreases level up prices by a percentage',
+        img:       false,
+        currency:  'cash',
+        price:     [89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
+        value:     [95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
+        written:   '@%',
+    },
     'belle_bonus': {
         name:      'Synergy Drink',
         desc:      'Increases Belle\'s output while the carrot is being clicked',
@@ -2392,6 +2393,77 @@ const sixShop = {
     // Dreamcatcher?
 }
 sixShop.keys = Object.keys(sixShop);
+//#endregion
+
+
+
+/* Boosts */
+//#region 
+const boosts = {
+    // CPC
+    'cpc_2x': {
+        name: 'CPC doubler',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cpc',
+        multiplier: 2,
+        time: 30, // seconds
+
+        currency: 'gc',
+        price: 3,
+    },
+    'cpc_5x': {
+        name: 'cpc_5x',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cpc',
+        multiplier: 2,
+        time: 30, // seconds
+
+        currency: 'gc',
+        price: 6,
+    },
+
+    // CPS
+    'cps_2x': {
+        name: 'cps_2x',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cps',
+        multiplier: 2,
+        time: 60, // seconds
+
+        currency: 'gc',
+        price: 3,
+    },
+    'cps_10x': {
+        name: 'cps_10x',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cps',
+        multiplier: 10,
+        time: 60, // seconds
+
+        currency: 'gc',
+        price: 8,
+    },
+    'cps_1000x': {
+        name: 'cps_1000x',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cps',
+        multiplier: 10,
+        time: 15, // seconds
+
+        currency: 'gc',
+        price: 300,
+    },
+}
 //#endregion
 
 

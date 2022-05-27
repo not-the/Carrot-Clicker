@@ -535,11 +535,11 @@ const Default_Six = {
             level: 0,
             value: 2,
         },
-        // 'level_up_discount': {
-        //     available: true,
-        //     level: 0,
-        //     value: 100,
-        // },
+        'level_up_discount': {
+            available: true,
+            level: 0,
+            value: 100,
+        },
         'belle_bonus': {
             available: true,
             level: 0,
@@ -1029,21 +1029,27 @@ function holdStart(useMousePos = true) {
         }, 1000 / (Six.data.clickrate.value || 2)); // replace with clicks per second
     }, 250);
 }
+
+/** Stops Clicking on release */
+//#region 
+function holdStop() {
+    clearTimeout(holdDelay);
+    clearInterval(holdClock);
+}
 mainCarrot.addEventListener('mouseup',      () => { holdStop(); });
 mainCarrot.addEventListener('mouseout',     () => { holdStop(); });
 mainCarrot.addEventListener('touchend',     () => { holdStop(); });
 mainCarrot.addEventListener('touchcancel',  () => { holdStop(); });
 window.onblur = () => { holdStop(); }
-/**
- * Stops Clciking on release
- */
-function holdStop() {
-    clearTimeout(holdDelay);
-    clearInterval(holdClock);
-}
+//#endregion
+
 
 // Carrot click
-mainCarrot.addEventListener('click', () => { onClick(true, 'click'); });
+// var isTouchDevice = 'ontouchstart' in document.documentElement;
+mainCarrot.addEventListener(/*isTouchDevice ? 'touchstart' : */'click', event => {
+    // event.preventDefault();
+    onClick(true, 'click');
+});
 var clickMethod = -1; // -1 = any, 0 = click, 1 = key
 var clickMethodTimer;
 /** Carrot Click
@@ -1076,14 +1082,11 @@ function onClick(useMousePos, method='click', source=0) {
     // Click speed
     clickSpeedHandler(true);
 
-    // Falling carrots
+    // Falling carrot chance
     fallingCarrot();
 
     // Sound effect
-    if(
-        settings.enableSounds == false
-        || settings.enableCarrotSounds == false
-    ) return;
+    if(!settings.enableSounds || !settings.enableCarrotSounds) return;
     randomSound('crunch', 95);
 }
 
@@ -1464,15 +1467,14 @@ function CarrotsPerSecond() {
  * @returns New character level up price
  */
 function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
-    // Multibuy
-    if(amount != 1) return getMultiLevelPrice(character, amount);
+    if(amount != 1) return getMultiLevelPrice(character, amount); // Multibuy
+    if(level <= 0 || (level <= 1 && character == Boomer_Bill)) {  // Stop recursion
+        let dp = defaultChar[character.nickname].lvlupPrice;
+        return initial ? dp * ((Six.data.level_up_discount.value || 100) / 100) : dp;
+    }
 
-    // Stop recursion
-    if(level <= 0 || (level <= 1 && character == Boomer_Bill)) return defaultChar[character.nickname].lvlupPrice;
     let price = getLevelPrice(character, level-1, amount, false);
     let modifier = 0;
-
-    // Get scaling
     let scaling = defaultChar[character.nickname].scaling;
     for(let si = scaling.length-1; si >= 0; si--) {
         let item = scaling[si];
@@ -1485,8 +1487,8 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     // Calculate
     let dw_modifier = 1 - DecreaseWagesEffects(); // Decrease wages
     price += dw_modifier * Math.floor(price * modifier);
-    return price;
-    // return initial ? price * ((Six.data.level_up_discount.value || 100) / 100) : price;
+    // return price;
+    return initial ? price * ((Six.data.level_up_discount.value || 100) / 100) : price;
 
     /** Multibuy price */
     function getMultiLevelPrice(character, amount) {
@@ -1503,6 +1505,12 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     }
 }
 
+// Debug level chart
+// let debug_count = 1;
+// let debug_data  = [100, 111];
+// let debug_chart = `<div class="point" title="000" style="margin-bottom: 0px;"></div>`;
+// const elChart = dom('debug');
+
 
 /** Levels up characters
  * @param {Object} character Character object
@@ -1518,6 +1526,18 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         player.carrots -= price; // Charge player
         character.lvl += amount;
         character.lvlupPrice = getLevelPrice(character, character.lvl+1); // Set next lvlupprice
+
+        // Debug
+        // debug_data.push(character.lvlupPrice);
+        // debug_count++;
+        // debug_chart +=
+        // `<div
+        //     class="point"
+        //     title="${debug_count}, ${debug_data[debug_count]}"
+        //     style="margin-bottom: ${debug_data[debug_count] / 500}px;">
+        // </div>`;
+        // // elChart.innerText = debug_data.join('\n');
+        // elChart.innerHTML = debug_chart;
 
         // Update page
         carrotCount();
@@ -1639,8 +1659,16 @@ function Calculate_Carrots(character) {
     }
     
     // Returns proper value for Carrots Per
-    if(cpHoes>0) return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl*cpHoes;
-    else return (1.1 * Charles.tome.improveWorkingConditions.value+Zcheck2)*character.lvl;
+    let iwc = Charles.tome.improveWorkingConditions.value;
+    let boosted = 1;
+    // Temporary boost handler
+    if(character == Boomer_Bill) {
+        boosted = boostEffects.cpc;
+    } else if(character == Belle_Boomerette) {
+        boosted = boostEffects.cps;
+    }
+    if(cpHoes>0) return (1.1 * iwc + Zcheck2) * character.lvl * cpHoes * boosted;
+    else return (1.1 * iwc + Zcheck2) * character.lvl * boosted;
 }
 
 /** Calculates the prestige potential and updates the page */
@@ -2307,5 +2335,117 @@ function tipchange() {
         };
     }
     tipsHTMLupdate = true;
+}
+//#endregion
+
+
+
+/*-----------Boost system----------- */
+//#region 
+// Active boosts
+const elBoosts = dom('boosts');
+const elNoPowers = dom('no_powers');
+var boostsActive = {}
+var boostEffects = {
+    'cpc': 1,
+    'cps': 1,
+}
+
+var boostID = 0;
+function useBoost(boost = 'cpc_2x') {
+    // Boost info
+    let id = boostID;
+    const item = boosts?.[boost];
+    if(item == undefined) return;
+
+    // Return if given boost type is already in use
+    if(boostEffects[item.type] != 1) {
+        toast('', 'You may only have one active boost of that type', '', false, true);
+        return;
+    }
+
+    let time_ms = item.time * 1000;
+    let target_time = Date.now() + time_ms;
+    let html = boostHTML(id, item);
+    elBoosts.innerHTML += html;
+
+    // Create boost
+    boostsActive[id] = {
+        name: boost,
+        timer: setInterval(() => { timer(id, target_time); }, 1000),
+    };
+    timer(id, target_time); // Instant-run
+    boostID++;
+
+    // Update boost effects
+    updateBoostEffects(item);
+    elNoPowers.classList.add('remove');
+
+    // Boost timer
+    function timer(id, target_time) {
+        // Get the date
+        let now = Date.now();
+        let remaining_ms = target_time - now;
+        let hours = Math.floor(remaining_ms / (1000 * 60 * 60));
+        let minutes = Math.floor((remaining_ms % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((remaining_ms % (1000 * 60)) / 1000);
+
+        // Add zero to left
+        if(seconds.toString().length == 1) { seconds = `0${seconds}`; }
+        // Show hours when applicable
+        if(hours != 0) {
+            hours = `${hours}:`;
+            if(minutes.toString().length == 1) { minutes = `0${minutes}`; }
+        } else { hours = ''; }
+
+        // Update page
+        dom(`time_boost_${id}`).innerText = `${hours}${minutes}:${seconds}`;
+
+        // Check if time is up
+        if(remaining_ms > 0) return
+        endBoost(id);
+    }
+    // HTML template
+    function boostHTML(id, item) {
+        return `
+        <div class="power_item tooltip_area" id="boost_${id}">
+            <img src="${item.img}" alt="" onclick="endBoost(${id})"><span id="time_boost_${id}">-:--</span>
+            <div class="shop_tooltip">
+                ${item.name}
+            </div>
+        </div>`
+    }
+}
+
+
+/** Ends boost */
+function endBoost(id) {
+    // Update boost effects
+    const item = boosts[boostsActive[id].name];
+    updateBoostEffects(item, 1);
+
+    clearInterval(boostsActive[id].timer);
+    delete boostsActive[id];
+
+    // dom(`boost_${id}`).innerText = 'Done';
+    dom(`boost_${id}`).remove();
+
+    // No active
+    if(Object.keys(boostsActive).length != 0) return;
+    elNoPowers.classList.remove('remove');
+}
+
+/** Recalculates game variables */
+function updateBoostEffects(item, reset=false) {
+    boostEffects[item.type] = reset || item.multiplier;
+
+    // Update specific values
+    if(item.type == 'cpc') {
+        player.cpc = Calculate_Carrots(Boomer_Bill);
+        updateCPC();
+    } else if(item.type == 'cps') {
+        player.cps = Calculate_Carrots(Belle_Boomerette);
+        updateCPC();
+    }
 }
 //#endregion

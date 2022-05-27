@@ -1,3 +1,41 @@
+/* Debug chart */
+/* #debug {
+    position: fixed;
+    z-index: 1200;
+    min-height: 20vh;
+    max-height: calc(100vh - 54px);
+    overflow: scroll;
+
+    top: 48px;
+    left: 10px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(32px);
+}
+#debug .point {
+    background-color: rgb(255, 255, 255);
+    width: 8px;
+    height: 8px;
+    margin: 1px;
+    border-radius: 50%;
+    display: inline-block;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rowdies&family=Ubuntu+Mono:wght@400;700&display=swap');
@@ -27,7 +65,7 @@
     /* --main-shop-hover:  #222020; */
 
     /* Text */
-    --secondary-text: rgb(196, 196, 196);
+    --secondary-text: #c4c4c4;
 
     /* Tri-pane colors */
     --brown-bg-color:      #4e3f34;
@@ -253,7 +291,7 @@ summary:hover {
 }
 .popup_box {
     background: var(--main-popup-color);
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
 
     padding: 20px;
@@ -527,7 +565,7 @@ h2, h3 {
     margin-left: auto;
     padding: 12px 16px;
     background: var(--main-popup-color);
-    border: 2px solid gray;
+    border: 1px solid gray;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
     position: relative;
@@ -1378,18 +1416,25 @@ body:not(.theme_light) .theme_checkmark {
     user-select: none;
     -webkit-user-select: none;
 }
+#boosts {
+    flex-wrap: wrap;
+}
 .power_item {
     background-color: var(--main-bg-color);
     box-shadow: 0 0 12px rgb(0 0 0 / 30%) inset;
     text-align: center;
+    width: max-content;
 
-    min-width: 54px;
     padding: 4px 8px;
     border-radius: 8px;
 
     display: inline-block;
 }
-.power_item:hover { box-shadow: none; }
+.power_item:hover,
+.power_item:focus-visible {
+    box-shadow: none;
+    z-index: 9999 !important;
+}
 .power_item:not(#multibuy) { padding-left: 32px; }
 .power_item:not(:last-of-type) { margin-right: 5px; }
 .power_item img {
@@ -1398,6 +1443,15 @@ body:not(.theme_light) .theme_checkmark {
     position: absolute;
     transform: translate(-28px, -3px);
 }
+.power_item .shop_tooltip {
+    width: max-content;
+    top: unset;
+    bottom: 100%;
+}
+.power_item img:hover {
+    content: url('./assets/icons/close_x.png');
+}
+#multibuy { min-width: 54px; }
 .mb_vr {
     padding-right: 5px;
     margin-right: 5px;
@@ -2009,6 +2063,7 @@ body:not(.gp) #golden_carrot_count*/ {
 #tripane nav .tab:nth-of-type(3) {
     border-radius: 0 16px 0 0 !important;
 }
+.popup_box .tab:hover { transform: none; }
 
 /* Info panel */
 .panel {
