@@ -832,15 +832,13 @@ function unlock(type, thingToUnlock, subtype, raw) {
     // Character
     else if(type == 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
-        if(characterQuery(thingToUnlock) == false) { charbox.classList.add('char_anim'); }
+        if(!characterQuery(thingToUnlock)) { charbox.classList.add('char_anim'); }
         player.characters[thingToUnlock] = true;
         charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
-        if(playerCharKeys.length >= chars.length) {
-            dom('more_chars_tooltip').classList.add('char_locked');
-        }
+        if(playerCharKeys.length >= chars.length) { dom('more_chars_tooltip').classList.add('char_locked'); }
 
         // if(thingToUnlock == 'carl') { populateCarl(); }
         // if(thingToUnlock == 'six')  { populateSix(); }

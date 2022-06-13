@@ -21,16 +21,11 @@
     <meta property="og:url" content="https://jjcvip.github.io/Carrot-Clicker/" />
     <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
-    <!-- <meta name="twitter:card" content="summary_large_image"> -->
 </head>
 <body>
-    <!-- <div id="debug">Debug</div> -->
-    
-    <!-- Corner Toasts -->
+    <!-- Toast notifications -->
     <div id="toast_container">
-        <div id="toasts_clear" onclick="clearToasts()">
-            Close All
-        </div>
+        <div id="toasts_clear" onclick="clearToasts()">Close All</div>
     </div>
 
     <!-- Main page -->
@@ -60,10 +55,6 @@
                 <div id="Tip" class="link_styling" onclick="tipchange()" tabindex="0" role="button">Tip: Click the carrot</div>
 
                 <div id="info_dropdown" tabindex="0">
-                    <!-- <svg height="20" width="25">
-                        <polygon points="0,0 25,0 12.5,10" style="fill:white;" />
-                    </svg> -->
-                    <!-- ☰ -->
                     ▼
                     <div class="hover_menu">
                         <!-- Settings -->
@@ -85,7 +76,6 @@
         
                             <a onclick="cosmeticSwitcher()" tabindex="0">
                                 <div class="menu_item link_styling secondary_text" style="width: 119px; padding-left: 0; padding-right: 0; text-align: center;">
-                                    <!-- <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert"> -->
                                     Cosmetics
                                 </div>
                             </a>
@@ -758,19 +748,7 @@
                         <p>Clicks per second (Best): <b id="lifetime_clickspeedrecord">---</b></p><br/>
 
                         <p>Themes: <b id="stat_themes">---</b></p>
-                        <!-- <details class="stat_collapse">
-                            <summary> -->
-                                <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast(...toasts.info_cosmetic_percent)">?</span></p> 
-                            <!-- </summary>
-                            Bundles:  <b id="stat_cosmetics_bundle">---</b><br/>
-                            Farmable: <b id="stat_cosmetics_farmable">---</b><br/>
-                            Bill:     <b id="stat_cosmetics_bill">---</b><br/>
-                            Belle:    <b id="stat_cosmetics_belle">---</b><br/>
-                            Greg:     <b id="stat_cosmetics_greg">---</b><br/>
-                            Charles:  <b id="stat_cosmetics_charles">---</b><br/>
-                            Carl:     <b id="stat_cosmetics_carl">---</b><br/>
-                            Tools:    <b id="stat_cosmetics_tools">---</b><br/>
-                        </details> -->
+                        <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast(...toasts.info_cosmetic_percent)">?</span></p> 
                         <p class="six_related">Trinkets: <b id="stat_trinkets">---</b></p>
                         
                         <br/>
@@ -894,40 +872,6 @@
                             <span id="volume_master_percent" class="secondary_text">100%</span>
                         </td>
                     </tr>
-                    
-                    <!-- Music Volume -->
-                    <!-- <tr>
-                        <td>
-                            <label for="volume_music" >
-                                Music:
-                            </label>
-                        </td>
-                        <td>
-                            <div class="slidecontainer">
-                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_music">
-                            </div>
-                        </td>
-                        <td>
-                            <span id="volume_music_percent">100%</span>
-                        </td>
-                    </tr> -->
-
-                    <!-- Other Volume -->
-                    <!-- <tr>
-                        <td>
-                            <label for="volume_misc" >
-                                Other:
-                            </label>
-                        </td>
-                        <td>
-                            <div class="slidecontainer">
-                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_misc">
-                            </div>
-                        </td>
-                        <td>
-                            <span id="volume_misc_percent">100%</span>
-                        </td>
-                    </tr> -->
                 </table><br>
 
                 

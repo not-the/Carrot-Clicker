@@ -1,41 +1,3 @@
-/* Debug chart */
-/* #debug {
-    position: fixed;
-    z-index: 1200;
-    min-height: 20vh;
-    max-height: calc(100vh - 54px);
-    overflow: scroll;
-
-    top: 48px;
-    left: 10px;
-    padding: 6px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-
-    background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(32px);
-}
-#debug .point {
-    background-color: rgb(255, 255, 255);
-    width: 8px;
-    height: 8px;
-    margin: 1px;
-    border-radius: 50%;
-    display: inline-block;
-} */
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rowdies&family=Ubuntu+Mono:wght@400;700&display=swap');
@@ -454,6 +416,26 @@ summary:hover {
     transition-duration: 0.5s;
     transition-timing-function: ease;
 }
+
+/* Screenshake */
+/* .screen_shake {
+    animation: screen_shake 0.8s infinite ease;
+    overflow-x: hidden;
+}
+.screen_shake .status_bar { transform: translateY(-80px); }
+@keyframes screen_shake {
+    0%   {transform: translate(0px, 0px);    }
+    1%   {transform: translate(14px, 1px) ;  }
+    10%  {transform: translate(-8px, -2px);  }
+    20%  {transform: translate(9px, 4px);    }
+    30%  {transform: translate(-4px, -5px) ; }
+    40%  {transform: translate(6px, -2px);   }
+    50%  {transform: translate(-6px, 1px);   }
+    60%  {transform: translate(4px, 7px) ;   }
+    70%  {transform: translate(-2px, -2px);  }
+    80%  {transform: translate(3px, 4px);    }
+    100% {transform: translate(0px, 0px);    }
+} */
 
 
 /* Dialog Popup */
@@ -1396,7 +1378,7 @@ body:not(.theme_light) .theme_checkmark {
 .characterbox:hover .character_name {
     text-decoration: underline;
 }
-.characterbox.char_anim { animation: char_unlock 0.5s ease; }
+.characterbox.char_anim:not(.show_info) { animation: char_unlock 0.5s ease; }
 @keyframes char_unlock {
     from {
         opacity: 0;
@@ -1745,6 +1727,9 @@ body:not(.gp) #golden_carrot_count*/ {
     min-height: 58px;
     max-height: 220px;
     overflow-y: auto;
+}
+.Charles .shop_bottom {
+    min-height: 220px;
 }
 
 /* Shop navigation */
@@ -2657,6 +2642,26 @@ footer {
     margin: 0 auto;
 }
 /* #credits.visible { opacity: 1; } */
+
+
+
+
+/* Pinned Dev panel */
+/* #devp .footer_bottom {
+    position: fixed;
+    z-index: 95;
+    bottom: 10px;
+    left: 10px;
+
+    height: 400px;
+    width: 410px;
+    overflow: auto;
+    
+    background-color: var(--lighter-bg-color);
+    outline: 1px solid var(--brown-lighter-color);
+    box-shadow: 4px 4px 12px rgb(0,0,0,0.5);
+    border-radius: 8px;
+} */
 
 
 

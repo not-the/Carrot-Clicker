@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.5';
+    const game_version = 'dev beta v1.15.5.1';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -16,13 +16,14 @@ const dialog = {
     jjcvip: ['Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip'],
 }
 // Toast templates
+const infot = ['', true, true];
 const toasts = {
     // Info blurbs
-    info_coins: ['Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', '', true, true],
-    info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, '', true, true],
-    info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', '', true, true],
-    info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', '', true, true],
-    info_boosts: ['Info: Boosts', 'Boosts will not be remembered if you restart the game', '', true, true],
+    info_coins: ['Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', ...infot],
+    info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, ...infot],
+    info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', ...infot],
+    info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', ...infot],
+    info_boosts: ['Info: Boosts', 'Boosts will not be remembered if you restart the game', ...infot],
 
     // Tutorials
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
@@ -1772,6 +1773,22 @@ const achievements = {
             'noToast': false,
         }
     },
+    '1000000_clicks': {
+        'name': 'Clicker God',
+        'desc': 'Click the carrot 1 million times (Hidden achievement)',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.lifetime.clicks', 1000000],
+        'style': 'secret',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+            'list': true,
+        }
+    },
 
     // Golden Carrots
     '50_golden_carrots': {
@@ -2068,22 +2085,6 @@ const achievements = {
         'reward': false,
         'pages': false,
         'conditions': ['player.fallingConsecRecord', 100],
-        'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1000000_clicks': {
-        'name': 'Clicker God',
-        'desc': 'Click the carrot 1 million times (Hidden achievement)',
-        'image': false,
-        'reward': false,
-        'pages': false,
-        'conditions': ['player.lifetime.clicks', 1000000],
         'style': 'secret',
         'mystery': {
             'name': true,
@@ -2420,10 +2421,22 @@ const boosts = {
 
         type: 'cpc',
         multiplier: 2,
-        time: 30, // seconds
+        time: 30,
 
         currency: 'gc',
         price: 6,
+    },
+    'cpc_10000x': {
+        name: 'cpc_10000x',
+        desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cpc',
+        multiplier: 10000,
+        time: 10,
+
+        currency: 'gc',
+        price: 6000,
     },
 
     // CPS
@@ -2434,7 +2447,7 @@ const boosts = {
 
         type: 'cps',
         multiplier: 2,
-        time: 60, // seconds
+        time: 60,
 
         currency: 'gc',
         price: 3,
@@ -2446,7 +2459,7 @@ const boosts = {
 
         type: 'cps',
         multiplier: 10,
-        time: 60, // seconds
+        time: 60,
 
         currency: 'gc',
         price: 8,
@@ -2458,7 +2471,7 @@ const boosts = {
 
         type: 'cps',
         multiplier: 10,
-        time: 15, // seconds
+        time: 15,
 
         currency: 'gc',
         price: 300,

@@ -120,6 +120,15 @@ function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150, siz
     }
 }
 
+/** Screen shake */
+// function screenShake(time=800, intensity=1) {
+//     $('body').classList.add('screen_shake');
+//     clearTimeout(shakeTimeout);
+//     var shakeTimeout = setTimeout(() => {
+//         $('body').classList.remove('screen_shake'); 
+//     }, time);
+// }
+
 
 // const sounds = [
     

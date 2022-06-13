@@ -1505,13 +1505,6 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     }
 }
 
-// Debug level chart
-// let debug_count = 1;
-// let debug_data  = [100, 111];
-// let debug_chart = `<div class="point" title="000" style="margin-bottom: 0px;"></div>`;
-// const elChart = dom('debug');
-
-
 /** Levels up characters
  * @param {Object} character Character object
  * @param {Number} amount Multibuy amount
@@ -1526,18 +1519,6 @@ function LevelUp(character=Boomer_Bill, amount=1) {
         player.carrots -= price; // Charge player
         character.lvl += amount;
         character.lvlupPrice = getLevelPrice(character, character.lvl+1); // Set next lvlupprice
-
-        // Debug
-        // debug_data.push(character.lvlupPrice);
-        // debug_count++;
-        // debug_chart +=
-        // `<div
-        //     class="point"
-        //     title="${debug_count}, ${debug_data[debug_count]}"
-        //     style="margin-bottom: ${debug_data[debug_count] / 500}px;">
-        // </div>`;
-        // // elChart.innerText = debug_data.join('\n');
-        // elChart.innerHTML = debug_chart;
 
         // Update page
         carrotCount();
@@ -2155,7 +2136,6 @@ setInterval(() => {
 
 // Lifetime Statistics Panel
 const elStatistics = dom('statistics');
-// const statLoading = elStatistics.innerHTML;
 const statsNumbers = {
     // Prestige
     prestige_carrots:            dom('prestige_carrots'),
@@ -2196,14 +2176,6 @@ const statsNumbers = {
     stat_themes:                      dom('stat_themes'),
     stat_cosmetics:                   dom('stat_cosmetics'),
     stat_trinkets:                    dom('stat_trinkets'),
-    // stat_cosmetics_bundle:            dom('stat_cosmetics_bundle'),
-    // stat_cosmetics_farmable:          dom('stat_cosmetics_farmable'),
-    // stat_cosmetics_bill:              dom('stat_cosmetics_bill'),
-    // stat_cosmetics_belle:             dom('stat_cosmetics_belle'),
-    // stat_cosmetics_greg:              dom('stat_cosmetics_greg'),
-    // stat_cosmetics_charles:           dom('stat_cosmetics_charles'),
-    // stat_cosmetics_carl:              dom('stat_cosmetics_carl'),
-    // stat_cosmetics_tools:             dom('stat_cosmetics_tools'),
 
     stat_achievements:                dom('stat_achievements'),
 }
@@ -2285,8 +2257,6 @@ function tipchange() {
     } else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) {
         tips.tracker = 3; // 1 billion
     }
-
-    console.log(tips.tracker);
 
     // Update best
     if(tips.tracker > tips.best) { tips.best = tips.tracker; }
