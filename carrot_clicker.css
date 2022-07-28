@@ -1838,7 +1838,8 @@ body:not(.gp) #golden_carrot_count*/ {
     padding: 5px;
 }
 /* Can't afford */
-.tooltip_area .shop_item.cant_afford {
+.tooltip_area .shop_item.cant_afford,
+.shop_item.cant_afford {
     filter: brightness(50%) contrast(90%);
     background-color: var(--darker-bg-color);
     /* cursor: not-allowed; */

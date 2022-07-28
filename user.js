@@ -231,42 +231,10 @@ function settingCarrotSounds() {
 }
 
 // Volume slider
-elVolumeMaster.oninput = () => {
-    volumeSliderHandler(0);
-}
-volumeMasterDropdown.oninput = () => {
-    volumeSliderHandler(1);
-}
+elVolumeMaster.oninput = () => { volumeSliderHandler(0); }
+volumeMasterDropdown.oninput = () => { volumeSliderHandler(1); }
 
-// Volume slider
-function volumeSliderHandler(v) {
-    let value;
-    if(v == 0) {
-        value = elVolumeMaster.value;
-        volumeMasterDropdown.value = value;
-    } else {
-        value = volumeMasterDropdown.value;
-        elVolumeMaster.value = value;
-    }
-
-    if(value == 0) {
-        vmdImage.src = './assets/icons/mute.svg';
-    } else if(vmdImage.src != './assets/icons/volume.svg') {
-        vmdImage.src = './assets/icons/volume.svg';
-    }
-
-    volume = value / 100;
-
-    if(music !== undefined) {
-        music.volume = volume;
-    }
-
-    // Update percentage
-    eInnerText(elVolumeMaster_label, value > 0 ? `${value}%` : 'OFF');
-
-    settings.master_volume = value / 100;
-    saveSettings();
-}
+/* Slider handler moved to carrot_clicker.js */
 
 
 

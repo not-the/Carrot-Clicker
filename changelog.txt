@@ -1,4 +1,24 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15.6
+    7-28-2022
+// ----------------------------------------------------------- //
+
+- Classic-er theme:
+  + Is now obtainable via Carl after unlocking all_normal_achievements
+  + Now has an icon
+- Grey theme is now available from Carl at the start (Carl's unlock condition has also been changed to compensate)
+- The level_up_discount trinket now has a name and icon
+- The Milennial Bill achievement is now secret as it isn't currently obtainable legitamately
+
+Bug fixes:
+- Fixed a bug where the volume icon in the dropdown would not change to a mute icon on page load (when volume is set to 0)
+- Fixed Carl shop items not greying out when too expensive
+- Fixed tutorial_multibuy incorrectly telling the player that the multibuy indicator is in the status bar instead of the boosts bar
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15.5.1
     6-13-2022
 // ----------------------------------------------------------- //

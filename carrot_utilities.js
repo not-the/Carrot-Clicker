@@ -170,9 +170,7 @@ function ClearLocalStorage(disableReload) {
 
 // Capitalize first letter of string
 // https://stackoverflow.com/a/1026087
-function capitalizeFL(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+function capitalizeFL(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
 
 // Volume variable
 var volume = 100;

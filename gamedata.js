@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.5.1';
+    const game_version = 'dev beta v1.15.6';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -28,7 +28,7 @@ const toasts = {
     // Tutorials
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
     tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
-    tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the status bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
+    tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the boosts bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
     // tutorial_golden_carrots is in carrot_clicker.js
 }
 //#endregion
@@ -174,10 +174,10 @@ const themes = {
     },
     'theme_original': {
         name:     'Carrot Clicker CLASSIC-ER',
-        image:    false,
+        image:    './assets/theme/theme_original.png',
         desc:     'The ORIGINAL original look of carrot clicker',
         cosmetic: false,
-        accent:   '#4e3f34',
+        accent:   '#291c11',
     },
     'theme_red': {
         name:     'Red Theme',
@@ -1084,7 +1084,7 @@ const achievements = {
         'reward': 'character:carl',
         'pages': false,
         'conditions': [
-            ['carlItemsAvailable()', 2],
+            ['carlItemsAvailable()', 3],
             ['player.cash', 6],
         ],
         // 'condition_amount': 1,
@@ -1164,11 +1164,13 @@ const achievements = {
         'reward': false,
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
+        'style': 'secret',
         'mystery': {
             'name': true,
             'desc': false,
             'image': true,
             'noToast': false,
+            'list': true,
         }
     },
     // Belle level
@@ -1985,9 +1987,12 @@ const achievements = {
         'name': 'All Normal Achievements',
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
-        'reward': () => {
-            let sc = toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(sc); }, "View credits");
-        },
+        'reward': [
+            'shop:theme/theme_original',
+            () => {
+                let sc = toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(sc); }, "View credits");
+            }
+        ],
         'pages': 10,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 3))', 100],
         // 'style': 'endgame',
@@ -2302,9 +2307,9 @@ const sixShop = {
         written:   '@ clicks/s',
     },
     'level_up_discount': {
-        name:      'level_up_discount',
-        desc:      'Decreases level up prices by a percentage',
-        img:       false,
+        name:      'Coupon Book',
+        desc:      'Decreases level up prices',
+        img:       './assets/items/coupon_book.png',
         currency:  'cash',
         price:     [89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
         value:     [95,  90,  85,  80,  75,  70,  65,  60,  55,  50],

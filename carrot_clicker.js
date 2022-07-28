@@ -378,6 +378,12 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+            'theme_original': {
+                currency: 'cash',
+                price: 54,
+                available: false,
+                bought: false,
+            },
             'theme_red': {
                 currency: 'cash',
                 price: 5,
@@ -396,6 +402,13 @@ const Default_Carl = {
                 available: false,
                 bought: false,
             },
+            'theme_grey': {
+                currency: 'cash',
+                price: 5,
+                available: true,
+                bought: false,
+            },
+
             // 'theme_custom': {
             //     currency: 'cash',
             //     price: 80,
@@ -721,6 +734,40 @@ function optionSoundsDisable(state) {
         elEnableCarrotSounds.disabled = false;
     }
 }
+// Volume slider
+function volumeSliderHandler(source=-1) {
+    let value;
+    if(source == 0) {
+        value = elVolumeMaster.value;
+        volumeMasterDropdown.value = value;
+    } else if(source == 1) {
+        value = volumeMasterDropdown.value;
+        elVolumeMaster.value = value;
+    } else if(source == -1) {
+        value = settings.master_volume * 100;
+        volumeMasterDropdown.value = value;
+        elVolumeMaster.value = value;
+    }
+
+    // Dropdown volume icon
+    if(value == 0) {
+        vmdImage.src = './assets/icons/mute.svg';
+    } else if(vmdImage.src != './assets/icons/volume.svg') {
+        vmdImage.src = './assets/icons/volume.svg';
+    }
+
+    // Update percentage
+    eInnerText(elVolumeMaster_label, value > 0 ? `${value}%` : 'OFF');
+
+    volume = value / 100;
+
+    if(music !== undefined) {
+        music.volume = volume;
+    }
+
+    settings.master_volume = value / 100;
+    saveSettings();
+}
 /** Fill out settings page options */
 function fillSettingsPage() {
     // Gameplay
@@ -739,9 +786,7 @@ function fillSettingsPage() {
     elEnableSounds.checked = settings.enableSounds;
     optionSoundsDisable(settings.enableSounds);
 
-    let vol = settings.master_volume * 100
-    elVolumeMaster.value = vol;
-    volumeMasterDropdown.value = vol;
+    volumeSliderHandler();
     elEnableMusic.checked = settings.enableMusic;
     elEnableCarrotSounds.checked = settings.enableCarrotSounds;
     eInnerText(elVolumeMaster_label, `${settings.master_volume * 100}%`);
@@ -874,7 +919,6 @@ if(localStorage.getObject("settings") != null) {
     // Create from default
     console.log('[Settings] No localStorage object found, creating...');
     resetSettings();
-    saveSettings();
 }
 
 
@@ -940,9 +984,8 @@ function r(max) { return Math.floor(Math.random() * max); }
  * @param {string} classname CSS class name
  * @param {boolean} state true = add, false = remove
  */
-function style(element, classname, state) {
-    if(state) { element.classList.add(classname); }
-    else { element.classList.remove(classname); }
+ function style(element, classname, state) {
+    state ? element.classList.add(classname) : element.classList.remove(classname);
 }
 
 // Store click speed
@@ -1173,7 +1216,10 @@ function fallingCarrot() {
         }
 
         if(type == 'carrot') {
-            if(player.flags['hardcore']) amount *= -1;
+            if(player.flags['hardcore']) {
+                amount *= -1;
+                // screenShake();
+            };
             earnCarrots(amount, 'bonus', true);
             mouseConfetti([6, 8], ccCarrot, 300);
         } else if(type == 'cash') {
