@@ -1157,9 +1157,8 @@ const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
 function fallingCarrot() {
     // Roll
-    let boostEffect = boostEffects['fc_chance'];
     let roll = Math.ceil((Math.random() * 100));
-    let rollchance = boostEffect; // 1% chance
+    let rollchance = boostEffects['fc_chance']; // 1% chance
     if(roll <= rollchance /*&& fallingActive < 4*/ || fallingCarrotPromiser >= 100) {
         fallingCarrotPromiser = 0;
     } else {
@@ -1171,7 +1170,7 @@ function fallingCarrot() {
     var element = document.createElement("img");
     
     // 6% chance the drop is money instead
-    let type = Math.ceil(Math.random() * 100) <= (6 / boostEffect) ? 'cash' : 'carrot';
+    let type = Math.ceil(Math.random() * 100) <= (6 / rollchance) ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
