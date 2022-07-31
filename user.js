@@ -748,7 +748,7 @@ function grantAchievement(key) {
     updateMainIcon();
 }
 
-// Unlock themes/cosmetics
+/** Unlock themes, cosmetics, characters, etc */
 function unlock(type, thingToUnlock, subtype, raw) {
     if(isUnlocked(type, thingToUnlock, subtype) == true) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
@@ -807,9 +807,6 @@ function unlock(type, thingToUnlock, subtype, raw) {
         elBody.classList.add(`c_${thingToUnlock}`);
 
         if(playerCharKeys.length >= chars.length) { dom('more_chars_tooltip').classList.add('char_locked'); }
-
-        // if(thingToUnlock == 'carl') { populateCarl(); }
-        // if(thingToUnlock == 'six')  { populateSix(); }
     }
     // Carl shop item
     else if(type == 'shop_item') {
@@ -904,7 +901,7 @@ function buyCarl(type, item, subtype = false) {
     }
 }
 
-/** Six buy */
+/** Buy Trinket  */
 function buySix(id) {
     let item = sixShop[id];
     let data = Six.data[id];
@@ -1035,7 +1032,7 @@ function isDebug() {
             player.flags['cookies_accepted'] = true;
 
             // In development
-            unlock('character', 'six');
+            // unlock('character', 'six');
             seeButton('hardmode');
 
             // Register cheat functions globally
@@ -1433,9 +1430,7 @@ function isDebug() {
     // Enable unlocked characters
     for(i = 0; i < playerCharKeys.length; i++) {
         let key = playerCharKeys[i];
-        if(player.characters[key] == true) {
-            unlock('character', key);
-        }
+        if(characterQuery(key)) { unlock('character', key); }
     }
 
     // Achievement list CSS
@@ -1559,11 +1554,8 @@ function isDebug() {
     populateSix();
     if(player.new_theme == true) { newIndicator(true, 'theme'); }
     if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
-
-    // Prestige button visibility
-    if(player.prestige_available == true) { seeButton('prestige'); }
-    // Has prestiged before
-    if(player.lifetime.prestige_count > 0) { showPrestigeStats(); }
+    if(player.prestige_available == true) { seeButton('prestige'); } // Prestige button visibility
+    if(player.lifetime.prestige_count > 0) { showPrestigeStats(); } // Has prestiged before
 
     // Finished
 })();

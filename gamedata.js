@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.6';
+    const game_version = 'dev beta v1.15.7';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -23,7 +23,7 @@ const toasts = {
     info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, ...infot],
     info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', ...infot],
     info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', ...infot],
-    info_boosts: ['Info: Boosts', 'Boosts will not be remembered if you restart the game', ...infot],
+    info_boosts: ['Info: Boosts', 'Boosts will not be remembered if the game is closed', ...infot],
 
     // Tutorials
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
@@ -106,6 +106,7 @@ const default_tips = {
         "Craft the carrot, Greg.",
         "Study the carrot, Charles.",
         "Paint the carrot, Carl.",
+        // "Sell Carrot Knicknacks, Six",
     ],
     fun_advanced: [
         "World hunger has been cured, but there must be more we can do.",
@@ -165,6 +166,13 @@ const themes = {
         cosmetic: false,
         accent:   '#000000',
     },
+    'theme_grey': {
+        name:     'Full Grey Theme',
+        image:    './assets/theme/theme_grey.png',
+        desc:     'Makes brown UI elements use grey instead',
+        cosmetic: false,
+        accent:   '#455779',
+    },
     'theme_classic': {
         name:     'Carrot Clicker Classic',
         image:    './assets/theme/theme_classic.png',
@@ -199,13 +207,6 @@ const themes = {
         desc:     'For when you get tired of gray',
         cosmetic: false,
         accent:   '#455779'
-    },
-    'theme_grey': {
-        name:     'Grey theme',
-        image:    './assets/theme/theme_grey.png', // NEEDS ICON
-        desc:     'For when you get tired of blue. Gives the tripane the same color scheme as the rest of the game',
-        cosmetic: false,
-        accent:   '#455779', // NEEDS ACCENT
     },
     'theme_camo': {
         name:     'Camo',
@@ -289,6 +290,7 @@ const cosmetics = {
             'greg':     'default',
             'charles':  'default',
             'carl':     'default',
+            'six':      'default',
             'tools':    'default',
         },
         // Cookie
@@ -351,6 +353,7 @@ const cosmetics = {
             'greg':     'bill',
             'charles':  'bill',
             'carl':     'bill',
+            'six':      'bill',
             'tools':    'bill',
         },
     },
@@ -737,6 +740,14 @@ const cosmetics = {
             'rename': 'six',
             'image': './assets/achievements/missing.png',
         },
+        'bill': {
+            'name': 'Bill',
+            'desc': 'Return to Bill.',
+            'group': 'bill',
+
+            'rename': 'Bill',
+            'image': './assets/characters/Boomer_Bill.png',
+        },
     },
     tools: {
         'default': {
@@ -755,7 +766,7 @@ const cosmetics = {
         'fertilizer': {
             'name': 'Fertilizer',
             'preview': './assets/tools/fertilizer/tool_0.png',
-            'desc': 'placeholder',
+            'desc': 'Quite fertile',
 
             '0': './assets/tools/fertilizer/tool_0.png',
             '1': './assets/tools/fertilizer/tool_1.png',
@@ -767,7 +778,7 @@ const cosmetics = {
         'blockgame': {
             'name': 'Minecraft Hoes',
             'preview': './assets/tools/blockgame/tool_0.png',
-            'desc': 'Yes',
+            'desc': 'Best tool in the game',
             'group': 'blockgame',
 
             '0': './assets/tools/blockgame/tool_0.png',
@@ -1587,7 +1598,7 @@ const achievements = {
         }
     },
     '1_billion_cpc': {
-        'name': '1_billion_cpc',
+        'name': 'Carrot Printer',
         'desc': 'Get your Carrots Per Click (CPC) to 1 billion',
         'image': false,
         'reward': false,
@@ -1688,35 +1699,6 @@ const achievements = {
             'noToast': false,
         }
     },
-    '3_falling_consecutive': {
-        'name': 'Match 3',
-        'desc': 'Grab 3 falling carrots in a row',
-        'image': false,
-        'reward': 'cash:12',
-        'pages': false,
-        'conditions': ['player.fallingConsecRecord', 3],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    // Commented out for now since it's not doable without fallingFrenzy
-    // '10_falling_consecutive': { 
-    //     'name': '10_falling_consecutive',
-    //     'desc': 'Grab 10 falling carrots in a row',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': false,
-    //     'conditions': ['player.fallingConsecRecord', 10],
-    //     'mystery': {
-    //         'name': true,
-    //         'desc': false,
-    //         'image': false,
-    //         'noToast': false,
-    //     }
-    // },
 
     // Clicks
     '500_clicks': {
@@ -2005,6 +1987,36 @@ const achievements = {
     },
 
     // Challenge achievements
+    '3_falling_consecutive': {
+        'name': 'Match 3',
+        'desc': 'Grab 3 falling carrots in a row',
+        'image': false,
+        'reward': 'cash:12',
+        'pages': false,
+        'conditions': ['player.fallingConsecRecord', 3],
+        'style': 'challenge',
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    // Commented out for now since it's not doable without boosts
+    // '10_falling_consecutive': { 
+    //     'name': '10_falling_consecutive',
+    //     'desc': 'Grab 10 falling carrots in a row',
+    //     'image': false,
+    //     'reward': false,
+    //     'pages': false,
+    //     'conditions': ['player.fallingConsecRecord', 10],
+    //     'mystery': {
+    //         'name': true,
+    //         'desc': false,
+    //         'image': false,
+    //         'noToast': false,
+    //     }
+    // },
     'no_bonus_carrots_challenge': {
         'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
@@ -2211,6 +2223,15 @@ const achievements = {
         },
         'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
+    },
+    'internal_six_available': {
+        'internal': true,
+        'name': 'internal_six_available',
+        'reward': () => {
+            unlock('character', 'six');
+        },
+        'pages': false,
+        'conditions': ['', true],
     },
     // 'internal_custom_theme_available': {
     //     'internal': true,
@@ -2480,6 +2501,56 @@ const boosts = {
 
         currency: 'gc',
         price: 300,
+    },
+
+    // Falling carrot chance
+    'fc_2x': {
+        name: 'Rain Song',
+        desc: '2x falling carrot chance for 5 minutes',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'fc_chance',
+        multiplier: 2,
+        time: 300,
+
+        // currency: 'gc',
+        // price: 300,
+    },
+    'fc_5x': {
+        name: 'fc_5x',
+        desc: '5x falling carrot chance for 2 minutes',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'fc_chance',
+        multiplier: 5,
+        time: 120,
+
+        // currency: 'gc',
+        // price: 300,
+    },
+    'fc_10x': {
+        name: 'fc_10x',
+        desc: '10x falling carrot chance for 1 minute',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'fc_chance',
+        multiplier: 10,
+        time: 60,
+
+        // currency: 'gc',
+        // price: 300,
+    },
+    'fc_frenzy': {
+        name: 'Falling Frenzy',
+        desc: 'Falling Carrots are guaranteed',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'fc_chance',
+        multiplier: 1000,
+        time: 10,
+
+        // currency: 'gc',
+        // price: 1000,
     },
 }
 //#endregion

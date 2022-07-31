@@ -940,12 +940,12 @@ function populateCosmeticsList(target) {
         // Size adjust
         setTimeout(() => {
             let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-            if(width > 632) { width = 632 - 68; }
-            else { width = width - 68; }
-            let item_width = 94;
+            if(width > 655) { width = 655 - 64; }
+            else { width = width - 64; }
+            let item_width = 84;
             if(width <= 460) { item_width = 84; }
-            // 632 theme popup width
-            // minus 57 to get actual used space
+            // 655 theme popup width
+            // minus 64 to get actual used space
             let amount = Math.floor(width / item_width);
             // console.log(amount);
             
@@ -1362,8 +1362,9 @@ function populateCarl() {
 
         let theme = themes[theme_keys[ti]];
         let img = theme.image;
+        let desc = theme.desc;
 
-        html += carlHTML(name, 'theme', theme.name, img, item.price);
+        html += carlHTML(name, 'theme', theme.name, img, item.price, desc);
         // count++;
     }
 
@@ -1372,18 +1373,16 @@ function populateCarl() {
     for(let ti = 0; ti < cosm_keys.length; ti++) {
         let name = cosm_keys[ti];
         let item = Carl.shop.cosmetic[name];
-        if(
-            item.available == false ||
-            item.bought == true
-        ) continue;
+        if(!item.available || item.bought) continue;
 
         carlShopData[name] = item.price;
 
         let [ca, cb] = name.split('/');
         let cosmetic = cosmetics[ca][cb];
         let img = cosmetic.image || cosmetic.preview;
+        let desc = cosmetic.desc;
 
-        html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+        html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price, desc);
         // count++;
     }
 
@@ -1398,8 +1397,9 @@ function populateCarl() {
     cashCount(false);
 
     /** Carl HTML template */
-    function carlHTML(internalName, type, name, img, price) {
+    function carlHTML(internalName, type, name, img, price, desc) {
         return `
+        <div class="tooltip_area">
             <div id="carl_shop_${internalName}" class="shop_item flex" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
                 <img src="${img}" alt="" class="shop_img">
                 <div class="info">
@@ -1411,6 +1411,9 @@ function populateCarl() {
                     </div>
                 </div>
             </div>
+
+            <div class="shop_tooltip">${desc}</div>
+        </div>
         `;
     }
 }
@@ -1442,9 +1445,10 @@ function populateSix() {
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
         html += sixHTML(key, item.img||'./assets/achievements/missing.png', item.name, item.desc, price, currency, segments, styles, value);
     }
+    // "Check back later for more trinkets"
     html += `
     <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
-        Check back later for more trinkets
+        Thanks for stopping by!
     </p>`;
     elSixShop.innerHTML = html;
     cashCount(false);

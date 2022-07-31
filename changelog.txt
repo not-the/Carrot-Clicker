@@ -1,4 +1,40 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.15.7
+    7-28-2022
+// ----------------------------------------------------------- //
+
+- 1_billion_cpc achievement now has a name
+- Support for boosts that increase the chance of falling carrots
+  + Chance of falling cash is reduced proportionally so that it doesnt change with boosts
+- Grey Theme now has an icon and description
+- Hovering over items in Carl's shop will show the item's description
+- Fixed a bug where the "Disable Keybinds" option wouldn't be remembered
+- Decreased the size of theme and cosmetic elements
+- Fixed a bug where Greg's crafting indicator would disappear
+- data_version bumped to 13
+
+Balance Changes
+- Changes to price scaling
+    Bill:
+        Levels 300+ : 0.09 -> 0.08
+    Belle:
+        Levels 0-74    : 0.11 -> 0.06
+        Levels 75-99   : 0.12 -> 0.12
+        Levels 100-124 : 0.08 -> 0.07
+        Levels 125-199 : 0.08 -> 0.07
+        Levels 200+    : 0.08 -> 0.08
+- Changes to starting tool prices
+    Tool 2:    600,000  ->    750,000
+    Tool 3: 60,000,000  -> 50,000,000
+- Changes to tool price scaling
+    Tool 2: 0.02 -> 0.024
+    Tool 3: 0.02 -> 0.018
+    Tool 6: 0.02 -> 0.028
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15.6
     7-28-2022
 // ----------------------------------------------------------- //

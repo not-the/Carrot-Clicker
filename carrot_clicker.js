@@ -145,7 +145,7 @@ const tomeCount = {
 const elFunTipsSlider = dom("FunTipsSlider");
 const elFunTipsSlider_label = dom("FunTipsSliderLabel");
 
-const elDisableKeybinds = dom('disable_keybinds');
+const elDisableKeybinds = dom('disableKeybinds');
 const elEnableSounds = dom('enable_sounds');
 const elEnableMusic = dom('enable_music');
 const elEnableCarrotSounds = dom('enable_carrot_sounds');
@@ -200,7 +200,7 @@ const playerPrestigeTemplate = {
 };
 const default_player = {
     // game_version: false,
-    data_version: 12, // needs to be incremented by 1 any time any game object is changed
+    data_version: 13, // needs to be incremented by 1 any time any game object is changed
     // time_last_saved: false,
 
     // Progress
@@ -218,6 +218,7 @@ const default_player = {
     pages: 0,
     golden_carrots: 0,
     prestige_potential: 0,
+    prestige_potential_cap: 0,
     prestige_available: false,
 
     // Current prestige
@@ -247,6 +248,7 @@ const default_player = {
     characters: {
         bill: true,
     },
+    six_full: false,
 
     // Achievements
     achievements: {},
@@ -283,6 +285,17 @@ const default_player = {
 // Tool durability values (hardmode)
 // const toolDurability = [140, 800, 3200, 12000, 24000, 64000];
 
+// tool
+const toolScaling = [
+    // False means fall back to default
+    false,
+    0.024,
+    0.018,
+    false,
+    false,
+    0.028,
+];
+
 // Character Defaults
 const Default_Boomer_Bill = new Character(
     "bill", './assets/characters/Boomer_Bill.png',
@@ -291,6 +304,7 @@ const Default_Boomer_Bill = new Character(
         { min: 1,   modifier: 0.11 },
         { min: 75,  modifier: 0.13 },
         { min: 100, modifier: 0.09 },
+        { min: 300, modifier: 0.08 },
     ],
     [0,0,0,0,0,0],
 );
@@ -298,9 +312,10 @@ const Default_Belle_Boomerette = new Character(
     "belle", './assets/characters/BelleBommerette.png',
     0, 200,
     [ // Price scaling
-        { min: 0,   modifier: 0.11 },
-        { min: 75,  modifier: 0.12 },
-        { min: 100, modifier: 0.08 },
+        { min: 0,   modifier: 0.06 },
+        { min: 100, modifier: 0.12 },
+        { min: 125, modifier: 0.07 },
+        { min: 200, modifier: 0.08 },
     ],
     [0,0,0,0,0,0]
 );
@@ -313,7 +328,7 @@ const Default_Gregory = new Character(
     ],
     [0,0,0,0,0,0]
 );
-Default_Gregory.HoePrices = [15000,600000,60000000,7000000000,500000000000,100000000000000];
+Default_Gregory.HoePrices = [15000,750000,50000000,7000000000,500000000000,100000000000000];
 Default_Gregory.crafting = false; // whether or not he is currently crafting
 const Default_Charles = {
     // Info
@@ -1136,16 +1151,16 @@ function onClick(useMousePos, method='click', source=0) {
 // Falling carrots
 var fallingCarrotPromiser = 0;
 var fallingID = 0;
-var fallingActive = 0;
-var fallingFrenzy = false;
+// var fallingActive = 0;
 var fallingConsecutive = 0;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
 function fallingCarrot() {
     // Roll
+    let boostEffect = boostEffects['fc_chance'];
     let roll = Math.ceil((Math.random() * 100));
-    let rollchance = 1; // 1% chance
-    if(roll <= rollchance && fallingActive < 4 || fallingFrenzy == true || fallingCarrotPromiser >= 100) {
+    let rollchance = boostEffect; // 1% chance
+    if(roll <= rollchance /*&& fallingActive < 4*/ || fallingCarrotPromiser >= 100) {
         fallingCarrotPromiser = 0;
     } else {
         fallingCarrotPromiser++;
@@ -1156,14 +1171,14 @@ function fallingCarrot() {
     var element = document.createElement("img");
     
     // 6% chance the drop is money instead
-    let type = Math.ceil(Math.random() * 100) <= 6 ? 'cash' : 'carrot';
+    let type = Math.ceil(Math.random() * 100) <= (6 / boostEffect) ? 'cash' : 'carrot';
 
     element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
     element.classList.add('falling_carrot');
     if(Math.floor(Math.random() * 2) == 0) { element.classList.add('mirror'); }
     element.id = fallingID;
     fallingID++;
-    fallingActive++;
+    // fallingActive++;
 
     let amount;
 
@@ -1202,14 +1217,14 @@ function fallingCarrot() {
     setTimeout(() => {
         if(dom(element.id) != null) {
             dom(element.id).remove();
-            fallingActive--;
+            // fallingActive--;
         }
     }, 2600);
 
     /** Grant reward when falling carrot is caught */
     function catchCarrot(id, type, amount) {
         dom(id).remove();
-        fallingActive--;
+        // fallingActive--;
         fallingConsecutive++;
         if(fallingConsecutive > player.fallingConsecRecord || player.fallingConsecRecord == undefined) {
             player.fallingConsecRecord = fallingConsecutive;
@@ -1441,7 +1456,7 @@ function updateMainIcon() {
     // Dev mode
     else if(isDebug()) {
         elMainIcon.src   = './assets/items/keyboard_2.png';
-        elMainIcon.title = 'Dev mode';
+        elMainIcon.title = 'Developer mode';
     }
     // Default
     else {
@@ -1700,9 +1715,14 @@ function Calculate_Carrots(character) {
 
 /** Calculates the prestige potential and updates the page */
 function calculatePrestigePotential() {
+    // Potential Cap
+    // ...
+
+    // Prestige Potential
+    let pageValue = (Six.data.page_bonus.value || 1) / 100;
     player.prestige_potential = Math.floor(
         5 * Math.pow(0.00000001 * player.prestige.carrots, 0.45) // Initial value
-        * (1 + (player.pages * (Six.data.page_bonus.value || 1)/100)) // Tome page bonus
+        * (1 + (player.pages * pageValue)) // Tome page bonus
     );
 
     // Update page
@@ -1717,6 +1737,8 @@ function calculatePrestigePotential() {
     )
     { dom('prestige_menu_button').classList.add('glowing'); }
     else { dom('prestige_menu_button').classList.remove('glowing'); }
+
+    return player.prestige_potential;
 }
 
 //#endregion
@@ -1861,22 +1883,23 @@ function DecreaseWagesEffects(){
  * @param {string} mode Options: "query" or "apply"
  * @returns Calculated hoe cost
  */
-function HoeCost(type=0,amount=1,mode="query"){
+function HoeCost(type=0,amount=1,mode="query") {
     var p = Gregory.HoePrices[type];
     var p2 = 0;
+    let scaling = toolScaling[type] || 0.02
     if(amount==1){
         if(mode=="apply"){
-            Gregory.HoePrices[type]+=(0.02*p);
+            Gregory.HoePrices[type] += (scaling * p);
         }
         return p;
     }
-    for(j=0;j<amount;j++){
-        p+=(0.02*p);
-        p2+=p;     
+    for(j = 0; j < amount; j++) {
+        p+=(scaling*p);
+        p2+=p;
     }
 
     if(mode=="apply"){
-        Gregory.HoePrices[type]=p;
+        Gregory.HoePrices[type] = p;
     }
     return p2;
 }
@@ -1910,13 +1933,10 @@ function gregLevelTest(type, minusone = true) {
  */
 function CreateHoe(type=0, amount=1, progress=0) {
     // Greg unlock check
-    if(characterQuery('greg') == false) return;
+    if(!characterQuery('greg')) return;
 
     // Return if a hoe is already in progress
-    if(n==1){
-        // toast("Greg is busy", "Wait until he is done crafting", '', false, true);
-        return;
-    }
+    if(n == 1) return;
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
     if(gregLevelTest(type)) {
@@ -2004,7 +2024,7 @@ function CreateHoe(type=0, amount=1, progress=0) {
                         // Main progress
                         if(settings.enableMainProgress == true) { elMainProgressBar.style.width = "0%"; }
                         elMainProgressContainer.classList.remove('status_tidbit_in');
-                        dom('greg_crafting_info').style.opacity = '0';
+                        // dom('greg_crafting_info').style.opacity = '0';
                         dom('greg_crafting_info').classList.add('inactive');
                         dom('greg_crafting_info').title = 'Idle';
                     }, 100);
@@ -2365,6 +2385,8 @@ var boostsActive = {}
 var boostEffects = {
     'cpc': 1,
     'cps': 1,
+
+    'fc_chance': 1,
 }
 
 var boostID = 0;
@@ -2428,6 +2450,7 @@ function useBoost(boost = 'cpc_2x') {
             <img src="${item.img}" alt="" onclick="endBoost(${id})"><span id="time_boost_${id}">-:--</span>
             <div class="shop_tooltip">
                 ${item.name}
+                <p class="secondary_text">${item.desc}</p>
             </div>
         </div>`
     }
@@ -2456,12 +2479,20 @@ function updateBoostEffects(item, reset=false) {
     boostEffects[item.type] = reset || item.multiplier;
 
     // Update specific values
-    if(item.type == 'cpc') {
-        player.cpc = Calculate_Carrots(Boomer_Bill);
-        updateCPC();
-    } else if(item.type == 'cps') {
-        player.cps = Calculate_Carrots(Belle_Boomerette);
-        updateCPC();
+    switch (item.type) {
+        case 'cpc':
+            player.cpc = Calculate_Carrots(Boomer_Bill);
+            updateCPC();
+            break;
+        case 'cps':
+            player.cps = Calculate_Carrots(Belle_Boomerette);
+            updateCPC();
+            break;
+        case 'fc_chance':
+            // player.fc_chance = item.multiplier;
+            break;
+        default:
+            break;
     }
 }
 //#endregion

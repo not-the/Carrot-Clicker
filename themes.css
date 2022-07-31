@@ -469,7 +469,7 @@
 .theme_green #tripane nav,
 .theme_blue #tripane nav,
 .theme_grey #tripane nav {
-    background-color: var(--main-bg-color);
+    background-color: var(--lighter-bg-color);
 }
 .theme_red #tripane nav .tab,
 .theme_green #tripane nav .tab,
@@ -477,6 +477,7 @@
 .theme_grey #tripane nav .tab {
     background-color: var(--main-bg-color);
     color: gray;
+    border-color: var(--border-color);
 }
 .theme_red #tripane nav .activetab,
 .theme_green #tripane nav .activetab,

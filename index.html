@@ -226,7 +226,7 @@
                         </div>
 
                         <!-- Info button -->
-                        <span tabindex="0" class="question_mark" title="Boosts will not be remembered if you restart the game" onclick="toast(...toasts.info_boosts)" style="padding-right: 10px; margin-left: auto;">?</span>
+                        <span tabindex="0" class="question_mark" title="Boosts will not be remembered if the game is closed" onclick="toast(...toasts.info_boosts)" style="padding-right: 10px; margin-left: auto;">?</span>
                     </div>
 
                     <!--Boomer Bill Rendering-->
@@ -466,7 +466,7 @@
                                 role="button">
                                     <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
                                     <div class="info">
-                                        <p>Improve working conditions</p>
+                                        <p>Improve Working Conditions</p>
                                         <div id="iwc_effect" class="shop_value secondary_text"></div>
                                         <span id="iwc_count" class="secondary_text">x0</span>
                                         <span id="ImproveWorkingConditions" class="shop_price">---</span>
@@ -487,7 +487,7 @@
                                 role="button">
                                     <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
                                     <div class="info">
-                                        <p>High quality tools</p>
+                                        <p>High Quality Tools</p>
                                         <div id="bh_effect" class="shop_value secondary_text"></div>
                                         <span id="bh_count" class="secondary_text">x0</span>
                                         <span id="BetterHoes" class="shop_price">---</span>
@@ -508,7 +508,7 @@
                                 role="button">
                                     <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
                                     <div class="info">
-                                        <p>Decrease worker wages</p>
+                                        <p>Decrease Worker Wages</p>
                                         <div id="dww_effect" class="shop_value secondary_text"></div>
                                         <span id="dww_count" class="secondary_text">x0</span>
                                         <span id="DecreaseWages" class="shop_price">---</span>
@@ -538,7 +538,7 @@
                     <div class="six characterbox char_locked" id="six_box">
                         <div class="char_info" id="six_info">
                             <h2>Six</h2>
-                            <p class="secondary_text">- ??? -</p>
+                            <p class="secondary_text">- Shopkeeper -</p>
                             <hr>
                             Sells trinkets that grant special abilities. Trinkets are kept when you prestige.
                         </div>
@@ -803,8 +803,8 @@
 
                 <!-- Options item -->
                 <b>Keybinds</b><br>
-                <label for="disable_keybinds">
-                <input type="checkbox" class="checkbox" id="disable_keybinds" onclick="setting('disable_keybinds')"">
+                <label for="disableKeybinds">
+                <input type="checkbox" class="checkbox" id="disableKeybinds" onclick="setting('disableKeybinds')"">
                     Disable keybinds
                 </label><br>
                 <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
@@ -1402,27 +1402,29 @@
         <div id="credits" class="center">
             <h1 class="credits_underline">Credits</h1>
 
-            <span class="secondary_text">Original concept</span>
+            <span class="secondary_text">Original Concept</span>
             <b>not-the</b>
 
             <span class="secondary_text">Gameplay</span>
             <b>JJCVIP</b>
             <b>not-the</b>
 
-            <span class="secondary_text">Game balance & clicker game math</span>
+            <span class="secondary_text">Game Balance & Clicker Game Math</span>
             <b>JJCVIP</b>
-            <!-- <b>not-the</b> -->
+            <b>not-the</b>
+
             <span class="secondary_text">UI/UX</span>
             <b>not-the</b>
 
-            <span class="secondary_text">Character artwork & worldbuilding</span>
+            <span class="secondary_text">Achievement, Statistics, Theme, & Cosmetics Systems</span>
+            <b>not-the</b>
+
+            <span class="secondary_text">Pixel Art</span>
+            <b>not-the</b>
+
+            <span class="secondary_text">Character Artwork & Worldbuilding</span>
             <b>JJCVIP</b>
 
-            <span class="secondary_text">Achievement, statistics, theme, & cosmetic
-                code, descriptions, artwork, & iconography</span>
-            <b>not-the</b>
-            <!-- <span class="secondary_text">Audio Code</span>
-            <b>not-the</b> -->
             <span class="secondary_text">Sound Effects & Music</span>
             <b>JJCVIP</b>
 
@@ -1432,7 +1434,7 @@
 
 
             <h3 class="credits_underline">Special Thanks</h3>
-            <span class="secondary_text">Additional cosmetics & ideas</span>
+            <span class="secondary_text">Additional Cosmetics & Ideas</span>
             <b>UniverseNarwhal</b>
 
             <span class="secondary_text">Playtesters</span>

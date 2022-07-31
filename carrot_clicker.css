@@ -687,7 +687,7 @@ h2, h3 {
 
 /* Fancy Theme Switcher */
 .fancy_switcher {
-    width: 632px;
+    width: 655px;
     max-width: 100%;
     height: 100%;
     max-height: 95%;
@@ -716,13 +716,18 @@ p.theme_menu_title {
     margin-bottom: 12px;
     padding-left: 24px;
 }
-.theme_preview {image-rendering: pixelated;}
+.theme_preview {
+    height: 80px;
+    width: 80px;
+    padding: 10px;
+    image-rendering: pixelated;
+}
 .fancy_switcher h1 {
     margin: 4px 0 10px 0;
 }
 .theme_item h3 {
     margin: 0;
-    margin-top: 20px;
+    margin-top: 16px;
     margin-bottom: 6px;
 }
 .theme_menu p {
@@ -734,7 +739,8 @@ p.theme_menu_title {
     /* max-width: 100%; */
     border-radius: 10px;
     background-color: var(--darker-bg-color);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
+    /* box-shadow: 0 0 16px rgba(0, 0, 0, 0.3) inset; */
 
     /* Leave room for checkbox */
     padding-right: 84px;
@@ -779,11 +785,6 @@ p.theme_menu_title {
 #themes_list .theme_preview {
     border-radius: 24px;
 }
-.theme_preview {
-    height: 90px;
-    width: 90px;
-    padding: 10px;
-}
 .theme_checkbox {
     width: 60px;
     height: 60px;
@@ -820,12 +821,14 @@ body:not(.theme_light) .theme_checkmark {
 /* dumb way to hide bundle checkmarks */
 #bundle_cosmetics .theme_checkbox {
     visibility: hidden;
+    position: absolute;
 }
 .cosmetics_grid .theme_item {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     margin-right: 4px;
     display: unset;
+    padding: 0; 
 }
 .cosmetics_grid .theme_item:hover {
     z-index: 200;
@@ -1259,8 +1262,8 @@ body:not(.theme_light) .theme_checkmark {
 
 /* Carrot */
 #main_carrot {
-    margin: 10px;
-    margin-right: 20px;
+    margin: 15px;
+    /* margin-right: 20px; */
     width: 358px;
     height: auto;
     z-index: 0;
@@ -1375,9 +1378,7 @@ body:not(.theme_light) .theme_checkmark {
     /* 3D */
     transform: perspective(800px);
 }
-.characterbox:hover .character_name {
-    text-decoration: underline;
-}
+.characterbox:hover .character_name { text-decoration: underline; }
 .characterbox.char_anim:not(.show_info) { animation: char_unlock 0.5s ease; }
 @keyframes char_unlock {
     from {
@@ -1398,6 +1399,9 @@ body:not(.theme_light) .theme_checkmark {
     user-select: none;
     -webkit-user-select: none;
 }
+#powers_container:hover {
+    z-index: 11;
+}
 #boosts {
     flex-wrap: wrap;
 }
@@ -1415,7 +1419,7 @@ body:not(.theme_light) .theme_checkmark {
 .power_item:hover,
 .power_item:focus-visible {
     box-shadow: none;
-    z-index: 9999 !important;
+    z-index: 1;
 }
 .power_item:not(#multibuy) { padding-left: 32px; }
 .power_item:not(:last-of-type) { margin-right: 5px; }
@@ -1427,8 +1431,9 @@ body:not(.theme_light) .theme_checkmark {
 }
 .power_item .shop_tooltip {
     width: max-content;
-    top: unset;
-    bottom: 100%;
+    /* top: unset; */
+    /* bottom: 100%; */
+    text-align: left;
 }
 .power_item img:hover {
     content: url('./assets/icons/close_x.png');
@@ -2035,6 +2040,7 @@ body:not(.gp) #golden_carrot_count*/ {
     border: none;
     border-bottom: none;
     color: white;
+    z-index: 1;
 }
 .inactivetab:hover {
     filter: brightness(120%)
@@ -2115,13 +2121,11 @@ body:not(.gp) #golden_carrot_count*/ {
     outline: 4px solid var(--generic-blue);
 }
 .style_challenge {
-    border: 2px solid rgb(177, 44, 44);
-}
-.style_challenge:not(.achievement_locked) {
-    background-color: rgb(85, 43, 43);
+    border: 2px solid rgb(177, 44, 44) !important;
+    background-color: rgb(85, 43, 43) !important;
 }
 .style_endgame {
-    border: 2px solid white;
+    border: 2px solid white !important;
     background: rgb(94, 94, 94);
     background: linear-gradient(
         110deg,
@@ -2160,7 +2164,7 @@ body:not(.gp) #golden_carrot_count*/ {
 }
 .style_secret {
     border: 2px solid purple !important;
-    background-color: rgb(61, 49, 61);
+    background-color: rgb(61, 49, 61) !important;
 }
 
 
