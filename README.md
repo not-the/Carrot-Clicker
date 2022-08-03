@@ -3,7 +3,7 @@
 
 Clicker game themed around carrots
 
-https://jjcvip.github.io/Carrot-Clicker/
+https://not-the.github.io/Carrot-Clicker/
 
 
 ## Credits:
