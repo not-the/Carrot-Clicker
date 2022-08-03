@@ -5,11 +5,18 @@ Clicker game themed around carrots
 
 https://jjcvip.github.io/Carrot-Clicker/
 
+__**Credits:**__
 
-**Credits:**
+**not-the**
+Original Concept
+Gameplay
+Game Balance & Clicker Game Math
+UI/UX
+Achievement, Statistics, Theme, & Cosmetics Systems
+Pixel Art
 
-Concept, UI Code, visual design, general code cleanup, HTML/CSS - https://github.com/not-the
-
-Main game code, gameplay & lore, game balance, developer art - https://github.com/JJCVIP
-
-Playtesters - UniverseNarwhal, Woff1, GuntherTheGod
+**JJCVIP**
+Gameplay
+Game Balance & Clicker Game Math
+Character Artwork & Worldbuilding
+Sound Effects & Music
