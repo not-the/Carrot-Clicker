@@ -1,0 +1,2157 @@
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.7
+    7-31-2022
+// ----------------------------------------------------------- //
+
+- 1_billion_cpc achievement now has a name
+- Support for boosts that increase the chance of falling carrots
+  + Chance of falling cash is reduced proportionally so that it doesnt change with boosts
+- Grey Theme now has an icon and description
+- Hovering over items in Carl's shop will show the item's description
+- Fixed a bug where the "Disable Keybinds" option wouldn't be remembered
+- Decreased the size of theme and cosmetic elements
+- Fixed a bug where Greg's crafting indicator would disappear
+- data_version bumped to 13
+
+Balance Changes
+- Changes to price scaling
+    Bill:
+        Levels 300+ : 0.09 -> 0.08
+    Belle:
+        Levels 0-74    : 0.11 -> 0.06
+        Levels 75-99   : 0.12 -> 0.12
+        Levels 100-124 : 0.08 -> 0.07
+        Levels 125-199 : 0.08 -> 0.07
+        Levels 200+    : 0.08 -> 0.08
+- Changes to starting tool prices
+    Tool 2:    600,000  ->    750,000
+    Tool 3: 60,000,000  -> 50,000,000
+- Changes to tool price scaling
+    Tool 2: 0.02 -> 0.024
+    Tool 3: 0.02 -> 0.018
+    Tool 6: 0.02 -> 0.028
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.6
+    7-28-2022
+// ----------------------------------------------------------- //
+
+- Classic-er theme:
+  + Is now obtainable via Carl after unlocking all_normal_achievements
+  + Now has an icon
+- Grey theme is now available from Carl at the start (Carl's unlock condition has also been changed to compensate)
+- The level_up_discount trinket now has a name and icon
+- The Milennial Bill achievement is now secret as it isn't currently obtainable legitamately
+
+Bug fixes:
+- Fixed a bug where the volume icon in the dropdown would not change to a mute icon on page load (when volume is set to 0)
+- Fixed Carl shop items not greying out when too expensive
+- Fixed tutorial_multibuy incorrectly telling the player that the multibuy indicator is in the status bar instead of the boosts bar
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.5.1
+    6-13-2022
+// ----------------------------------------------------------- //
+
+- Removed some comments & unused code
+- Added but commented out a screenShake() function
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.5
+    5-26-2022
+// ----------------------------------------------------------- //
+
+- level_up_discount trinket is now available
+- Code for boosts system, cancelling boosts, boost types
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.4
+    5-24-2022
+// ----------------------------------------------------------- //
+
+Game calculations & multibuy
+- Rewrote the function that calculates level up costs
+  + Not sure why but prices are slightly different- but the difference is negligible
+  + Multibuy works perfectly at lower levels and becomes wildly innacurate at higher levels, will try to fix
+- Implemented "Multibuy should let you transfer tools, even if there aren't enough (if you have 7 tools and x10 enabled it won't transfer the them)"
+- Character level up button highlighting now works with multibuy
+- Buying Decrease Wages tomes after upgrading characters will now retroactively effect level up prices
+
+Achievements:
+- Made all big number achievements past "A World Fed" hidden by default, at least until they are obtainable without cheating
+- New achievements: 1_quadrillion_carrots_at_once, 1_trillion_cpc
+
+Misc
+- Shop tooltips will no longer take on any CSS filters that are applied to the shop item (ei, getting darker when you can't afford it)
+- Fixed shop tooltips not rendering on top/not being visible on mobile
+- Tools will no longer glow if they are maxed and can't equip another
+- Greg now tells you what level the next tool will unlock at
+- "Disable tutorial messages" button is now keyboard focusable
+- New trinket: level_up_discount (currently commented out)
+- #dan hash now disables tutorial messages and carl notifications
+- Misc light theme & classic theme fixes
+- data_version bumped to 12
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.3
+    5-19-2022
+// ----------------------------------------------------------- //
+
+- Buffed propane tank and changed its scaling to double each upgrade
+- Max speed craft jobs are now nearly instantaneous
+- Carrot related numbers in statistics now DisplayRounded() instead of the full number
+- Updated the confetti easter egg to activate whereever you click, until the page is resfreshed
+- Clicking on a character's avatar will now open their bio pane
+- Multibuy button has been moved from the status bar to above Bill
+- Escape key now closes character bios
+- Additional keybinds can now be set for:
+  + Tips menu (H)
+  + Themes menu
+  + Cosmetics menu
+  + Achievements panel (A)
+  + Statistics (S)
+  + Settings panels (D)
+  + Toggling full numbers (F)
+- data_version has been bumped to 11
+
+LocalStorage improvements:
+- Fixed tips_seen not saving correctly and made it no longer store unused information in localStorage
+- Character Six's static shop data is no longer stored in localStorage
+
+CSS
+- Max screen width for mobile layout is now smaller
+- Fixed horizontal scrollbar appearing (again)
+- General fixes/consistency changes to the red, green, and blue themes
+- New themes (CSS only for the moment, not unlockable):
+  + theme_grey (Makes tripane section grey)
+  + theme_original (based on my original version of Carrot Clicker)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.2.1
+    5-17-2022
+// ----------------------------------------------------------- //
+
+- Fixed horizontal scrollbar appearing
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.2
+    5-17-2022
+// ----------------------------------------------------------- //
+
+- Ads experiment
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15.1
+    5-17-2022
+// ----------------------------------------------------------- //
+
+- Complete overhaul/replacement of character tooltips- instead the character box is enlarged with a space for a biography on the side
+
+Charles:
+- The game will now automatically open Charles' bio screen after a prestige to prompt you to spend your golden carrots
+- His character box will also glow when you can afford a tome
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.15
+    5-12-2022
+// ----------------------------------------------------------- //
+
+Changes:
+- You can now import/export save data through the developer panel
+  + Importing/exporting save files using this tool will not transfer settings or tip data
+- The hardmode button will no longer appear unless you're in dev mode
+- Reduced the chances of a falling carrot being cash (8% -> 6%)
+- Master volume now defaults to 80% and the dropdown slider will now be correct on page load
+- You now need 100% of the cost of a tool to start crafting, but this can be reduced with the credit card
+- Support for listing tome effects (note: the numbers aren't accurate yet since tome effects are currently inconsistent/arbitrary)
+
+Trinkets:
+- New trinket: Credit Card
+- Trinket price changes, mostly increases
+- Propane Tank now has a texture and golden mouse's texture has been updated
+
+Achievements:
+- Fixed the 1_decrease_wages achievement requiring 2 instead of 1
+- Increased "Penny Pincher" and "Savings Account" to require 500 and 250 cash respectively
+- Tip of the iceberg is now harder to get (now needs 2 complete tip types instead of 1)
+- The achievements 1_duodecillion_carrots and 1_tredecillion_carrots have been changed to be hidden achievements
+  + Apparently mobile safari can't handle numbers higher than undecillion, and aside from that I don't think either of them are achievable
+- Gave some unnamed achievements names
+- Reduced/removed page rewards for some achievements
+
+Bug fixes:
+- Fixed a crash when loading the page with full_numbers enabled
+- Fixed a bug where CPC/CPS wouldn't immediately recalculate when buying tomes (Issue #54)
+- Fixed a bug where the second wooden hoe you equip wouldn't do anything (Issue #52)
+- Fixed falling carrots rendering on top of the status bar
+- Fixed a mobile safari issue where you could long press on a falling carrot and it would appear to duplicate (touch callout)
+- Quickly tapping a shop item on mobile will no longer zoom the screen
+
+Internal changes:
+- Condensed the Calculate_Carrots() function
+- data_version bumped to 10
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.4
+    5-5-2022
+// ----------------------------------------------------------- //
+
+- Made a number of cosmetics Carl sells cheaper
+- Added an unlock all trinkets button to the dev panel
+- Dev mode main icon
+- Misc fixes/improvements
+
+Falling carrot changes
+- Reduced falling carrot drop chance (2% -> 1%)
+  + Made it so that reaching 1t lifetime carrots no longer increases it to 3%
+  + Changed the threshold for pity carrots (maximum amount of clicks before you are guaranteed a falling carrot): 50 -> 100
+- Cash changes:
+  + The odds that a falling carrot will be cash have been changed (2% -> 8%) which is technically double what it was before
+- Clicking a falling carrot will count as a click for the clicks per second indicator
+
+Trinkets:
+- Golden mouse prices have been adjusted to be slightly cheaper
+- Origami prices have been adjusted to be more expensive
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.3
+    5-4-2022
+// ----------------------------------------------------------- //
+
+- Charles' tomes have new artwork based on the related achievements
+  + Original sprites will still appear in the classic theme
+- More trinkets have sprites
+- Fixed shop tooltips not appearing on mobile
+- The prestige button will now glow when your prestige potential is greater than your lifetime GC
+- Fixed a bug where the IWC tome cap would also prevent other tome types from being bought
+  + Maximum per tome type is now stored within charles instead of hardcoded into BuyTome()
+- data_version bumped to 9
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.2.1
+    5-3-2022
+// ----------------------------------------------------------- //
+
+- Fixed tutorial messages being off by default
+- Bumped data_version to 8
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.2
+    5-3-2022
+// ----------------------------------------------------------- //
+
+Trinket shop:
+- Some items now have images
+- Synergy drink maximmum changed from 200% -> 250% and prices changed
+- greg_speed maximum changed from 3x -> 5x and prices changed
+
+- Tutorial toasts will now ask you if you want to disable tutorial messages
+  + Option is also available in settings
+- Fixed a bug where clicking the carrot would make CPS appear to be 0
+- The toast notifications that appear when clicking checkboxes in settings will now be gramatically correct (will use are instead of is when appropriate)
+- Misc light theme fixes 
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.1.1
+    5-2-2022
+// ----------------------------------------------------------- //
+
+- New item: greg_speed
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14.1
+    5-1-2022
+// ----------------------------------------------------------- //
+
+- The clicks per second indicator should now be accurate, but slower to update. Its sample size is now 3 seconds long instead of 1 (Issue #56)
+- Added a trinkets completion statistic to statistics
+- New achievement (currently disabled): all_trinkets
+- Misc CSS improvements/fixes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.14
+    5-1-2022
+// ----------------------------------------------------------- //
+
+Character six
+
+- Character six has html, css, and feature-complete code (more or less)
+  + Currently has 5 unique trinkets with functionality
+  + Isn't currently unlockable without cheating
+  + Needs related achievement(s)
+  + Still needs a name and artwork
+- Special styling for cash rewards in achievements list
+- Made Charles and Carls' shop CSS consistent
+- Gave Charles' shop items hover tooltips
+- Opening a character info tooltip will close all others
+- Fixed a bug where CPS would run at half speed after a prestige
+- New achievements:
+  + 100_falling_consecutive (Secret achievement)
+  + bill_lvl_1000
+  + belle_lvl_500
+- Reduced the prices of some of carls' shop items
+- Fixed some bugs introduced in dev beta 1.13.7
+  + Carl not working
+  + Player getting charged the wrong price for character upgrades and then going into negative carrot)
+- Misc fixes/improvements
+- Data version has been bumped to 7
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.7
+    4-30-2022
+// ----------------------------------------------------------- //
+
+- Added new keyboard combo easter eggs: "confetti" and "boring"
+- Fixed prestige potential in the prestige menu not updating
+- Reduced the amount of code autosave uses and removed the need to restart your game if a new character or object has been added to autosave
+- More internal work on character six
+- Misc fixes/improvements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.6
+    4-26-2022
+// ----------------------------------------------------------- //
+
+- Internal prep for another character
+- Fixed a bug where starter tips wouldn't remember if they were seen
+- New achievements:
+  + 1_trillion_carrots_at_once
+  + 1_billion_cpc
+  + basic_tips
+  + all_tips
+- Infinite library achievement's requirement changed from 48 -> 140
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.5
+    4-25-2022
+// ----------------------------------------------------------- //
+
+- Moved game version to gamedata.js
+- Fixed "Clicks per second (Best)" being recorded incorrectly
+- Progress bar movement is now smoother
+- Fixed incomplete craft jobs not continuing on page load ("Too Expensive")
+- "Full Numbers" setting now effects CPC, CPS, and prestige potential
+- Falling carrots & cash now create confetti
+- Game now internally takes note of when an achievement was earned
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.4
+    4-24-2022
+// ----------------------------------------------------------- //
+
+- Greatly reduced the amount of code the achievements system uses
+- Fixed achievement rewards disappearing when there are more than 1
+- Fixed some achievements not being listed
+- Fixed a bug where locked achievements that don't have images will not use missing.png
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.3
+    4-21-2022
+// ----------------------------------------------------------- //
+
+- Tips: changed "Basic" to "Starter"
+- Fixed a bug where an unfinished crafting job would still check if you could afford it at full price before restarting
+- New (internal) statistic: player.fallingConsecutive
+  + Catching multiple falling carrots without clicking the main carrot in between will count
+- New achievement: Match 3 (3_falling_consecutive)
+- Earning pages will now make the pages count flash like the coin count does
+- Moved more achievement rewards to being Carl shop item unlocks instead
+- Dev panel: Added a cash input and fixed some other issues
+
+CSS:
+- Fixed statistics not being readable in light theme
+- Fixed terminal theme's progress bars having rounded edges
+
+Numbers:
+- Fixed prestige potential not resetting after a prestige, and the carrot count + golden carrot count not getting updated on the page
+- Fixed golden carrot count not updating on the page when tomes are bought
+- A number of other misc fixes related to page manipulation/numbers on the page not getting updated
+
+Falling carrots:
+- Falling carrots have a 50% chance of being visually reversed
+- Clicking a falling carrot also gives a chance of dropping another falling carrot so going out of your way to click them has less disadvantages compared to clicking the carrot itself
+- Changed cash rewards so that you earn less cash early game, and more later. Actual chance of cash dropping is unchanged:
+  + Starts between:     5-15 -> 5-10
+  + After 1b lifetime:       -> 5-13
+  + After 1t lifetime:       -> 8-16
+  + After 1q lifetime:  8-18 -> 12-24
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.2.1
+    4-16-2022
+// ----------------------------------------------------------- //
+
+- Fixed the coin line not flashing
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.2
+    4-16-2022
+// ----------------------------------------------------------- //
+
+- Made the view credits button in settings an actual button
+- Unlock all tips button added to the dev panel
+- Reorganised statistics to make a little more sense and gave it some new CSS
+- Some basic infrastructure for a hardmode
+  + Support and visuals for negative number popups
+- Bumped data_version to 5 (forgot to do it last update)
+
+Big numbers
+- left-section will no longer change width when extremely long numbers are in it
+- Character levels will display with numCommas() instead of DisplayRounded()
+- Falling carrot popups will now DisplayRounded instead of using the raw number
+- Game now uses a local copy of carrot_utilities.js
+- DisplayRounded now supports rounding numbers up to 999 vigintillion
+- player.prestige.falling_carrots_grabbed can now be seen in statistics
+- Some statistics now have icons
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.1
+    4-15-2022
+// ----------------------------------------------------------- //
+
+- Fixed select elements still being keyboard focusable when the main page is obstructed
+- Fixed character buttons being lit up until the carrot is clicked
+- Fixed the "Older changes" button on the changelog page linking incorrectly
+- Fixed achievement names and page counts sometimes overlapping in grid view
+- Fixed grid view descriptions going off the screen on mobile
+- If there are enough toasts to not fit on the screen they will now be scrollable
+
+Internal changes:
+- Gave characters nickname properties and removed the characterString() function
+- Gave even more functions JSDoc comments
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13.0.1
+    4-13-2022
+// ----------------------------------------------------------- //
+
+- Game version is now also in the footer and is updated in carrot_clicker.js
+- Cookie agreement now uses the flags system- will need to agree again for your game to save
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.13
+    4-13-2022
+// ----------------------------------------------------------- //
+
+- Some new default tool sprites (only tools 0 and 2 atm)
+- New tools cosmetic: fertilizer
+- Gave tool count numbers an outline for better contrast
+- Changed the delete save data keybind to be backspace or delete, and to only work if isDebug() resolves to true
+- Pressing enter while in the prestige menu will open the prestige dialog (P -> Enter -> Enter to prestige)
+- Fixed Gregory crafting jobs not continuing on page load
+- onbeforeunload will now work in supported browsers (unfortunately not enough browsers to justify removing autosave)
+- Changed the cash popup color from red to yellow
+- Renamed cash (Shekels -> Coins)
+- Coin count will breifly light up after you've earned coins
+- Earning the 1_billion_carrots achievement will increase the odds of a falling carrot being cash (2% -> 3%)
+- Earning the 1_quadrillion_carrots achievement will increase both the minimum and maximum amount of cash you can get from a drop by 3
+  + Normally: 5 minimum, 15 max
+  + After: 8 minimum, 18 max
+  + Technically this calculation uses the same conditions as the achievemensts instead of checking for the achievements themselves.
+- Changed tip: "Long hover over a character to view their description" -> "Click a character's "i" symbol to learn more about them"
+- Carl shop items will now fallback to using cosmetic.preview if cosmetic.image doesn't exist
+- Game related keybinds will now be ignored if any menu is open
+
+Internal changes:
+- Cleaned up the HTML and removed a bunch of unused code
+- Moved more code out of the main game loop
+- Renamed:
+  + player.Carrots -> player.carrots
+  + player.EquippedHoes -> equippedHoes
+- Removed unused statistics:
+  + player.prestige.hoes.equipped
+  + player.prestige.hoes.equippedTotal
+  + player.lifetime.hoes.equipped
+  + player.lifetime.hoes.equippedTotal
+- player.data_version bumped to 4
+
+Accessibility:
+- Added role="button" to a number of clickable elements
+- Made a ton of elements keyboard focusable (status bar tip, themes, cosmetics, character mini buttons, footer carrot, footer "view credits")
+- Opening any kind of popup will disable keyboard navigation for the rest of the page
+- Fixed an issue where when pressing enter on focused summary elements they would not stay open (had to make an exception for summaries since they already accept enter as a way to open them)
+
+Achievements:
+- Achievement grid view has recieved the same treatment as the cosmetic menu, item descriptions near the right side will hopefully no longer go off the screen
+  + Grid mode will look the same regardless of compact mode
+  + Grid mode is no longer marked as WIP
+- Achievement compact mode is no longer the default, however they will still look the same with it off as they previously did with it on
+  + Compact mode on is now even smaller, using the same look as achievement toasts
+- Clicking an achievement toast will link to that achievement
+
+Themes:
+- Fixed theme_retro having the wrong accent color, and certain icons being black
+- The camo theme background is no longer blurry for some browsers
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.12.1
+    4-9-2022
+// ----------------------------------------------------------- //
+
+- Fixed an issue where clicking a keybind, then clicking another would not close the previous (unclosable) toast prompt
+- Some changes to the image attribution section of the credits
+- Replaced the external link icon
+- Fixed the achievement sort dropdown overlapping the title text on smaller screens
+- Fixed belle and greg's level up keybinds leveling by 2 instead of 1
+- Renamed the "Reduce hoe costs" tome to "High quality tools"
+- Replaced the word "hoe" with "tool" from all tips/hints/statistics and made said tips clearer
+
+Themes:
+- Changed the camo theme's background image and gave it some misc color fixes
+- Misc improvements to the OLED and Chat App themes
+- Retro theme overhaul
+- Fixed the close all toasts button being the wrong width sometimes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.12
+    4-9-2022
+// ----------------------------------------------------------- //
+
+-fixed prestige potential not resetting
+-Belle price scaling
+    + 0-75 0.11--> 0.07
+    + 75-100 0.12-->0.06
+-Fixed cpc and cps not updating
+-decreaseWages Value is properly set and displayed
+-Charles information display changed to better reflect whats actually happening
+-Everything Charles is Broken in a whole new way!!1
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.9
+    4-8-2022
+// ----------------------------------------------------------- //
+
+- Fixed an issue where the CPC was 0 by default
+- Took some things out of the main game loop
+- Game now saves after a prestige
+- Added support for multiple tags in location.hash
+- Added a new hash: #itch (similar to ach, short for achievement) and #dan (Disable Achievement Notifications): disables achievement notifications using the no_achievement_toasts flag
+- Added a cosmetics button to the dropdown
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.8
+    4-8-2022
+// ----------------------------------------------------------- //
+
+- Added image attributions to the credits
+- Removed the confetti() function and replaced it with mouseConfetti()
+- Replaced the refresh icon with a new one
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.7
+    4-8-2022
+// ----------------------------------------------------------- //
+
+ - Created Calculate_Carrots to only calculate and update the cpc and cps when necessary
+ - Each Better Hoe tome improves Hoes multiplier by 1%
+ - All Charles upgrades function at a somewhat reasonable price
+   
+ ~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.6
+    4-8-2022
+// ----------------------------------------------------------- //
+
+- Tools cosmetic support
+- Fixed the reset buttons for autosave frequency and notification length being incorrect and/or not working
+- Fixed achievements related to decreaseWages being granted early due to a change to its default value (0 -> 1)
+- Backdrop click getting ignored for themes without transparent backdrops is now a theme property
+- Added a toast prompt when setting keybinds (similar to the equip hoe toast)
+- Added some JSDoc comments
+- You can no longer change cosmetics for characters you haven't unlocked
+
+Internal changes:
+- settings_default -> default_settings
+- Default_Player -> default_player
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.5
+    4-6-2022
+// ----------------------------------------------------------- //
+
+- Cleaned and organized page setup JS
+- Created Documentation for the Character Class
+- Renamed Player1 object to Default_Player
+- Moved unused code in the Default_Player object into unusedCode.txt
+- Lowered Belle Starting price 250 --> 200
+- Added Documentation to carlItemsAvalible, carlShopQuery, SaveGame, Multibuy Spin,r, HoldStart, HoldStop, onClick, Carrot Count, characterButtons, updateHoePrices, updateCharlesShop, updateCarlsShop, showPrestigeStats, pagesCount, updateMainIcon, updatePrestigeMenu, clickSpeedHandler, CarrotsPerSecond, CharacterLevelUpPrice, LevelUp, and Prestige
+- Charles multibuy display now works
+- Credited GuntherTheGod
+- added Bill to Ugly Sweater cosmetic name
+- changed Decrese Wages effect(https://www.desmos.com/calculator/glmtmyafqq)
+- tweaked Charles tome lvling up to be more balanced and consistent with other upgrades(WIP)
+- percent of fun tips retains the % symbol
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.4
+    4-2-2022
+// ----------------------------------------------------------- //
+
+- Updated some themes to alter the way confetti looks
+- Misc fixes to theme CSS
+- Removed some unused code
+- Fixed an oversight where the golden carrot explanation you get after prestiging for the first time wouldn't appear
+- Fixed toasts not having a dismiss animation
+- Added to the credits
+- Made overlay elements use 100vh instead of 100% to prevent rescaling on iOS
+- Commented out the custom theme for now
+- Fixed the backdrop not having a blur effect in webkit browsers
+- Carl's shop items will now animate when bought
+- Characters will now animate when unlocked
+- Replaced the image the pineapple cosmetic uses
+- Replaced the image falling cash uses
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.3
+    3-28-2022
+// ----------------------------------------------------------- //
+
+- Hoe Multibuy System Works(Fingers Crossed)
+- Character Multibuy WIP but the numbers are closer.
+- Fixed Kal's typo
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.2
+    3-28-2022
+// ----------------------------------------------------------- //
+
+- Switched over the playtester flag to use the flags system
+- Added additonal checks to prevent a crash when trying to restart an invalid crafting job
+- Fixed character tooltips going offscreen on mobile
+- Some changes/additions to the credits screen
+- Replaced the cookie cosmetic's image
+- Fixed the ghost carrot cosmetic and gave it a description
+- Changed the tools' filenames
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.1.1
+    3-27-2022
+// ----------------------------------------------------------- //
+
+- Credits no longer auto start on page load
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.1
+    3-27-2022
+// ----------------------------------------------------------- //
+
+- Wrote out real credits for the credits screen (still WIP)
+- Reverted a change that changed mouse confetti speed
+- Carl shop toasts will no longer appear until you've unlocked carl
+- Unlock requirement for Carl reduced to 6 cash
+- Clicking the settings button in the status bar dropdown no longer scrolls you too far
+- Fixed a bug where the credits scroll interval would double up and make it scroll very fast
+- Fixed a bug where pressing escape during equip mode wouldn't cancel it
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.11.0
+    3-26-2022
+// ----------------------------------------------------------- //
+
+Carrot Clicking:
+- Moved over the main carrot click to an event listener
+- Holding down left click or your carrot keybind will give you a very weak form of autoclicking (3cps)
+- You can no longer click and use the carrot keybind at the same time
+
+Other changes:
+- data_version has been increased to 3
+- Toasts: no_close gives the toast immunity from clearToasts
+- Added a new mouseConfetti() and added it as visual feedback for certain actions like clicking the carrot or upgrading characters
+- New setting: confetti_effects - disables confetti effects
+- Statistics related to hoes crafted will now only increase after Greg is done crafting
+- Character's upgrade buttons will now be greyed out when you can't afford it
+- Clicking a character's info button will bring up their tooltip, clicking it again will hide it
+  + Hovering over a character will no longer bring up the tooltip
+- Hoes now correctly highlight when they can be bought (didn't realize the minimum needed to craft was 50% and not 80%)
+  + Also fixed Greg's tooltip incorrectly saying 80%
+- Fixed an issue where hoes would be blacked out if you had some equipped but none ready to equip
+- Removed the "Cannot afford" toast when clicking the upgrade button
+- Character upgrade prices should now change with multibuy (still inaccurate though)
+- The game will now save if you were crafting a hoe and continue when you refresh the page
+- Clicking the "View Credits" toast will now close the toast
+- Left in but commented out some debugging tools for calculating/comparing the accuracy of Bill's multibuy prices
+- Left in but commented out a very basic offline earnings calculator
+- Left in but commented a hoe equip animation that I couldn't get working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.10.3
+    3-25-2022
+// ----------------------------------------------------------- //
+
+- Carl's unlock conditions have been changed so that you also need to earn at least 10 cash before he'll appear
+- The keyboard combo for equipping hoes is now a two step action (Issue #48):
+  + Press alt + 4 (craft hoe key) to enter equip mode
+  + Press 1 or 2 (or whatever your bill/belle upgrade key is)
+- Changed the default multibuy keybind back to Shift
+- The game will no longer save/use localStorage until you have accepted the cookie notice
+- Completing the all_normal_achievements achievement will now prompt you to view game credits
+- Function rewards are now stored within the achievement instead of in string form and parsed later
+- Falling carrots will now change with the cosmetic
+- Credits screen is implemented
+  + Will automatically scroll unless you stop it
+
+Toasts:
+- Set noToast to true for some achievements that already trigger notifications to reduce notification spam
+- Added support for creating toasts without an X button (close all will still work)
+- Added support for giving toasts a button
+- Achievement toasts are now much smaller and are more in-line with normal toasts
+
+Accessibility:
+- Upgrade buttons, hoes, and ? help buttons are now keyboard focusable
+- The main carrot and slider inputs will now have an outline when focused
+- iOS: Holding down on the main carrot will no longer trigger the image popout
+
+Dev tools:
+- Carrots granted by dev tools should behave like normally earned carrots now (triggers achievements properly and calculates prestige potential how you would expect)
+- Removed a bunch of console.log()s that are no longer needed
+- Dev mode now bypasses the cookie notice
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.10.2
+    3-22-2022
+// ----------------------------------------------------------- //
+
+- Default settings.notificationLength has been changed (5s -> 6s)
+- Achievement notifications no longer use double notificationLength
+- Fixed The Gregs of Defeat (greg_lvl_20) achievement being granted at level 15
+- Fixed the prestige menu having the wrong height on mobile
+- Fixed the dropdown menu disappearing when navigating it with keyboard controls/tab key focus
+- Increased the chances of a falling carrot being cash from 1% to 2%
+- Cash drops changed from 4-12 to 5-16
+- Fixed the toast that appears when disabling/enabling keybinds being blank
+- Fixed the achievement x/total starting at -1, it should now ignore internal achievements correctly
+- The default multibuy key is now `
+- Equipping hoe keybinds are broken now
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.10.1
+    3-16-2022
+// ----------------------------------------------------------- //
+
+Save data:
+- Save updating now works- accidentally left out the code that actually does it
+- Rewards added retroactively to achievements you already have can be granted by the save updater (assuming data_version has changed)
+- player.data_version has been increased to 2
+
+Tips:
+- Fixed an issue where tips.tracker could roll a -1 and fail to display a new tip
+- You can no longer get the same tip twice in a row
+- The tips menu will now only show tip levels you have reached
+- Advanced tips will now be listed in the tips menu
+- Fun tips that haven't been unlocked will still have a smiley face next to them
+
+CSS:
+- Fixed an issue where hovering over a cosmetic in grid mode would change the container's size
+- Gave falling carrots and falling carrot +1 popups better drop shadows and increased font size to improve contrast/readability
+- Text in the status bar can no longer be selected (you can spam cycle tips without the selection box now)
+- The dropdown button now needs to be clicked to open, and animates when closing instead of just opening
+- Achievements with unique visuals/colors will also have them while locked
+- Changed the color of the main status bar to make it consistent with Greg's
+- Fixed the jittering effect in the theme and cosmetic menus when hovering
+- Misc theme fixes/improvements
+
+Settings panel:
+- New option: Carl shop notifications- on by default, allows you to disable the notification that appears when carl has a new shop item available
+  + Won't appear until character is unlocked
+- New option: cosmetic_auto_equip- off by default, automatically equips cosmetics when they are unlocked
+- Fun tips percentage is now stored in settings and will persist after a page refresh
+- Fixed notification time and enableSounds not working
+
+Other:
+- New achievement: footer_carrot_clicker
+- New cosmetics: Boomer Bros
+- Pineapple cosmetic is now available from Carl
+- The 4 carrot variants are now available from Carl
+- A cosmetic becoming available now works to unlock Carl
+- Internal achievements no longer count towards your x/total achievements
+- Reordered some cosmetics to be more in line with the order you (generally) unlock them in
+- The theme/cosmetic "NEW" indicators will now appear in the menu tab bars, and will persist after the page is refreshed
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.10.0
+    3-12-2022
+// ----------------------------------------------------------- //
+
+- Introduced a way to update saves- changes to any game objects used in save data will be added to the player's save data (this may need some testing to ensure it works as intended)
+  + Game's internal data version has been bumped to 1, and will be incremented by 1 every time an addition to save data is made
+  + Player page count checks will only occur after the data_version number has been incremented
+- Status bar dropdown arrow is now closer to the middle on mobile
+- Gave the multibuy indicator a title on hover, and made the prestige button's title hidden until prestiging is available
+- The light, retro, and black and white themes now have mobile accent colors
+- Everything related to the inventory has been commented out for now
+- Fixed the theme % in statistics not being toFixed(0)
+- Support for internal achievements that will not appear to the player, but can be used to trigger certain events like a normal achievement
+- Failure to make a shop item available will no longer halt the rest of the code
+- Game will now use price and currency data from the default carl object so that it can change as the game is updated
+- Added a shorthand function for looping through objects as if they are arrays (loopObject())
+- Custom theme is now obtainable (but not customizable yet) by getting all other themes
+- Moved over some achievement rewards into being shop items instead (still made available after a certain achievement is earned)
+- Gave the biker bill and dollar bill cosmetics unique backgrounds
+- All cosmetics should now be obtainable
+- Redrew Charles so that he is no longer the wrong resolution & blurry
+- Replaced the main carrot image with a 1:1 aspect ratio version
+- Fixed an issue where if you already owned a cosmetic and tried to buy it from Carl it wouldn't be removed from the shop (or marked as bought)
+- Misc theme fixes:
+  + Blacked out hoes will now match theme's colors
+- Gave more achievements images: OSHA Violator, Wibbly Wobbly (most likely a placeholder), Falling Into Place
+- All cosmetics now have descriptions
+- Added some (overly complicated) JS to make sure cosmetics in columns on the right will still have readable descriptions- this will start to break down if the window size changes
+- Fixed player.prestige.falling_carrots_grabbed not being counted
+- Reduced minimum prestige potential to 1 so it's in line with when the option becomes available
+- Cosmetic bundles now work as intended (previously on the bill bundle would work) and are also future-proof for if new cosmetic types are added
+- Classic Theme fixes + improvements
+
+
+Tips:
+- Cleaned up code
+  + Changed the way different tip levels are unlocked
+  + Tips won't cycle if a menu or dialog is open
+  + Tips lower than your level will still appear but at a decreased rate
+
+
+New unlockables
+- Added some new cosmetics: 
+  + Ascii Carrot and Color Ascii Carrot (goes with terminal theme)
+  + Santa Charles
+- New themes:
+  + Terminal
+  + Chat App
+- New achievements:
+  + Penny Pincher (100_lifetime_cash)
+  + Savings Account (50_cash)
+
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.8
+    3-8-2022
+// ----------------------------------------------------------- //
+
+Fixing all the bugs
+
+Fixes:
+- Tome page info button/tutorial message now tell you how to get tome pages
+- The "Always-on-top progress bar" option is no longer broken
+- Moved sound and music functions over from carrot_utilities to user.js
+  + Fixed them not disabling properly (were still on the old settings system)
+  + Fixed music being 100x quieter than intended until the volume slider was used
+  + "Carrot sound effects" is now disabled by default
+  + Renamed "Music" and "Carrot sound effects" to "Beta music" and "Beta carrot sounds" respectively
+- Both the autosave frequency tooltip and its reset button were under the impression that the default was 2 despite it being 5
+- Minecraft theme no longer uses bold text since the font doesn't support it
+- Number popups created by falling carrots are now larger, have a unique animation, and will render above other popups
+- Unlocked themes statistic now has a percentage value next to it
+- Gave Greg a small indicator to show what he is crafting (similar to the main progress bar)
+- Replaced the level up button with a different image (subject to change)
+- You can no longer upgrade characters that haven't been unlocked
+- The prestige menu can no longer be opened until prestiging becomes available
+- Escape key now works to close the tips menu
+- Misc light theme fixes
+- Some other random optimizations/improvements
+
+Achievements:
+- More achievements now have images: Paginator, Pineapple
+- The "shine" achievement style now does something
+- Support for cash rewards in the achievements list
+- New achievement: unlock_all_characters
+
+Carl:
+- Shop unlocks will no longer be visible in the achievements list as rewards
+- Carl will now unlock once he has at least 2 shop items available
+- Carl can now sell cosmetics
+- Made a number of previously unobtainable cosmetics & themes available
+- Carl's "Can't afford" toast now tells you the price
+
+Cosmetics:
+- There is now a button on each character that allows you to jump to their cosmetics list, and another button that will allow you to view character info
+- The cosmetics count in statistics is now correct
+- Cosmetics for characters you haven't unlocked will no longer be visible
+- Support for hidden cosmetics (upvote and huh whuh are now hidden)
+
+Balance changes:
+- Falling carrot rewards changed (400% and 800% of CPC) -> (500% and 2000% of CPC)
+- Falling carrots now have a 1% chance of being cash instead of the 0.5% it was previously
+- Minimum cash drop changed from 2 to 4
+- "Half Way There" achievement now includes challenge achievements, so it will be slightly harder to get
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.7
+    3-4-2022
+// ----------------------------------------------------------- //
+
+- Falling carrots now work again
+- Falling carrot popup will once again correctly use your mouse position
+- Fixed an issue where setting achievements to grid view and then switching to another tab would still display the achievements farther up the page
+- Fixed an issue where hovering over an achievement would make it render above the tripane buttons
+- Compact achievements is now enabled by default
+- Added an info button to the cash count
+- Cleaned up changelog page's CSS
+- More achievements have images: Early Playtester, Fall Guy
+- Reduced the numbers for the clicks achievements, removed their page rewards and made the final one a secret achievement
+- Reduced/removed some more page rewards, particularly for early game achievements
+- Added an achievement and tutorial message for earning your first tome page
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.6
+    2-6-2022, changes pushed 3-4-2022
+// ----------------------------------------------------------- //
+
+- Added a tips menu (no functionality yet)
+- NEED TO FIX: sound options, always-on-top option
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.5
+    1-13-2022, changes pushed 1-21-2021
+// ----------------------------------------------------------- //
+
+- Fixed the level up arrow being the wrong aspect ratio (and this also fixed the final hoe not fitting in some themes)
+- Changed some page rewards
+  + Secret achievements no longer give pages
+- Added a new challenge achievement (no falling carrots)
+- Increased falling carrot rewards from between 200%-600% to 400%-800%
+- The achievements menu now has its own ? png for locked cosmetics with no background
+- The themes menu is now consistent with the cosmetics menu and has the "full" list from the start, where locked themes are greyed and with info redacted
+- Theme & cosmetic switchers: checkmarks don't appear on locked items
+- Misc light theme fixes
+- Prestige menu now goes into column mode for smaller viewports (460px and smaller)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.4
+    1-9-2022
+// ----------------------------------------------------------- //
+
+- Reverted removal of autosave since onbeforeunload doesn't work on mobile (onbeforeunload is left untouched)
+- Added two cosmetics: "Dollar Bill" (from the Dollar Bill achievement) and "Biker Bill"
+- Changed some page rewards for early game achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.3
+    12-30-2021
+// ----------------------------------------------------------- //
+
+Dev panels merged & consistency changes
+
+- More characters tooltip is now the same width as the character boxes, preventing the page from shifting around as you unlock new characters
+- Renamed some older HTML elements to have more accurate ID names:
+  + "notifs-section" -> "tripane"
+  + "info-panel"     -> "stats-panel"
+  + "notifs-nav"     -> "tripane-nav"
+- Fixed issue where cosmetic grid descriptions were interactable
+- Fixed achievement icons being underneath each other when hovered
+- Added a "Compact Achievements" option that makes achievements much more compact (rewards list is still unchanged since it needs a rework)
+  + Achievement notifications will always use the compact CSS
+- Made the grid view for achievements accessible (still experimental)
+- PopulateAchievements() will now keep track of when it needs to generate new HTML and when it doesn't (specifically, changing tabs doesn't generate the list every time, it only runs when there is a change)
+- Heavily streamlined the code for keyboard combos and made it easier to add new ones
+- The JJCVIP easter egg now gives you 1 carrot
+- OLED theme fixes: popup menus, status bar dropdown, achievements, settings footer/dev tools, hr tags, prestige menu, Charles & Carl shop items
+- Disabled scroll-behavior: smooth because of an issue where you would get scrolled down when deleting save data or prestiging
+
+More settings are now stored within the settings object:
+  + openpanel
+  + master_volume
+  + disableKeybinds
+  + enableMainProgress
+  + enableMusic
+  + enableCarrotSounds
+This means that the "Reset Settings" button will now work and settings uses much less code. Resetting settings will also correctly update the checkboxes in settings now
+
+Fixed JJ jank:
+- Statistics were not working (html got reverted to an earlier version without the cash statistics)
+- Merged mine and JJ's dev mode- unfortunately the way tabs work is too jank and I had to move it into settings where mine was
+- Dev mode:
+  + Carrot & golden carrot now set lifetime carrots/golden carrots too (not the same way the game normally would but this still fixes it not working with lifetime-based achievements among other things)
+  + Carrot input has a displayrounded representation of the number next to it
+  + You can press enter while typing in the fields to update the values
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.2
+    12-29-2021
+// ----------------------------------------------------------- //
+-Outdated Autosave code has been Removed
+-Deleting saved data works again(was previosuly not deleting becasue it was instantly resaved)
+-Made Hoes Cheaper
+-tweaked some prestige calculations
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.1.1
+    12-29-2021
+// ----------------------------------------------------------- //
+-Background Changes to Improve perforamce
+-Autosave now runs on window unload
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.1
+    12-28-2021
+// ----------------------------------------------------------- //
+-Spent 3 hours working through the HTML and CSS to add a hidden Developer Tools Tab
+-Got it to work with #Dev
+-Kal already made developer tools, didn't push them, commented them out when he did push them
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.0.1
+    12-28-2021
+// ----------------------------------------------------------- //
+
+- Accidentally left a debugging tool in (clicking a locked achievement unlocks it)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.9.0
+    12-28-2021
+// ----------------------------------------------------------- //
+
+Carl has learned to draw and is no longer useless
+
+- Removed page rewards from some achievements so that you get less early game
+- Fixed the "Clicker Hero" achievement incorrectly being 100,000 instead of 10,000
+- Fixed falling carrots not fully falling out of the container (since it's bigger now)
+- Support for descriptionless and/or titleless toasts
+- Condensed Carl's card a little bit
+- Carl's shop is now mostly functional. Save data needs to be deleted for him to work. Adding a theme to his shop is now possible via achievements
+- Support for cash rewards from achievements
+- You can now see how much cash you have earned & spent in statistics
+- Some changes to the classic theme to make it more consistent/accurate
+- Reduced the size of the main carrot (and in turn its container) so that it and the character boxes match the width of the tri-panel
+- Fixed 6 items no longer fitting in a row within the cosmetics switcher
+- Fixed the pineapple easter egg not working
+- Fixed certain button icons (Change Theme button in settings) not being visible on hover (if they need to be inverted by default)
+- Tri-panel button icons are now hidden on smaller screens
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.7
+    12-23-2021
+// ----------------------------------------------------------- //
+
+- Renamed the "iconography" folder to simply "icons"
+- Inventory button now displays as expected when hovered
+- More achievements have pixel art (Completionist)
+- Tome pages now have a unique sprite instead of recycling the generic tome
+- More themes have icons (Black & White)
+- Fixed bug where prestige potential would be reset to 0 before golden carrots were granted (prestiging didn't give anything)
+- Infrastucture for a persistent currency
+- There is now a chance a falling carrot will be currency instead
+- Fixed Black & White theme jank
+- Cosmetic bundles no longer have checkmarks (the logic for them to be correct would take effort and they don't really need them)
+- Added a carrot icon in the top left that changes based on game progression (only thing that changes it currently is getting all achievements and prestiging)
+- Revamped prestige menu now displays the correct numbers
+
+Light theme fixes:
+- Prestige and inventory button icons are now visible
+- Greg's progress bar is now a lighter color
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.6
+    12-20-2021
+// ----------------------------------------------------------- //
+
+Big bug fix update, again
+
+- Keybinds menu now has a maximum height
+- Dropdown menu animates in
+- Fixed bug where toasts wouldn't animate most of the time
+- Added an achievement between "A World Fed" and "Lifetime Supply": "Carrot Continent"
+  + All big number achievements after this one have been increased by a factor of 1,000
+- Gave some more achievements icons! (On the Clock, Off the Clock, Free Falling, The Tools to Victory)
+- Blockgame theme fixes:
+  + Fixed the theme & cosmetic menus being the wrong width
+  + Fixed the left outline on toast notifications being cut off
+  + Fixed the main background shifting downward when the size of the page changes
+- Fixed oversight where the escape wouldn't work in the inventory (doesn't work in the keybinds menu either but i left that as is since escape is used to unbind)
+- Reduced the page rewards on some achievements
+- Added a Jokester Carl cosmetic
+- Farmable cosmetics that are pixel art will now render pixelated (no longer blurry)
+- You can now see how many of each tome you have
+- Fixed bug where achievements would stay for the normal toast notification time instead of double, as the settings page says
+- Replaceable toasts no longer animate/make the above toasts jitter
+- Moved hoe prices out of the main game loop
+- Moved multibuy from carrot_utilities.js to carrot_clicker.js
+- The game will now display an error message if it takes 2 or more seconds to run the initial javascript
+- In phone-width viewports (460px and smaller) the cosmetics in grid view will shrink to fit 4 in each row (I have only tested this on my phone)
+- theme icons now have rounded borders
+- The game once again checks if Greg is unlocked before creating or equipping a hoe (and it works this time)
+- Fixed character prices being 1 level higher than intended (issue #44)
+- Fixed certain statistics showing non-whole numbers when they shouldn't
+- Redesigned prestige menu, button, and an inventory button
+
+Prestige changes:
+- Prestige potential is now based on the total carrots you've earned during a prestige instead of the amount you have
+- You now earn 5x the golden carrots as before
+  + This, combined with the previous change makes for a significant increase in golden carrots. Both are subject to change but I wanted prestiging to be something you do more often)
+- You can only get whole number amounts of golden carrots
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.5
+    12-7-2021
+// ----------------------------------------------------------- //
+
+- Autosave interval and notification time inputs now have min and max attributes
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.4
+    12-7-2021
+// ----------------------------------------------------------- //
+
+- Carl is now unlockable again
+- Theme and cosmetic switcher checkmarks will now work on page load if the player had settings other than the default saved
+- Added an achievement for getting Belle to level 100
+- Falling carrot dropshadow is no longer pure black
+- Falling carrots now leave the carrot container before disappearing
+- Fixed an issue where the lifetime falling carrots grabbed statistics was twice as much as it should have been
+- You can now see how many carrots you have in statistics
+- You can once again see how many cosmetics out of the total you have in settings, along with a percentage (does not include the default cosmetics)
+- Added a cosmetic: Business Bill
+- Gave a bunch cosmetics descriptions
+- Added a cosmetic: Golden pixel carrot
+- "Fixed" bundle cosmetics not having an image in the achievements list
+- Added achievements for grabbing 50, 250, and 2048 falling carrots
+- More cosmetics are now available via the achievements system (this may be subject to change)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.3
+    12-2-2021
+// ----------------------------------------------------------- //
+
+HD Carrots and rounding out the rough spots
+
+- Greg's hoes will now appear grayed out when they are unlocked, but are too expensive
+  + They will also become highlighted when you have 80% of their crafting cost
+- The game will now show if a hoe slot is full (amount is equal to Greg's level)
+- Fixed another issue with achievements
+- The game will now remember what cosmetics you had selected (again)
+- The game will now remember if you had the cosmetics menu in grid mode
+- Fixed cosmetic menu dropdowns being jank
+- Fixed cosmetic menu (grid mode) hover effects being jank (still goes offscreen)
+- Made theme/cosmetic switchers slightly wider and taller
+- Cosmetics menu is now in grid view by default
+- Main carrot image is now HD, and the main carrot has extra padding
+- The checkmarks in the cosmetic and theme switchers now work
+
+Known issues: cosmetic bundles ("All" category) not always working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.2
+    12-2-2021
+// ----------------------------------------------------------- //
+
+- Added some new achievements
+- Rewards in achievement notifications now work
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.1
+    12-2-2021
+// ----------------------------------------------------------- //
+
+Cosmetics Upgrade Part 2™️
+
+- I've gone through everything related to cosmetics (which was a lot) and made it compatible with the new cosmetics system (hopefully)
+- Fixed issue where numbers on page wouldn't appear on page load
+- Fixed an old bug where achievement list rewards would continue to appear on the next achievement until another reward was encountered (and got rid of my hacky fix for this, which was having a doNothing() function as the reward for achievements without one)
+- Imrpoved cosmetics grid view
+- Unlocking a cosmetics bundle will now also unlock all related cosmetics
+- Achievements should be working again
+- Added a (currently unused) grid view for achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.8.0
+    11-30-2021
+// ----------------------------------------------------------- //
+
+Cosmetics Upgrade
+
+- Ability to set cosmetics per-character
+  + The UI for this is still a WIP but 90% of the code is functional
+  + Certain things related to cosmetics are probably broken now
+- Cookie notice on page load
+- Achievement notification rewards now have the correct background color
+- Achievement notifications now show how many pages they give
+- Switched over theme localStorage to the settings object
+- The amount of falling carrots you've clicked is now stored and displayed in statistics
+- Added achievements for number of clicks
+- Falling carrots have had their rewards increased slightly (200% - 400% to 200% to 600%)
+
+Note: Users will have to delete their save for the game to function
+1.8.0.1: Added outdated save warning
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.4
+    11-28-2021
+// ----------------------------------------------------------- //
+
+- Falling Carrots will no longer appear at random, but instead have a chance of appearing when you click the main carrot.
+  + This is subject to change but I think this rewards clicking better and avoids making the player feel like they're missing something while they are away from the carrot
+- Changed some achievements' page rewards
+- Fixed tips not automatically cycling and changed it to change every 15 seconds (Issue #28)
+- Moved themes, cosmetics, and achievement data into gamedata.js
+- Added a number of new tips and edited some outdated ones
+- Clicking to cycle through tips will now reset the automatic cycle timer (Issue #28)
+- Fixed a (non) issue where game used nonexistant prestige_potential variable instead of player.prestige_potential (apparently this didn't break anything but still)
+- Added an HTML changelog (unused for the moment)
+- Most of the themes should now support most of the newer features
+- Fixed the issue where there would be extra space underneath the achievements tab (Issue #42)
+- Internal changes in preparation for the improved cosmetics system
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.3
+    11-27-2021
+// ----------------------------------------------------------- //
+
+- Dropdown menu now has a shadow
+- Added theme option to dropdown menu
+- Fixed full numbers not working
+- Added falling carrots. Click them for a small carrot bonus.
+- Smooth scroll behavior works now
+- Fixed issue where achievement toasts' x button wouldn't work
+
+Carrot Utilities:
+- DisplayRounded() works again
+- Fixed issue where fixedTo would get ignored under certain conditions
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.2
+    11-27-2021
+// ----------------------------------------------------------- //
+
+Page manipulation improvements & Tome Pages update
+
+- Removed the save button for the notification time option, it will now save whenever it's changed
+- Moved character level/price page manipulation out of the main game loop
+- Charles' tomes will now become highlighted when you can afford them
+- You can now filter the achievements list to only show challenge achievements
+- "Raw Knowledge" achievement now works
+- Fixed prestige section not appearing
+- Fixed Golden Carrot count text being the wrong color
+- Added "Golden Carrots spent" statistic to statistics
+- Prestige statistics should now work and can be viewed in the statistics menu
+  + This information won't appear until after you've prestiged
+- Reordered the achievements list a little
+- Fixed issue where the page would be scrollable while in the themes menu after you changed themes
+- Added some character specific cosmetics (fancy bill and safety greg)
+  + Note: You can't mix and match cosmetics yet
+- New collectible: Pages
+  + These are the replacement for the achievement percentage = prestige buff mechanic- for every page you have, you will earn +1% golden carrots when you prestige. Pages are earned by completing achievements.
+  + There is support for balance changes here: if the page reward(s) for an achievement are changed in an update the game will update the player's page count accordingly
+- Added an achievement for unlocking every achievement (excluding secret achievements)
+- Fixed issue where spacebar for carrot farming didn't work
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.1
+    11-26-2021
+// ----------------------------------------------------------- //
+
+localStorage is fixed
+
+- localStorage / autosave are now fixed, the game no longer requires a page reload to function
+- Autosave interval option in settings
+- Carl is now slightly harder to unlock (you need at least 1 theme and 1 cosmetic instead of one or the other)
+- A number of achievements' images are no longer hidden by default
+- Deleting your save data or prestiging now scrolls you to the top of the page
+- Made tri-pane tabs taller
+- The game now keeps track of your statistics for your current prestige
+- Click popup now has a minimum before it is rounded
+- Added "Full numbers" option to settings (due to the way javascript works it will display scientific notation beyond a certain point)
+- Reset keybinds button now creates a toast
+- Added more triggers for the "out of date save data" warning
+- Fixed an issue where the error toast would not appear when trying to set "Time until notifications disappear" to an invalid number
+- "Always-on-top progress bar" option now functions properly and saves its state
+- Achievements now have a "style" property and special achievements will now have unique styling
+- 1 new achievement (reach 100,000 carrots without crafting hoes)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.0.1
+    11-24-2021
+// ----------------------------------------------------------- //
+
+- Updated title version
+- Changed a word in "Extreme Farming's" description
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.7.0
+    11-24-2021
+// ----------------------------------------------------------- //
+
+Keybind Customization and miscellaneous improvements
+
+What's new:
+- Added a footer/image attribution section to settings
+- Tri-panel tabs now have icons and rounded borders
+- You can now hover over an achievement icon to enlarge it
+- Made rewards in the achievement list more compact and changed their background color to be darker
+- A message now displays when you filter by locked only or unlocked only and nothing fits the criteria
+- Lots of miscellaneous CSS tweaks
+- Carrot count will not display as rounded if under 1,000,000
+- You can now customize the keybinds to your liking in settings
+- Settings are now stored in a localStorage object
+- Keybinds will now work with caps lock turned on
+- You can now filter the achievements list to show hidden (secret) achievements
+- The panels at the bottom will now use their own height and scroll with the rest of the page instead of a contained scrollable area
+- Got rid of the "big social" meta tag
+- Added a volume slider to the dropdown menu
+- Messed up slider CSS
+
+Fixes:
+- Fixed extra pixel on the easter egg achievement's image
+- Fixed issue where theme/cosmetic items would be wider than the container
+- Fixed issue where dropdown didn't work on mobile
+- Fixed long tips overlapping the dropdown button on mobile
+- Partially fixed an issue where achievements would appear to have the same reward as the previous achievements
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.6.1 & 1.6.6.2
+    11-22-2021
+// ----------------------------------------------------------- //
+
+.1
+- Potentially fixed the social media preview not having an image
+
+.2
+- Added a link to the changelog to the dropdown menu
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.6
+    11-22-2021
+// ----------------------------------------------------------- //
+
+Oversights and other backlog changes
+
+- Added Alien Carrot cosmetic (currently not obtainable)
+- There is now a warning at the top of the page when you have Javascript disabled
+- Social media link preview tags have been added, so sharing the link will now provide information about the game.
+- Game will no longer grant an achievement if you already have it
+- Game will no longer grant a theme or cosmetic if you already have it
+- Moved earning carrots into its own function
+- You can now press escape to close the cosmetic switcher
+- Fixed issue where left-section would have a background color on mobile while a theme that changes it is active
+- Fixed issue where theme/cosmetic switchers would be wider than the viewport on small screens
+- When any popup box is open the main page will not be scrollable (this previously only worked for dialog boxes, other popups got left out)
+- The theme/cosmetic switcher buttons now play the button press sound
+- Fixed big number achievements past 1 quintillion being 1000x less than intended
+- Achievements without images will now display missing.png in their toast notification
+- Changed the prestige dialog to reflect the fact that you keep your unlocked characters
+- Carl will now spill over to the right side of the screen when there is space (1300px or wider)
+- Charles has been moved to the leftmost column since he fits there better
+- The theme/cosmetic menu now keeps the tabs/close button at the top so they are accessible at all times
+- New theme: Black & White
+- Most of the clickable elements on the page should now be keyboard focusable (some still aren't interactable- accessibility is still an ongoing process)
+- You should be able to press enter while navigating the page via keyboard as an alternative to clicking
+- Dropdown menu will open when keyboard focused (items still don't seem to be selectable, not sure why)
+- Wrote some (currently unused) code for random falling carrots
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.5
+    11-21-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Achievements are now more compact
+- Modified a number of achievements and gave some pixel art
+- Updated developer tools
+- Added another keyboard combo with related achievement
+- Music is now off by default, but can be reenabled in settings
+- Themes now have proper accent color support, and all of the themes now have accent colors
+
+Fixes:
+- ~~Fixed numbers having decimal places when they shouldn't (carrot utilities)~~
+  + My fix broke even more things so I've just reverted it for now
+- Commented out console.log() that was spamming the console
+- The status bar progress bar will now correctly display what hoe you are crafting
+- Minor light theme fix- secondary_text was difficult to read (light theme is still incomplete)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.4.1
+    11-20-2021
+// ----------------------------------------------------------- //
+-Hotfix for Character leving prices
+
+~JJ
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.4
+    11-19-2021
+// ----------------------------------------------------------- //
+
+Achievement Consistency Update
+
+- Added some new achievements
+- Modified some achievements so that their requirements are visible by default
+- Changed some achievement descriptions
+- More achievements now have pixel art
+- Keyboard combos now work and a related achievement has been added
+- Some new keyboard combos were added
+- Large numbers in statistics now have commas
+- Statistics is now consistent with the achievements menu in that hidden achievements aren't required for 100% completion
+- There is now a unique icon for unlocked achievements that are missing an image
+
+CSS:
+- Fixed a bug where achievements' rounded borders were jank
+- Status bar dropdown no longer looks out of place/misaligned on mobile
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.3
+    11-19-2021
+// ----------------------------------------------------------- //
+
+- Leveling up isn't riduclously expensive now
+- completely rehualed Charles(not complete)
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.2.1 & 1.6.2.2
+    11-16-2021
+// ----------------------------------------------------------- //
+
+.1:
+- Added a temporary cheat tool for developer use
+
+.2:
+- Renamed the 1 quintillion carrots achievement
+- Added an achievement for prestiging 10 times
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.2
+    11-15-2021
+// ----------------------------------------------------------- //
+
+- New cosmetic: Pixel Carrot
+- Cosmetic names and the name that replaces "carrot" are now two separate values (name and farmable respectively)
+- Improved visual hierarchy of the theme/cosmetic menu
+- Got rid of the paint splatter element in the cosmetic screen
+- More achievements have pixel art
+- More achievements have been added
+- Achievements with the "hide from list" property will now be ignored when calculating achievement progress (won't appear in the total and won't be required for 100% completion)
+- Multibuy button redesign is now on hold
+- Statistics will no longer display fractions of a carrot (from CPS)
+- Gave Greg a more detailed tooltip
+- When a dialog or other popup menu is open the page behind it won't be scrollable
+- Added support for keyboard combinations (doesn't trigger anything yet)
+
+Fixes:
+- Fixed an issue where the theme/cosmetic menu would not be scrollable when the list exceeded screen height
+- Fixed some achievements having incorrect rewards
+- Fixed an issue where the tips text would get cut off when it doesn't fit, usually on mobile
+- Fixed an issue where theme/cosmetic descriptions would go outside the div
+- Minecraft theme now supports some of the newer features
+
+Scrapped changes:
+- Redid the CarrotsPerSecond() function so that it no longer gives fractions of a carrot
+- Fixed an issue where the carrot counter wouldn't update when you bought something (was a result of the above change apparently)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.1
+    11-14-2021
+// ----------------------------------------------------------- //
+
+- The cursor cosmetic is now unlocked via the "I am Seed" achievement, so it's a little harder to get now
+- Both themes and cosmetics are now accessible from the same menu
+- Fixed an issue where carrots per second wouldn't count towards your lifetime carrots
+- Game now keeps track of how many carrots you've earned from clicking & how many you've earned from CPS
+- The statistics menu now has collapsible sections for more detailed statistics
+- Putting #mute at the end of the URL will do the same thing as #automute (disables sound)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.0.1 & 1.6.0.2
+    11-13-2021
+// ----------------------------------------------------------- //
+
+- Fixed issue where the dropdown menu text was center aligned on mobile
+- Fixed hoes not working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.6.0
+    11-13-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Cosmetic switcher is here!
+- The game will now remember what cosmetic you had equipped and will enable it on page load
+- New feature for toasts: you can now specify if a toast is replaceable, or "low importance". If true it will disappear when another toast appears.
+  + Given the majority of toast notifications this property so that they no longer cover the screen
+- Added even more achievements
+- Charles' buttons now have icons and are consistent with Carl's shop items
+- Characters now need to be unlocked
+  + Belle is unlocked by upgrading Bill once
+  + Greg is unlocked by earning 5,000 carrots
+  + Charles is unlocked by prestiging
+  + Carl is unlocked by unlocking any theme/cosmetic
+- Statistics: game now keeps track of how many times you've clicked the carrot
+- Achievements now update every second instead of every 5
+- More achievements have icons
+
+Misc:
+- Fixed issue where the achievements list wouldn't load unless you switched tabs
+- Made dropdown menu smaller and gave it a left border
+- Charles now uses eInnerText()
+- Got rid of the console.log()s that were spamming the console
+- Tri-panel section is now taller (specifically, viewport height);
+- Added the new player object variables to the "Old save file" warning
+
+Known issues:
+- Page reloads twice now? Don't know why this is
+- Once again you will need to delete your save data for the game to work
+- Cosmetic switchers' checkmarks don't appear
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.5.4
+    11-12-2021
+// ----------------------------------------------------------- //
+
+- Cleaned up HTML and reverted a couple changes
+  + Theme switcher is available through Carl but it's also in settings
+- General CSS tweaks/improvements
+- Carl's theme/cosmetic buttons look a little cleaner
+- Prestige potential now only shows down to the tenths place
+- Restored the tri-panel's tab buttons to their intended CSS (more or less)
+- When Greg is crafting there will also be a progress bar at the top of the page
+  + This can be disabled in settings
+- Added a dropdown menu to the status bar
+- The page title will now display your carrot count and updates every 15 seconds (this is currently disabled because I want to play with it)
+- If #automute is added to the URL the game will disable sounds automatically (mostly for me having to delete save data over and over)
+  + Example: https://jjcvip.github.io/Carrot-Clicker/#automute
+
+Achievements:
+- Fixed issue where toasts would appear farther than the left than they should if an achievement toast was also on the screen
+- Fixed issue where toasts would cover other toasts below them
+- Fixed issue where toasts would have a } and extra gray space at the bottom
+- Added support for "secret" achievements that don't appear in the list at all, and in the future won't count your achievement progress
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.5.3
+    11-12-2021
+// ----------------------------------------------------------- //
+
+-Prestige change(complicated Equation Here
+-added a Carl.png
+-changed name 'Six Figure Income'
+-Changed Critera 'retro' to golden Carrots
+-Moved theme Changer to Carl
+
+~JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.5.2
+    11-12-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Fixed issue where achievement toasts would be wider than the viewport on mobile
+- Added some more achievements, there are now 22
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.5.1
+    11-11-2021
+// ----------------------------------------------------------- //
+
+Achievements:
+- More achievements now have pixel art
+- Added some achievements
+- Tweaked some achievements
+- Achievement notifications have been overhauled, no longer uses a generic toast notification
+  + These still need some work
+
+Random:
+- Added crafted hoes to statistics
+- Edited the player object once again so that it can keep track of lifetime hoes crafted
+  + If you run into issues with the statistics menu you will need to reset your game
+- Switched over some usage of .innerHTML to eInnerHTML()
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.5.0
+    11-10-2021
+// ----------------------------------------------------------- //
+
+- Gave some achievements pixel art
+- Changed all images to be rendered pixelated
+- Game now keeps track of how fast you are clicking and displays it (there is also a related achievement)
+- Fixed issue where the welcome message and temporary fix messages wouldn't appear when intended (temporary fix message is now gone)
+- DOM Manipulation doesn't take place unless necessary: Swapped out the usage of .innerText for eInnerText() and innerHTML for eInnerHTML() which doesn't update the page if the intended output is the same as what is already there (hopefully this will improve performance, I'm not able to test if there's a difference)
+- The carrot counter also now updates instantly, instead of on a timer with everything elements
+  + Depending on if I feel like doing the work I'll also make this change for the other page elements in the future
+- Achievements tab is pretty much complete! You can now view a list of achievements and read their descriptions if you need something to do.
+- Increased the size of the tri-panel section at the bottom of the page (this may change again in the future)
+- Progress information in the achievements tab works and shows you your percentage to completion
+
+Known issues:
+- Achievement rewards display on achievements they don't belong to
+- Achievements still use normal toasts
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.6
+    11-7-2021
+// ----------------------------------------------------------- //
+
+- Volume slider in settings
+- Moved fun tips slider code to user.js
+- Theme switcher X button is no longer the same color as the background in the white theme
+- Achievements work again (they have been updated to use the new player object format)
+- playSound() and playMusic() have been moved to Carrot Utilities
+- Added some new achievements
+- Change Theme button now plays the button sound effect
+- Character 5 now has a name (Carl) and can be changed by cosmetics
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.5.1 hotfix
+    11-7-2021
+// ----------------------------------------------------------- //
+
+- Hotfix for upgrade prices going up too fast (Issue #32)
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.5
+    11-7-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Lifetime stats now have their own object inside of the player object
+  + This will almost definitely break old save files
+- Game now keeps track of your prestige count, and this number is also available in the statistics tab
+- Added HTML for a 5th character
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.4
+    11-7-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Improved playMusic() function, will now loop on its own
+- Added a music toggle to settings
+- Added a stopMusic() function
+- All of the currently available themes now have pixel art icons
+
+Fixes:
+- Achievements with multiple conditions now work! ("3 heads are better than one" is currently the only multi condition achievement)
+- Fixed issue where statistics wouldn't load (Not having the load statistics function inside another anonymous function broke it for some reason)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.3
+    11-7-2021
+// ----------------------------------------------------------- //
+
+Whats new:
+-Added Bad music
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.2
+    11-6-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Sound effects when clicking the carrot and certain buttons (currently the sound effects being used have background noise so they are subject to change- if they become annoying you can disable them in settings)
+- Options in settings to disable all sound effects or just carrot sound effects
+- Changed OLED Theme description:
+  "Dark theme compatible with OLED screens" -> "Don't play Carrot Clicker after midnight"
+- Made some pieces of text a light gray instead of white in an attempt to improve visual heirarchy a little
+- Moved fun tip percentage to be higher up in settings
+
+Achievements:
+- "Bill of the Century" achievement now gives you the bill cosmetic (no way to enable cosmetics yet)
+- use_charles achievement now works (needed its own function);
+- Achievement notification will now tell you if you've earned a reward for completing it (generic toast notifications are temporary, achievements will have their own style of toasts later)
+
+Fixes:
+- Clicking on the same theme more than once makes the checkmark disappear
+- Retro Green theme no longer makes Greg's progress bar red
+- Fun tips slider knob actually reaches the end(s) of the slider and is slightly bigger
+- Lots of other random fixes, mostly related to achievements
+
+Known issues:
+- Upgrade prices increase at an insane rate
+- Save file compatibility doesn't always work- you may need to start over for themes/achievements to work.
+- Achievements tab not actually doing anything
+- Carrot sound effects being bad
+
+~ Kal
+
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.1.1 hotfix
+    11-6-2021
+// ----------------------------------------------------------- //
+
+- "Compatibility for old save files" mentioned in 1.4 should now work properly- previously, players with old save files would not be given the default themes and the theme switcher would be useless.
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.1
+    11-5-2021
+// ----------------------------------------------------------- //
+
+- Statistics now tells you how many achievements, themes, and cosmetics out of the total you have
+- Added two achievements:
+    + First Hoe (Triggers tutorial message same as before)
+    + First Netherite Hoe
+- Reduced statistics refresh time to 2 seconds
+
+Fixes:
+- Fixed certain images not appearing (their src attribute didn't have a "." at the start). I think this might also be why the character avatars were disappearing but we'll have to see if that goes away or not.
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.4.0
+    11-5-2021
+// ----------------------------------------------------------- //
+
+What's new:
+- Fancy theme switcher:
+    + Hides themes that have not been unlocked
+    + Tells you how many remaining themes you have to unlock
+- unlock() function now works (for themes, since there is no cosmetic switcher at the moment)
+- Achievements:
+    + Not quite complete, but in terms of JS they're basically done
+    + Some achievements may not work properly (specifically ones with multiple conditions)
+    + Still need to have them appear in the achievements tab
+    + Still need to give them a unique style of toast that can display an image and tell you what unlocks come with
+- Compatibility for old save files:
+    + Achievements and unlockables have been added to the player object, and because of the way the game stores said object I've had to add some checks to make sure that the required properties are added. I don't know if this will stay, but for now you can continue playing without losing your save.
+
+Fixes:
+- Fixed the confetti element always being visible and causing a white border around the screen
+- Hoes are now craftable again (n variable was missing)
+- Statistics now displays actual data (only 2 numbers actually show up at the moment)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.7
+    11-3-2021
+// ----------------------------------------------------------- //
+
+JS Changes
+- Added loading icon & basic handler for putting statistics in the statistics tab (doesn't currently put statistics there since I don't know how we are going to store lifetime stats)
+- Slightly improved efficiency of keybindHandler() function
+- Added a keybind for closing all toast notifications (x key)
+- Toast elements were not being deleted properly (ID being used to delete them was on a child element intstead of the element itself)
+- Basic support for unlockable themes (until they are available through in-game means they will still be available)
+- confetti() function
+
+Themes:
+- Started working on a fancy theme switcher, just need to make the interface (HTML) itself
+- Themes can now be locked/unlocked (For now they are all available by default, at least until they can be obtained through gameplay)
+- Added Green Theme
+- Added Blue Theme
+- White theme fixes
+- Minecraft theme is closer to being "complete"
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.6
+    11-3-2021
+// ----------------------------------------------------------- //
+
+- Fixed wrong hoe behavior
+- Cleaned up some Code
+- Multibuy display was broken; now fixed
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.5
+    11-2-2021
+// ----------------------------------------------------------- //
+
+- General HTML changes to better support cosmetics
+- Charles's HTML no longers says Belle
+- Fixed a typo in Greg's tooltip
+- Cosmetics can now change character avatars and names
+- Started to add infrastructure for achievements (user.js)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.4
+    11-1-2021
+// ----------------------------------------------------------- //
+
+JS changes:
+- Bill can once again equip stone hoes (Issue #27)
+- Added functions and infrastructure for cosmetics
+- Game will remember what cosmetic was in use and will reenable it on page load
+
+CSS changes:
+- Made the inputs in settings look a little nicer and made them all the same width
+
+New themes (subject to change):
+- Added a gameboy-esque retro green theme
+- Added a Minecraft theme (also enables a relevant cosmetic)
+Note: most of these themes will not be unlocked by default
+
+Known issues:
+- Retro and Minecraft themes make it so that Greg's netherite hoe doesn't fit
+- Themes not being complete
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.3
+    10-31-2021
+// ----------------------------------------------------------- //
+
+JS changes:
+- Added a tip to Tips.basic: "Click here to cycle through available tips!"
+- Game now remembers what pane (bottom section) was last opened and reopens it on page load
+
+CSS changes:
+- Custom scrollbar (does not change with theme at the moment)
+    + Tri-pane scrollbar is brown to match
+- Fixed settings (and achievements/statistics) not being scrollable/not scrolling properly
+- Moved more colors to CSS variables
+- Gave the carrot a shadow to go along with the valley I put it in
+    + Shadow does not appear in the "Classic" theme
+- Bottom (tri-pane) section now matches the light theme
+- Bottom (tri-pane) section is now taller and has a larger bottom margin to accomodate mobile
+- Centered Prestige info put in a linebreak so that the text doesn't reach the edge
+- Light theme is no longer Work in progress, but I would still like to the improve its contrast and/or add some color to it.
+
+New themes:
+- OLED Dark theme
+- WIP Red theme
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.2.1 hotfix
+    10-30-2021
+// ----------------------------------------------------------- //
+
+- Reverted carrot_clicker.js to previous version
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.2
+    10-30-2021
+// ----------------------------------------------------------- //
+
+- Fun tips percentage slider added to settings
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.1
+    10-30-2021
+// ----------------------------------------------------------- //
+
+- Removed carrot_utilities.js and linked to external (forked) copy
+
+~ Kal
+
+- Fixed leveling up charcters to actually work. (should be cleaned up in the code
+
+~ JJ
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.3.0
+    10-29-2021
+// ----------------------------------------------------------- //
+
+CSS changes:
+- Top bar no longer pushes rest of page down when its size changes
+- Charles now stays in the same column as the other characters ~~(Assuming there isn't space for him on the right)~~ not added yet
+- General CSS cleanup
+
+Themes:
+- Theme dropdown in settings pane
+- New WIP light theme
+- WIP Classic theme (Original Carrot Clicker CSS, green outlines and all)
+- Themes are able to change mobile accent color to match
+- Theme is automatically stored and loaded using localStorage
+- More themes are planned
+
+Misc:
+- Statistics and achievements tabs have swapped places, achievements is open by default
+- Multibuy (1x) indicator in the top left can be clicked to change it
+- Fixed issue on mobile where touble tapping the carrot (or anything on the page) would zoom (needs to be tested, seems to work on my phone though)
+- A progress bar will appear directly below the status bar while Greg is crafting (unfinished)
+
+Still need to do:
+- Charles spills over to a 2nd column when there is enough room
+- Status bar progress bar needs to work
+- Make settings look nicer
+- Fix the hoes again again
+- Tip slider needs to actually work
+- A general clean up of code
+
+Lines of code:
+  Total HTML:  441
+  Total CSS :  873
+  Total JS:   1334
+  TOTAL:      2648
+
+
+~ Kal

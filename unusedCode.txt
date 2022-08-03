@@ -1,0 +1,596 @@
+/-------------------------------------/
+
+        Written But Unused Code
+
+/------------------------------------/
+
+index.html
+*In credits, image attribution section
+*   credit not required for these
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Refresh_(89382)_-_The_Noun_Project.svg">Refresh icon</a> Nice and Serious, CC0, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:About_icon_(The_Noun_Project).svg">About icon</a> made by AnsteyDesign, CC0, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Emojione_2754.svg">Emoji One Question mark SVG</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons -->
+<!-- <a href="https://commons.wikimedia.org/wiki/File:Backpack_(2551)_-_The_Noun_Project.svg">Backpack icon</a> by Rémy Médard, CC0, via Wikimedia Commons -->
+
+carrot_clicker.css
+* unused multibuy indicator
+/* Multibuy indicator */
+#multibuy_button {
+    font-size: 14pt;
+    font-weight: bolder;
+    background-color: var(--lighter-bg-color);
+    color: white;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    padding: 4px 0 8px;
+    margin-left: 8px;
+    margin-top: -31px;
+    width: 54px;
+    text-align: center;
+    border-radius: 0 0 16px 16px;
+}
+#multibuy_button:hover {
+    filter: brightness(125%);
+}
+
+
+/----------CarrotClicker.Js---------/
+
+*In EarnCash()
+    // Type
+    // switch(type) {
+    //     // Click
+    //     case 'bonus':
+    //         player.prestige.click_carrots += amount
+    //         player.prestige.clicks ++;
+
+    //         player.lifetime.click_carrots += amount;
+    //         player.lifetime.clicks ++;
+    //         break;
+    //     // Idle
+    //     case 'achievement':
+    //         player.prestige.idle_carrots += amount;
+    //         player.lifetime.idle_carrots += amount;
+    //         break;
+    //     // Bonus
+    //     case 'other':
+    //         player.prestige.bonus_carrots += amount;
+    //         player.lifetime.bonus_carrots += amount;
+
+    //         player.lifetime.falling_carrots_grabbed++;
+    //         break;
+    // }
+
+
+*In onClick()
+    // Prevent use of spacebar/click at the same time
+    // if(method != clickMethodLimit && clickMethodLimit != 'none' && clickMethodTimer < Date.now() - 1000) {
+    //     clickMethodLimit = method;
+    //     clickMethodTimer = Date.now();
+
+    //     return;
+    // }
+
+    // Click method limit
+    // if(clickMethodTimer < Date.now - 500) {
+    //     clickMethodLimit = 'none';
+    // }
+
+
+*Under Tips Section
+    // const tips = localStorage.getObject("tips");
+    // setInterval(()=>{
+    //     if(tips){
+    //         localStorage.setObject("tips",tips);
+    //     }else{
+    //         localStorage.setObject("tips",default_tips);
+    //         // location.reload();
+    //     }
+    // }, 2000);
+
+    // const tips;
+
+    // if(localStorage.getObject("tips") == null) {
+    //     localStorage.setObject("tips", default_tips);
+    // } else {
+    //     tips = localStorage.getObject("tips");
+    // }
+
+
+*Function Music
+    //Music
+    // setInterval(()=>{
+    //     playMusic('music.m4a');
+    // },80000);
+
+
+*In MainGameLoop
+    // Top bar (Might bring back later - don't delete)
+    // Basic_Info.innerText = "Carrots:" + DisplayRounded(Math.floor(player.Carrots)) + " CPC:"+DisplayRounded(Math.floor(player.cpc),2) + " CPS:"+ DisplayRounded(Math.floor(player.cps),2) + " Golden Carrots:" + DisplayRounded(player.golden_carrots,2);
+
+
+*In Default_Player object
+    // Unlocked main buttons
+    // main_buttons: {
+    //     prestige: false,
+    //     inventory: false,
+    // },
+*Under CharacterLvlUpPrices
+    // Bill price debug
+    // var billarray = [100, 111, 123, 136, 150, 166, 184, 204, 226, 250, 277, 307, 340, 377, 418, 463, 513, 569, 631, 700, 777, 862, 956, 1061, 1177, 1306, 1449, 1608, 1784, 1980, 2197, 2438, 2706, 3003, 3333, 3699, 4105, 4556, 5057, 5613, 6230, 6915, 7675, 8519, 9456, 10496, 11650, 12931, 14353, 15931, 17683, 19628, 21787, 24183, 26843, 29795, 33072, 36709, 40746, 45228, 50203, 55725, 61854, 68657, 76209, 84591, 93896, 104224, 115688, 128413, 142538, 158217, 175620, 194938, 220279, 248915, 281273, 317838, 359156, 405846, 458605, 518223, 585591, 661717, 747740, 844946, 954788, 1078910, 1219168, 1377659, 1556754, 1759132, 1987819, 2246235, 2538245, 2868216, 3241084, 3662424, 4138539, 4511007];
+    // function billDebug(level, from=1) {
+    //     let total = 0;
+    //     for(i = from; i <= level; i++) {
+    //         total += billarray[i - 1];
+    //     }
+    //     return total;
+    // }
+
+*Old CharacterLvlUpPrices() function
+function getLevelPrice(character=Boomer_Bill, amount=1, mode="query"){
+    // console.log(`getLevelPrice(${character.nickname}, ${amount}, ${mode})`);
+    let r = character.lvlupPrice;
+    let r2=0;
+
+    function multibuyPrice(PriceIncrease) {
+        console.log(`${character.nickname} r: ${r}`);
+        console.log(`${character.nickname} r * PriceIncrease: ${r * PriceIncrease}`);
+        r += (1 - DecreaseWagesEffects()) * Math.floor(r * PriceIncrease);
+        if(amount==1){
+            r2=r;
+            return;
+        }
+        r2 += r; 
+        // console.log(`multibuyPrice(${PriceIncrease})\nr = ${r}\nr2 = ${r2}`);
+    }
+    // Multibuy loop
+    if(amount==1){
+        // Gregory
+        if(character==Gregory){
+            if(Gregory.lvl+i<50){
+                multibuyPrice(0.14);
+            }else{
+                multibuyPrice(0.21);
+            }
+        }
+        // Belle
+        else if(character==Belle_Boomerette){
+            if(Belle_Boomerette.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                multibuyPrice(0.12)
+            }else{
+                multibuyPrice(0.08)
+            }   
+        }
+        // Bill
+        else if(character==Boomer_Bill){
+            if(Boomer_Bill.lvl+i<75){
+                multibuyPrice(0.11);
+            }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                multibuyPrice(0.13);
+            }else{
+                multibuyPrice(0.09);
+            }
+            
+        }
+    }else{
+        for(i=1; i<amount; i++){
+            // Gregory
+            if(character==Gregory){
+                if(Gregory.lvl+i<50){
+                    multibuyPrice(0.14);
+                }else{
+                    multibuyPrice(0.22);
+                }
+            }
+            // Belle
+            else if(character==Belle_Boomerette){
+                if(Belle_Boomerette.lvl+i<75){
+                    multibuyPrice(0.07);
+                }else if(Belle_Boomerette.lvl+i<100&&Belle_Boomerette.lvl+i>=75){
+                    multibuyPrice(0.06)
+                }else{
+                    multibuyPrice(0.08)
+                }   
+            }
+            // Bill
+            else if(character==Boomer_Bill){
+                if(Boomer_Bill.lvl+i<75){
+                    multibuyPrice(0.11);
+                }else if(Boomer_Bill.lvl+i<100&&Boomer_Bill.lvl+i>=75){
+                    multibuyPrice(0.13);
+                }else{
+                    multibuyPrice(0.09);
+                }
+                
+            }
+        }
+    }
+    
+    // Apply
+    if(mode=="apply") character.lvlupPrice = Math.floor(r);
+    return amount == 1 ? character.lvlupPrice : r2;
+}
+
+*JJ WIP LevelUp() overhaul
+// function LevelUp(character=Boomer_Bill, amount=1) {
+//     // var array=[];
+//     // var multiplier = 1.11;
+//     // for(i=1;i<=amount;i++){
+//     //     array.push((1-DecreaseWagesEffects)*(multiplier*array[i-1]))
+//     // }
+    
+//     if(characterQuery(character.nickname) == false) return;
+//     if(player.carrots >= r) {
+//         character.lvl += amount;
+//         player.carrots -= r;
+//         character.lvlupPrice=array[amount];
+
+//         // Update page
+//         carrotCount();
+//         characterPrices();
+//         characterButtons();
+//         updateCPC();
+//         if(character==Boomer_Bill){player.cpc=Calculate_Carrots(Boomer_Bill);}
+//         if(character==Belle_Boomerette){player.cps=Calculate_Carrots(Belle_Boomerette);}
+
+//         // Animation
+//         mouseConfetti([2, 3], ccGold);
+//     }
+// }
+
+
+
+/------------styling.js-------------/
+
+* In populateCarl()
+    // Loop through shop_order
+    // for(let i = 0; i < Carl.shop_order.length; i++) {
+    //     let raw = Carl.shop_order[i];
+    //     console.log('aaaaaaaa: ' + raw);
+    //     let [type, name] = raw.includes(':') == false ? ['theme', raw] : raw.split(':');
+    //     let item = Carl.shop[type][name];
+    //     if(
+    //         item.available == false ||
+    //         item.bought == true
+    //     ) continue;
+
+    //     carlShopData[name] = item.price;
+
+    //     // Theme
+    //     if(type == 'theme') {
+    //         // let theme_keys = Carl.shop.theme.keys;
+    //         let theme = themes[name];
+    //         let img = theme.image;
+    
+    //         html += carlHTML(name, 'theme', theme.name, img, item.price);
+    //     }
+    //     // Cosmetic
+    //     else if(type == 'cosmetic') {
+    //         // let cosm_keys = Carl.shop.cosmetic.keys;
+    //         let [ca, cb] = name.split('/');
+    //         let cosmetic = cosmetics[ca][cb];
+    //         let img = cosmetic.image;
+    
+    //         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+    //     }
+    // }
+
+* Above the mouse position handler
+// Title changer
+setInterval(() => {
+    dom('page_title').innerText = `Carrot Clicker - ${DisplayRounded(player.carrots.toFixed(0))} carrots`;
+}, 2000);
+
+
+
+/------------user.js-------------/
+
+
+*In Eventlistener('keydown')
+    // Close/Accept dialog
+    // if(dialogOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     } else if(event.key == "Enter"){
+    //         closeDialog(true);
+    //     }
+    // }
+
+    // Close theme switcher
+    // if(themeSwitcherOpen || cosmeticSwitcherOpen) {
+    //     if(event.key == "Escape"){
+    //         closeDialog();
+    //     }
+    // }
+
+    // When on main page send to keybind handler
+    // keybindHandler(event);
+
+
+*Under custom keybinds
+    // var keybindsLS = localStorage.getItem("keybinds");
+    // if(keybindsLS=="false"){
+    //     elDisableKeybinds.checked=true;
+    // }
+    // //Keyboard Event listener and checkboxing
+    // function KeyBinds() {
+    //     //checkbox
+    
+    //     //checking checkbox
+    //     if (elDisableKeybinds.checked == true){
+    //         toast("Settings","Keybinds are Disabled","red");
+    //         window.removeEventListener('keydown',keybinds);
+    //         localStorage.setItem("keybinds","false");
+    //         return;
+    //     }
+
+    //     window.addEventListener('keydown',keybinds);
+    //     localStorage.setItem("keybinds","true");
+    // }
+
+    // KeyBinds();
+
+
+*In unlock if type='cosmetic' and subtype == 'bundle'
+
+    // let bundle = cosmetics.bundle[thingToUnlock];
+
+    // for(let i = 0; i < bundle.length; i++) {
+    //     let key = bundle.keys[i];
+    //     let ntarget = bundle[key];
+
+    //     console.log(`unlock('cosmetic', ${key}, ${ntarget})`);
+
+    //     // if(key == 'name' || key == 'preview' || key == 'desc') continue;
+    //     unlock('cosmetic', key, ntarget);
+    // }
+
+
+*Under location hashes
+    // else if(location.hash == '#cheatmode') {
+    //     console.log(`
+    //     allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     allCosmetics = () => {
+    //         for(let t = 0; t < cosmeticsKeys.length; t++) {
+    //             let key = cosmeticsKeys[t];
+    //             let target = cosmetics[key];
+        
+    //             // Loop through cosmetics
+    //             for(let c = 0; c < target['keys'].length; c++) {
+    //                 unlock('cosmetic', target.keys[c], key);
+    //             }
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;var allCharacters = () => {
+    //         unlock('character', 'belle');
+    //         unlock('character', 'greg');
+    //         unlock('character', 'charles');
+    //         unlock('character', 'carl');
+    //         toast('All Characters now available', 'Dev tools');
+    //     }
+    //     var allAchievements = () => {
+    //         for(let i = 0; i < achievementsKeys.length; i++) {
+    //            grantAchievement(achievementsKeys[i])
+    //         }
+    //         toast('All Achievements now visible', 'Dev tools');
+    //     }
+    //     var allThemes = () => {
+    //         for(let i = 0; i < themesKeys.length; i++) {
+    //             unlock('theme', themesKeys[i])
+    //         }
+    //         toast('All Themes now available', 'Dev tools');
+    //     }
+    //     var allCosmetics = () => {
+    //         for(let i = 0; i < cosmeticsKeys.length; i++) {
+    //             unlock('cosmetic', cosmeticsKeys[i])
+    //         }
+    //         toast('All Cosmetics now available', 'Dev tools');
+    //     }
+        
+    //     $('#dev').innerHTML =
+    //     \`<div class="footer_bottom" style="display: block; padding: 16px 24px;">
+    //         <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+    //         Unlock all:
+    //         <button onclick="allCharacters()">
+    //             Characters
+    //         </button>
+    //         <button onclick="allAchievements()">
+    //             Achievements
+    //         </button>
+    //         <button onclick="allThemes()">
+    //             Themes
+    //         </button>
+    //         <button onclick="allCosmetics()">
+    //             Cosmetics
+    //         </button>
+    //     </div><br>\`;
+        
+    //     toast('Dev Tools enabled', false);`)
+    // }
+
+*under tutorial
+    // Initial Welcome
+    // if(store("tutorial_sample") == null) {
+    //     store("tutorial_sample", "done");
+    //     toast("Please Wait", "As a temporary fix, the page will refresh after a few seconds. Hang on!", "red", true);
+    // } else if(store("tutorial_sample") == "done") {
+    //     // Temporary two step until someone fixes the storage issue
+    //     store("tutorial_sample", "really_done");
+    //     toast("Welcome to Carrot Clicker!", "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!", "", true);
+    // }
+
+
+
+* at the bottom of onLoad()
+//     console.log(`                                                                
+//                                          (( #%@@@           
+//                                         @/@#//*%            
+//                                         %(&//*&   @//&      
+//                                        @/&/(*@  %//**#      
+//                                        %//(/@@///**@        
+//                                       @((((#//**%    /@%(((/
+//                              @#######((((((**(@&#((((%@     
+//                            %#####(###((((/(((((*******@     
+//                          %########((((((/(//@               
+//                        %(#######((((((((////@               
+//                      @((#####((((((*((/////&                
+//                    @#(###(#((((((((//////&                  
+//                  @((####((((((((/*/////@                    
+//                &((###(((((((((//////&                       
+//              &((##(/(((((/(//////@                          
+//            @((#(((((((/(//////#                             
+//           #(#(((((((((//////&                               
+//         @((((((((((//////#(                                 
+//       @(((((((/(//////%(                                    
+//     (((((((((/////#@                                        
+//    @((((((//////@                                           
+//   &/((((/////&                                              
+//  %///////(@                                                 
+// %////(@                                                     
+
+//   _____                     _      _____ _ _      _             
+//  / ____|                   | |    / ____| (_)    | |            
+// | |     __ _ _ __ _ __ ___ | |_  | |    | |_  ___| | _____ _ __ 
+// | |    / _\` | '__| '__/ _ \\| __| | |    | | |/ __| |/ / _ \\ '__|
+// | |___| (_| | |  | | | (_) | |_  | |____| | | (__|   <  __/ |   
+//  \\_____\\__,_|_|  |_|  \\___/ \\__|  \\_____|_|_|\\___|_|\\_\\___|_|   
+                                                                 
+                                                                  
+
+                                                               
+                                                               
+// `)
+
+
+
+
+
+
+
+* populateCarl function
+populateCarl w/ pages
+function populateCarl(page_dir=0) {
+    // Get keys
+    let theme_keys = Carl.shop.theme.keys;
+    let cosm_keys = Carl.shop.cosmetic.keys;
+    let pageMax = Math.ceil(Object.keys(carlShopData).length / 3);
+
+    // Pages
+    pageCarl += page_dir;
+    if(pageCarl < 1 || pageCarl > pageMax) {
+        pageCarl += page_dir * -1
+        return;
+    };
+    carl_page_indicator.innerText = `${pageCarl}/${pageMax}`;
+
+    let html = '';
+    carlShopData = {};
+    let count = 1;
+
+    // Loop through themes
+    for(let ti = 0; ti < theme_keys.length; ti++) {
+        let name = theme_keys[ti];
+        let item = Carl.shop.theme[name];
+        // Skip if unavailable
+        if(
+            item.available == false ||
+            item.bought == true
+        ) continue;
+        // Add to shop data
+        carlShopData[name] = item.price;
+        // Skip if out of page range
+        if(count > pageCarl * 3 || count < (pageCarl * 3) - 3) continue;
+
+        let theme = themes[theme_keys[ti]];
+        let img = theme.image;
+
+        html += carlHTML(name, 'theme', theme.name, img, item.price);
+        count++;
+    }
+
+    // Loop through cosmetics
+    for(let ti = 0; ti < cosm_keys.length; ti++) {
+        let name = cosm_keys[ti];
+        let item = Carl.shop.cosmetic[name];
+        if(
+            item.available == false ||
+            item.bought == true ||
+            count > pageCarl * 3
+        ) continue;
+
+        carlShopData[name] = item.price;
+
+        let [ca, cb] = name.split('/');
+        let cosmetic = cosmetics[ca][cb];
+        let img = cosmetic.image || cosmetic.preview;
+
+        html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price);
+        count++;
+    }
+
+    // Update page
+    if(html == '') {
+        html = `
+        <p class="padding-5px secondary_text center">
+            That's all for now. Complete more achievements for more things to buy!
+        </p>`;
+    }
+    carlShop.innerHTML = html;
+    cashCount(false);
+
+    /** Carl HTML template */
+    function carlHTML(internalName, type, name, img, price) {
+        return `
+        <div id="carl_shop_${internalName}" class="shop_item" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
+            <div class="flex">
+                <img src="${img}" alt="" class="shop_img">
+                <div class="info">
+                    <b>${name}</b>
+                    <p class="secondary_text">${capitalizeFL(type)}</p>
+    
+                    <div class="shop_price">
+                        ${price} coins
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+}
