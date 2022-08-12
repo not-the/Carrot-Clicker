@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.15.7';
+    const game_version = 'dev beta v1.16';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -980,7 +980,7 @@ const achievements = {
         'image': './assets/achievements/working_conditions.png',
         'reward': 'shop:cosmetic/greg/safety_greg',
         'pages': false,
-        'conditions': ['Charles.tome.improveWorkingConditions.value', 1],
+        'conditions': ['Charles.improveWorkingConditions.value', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -994,7 +994,7 @@ const achievements = {
         'image': './assets/achievements/tome_improve_hoe_costs.png',
         'reward': false,
         'pages': false,
-        'conditions': ['Charles.tome.betterHoes.value', 1],
+        'conditions': ['Charles.betterHoes.value', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1008,7 +1008,7 @@ const achievements = {
         'image': './assets/achievements/tome_decrease_wages.png',
         'reward': 'shop:cosmetic/bill/dollar_bill',
         'pages': false,
-        'conditions': ['Charles.tome.decreaseWages.value', 1],
+        'conditions': ['Charles.decreaseWages.value', 1],
         'mystery': {
             'name': true,
             'desc': false,
@@ -2254,9 +2254,9 @@ var internalAchievements = 0;
 /** use_charles */
 function ex_charlesUses() {
     if(
-    Charles.tome.improveWorkingConditions.value > Default_Charles.tome.improveWorkingConditions.value
-    || Charles.tome.betterHoes.value > Default_Charles.tome.betterHoes.value
-    || Charles.tome.decreaseWages.value > Default_Charles.tome.decreaseWages.value
+    Charles.improveWorkingConditions.value > Default_Charles.improveWorkingConditions.value
+    || Charles.betterHoes.value > Default_Charles.betterHoes.value
+    || Charles.decreaseWages.value > Default_Charles.decreaseWages.value
     ) return true;
     return false;
 }

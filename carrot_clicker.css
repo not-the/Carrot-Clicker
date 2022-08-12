@@ -1814,6 +1814,9 @@ body:not(.gp) #golden_carrot_count*/ {
 
     pointer-events: none;
 }
+.charles_shop_containter{
+    font-size: 12.5pt;
+}
 .tooltip_area:hover .shop_tooltip,
 .tooltip_area:focus .shop_tooltip,
 .tooltip_area:focus-within .shop_tooltip {

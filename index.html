@@ -21,6 +21,11 @@
     <meta property="og:url" content="https://jjcvip.github.io/Carrot-Clicker/" />
     <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
+    <script src="carrot_utilities.js" defer></script>
+    <script src="gamedata.js" defer></script>
+    <script src="carrot_clicker.js" defer></script>
+    <script src="styling.js" defer></script>
+    <script src="user.js" defer></script>
 </head>
 <body>
     <!-- Toast notifications -->
@@ -459,13 +464,13 @@
                             <!-- Charles' tomes -->
                             <div class="tooltip_area">
                                 <div
-                                onclick="BuyTome(Charles.tome.improveWorkingConditions,multibuy[mbsel])"
+                                onclick="Charles.improveWorkingConditions.add(multibuy[mbsel])"
                                 id="ImproveWorkingConditions_button"
                                 class="unbold shop_item flex cant_afford"
                                 tabindex="0"
                                 role="button">
                                     <img src="./assets/items/tome_iwc.png" alt="" class="shop_img tome_iwc">
-                                    <div class="info">
+                                    <div class="info charles_shop_containter">
                                         <p>Improve Working Conditions</p>
                                         <div id="iwc_effect" class="shop_value secondary_text"></div>
                                         <span id="iwc_count" class="secondary_text">x0</span>
@@ -480,13 +485,13 @@
 
                             <div class="tooltip_area">
                                 <div
-                                onclick="BuyTome(Charles.tome.betterHoes,multibuy[mbsel])"
+                                onclick="Charles.betterHoes.add(multibuy[mbsel])"
                                 id="BetterHoes_button"
                                 class="unbold shop_item flex cant_afford"
                                 tabindex="0"
                                 role="button">
                                     <img src="./assets/items/tome_tools.png" alt="" class="shop_img tome_tools">
-                                    <div class="info">
+                                    <div class="info charles_shop_containter">
                                         <p>High Quality Tools</p>
                                         <div id="bh_effect" class="shop_value secondary_text"></div>
                                         <span id="bh_count" class="secondary_text">x0</span>
@@ -501,13 +506,13 @@
 
                             <div class="tooltip_area">
                                 <div
-                                onclick="BuyTome(Charles.tome.decreaseWages,multibuy[mbsel])"
+                                onclick="Charles.decreaseWages.add(multibuy[mbsel])"
                                 id="DecreaseWages_button"
                                 class="unbold shop_item pointer flex cant_afford"
                                 tabindex="0"
                                 role="button">
                                     <img src="./assets/items/tome_dww.png" alt="" class="shop_img tome_dww">
-                                    <div class="info">
+                                    <div class="info charles_shop_containter">
                                         <p>Decrease Worker Wages</p>
                                         <div id="dww_effect" class="shop_value secondary_text"></div>
                                         <span id="dww_count" class="secondary_text">x0</span>
@@ -534,7 +539,7 @@
                 <!-- #region -->
                 <div class="character_column">
 
-                    <!--SIX Rendering-->
+                    <!--Jared Rendering-->
                     <div class="six characterbox char_locked" id="six_box">
                         <div class="char_info" id="six_info">
                             <h2>Six</h2>
@@ -548,7 +553,7 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                                src="./assets/achievements/missing.png"
+                                src="./assets/characters/Jared.png"
                                 alt="six"
                                 id="six_avatar"
                                 class="characterimg"
@@ -1485,11 +1490,7 @@
     <!-- Javascript -->
     <!-- #region -->
     <!-- <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script> -->
-    <script src="carrot_utilities.js"></script>
-    <script src="gamedata.js"></script>
-    <script src="carrot_clicker.js"></script>
-    <script src="styling.js"></script>
-    <script src="user.js"></script>
+
     <!-- #endregion -->
 </body>
 </html>

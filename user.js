@@ -422,8 +422,6 @@ function keybindHandler(event, state) {
     // if(state != 'keyup') return;
 
 
-
-
     // Multibuy
     if(
         key == settings.keybinds['key_multibuy']
@@ -1113,6 +1111,7 @@ function isDebug() {
                     let gcc = parseInt(setGoldenCarrotsEl.value);
                     player.golden_carrots = gcc
                     updateGC();
+                    updateCharlesShop();
                 }
                 // Levels
                 if(setBillLvlEl.value != '') {
@@ -1310,10 +1309,9 @@ function isDebug() {
         Gregory,
 
         Charles,
-        Charles.tome,
-        Charles.tome.improveWorkingConditions,
-        Charles.tome.decreaseWages,
-        Charles.tome.betterHoes,
+        Charles.improveWorkingConditions,
+        Charles.decreaseWages,
+        Charles.betterHoes,
 
         Carl,
         Carl.shop,
@@ -1337,10 +1335,9 @@ function isDebug() {
         Default_Gregory,
 
         Default_Charles,
-        Default_Charles.tome,
-        Default_Charles.tome.improveWorkingConditions,
-        Default_Charles.tome.decreaseWages,
-        Default_Charles.tome.betterHoes,
+        Default_Charles.improveWorkingConditions,
+        Default_Charles.decreaseWages,
+        Default_Charles.betterHoes,
 
         Default_Carl,
         Default_Carl.shop,

@@ -1,4 +1,46 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16
+    7-31-2022
+// ----------------------------------------------------------- //
+- Rewrote buying tomes code to actually work
+- Created a tome class to handle the tome prototypes and methods
+- Created extension character classes
+- Created a player class(Support for different save files?)
+- Completely rewrote prestige potential
+- reworked style of Charles Shop
+    -Made text smaller
+    -displayed rounded numbers when above 99,999
+- Tool six now give a Massive bonus based on how many hoes of lesser rank you have.
+- Balancing Changes
+    - Changes to price scaling
+    Greg:
+        Levels 0-25   :0.14 -> 0.21156
+        Levels 25-50  :0.14 -> 0.1874
+        Levels 50-75  :0.21 -> 0.227
+        Levels 75-100 :0.21 -> 0.284
+        Levels 100-125:0.21 -> 0.409
+        Levels 125-∞  :0.21 -> 0.25
+        
+    - Changes to starting tool prices
+      Tool 3: 50,000,000 -> 55,000,000
+      Tool 4: 7,000,000,000 -> 9,000,000,000
+      Tool 5: 500,000,000,000 -> 1,000,000,000,000
+      Tool 6: 100,000,000,000,000 -> 5,000,000,000,000,000
+    - Changes to tool price scaling
+      Tool 3: 0.018 -> 0.021
+      Tool 4: 0.02 -> 0.019
+      Tool 5: 0.02 -> 0.018
+      Tool 6: 0.028 -> 0.03
+- Added new Feature to Netherite Hoes that makes them give bonuses based on how much other hoes you have
+- Changed the way scripts load so that they load asyncronously and run once the page is finished loading.
+
+  ~JJ
+
+-rewrote earnCarrots function
+
+  ~Kal
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.15.7
     7-31-2022
 // ----------------------------------------------------------- //
