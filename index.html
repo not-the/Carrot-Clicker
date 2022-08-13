@@ -22,6 +22,12 @@
     <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
 
+    <!-- JS -->
+    <script src="carrot_utilities.js" defer></script>
+    <script src="gamedata.js" defer></script>
+    <script src="carrot_clicker.js" defer></script>
+    <script src="styling.js" defer></script>
+    <script src="user.js" defer></script>
 </head>
 <body>
     <!-- Toast notifications -->
@@ -69,14 +75,16 @@
                         <!-- Theme/cosmetic -->
                         <div class="flex">
                             <a onclick="themeSwitcher()" tabindex="0">
-                                <div class="menu_item link_styling secondary_text" style="width: 119px; border-right: 1px solid var(--border-color);">
+                                <div class="menu_item link_styling secondary_text" style="border-right: 1px solid var(--border-color);">
                                     <img src="./assets/icons/palette.svg" alt="" class="dropdown_img invert">
                                     Themes
                                 </div>
                             </a>
         
                             <a onclick="cosmeticSwitcher()" tabindex="0">
-                                <div class="menu_item link_styling secondary_text" style="width: 119px; padding-left: 0; padding-right: 0; text-align: center;">
+                                <div class="menu_item link_styling secondary_text cosmetic_related">
+                                    <img src="./assets/icons/padlock.svg" alt="" class="dropdown_img invert cosmetic_padlock">
+                                    <img src="./assets/icons/cosmetic.svg" alt="" class="dropdown_img invert">
                                     Cosmetics
                                 </div>
                             </a>
@@ -245,7 +253,7 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                            src="./assets/characters/Boomer_Bill.png"
+                            src="./assets/characters/Bill.png"
                             alt="Boomer Bill"
                             id="bill_avatar"
                             class="characterimg"
@@ -265,25 +273,25 @@
                         <!-- Bottom -->
                         <div class="bottom hoecontainer">
 
-                            <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="LevelUp(Boomer_Bill,multibuy[mbsel])" title="Level up" tabindex="0" role="button">
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Bill_level_up" class="levelupimg" alt="Upgrade Boomer Bill" onclick="levelUp(Boomer_Bill,multibuy[mbsel])" title="Level up" tabindex="0" role="button">
                             
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Wooden_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Boomer_Bill,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="bill_wooden_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_0.png" onclick="equipTool(Boomer_Bill,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="bill_wooden_hoe" tabindex="0" role="button">
 
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Stone_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Boomer_Bill,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="bill_stone_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_1.png" onclick="equipTool(Boomer_Bill,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="bill_stone_hoe" tabindex="0" role="button">
 
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Iron_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Boomer_Bill,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="bill_iron_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_2.png" onclick="equipTool(Boomer_Bill,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="bill_iron_hoe" tabindex="0" role="button">
 
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Gold_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Boomer_Bill,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="bill_gold_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_3.png" onclick="equipTool(Boomer_Bill,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="bill_gold_hoe" tabindex="0" role="button">
 
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Diamond_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Boomer_Bill,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="bill_diamond_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_4.png" onclick="equipTool(Boomer_Bill,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="bill_diamond_hoe" tabindex="0" role="button">
 
                             <p class="Bill_Hoe_Number toolnumber" id="Bill_Netherite_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="bill_netherite_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_5.png" onclick="equipTool(Boomer_Bill,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="bill_netherite_hoe" tabindex="0" role="button">
                         </div>
                     </div>
                     <!-- #endregion -->
@@ -303,7 +311,7 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                            src="./assets/characters/BelleBommerette.png"
+                            src="./assets/characters/Belle.png"
                             alt="Belle Boomerette"
                             id="belle_avatar"
                             class="characterimg"
@@ -324,25 +332,25 @@
                         <!-- Bottom -->
                         <div class="bottom hoecontainer">
 
-                            <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="LevelUp(Belle_Boomerette,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Belle_level_up" alt="Upgrade Belle Boomerette" onclick="levelUp(Belle_Boomerette,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Wooden_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_0.png" onclick="EquipHoe(Belle_Boomerette,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="belle_wooden_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_0.png" onclick="equipTool(Belle_Boomerette,0,multibuy[mbsel])" class="toolicon blackedout tool_0" id="belle_wooden_hoe" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Stone_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_1.png" onclick="EquipHoe(Belle_Boomerette,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="belle_stone_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_1.png" onclick="equipTool(Belle_Boomerette,1,multibuy[mbsel])" class="toolicon blackedout tool_1" id="belle_stone_hoe" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Iron_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_2.png" onclick="EquipHoe(Belle_Boomerette,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="belle_iron_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_2.png" onclick="equipTool(Belle_Boomerette,2,multibuy[mbsel])" class="toolicon blackedout tool_2" id="belle_iron_hoe" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Gold_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_3.png" onclick="EquipHoe(Belle_Boomerette,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="belle_gold_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_3.png" onclick="equipTool(Belle_Boomerette,3,multibuy[mbsel])" class="toolicon blackedout tool_3" id="belle_gold_hoe" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Diamond_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_4.png" onclick="EquipHoe(Belle_Boomerette,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="belle_diamond_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_4.png" onclick="equipTool(Belle_Boomerette,4,multibuy[mbsel])" class="toolicon blackedout tool_4" id="belle_diamond_hoe" tabindex="0" role="button">
 
                             <p class="Belle_Hoe_Number toolnumber" id="Belle_Netherite_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_5.png" onclick="EquipHoe(Belle_Boomerette,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="belle_netherite_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_5.png" onclick="equipTool(Belle_Boomerette,5,multibuy[mbsel])" class="toolicon blackedout tool_5" id="belle_netherite_hoe" tabindex="0" role="button">
                         </div>
 
                     </div>
@@ -362,7 +370,7 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                            src="./assets/characters/Gregory.png"
+                            src="./assets/characters/Greg.png"
                             alt="Gregory"
                             id="greg_avatar"
                             class="characterimg"
@@ -388,31 +396,31 @@
                                 <img src="./assets/icons/refresh.svg" alt="" class="greg_spinny">
                             </div>
 
-                            <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="LevelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
+                            <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="levelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
                             
                             <span id="wooden_hoe_price" class="hoe_price greg_margin_fix">Wooden</span>
                             <p class="Greg_Hoe_Number toolnumber greg_margin_fix" id="Greg_Wooden_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_0.png" class="toolicon blackedout greg_margin_fix tool_0" onclick="CreateHoe(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_0.png" class="toolicon blackedout greg_margin_fix tool_0" onclick="createTool(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0" role="button">
 
                             <span id="stone_hoe_price" class="hoe_price">Stone</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_1.png" class="toolicon blackedout tool_1" onclick="CreateHoe(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_1.png" class="toolicon blackedout tool_1" onclick="createTool(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0" role="button">
 
                             <span id="iron_hoe_price" class="hoe_price">Iron</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_2.png" class="toolicon blackedout tool_2" onclick="CreateHoe(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_2.png" class="toolicon blackedout tool_2" onclick="createTool(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0" role="button">
 
                             <span id="gold_hoe_price" class="hoe_price">Gold</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_3.png" class="toolicon blackedout tool_3" onclick="CreateHoe(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_3.png" class="toolicon blackedout tool_3" onclick="createTool(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0" role="button">
 
                             <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_4.png" class="toolicon blackedout tool_4" onclick="CreateHoe(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_4.png" class="toolicon blackedout tool_4" onclick="createTool(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0" role="button">
 
                             <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
-                            <img src="./assets/tools/tool_5.png" class="toolicon blackedout tool_5" onclick="CreateHoe(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0" role="button">
+                            <img src="./assets/tools/tool_5.png" class="toolicon blackedout tool_5" onclick="createTool(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0" role="button">
                             </div>
                             
                             <!-- Progress Bar -->
@@ -535,7 +543,7 @@
                 <!-- #region -->
                 <div class="character_column">
 
-                    <!--Jared Rendering-->
+                    <!--Six Rendering-->
                     <div class="six characterbox char_locked" id="six_box">
                         <div class="char_info" id="six_info">
                             <h2>Six</h2>
@@ -549,7 +557,7 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                                src="./assets/characters/Jared.png"
+                                src="./assets/achievements/missing.png"
                                 alt="six"
                                 id="six_avatar"
                                 class="characterimg"
@@ -565,7 +573,17 @@
 
                         <!-- Bottom -->
                         <div class="bottom shop_bottom">
-                            <div id="six_shop"></div>
+                            <div id="six_shop">
+                                <div class="center">
+                                    <img src="./assets/items/mouse_2.png" alt="" style="height: 48px; width: 48px;">
+                                    <img src="./assets/items/origami.png" alt="" style="height: 48px; width: 48px;">
+                                    <img src="./assets/items/credit.png" alt="" style="height: 48px; width: 48px;">
+                                    <br>
+                                    Interested in some high quality merchandise?
+                                    <br>
+                                    <button style="width: 70%; margin-top: 8px;" onclick="hireSix()">Hire Six <span class="secondary_text">(1b carrots)</span></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -775,7 +793,9 @@
                         <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
                         Themes
                     </button>
-                    <button id="cosmetic_button" onclick="cosmeticSwitcher()">
+                    <button id="cosmetic_button" onclick="cosmeticSwitcher()" class="cosmetic_related">
+                        <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
+                        <img src="./assets/icons/cosmetic.svg" alt="" class="button_icon invert">
                         Cosmetics
                     </button><br><br>
                 </label>
@@ -950,7 +970,10 @@
             <!-- Tabs -->
             <div class="switcher_bar flex">
                 <button class="tab activetab">Themes</button>
-                <button class="tab" onclick="switchSwitchers()" id="cosmetic_tab_button">Cosmetics</button>
+                <button class="tab cosmetic_related" onclick="cosmeticSwitcher()" id="cosmetic_tab_button">
+                    <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
+                    Cosmetics
+                </button>
                 <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             </div>
 
@@ -982,7 +1005,7 @@
         <div id="cosmetic_menu" class="popup_box fancy_switcher">
             <!-- Tab bar -->
             <div class="switcher_bar flex">
-                <button class="tab" onclick="switchSwitchers()" id="theme_tab_button">Themes</button>
+                <button class="tab" onclick="themeSwitcher()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
                 <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
             </div>
@@ -1423,14 +1446,12 @@
             <span class="secondary_text">Pixel Art</span>
             <b>not-the</b>
 
-            <span class="secondary_text">Character Artwork & Worldbuilding</span>
+            <span class="secondary_text">Character Designs & Worldbuilding</span>
             <b>JJCVIP</b>
 
             <span class="secondary_text">Sound Effects & Music</span>
             <b>JJCVIP</b>
 
-            <!-- <span class="secondary_text">LocalStorage & Settings Systems</span>
-            <b>not-the</b> -->
 
 
 
@@ -1446,17 +1467,17 @@
 
 
             <span class="secondary_text">Image Attribution:</span>
-            Carrot, money bag, cookie, and pineapple images from <b>Google's Noto Emoji Icons</b> (Apache License 2.0)
-            <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener noreferrer" >https://github.com/googlefonts/noto-emoji</a>
-            <a target="_blank" href="https://icons8.com/icon/83214/settings">Settings icon</a> from <a target="_blank" href="https://icons8.com">Icons8</a>
-            <a href="https://www.flaticon.com/free-icon/medal_1895474">Medal icon</a> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-            <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">Lightbulb Icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg">PICOL, PIctorial COmmunication Language</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg">Speaker Icon</a> and <a href="https://commons.wikimedia.org/wiki/File:Mute_Icon.svg">Mute Icon</a> by Mobius, Public domain, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.dsvg">Palette icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.svg">Scott de Jonge</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:Faenza-input-keyboard-symbolic.svg">Keyboard icon</a> made by Matthieu James, <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
-
-            Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/">https://andersonseedsmn.com/home/dirt-background/</a>
+            Carrot, money bag, cookie, and pineapple images from <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener noreferrer">Google's Noto Emoji Icons</a> (Apache License 2.0)
+            <a target="_blank" href="https://icons8.com/icon/83214/settings">Settings icon</a> from <a href="https://icons8.com" target="_blank" rel="noopener noreferrer">Icons8</a>
+            <a href="https://www.flaticon.com/free-icon/medal_1895474" target="_blank" rel="noopener noreferrer"">Medal icon</a> made by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer">Freepik</a> from <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer">www.flaticon.com</a>
+            <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg" target="_blank" rel="noopener noreferrer">Lightbulb Icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:PICOL_icon_Light.svg" target="_blank" rel="noopener noreferrer">PICOL, PIctorial COmmunication Language</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank" rel="noopener noreferrer">CC BY 3.0</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg" target="_blank" rel="noopener noreferrer">Speaker Icon</a> and <a href="https://commons.wikimedia.org/wiki/File:Mute_Icon.svg" target="_blank" rel="noopener noreferrer">Mute Icon</a> by Mobius, Public domain, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.dsvg" target="_blank" rel="noopener noreferrer">Palette icon</a> made by <a href="https://commons.wikimedia.org/wiki/File:Map_icons_by_Scott_de_Jonge_-_art-gallery.svg" target="_blank" rel="noopener noreferrer">Scott de Jonge</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank" rel="noopener noreferrer">CC BY 3.0</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:Clothes_hanger_icon_3.svg">Clothes Hanger Icon</a> Paris 16, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:Faenza-input-keyboard-symbolic.svg" target="_blank" rel="noopener noreferrer">Keyboard icon</a> made by Matthieu James, <a href="http://www.gnu.org/licenses/gpl.html" target="_blank" rel="noopener noreferrer">GPL</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg" target="_blank" rel="noopener noreferrer">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:High-contrast-system-lock-screen.svg" target="_blank" rel="noopener noreferrer">Padlock Icon</a>, <a href="http://www.gnu.org/licenses/lgpl.html">LGPL</a>, via Wikimedia Commons
+            Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/" target="_blank" rel="noopener noreferrer">https://andersonseedsmn.com/home/dirt-background/</a>
             
 
             <span class="secondary_text">And thanks to:</span>
@@ -1484,14 +1505,12 @@
     <div id="mouse_confetti"></div>
 
     <!-- Javascript -->
-    <script src="carrot_utilities.js"></script>
-    <script src="gamedata.js"></script>
-    <script src="carrot_clicker.js" ></script>
-    <script src="styling.js" ></script>
-    <script src="user.js" r></script>
     <!-- #region -->
-    <!-- <script crossorigin src="https://not-the.github.io/carrot_utilities/carrot_utillities.js"></script> -->
-
+    <!-- <script src="carrot_utilities.js"></script>
+    <script src="gamedata.js"></script>
+    <script src="carrot_clicker.js"></script>
+    <script src="styling.js"></script>
+    <script src="user.js"></script> -->
     <!-- #endregion -->
 </body>
 </html>

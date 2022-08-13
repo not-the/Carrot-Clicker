@@ -1,25 +1,58 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.16
-    7-31-2022
+    VERSION dev beta 1.16.1
+    8-12-2022
 // ----------------------------------------------------------- //
+
+- Fixed an issue where the level up buttons would highlight incorrectly, as if the character was one level higher (Issue #58)
+- Magic keyboard has gained a secondary ability: clicking on one of Bill or Belle's tools slots when Greg has no tools to give will make him craft one and auto equip it when done.
+- All characters now have new artwork
+- Developer art for the character icons is still available in cosmetic form- Shows up in Carl's shop after the 1_quadrillion_carrots achievement is unlocked
+- Fixed the 1000_cps achievement incorrectly requiring 100,000
+- Minor updates to the credits, and made all links in credits open in a new tab
+- Removed the switchswitchers() function
+- The cosmetic menu is now locked behind Carl
+- Cosmetics buttons now have an icon
+- Character info and cosmetic buttons are now visible at all times
+- Sixth character now has an unlock condition and hire mechanic
+
+- Renamed some functions:
+  + Calculate_Carrots    -> calculateCarrots
+  + Prestige             -> prestige
+  + LevelUp              -> levelUp
+  + CarrotsPerSecond     -> carrotsPerSecond
+  + CreateHoe            -> createTool
+  + HoeCost              -> toolCost
+  + EquipHoe             -> equipTool
+  + DisplayAllHoes       -> updateAllTools
+  + DisplayHoe           -> updateTool (also moved to be inside of updateAllTools)
+  + DecreaseWagesEffects -> decreaseWagesEffects
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.16
+    8-12-2022
+// ----------------------------------------------------------- //
+
 - Rewrote buying tomes code to actually work
 - Created a tome class to handle the tome prototypes and methods
 - Created extension character classes
-- Created a player class(Support for different save files?)
+- Created a player class (Support for different save files?)
 - Completely rewrote prestige potential
-- reworked style of Charles Shop
+- Reworked style of Charles Shop
     -Made text smaller
     -displayed rounded numbers when above 99,999
 - Tool six now give a Massive bonus based on how many hoes of lesser rank you have.
 - Balancing Changes
     - Changes to price scaling
     Greg:
-        Levels 0-25   :0.14 -> 0.21156
-        Levels 25-50  :0.14 -> 0.1874
-        Levels 50-75  :0.21 -> 0.227
-        Levels 75-100 :0.21 -> 0.284
-        Levels 100-125:0.21 -> 0.409
-        Levels 125-∞  :0.21 -> 0.25
+        Levels 0-25    :0.14 -> 0.21156
+        Levels 25-50   :0.14 -> 0.1874
+        Levels 50-75   :0.21 -> 0.227
+        Levels 75-100  :0.21 -> 0.284
+        Levels 100-125 :0.21 -> 0.409
+        Levels 125-∞   :0.21 -> 0.25
         
     - Changes to starting tool prices
       Tool 3: 50,000,000 -> 55,000,000
@@ -34,11 +67,11 @@
 - Added new Feature to Netherite Hoes that makes them give bonuses based on how much other hoes you have
 - Changed the way scripts load so that they load asyncronously and run once the page is finished loading.
 
-  ~JJ
+~ JJ
 
--rewrote earnCarrots function
+- Rewrote earnCarrots function
 
-  ~Kal
+~ Kal
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.15.7

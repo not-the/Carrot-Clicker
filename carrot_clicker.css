@@ -1094,6 +1094,9 @@ body:not(.theme_light) .theme_checkmark {
 #info_dropdown svg {
     max-height: 36px;
 }
+#info_dropdown .flex .menu_item {
+    width: 119px;
+}
 .hover_menu {
     position: absolute;
     z-index: -1;
@@ -1152,12 +1155,12 @@ body:not(.theme_light) .theme_checkmark {
 .dropdown_img {
     image-rendering: unset;
     position: absolute;
-    left: 8px;
-    top: 8px;
+    left: 9px;
+    top: 9px;
     
     opacity: 0.6;
 
-    width: 20px;
+    width: 18px;
 }
 .menu_item:hover .dropdown_img {
     opacity: 1;
@@ -1510,10 +1513,10 @@ body:not(.theme_light) .theme_checkmark {
 
 .char_mini_button {
     width: 16px;
-    filter: invert() opacity(70%);
+    filter: invert() opacity(80%);
     cursor: pointer;
 
-    opacity: 0;
+    opacity: 0.5;
 
     position: absolute;
     transition: opacity 0.05s ease;
@@ -1615,6 +1618,17 @@ body:not(.c_charles) .charles_related,
 body:not(.c_six) .six_related/*,
 body:not(.gp) #golden_carrot_count*/ {
     display: none;
+}
+
+/* Make cosmetics menu appear to be locked */
+.cosmetic_padlock { opacity: 0.4; }
+body:not(.c_six) .cosmetic_related { color: gray; border-color: gray; background-color: rgba(0, 0, 0, 0.15); }
+body:not(.c_six) .cosmetic_related .dropdown_img:not(.cosmetic_padlock),
+body:not(.c_six) .cosmetic_related .button_icon:not(.cosmetic_padlock) { display: none; }
+body.c_six .cosmetic_padlock { display: none; }
+body:not(.c_six) .char_custom_button {
+    content: url(./assets/icons/padlock.svg);
+    opacity: 0.5 !important;
 }
 
 /* Greg */
@@ -1754,6 +1768,7 @@ body:not(.gp) #golden_carrot_count*/ {
 .char_button {
     height: 32px;
     padding: 6px 0;
+    margin-top: 6px;
 }
 /* .six .shop_bottom { max-height: 301px; } */
 
@@ -1813,9 +1828,6 @@ body:not(.gp) #golden_carrot_count*/ {
     padding: 4px 6px;
 
     pointer-events: none;
-}
-.charles_shop_containter{
-    font-size: 12.5pt;
 }
 .tooltip_area:hover .shop_tooltip,
 .tooltip_area:focus .shop_tooltip,
@@ -2385,16 +2397,10 @@ body:not(.gp) #golden_carrot_count*/ {
     background-color: orangered;
 }
 
-/* 
-JJ's Slider for Tips
-Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
-*/
-
+/* HTML Slider */
 .slidecontainer {
     width: 100%; /* Width of the outside container */
 }
-  
-/* The slider itself */
 .slider {
     /* -webkit-appearance: none;
     appearance: none; */
@@ -2411,8 +2417,6 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 .slider:focus-visible {
     outline: -webkit-focus-ring-color auto 1px;
 }
-  
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
 .slider::-webkit-slider-thumb {
     /* -webkit-appearance: none;
     appearance: none; */
@@ -2425,7 +2429,6 @@ Basically ripping off https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
-  
 .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
@@ -2770,11 +2773,6 @@ footer {
     /* Overlay */
     #overlay {
         height: 100vh;
-    }
-    .cosmetics_grid .theme_item,
-    .cosmetics_grid .theme_item .theme_preview {
-        width: 80px;
-        height: 80px;
     }
     #prestige_menu {
         max-height: 360px;

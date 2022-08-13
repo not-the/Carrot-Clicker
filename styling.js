@@ -189,7 +189,7 @@ function closeDialog(doAction, backdrop=false) {
         if(doAction) {
             switch(dialogButtonAction) {
                 case 'prestige':
-                    Prestige();
+                    prestige();
                     break;
                 case 'clearsave':
                     clearSave();
@@ -559,24 +559,6 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 
 
 
-
-/** Theme switcher <-> Cosmetic switcher */
-function switchSwitchers() {
-    buttonSound();
-
-    if(themeSwitcherOpen == true) {
-        themeSwitcherOpen = false;
-        cosmeticSwitcherOpen = true;
-        cosmeticSwitcher();
-        closeThemeSwitcher(true);
-    } else {
-        themeSwitcherOpen = true;
-        cosmeticSwitcherOpen = false;
-        themeSwitcher();
-        closeCosmeticSwitcher(true);
-    }
-}
-
 /* ----- Fancy Theme Switcher ----- */
 /** Opens the theme menu */
 function themeSwitcher() {
@@ -599,6 +581,7 @@ function closeThemeSwitcher(noOverlay = false) {
 var uncollapseNeeded = false;
 /** Opens the cosmetic menu */
 function cosmeticSwitcher(category = false) {
+    if(!characterQuery('carl')) return;
     openMenu();
     cosmeticSwitcherOpen = true;
     cosmeticMenu.classList.add('visible');
@@ -1421,6 +1404,8 @@ function populateCarl() {
 const elSixShop = dom('six_shop');
 /** Populate six's shop */
 function populateSix() {
+    if(characterQuery('six') != true) return;
+
     let html = '';
     let keys = sixShop.keys;
     for(i = 0; i < keys.length; i++) {

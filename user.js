@@ -445,34 +445,34 @@ function keybindHandler(event, state) {
     else if(key == settings.keybinds['key_bill_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Boomer_Bill, equipWaiting, multibuy[mbsel]);
+            equipTool(Boomer_Bill, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip()
         }
         // Level up
         else {
-            LevelUp(Boomer_Bill, multibuy[mbsel]);
+            levelUp(Boomer_Bill, multibuy[mbsel]);
         }
     }
     else if(key == settings.keybinds['key_belle_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
+            equipTool(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip();
         }
         // Level up
         else {
-            LevelUp(Belle_Boomerette, multibuy[mbsel]);
+            levelUp(Belle_Boomerette, multibuy[mbsel]);
         }
     }
     else if(key == settings.keybinds['key_greg_lvlup']) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
-            EquipHoe(Gregory, equipWaiting, multibuy[mbsel]);
+            equipTool(Gregory, equipWaiting, multibuy[mbsel]);
             cancelHoeEquip();
         }
         // Level up
         else {
-            LevelUp(Gregory, multibuy[mbsel]);
+            levelUp(Gregory, multibuy[mbsel]);
         }
     }
 
@@ -482,7 +482,7 @@ function keybindHandler(event, state) {
             // Craft
             if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == false) {
                 // console.log(`key_craft_${i}: Craft`);
-                CreateHoe(i, multibuy[mbsel]);
+                createTool(i, multibuy[mbsel]);
             }
             // Equip
             else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == true) {
@@ -799,7 +799,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
     else if(type == 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
         if(!characterQuery(thingToUnlock)) { charbox.classList.add('char_anim'); }
-        player.characters[thingToUnlock] = true;
+        player.characters[thingToUnlock] = thingToUnlock == 'six' ? 'ready' : true;
         charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
@@ -901,6 +901,7 @@ function buyCarl(type, item, subtype = false) {
 
 /** Buy Trinket  */
 function buySix(id) {
+    if(characterQuery('six') != true) return;
     let item = sixShop[id];
     let data = Six.data[id];
     let price = item.price[data.level];
@@ -917,16 +918,13 @@ function buySix(id) {
 
     // Extra
     if(id == 'page_bonus') { calculatePrestigePotential(); }
-    else if(id == 'greg_min_start') { DisplayAllHoes(); }
-    else if(id == 'level_up_discount') { 
-        recalculatePrices();
-    }
+    else if(id == 'greg_min_start') { updateAllTools(); }
+    else if(id == 'level_up_discount') { recalculatePrices(); }
 }
 
 /** Test if a character is unlocked */
 function characterQuery(char) {
-    if(player.characters.hasOwnProperty(char)) return true;
-    return false;
+    return player.characters[char];
 }
 /** Test if all characters are unlocked */
 function allCharQuery() {
@@ -1066,6 +1064,7 @@ function isDebug() {
                 toast('', 'Devtools: All Cosmetics now available');
             }
             window.allTrinkets = () => {
+                unlock('character', 'six', true);
                 let keys = sixShop.keys;
                 for(i = 0; i < keys.length; i++) {
                     let key = keys[i];
@@ -1466,7 +1465,7 @@ function isDebug() {
     // Restart unfinished crafting job (Greg)
     if(Gregory.crafting != false) {
         console.log('[Greg] Restarting unfinished craft job');
-        try { CreateHoe(...Gregory.crafting); }
+        try { createTool(...Gregory.crafting); }
         catch (error) { console.error(error); }
         
     }
@@ -1544,7 +1543,7 @@ function isDebug() {
     updateCharlesShop();
     pagesCount(false);
     calculatePrestigePotential();
-    DisplayAllHoes();
+    updateAllTools();
     updateHoePrices();
     updateMainIcon();
     populateCarl();

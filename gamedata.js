@@ -106,7 +106,7 @@ const default_tips = {
         "Craft the carrot, Greg.",
         "Study the carrot, Charles.",
         "Paint the carrot, Carl.",
-        // "Sell Carrot Knicknacks, Six",
+        "Sell carrot knicknacks, Six",
     ],
     fun_advanced: [
         "World hunger has been cured, but there must be more we can do.",
@@ -322,12 +322,8 @@ const cosmetics = {
             'image': './assets/theme/santa_charles.png',
             'desc': 'Christmas themed cosmetics',
 
-            // 'farmable': 'default',
             'bill':     'ugly_sweater',
-            // 'belle':    'bill',
-            // 'greg':     'bill',
             'charles':  'santa_charles',
-            // 'carl':     'bill',
         },
         // Bros
         'plumber': {
@@ -337,14 +333,28 @@ const cosmetics = {
             'desc': 'They\'re carpenters',
 
             'bill': 'plumber',
-            // 'belle': 'grandma_belle',
             'greg': 'plumber',
+        },
+        // Developer Art
+        'developer_art': {
+            'name': 'Developer Art',
+            'preview': './assets/theme/developer_art/Bill.png',
+            'desc': 'Original artwork',
+
+            // 'farmable': 'default',
+            'bill':     'developer_art',
+            'belle':    'developer_art',
+            'greg':     'developer_art',
+            'charles':  'developer_art',
+            'carl':     'developer_art',
+            'six':      'developer_art',
+            'tools':    'blockgame',
         },
         // All Bill
         'bill': {
             'name': 'All Bill',
-            'preview': './assets/characters/Boomer_Bill.png',
-            'image': './assets/characters/Boomer_Bill.png',
+            'preview': './assets/characters/Bill.png',
+            'image': './assets/characters/Bill.png',
             'desc': 'One of us',
 
             'farmable': 'bill',
@@ -457,12 +467,12 @@ const cosmetics = {
         // Bill clicker
         'bill': {
             'name': 'Bill',
-            'preview': './assets/characters/Boomer_Bill.png',
+            'preview': './assets/characters/Bill.png',
             'desc': 'Bill',
             'group': 'bill',
 
             'farmable': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
             'render_type': 'pixel',
         },
         // Netherite hoe
@@ -550,7 +560,7 @@ const cosmetics = {
             'group': 'default',
 
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
         'biker_bill': {
             'name': 'Biker Bill',
@@ -611,6 +621,14 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/plumber_bill.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Bill in all his glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Bill.png',
+        },
     },
     belle: {
         'default': {
@@ -619,7 +637,7 @@ const cosmetics = {
             'group': 'default',
 
             'rename': 'Belle',
-            'image': './assets/characters/BelleBommerette.png',
+            'image': './assets/characters/Belle.png',
         },
         'grandma_belle': {
             'name': 'Grandma Belle',
@@ -630,13 +648,21 @@ const cosmetics = {
             'rename': 'Grandma Belle',
             'image': './assets/theme/cookie/grandma_belle.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Belle in all her glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Belle.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'Return to Bill.',
             'group': 'bill',
             
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
     },
     greg: {
@@ -646,7 +672,7 @@ const cosmetics = {
             'group': 'default',
 
             'rename': 'Greg',
-            'image': './assets/characters/Gregory.png',
+            'image': './assets/characters/Greg.png',
         },
         'safety_greg': {
             'name': 'High Vis Greg',
@@ -664,13 +690,21 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/plumber_greg.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Greg in all his glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Greg.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
     },
     charles: {
@@ -697,13 +731,21 @@ const cosmetics = {
             'rename': 'chrles',
             'image': './assets/theme/special_charles.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Charles in all his glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Charles.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
     },
     carl: {
@@ -722,13 +764,21 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/joker_carl.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Carl in all his glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Carl.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
     },
     six: {
@@ -740,13 +790,21 @@ const cosmetics = {
             'rename': 'six',
             'image': './assets/achievements/missing.png',
         },
+        'developer_art': {
+            'name': 'Developer Art',
+            'desc': 'The original Six in all [Six] glory',
+            'group': 'developer_art',
+
+            'rename': false,
+            'image': './assets/theme/developer_art/Six.png',
+        },
         'bill': {
             'name': 'Bill',
             'desc': 'Return to Bill.',
             'group': 'bill',
 
             'rename': 'Bill',
-            'image': './assets/characters/Boomer_Bill.png',
+            'image': './assets/characters/Bill.png',
         },
     },
     tools: {
@@ -790,7 +848,7 @@ const cosmetics = {
         },
         'bill': {
             'name': 'Bill',
-            'preview': './assets/characters/Boomer_Bill.png',
+            'preview': './assets/characters/Bill.png',
             'desc': 'Return to Bill',
             'group': 'bill',
 
@@ -1351,6 +1409,7 @@ const achievements = {
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
         'image': false,
         'reward': [
+            'shop:cosmetic/bundle/developer_art',
             'shop:cosmetic/tools/fertilizer',
             () => { mouseConfetti([24,24], confettiColors, 300) },
         ],
@@ -1633,7 +1692,7 @@ const achievements = {
         'image': false,
         'reward': 'shop:cosmetic/bill/business_bill',
         'pages': 2,
-        'conditions': ['player.cps', 100000],
+        'conditions': ['player.cps', 1000],
         'mystery': {
             'name': true,
             'desc': false,
@@ -2231,7 +2290,7 @@ const achievements = {
             unlock('character', 'six');
         },
         'pages': false,
-        'conditions': ['', true],
+        'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 1000000000', true],
     },
     // 'internal_custom_theme_available': {
     //     'internal': true,
@@ -2320,7 +2379,7 @@ function playerCosmeticsCount() {
 const sixShop = {
     'clickrate': {
         name:      'Golden Mouse',
-        desc:      'Increases hold-to-click speed by 1',
+        desc:      'Increases hold-to-click speed',
         img:       './assets/items/mouse_2.png',
         currency:  'cash',
         price:     [5, 10, 25, 45, 70, 100, 135],
@@ -2345,7 +2404,7 @@ const sixShop = {
         value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
         written:   '+@%',
     },
-    // 'greg_slots': { // scrapped
+    // 'greg_slots': { // scrapped because of how craft speed works
     //     name:      'greg_slots',
     //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
     //     img:       './assets/achievements/missing.png',
@@ -2390,9 +2449,9 @@ const sixShop = {
         value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
         written:   '+@%/page',
     },
-    'spacebar_click': {
+    'magic_keyboard': {
         name:      'Magic Keyboard',
-        desc:      'Allows the use of spacebar and click at the same time',
+        desc:      'Allows the use of spacebar and click at the same time. Secondary ability: you can queue equip a tool if Greg has none ready.', // allows you to single-click to craft & equip tools when Greg has none to give
         img:       './assets/items/keyboard_2.png',
         currency:  'cash',
         price:     [200],
@@ -2401,7 +2460,7 @@ const sixShop = {
     },
     // 'paperclip': {
     //     name:      'Paperclip',
-    //     desc:      '???',
+    //     desc:      'Seems to be useless, aside from holding your papers together. Why would you buy these?',
     //     img:       './assets/achievements/missing.png',
     //     currency:  'cash',
     //     price:     [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
