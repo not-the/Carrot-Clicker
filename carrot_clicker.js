@@ -413,7 +413,7 @@ const Default_Belle_Boomerette = new Farmer(
         { min: 125, modifier: 0.07 },
         { min: 200, modifier: 0.08 },
     ],
-    [0,0,0,0,0,0]
+    [0,0,0,0,0,0],
 );
 const Default_Gregory = new Blacksmith(
     "greg", './assets/characters/Greg.png',
@@ -428,7 +428,7 @@ const Default_Gregory = new Blacksmith(
     ],
     [0,0,0,0,0,0],
     [15000,750000,55000000,9000000000,5000000000000,25000000000000000],
-    false
+    false,
 );
 
 class tome {
@@ -775,12 +775,13 @@ const Default_Six = {
     },
 }
 function hireSix() {
-    if(player.carrots < 1000000000) {
-        toast('More carrots needed', 'Six needs at least 1 billion carrots to move in.');
+    const hireCost = 500000000;
+    if(player.carrots < hireCost) {
+        toast('More carrots needed', 'Six needs at least 500 million carrots to move in.');
         return;
     }
-    player.carrots -= 1000000000;
-    player.characters.six = true;
+    player.carrots -= hireCost;
+    player.characters['six'] = true;
     populateSix();
     toast('Trinkets now available', 'Use cash to buy trinkets with special abilities.');
 }
@@ -1699,7 +1700,7 @@ function carrotsPerSecond() {
  */
 function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     if(amount != 1) return getMultiLevelPrice(character, amount); // Multibuy
-    if(level <= 0 || (level <= 1 && character == Boomer_Bill)) {  // Stop recursion
+    if(level <= 0 || (level <= 1 && character == Boomer_Bill)) { // Stop recursion
         let dp = defaultChar[character.nickname].lvlupPrice;
         return initial ? dp * ((Six.data.level_up_discount.value || 100) / 100) : dp;
     }
@@ -1865,11 +1866,9 @@ function prestige() {
     
     // Temporary boost handler
     let boosted = 1;
-    if(character == Boomer_Bill) {
-        boosted = boostEffects.cpc;
-    } else if(character == Belle_Boomerette) {
-        boosted = boostEffects.cps;
-    }
+    if(character == Boomer_Bill) boosted = boostEffects.cpc;
+    else if(character == Belle_Boomerette) boosted = boostEffects.cps;
+
     //returns the correct value
     if(cpHoes>0) return (1.1 * iwc) * character.lvl * cpHoes * boosted * SixToolBonus;
     else return (1.1 * iwc) * character.lvl * boosted * SixToolBonus;
@@ -1930,16 +1929,9 @@ function recalculatePrices() {
  * @param {string} mode Options: "query" or "apply"
  * @returns The calculated price
  */
-
-
 function decreaseWagesEffects(){
-    if(Charles.decreaseWages.value<1000){
-        return((Math.pow(Math.log(Charles.decreaseWages.value+1),3)/318.114));
-    }else if(Charles.decreaseWages.value<1000){
-        return((Math.pow(Math.log(Charles.decreaseWages.value+1),2)/69.077553));
-    }else{
-        return (Math.log(Charles.decreaseWages.value+1)/10);
-    }
+    if(Charles.decreaseWages.value==false) return 0;
+    return Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146;
 }
 //#endregion
 

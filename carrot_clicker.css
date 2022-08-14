@@ -60,9 +60,6 @@
 
     /* Dark scrollbar (also changes other unstyled elements */
     /* color-scheme: dark; */
-	
-    /* info panel width */
-    --tab-percent: 33.33%;
 }
 
 /* Scrollbar */
@@ -1612,9 +1609,9 @@ body:not(.theme_light) .theme_checkmark {
 
 /* body:not(.c_bill) .bill_related, */
 body:not(.c_belle) .belle_related,
-body:not(.c_carl) .carl_related,
 body:not(.c_greg) .greg_related,
 body:not(.c_charles) .charles_related,
+body:not(.c_carl) .carl_related,
 body:not(.c_six) .six_related/*,
 body:not(.gp) #golden_carrot_count*/ {
     display: none;
@@ -1622,11 +1619,11 @@ body:not(.gp) #golden_carrot_count*/ {
 
 /* Make cosmetics menu appear to be locked */
 .cosmetic_padlock { opacity: 0.4; }
-body:not(.c_six) .cosmetic_related { color: gray; border-color: gray; background-color: rgba(0, 0, 0, 0.15); }
-body:not(.c_six) .cosmetic_related .dropdown_img:not(.cosmetic_padlock),
-body:not(.c_six) .cosmetic_related .button_icon:not(.cosmetic_padlock) { display: none; }
-body.c_six .cosmetic_padlock { display: none; }
-body:not(.c_six) .char_custom_button {
+body:not(.c_carl) .cosmetic_related { color: gray; border-color: gray; background-color: rgba(0, 0, 0, 0.15); }
+body:not(.c_carl) .cosmetic_related .dropdown_img:not(.cosmetic_padlock),
+body:not(.c_carl) .cosmetic_related .button_icon:not(.cosmetic_padlock) { display: none; }
+body.c_carl .cosmetic_padlock { display: none; }
+body:not(.c_carl) .char_custom_button {
     content: url(./assets/icons/padlock.svg);
     opacity: 0.5 !important;
 }
@@ -2003,20 +2000,19 @@ body:not(.c_six) .char_custom_button {
 
 /* Notifications section */
 #tripane {
-    max-width: 1150px;
-    position: relative;
-    width: 100%;
-    /* height: 700px; */
-    /* height: calc(100vh - 50px); */
-    min-width: 270px;
-    min-height: 85vh;
-    /* margin: 24px auto 80px; */
-    margin: 24px auto 0;
-    padding: 0;
     background-color: var(--brown-bg-color);
-
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
     border-radius: 16px 16px 0 0;
+    
+    width: 100%;
+    min-width: 270px;
+    max-width: 1150px;
+    /* max-width: 780px; */
+    min-height: 85vh;
+    
+    position: relative;
+    margin: 24px auto 0;
+    padding: 0;
 }
 #tripane h1 {
     margin-bottom: 8px;
@@ -2026,24 +2022,27 @@ body:not(.c_six) .char_custom_button {
     margin: 0 auto;
     background-color: var(--brown-bg-color);
     border-radius: 16px 16px 0 0;
+    /* padding: 1px solid transparent; */
 
     position: sticky;
     z-index: 3;
     top: 36px;
 }
 #tripane nav .tab {
-    width: var(--tab-percent);
+    width: 100%;
     height: 2.3em;
     cursor: pointer;
-    background-color: rgb(53, 42, 34);
+    background-color: var(--brown-darkest-color);
     border: none;
     border-radius: 0 !important;
-    border-left: 1px solid var(--brown-darker-color);
-    border-right: 1px solid var(--brown-darker-color);
     margin-top: 0;
     margin-bottom: 0;
 
     position: relative;
+}
+#tripane nav .tab:nth-of-type(2n) {
+    border-left: 1px solid var(--brown-darker-color);
+    border-right: 1px solid var(--brown-darker-color);
 }
 .tab:hover {
     transform: translateY(-2px);
@@ -2075,8 +2074,6 @@ body:not(.c_six) .char_custom_button {
 /* Info panel */
 .panel {
     position: absolute;
-    /* height: 667px; */
-    /* height: calc(100vh - 83px); */
     min-height: 85vh;
     height: min-content;
     width: 100%;
@@ -2355,10 +2352,21 @@ body:not(.c_six) .char_custom_button {
 
 
 /* Statistics */
-#statistics p, #statistics summary {
+#statistics p,
+#statistics summary {
+    /* background-color: var(--brown-darkest-color); */
     color: var(--secondary-text);
+    /* margin-bottom: 1px; */
+
+    height: 24px;
     font-style: italic;
     padding-right: 8px;
+    /* padding: 2px 10px; */
+
+    /* border-radius: 6px; */
+}
+#statistics summary:hover {
+    filter: brightness(125%);
 }
 #statistics b {
     color: white;

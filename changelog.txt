@@ -1,3 +1,20 @@
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.16.2
+    8-13-2022
+// ----------------------------------------------------------- //
+
+- Fixed a mistake where cosmetics would appear to be locked until Six became available instead of Carl
+- Removed and reduced the page rewards for a number of early game achievements
+- Fixed Six not staying unlock after a game restart
+
+~ Kal
+
+- Replaced decreaseWagesEffects() with an improved version
+
+~ JJ
+
+
 // ----------------------------------------------------------- //
     VERSION dev beta 1.16.1
     8-12-2022

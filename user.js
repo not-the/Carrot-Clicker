@@ -799,7 +799,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
     else if(type == 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
         if(!characterQuery(thingToUnlock)) { charbox.classList.add('char_anim'); }
-        player.characters[thingToUnlock] = thingToUnlock == 'six' ? 'ready' : true;
+        player.characters[thingToUnlock] = thingToUnlock == 'six' && player.characters[thingToUnlock] != true ? 'ready' : true;
         charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);

@@ -80,7 +80,7 @@ const default_tips = {
         "Only YOU can save the carrots!",
         "Carrots have been proven to improve eyesight by 150%. It's true!",
         "Carrots are your friend",
-        "JJ broke it", // "Only the best code",
+        "Only the best code", // originally "JJ broke it",
         "Carrot Clicker is mobile-friendly!",
         "Click the carrot, Bill.",
         "Wait for the carrot to grow, Belle.",
@@ -1170,7 +1170,7 @@ const achievements = {
         'desc': 'Upgrade every (upgradeable) character at least once',
         'image': './assets/achievements/3_heads.png',
         'reward': ['shop:theme/theme_red', 'shop:theme/theme_green', 'shop:theme/theme_blue'],
-        'pages': 3,
+        'pages': false,
         'conditions': [
             ['Boomer_Bill.lvl',      2],
             ['Gregory.lvl',          1],
@@ -1291,7 +1291,7 @@ const achievements = {
         'desc': 'Upgrade Gregory to level 25',
         'image': false,
         'reward': false,
-        'pages': 2,
+        'pages': false,
         'conditions': ['Gregory.lvl', 25],
         'mystery': {
             'name': true,
@@ -1346,7 +1346,7 @@ const achievements = {
             'shop:theme/theme_camo',
             () => { mouseConfetti([24,24], confettiColors, 300) },
         ],
-        'pages': 2,
+        'pages': false,
         'conditions': ['player.lifetime.carrots', 401000],
         'mystery': {
             'name': true,
@@ -1360,7 +1360,7 @@ const achievements = {
         'desc': 'Earn your 1 millionth carrot',
         'image': './assets/achievements/1_million_carrots.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
-        'pages': 2,
+        'pages': 1,
         'conditions': ['player.lifetime.carrots', 1000000],
         'mystery': {
             'name': true,
@@ -1647,7 +1647,7 @@ const achievements = {
         'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
         'image': './assets/achievements/9000.png',
         'reward': 'shop:theme/theme_chatapp',
-        'pages': 2,
+        'pages': 1,
         'conditions': ['player.cpc', 9000],
         'mystery': {
             'name': true,
@@ -1661,7 +1661,7 @@ const achievements = {
         'desc': 'Get your Carrots Per Click (CPC) to 1 billion',
         'image': false,
         'reward': false,
-        'pages': 3,
+        'pages': 2,
         'conditions': ['player.cpc', 1000000000],
         'mystery': {
             'name': true,
@@ -1675,7 +1675,7 @@ const achievements = {
         'desc': 'Get your Carrots Per Click (CPC) to 1 trillion',
         'image': false,
         'reward': false,
-        'pages': 4,
+        'pages': 3,
         'conditions': ['player.cpc', 1000000000000],
         'mystery': {
             'name': true,
@@ -1691,7 +1691,7 @@ const achievements = {
         'desc': 'Produce 1,000 carrots every second',
         'image': false,
         'reward': 'shop:cosmetic/bill/business_bill',
-        'pages': 2,
+        'pages': false,
         'conditions': ['player.cps', 1000],
         'mystery': {
             'name': true,
@@ -2290,7 +2290,7 @@ const achievements = {
             unlock('character', 'six');
         },
         'pages': false,
-        'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 1000000000', true],
+        'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 500000000', true],
     },
     // 'internal_custom_theme_available': {
     //     'internal': true,
