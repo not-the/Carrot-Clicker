@@ -240,6 +240,36 @@ function getLevelPrice(character=Boomer_Bill, amount=1, mode="query"){
 //     }
 // }
 
+*in EquipTool function
+    // Animate
+    // var from =      elHoes['greg'][type];
+    // var to =        elHoes[character.nickname][type];
+    // var rect_from = from.getBoundingClientRect();
+    // var rect_to =   to.getBoundingClientRect();
+
+    // // Create
+    // var clone = document.createElement('img');
+    // clone.src = from.src;
+
+    // // Move to start
+    // clone.style.transform = `translate(${rect_from.left}px, ${rect_from.top}px)`;
+    // clone.className = 'toolicon';
+    // mcContainer.append(clone);
+
+    // // Move to destination
+    // setTimeout(() => {
+    //     console.log(clone.style.transform);
+    //     clone.style.transform = `translate(${rect_to.left.toFixed(1)}px, ${rect_to.top.toFixed(1)}px))`;
+    //     console.log(clone.style.transform);
+    //     console.log(`translate(${rect_to.left}px, ${rect_to.top}px))`);
+    //     clone.style.width = '32px';
+    //     clone.style.hoeImg = '32px';
+    // }, 20);
+
+    // Delete
+    // setTimeout(() => {
+    //     clone.remove();
+    // }, 500);
 
 
 /------------styling.js-------------/

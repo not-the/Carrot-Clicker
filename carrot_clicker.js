@@ -187,48 +187,6 @@ class Player{
         this.flags=flags;
 
     }
-    static earnClickedCarrots(amount){
-        //updates values
-        player.carrots, player.prestige.carrots, player.lifetime.carrots, 
-        player.lifetime.click_carrots += amount;
-        player.lifetime.clicks ++;
-        //updates page
-        carrotCount();
-        characterButtons();
-        calculatePrestigePotential();
-    }
-
-    static earnIdleCarrots(amount){
-        //updates values
-        player.carrots, player.prestige.carrots, player.lifetime.carrots, 
-        player.prestige.idle_carrots, player.lifetime.idle_carrots += amount;
-        //updates page
-        carrotCount();
-        characterButtons();
-        calculatePrestigePotential();
-    }
-    static earnBonusCarrots(amount,useMousePos=false){
-        //popupHandler
-        popupHandler(useMousePos, DisplayRounded(amount, 1), 'falling');
-        //updates values
-        player.prestige.bonus_carrots, player.lifetime.bonus_carrots += amount;
-        player.prestige.falling_carrots_grabbed, player.lifetime.falling_carrots_grabbed ++;
-        //updates page
-        carrotCount();
-        characterButtons();
-        calculatePrestigePotential();
-    }
-
-    static earnCash(amount, type) {
-        switch (type) {
-            case "bonus": popupHandler(true, amount, 'cash');
-                break;
-            default: popupHandler(false, amount, 'cash');
-        }
-        player.cash += amount;
-        player.lifetime.cash += amount;
-        cashCount(true);
-    }
 }
 
 class statsTracker{
@@ -1091,7 +1049,7 @@ const default_settings = {
     cosmetics_grid: true,       // boolean
     achievements_grid: false,   // boolean
     compact_achievements: false,// boolean
-    fun_tip_percentage: 50,     // number - between 0 and 100
+    fun_tip_percentage: 40,     // number - between 0 and 100
 
     keybinds: keybinds_default, // object
 }
@@ -1128,8 +1086,8 @@ const multibuy = [1,10,100]; // multibuy multipliers
 var mbsel      = 0;          // multi-buy selector
 /** Cycles multibuy amount */
 function multibuySpin() {
-    if(multibuy[multibuy.length-1] > multibuy[mbsel]) { mbsel++; }
-    else { mbsel=0; }
+    if(multibuy[multibuy.length-1] > multibuy[mbsel]) mbsel++;
+    else mbsel=0;
 
     // Update page
     characterPrices();
@@ -1145,6 +1103,7 @@ function multibuySpin() {
         player.flags['tutorial_multibuy'] = true;
     }
 }
+
 
 /** Clears localStorage
  * @param {Boolean} disableReload 
@@ -1220,11 +1179,8 @@ function earnCarrots(amount, type, useMousePos = false) {
  * @param {string} type 'bonus' will use mouse position
  */
 function earnCash(amount, type) {
-    if(type == 'bonus') {
-        popupHandler(true, amount, 'cash');
-    } else {
-        popupHandler(false, amount, 'cash');
-    }
+    if(type == 'bonus') popupHandler(true, amount, 'cash');
+    else popupHandler(false, amount, 'cash');
 
     player.cash += amount;
     player.lifetime.cash += amount;
@@ -1318,12 +1274,9 @@ function fallingCarrot() {
     // Roll
     let roll = Math.ceil((Math.random() * 100));
     let rollchance = boostEffects['fc_chance']; // 1% chance
-    if(roll <= rollchance /*&& fallingActive < 4*/ || fallingCarrotPromiser >= 100) {
-        fallingCarrotPromiser = 0;
-    } else {
-        fallingCarrotPromiser++;
-        return;
-    }
+
+    if(roll <= rollchance /*&& fallingActive < 4*/ || fallingCarrotPromiser >= 100) fallingCarrotPromiser = 0; 
+    else return fallingCarrotPromiser++;
     
     // Create element
     var element = document.createElement("img");
@@ -1373,16 +1326,12 @@ function fallingCarrot() {
     element.classList.add('bright_200');
 
     setTimeout(() => {
-        if(dom(element.id) != null) {
-            dom(element.id).remove();
-            // fallingActive--;
-        }
+        if(dom(element.id) != null) dom(element.id).remove();
     }, 2600);
 
     /** Grant reward when falling carrot is caught */
     function catchCarrot(id, type, amount) {
         dom(id).remove();
-        // fallingActive--;
         fallingConsecutive++;
         if(fallingConsecutive > player.fallingConsecRecord || player.fallingConsecRecord == undefined) {
             player.fallingConsecRecord = fallingConsecutive;
@@ -1391,7 +1340,6 @@ function fallingCarrot() {
         if(type == 'carrot') {
             if(player.flags['hardcore']) {
                 amount *= -1;
-                // screenShake();
             };
             earnCarrots(amount, 'bonus', true);
             mouseConfetti([6, 8], ccCarrot, 300);
@@ -1404,6 +1352,7 @@ function fallingCarrot() {
         fallingCarrot(); // Roll again
     }
 }
+
 
 /* ----------------------Page Manipulation Functions------------------------*/
 //#region 
@@ -1787,6 +1736,10 @@ function prestige() {
     player.lifetime.golden_carrots += player.prestige_potential;
     player.lifetime.prestige_count += 1;
 
+    //stop any hoes from crafting
+    clearInterval(craftingInterval);
+    setTimeout(updateCraftingBar, 90);
+
     // Reset characters to default
     [
         Boomer_Bill.lvlupPrice,
@@ -1988,25 +1941,28 @@ function gregLevelTest(type, minusone = true) {
 }
 
 var currently_crafting = 0;
+var craftingInterval;
 /** Craft tool (Greg)
  * @param {number} type Tool ID
  * @param {number} amount Amount to craft
  * @param {number} progress Value given if the game is started and an unfinished crafting job is found in the save file
  * @returns If a condition for crafting (such as cost) is not met
  */
-function createTool(type=0, amount=1, progress=0, intended_character=false) {
+ function createTool(type=0, amount=1, progress=0, intended_character=false) {
     // Greg unlock check
-    if(!characterQuery('greg')) return;
+    if(!characterQuery('greg')) return "Greg is not unlocked yet";
 
     // Return if a hoe is already in progress
-    if(currently_crafting == 1) return;
+    if(currently_crafting == 1) return "Tool is already being crafted";
 
     // Checks if Greg is Experienced Enough to Purchase a Hoe.
     if(gregLevelTest(type)) {
         let required = type >= 1 ? (type*25) : 1;
-        toast("Unable to craft", `Greg too inexperienced. Greg must be at least Level: ${required} to create this tool`, '', false, true);
-        return;
+        return toast("Unable to craft", `Greg too inexperienced. Greg must be at least Level: ${required} to create this tool`, '', false, true);
     }
+
+    // Checks to see if Greg Can Hold more of this Type
+    if(Gregory.Hoes[type]+amount-1>= Gregory.lvl) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
 
     let price = toolCost(type,amount);
     // Checks if Hoe is Too expensive
@@ -2015,112 +1971,97 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
         return;
     }
 
-    // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type]+amount-1>= Gregory.lvl) {
-        toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
-        return;
-    }
-
     // Craft tool
-    if(currently_crafting != 0) return;
-    currently_crafting=1;
+    if(currently_crafting != false) return;
+    currently_crafting=true;
     toolCost(type,amount,"apply"); 
     //Creates Hoe And Displays Progress Bar
-    var i = 0;
-    if (i == 0) {
-        i = 1;
-        var p = progress;
 
-        // Main progress bar
-        if(settings.enableMainProgress == true) elMainProgressContainer.classList.add('status_tidbit_in');
-        dom('main_progress_image').src = hoeImg(type);
-        
-        // Greg info
-        dom('greg_progress_image').src = hoeImg(type);
-        dom('greg_crafting_info').classList.remove('inactive');
-        dom('greg_crafting_info').title = 'Crafting...';
-        // mouseConfetti([1, 4], ccWhite);
+    // Main progress bar
+    if(settings.enableMainProgress == true) elMainProgressContainer.classList.add('status_tidbit_in');
+    dom('main_progress_image').src = hoeImg(type);
+    
+    // Greg info
+    dom('greg_progress_image').src = hoeImg(type);
+    dom('greg_crafting_info').classList.remove('inactive');
+    dom('greg_crafting_info').title = 'Crafting...';
+    // mouseConfetti([1, 4], ccWhite);
 
-        // Run crafting loop
-        var id = setInterval(frame, 100);
-        function frame() {
-            // While crafting
-            if(p < price) {
-                let adjust = ((Six.data.greg_speed.value / 100) || 0.01) * player.carrots;
-                p += adjust;
-                player.carrots -= adjust;
-                Gregory.crafting = [type, amount, p]; // Save crafting progress in case of page refresh
-
-                // Update page
-                elGregProgress.style.width = `${Math.ceil(100*(p/price))}%`;
-                if(settings.enableMainProgress == true) {
-                    elMainProgressBar.style.opacity = '1';
-                    elMainProgressBar.style.width  = `${Math.ceil(100*(p/price))}%`;
-                }
-                // eInnerText(elClickSpeed, `${DisplayRounded(p)}/${DisplayRounded(price)}`);
-            }
-            // Done crafting
-            if(p >= price) {
-                clearInterval(id);
-                i = 0;
-                player.carrots+=p-price;
-                p = 0;
-
-                // Give item and reset
-                Gregory.Hoes[type] += amount;
-                currently_crafting = 0;
-
-                // Statistics
-                player.prestige.hoes.crafted[type] += amount;
-                player.prestige.hoes.craftedTotal  += amount;
-                player.lifetime.hoes.crafted[type] += amount;
-                player.lifetime.hoes.craftedTotal  += amount;
-                Gregory.crafting = false;
-
-                // Update page
-                setTimeout(() => {
-                    // Greg progress
-                    elGregProgress.style.width = "0%";
-
-                    // Main progress
-                    if(settings.enableMainProgress == true) { elMainProgressBar.style.width = "0%"; }
-                    elMainProgressContainer.classList.remove('status_tidbit_in');
-                    // dom('greg_crafting_info').style.opacity = '0';
-                    dom('greg_crafting_info').classList.add('inactive');
-                    dom('greg_crafting_info').title = 'Idle';
-                }, 100);
-
-                if(intended_character != false) equipTool(intended_character, type, amount);
-            }
-
-        }
+    // Run crafting loop
+    craftingInterval = setInterval(frame, 100);
+    function frame() {
+        // While crafting
+        if(progress < price) craft();
+        // Done crafting
+        if(progress >= price) whenDone();
     }
 
-    // Update page
-    updateAllTools();
+    function craft(){
+        let adjust = ((Six.data.greg_speed.value / 100) || 0.01) * player.carrots;
+        progress += adjust;
+        player.carrots -= adjust;
+        Gregory.crafting = [type, amount, progress]; // Save crafting progress in case of page refresh
+
+        // Update page
+        elGregProgress.style.width = `${Math.ceil(100*(progress/price))}%`;
+        if(settings.enableMainProgress == true) {
+            elMainProgressBar.style.opacity = '1';
+            elMainProgressBar.style.width  = `${Math.ceil(100*(progress/price))}%`;
+        }
+        // eInnerText(elClickSpeed, `${DisplayRounded(p)}/${DisplayRounded(price)}`);
+    }
+
+    function whenDone(){
+        clearInterval(craftingInterval);
+        player.carrots+=progress-price;
+        progress = 0;
+
+        // Give item and reset
+        Gregory.Hoes[type] += amount;
+        currently_crafting = 0;
+
+        // Statistics
+        player.prestige.hoes.crafted[type] += amount;
+        player.prestige.hoes.craftedTotal  += amount;
+        player.lifetime.hoes.crafted[type] += amount;
+        player.lifetime.hoes.craftedTotal  += amount;
+        Gregory.crafting = false;
+
+        if(intended_character != false) equipTool(intended_character, type, amount);
+
+        // Update page
+        setTimeout(updateCraftingBar, 90);
+    }
+}
+function updateCraftingBar(){
+    // Greg progress
+    elGregProgress.style.width = "0%";
+
+    // Main progress
+    if(settings.enableMainProgress == true) { elMainProgressBar.style.width = "0%"; }
+    elMainProgressContainer.classList.remove('status_tidbit_in');
+    // dom('greg_crafting_info').style.opacity = '0';
+    dom('greg_crafting_info').classList.add('inactive');
+    dom('greg_crafting_info').title = 'Idle';
+    //page updates
+    updateAllTools(); 
     updateHoePrices();
 }
-
 /** Equips a tool to a Character
  * @param {object} character Character object
  * @param {number} type Tool ID
  * @param {number} amount 
  * @returns If there is any reason that hoe type can't be equipped
  */
-function equipTool(character=Boomer_Bill, type=0, amount=1){
-    if(!characterQuery('greg') || !characterQuery(character.nickname)) return; // Greg/target character unlock check
+ function equipTool(character=Boomer_Bill, type=0, amount=1){
+    if(!characterQuery('greg') || !characterQuery(character.nickname)) return "Character not unlocked"; // Greg/target character unlock check
 
     // Ensure Gregory has enough to give
     if(Gregory.Hoes[type] < amount) {
         if(Gregory.Hoes[type] > 0) amount = Gregory.Hoes[type]; // If multibuy, transfer remaining
-        else if(Six.data.magic_keyboard.value) {
-            createTool(type, amount, 0, character); // Queue equip
-            return;
-        }
+        else if(Six.data.magic_keyboard.value) return createTool(type, amount, 0, character); // Queue equip
         else return; // Not enough
     };
-
-    // Six.data.magic_keyboard.value
 
     // Check if Greg is high enough level to equip
     if(character.Hoes[type]+amount-1>=Gregory.lvl) { 
@@ -2135,42 +2076,12 @@ function equipTool(character=Boomer_Bill, type=0, amount=1){
     Gregory.Hoes[type]   -= amount;
 
     // Recalculate CPC/CPS
-    if(character==Boomer_Bill)           {player.cpc = calculateCarrots(Boomer_Bill);}
-    else if(character==Belle_Boomerette) {player.cps = calculateCarrots(Belle_Boomerette);}
+    if     (character==Boomer_Bill) player.cpc = calculateCarrots(Boomer_Bill);
+    else if(character==Belle_Boomerette) player.cps = calculateCarrots(Belle_Boomerette);
 
     // Update page
     updateCPC();
     updateAllTools();
-
-    // Animate
-    // var from =      elHoes['greg'][type];
-    // var to =        elHoes[character.nickname][type];
-    // var rect_from = from.getBoundingClientRect();
-    // var rect_to =   to.getBoundingClientRect();
-
-    // // Create
-    // var clone = document.createElement('img');
-    // clone.src = from.src;
-
-    // // Move to start
-    // clone.style.transform = `translate(${rect_from.left}px, ${rect_from.top}px)`;
-    // clone.className = 'toolicon';
-    // mcContainer.append(clone);
-
-    // // Move to destination
-    // setTimeout(() => {
-    //     console.log(clone.style.transform);
-    //     clone.style.transform = `translate(${rect_to.left.toFixed(1)}px, ${rect_to.top.toFixed(1)}px))`;
-    //     console.log(clone.style.transform);
-    //     console.log(`translate(${rect_to.left}px, ${rect_to.top}px))`);
-    //     clone.style.width = '32px';
-    //     clone.style.hoeImg = '32px';
-    // }, 20);
-
-    // Delete
-    // setTimeout(() => {
-    //     clone.remove();
-    // }, 500);
 }
 
 /** Update all tools on page */
@@ -2257,12 +2168,13 @@ function seeButton(button = 'prestige') {
 
 //#endregion
 
+
 // Game loop (temporary)
 setInterval(() => {
+    updateAllTools();
     carrotCount();
     updateCPC();
-    updateAllTools();
-}, 250);
+}, 300);
 
 
 /*-----------------Statistics-----------------*/
@@ -2378,55 +2290,31 @@ var tipInterval = setInterval(() => {tipchange()}, 15000);
 
 /** Randomly choose a new tip to display in the status bar */
 function tipchange() {
-    if(menuOpen()) return;
+    if(menuOpen()) return 'Can\'t Choose new Tip; Menu Open';
     
     clearInterval(tipInterval);
     tipInterval = setInterval(() => {tipchange()}, 15000);
     
     // Tracker - determine tips level
-    if(player.equippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) {
-        tips.tracker = 1; // 1 tool equipped or 100k
-    } else if(player.prestige.carrots > 1000000 && tips.tracker == 1) {
-        tips.tracker = 2; // 1 million
-    } else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) {
-        tips.tracker = 3; // 1 billion
-    }
+    if(player.equippedHoes > 0 || player.prestige.carrots > 100000 && tips.tracker == 0) tips.tracker = 1; // 1 tool equipped or 100k
+    else if(player.prestige.carrots > 1000000 && tips.tracker == 1) tips.tracker = 2; // 1 million
+    else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) tips.tracker = 3; // 1 billion
 
     // Update best
-    if(tips.tracker > tips.best) { tips.best = tips.tracker; }
+    if(tips.tracker > tips.best) tips.best = tips.tracker;
 
-    // 20% chance a lower level tip will appear (and another chance within that that a current-level tip will appear)
-    // console.log(tips.tracker);
-    let roll = Math.floor(Math.random() * 5);
-    if(roll == 0) {
-        let t_roll = Math.floor(Math.random() * tips.tracker);
-        tips.tracker = t_roll;
-    }
-    // console.log(tips.tracker);
+    // 20% chance any tip tier can appear 
+    if(Math.random < 0.15) tips.tracker = Math.floor(Math.random() * tips.tracker);
     
-    // Decides if the tip will be real or fun.
-    tips.random = Math.random();
-    tips.type = tips.random < settings.fun_tip_percentage / 100 ? "fun" : "real";
+    // Decides if the tip will be real or fun. 
+    tips.type = Math.random() < settings.fun_tip_percentage / 100 ? "fun" : "real";
 
     // Determine and display the tip
     let type = tips.type == "fun" ? 'fun_' : '';
     type += tl[tips.tracker];
 
     // Roll tip
-    var rmax = 0;
-    function tiproll() {
-        let r = Math.floor(Math.random() * tips[type].length);
-        // Repeat, reroll- prevent recursion by stopping at 10 rolls
-        if(tips.number == r && rmax < 3) {
-            rmax++;
-            tiproll();
-            return;
-        };
-        tips.number = r;
-        rmax = 0;
-    }
-    tiproll();
-
+    tips.number = Math.floor(Math.random() * tips[type].length);
 
     // Page
     elTips.innerText = tips[type][tips.number];
