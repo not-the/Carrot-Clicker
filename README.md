@@ -3,8 +3,8 @@
 
 Clicker game themed around carrots
 
-https://not-the.github.io/Carrot-Clicker/
-
+| https://carrot.notkal.com/ | [Issues](https://github.com/not-the/Carrot-Clicker/issues) | [Projects](https://github.com/not-the/Carrot-Clicker/projects/1) |
+|---|---|---|
 
 ## Credits:
 
