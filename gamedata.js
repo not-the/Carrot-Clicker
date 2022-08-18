@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.2';
+    const game_version = 'dev beta v1.16.4';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -10,10 +10,14 @@
 //#region
 // Dialog templates
 const dialog = {
-    prestige_confirm: ['Are you sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', 'prestige'],
-    clearsave: ['Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', 'clearsave'],
-    settings_reset: ['Are you sure?', 'All settings will be returned to their default values', 'OK', '', 'resetsettings'],
-    jjcvip: ['Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', 'jjcvip'],
+    prestige_confirm: ['Are you sure you want to Prestige?', 'Your carrots, tools, and upgrades will be lost, but you will gain the ability to buy farm upgrades in the form of tomes.', 'Prestige', 'button_gold', () => { prestige(); closeDialog(); }],
+    clearsave: ['Are you sure?', 'Your progress will be lost forever!', 'Delete Save Data', 'button_red', () => { clearSave(); closeDialog(); }],
+    settings_reset: ['Are you sure?', 'All settings will be returned to their default values', 'OK', '', () => {
+        resetSettings();
+        toast('Settings Reset', 'All settings returned to defaults');
+        closeDialog();
+    }],
+    jjcvip: ['Are you sure you want to CARROT?', 'All of your CARROT will be lost.', 'Carrot', 'button_orange', () => { earnCarrots(1, 'bonus'); closeDialog(); }],
 }
 // Toast templates
 const infot = ['', true, true];
@@ -29,7 +33,12 @@ const toasts = {
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
     tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
     tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the boosts bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
+    tutorial_charles: ['Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming,', '', true, false, false, true],
     // tutorial_golden_carrots is in carrot_clicker.js
+
+    // Misc
+    notice_trinkets: ['Trinkets now available', 'Use cash to buy trinkets with special abilities.'],
+    error_six_hire_cost: ['More carrots needed', 'Six needs at least 500 million carrots to move in.'],
 }
 //#endregion
 
@@ -151,6 +160,7 @@ const themes = {
         image:    './assets/theme/theme_dark.png',
         desc:     'Default dark',
         cosmetic: false,
+        accent:   '#312e2e',
     },
     'theme_light': {
         name:     'Light Theme',
@@ -171,7 +181,6 @@ const themes = {
         image:    './assets/theme/theme_grey.png',
         desc:     'Makes brown UI elements use grey instead',
         cosmetic: false,
-        accent:   '#455779',
     },
     'theme_classic': {
         name:     'Carrot Clicker Classic',
@@ -235,7 +244,6 @@ const themes = {
         desc:     'Become 1337 hax0r',
         cosmetic: 'farmable/ascii',
         accent:   '#0c0c0c',
-        no_backdrop_click: true,
     },
     'theme_chatapp': {
         name:     'Chat App',
@@ -243,7 +251,6 @@ const themes = {
         desc:     '"how do i find #general"',
         cosmetic: false,
         accent:   '#202225',
-        no_backdrop_click: true,
     },
     // 'theme_xp': {
     //     name:     'Doors Experience',
@@ -258,7 +265,6 @@ const themes = {
         desc:     'Does it violate copyright if this is just a hobby project with no ads? Genuine question',
         cosmetic: 'bundle/blockgame',
         accent:   '#3c2a1d',
-        no_backdrop_click: true,
     },
     // 'theme_custom': {
     //     name: 'Custom Theme',
@@ -979,6 +985,38 @@ const achievements = {
             'noToast': false,
         }
     },
+    'themery': {
+        'name': 'Taking in the Themery',
+        'desc': 'Gain the attention of the artist',
+        'image': './assets/achievements/themery.png',
+        'reward': 'character:carl',
+        'pages': false,
+        'conditions': [
+            ['carlItemsAvailable()', 3],
+            ['player.cash', 6],
+        ],
+        // 'condition_amount': 1,
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    'hire_six': {
+        'name': 'One Man\'s Trash',
+        'desc': 'Hire the shopkeep',
+        'image': false,
+        'reward': 'character:six',
+        'pages': 1,
+        'conditions': ['player.characters.six', true],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
 
     // Prestiging
     '1_prestige': {
@@ -1146,24 +1184,6 @@ const achievements = {
         }
     },
 
-    'own_a_theme': {
-        'name': 'Taking in the Themery',
-        'desc': 'Gain the attention of the artist',
-        'image': './assets/achievements/themery.png',
-        'reward': 'character:carl',
-        'pages': false,
-        'conditions': [
-            ['carlItemsAvailable()', 3],
-            ['player.cash', 6],
-        ],
-        // 'condition_amount': 1,
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
     // Character usage
     'upgrade_all_characters_once': {
         'name': '3 Heads Are Better Than One',
@@ -1918,7 +1938,7 @@ const achievements = {
         'image': false,
         'reward': false,
         'pages': 10,
-        'conditions': ['percentage(...sixCompletion().split('/'))', 100],
+        'conditions': ['percentage(...player.trinket_completion.split("/"))', 100],
         'style': 'endgame',
         'mystery': {
             'name': true,
@@ -2286,9 +2306,7 @@ const achievements = {
     'internal_six_available': {
         'internal': true,
         'name': 'internal_six_available',
-        'reward': () => {
-            unlock('character', 'six');
-        },
+        'reward': () => { unlock('character', 'six', 'ready'); },
         'pages': false,
         'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 500000000', true],
     },
@@ -2377,13 +2395,22 @@ function playerCosmeticsCount() {
 //#region 
 // Shop info (Static)
 const sixShop = {
+    'mp3_player': {
+        name:      'MP3 Player',
+        desc:      'Seems to have some old music on it',
+        img:       './assets/items/tome_tools.png',
+        currency:  'cash',
+        price:     [50],
+        value:     [false, true],
+        written:   '',
+    },
     'clickrate': {
         name:      'Golden Mouse',
         desc:      'Increases hold-to-click speed',
         img:       './assets/items/mouse_2.png',
         currency:  'cash',
-        price:     [5, 10, 25, 45, 70, 100, 135],
-        value:     [3,  4,  5,  6,  7,   8,   9],
+        price:     [   5, 10, 25, 45, 70, 100, 135],
+        value:     [2, 3,  4,  5,  6,  7,   8,   9],
         written:   '@ clicks/s',
     },
     'level_up_discount': {
@@ -2391,20 +2418,21 @@ const sixShop = {
         desc:      'Decreases level up prices',
         img:       './assets/items/coupon_book.png',
         currency:  'cash',
-        price:     [89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
-        value:     [95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
+        price:     [     89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
+        value:     [100, 95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
         written:   '@%',
+        update:    () => { recalculatePrices(); }
     },
     'belle_bonus': {
         name:      'Synergy Drink',
         desc:      'Increases Belle\'s output while the carrot is being clicked',
         img:       './assets/items/synergy.png',
         currency:  'cash',
-        price:     [24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
-        value:     [25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
+        price:     [   24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
+        value:     [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
         written:   '+@%',
     },
-    // 'greg_slots': { // scrapped because of how craft speed works
+    // 'greg_slots': { // scrapped because of how craft speed works- may add later but probably wouldnt be any good
     //     name:      'greg_slots',
     //     desc:      'Gives Greg an additional slot, which allows multiple tools to be crafted at once.',
     //     img:       './assets/achievements/missing.png',
@@ -2413,13 +2441,23 @@ const sixShop = {
     //     value:     [2],
     //     written:   '@ slots',
     // },
+    'tool_slots': {
+        name:      'Tool Box',
+        desc:      'Gives all characters additional tool slots on top of Greg\'s level',
+        img:       './assets/items/tool_box.png',
+        currency:  'cash',
+        price:     [   1, 1, 1, 1, 1, 1, 1, 1, 1,  1],
+        value:     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        written:   '+@ slots',
+        update:    () => { updateAllTools(); },
+    },
     'greg_speed': {
         name:      'Propane Tank',
         desc:      'Increases Greg\'s crafting speed',
         img:       './assets/items/propane.png',
         currency:  'cash',
-        price:     [ 38, 53,  74, 92, 121, 176, 204],
-        value:     [1.5,  2,   4,  8,  16,  32, 64],
+        price:     [   38, 53,  74, 92, 121, 176, 204],
+        value:     [1, 1.5,  2,   4,  8,  16,  32, 64],
         written:   'x@',
     },
     'greg_min_start': {
@@ -2427,17 +2465,18 @@ const sixShop = {
         desc:      'Allows Greg to craft a tool before you can afford it. Percent value is how much of the tool\'s cost you need to start crafting.',
         img:       './assets/items/credit.png',
         currency:  'cash',
-        price:     [40, 47, 54, 61, 68],
-        value:     [90, 80, 70, 60, 50],
+        price:     [     40, 47, 54, 61, 68],
+        value:     [100, 90, 80, 70, 60, 50],
         written:   '@%',
+        update:    () => { updateAllTools(); }
     },
     'falling_bonus': {
         name:      'Cistern',
         desc:      'Increases falling carrot rewards',
         img:       './assets/items/cistern.png',
         currency:  'cash',
-        price:     [60, 112, 163, 252, 309],
-        value:     [20,  40,  60,  80, 100],
+        price:     [   60, 112, 163, 252, 309],
+        value:     [0, 20,  40,  60,  80, 100],
         written:   '+@%',
     },
     'page_bonus': {
@@ -2445,17 +2484,18 @@ const sixShop = {
         desc:      'Increases your tome pages\' prestige buff',
         img:       './assets/items/origami.png',
         currency:  'cash',
-        price:     [100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
-        value:     [1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
+        price:     [   100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
+        value:     [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
         written:   '+@%/page',
+        update:    () => { calculatePrestigePotential(); }
     },
     'magic_keyboard': {
         name:      'Magic Keyboard',
         desc:      'Allows the use of spacebar and click at the same time. Secondary ability: you can queue equip a tool if Greg has none ready.', // allows you to single-click to craft & equip tools when Greg has none to give
         img:       './assets/items/keyboard_2.png',
         currency:  'cash',
-        price:     [200],
-        value:     [true],
+        price:     [       200],
+        value:     [false, true],
         written:   '',
     },
     // 'paperclip': {

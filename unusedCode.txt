@@ -624,3 +624,47 @@ function populateCarl(page_dir=0) {
         </div>`;
     }
 }
+
+
+*Near bottom of user.js ~ Kal
+// Loop through object shorthand
+function loopObject(obj, func) {
+    let keys =     Object.keys(obj);
+    for(i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let item = obj[key];
+        func(item, key);
+    }
+}
+
+*Anywhere in HTML/CSS
+// HTML
+<!-- Loading carrot -->
+<img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
+
+// CSS
+.loading_carrot {
+    height: 80px;
+    width: 80px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    filter: contrast(0%) brightness(0%);
+    opacity: 0.5;
+    animation: spin 3s infinite linear;
+}
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.fade_out {animation: opacity 2s forwards}
+.fade_in  {animation: opacity 2s forwards reverse}
+@keyframes opacity {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}

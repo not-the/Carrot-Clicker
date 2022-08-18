@@ -43,21 +43,14 @@ function stopMusic() {
 }
 //#endregion
 
-
-
 /** Returns true if any menu or popup is open */
 function menuOpen() {
-    if(dialogOpen || themeSwitcherOpen || cosmeticSwitcherOpen /*|| keybindsMenuOpen*/ || prestigeMenuOpen || inventoryOpen || tipsMenuOpen || creditsOpen || charInfoOpen)
-    { return true; }
+    if(menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige /*|| menuState.inventory*/ || menuState.tips || menuState.credits)
+    return true;
     return false;
 }
 
-
-
 /*---------------OPTIONS-------------------*/
-
-// Page variables
-
 
 // Update the current slider value (each time you drag the slider handle)
 elFunTipsSlider.oninput = () => {
@@ -234,8 +227,6 @@ function settingCarrotSounds() {
 elVolumeMaster.oninput = () => { volumeSliderHandler(0); }
 volumeMasterDropdown.oninput = () => { volumeSliderHandler(1); }
 
-/* Slider handler moved to carrot_clicker.js */
-
 
 
 /*------------EVENT LISTENERS--------------*/
@@ -244,14 +235,10 @@ volumeMasterDropdown.oninput = () => { volumeSliderHandler(1); }
 var keyCarrotFiring = false;
 document.addEventListener('keydown', event => {
     let key = event.key;
-    if(key == " ") {
-        event.preventDefault();
-    }
-
+    if(key == " ") event.preventDefault();
     key = interpretKey(key);
-
-    if(dialogOpen || menuOpen() || settings.disableKeybinds) return;
-    if(key == settings.keybinds['key_carrot'] && keyCarrotFiring == false) {
+    if(settings.disableKeybinds || menuOpen()) return;
+    if(key == settings.keybinds['key_carrot'] && !keyCarrotFiring) {
         keyCarrotFiring = true;
         holdStart(false);
     }
@@ -261,26 +248,21 @@ document.addEventListener('keydown', event => {
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
     // Close/Accept dialog
-    if(dialogOpen) {
+    if(menuState.dialog) {
         if(event.key == "Escape"){
             closeDialog();
-            if(equipWaiting != -1) { cancelHoeEquip(); }
+            if(equipWaiting != -1) cancelToolEquip();
         } else if(event.key == "Enter"){
             closeDialog(true);``
         }
         return;
     } else {
-        if(event.key == "Escape" && equipWaiting != -1){
-            cancelHoeEquip();
-        }
+        if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip();
     }
     // Close theme switcher
     if(menuOpen()) {
-        if(event.key == "Escape"){
-            closeDialog();
-        } else if(prestigeMenuOpen && event.key == "Enter") {
-            prestigeDialog();
-        }
+        if(event.key == "Escape") closeDialog();
+        else if(prestigeMenuOpen && event.key == "Enter") openDialog(...dialog.prestige_confirm);
     }
 
     // When on main page send to keybind handler
@@ -352,7 +334,7 @@ var easterEgg = 0;
 function eggUp() {
     easterEgg += easterEgg < 101 ? 1 : 0;
     mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
-    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300); }
+    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300, 4, true); }
 }
 var equipWaiting = -1;
 var equipToastID = false;
@@ -413,7 +395,7 @@ function keybindHandler(event, state) {
     // Stop if keybinds need to be ignored
     if(
         settings.disableKeybinds == "true"
-        || dialogOpen == true
+        || menuState.dialog == true
         || document.activeElement.nodeName == 'TEXTAREA'
         || document.activeElement.nodeName == 'INPUT'
         || menuOpen()
@@ -446,7 +428,7 @@ function keybindHandler(event, state) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             equipTool(Boomer_Bill, equipWaiting, multibuy[mbsel]);
-            cancelHoeEquip()
+            cancelToolEquip()
         }
         // Level up
         else {
@@ -457,7 +439,7 @@ function keybindHandler(event, state) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             equipTool(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
-            cancelHoeEquip();
+            cancelToolEquip();
         }
         // Level up
         else {
@@ -468,7 +450,7 @@ function keybindHandler(event, state) {
         // Waiting to equip hoe
         if(equipWaiting != -1) {
             equipTool(Gregory, equipWaiting, multibuy[mbsel]);
-            cancelHoeEquip();
+            cancelToolEquip();
         }
         // Level up
         else {
@@ -491,7 +473,7 @@ function keybindHandler(event, state) {
                 // No hoes
                 if(Gregory.Hoes[i] < 1) return;
 
-                equipToastID = toast('Equipping Hoe', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelHoeEquip() }, 'Cancel');
+                equipToastID = toast('Equipping Hoe', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
                 equipWaiting = i;
             }
         }
@@ -538,7 +520,7 @@ function keybindHandler(event, state) {
 }
 
 /** Cancel tool equip */
-function cancelHoeEquip() {
+function cancelToolEquip() {
     equipWaiting = -1;
     closeToast(equipToastID);
 }
@@ -598,9 +580,9 @@ setInterval(() => {
         if(achieveQuery(key)) continue; // Skip if already unlocked
         evaluateConditions(key); // Evaluate
     }
-}, 1000);
+}, 3000);
 
-/** Achievement Conditions evaluator */
+/** Achievement conditions evaluator */
 function evaluateConditions(key) {
     let achievement = achievements[key];
     let multicondition = Array.isArray(achievement.conditions[0]);
@@ -637,7 +619,7 @@ function evaluateConditions(key) {
     }
 }
 
-/** Takes in achievement and grants rewards */
+/** Takes in an achievement and grants rewards */
 function rewardBreakdown(achieve, retroactive = false) {
     // console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
     let reward = achieve?.reward;
@@ -799,12 +781,12 @@ function unlock(type, thingToUnlock, subtype, raw) {
     else if(type == 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
         if(!characterQuery(thingToUnlock)) { charbox.classList.add('char_anim'); }
-        player.characters[thingToUnlock] = thingToUnlock == 'six' && player.characters[thingToUnlock] != true ? 'ready' : true;
+        player.characters[thingToUnlock] = subtype || true;
         charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
-        if(playerCharKeys.length >= chars.length) { dom('more_chars_tooltip').classList.add('char_locked'); }
+        if(playerCharKeys.length >= chars.length) dom('more_chars_tooltip').classList.add('char_locked');
     }
     // Carl shop item
     else if(type == 'shop_item') {
@@ -900,7 +882,7 @@ function buyCarl(type, item, subtype = false) {
 }
 
 /** Buy Trinket  */
-function buySix(id) {
+function buyTrinket(id) {
     if(characterQuery('six') != true) return;
     let item = sixShop[id];
     let data = Six.data[id];
@@ -910,16 +892,28 @@ function buySix(id) {
     // Upgrade
     player.cash -= price;
     data.level++;
-    data.value = item.value[data.level - 1];
+    data.value = item.value[data.level];
+
+    // Store completion value
+    player.trinket_completion = sixCompletion();
     
     // Update page
     populateSix();
     mouseConfetti([3,3], ccWhite, 150, 1);
+    if(item.update) item.update();
 
-    // Extra
-    if(id == 'page_bonus') { calculatePrestigePotential(); }
-    else if(id == 'greg_min_start') { updateAllTools(); }
-    else if(id == 'level_up_discount') { recalculatePrices(); }
+    /** Calculates and returns completion (#/#) of trinkets */
+    function sixCompletion() {
+        let keys = sixShop.keys;
+        let comTotal = 0;
+        let maxTotal = 0;
+        for(i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            comTotal += Six?.data[key]?.level;
+            maxTotal += sixShop[key].price.length;
+        }
+        return `${comTotal}/${maxTotal}`;
+    }
 }
 
 /** Test if a character is unlocked */
@@ -991,24 +985,15 @@ function resetKeybinds() {
     toast('Settings', 'Keybinds set to defaults', '', false, true);
 }
 
-
-// Loop through object shorthand
-function loopObject(obj, func) {
-    let keys =     Object.keys(obj);
-    for(i = 0; i < keys.length; i++) {
-        let key = keys[i];
-        let item = obj[key];
-        func(item, key);
-    }
-}
 var hashlist;
+/** Returns true if game is in debug or developer mode */
 function isDebug() {
     if(hashlist.includes('dev')
     || hashlist.includes('developer')
     || hashlist.includes('cheatmode')
     || hashlist.includes('debug')
-    || player.flags['debug'] == true
-    || store('debug') == 'true') return true;
+    || player.flags['debug'] == true)
+    return true;
 }
 
 // URL hashes
@@ -1016,7 +1001,6 @@ function isDebug() {
     onhashchange = hash;
     function hash() {
         hashlist = location.hash.substring(1).split('#');
-        // console.log(hashlist);
 
         // Mute
         if(hashlist.includes('automute') || hashlist.includes('mute')) {
@@ -1025,41 +1009,30 @@ function isDebug() {
         }
         // Dev tools
         if(isDebug()) {
-            player.flags['cookies_accepted'] = true;
-
-            // In development
-            // unlock('character', 'six');
-            seeButton('hardmode');
+            player.flags['cookies_accepted'] = true; // Auto-accept cookie notice
+            seeButton('hardmode'); // Features in development
 
             // Register cheat functions globally
             //#region
             window.allCharacters = () => {
-                for(let ci = 0; ci < chars.length; ci++) {
-                    unlock('character', chars[ci]);
-                }
+                for(let ci = 0; ci < chars.length; ci++) unlock('character', chars[ci], true);
                 toast('', 'Devtools: All Characters now available');
             }
             window.allAchievements = () => {
-                for(let i = 0; i < achievementsKeys.length; i++) {
-                    grantAchievement(achievementsKeys[i])
-                }
+                for(let i = 0; i < achievementsKeys.length; i++) grantAchievement(achievementsKeys[i]);
                 toast('', 'Devtools: All Achievements now unlocked');
             }
             window.allThemes = () => {
-                for(let i = 0; i < themesKeys.length; i++) {
-                    unlock('theme', themesKeys[i])
-                }
+                for(let i = 0; i < themesKeys.length; i++) unlock('theme', themesKeys[i]);
                 toast('', 'Devtools: All Themes now available');
             }
             window.allCosmetics = () => {
                 for(let t = 0; t < cosmeticsKeys.length; t++) {
                     let key = cosmeticsKeys[t];
                     let target = cosmetics[key];
-            
+
                     // Loop through cosmetics
-                    for(let c = 0; c < target['keys'].length; c++) {
-                        unlock('cosmetic', target.keys[c], key);
-                    }
+                    for(let c = 0; c < target['keys'].length; c++) unlock('cosmetic', target.keys[c], key);
                 }
                 toast('', 'Devtools: All Cosmetics now available');
             }
@@ -1101,8 +1074,8 @@ function isDebug() {
                 // Cash
                 if(setCashEl.value != '') {
                     let coinc = parseInt(setCashEl.value);
-                    player.cash             = 0;
-                    player.lifetime.cash    = 0;
+                    player.cash          = 0;
+                    player.lifetime.cash = 0;
                     earnCash(coinc);
                 }
                 // Golden carrots
@@ -1155,38 +1128,28 @@ function isDebug() {
                 }
                 dom('import_export').value = exported;
             }
+            window.optionDebugUpdate = () => {
+                player.flags.debug_dont_autoupdate = dom('debug_dont_autoupdate').checked;
+                toast('Flag set', `\ndebug_dont_autoupdate = ${player.flags.debug_dont_autoupdate}`, '', false, true);
+            }
             //#endregion
 
             // Put dev panel in settings
             $('#devp').innerHTML = /* html */
             `<div class="footer_bottom brown_darker_color" style="display: block; padding: 16px 24px;">
                 <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-                <button onclick="clearSave()" class="button_red">
-                    Quick Reset
-                </button>
+                <button onclick="clearSave()" class="button_red">Quick Reset</button>
 
                 <h4>Unlock all</h4>
-                <button onclick="allUnlocks()">
-                    Everything
-                </button>
-                <button onclick="allCharacters()">
-                    Characters
-                </button>
-                <button onclick="allAchievements()">
-                    Achievements
-                </button><br/>
-                <button onclick="allThemes()">
-                    Themes
-                </button>
-                <button onclick="allCosmetics()">
-                    Cosmetics
-                </button>
-                <button onclick="allTrinkets()">
-                    Trinkets
-                </button>
-                <button onclick="allTips()">
-                    Tips
-                </button><br/>
+                <button onclick="allUnlocks()">Everything</button>
+                <button onclick="allCharacters()">Characters</button>
+                <button onclick="allAchievements()">Achievements</button>
+                <br/>
+                <button onclick="allThemes()">Themes</button>
+                <button onclick="allCosmetics()">Cosmetics</button>
+                <button onclick="allTrinkets()">Trinkets</button>
+                <button onclick="allTips()">Tips</button>
+                <br/>
                 
                 <h4>Set Values</h4>
                 <table>
@@ -1229,7 +1192,12 @@ function isDebug() {
                 </table>
                 <button onclick="updateValues()">Update Values</button>
                 
-                <h4>Savedata management</h4>
+                <h4>Save data management</h4>
+                <label for="debug_dont_autoupdate">
+                <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
+                onclick="optionDebugUpdate()">
+                    Auto-update save while in debug mode
+                </label><br/>
                 <textarea name="import_export" id="import_export" cols="40" rows="3" style="max-width: 100%; min-width: 100%;" onclick="this.focus();this.select()"></textarea><br/>
                 <button onclick="exportSave()" style="width: 159px;">🠹 Export</button>
                 <button onclick="importSave()" style="width: 159px;">🠻 Import</button>
@@ -1350,7 +1318,7 @@ function isDebug() {
     if(
         default_player.data_version > player.data_version
         || player.hasOwnProperty('data_version') == false
-        || isDebug() == true
+        || isDebug() == true && !player.flags.debug_dont_autoupdate
     ) {
         try {
             // Loop through onu_templates array
@@ -1400,6 +1368,9 @@ function isDebug() {
                 player.pages = pagesIntended;
             }
             //#endregion
+
+            // Characters
+            recalculatePrices();
     
             // Done
             console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);
@@ -1544,7 +1515,7 @@ function isDebug() {
     pagesCount(false);
     calculatePrestigePotential();
     updateAllTools();
-    updateHoePrices();
+    updateToolPrices();
     updateMainIcon();
     populateCarl();
     populateSix();

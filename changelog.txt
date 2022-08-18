@@ -1,16 +1,77 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.4
+    8-17-2022
+// ----------------------------------------------------------- //
+
+Starting to prepare to get ready to potentially approach a possible stable release
+
+What's new:
+- New trinket: Tool Box (tool_slots) - Gives additional tool slots (Greg's level + Tool Box level)
+- "Auto-update save while in debug mode" option added to dev panel
+- Falling carrots no longer interrupt auto-click, instead they are collected if you move your mouse over them
+- Overhauled the footer section and added some links
+- Footer carrot easter egg now displays the confetti effect regardless of your settings - also gave it some visual feedback
+
+- Changed achievement check interval: 1s -> 3s
+- New achievment: hire_six
+
+- Moved a bunch of stuff over to CSS variables
+- Switched over a number of themes to use variables: Light, Retro, and Terminal
+- Improved terminal theme animations when clicking
+- Removed a bunch of unused CSS and tried to condense the rest
+
+Balance changes:
+- Six hire cost: 500m -> 250m
+- Bill price scaling:
+    Levels     500+:   0.08 -> 0.065
+- Belle price scaling:
+    Levels    0-99:   0.06 -> 0.058
+    Levels 100-124:   0.12 -> 0.11
+- Greg price scaling:
+    Levels    0-24: 0.21156 -> 0.2
+    Levels   25-49: 0.1874     (Unchanged)
+    Levels   50-74: 0.227   -> 0.1874
+    Levels   75-99: 0.284   -> 0.28
+    Levels 100-124: 0.409   -> 0.4
+
+Bug fixes:
+- Fixed a bug where Carl's shop highlighting would be incorrect when he's first unlocked
+- Fixed fancy_bill cosmetic not appearing in Carls' shop
+- Fixed stylized achievement toasts not animating when closed
+- Fixed an oversight where mirrored falling carrots would have their shadows mirrored too
+- Fixed all_trinkets achievement not being granted
+
+Internal changes:
+- Reduced amount of code used by a number of styling.js functions
+- Removed the no_backdrop_click theme property as it's not a very important feature
+- New player property: trinket_completion - moved sixCompletion() function to buyTrinket()
+- Game will now run recalculatePrices() when updating save files (so editing a character's scaling will immediately update)
+- Misc improvements to the way trinkets are handled
+- Reworked the openDialog() and closeDialog() functions to accept any code for the accept button (like toasts)
+- Renamed some functions:
+  + cancelHoeEquip  -> cancelToolEquip
+  + buySix          -> buyTrinket
+  + updateHoePrices -> updateToolPrices
+- data_version bumped to 15
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.3
     8-16-2022
 // ----------------------------------------------------------- //
-  - tip changes
-    - rewrote the tip code to be less redunant
-    - changed chance of displaying a tip of a different tier 20% -> 15%
-    - changed default fun tip percentage 50% -> 40%
-  - rewrote equip hoes to be cleaner 
-  - rewrote createHoe to be cleaner
-  - Fixed bug where Hoes would continue crafting after prestiging
+  
+- Tip changes
+  + rewrote the tip code to be less redunant
+  + changed chance of displaying a tip of a different tier 20% -> 15%
+  + changed default fun tip percentage 50% -> 40%
+- Rewrote equip hoes to be cleaner 
+- Rewrote createHoe to be cleaner
+- Fixed bug where Hoes would continue crafting after prestiging
 
 ~ JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.16.2

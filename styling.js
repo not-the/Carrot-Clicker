@@ -4,34 +4,30 @@
 const elBody =          document.querySelector('body');
 const bonusVisualArea = dom("bonusVisualArea");
 const clickingArea =    dom("clicking_area");
-// var tooltipBill =       dom("billtooltip").style.top;
-// var tooltipBelle =      dom("belletooltip").style.top;
-// var tooltipGreg =       dom("gregtooltip").style.top;
 var mouseX = 0;
 var mouseY = 0;
 
 // Popup counters (unique IDs so that they are deleted after a set time)
-var toastID =      0;
-var toastsList =  {};
-var bonusID =      0;
+var toastID    = 0;
+var toastsList = {};
+var bonusID    = 0;
 
-// Menu state
-var dialogOpen =            false;
-var charInfoOpen =          false;
-var themeSwitcherOpen =     false;
-var cosmeticSwitcherOpen =  false;
-var keybindsMenuOpen =      false;
-var prestigeMenuOpen =      false;
-var inventoryOpen =         false;
-var tipsMenuOpen =          false;
-var creditsOpen =           false;
+/** Menu state */
+var menuState = {
+    dialog:    false,
+    character: false,
+    theme:     false,
+    cosmetic:  false,
+    keybinds:  false,
+    prestige:  false,
+    inventory: false,
+    tips:      false,
+    credits:   false,
+}
 
 // Don't regenerate achievements list unless necessary
-var achieveHTMLupdate =     true;
-var tipsHTMLupdate =        true;
-
-// Dialog button action
-var dialogButtonAction = 'none';
+var achieveHTMLupdate = true;
+var tipsHTMLupdate    = true;
 
 // Dialog Elements
 const overlay = dom("overlay");
@@ -80,8 +76,8 @@ const ccCarrot =        ['#ed9645', '#c3580d', '#de5a01', '#974810'];
  * @param {number} time Particle lifespan in milliseconds. Will also effect the travel distance of the particles.
  * @returns 
  */
-function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150, size_min=4) {
-    if(!settings.confetti_effects) return;
+function mouseConfetti(particles=[5,5], colorArray=confettiColors, time=150, size_min=4, force_display=false) {
+    if(!settings.confetti_effects && !force_display) return;
     let count = r(particles[1] - particles[0] + 1) + particles[0] - 1;
     // console.log('mouse confetti!');
     for(i = 0; i < count; i++) {
@@ -153,107 +149,75 @@ function buttonSound() {
  * @param {string} desc Dialog description
  * @param {string} buttonName Name for the accept button
  * @param {string} buttonStyle Class to be applied to the accept button
- * @param {string} buttonAction Code to be run if the accept button is pressed
+ * @param {function} button_action Function to be run if the accept button is pressed
  */
-function openDialog(title, desc, buttonName, buttonStyle, buttonAction) {
-    openMenu();
+function openDialog(title, desc, buttonName, buttonStyle, button_action) {
+    openMenu('dialog');
+    elDialog.main.classList.add('visible');
     buttonSound();
 
-    dialogOpen = true;
-    elDialog.main.classList.add('visible');
-
     // Fill out dialog text, if applicable
-    if(title)       {eInnerText(elDialog.title, title);}
-    if(desc)        {eInnerText(elDialog.desc, desc);}
-    if(buttonName)  {eInnerText(elDialog.buttons.accept, buttonName);}
-    
-    if(buttonStyle) { elDialog.buttons.accept.classList.add(buttonStyle); }
-
-    dialogButtonAction = buttonAction;
+    if(title)        eInnerText(elDialog.title, title);
+    if(desc)         eInnerText(elDialog.desc, desc);
+    if(buttonName)   eInnerText(elDialog.buttons.accept, buttonName);
+    if(buttonStyle)  elDialog.buttons.accept.classList.add(buttonStyle);
+    if(button_action) elDialog.buttons.accept.onclick = button_action;
 }
 
 /** Close all popup menus
- * @param {boolean} doAction Whether or not to run dialogButtonAction 
- * @param {boolean} backdrop If the backdrop was clicked to run the function
+ * @param {boolean} accept Whether or not to run the dialog accept function 
  * @returns 
  */
-function closeDialog(doAction, backdrop=false) {
+function closeDialog(accept=false) {
+    overlay.classList.remove("visible");
+    elBody.classList.remove('overflow_hidden');
+    elDialog.main.classList.remove('visible');
     buttonSound();
 
-    // Some themes have solid backdrops, ignore
-    if(backdrop == true && themes[settings.theme].no_backdrop_click == true) return;
-
     // Reset dialog
-    if(dialogOpen) {
-        // Run a function when accept is pressed
-        if(doAction) {
-            switch(dialogButtonAction) {
-                case 'prestige':
-                    prestige();
-                    break;
-                case 'clearsave':
-                    clearSave();
-                    break;
-                case 'resetsettings':
-                    resetSettings(true);
-                    break;
-                case 'jjcvip':
-                    earnCarrots(1, 'bonus');
-                    break;
-                default:
-                    console.error('Dialog action not listed');
-                    break;
-            };
-        };
-
-        dialogOpen = false;
+    if(menuState.dialog) {
+        menuState.dialog = false;
         eInnerText(elDialog.title, 'Dialog Title');
         eInnerText(elDialog.desc, 'Dialog description');
         // Reset Accept button
         elDialog.buttons.accept.classList.remove(...elDialog.buttons.accept.classList);
-        // elDialog.buttons.accept.onclick = closeDialog;
+        elDialog.buttons.accept.onclick = closeDialog;
         eInnerText(elDialog.buttons.accept, "OK");
     }
 
-    overlay.classList.remove("visible");
-    elBody.classList.remove('overflow_hidden');
-    elDialog.main.classList.remove('visible');
-
-    dialogButtonAction = 'none';
-
     // Hide other popup menus
     //#region
-    if(charInfoOpen != false) {
-        dom(`${charInfoOpen}_box`).classList.remove('show_info');
-        charInfoOpen = false;
+    if(menuState.character) {
+        dom(`${menuState.character}_box`).classList.remove('show_info');
+        menuState.character = false;
     }
-    if(themeSwitcherOpen) {
+    if(menuState.theme) {
         themeMenu.classList.remove('visible');
-        themeSwitcherOpen = false;
+        menuState.theme = false;
     }
-    if(cosmeticSwitcherOpen) {
+    if(menuState.cosmetic) {
         cosmeticMenu.classList.remove('visible');
-        cosmeticSwitcherOpen = false;
+        menuState.cosmetic = false;
     }
-    if(keybindsMenuOpen) {
+    if(menuState.keybinds) {
         elKeybindsMenu.classList.remove('visible');
-        keybindsMenuOpen = false;
+        menuState.keybinds = false;
     }
-    if(prestigeMenuOpen) {
+    if(menuState.prestige) {
         prestigeMenu.classList.remove('visible');
-        prestigeMenuOpen = false;
+        menuState.prestige = false;
     }
-    if(inventoryOpen) {
+    if(menuState.prestige) {
         inventoryMenu.classList.remove('visible');
-        inventoryOpen = false;
+        menuState.prestige = false;
     }
-    if(tipsMenuOpen) {
+    if(menuState.tips) {
         tipsMenu.classList.remove('visible');
-        tipsMenuOpen = false;
+        menuState.tips = false;
     }
-    if(creditsOpen) {
+    if(menuState.credits) {
         elCredits.classList.remove('visible');
-        creditsOpen = false;
+        menuState.credits = false;
     }
 
     // Enable keyboard navigation for main page
@@ -262,12 +226,6 @@ function closeDialog(doAction, backdrop=false) {
         element.tabIndex = 0;
     });
     //#endregion
-}
-
-// Dialog templates
-/** Opens the prestige dialog */
-function prestigeDialog() {
-    openDialog(...dialog.prestige_confirm);
 }
 
 
@@ -562,19 +520,15 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 /* ----- Fancy Theme Switcher ----- */
 /** Opens the theme menu */
 function themeSwitcher() {
-    openMenu();
-    themeSwitcherOpen = true;
+    openMenu('theme');
     themeMenu.classList.add('visible');
-
     newIndicator(false, 'theme');
     buttonSound();
 }
 /** Closes the theme menu */
 function closeThemeSwitcher(noOverlay = false) {
     themeMenu.classList.remove('visible');
-    if(noOverlay == false) {
-        overlay.classList.remove("visible"); 
-    }
+    if(noOverlay == false) overlay.classList.remove("visible"); 
 }
 
 /* ----- Fancy Cosmetic Switcher ----- */
@@ -582,15 +536,13 @@ var uncollapseNeeded = false;
 /** Opens the cosmetic menu */
 function cosmeticSwitcher(category = false) {
     if(!characterQuery('carl')) return;
-    openMenu();
-    cosmeticSwitcherOpen = true;
+    openMenu('cosmetic');
     cosmeticMenu.classList.add('visible');
-
     newIndicator(false, 'cosmetic');
     buttonSound();
 
     // Uncollapse intended category
-    if(category != false) {
+    if(category) {
         // Collapse all
         document.querySelectorAll('.cosmetic_collapse').forEach(e => {
             e.open = false;
@@ -615,7 +567,7 @@ function closeCosmeticSwitcher(noOverlay = false) {
 }
 
 // Always run when a menu is open
-function openMenu() {
+function openMenu(id) {
     closeDialog();
     overlay.classList.add("visible");
     elBody.classList.add('overflow_hidden');
@@ -625,6 +577,7 @@ function openMenu() {
     document.querySelectorAll('#main *[tabindex="0"], #main button, #main input, #main select, #main a').forEach(element => {
         element.tabIndex = -1;
     });
+    menuState[id] = true;
 }
 
 /** Opens the prestige menu */
@@ -632,8 +585,7 @@ function openPrestigeMenu() {
     // Prevent from opening if unavailable
     if(player.prestige_available != true) {return};
     
-    openMenu();
-    prestigeMenuOpen = true;
+    openMenu('prestige');
     prestigeMenu.classList.add('visible');
     updatePrestigeMenu();
     buttonSound();
@@ -642,7 +594,7 @@ function openPrestigeMenu() {
 /* ----- Inventory ----- */
 // function openInventory() {
 //     closeDialog();
-//     inventoryOpen = true;
+//     menuState.inventory = true;
 //     inventoryMenu.classList.add('visible');
 //     overlay.classList.add("visible");
 //     elBody.classList.add('overflow_hidden');
@@ -656,8 +608,7 @@ function openTipsMenu() {
         populateTipsMenu();
         tipsHTMLupdate = false;
     }
-    openMenu();
-    tipsMenuOpen = true;
+    openMenu('tips');
     tipsMenu.classList.add('visible');
     buttonSound();
 }
@@ -1209,44 +1160,22 @@ elAchievementFilter.addEventListener('change', () => {
     populateAchievements();
 });
 
-var currentTheme;
 /** Set theme
  * @param {string} theme Theme to switch to
  */
 function setTheme(theme) {
-    // var theme = optionTheme.value;
-    var theme_color = '#312e2e';
+    var theme_color = themes[theme].accent || '#312e2e';
     var from = settings.theme;
 
     // If there is already a theme class, remove it
-    [...elBody.classList].forEach(c => {
-        if(c.includes('theme')) {
-            elBody.classList.remove(c);
-        }
-    });
-
-    // Add new theme
-    elBody.classList.add(theme);
-
-    // console.log(themes[theme]);
-    if(themes[theme].hasOwnProperty('accent') == true) {
-        theme_color = themes[theme].accent;
-    };
-
+    [...elBody.classList].forEach(c => { if(c.includes('theme')) elBody.classList.remove(c); });
+    elBody.classList.add(theme); // Add new theme
     dom('theme_color').content = theme_color;
-
-    // Set related cosmetic
-    // if(themes[theme].hasOwnProperty('cosmetic') == true && themes[theme].cosmetic != false) {
-    //     let [t, c] = themes[theme].cosmetic.split('/');
-    //     setCosmetic(t, c);
-    // }
 
     // Save to localStorage
     settings.theme = theme;
-    saveSettings();
-    currentTheme = theme;
+    saveSettings(); 
 
-    // Fancy Switcher fix
     themeSwitcherCheckmark(theme, from);
     /** Theme switcher checkmarks */
     function themeSwitcherCheckmark(theme, from = false) {
@@ -1265,7 +1194,7 @@ function setTheme(theme) {
 
 
 
-// Character info
+/** Opens character info screen */
 function characterInfo(character, state=undefined) {
     let charbox = dom(`${character}_box`);
     if(charbox.classList.contains('show_info') || state == false) {
@@ -1274,7 +1203,7 @@ function characterInfo(character, state=undefined) {
     } else {
         openMenu();
         charbox.classList.add('show_info');
-        charInfoOpen = character;
+        menuState.character = character;
     }
 }
 
@@ -1284,9 +1213,8 @@ const elCredits = dom('credits');
 var creditInterval;
 /** Opens the credits with autoscroll */
 function startCredits(toast = false) {
-    if(toast != false) { closeToast(toast); }
-    openMenu();
-    creditsOpen = true;
+    if(toast) closeToast(toast);
+    openMenu('credits');
     elCredits.scrollTop = 0;
     elCredits.classList.add('visible');
     clearInterval(creditInterval);
@@ -1308,18 +1236,11 @@ const elKeybindsBlurb = dom('keybinds_blurb');
 let keyBlurbText = elKeybindsBlurb.innerHTML;
 /** Opens the keybind menu */
 function keybindsMenu() {
-    openMenu();
-    keybindsMenuOpen = true;
+    openMenu('keybinds');
     elKeybindsMenu.classList.add('visible');
-
-    if(elDisableKeybinds.checked == true) {
-        elKeybindsBlurb.classList.add('color_red');
-        elKeybindsBlurb.innerText = 'Warning: Keybinds are currently disabled in settings.';
-    } else {
-        elKeybindsBlurb.classList.remove('color_red');
-        elKeybindsBlurb.innerText = keyBlurbText;
-    }
-
+    let checked = elDisableKeybinds.checked;
+    style(elKeybindsBlurb, 'color_red', checked);
+    elKeybindsBlurb.innerText = checked ? 'Warning: Keybinds are currently disabled in settings.' : keyBlurbText;
     buttonSound();
 }
 
@@ -1378,6 +1299,7 @@ function populateCarl() {
     }
     carlShop.innerHTML = html;
     cashCount(false);
+    updateCarlsShop();
 
     /** Carl HTML template */
     function carlHTML(internalName, type, name, img, price, desc) {
@@ -1442,7 +1364,7 @@ function populateSix() {
     function sixHTML(id, src, name, desc, price, currency, segments, styles, value) {
         return `
         <div class="tooltip_area">
-            <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buySix('${id}')" tabindex="0" role="button">
+            <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buyTrinket('${id}')" tabindex="0" role="button">
                 <img src="${src}" alt="" class="shop_img">
                 <div class="info">
                     <b>${name}</b>

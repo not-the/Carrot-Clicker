@@ -18,11 +18,11 @@
     <!-- https://stackoverflow.com/a/54266944/11039898 -->
     <meta property="og:title" content="Carrot Clicker" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://jjcvip.github.io/Carrot-Clicker/" />
-    <meta property="og:image" content="https://jjcvip.github.io/Carrot-Clicker/assets/Carrot%20Clicker.png" />
+    <meta property="og:url" content="https://carrot.notkal.com/" />
+    <meta property="og:image" content="https://carrot.notkal.com/assets/Carrot%20Clicker.png" />
     <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
 
-    <!-- JS -->
+    <!-- Javascript -->
     <script src="carrot_utilities.js" defer></script>
     <script src="gamedata.js" defer></script>
     <script src="carrot_clicker.js" defer></script>
@@ -547,7 +547,7 @@
                     <div class="six characterbox char_locked" id="six_box">
                         <div class="char_info" id="six_info">
                             <h2>Six</h2>
-                            <p class="secondary_text">- Shopkeeper -</p>
+                            <p class="secondary_text">- Shopkeep -</p>
                             <hr>
                             Sells trinkets that grant special abilities. Trinkets are kept when you prestige.
                         </div>
@@ -581,7 +581,7 @@
                                     <br>
                                     Interested in some high quality merchandise?
                                     <br>
-                                    <button style="width: 70%; margin-top: 8px;" onclick="hireSix()">Hire Six <span class="secondary_text">(500m carrots)</span></button>
+                                    <button style="width: 70%; margin-top: 8px;" onclick="hireSix()">Hire <span class="secondary_text">(250m carrots)</span></button>
                                 </div>
                             </div>
                         </div>
@@ -687,10 +687,10 @@
                     <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast(...toasts.info_achieve_percent)">?</span>
                 </p><br>
                 <label for="compact_achievements">
-                    <input type="checkbox" class="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
+                    <input type="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
                 </label>
                 <label for="achievements_grid">
-                    <input type="checkbox" class="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view
+                    <input type="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view
                 </label><br><br>
                 
                 <div id="achievements_list">
@@ -702,9 +702,6 @@
                         <p>Click the carrot</p>
                         </div>
                     </div>-->
-
-                    <!-- Loading carrot -->
-                    <img src="./assets/Carrot Clicker.png" alt="Loading..." class="loading_carrot">
                 </div>
             </div>
 
@@ -803,15 +800,15 @@
                 
                 <b>Gameplay</b><br>
                 <label for="tutorial_messages">
-                    <input type="checkbox" class="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
+                    <input type="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
                     Tutorial messages<br>
                 </label>
                 <label for="carl_shop_toasts">
-                    <input type="checkbox" class="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
+                    <input type="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
                     Carl shop notifications<br>
                 </label>
                 <label for="cosmetic_auto_equip">
-                    <input type="checkbox" class="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                    <input type="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
                     Auto-equip new cosmetics<br><br>
                 </label>
 
@@ -825,7 +822,7 @@
                 <!-- Options item -->
                 <b>Keybinds</b><br>
                 <label for="disableKeybinds">
-                <input type="checkbox" class="checkbox" id="disableKeybinds" onclick="setting('disableKeybinds')"">
+                <input type="checkbox" id="disableKeybinds" onclick="setting('disableKeybinds')"">
                     Disable keybinds
                 </label><br>
                 <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
@@ -845,15 +842,15 @@
                 <!-- Disable main progress bar -->
                 <b>Interface</b><br>
                 <label for="full_numbers">
-                    <input type="checkbox" class="checkbox" id="full_numbers" onclick="setting('full_numbers')">
+                    <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')">
                     Full numbers
                 </label><br>
                 <label for="enable_main_progress">
-                    <input type="checkbox" class="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
+                    <input type="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
                     Always-on-top progress bar
                 </label><br>
                 <label for="confetti_effects">
-                    <input type="checkbox" class="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
+                    <input type="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
                     Confetti effects
                 </label><br><br>
 
@@ -861,17 +858,17 @@
                 <b>Sounds</b><br>
                 <!-- All sounds -->
                 <label for="enable_sounds">
-                    <input type="checkbox" class="checkbox" id="enable_sounds" checked onclick="settingSounds()">
+                    <input type="checkbox" id="enable_sounds" checked onclick="settingSounds()">
                         Sounds
                 </label><br>
                 <!-- Music toggle -->
                 <label for="enable_music">
-                    <input type="checkbox" class="checkbox" id="enable_music" onclick="settingMusic()">
+                    <input type="checkbox" id="enable_music" onclick="settingMusic()">
                         Beta music
                 </label><br>
                 <!-- Carrot sounds -->
                 <label for="enable_carrot_sounds">
-                    <input type="checkbox" class="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
+                    <input type="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
                         Beta carrot sounds
                 </label><br>
 
@@ -913,6 +910,7 @@
                 <button onClick="openDialog(...dialog.settings_reset)">Reset Settings</button>
                 <br><br><hr><br>
 
+                <!-- Footer -->
                 <footer>
                     <!-- Title -->
                     <div>
@@ -921,20 +919,44 @@
                         <p id="footer_version">Version Dev Beta v?.?.? - Unstable</p>
                     </div>
 
-                    <!-- Footer things -->
-                    <div class="footer_bottom brown_darker_color">
+                    <!-- Columns -->
+                    <div class="footer_bottom">
+                        <!-- Created by -->
                         <div class="footer_column">
-                            <b>Created by:</b>
-                            <div class="secondary_text">
-                                <a href="https://www.notkal.com/">not-the</a> and <a href="https://github.com/JJCVIP">JJCVIP</a>
+                            <h3>Created by</h3>
+                            <div class="flex" style="align-items: center; justify-content: center;">
+                                <a href="https://www.notkal.com/" class="user_card">
+                                    <div class="flex" style="margin-right: 8px;">
+                                        <img src="https://avatars.githubusercontent.com/u/87151784?v=4" alt="Avatar">
+                                        <p>not-the</p>
+                                    </div>
+                                </a>
+                                <a href="https://github.com/JJCVIP" class="user_card">
+                                    <div class="flex">
+                                        <img src="https://avatars.githubusercontent.com/u/88807892?v=4" alt="Avatar">
+                                        <p>JJCVIP</p>
+                                    </div>
+                                </a>
                             </div>
-                            <button onclick="startCredits()" style="margin-top: 8px;">View Credits</button>
+                            <button onclick="startCredits()" style="width: 100%; max-width: 240px; margin-top: 8px;">View Credits</button>
                         </div>
-                        <!-- <div class="footer_column">
-                            <b>Links:</b><br/>
-                            <a href="#" target="_blank" rel="noopener noreferrer" class="white">About</a><br/>
-                            <a href="#" target="_blank" rel="noopener noreferrer" class="white">Contact</a><br/>
-                        </div> -->
+
+                        <!-- Links -->
+                        <div class="footer_column">
+                            <h3>More</h3>
+                            <a href="./changelog/" class="user_card footer_card">
+                                <div class="flex">
+                                    <img src="./assets/icons/refresh.svg" alt="" class="invert_alt">
+                                    <p>Changelog</p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/JJCVIP/Carrot-Clicker" class="user_card footer_card">
+                                <div class="flex">
+                                    <img src="./assets/icons/github.png" alt="Github logo" class="invert_alt">
+                                    <p>Github</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
 
                 </footer>
@@ -945,7 +967,7 @@
     <!-- Popup menus -->
     <div id="overlay" class="dramatic">
         <!-- Backdrop -->
-        <div id="backdrop" onclick="closeDialog(false, true, true)"></div>
+        <div id="backdrop" onclick="closeDialog()"></div>
 
         <!-- Dialog Box -->
         <div id="dialog" class="popup_box">
@@ -974,7 +996,7 @@
                     <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
                     Cosmetics
                 </button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             </div>
 
             <!-- Title -->
@@ -1007,7 +1029,7 @@
             <div class="switcher_bar flex">
                 <button class="tab" onclick="themeSwitcher()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             </div>
             
             <!-- Title -->
@@ -1092,7 +1114,7 @@
         <!-- Keybinds menu -->
         <div id="keybinds_menu" class="popup_box fancy_switcher">
             <button onclick="resetKeybinds()" id="key_reset">Reset to defaults</button>
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             <h1>Edit Keybinds</h1>
             <p><i class="secondary_text" id="keybinds_blurb">Keybinds are disabled while this menu is open</i></p><br>
 
@@ -1107,7 +1129,7 @@
             <br/><br/>
 
             <!-- List Keybinds -->
-            <div id="keybinds_list">
+            <div id="keybinds_list" class="flex">
 
                 <!-- Gameplay -->
                 <div class="key_column flex_1">
@@ -1314,7 +1336,7 @@
 
         <!-- Fancy Prestige menu -->
         <div id="prestige_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             <h1>Prestige</h1>
 
             <div class="prestige_menu_flex flex">
@@ -1354,7 +1376,7 @@
                 <!-- Next prestige -->
                 <p class="prestigetooltip center half_width" style="padding-top: 6px;">
                     <!-- Prestige button -->
-                    <button onClick="prestigeDialog()" class="button_gold full_width" title="Prestige">
+                    <button onClick="openDialog(...dialog.prestige_confirm);" class="button_gold full_width" title="Prestige">
                         Prestige
                     </button><br>
                     Prestiging now will result in:<br/>
@@ -1371,7 +1393,7 @@
 
         <!-- Inventory -->
         <!-- <div id="inventory_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             <h1>Inventory</h1>
             <p><i class="secondary_text">Secondary text</i></p><br>
 
@@ -1410,7 +1432,7 @@
 
         <!-- Tips menu -->
         <div id="tips_menu" class="popup_box fancy_switcher">
-            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog(false)" tabindex="0" role="button">x</h2>
+            <h2 class="toast_close generic_close" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             <h1>Tips</h1>
             <p class="secondary_text">Game knowledge</p>
 
@@ -1503,14 +1525,5 @@
     <!-- Visual effects -->
     <div id="bonusVisualArea"></div>
     <div id="mouse_confetti"></div>
-
-    <!-- Javascript -->
-    <!-- #region -->
-    <!-- <script src="carrot_utilities.js"></script>
-    <script src="gamedata.js"></script>
-    <script src="carrot_clicker.js"></script>
-    <script src="styling.js"></script>
-    <script src="user.js"></script> -->
-    <!-- #endregion -->
 </body>
 </html>

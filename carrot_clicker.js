@@ -159,7 +159,7 @@ const elEnableMainProgress = dom('enable_main_progress');
 //creates a player class
 class Player{
     constructor(data_version,carrots,cpc,cps,equippedHoes,cash,
-        clickSpeedRecord,fallingConsecRecord,pages,golden_carrots,
+        clickSpeedRecord,fallingConsecRecord,trinket_completion,pages,golden_carrots,
         prestige_potential,prestige_potential_cap,prestige_available,
         prestige,characters,achievements, internal,themes,cosmetics,
         new_theme,new_cosmetic,flags){
@@ -171,6 +171,7 @@ class Player{
         this.cash=cash;
         this.clickSpeedRecord=clickSpeedRecord;
         this.fallingConsecRecord=fallingConsecRecord;
+        this.trinket_completion=trinket_completion;
         this.pages=pages;
         this.golden_carrots=golden_carrots;
         this.prestige_potential=prestige_potential;
@@ -193,7 +194,7 @@ class statsTracker{
     constructor(
         carrots,click_carrots,idle_carrots,bonus_carrots,
         cash,falling_carrots_grabbed,golden_carrots,prestige_count,
-        clicks,hoes,tomes_bought){
+        clicks,hoes,tomes_bought,trinkets_complete){
         this.carrots=carrots;
         this.click_carrots=click_carrots;
         this.idle_carrots= idle_carrots;
@@ -205,6 +206,7 @@ class statsTracker{
         this.clicks=clicks;
         this.hoes=hoes;
         this.tomes_bought=tomes_bought;
+        this.trinkets_complete=trinkets_complete;
     }
 }
 
@@ -291,7 +293,7 @@ const playerPrestigeTemplate = {
 };
 
 const default_player = new Player(
-    14,//data_version; needs to be incremented by 1 any time any game object is changed
+    15,//data_version; needs to be incremented by 1 any time any game object is changed
     0, //carrots
     1, //cpc; Carrots per click
     0, //cps; Carrots per Second
@@ -299,12 +301,13 @@ const default_player = new Player(
     0, //cash
     0, //clickSpeedRecord
     0, //fallingConsecRecord
+    '0/0', //trinket_completion,
     0, //pages; tome pages that increase prestige potential
     0, //golden_carrots
     0, //prestige_potential; golden carrots recived upon prestige
     0, //prestige_potential_cap
     false, //prestige_available; wether you can prestige
-    clone(playerPrestigeTemplate),//prestige
+    clone(playerPrestigeTemplate), //prestige
 
     // Unlocked characters
     {bill:true}, //characters; unlocked
@@ -331,7 +334,7 @@ const default_player = new Player(
 
     {}  //flags
 )
-default_player.lifetime = new statsTracker(0,0,0,0,0,0,0,0,0,{crafted: [0, 0, 0, 0, 0, 0],craftedTotal: 0},0)
+default_player.lifetime = new statsTracker(0,0,0,0,0,0,0,0,0,{crafted: [0, 0, 0, 0, 0, 0],craftedTotal: 0},0,0);
 
 
 /* --- Tools --- */
@@ -355,10 +358,11 @@ const Default_Boomer_Bill = new Farmer(
     "bill", './assets/characters/Bill.png',
     1, 100,
     [ // Price scaling
-        { min: 1,   modifier: 0.11 },
-        { min: 75,  modifier: 0.13 },
-        { min: 100, modifier: 0.09 },
-        { min: 300, modifier: 0.08 },
+        { min: 1,   modifier: 0.11  },
+        { min: 75,  modifier: 0.13  },
+        { min: 100, modifier: 0.09  },
+        { min: 300, modifier: 0.08  },
+        { min: 500, modifier: 0.065 },
     ],
     [0,0,0,0,0,0],
 );
@@ -366,10 +370,10 @@ const Default_Belle_Boomerette = new Farmer(
     "belle", './assets/characters/Belle.png',
     0, 200,
     [ // Price scaling
-        { min: 0,   modifier: 0.06 },
-        { min: 100, modifier: 0.12 },
-        { min: 125, modifier: 0.07 },
-        { min: 200, modifier: 0.08 },
+        { min: 0,   modifier: 0.058 },
+        { min: 100, modifier: 0.11  },
+        { min: 125, modifier: 0.07  },
+        { min: 200, modifier: 0.08  },
     ],
     [0,0,0,0,0,0],
 );
@@ -378,11 +382,11 @@ const Default_Gregory = new Blacksmith(
     0, 5000,
     [ // Price scaling
         { min: 0,   modifier: 0.21156 },
-        { min: 25,  modifier: 0.1874 },
-        { min: 50,  modifier: 0.227 },
-        { min: 75,  modifier: 0.284 },
-        { min: 100, modifier: 0.409 },
-        { min: 125, modifier: 0.25}
+        { min: 25,  modifier: 0.1874  },
+        { min: 50,  modifier: 0.227   },
+        { min: 75,  modifier: 0.284   },
+        { min: 100, modifier: 0.409   },
+        { min: 125, modifier: 0.25    },
     ],
     [0,0,0,0,0,0],
     [15000,750000,55000000,9000000000,5000000000000,25000000000000000],
@@ -631,19 +635,26 @@ const Default_Carl = {
                 bought: false,
             },
 
-            // Bill
-            'bill/business_bill': {
-                currency: 'cash',
-                price: 5,
-                available: false,
-                bought: false,
-            },
+            // Bill 
             'bill/biker_bill': {
                 currency: 'cash',
                 price: 5,
                 available: false,
                 bought: false,
             },
+            'bill/fancy_bill': {
+                currency: 'cash',
+                price: 40,
+                available: false,
+                bought: false,
+            },
+            'bill/business_bill': {
+                currency: 'cash',
+                price: 5,
+                available: false,
+                bought: false,
+            },
+
             
             // Carl
             'carl/joker_carl': {
@@ -675,6 +686,11 @@ const Default_Six = {
 
     // Shop player data
     data: {
+        'mp3_player': {
+            available: true,
+            level: 0,
+            value: false,
+        },
         'clickrate': {
             available: true,
             level: 0,
@@ -690,11 +706,16 @@ const Default_Six = {
             level: 0,
             value: 0,
         },
-        // 'greg_slots': {
+        // 'greg_slots': { // scrapped because of how craft speed works- may add later but probably wouldnt be any good
         //     available: true,
         //     level: 0,
         //     value: 1,
         // },
+        'tool_slots': {
+            available: true,
+            level: 0,
+            value: 0,
+        },
         'greg_speed': {
             available: true,
             level: 0,
@@ -732,16 +753,15 @@ const Default_Six = {
         // },
     },
 }
+/** Hire Six */
 function hireSix() {
-    const hireCost = 500000000;
-    if(player.carrots < hireCost) {
-        toast('More carrots needed', 'Six needs at least 500 million carrots to move in.');
-        return;
-    }
+    if(player.character.six != 'ready') return; // Not available for hire or already hired
+    const hireCost = 250000000;
+    if(player.carrots < hireCost) return toast(...toasts.error_six_hire_cost); // Too expensive
     player.carrots -= hireCost;
     player.characters['six'] = true;
     populateSix();
-    toast('Trinkets now available', 'Use cash to buy trinkets with special abilities.');
+    toast(...toasts.notice_trinkets);
 }
 
 // Used when determining how many characters there are
@@ -784,27 +804,12 @@ function carlItemsAvailable() {
 function carlShopQuery(type, item) {
     console.warn(`carlShopQuery(${type}, ${item})`);
     try {
-        if(Carl.shop[type][item].available == true
-            || Carl.shop[type][item].bought == true
-        ) { return true; }
-        else { return false};
+        if(Carl.shop[type][item].available || Carl.shop[type][item].bought) return true;
+        else return false;
     } catch (error) {
-        console.log('carlShopQuery: invalid query- item or type not found');
+        console.warn('carlShopQuery: invalid query- item or type not found');
         return false;
     }
-}
-
-/** Returns completion of trinkets */
-function sixCompletion() {
-    let keys = sixShop.keys;
-    let comTotal = 0;
-    let maxTotal = 0;
-    for(i = 0; i < keys.length; i++) {
-        let key = keys[i];
-        comTotal += Six?.data[key]?.level;
-        maxTotal += sixShop[key].price.length;
-    }
-    return `${comTotal}/${maxTotal}`;
 }
 
 
@@ -967,13 +972,10 @@ function saveSettings() {
     localStorage.setObject("settings", settings);
 }
 /** Reset settings to defaults */
-function resetSettings(dialog=false) {
+function resetSettings() {
     settings = clone(default_settings);
     saveSettings();
     fillSettingsPage();
-
-    if(!dialog) return;
-    toast('Settings Reset', 'All settings returned to defaults');
 }
 
 // Default keybinds
@@ -1092,7 +1094,7 @@ function multibuySpin() {
     // Update page
     characterPrices();
     characterButtons();
-    updateHoePrices();
+    updateToolPrices();
     updateAllTools();
     updateCharlesShop();
     eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
@@ -1156,22 +1158,13 @@ function earnCarrots(amount, type, useMousePos = false) {
     player.prestige[`${type}_carrots`] += amount;
     player.lifetime[`${type}_carrots`] += amount;
 
-    // Special cases
-    switch(type) {
-        case 'click': // Click
-            player.prestige.clicks++;
-            player.lifetime.clicks++;
-            break;
-        case 'bonus': // Bonus
-            popupHandler(useMousePos, DisplayRounded(amount, 1), 'falling');
-            player.prestige.falling_carrots_grabbed++;
-            player.lifetime.falling_carrots_grabbed++;
-    }
-
     // Update page
     carrotCount();
     characterButtons();
     calculatePrestigePotential();
+
+    // Bonus
+    if(type == 'bonus') popupHandler(useMousePos, DisplayRounded(amount, 1), 'falling');
 }
 
 /** Earn currency
@@ -1189,35 +1182,48 @@ function earnCash(amount, type) {
 }
 
 // Carrot event listeners
-var holdDelay;
-var holdClock;
+var hold = {
+    active: false,
+    delay:  undefined,
+    clock:  undefined,
+}
 mainCarrot.addEventListener('mousedown',    () => { holdStart(); });
 mainCarrot.addEventListener('touchstart',   () => { holdStart(); });
 /** Holding down clicks carrots
  * @param {Boolean} useMousePos 
  */
 function holdStart(useMousePos = true) {
-    clearTimeout(holdDelay);
-    holdDelay = setTimeout(() => {
-        clearInterval(holdClock)
-        holdClock = setInterval(() => {
-            if(document.hidden) { clearInterval(holdClock); return; }
+    clearTimeout(hold.delay);
+    hold.active = true;
+    hold.delay = setTimeout(() => {
+        clearInterval(hold.clock)
+        hold.clock = setInterval(() => {
+            if(document.hidden) return clearInterval(hold.clock);
             onClick(useMousePos, 'click');
-            // mainCarrot.click(); // alternative
-        }, 1000 / (Six.data.clickrate.value || 2)); // replace with clicks per second
+        }, 1000 / (Six.data.clickrate.value || 2));
     }, 250);
 }
 
-/** Stops Clicking on release */
+// holdStop
 //#region 
+/** Stops Clicking on release */
 function holdStop() {
-    clearTimeout(holdDelay);
-    clearInterval(holdClock);
+    hold.active = false;
+    clearTimeout(hold.delay);
+    clearInterval(hold.clock);
 }
-mainCarrot.addEventListener('mouseup',      () => { holdStop(); });
-mainCarrot.addEventListener('mouseout',     () => { holdStop(); });
-mainCarrot.addEventListener('touchend',     () => { holdStop(); });
-mainCarrot.addEventListener('touchcancel',  () => { holdStop(); });
+mainCarrot.addEventListener('mouseup', () => { holdStop(); });
+mainCarrot.addEventListener('mouseout', event => {
+    if(!hold.active) return;
+    // Don't stop if moused out to falling carrot
+    let obstruct = event.relatedTarget;
+    if(obstruct.classList.contains('falling_carrot')) {
+        return obstruct.click();
+    }
+    holdStop();
+});
+mainCarrot.addEventListener('touchend', () => { holdStop(); });
+mainCarrot.addEventListener('touchcancel', () => { holdStop(); });
 window.onblur = () => { holdStop(); }
 //#endregion
 
@@ -1247,6 +1253,8 @@ function onClick(useMousePos, method='click', source=0) {
 
     // Grant carrots
     earnCarrots(player.cpc, 'click');
+    player.prestige.clicks++;
+    player.lifetime.clicks++;
     fallingConsecutive = 0;
     cpsbuff = 5; // Used by trinkets
 
@@ -1322,9 +1330,7 @@ function fallingCarrot() {
 
     // To page
     fallingCarrotsArea.append(element);
-
     element.classList.add('bright_200');
-
     setTimeout(() => {
         if(dom(element.id) != null) dom(element.id).remove();
     }, 2600);
@@ -1338,9 +1344,9 @@ function fallingCarrot() {
         }
 
         if(type == 'carrot') {
-            if(player.flags['hardcore']) {
-                amount *= -1;
-            };
+            if(player.flags['hardcore']) amount *= -1;
+            player.prestige.falling_carrots_grabbed++;
+            player.lifetime.falling_carrots_grabbed++;
             earnCarrots(amount, 'bonus', true);
             mouseConfetti([6, 8], ccCarrot, 300);
         } else if(type == 'cash') {
@@ -1441,7 +1447,7 @@ function characterButtons() {
     style(dom('Greg_level_up'),  'grayedout', greg);
 }
 /** Updates Hoe prices on the page */
-function updateHoePrices() {
+function updateToolPrices() {
     eInnerText(elHoePrices.wooden,    `${DisplayRounded(toolCost(0,multibuy[mbsel]),1)}`);
     eInnerText(elHoePrices.stone,     `${DisplayRounded(toolCost(1,multibuy[mbsel]),1)}`);
     eInnerText(elHoePrices.iron,      `${DisplayRounded(toolCost(2,multibuy[mbsel]),1)}`);
@@ -1553,6 +1559,11 @@ function updateMainIcon() {
         elMainIcon.src   = './assets/easter_egg.png';
         elMainIcon.title = 'Hardmode';
     }
+    // Dev mode
+    else if(isDebug()) {
+        elMainIcon.src   = './assets/items/keyboard_2.png';
+        elMainIcon.title = 'Developer mode';
+    }
     // Gold Medal
     else if(achieveQuery('all_achievements')) {
         elMainIcon.src   = './assets/medal_spin.gif';
@@ -1572,11 +1583,6 @@ function updateMainIcon() {
     else if(achieveQuery('1_prestige')) {
         elMainIcon.src   = './assets/theme/pixel_golden_carrot.png';
         elMainIcon.title = 'Prestiged';
-    }
-    // Dev mode
-    else if(isDebug()) {
-        elMainIcon.src   = './assets/items/keyboard_2.png';
-        elMainIcon.title = 'Developer mode';
     }
     // Default
     else {
@@ -1719,7 +1725,6 @@ function levelUp(character=Boomer_Bill, amount=1) {
  */
 function prestige() {
     console.log('Prestiging...');
-
     if(player.prestige_potential < 1) {
         console.warn('Insufficient prestige potential');
         toast('Cannot Prestige', 'Insufficient prestige potential. Try again later.');
@@ -1729,14 +1734,14 @@ function prestige() {
     window.scrollTo(0, 0);
     clearInterval(cpsInterval);
 
-    // Statistics
+    // Reset statistics
     player.prestige = clone(playerPrestigeTemplate);
     // Give golden carrots
     player.golden_carrots += player.prestige_potential;
     player.lifetime.golden_carrots += player.prestige_potential;
     player.lifetime.prestige_count += 1;
 
-    //stop any hoes from crafting
+    // Stop any tools from crafting
     clearInterval(craftingInterval);
     setTimeout(updateCraftingBar, 90);
 
@@ -1775,7 +1780,7 @@ function prestige() {
 
     // Tutorial message
     if(player.lifetime.prestige_count == 1) {
-        let toaster = toast('Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming,', '', true, false, false, true, () => { closeToast(toaster); }, "Got it");
+        let toaster = toast(...toasts.tutorial_charles, () => { closeToast(toaster); }, "Got it");
     }
 
     // Recalculate & update prestige potential
@@ -1848,7 +1853,7 @@ function calculatePrestigePotential() {
     if(!settings.full_numbers) {eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));}
     else { eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0))); }
 
-    if(prestigeMenuOpen) { eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2)); }
+    if(menuState.prestige) { eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2)); }
 
     // Make button glow if prestiging will double lifetime
     if(
@@ -1948,7 +1953,7 @@ var craftingInterval;
  * @param {number} progress Value given if the game is started and an unfinished crafting job is found in the save file
  * @returns If a condition for crafting (such as cost) is not met
  */
- function createTool(type=0, amount=1, progress=0, intended_character=false) {
+function createTool(type=0, amount=1, progress=0, intended_character=false) {
     // Greg unlock check
     if(!characterQuery('greg')) return "Greg is not unlocked yet";
 
@@ -1962,9 +1967,9 @@ var craftingInterval;
     }
 
     // Checks to see if Greg Can Hold more of this Type
-    if(Gregory.Hoes[type]+amount-1>= Gregory.lvl) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
+    if(Gregory.lvl == 0 || Gregory.Hoes[type]+amount-1 >= Gregory.lvl+Six.data.tool_slots.value) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
 
-    let price = toolCost(type,amount);
+    let price = toolCost(type, amount);
     // Checks if Hoe is Too expensive
     if(price * ((Six.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) {
         // toast("Too expensive!", "That tool is currently too expensive", '', false, true);
@@ -1990,10 +1995,8 @@ var craftingInterval;
     // Run crafting loop
     craftingInterval = setInterval(frame, 100);
     function frame() {
-        // While crafting
-        if(progress < price) craft();
-        // Done crafting
-        if(progress >= price) whenDone();
+        if(progress < price) craft(); // While crafting
+        else whenDone(); // Done crafting
     }
 
     function craft(){
@@ -2045,7 +2048,7 @@ function updateCraftingBar(){
     dom('greg_crafting_info').title = 'Idle';
     //page updates
     updateAllTools(); 
-    updateHoePrices();
+    updateToolPrices();
 }
 /** Equips a tool to a Character
  * @param {object} character Character object
@@ -2053,7 +2056,7 @@ function updateCraftingBar(){
  * @param {number} amount 
  * @returns If there is any reason that hoe type can't be equipped
  */
- function equipTool(character=Boomer_Bill, type=0, amount=1){
+function equipTool(character=Boomer_Bill, type=0, amount=1){
     if(!characterQuery('greg') || !characterQuery(character.nickname)) return "Character not unlocked"; // Greg/target character unlock check
 
     // Ensure Gregory has enough to give
@@ -2100,16 +2103,13 @@ function updateAllTools() {
 
         // Bill & Belle hoes
         if(charString == 'bill' || charString == 'belle') {
-            // Remove blackout and set innertext
-            // Greg has a hoe to give
             let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl);
             style(img, 'glowing', glowState);
             style(img, 'blackedout', !glowState);
         }
         // Greg hoes
         else if(charString == 'greg') {
-            // Can afford and is unlocked
-            if(
+            if( // Can afford and is unlocked
                 !gregLevelTest(type, false)
                 && Gregory.HoePrices[type] * ((Six.data.greg_min_start.value || 100) / 100) <= player.carrots
             ) {
@@ -2130,7 +2130,7 @@ function updateAllTools() {
 
 
         // Number
-        if(character.Hoes[type] == Gregory.lvl && Gregory.lvl != 0) {
+        if(character.Hoes[type] == Gregory.lvl + Six.data.tool_slots.value && Gregory.lvl != 0) {
             eInnerText(count, 'MAX');
             img.classList.remove('blackedout');
             img.classList.remove('grayedout');
@@ -2267,7 +2267,7 @@ function loadStatistics() {
 
     statsNumbers.stat_themes.innerText = `${Object.keys(player.themes).length - 3}/${Object.keys(themes).length - 3} (${percentage(Object.keys(player.themes).length - 3, Object.keys(themes).length - 3).toFixed(0)}%)`;
     statsNumbers.stat_cosmetics.innerText =  `${playerCosmeticsCount()}/${totalCosmetics} (${percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)}%)`;
-    statsNumbers.stat_trinkets.innerText = `${sixCompletion()} (${percentage(...sixCompletion().split('/')).toFixed(0)}%)`;
+    statsNumbers.stat_trinkets.innerText = `${player.trinket_completion} (${percentage(...player.trinket_completion.split('/')).toFixed(0)}%)`;
     let unlockedAchievements = Object.keys(player.achievements);
     achievementProgress(statsNumbers.stat_achievements);
 }
