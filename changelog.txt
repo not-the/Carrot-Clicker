@@ -7,14 +7,13 @@ Starting to prepare to get ready to potentially approach a possible stable relea
 
 What's new:
 - New trinket: Tool Box (tool_slots) - Gives additional tool slots (Greg's level + Tool Box level)
+- New trinket: MP3 Player (no functionality at the moment)
 - "Auto-update save while in debug mode" option added to dev panel
 - Falling carrots no longer interrupt auto-click, instead they are collected if you move your mouse over them
 - Overhauled the footer section and added some links
 - Footer carrot easter egg now displays the confetti effect regardless of your settings - also gave it some visual feedback
-
 - Changed achievement check interval: 1s -> 3s
 - New achievment: hire_six
-
 - Moved a bunch of stuff over to CSS variables
 - Switched over a number of themes to use variables: Light, Retro, and Terminal
 - Improved terminal theme animations when clicking
