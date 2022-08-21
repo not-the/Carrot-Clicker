@@ -2395,15 +2395,15 @@ function playerCosmeticsCount() {
 //#region 
 // Shop info (Static)
 const sixShop = {
-    'mp3_player': {
-        name:      'MP3 Player',
-        desc:      'Seems to have some old music on it',
-        img:       './assets/items/tome_tools.png',
-        currency:  'cash',
-        price:     [50],
-        value:     [false, true],
-        written:   '',
-    },
+    // 'mp3_player': {
+    //     name:      'MP3 Player',
+    //     desc:      'Seems to have some old music on it',
+    //     img:       './assets/items/tome_tools.png',
+    //     currency:  'cash',
+    //     price:     [50],
+    //     value:     [false, true],
+    //     written:   '',
+    // },
     'clickrate': {
         name:      'Golden Mouse',
         desc:      'Increases hold-to-click speed',

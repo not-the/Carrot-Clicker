@@ -362,7 +362,7 @@
                             <h2>Greg</h2>
                             <p class="secondary_text">- Blacksmith -</p>
                             <hr>
-                            Upgrade Greg to create and store tools. The maximum amount of tools he and the other characters can hold can hold is equal to his level.
+                            Upgrade Greg to create and store tools. The maximum amount of tools he and the other characters can hold is equal to his level.
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('greg')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('greg')" tabindex="0" role="button">
@@ -388,7 +388,6 @@
                         <!-- Bottom -->
                         <div class="bottom secondary_text">
                             <div class="Greg_Hoe_Container hoecontainer">
-                            <!-- <span class="hoe_price">Prices:</span> -->
 
                             <!-- Crafting display -->
                             <div class="darker_bg_color inactive" title="Idle" id="greg_crafting_info">
@@ -398,27 +397,27 @@
 
                             <img src="./assets/icons/lvl_up_arrow.png" id="Greg_level_up" alt="Upgrade Greg" onclick="levelUp(Gregory,multibuy[mbsel])" class="levelupimg" title="Level up" tabindex="0" role="button">
                             
-                            <span id="wooden_hoe_price" class="hoe_price greg_margin_fix">Wooden</span>
+                            <span class="tool_price greg_margin_fix" data-tool-id="0">tool_0</span>
                             <p class="Greg_Hoe_Number toolnumber greg_margin_fix" id="Greg_Wooden_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_0.png" class="toolicon blackedout greg_margin_fix tool_0" onclick="createTool(0,multibuy[mbsel])" id="greg_wooden_hoe" tabindex="0" role="button">
 
-                            <span id="stone_hoe_price" class="hoe_price">Stone</span>
+                            <span class="tool_price" data-tool-id="1">tool_1</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Stone_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_1.png" class="toolicon blackedout tool_1" onclick="createTool(1,multibuy[mbsel])" id="greg_stone_hoe" tabindex="0" role="button">
 
-                            <span id="iron_hoe_price" class="hoe_price">Iron</span>
+                            <span class="tool_price" data-tool-id="2">tool_2</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Iron_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_2.png" class="toolicon blackedout tool_2" onclick="createTool(2,multibuy[mbsel])" id="greg_iron_hoe" tabindex="0" role="button">
 
-                            <span id="gold_hoe_price" class="hoe_price">Gold</span>
+                            <span class="tool_price" data-tool-id="3">tool_3</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Gold_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_3.png" class="toolicon blackedout tool_3" onclick="createTool(3,multibuy[mbsel])" id="greg_gold_hoe" tabindex="0" role="button">
 
-                            <span id="diamond_hoe_price" class="hoe_price">Diamond</span>
+                            <span class="tool_price" data-tool-id="4">tool_4</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Diamond_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_4.png" class="toolicon blackedout tool_4" onclick="createTool(4,multibuy[mbsel])" id="greg_diamond_hoe" tabindex="0" role="button">
 
-                            <span id="netherite_hoe_price" class="hoe_price">Netherite</span>
+                            <span class="tool_price" data-tool-id="5">tool_5</span>
                             <p class="Greg_Hoe_Number toolnumber" id="Greg_Netherite_Hoe_Number">err</p>
                             <img src="./assets/tools/tool_5.png" class="toolicon blackedout tool_5" onclick="createTool(5,multibuy[mbsel])" id="greg_netherite_hoe" tabindex="0" role="button">
                             </div>
@@ -965,7 +964,7 @@
     </main>
   
     <!-- Popup menus -->
-    <div id="overlay" class="dramatic">
+    <div id="overlay">
         <!-- Backdrop -->
         <div id="backdrop" onclick="closeDialog()"></div>
 

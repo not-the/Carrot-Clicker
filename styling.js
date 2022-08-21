@@ -32,7 +32,7 @@ var tipsHTMLupdate    = true;
 // Dialog Elements
 const overlay = dom("overlay");
 const elDialog = {
-    main:    dom("dialog"),
+    // main:    dom("dialog"),
     title:   dom("dialog_title"),
     desc:    dom("dialog_desc"),
     buttons: {
@@ -153,7 +153,6 @@ function buttonSound() {
  */
 function openDialog(title, desc, buttonName, buttonStyle, button_action) {
     openMenu('dialog');
-    elDialog.main.classList.add('visible');
     buttonSound();
 
     // Fill out dialog text, if applicable
@@ -169,9 +168,8 @@ function openDialog(title, desc, buttonName, buttonStyle, button_action) {
  * @returns 
  */
 function closeDialog(accept=false) {
-    overlay.classList.remove("visible");
+    overlay.className = "";
     elBody.classList.remove('overflow_hidden');
-    elDialog.main.classList.remove('visible');
     buttonSound();
 
     // Reset dialog
@@ -187,36 +185,32 @@ function closeDialog(accept=false) {
 
     // Hide other popup menus
     //#region
+    if(menuState.dialog) {
+        menuState.dialog = false;
+    }
     if(menuState.character) {
         dom(`${menuState.character}_box`).classList.remove('show_info');
         menuState.character = false;
     }
     if(menuState.theme) {
-        themeMenu.classList.remove('visible');
         menuState.theme = false;
     }
     if(menuState.cosmetic) {
-        cosmeticMenu.classList.remove('visible');
         menuState.cosmetic = false;
     }
     if(menuState.keybinds) {
-        elKeybindsMenu.classList.remove('visible');
         menuState.keybinds = false;
     }
     if(menuState.prestige) {
-        prestigeMenu.classList.remove('visible');
         menuState.prestige = false;
     }
     if(menuState.prestige) {
-        inventoryMenu.classList.remove('visible');
         menuState.prestige = false;
     }
     if(menuState.tips) {
-        tipsMenu.classList.remove('visible');
         menuState.tips = false;
     }
     if(menuState.credits) {
-        elCredits.classList.remove('visible');
         menuState.credits = false;
     }
 
@@ -405,11 +399,9 @@ const settingsTab     = dom("settings-panel-button");
  * @returns 
  */
 function panelChange(to, noSound = false) {
-    if(currentPanel == to) {
-        return;
-    } else {
-        // Sound effect
-        if(noSound == false) {buttonSound();}
+    if(currentPanel == to) return;
+    else {
+        currentPanel = to;
 
         // Tab reset
         infoTab.classList.remove("activetab");
@@ -423,24 +415,19 @@ function panelChange(to, noSound = false) {
 
         // Unhide selected panel
         dom(to + "-button").classList.add("activetab");
-
         dom(to).classList.add('unremove');
         
         // Save
         settings.openpanel = to;
         saveSettings();
-        currentPanel = to;
+
+        buttonSound();
     }
 
     // Update achievements list
-    if(to == 'achievements-panel' && achieveHTMLupdate == true) {
-        populateAchievements();
-    }
-    if(to == 'stats-panel'){
-        statsInterval = setInterval(() => {loadStatistics()}, 1000);
-    } else {
-        clearInterval(statsInterval);
-    }
+    if(to == 'achievements-panel' && achieveHTMLupdate == true)  populateAchievements();
+    if(to == 'stats-panel') statsInterval = setInterval(() => {loadStatistics()}, 1000);
+    else clearInterval(statsInterval);
 }
 //#endregion
 
@@ -497,7 +484,6 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
         clickVisualElement.classList.add("clickvisual_cash");
     }
     
-
     bonusVisualArea.append(clickVisualElement);
 
     // Delete Popup after animation finishes/2 seconds
@@ -521,7 +507,6 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 /** Opens the theme menu */
 function themeSwitcher() {
     openMenu('theme');
-    themeMenu.classList.add('visible');
     newIndicator(false, 'theme');
     buttonSound();
 }
@@ -537,7 +522,6 @@ var uncollapseNeeded = false;
 function cosmeticSwitcher(category = false) {
     if(!characterQuery('carl')) return;
     openMenu('cosmetic');
-    cosmeticMenu.classList.add('visible');
     newIndicator(false, 'cosmetic');
     buttonSound();
 
@@ -561,15 +545,14 @@ function cosmeticSwitcher(category = false) {
 /** Closes the cosmetic menu */
 function closeCosmeticSwitcher(noOverlay = false) {
     cosmeticMenu.classList.remove('visible');
-    if(noOverlay == false) {
-        overlay.classList.remove("visible");
-    }
+    if(!noOverlay) overlay.classList.remove("visible");
 }
 
 // Always run when a menu is open
 function openMenu(id) {
     closeDialog();
     overlay.classList.add("visible");
+    overlay.classList.add(`show_${id}`);
     elBody.classList.add('overflow_hidden');
 
     // Disable keyboard navigation for main page
@@ -586,7 +569,6 @@ function openPrestigeMenu() {
     if(player.prestige_available != true) {return};
     
     openMenu('prestige');
-    prestigeMenu.classList.add('visible');
     updatePrestigeMenu();
     buttonSound();
 }
@@ -595,7 +577,6 @@ function openPrestigeMenu() {
 // function openInventory() {
 //     closeDialog();
 //     menuState.inventory = true;
-//     inventoryMenu.classList.add('visible');
 //     overlay.classList.add("visible");
 //     elBody.classList.add('overflow_hidden');
 
@@ -609,7 +590,6 @@ function openTipsMenu() {
         tipsHTMLupdate = false;
     }
     openMenu('tips');
-    tipsMenu.classList.add('visible');
     buttonSound();
 }
 const elTipsList = dom('tips_list');
@@ -956,25 +936,57 @@ function populateCosmeticsList(target) {
 //#endregion
 
 
-
-// Populate achievements list
 const elAchievementsList = dom('achievements_list');
 const elAchievementFilter = dom('achievement_filter');
-function populateAchievements() {
+
+/** Populate achievements list
+ * @param {string} specific Accepts an achievement key and updates only that achievement instead
+ */
+function populateAchievements(specific=false) {
     const filter = dom('achievement_filter').value;
     // Don't populate if not needed
     if(!achieveHTMLupdate) return;
     achieveHTMLupdate = false;
-    
     var achievementHTML = '';
-    var rewardsHTML = '';
 
-    for(let i = 0; i < achievementsKeys.length; i++) {
-        let key = achievementsKeys[i];
+    // Populate all
+    if(!specific) {
+        for(let i = 0; i < achievementsKeys.length; i++) achievementHTML += htmlTemplate(achievementsKeys[i]);
+    }
+    // Populate single
+    else {
+        let item = achievements?.[specific];
+        if(item == undefined) return console.warn(`populateAchievements(): [${specific}] is not a valid achievement`);
+
+        let ahtml = new DOMParser().parseFromString(htmlTemplate(specific), "text/html").body.firstChild;
+        let replace = document.getElementById(specific);
+        replace.parentNode.replaceChild(ahtml, replace);
+        return;
+    }
+
+
+    // Filter by unlocked
+    if(achievementHTML == '') {
+        if(filter == 'unlocked') {
+            achievementHTML = `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
+        }
+        // Filter by locked
+        else if(filter == 'locked') {
+            achievementHTML = `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
+        }
+        // Filter by secret
+        else if(filter == 'secret') {
+            achievementHTML = `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+        }
+    }
+
+    elAchievementsList.innerHTML = achievementHTML;
+    setTimeout(() => {achieveGridAdjust()}, 50);
+
+    function htmlTemplate(key) {
+        var rewardsHTML = '';
         let achieve = achievements[key];
-
-        // Test if unlocked
-        let unlocked = achieveQuery(key);
+        let unlocked = achieveQuery(key); // Test if unlocked
 
         // Filters
         if(
@@ -984,7 +996,7 @@ function populateAchievements() {
             filter == 'challenge' && achieve.style != 'challenge' || 
             filter == 'secret'    && achieve.mystery.list != true ||
             achieve.mystery.list == true && unlocked == false
-        ) continue;
+        ) return '';
 
 
         // Rewards info
@@ -1002,16 +1014,10 @@ function populateAchievements() {
                 let reward = achieve.reward;
                 inner += rewardHTML(reward);
             }
-            
+
             // Export HTML
-            rewardsHTML =
-            `<!-- Rewards -->
-            <div class="rewards_list">
-                ${inner}
-            </div>`;
-        } else {
-            rewardsHTML = '';
-        }
+            rewardsHTML = `<div class="rewards_list">${inner}</div>`;
+        } else rewardsHTML = '';
 
         // Achievement info
         // cheat:       onclick="grantAchievement('${key}')"
@@ -1024,7 +1030,7 @@ function populateAchievements() {
         let title = name == '???' ? 'This achievement has not been unlocked' : name;
 
         // Create
-        achievementHTML += /* htmla */ `
+        return /* htmla */ `
         <div
             id="${key}"
             class="achievement_item 
@@ -1050,28 +1056,57 @@ function populateAchievements() {
             ${rewardsHTML}
         </div>
         `;
-    }
 
-    // Filter by unlocked
-    if(achievementHTML == '') {
-        if(filter == 'unlocked') {
-            achievementHTML =
-                `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
-        }
-        // Filter by locked
-        else if(filter == 'locked') {
-            achievementHTML =
-                `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
-        }
-        // Filter by secret
-        else if(filter == 'secret') {
-            achievementHTML =
-                `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
+        /** Achievement reward HTML */
+        function rewardHTML(reward) {
+            let [rewardType, rewardName] =
+            typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
+            let subtype;
+
+            let informalName;
+            let icon;
+            let extraClass = '';
+
+            // Don't show function rewards
+            if(rewardType == 'function' || rewardType == 'shop') return '';
+
+            // Get reward info
+            if(rewardType == 'theme') {
+                informalName = themes[rewardName].name;
+                icon = themes[rewardName].image
+            }
+            // Cosmetic
+            else if(rewardType == 'cosmetic') {
+                [subtype, rewardName] = rewardName.split('/');
+                informalName = cosmetics[subtype][rewardName].name;
+                icon = cosmetics[subtype][rewardName].image || cosmetics[subtype][rewardName].preview;
+            }
+            // Character
+            else if(rewardType == 'character') {
+                informalName = capitalizeFL(rewardName);
+                icon = defaultChar[rewardName].img; // Get image
+            }
+            // Cash
+            else if(rewardType == 'cash') {
+                icon = './assets/piggy_bank.png';
+                informalName = `${rewardName} coins`;
+                rewardType = '';
+                extraClass = 'rcash';
+            }
+
+            return `
+            <div class="reward flex ${extraClass}">
+                <img src="${icon}" alt="${informalName}" class="reward_img">
+                <div>
+                    <h4>${informalName}</h4>
+                    <p class="secondary_text">
+                        ${capitalizeFL(rewardType)}
+                    </p>
+                </div>
+            </div>
+            `;
         }
     }
-
-    elAchievementsList.innerHTML = achievementHTML;
-    setTimeout(() => {achieveGridAdjust()}, 50);
 }
 function achieveGridAdjust() {
     // Size adjust
@@ -1096,56 +1131,7 @@ function achieveGridAdjust() {
     });
 }
 
-
-// Achievement reward HTML
-function rewardHTML(reward) {
-    let [rewardType, rewardName] =
-    typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
-    let subtype;
-
-    let informalName;
-    let icon;
-    let extraClass = '';
-
-    // Don't show function rewards
-    if(rewardType == 'function' || rewardType == 'shop') return '';
-
-    // Get reward info
-    if(rewardType == 'theme') {
-        informalName = themes[rewardName].name;
-        icon = themes[rewardName].image
-    }
-    // Cosmetic
-    else if(rewardType == 'cosmetic') {
-        [subtype, rewardName] = rewardName.split('/');
-        informalName = cosmetics[subtype][rewardName].name;
-        icon = cosmetics[subtype][rewardName].image || cosmetics[subtype][rewardName].preview;
-    }
-    // Character
-    else if(rewardType == 'character') {
-        informalName = capitalizeFL(rewardName);
-        icon = defaultChar[rewardName].img; // Get image
-    }
-    // Cash
-    else if(rewardType == 'cash') {
-        icon = './assets/piggy_bank.png';
-        informalName = `${rewardName} coins`;
-        rewardType = '';
-        extraClass = 'rcash';
-    }
-
-    return `
-    <div class="reward flex ${extraClass}">
-        <img src="${icon}" alt="${informalName}" class="reward_img">
-        <div>
-            <h4>${informalName}</h4>
-            <p class="secondary_text">
-                ${capitalizeFL(rewardType)}
-            </p>
-        </div>
-    </div>
-    `;
-}
+/** Achievement progress */
 function achievementProgress(element = dom('achievement_progress')) {
     let unlockedAchievements = Object.keys(player.achievements);
     eInnerText(
@@ -1216,7 +1202,6 @@ function startCredits(toast = false) {
     if(toast) closeToast(toast);
     openMenu('credits');
     elCredits.scrollTop = 0;
-    elCredits.classList.add('visible');
     clearInterval(creditInterval);
     creditInterval = setInterval(() => {
         elCredits.scrollTop += 1;
@@ -1237,7 +1222,6 @@ let keyBlurbText = elKeybindsBlurb.innerHTML;
 /** Opens the keybind menu */
 function keybindsMenu() {
     openMenu('keybinds');
-    elKeybindsMenu.classList.add('visible');
     let checked = elDisableKeybinds.checked;
     style(elKeybindsBlurb, 'color_red', checked);
     elKeybindsBlurb.innerText = checked ? 'Warning: Keybinds are currently disabled in settings.' : keyBlurbText;
@@ -1325,18 +1309,49 @@ function populateCarl() {
 
 const elSixShop = dom('six_shop');
 /** Populate six's shop */
-function populateSix() {
+function populateSix(specific=false) {
     if(characterQuery('six') != true) return;
 
     let html = '';
     let keys = sixShop.keys;
-    for(i = 0; i < keys.length; i++) {
-        let key = keys[i];
+
+    // Populate all
+    if(!specific) {
+        for(i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            html += sixHTML(key);
+        }
+
+        elSixShop.innerHTML = html;
+        // "Check back later for more trinkets"
+        html += `
+        <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
+            Thanks for stopping by!
+        </p>`;
+    }
+    // Populate single
+    else {
+        let item = sixShop?.[specific];
+        console.log(item);
+        if(item == undefined) return console.warn(`populateSix(): [${specific}] is not a valid trinket`);
+
+        let ahtml = new DOMParser().parseFromString(sixHTML(specific), "text/html").body.firstChild;
+        let replace = document.getElementById(`six_shop_${specific}`);
+        replace.parentNode.replaceChild(ahtml, replace);
+        return;
+    }
+    
+
+    cashCount(false);
+
+    /** Six HTML template */
+    function sixHTML(key) {
         let item = sixShop[key];
         let data = Six.data?.[key];
-        if(!data.available || data == undefined) continue;
+        if(!data.available || data == undefined) return;
 
         // Segment bar
+        let src = item.img || './assets/achievements/missing.png';
         let segments = '';
         for(si = 1; si <= item.price.length; si++) {
             let styles = data.level >= si ? 'filled' : '';
@@ -1350,30 +1365,19 @@ function populateSix() {
             styles = '';
         }
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
-        html += sixHTML(key, item.img||'./assets/achievements/missing.png', item.name, item.desc, price, currency, segments, styles, value);
-    }
-    // "Check back later for more trinkets"
-    html += `
-    <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
-        Thanks for stopping by!
-    </p>`;
-    elSixShop.innerHTML = html;
-    cashCount(false);
 
-    /** Six HTML template */
-    function sixHTML(id, src, name, desc, price, currency, segments, styles, value) {
         return `
-        <div class="tooltip_area">
-            <div id="six_shop_${id}" class="shop_item ${styles}" onclick="buyTrinket('${id}')" tabindex="0" role="button">
+        <div id="six_shop_${key}" class="tooltip_area">
+            <div class="shop_item ${styles}" onclick="buyTrinket('${key}')" tabindex="0" role="button">
                 <img src="${src}" alt="" class="shop_img">
                 <div class="info">
-                    <b>${name}</b>
+                    <b>${item.name}</b>
                     <div class="segment_bar darker_bg_color">${segments}</div>
                     <div class="shop_value secondary_text">${value}</div>
                     <div class="shop_price">${price} ${currency}</div>
                 </div>
             </div>
-            <div class="shop_tooltip">${desc}</div>
+            <div class="shop_tooltip">${item.desc}</div>
         </div>`;
     }
 }

@@ -101,14 +101,7 @@ const elHoeCount = {
         dom("Greg_Netherite_Hoe_Number")
     ]
 }
-const elHoePrices = {
-    wooden:     dom("wooden_hoe_price"),
-    stone:      dom("stone_hoe_price"),
-    iron:       dom("iron_hoe_price"),
-    gold:       dom("gold_hoe_price"),
-    diamond:    dom("diamond_hoe_price"),
-    netherite:  dom("netherite_hoe_price")
-};
+const elToolPrices = document.querySelectorAll('.tool_price');
 const elMainProgressContainer = dom('main_progress_container');
 const elMainProgressBar = dom('main_progress_bar');
 const elGregProgress = dom("Greg_Progress");
@@ -425,7 +418,7 @@ class tome {
             //check if target is met;
             if(target===valueDummy+1) {
                 if(sendNewPrice) {
-                    console.log(newPrice);
+                    // console.log(newPrice);
                     return newPrice;
                 }
                 return sum;
@@ -453,9 +446,8 @@ class tome {
         player.lifetime.tomes_bought += amount; // Statistics
 
         // Recalculate CPC/CPS/level up prices
-        player.cpc = calculateCarrots(Boomer_Bill);
-        player.cps = calculateCarrots(Belle_Boomerette);
-        //recalculatePrices();
+        recalculateCarrotsPer();
+        recalculatePrices();
 
         // Update page
         updateCharlesShop();
@@ -464,6 +456,7 @@ class tome {
         mouseConfetti([3, 8], ccWhite);
     }
 }
+
 const Default_Charles = new Scholar("charles",'./assets/characters/Charles.png',)
 Default_Charles.improveWorkingConditions=new tome (0,1,22025);
 Default_Charles.decreaseWages=new tome(0,1,22025);
@@ -755,7 +748,10 @@ const Default_Six = {
 }
 /** Hire Six */
 function hireSix() {
-    if(player.character.six != 'ready') return; // Not available for hire or already hired
+    if(player.characters.six != 'ready') {
+        if(player.characters.six == true) populateSix();
+        else return; // Not available for hire or already hired
+    }
     const hireCost = 250000000;
     if(player.carrots < hireCost) return toast(...toasts.error_six_hire_cost); // Too expensive
     player.carrots -= hireCost;
@@ -1094,8 +1090,8 @@ function multibuySpin() {
     // Update page
     characterPrices();
     characterButtons();
-    updateToolPrices();
     updateAllTools();
+    updateToolPrices();
     updateCharlesShop();
     eInnerText(dom("multibuy"), multibuy[mbsel] + "x");
 
@@ -1446,14 +1442,12 @@ function characterButtons() {
     style(dom('Belle_level_up'), 'grayedout', belle);
     style(dom('Greg_level_up'),  'grayedout', greg);
 }
-/** Updates Hoe prices on the page */
+/** Updates tool prices on the page */
 function updateToolPrices() {
-    eInnerText(elHoePrices.wooden,    `${DisplayRounded(toolCost(0,multibuy[mbsel]),1)}`);
-    eInnerText(elHoePrices.stone,     `${DisplayRounded(toolCost(1,multibuy[mbsel]),1)}`);
-    eInnerText(elHoePrices.iron,      `${DisplayRounded(toolCost(2,multibuy[mbsel]),1)}`);
-    eInnerText(elHoePrices.gold,      `${DisplayRounded(toolCost(3,multibuy[mbsel]),1)}`);
-    eInnerText(elHoePrices.diamond,   `${DisplayRounded(toolCost(4,multibuy[mbsel]),1)}`);
-    eInnerText(elHoePrices.netherite, `${DisplayRounded(toolCost(5,multibuy[mbsel]),1)}`);
+    elToolPrices.forEach(element => {
+        let type = Number(element.dataset.toolId);
+        eInnerText(element, /*gregLevelTest(type) ? */`${DisplayRounded(toolCost(type, multibuy[mbsel]),1)}`/* : '---'*/);
+    });
 }
 /** Updates Charles' shop content */
 function updateCharlesShop() {
@@ -1784,6 +1778,7 @@ function prestige() {
     }
 
     // Recalculate & update prestige potential
+    recalculateCarrotsPer();
     calculatePrestigePotential();
     seeButton('prestige');
 
@@ -1792,17 +1787,10 @@ function prestige() {
     characterPrices();
     characterButtons();
     updateCharlesShop();
-    // updatePrestigeMenu();
     showPrestigeStats();
 
-    // calculate CPC and CPS
-    player.cpc = calculateCarrots(Boomer_Bill);
-    player.cps = calculateCarrots(Belle_Boomerette);
-
-    // Prompt player to use Charles (should maybe only be first time?)
-    setTimeout(() => {
-        characterInfo('charles'); 
-    }, 100);
+    // Prompt player to use Charles
+    setTimeout(() => { characterInfo('charles') }, 100);
 }
 /** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
  * @param {Object} character 
@@ -1811,8 +1799,8 @@ function prestige() {
  function calculateCarrots(character) {
     let SixToolBonus = Math.floor(character.Hoes[5]/10*Math.floor(Math.pow(character.Hoes[0]*character.Hoes[1]*character.Hoes[2]*character.Hoes[3]*character.Hoes[4],0.3))) || 1;
     let betterHoes=1+Charles.betterHoes.value/100 // Calculate betterHoes bonus
-    let iwc = Charles.improveWorkingConditions.value || 1;
-    // Calculates Hoe Values
+    let iwc = (Charles.improveWorkingConditions.value/* * 1.1*/) + 1;
+    // Calculates tool values
     let modifier = 10;
     let cpHoes = (1*betterHoes*(character.Hoes[0]) + 1);
     for(let i = 1; i < character.Hoes.length; i++) {
@@ -1822,19 +1810,24 @@ function prestige() {
         modifier *= 10;
     }
     
-    // Temporary boost handler
+    // Boost handler
     let boosted = 1;
     if(character == Boomer_Bill) boosted = boostEffects.cpc;
     else if(character == Belle_Boomerette) boosted = boostEffects.cps;
 
-    //returns the correct value
-    if(cpHoes>0) return (1.1 * iwc) * character.lvl * cpHoes * boosted * SixToolBonus;
-    else return (1.1 * iwc) * character.lvl * boosted * SixToolBonus;
+    // Returns the correct value
+    if(cpHoes>0) return iwc * character.lvl * cpHoes * boosted * SixToolBonus;
+    else return iwc * character.lvl * boosted * SixToolBonus;
+}
+
+/** Recalculates and sets CPC and CPS */
+function recalculateCarrotsPer() {
+    player.cpc = calculateCarrots(Boomer_Bill);
+    player.cps = calculateCarrots(Belle_Boomerette);
 }
 
 /** Calculates the prestige potential and updates the page */
 function calculatePrestigePotential() {
-
     // Prestige Potential
     let pageValue = (Six.data.page_bonus.value || 1) / 100;
     let defaultPotential = player.cpc*player.cps;
@@ -1850,18 +1843,17 @@ function calculatePrestigePotential() {
     player.prestige_potential= Math.floor(Math.pow((defaultPotential * characterLevelMultiplier * tomePageBonus * BalancedLevelModifer())/10000000000,0.4));
 
     // Update page
-    if(!settings.full_numbers) {eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));}
-    else { eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0))); }
+    if(!settings.full_numbers) eInnerText(elMainPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
+    else eInnerText(elMainPrestigePotential, numCommas(player.prestige_potential.toFixed(0)));
 
-    if(menuState.prestige) { eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2)); }
+    if(menuState.prestige) eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
 
     // Make button glow if prestiging will double lifetime
     if(
         (player.lifetime.golden_carrots == 0 && player.prestige_potential >= 20)
         || (player.lifetime.golden_carrots != 0 && player.prestige_potential > player.lifetime.golden_carrots)
-    )
-    { dom('prestige_menu_button').classList.add('glowing'); }
-    else { dom('prestige_menu_button').classList.remove('glowing'); }
+    ) dom('prestige_menu_button').classList.add('glowing');
+    else dom('prestige_menu_button').classList.remove('glowing');
 
     return player.prestige_potential;
 }
@@ -1908,9 +1900,7 @@ function toolCost(type=0,amount=1,mode="query") {
     var p2 = 0;
     let scaling = toolScaling[type] || 0.02
     if(amount==1){
-        if(mode=="apply"){
-            Gregory.HoePrices[type] += (scaling * p);
-        }
+        if(mode=="apply") Gregory.HoePrices[type] += (scaling * p);
         return p;
     }
     for(j = 0; j < amount; j++) {
@@ -1918,9 +1908,7 @@ function toolCost(type=0,amount=1,mode="query") {
         p2+=p;
     }
 
-    if(mode=="apply"){
-        Gregory.HoePrices[type] = p;
-    }
+    if(mode=="apply") Gregory.HoePrices[type] = p;
     return p2;
 }
 
@@ -1928,21 +1916,15 @@ function toolCost(type=0,amount=1,mode="query") {
  * @param {number} type 
  * @returns Image source
  */
-function hoeImg(type) {
-    return cosmetics['tools'][settings.cosmetics.tools][type];
-}
+function hoeImg(type) { return cosmetics['tools'][settings.cosmetics.tools][type]; }
 
-/** Greg level test */
-function gregLevelTest(type, minusone = true) {
-    let modifier = -1;
-    if(minusone == false) modifier = 0;
-
-    if(type == 0) {
-        if(Gregory.lvl == 0) return true;
-        return false;
-    }
-    if(Gregory.lvl >= (type*25)) return false;
-    return true;
+/** Returns true if Greg can craft a given tool
+ * @param {number} type Tool ID
+ * @returns true or false, or the minimum level required if return_min = true
+ */
+function gregLevelTest(type, return_min=false) {
+    let needed = type >= 1 ? (type*25) : 1;
+    return return_min ? needed : (Gregory.lvl >= needed);
 }
 
 var currently_crafting = 0;
@@ -1954,36 +1936,26 @@ var craftingInterval;
  * @returns If a condition for crafting (such as cost) is not met
  */
 function createTool(type=0, amount=1, progress=0, intended_character=false) {
-    // Greg unlock check
-    if(!characterQuery('greg')) return "Greg is not unlocked yet";
-
-    // Return if a hoe is already in progress
-    if(currently_crafting == 1) return "Tool is already being crafted";
-
-    // Checks if Greg is Experienced Enough to Purchase a Hoe.
-    if(gregLevelTest(type)) {
+    if(!characterQuery('greg')) return "Greg is not unlocked yet"; // Greg unlock check
+    if(currently_crafting == 1) return "Tool is already being crafted"; // Return if crafting is already in progress
+    if(!gregLevelTest(type)) { // Checks if Greg is experienced enough
         let required = type >= 1 ? (type*25) : 1;
         return toast("Unable to craft", `Greg too inexperienced. Greg must be at least Level: ${required} to create this tool`, '', false, true);
     }
-
-    // Checks to see if Greg Can Hold more of this Type
+    // Checks to see if Greg can hold more of this type
     if(Gregory.lvl == 0 || Gregory.Hoes[type]+amount-1 >= Gregory.lvl+Six.data.tool_slots.value) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
 
+    // Checks if player has enough carrots
     let price = toolCost(type, amount);
-    // Checks if Hoe is Too expensive
-    if(price * ((Six.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) {
-        // toast("Too expensive!", "That tool is currently too expensive", '', false, true);
-        return;
-    }
+    if(price * ((Six.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) return //toast("Too expensive!", "That tool is currently too expensive", '', false, true);
 
     // Craft tool
     if(currently_crafting != false) return;
     currently_crafting=true;
     toolCost(type,amount,"apply"); 
-    //Creates Hoe And Displays Progress Bar
 
     // Main progress bar
-    if(settings.enableMainProgress == true) elMainProgressContainer.classList.add('status_tidbit_in');
+    if(settings.enableMainProgress) elMainProgressContainer.classList.add('status_tidbit_in');
     dom('main_progress_image').src = hoeImg(type);
     
     // Greg info
@@ -2030,23 +2002,23 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
         player.lifetime.hoes.craftedTotal  += amount;
         Gregory.crafting = false;
 
-        if(intended_character != false) equipTool(intended_character, type, amount);
+        if(intended_character) equipTool(intended_character, type, amount);
 
         // Update page
         setTimeout(updateCraftingBar, 90);
     }
 }
+/** Updates crafting bar progress */
 function updateCraftingBar(){
     // Greg progress
     elGregProgress.style.width = "0%";
-
     // Main progress
-    if(settings.enableMainProgress == true) { elMainProgressBar.style.width = "0%"; }
+    if(settings.enableMainProgress == true) elMainProgressBar.style.width = "0%";
     elMainProgressContainer.classList.remove('status_tidbit_in');
-    // dom('greg_crafting_info').style.opacity = '0';
     dom('greg_crafting_info').classList.add('inactive');
     dom('greg_crafting_info').title = 'Idle';
-    //page updates
+
+    // Update page
     updateAllTools(); 
     updateToolPrices();
 }
@@ -2067,7 +2039,7 @@ function equipTool(character=Boomer_Bill, type=0, amount=1){
     };
 
     // Check if Greg is high enough level to equip
-    if(character.Hoes[type]+amount-1>=Gregory.lvl) { 
+    if(character.Hoes[type]+amount-1>=Gregory.lvl+Six.data.tool_slots.value) { 
         toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
         currently_crafting=0;
         return;
@@ -2079,15 +2051,14 @@ function equipTool(character=Boomer_Bill, type=0, amount=1){
     Gregory.Hoes[type]   -= amount;
 
     // Recalculate CPC/CPS
-    if     (character==Boomer_Bill) player.cpc = calculateCarrots(Boomer_Bill);
-    else if(character==Belle_Boomerette) player.cps = calculateCarrots(Belle_Boomerette);
+    recalculateCarrotsPer();
 
     // Update page
     updateCPC();
     updateAllTools();
 }
 
-/** Update all tools on page */
+/** Update all tools affordability highlighting on page */
 function updateAllTools() {
     for(i = 0; i < 6; i++) {
         updateTool(Boomer_Bill, i);
@@ -2101,31 +2072,30 @@ function updateAllTools() {
         let count = elHoeCount[charString][type];
         let img = elHoes[charString][type];
 
-        // Bill & Belle hoes
+        // Bill & Belle
         if(charString == 'bill' || charString == 'belle') {
-            let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl);
+            let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl+Six.data.tool_slots.value);
             style(img, 'glowing', glowState);
             style(img, 'blackedout', !glowState);
         }
-        // Greg hoes
+        // Greg
         else if(charString == 'greg') {
-            if( // Can afford and is unlocked
-                !gregLevelTest(type, false)
-                && Gregory.HoePrices[type] * ((Six.data.greg_min_start.value || 100) / 100) <= player.carrots
+            // Can afford and is unlocked
+            if(
+                gregLevelTest(type)
+                && toolCost(type, multibuy[mbsel]) * ((Six.data.greg_min_start.value / 100) || 1) <= player.carrots
             ) {
                 img.classList.remove('blackedout');
                 img.classList.remove('grayedout');
                 eInnerText(count, '');
             }
             // Greg's lvl is sufficient but can't afford
-            else if(!gregLevelTest(type, false)) {
+            else if(gregLevelTest(type)) {
                 img.classList.add('grayedout');
                 img.classList.remove('blackedout');
             }
             // Blacked out
-            else {
-                img.classList.add('blackedout');
-            }
+            else img.classList.add('blackedout');
         }
 
 

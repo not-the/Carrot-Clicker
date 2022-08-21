@@ -690,26 +690,13 @@ function grantAchievement(key) {
 
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
-    if(achieve.internal != true && achieve.mystery.noToast != true) {
-        // Normal toast
-        // toast(`Achievement earned: ${achieve.name}`, `${achieve.desc}\nUnlocked:\n${achieve.reward.toString().split(',').join('\n')}`);
-
-        // New toast
-        if(player.flags['no_achievement_toasts'] != true) {
-            toast('', '', '', false, false, key);
-        }
+    if(achieve.internal != true && achieve.mystery.noToast != true && player.flags['no_achievement_toasts'] != true) {
+        toast('', '', '', false, false, key);
     }
 
-    // Add achievement to player.achievements
-    player.achievements[key] = Date.now();
-    if(achieve.internal == true) {
-        player.internal++;
-    }
-
-    // Check if there is an award to give
-    if(achieve.reward != false) {
-        rewardBreakdown(achieve);
-    }
+    player.achievements[key] = Date.now(); // Add achievement to player.achievements
+    if(achieve.internal) player.internal++;
+    if(achieve.reward != false) rewardBreakdown(achieve); // Check if there is an award to give
 
     // Give pages
     if(achieve.pages != false && achieve.pages != null) {
@@ -719,9 +706,7 @@ function grantAchievement(key) {
 
     // Update achievement list
     achieveHTMLupdate = true;
-    if(currentPanel == "achievements-panel") {
-        populateAchievements();
-    }
+    if(currentPanel == "achievements-panel") populateAchievements(key);
 
     // Update page
     achievementProgress();
@@ -898,7 +883,7 @@ function buyTrinket(id) {
     player.trinket_completion = sixCompletion();
     
     // Update page
-    populateSix();
+    populateSix(id);
     mouseConfetti([3,3], ccWhite, 150, 1);
     if(item.update) item.update();
 
@@ -1046,7 +1031,7 @@ function isDebug() {
                     if(data == undefined) continue;
                     let prices = item.price;
                     data.level = prices.length;
-                    data.value = item.value[data.level - 1];
+                    data.value = item.value[data.level];
                 }
                 populateSix();
                 toast('', 'Devtools: All Trinkets now maxed');
@@ -1397,7 +1382,8 @@ function isDebug() {
     // Enable unlocked characters
     for(i = 0; i < playerCharKeys.length; i++) {
         let key = playerCharKeys[i];
-        if(characterQuery(key)) { unlock('character', key); }
+        let value = player.characters[key];
+        if(characterQuery(key)) unlock('character', key, value);
     }
 
     // Achievement list CSS

@@ -152,6 +152,16 @@ img {
     pointer-events: initial !important;
 }
 
+/* Show menus */
+#overlay.show_dialog #dialog,
+#overlay.show_theme #theme_menu,
+#overlay.show_cosmetic #cosmetic_menu,
+#overlay.show_prestige #prestige_menu,
+#overlay.show_tips #tips_menu,
+#overlay.show_keybinds #keybinds_menu,
+#overlay.show_credits #credits
+{ display: unset !important; }
+
 /* Container */
 #container {
     justify-content: center;
@@ -251,7 +261,8 @@ summary:hover { background-color: var(--border-color); }
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    visibility: hidden;
+
+    display: none;
 }
 
 /* Text Colors */
@@ -346,6 +357,7 @@ summary:hover { background-color: var(--border-color); }
     left: 0;
     z-index: 200;
     visibility: hidden;
+    backdrop-filter: blur(30px) saturate(20%);
 }
 #backdrop {
     height: 100vh;
@@ -355,7 +367,6 @@ summary:hover { background-color: var(--border-color); }
     -webkit-backdrop-filter: blur(30px);
     z-index: 190;
 }
-#overlay.dramatic { backdrop-filter: blur(30px) saturate(20%); }
 #dialog { width: 420px; }
 /* .dialog_animate { animation: dialog 0.25s ease-out; }
 @keyframes dialog { from {transform: translate(-50%, calc(-50% + 20px));} } */
@@ -502,8 +513,6 @@ summary:hover { background-color: var(--border-color); }
     padding: 0;
     padding-top: 48px;
     z-index: 200;
-
-    visibility: hidden;
 }
 .fancy_list {
     overflow: auto;
@@ -1418,7 +1427,7 @@ body:not(.c_carl) .char_custom_button {
 .Greg .toolfull {
     transform: translateX(12px) translateY(28px) !important;
 }
-.Greg .hoe_price {
+.Greg .tool_price {
     font-size: 0.9rem;
     position: absolute;
     transform: translateY(44px);
@@ -2281,8 +2290,6 @@ footer .user_card { text-decoration: none !important; }
 
 /* Credits */
 #credits {
-    visibility: hidden;
-
     width: 100%;
     height: 100vh;
     padding: 40vh 16px 120px;
@@ -2295,6 +2302,8 @@ footer .user_card { text-decoration: none !important; }
     transform: translateX(-50%);
 
     white-space: pre-line;
+
+    display: none;
 }
 #credits h1,
 #credits h2,

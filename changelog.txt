@@ -1,4 +1,35 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.5
+    8-21-2022
+// ----------------------------------------------------------- //
+
+Performance update
+
+- All popup menus have been switched over to use display: none instead of visibility- hopefully this will reduce the amount of images & html that are actually loaded
+- Populate functions (populateAchievements() and populateSix()) have been updated:
+  + Instead of rerendering the entire achievements list when there is a change, populate functions will now replace only what is needed
+
+Tomes:
+- Fixed character prices not updating when Decrease Worker Wages tomes are purchased
+- Fixed the first Improve Working Conditions tome not doing anything (Issue #65)
+- Fixed Improve Working Conditions giving a +10% buff at 0 (Issue #59)
+
+Bug fixes:
+- Fixed a typo in Greg's bio
+- Fixed Six skipping his hire state and simply unlocking, but appearing to be hireable until page refresh
+- Fixed the tool box trinket only giving Greg extra slots and not Bill or Belle
+- Tool highlighting will now work with multibuy (Issue #61)
+
+Internal changes:
+- Rewrote the updateToolPrices and gregLevelTest functions
+- Renamed some functions:
+  + updateHoePrices  -> updateToolPrices
+- Fixed dev mode allTrinkets() not working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.4
     8-17-2022
 // ----------------------------------------------------------- //
