@@ -542,28 +542,28 @@
                 <!-- #region -->
                 <div class="character_column">
 
-                    <!--Six Rendering-->
-                    <div class="six characterbox char_locked" id="six_box">
-                        <div class="char_info" id="six_info">
-                            <h2>Six</h2>
+                    <!--Jared Rendering-->
+                    <div class="jared characterbox char_locked" id="jared_box">
+                        <div class="char_info" id="jareed_info">
+                            <h2>Jared</h2>
                             <p class="secondary_text">- Shopkeep -</p>
                             <hr>
                             Sells trinkets that grant special abilities. Trinkets are kept when you prestige.
                         </div>
-                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('six')" tabindex="0" role="button">
-                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('six')" tabindex="0" role="button">
+                        <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('jared')" tabindex="0" role="button">
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('jared')" tabindex="0" role="button">
 
                         <!-- Top -->
                         <div class="top flex">
                             <img
                                 src="./assets/achievements/missing.png"
-                                alt="six"
-                                id="six_avatar"
+                                alt="jared"
+                                id="jared_avatar"
                                 class="characterimg"
-                                title="six"
-                                onclick="characterInfo('six')">
+                                title="jared"
+                                onclick="characterInfo('jared')">
                             <div class="characterdesc">
-                                <b id="six_name" class="character_name">? (WIP)</b>
+                                <b id="jared_name" class="character_name">? (WIP)</b>
                                 <p class="secondary_text">
                                     Trinket shop
                                 </p>
@@ -572,7 +572,7 @@
 
                         <!-- Bottom -->
                         <div class="bottom shop_bottom">
-                            <div id="six_shop">
+                            <div id="jared_shop">
                                 <div class="center">
                                     <img src="./assets/items/mouse_2.png" alt="" style="height: 48px; width: 48px;">
                                     <img src="./assets/items/origami.png" alt="" style="height: 48px; width: 48px;">
@@ -580,7 +580,7 @@
                                     <br>
                                     Interested in some high quality merchandise?
                                     <br>
-                                    <button style="width: 70%; margin-top: 8px;" onclick="hireSix()">Hire <span class="secondary_text">(250m carrots)</span></button>
+                                    <button style="width: 70%; margin-top: 8px;" onclick="hireJared()">Hire <span class="secondary_text">(250m carrots)</span></button>
                                 </div>
                             </div>
                         </div>
@@ -764,7 +764,7 @@
 
                         <p>Themes: <b id="stat_themes">---</b></p>
                         <p>Cosmetics: <b id="stat_cosmetics">---</b> <span tabindex="0" class="question_mark" title="This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu." onclick="toast(...toasts.info_cosmetic_percent)">?</span></p> 
-                        <p class="six_related">Trinkets: <b id="stat_trinkets">---</b></p>
+                        <p class="jared_related">Trinkets: <b id="stat_trinkets">---</b></p>
                         
                         <br/>
 
@@ -1095,10 +1095,10 @@
                     <div id="carl_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
-                <!-- six -->
-                <details open class="cosmetic_collapse six_related" id="collapse_six">
-                    <summary class="h3">six:</summary>
-                    <div id="six_cosmetics" class="cosmetics_mini"></div>
+                <!-- jared -->
+                <details open class="cosmetic_collapse jared_related" id="collapse_jared">
+                    <summary class="h3">jared:</summary>
+                    <div id="jared_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
                 <!-- Tools -->
@@ -1353,6 +1353,7 @@
                             <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
                         </div>
                     </div> -->
+                    
                     <!-- Golden Carrot count -->
                     <div class="flex prestige_item main_bg_color">
                         <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
@@ -1360,9 +1361,12 @@
                             <h6 class="prestige_number" id="prestige_menu_gc_count">Loading...</h6>
                             <p>Golden Carrots</p>
                         </div>
+                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button" id="golden_carrot_info_button" onclick="characterInfo('bill')" tabindex="0" role="button">
                     </div>
 
-                    <!-- Tome page count -->
+                    <!-- Tome page 
+                        
+                        count -->
                     <div class="flex prestige_item main_bg_color">
                         <img src="./assets/items/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
                         <div>

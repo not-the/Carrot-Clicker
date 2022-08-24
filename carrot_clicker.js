@@ -317,7 +317,7 @@ const default_player = new Player(
         'greg':     ['default'],
         'charles':  ['default'], 
         'carl':     ['default'], 
-        'six':      ['default'],
+        'jared':    ['default'],
         'tools':    ['default']
     }, // cosmetics
 
@@ -408,26 +408,21 @@ class tome {
         //multibuy for loop
         for(let i=0;i<amount+10;i++){
             //scaling
-            if(valueDummy>1000)     scaling = 1.00101;
+            if(valueDummy>99)       scaling = 1.01;
             else if(valueDummy>375) scaling = 1.003;
-            else if(valueDummy>99)  scaling = 1.01;
+            else if(valueDummy>1000)scaling = 1.00101;
 
             //set new price
             newPrice=Math.ceil(newPrice*scaling);
 
             //check if target is met;
-            if(target===valueDummy+1) {
-                if(sendNewPrice) {
-                    // console.log(newPrice);
-                    return newPrice;
-                }
-                return sum;
-            }
-            
+            if(target===valueDummy+1) break;
             //numbers go up
             sum+=newPrice;
             valueDummy+=1;
         }
+        if(sendNewPrice) return newPrice;
+        else return sum;
     } 
 
     add(amount=1){
@@ -669,11 +664,11 @@ const Default_Carl = {
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
-const Default_Six = {
+const Default_Jared = {
     // Info
-    name: "six",
-    nickname: "six",
-    img: './assets/characters/Six.png',
+    name: "jared",
+    nickname: "jared",
+    img: './assets/characters/Jared.png',
 
     hired: false,
 
@@ -746,17 +741,17 @@ const Default_Six = {
         // },
     },
 }
-/** Hire Six */
-function hireSix() {
-    if(player.characters.six != 'ready') {
-        if(player.characters.six == true) populateSix();
+/** Hire Jared */
+function hireJared() {
+    if(player.characters.jared != 'ready') {
+        if(player.characters.jared == true) populateJared();
         else return; // Not available for hire or already hired
     }
     const hireCost = 250000000;
-    if(player.carrots < hireCost) return toast(...toasts.error_six_hire_cost); // Too expensive
+    if(player.carrots < hireCost) return toast(...toasts.error_jared_hire_cost); // Too expensive
     player.carrots -= hireCost;
-    player.characters['six'] = true;
-    populateSix();
+    player.characters['jared'] = true;
+    populateJared();
     toast(...toasts.notice_trinkets);
 }
 
@@ -767,7 +762,7 @@ const chars = [
     'greg',
     'charles',
     'carl',
-    'six',
+    'jared',
 ];
 const defaultChar = {
     'bill':    clone(Default_Boomer_Bill),
@@ -775,7 +770,7 @@ const defaultChar = {
     'greg':    clone(Default_Gregory),
     'charles': clone(Default_Charles),
     'carl':    clone(Default_Carl),
-    'six':     clone(Default_Six),
+    'jared':   clone(Default_Jared),
 }
 
 /** Return number of available shop items
@@ -817,7 +812,7 @@ var Belle_Boomerette;
 var Gregory;
 var Charles;
 var Carl;
-var Six;
+var Jared;
 
 // Use savedata if available, otherwise use default
 // console.log('[Autosave] Player has savedata, importing...');
@@ -827,7 +822,7 @@ Belle_Boomerette = localStorage.getObject("Belle")   || clone(Default_Belle_Boom
 Gregory          = localStorage.getObject("Greg")    || clone(Default_Gregory);
 saved_Charles    = localStorage.getObject("Charles") || clone(Default_Charles);
 Carl             = localStorage.getObject("Carl")    || clone(Default_Carl);
-Six              = localStorage.getObject("Six")     || clone(Default_Six);
+Jared              = localStorage.getObject("Jared") || clone(Default_Jared);
 Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
 Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
 Charles.decreaseWages=new tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
@@ -841,7 +836,7 @@ const saveList = {
     "Greg":      Gregory,
     "Charles":   Charles,
     "Carl":      Carl,
-    "Six":       Six,
+    "Jared":     Jared,
 }
 const saveListKeys = Object.keys(saveList);
 var preventSaveGame = false;
@@ -1040,7 +1035,7 @@ const default_settings = {
         greg:     'default',
         charles:  'default',
         carl:     'default',
-        six:      'default',
+        jared:      'default',
         tools:    'default',
     },
     openpanel: null,            // string
@@ -1196,7 +1191,7 @@ function holdStart(useMousePos = true) {
         hold.clock = setInterval(() => {
             if(document.hidden) return clearInterval(hold.clock);
             onClick(useMousePos, 'click');
-        }, 1000 / (Six.data.clickrate.value || 2));
+        }, 1000 / (Jared.data.clickrate.value || 2));
     }, 250);
 }
 
@@ -1245,7 +1240,7 @@ function onClick(useMousePos, method='click', source=0) {
         clearTimeout(clickMethodTimer);
         clickMethodTimer = setTimeout(() => clickMethod = -1, 1000);
     }
-    if(clickMethod != source && clickMethod != -1 && !Six.data.magic_keyboard.value) return;
+    if(clickMethod != source && clickMethod != -1 && !Jared.data.magic_keyboard.value) return;
 
     // Grant carrots
     earnCarrots(player.cpc, 'click');
@@ -1301,7 +1296,7 @@ function fallingCarrot() {
         // Carrot reward
         // Between 500% and 2000% of player's CPC
         let rewardVariation = (Math.ceil((Math.random() * 1500)) + 500) / 100;
-        rewardVariation *= ((Six.data.falling_bonus.value / 100) + 1) || 1;
+        rewardVariation *= ((Jared.data.falling_bonus.value / 100) + 1) || 1;
         amount = Math.round(player.cpc * rewardVariation);
     } else if(type == 'cash') {
         // Cash reward
@@ -1362,15 +1357,14 @@ const elPrestigeStats = dom('this_prestige_stats');
 
 /** Updates carrot count on the page */
 function carrotCount() {
-    count = settings.full_numbers != true ?
-    DisplayRounded(Math.floor(player.carrots), 3, 1000000) : numCommas(Math.floor(player.carrots));
+    count = settings.full_numbers != true ? DisplayRounded(Math.floor(player.carrots), 3, 1000000) : numCommas(Math.floor(player.carrots));
     eInnerText(elCarrotCount, count);
 }
 /** Updates player.cash on the page */
 function cashCount(flash = true) {
     eInnerText(elCashCount, numCommas(player.cash));
     if(characterQuery('carl')) { updateCarlsShop(); }
-    if(characterQuery('six'))  { updateSixsShop(); }
+    if(characterQuery('jared'))  { updateJaredsShop(); }
 
     // Flash
     if(flash != true) return;
@@ -1408,10 +1402,10 @@ function updateCPC(flash=true) {
 
     // Belle bonus display
     let star = '';
-    if(cpsbuff == 0 || Six.data.belle_bonus.value == 0 || player.cps == 0) {
+    if(cpsbuff == 0 || Jared.data.belle_bonus.value == 0 || player.cps == 0) {
         cps = player.cps;
     } else {
-        cps = player.cps * ((Six.data.belle_bonus.value / 100) + 1) || 0;
+        cps = player.cps * ((Jared.data.belle_bonus.value / 100) + 1) || 0;
         star = '*';
     }
 
@@ -1515,15 +1509,15 @@ function updateCarlsShop() {
         style(element, 'cant_afford', (player.cash < price));
     }
 }
-/** Updates Six's shop affordability highlighting */
-function updateSixsShop() {
-    let keys = sixShop.keys;
+/** Updates Jared's shop affordability highlighting */
+function updateJaredsShop() {
+    let keys = jaredShop.keys;
     try {
         for(i = 0; i < keys.length; i++) {
             let key = keys[i];
-            if(!Six.data[key].available) continue;
-            var element = dom(`six_shop_${keys[i]}`);
-            let price = sixShop[key].price[Six.data[key].level];
+            if(!Jared.data[key].available) continue;
+            var element = dom(`jared_shop_${keys[i]}`);
+            let price = jaredShop[key].price[Jared.data[key].level];
             style(element, 'cant_afford', (player.cash < price));
         }
     } catch (error) {
@@ -1632,7 +1626,7 @@ function carrotsPerSecond() {
     let cps = player.cps;
     if(cps <= 0) return;
     if(cpsbuff != 0) {
-        cps *= ((Six.data.belle_bonus.value / 100) + 1) || 1;
+        cps *= ((Jared.data.belle_bonus.value / 100) + 1) || 1;
         cpsbuff--;
     }
     earnCarrots(cps/10, 'idle');
@@ -1651,7 +1645,7 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     if(amount != 1) return getMultiLevelPrice(character, amount); // Multibuy
     if(level <= 0 || (level <= 1 && character == Boomer_Bill)) { // Stop recursion
         let dp = defaultChar[character.nickname].lvlupPrice;
-        return initial ? dp * ((Six.data.level_up_discount.value || 100) / 100) : dp;
+        return initial ? dp * ((Jared.data.level_up_discount.value || 100) / 100) : dp;
     }
 
     let price = getLevelPrice(character, level-1, amount, false);
@@ -1669,7 +1663,7 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
     let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
     price += dw_modifier * Math.floor(price * modifier);
     // return price;
-    return initial ? price * ((Six.data.level_up_discount.value || 100) / 100) : price;
+    return initial ? price * ((Jared.data.level_up_discount.value || 100) / 100) : price;
 
     /** Multibuy price */
     function getMultiLevelPrice(character, amount) {
@@ -1702,12 +1696,13 @@ function levelUp(character=Boomer_Bill, amount=1) {
         character.lvlupPrice = getLevelPrice(character, character.lvl); // Set next lvlupprice
 
         // Update page
+        if(character==Boomer_Bill){player.cpc=calculateCarrots(Boomer_Bill);}
+        if(character==Belle_Boomerette){player.cps=calculateCarrots(Belle_Boomerette);}
         carrotCount();
         characterPrices();
         characterButtons();
         updateCPC();
-        if(character==Boomer_Bill){player.cpc=calculateCarrots(Boomer_Bill);}
-        if(character==Belle_Boomerette){player.cps=calculateCarrots(Belle_Boomerette);}
+        updateAllTools();
 
         // Animation
         mouseConfetti([2, 3], ccGold);
@@ -1799,37 +1794,38 @@ function prestige() {
  function calculateCarrots(character) {
     let SixToolBonus = Math.floor(character.Hoes[5]/10*Math.floor(Math.pow(character.Hoes[0]*character.Hoes[1]*character.Hoes[2]*character.Hoes[3]*character.Hoes[4],0.3))) || 1;
     let betterHoes=1+Charles.betterHoes.value/100 // Calculate betterHoes bonus
-    let iwc = (Charles.improveWorkingConditions.value/* * 1.1*/) + 1;
-    // Calculates tool values
+    let iwcBonus=0.01;
+    let iwc = (Charles.improveWorkingConditions.value*iwcBonus)+1;
+    // Calculates Hoe Values
     let modifier = 10;
     let cpHoes = (1*betterHoes*(character.Hoes[0]) + 1);
     for(let i = 1; i < character.Hoes.length; i++) {
         let toolValue = (modifier*betterHoes*character.Hoes[i]);
-
         cpHoes += toolValue;
         modifier *= 10;
     }
     
-    // Boost handler
+    //boost handler
     let boosted = 1;
     if(character == Boomer_Bill) boosted = boostEffects.cpc;
     else if(character == Belle_Boomerette) boosted = boostEffects.cps;
-
-    // Returns the correct value
+    
+    //returns the correct value
     if(cpHoes>0) return iwc * character.lvl * cpHoes * boosted * SixToolBonus;
     else return iwc * character.lvl * boosted * SixToolBonus;
-}
+ }
 
 /** Recalculates and sets CPC and CPS */
 function recalculateCarrotsPer() {
     player.cpc = calculateCarrots(Boomer_Bill);
     player.cps = calculateCarrots(Belle_Boomerette);
+    updateCPC();
 }
 
 /** Calculates the prestige potential and updates the page */
 function calculatePrestigePotential() {
     // Prestige Potential
-    let pageValue = (Six.data.page_bonus.value || 1) / 100;
+    let pageValue = (Jared.data.page_bonus.value || 1) / 100;
     let defaultPotential = player.cpc*player.cps;
     let characterLevelMultiplier = Boomer_Bill.lvl+Belle_Boomerette.lvl+Gregory.lvl;
     let tomePageBonus = 1 + (player.pages * pageValue);
@@ -1884,7 +1880,6 @@ function decreaseWagesEffects(){
     return Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146;
 }
 //#endregion
-
 
 /*-----------Hoe Functions--------------*/
 //#region
@@ -1943,11 +1938,11 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
         return toast("Unable to craft", `Greg too inexperienced. Greg must be at least Level: ${required} to create this tool`, '', false, true);
     }
     // Checks to see if Greg can hold more of this type
-    if(Gregory.lvl == 0 || Gregory.Hoes[type]+amount-1 >= Gregory.lvl+Six.data.tool_slots.value) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
+    if(Gregory.lvl == 0 || Gregory.Hoes[type]+amount-1 >= Gregory.lvl+Jared.data.tool_slots.value) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
 
     // Checks if player has enough carrots
     let price = toolCost(type, amount);
-    if(price * ((Six.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) return //toast("Too expensive!", "That tool is currently too expensive", '', false, true);
+    if(price * ((Jared.data.greg_min_start.value || 100) / 100) > player.carrots && progress == 0) return //toast("Too expensive!", "That tool is currently too expensive", '', false, true);
 
     // Craft tool
     if(currently_crafting != false) return;
@@ -1972,7 +1967,7 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
     }
 
     function craft(){
-        let adjust = ((Six.data.greg_speed.value / 100) || 0.01) * player.carrots;
+        let adjust = ((Jared.data.greg_speed.value / 100) || 0.01) * player.carrots;
         progress += adjust;
         player.carrots -= adjust;
         Gregory.crafting = [type, amount, progress]; // Save crafting progress in case of page refresh
@@ -2034,12 +2029,12 @@ function equipTool(character=Boomer_Bill, type=0, amount=1){
     // Ensure Gregory has enough to give
     if(Gregory.Hoes[type] < amount) {
         if(Gregory.Hoes[type] > 0) amount = Gregory.Hoes[type]; // If multibuy, transfer remaining
-        else if(Six.data.magic_keyboard.value) return createTool(type, amount, 0, character); // Queue equip
+        else if(Jared.data.magic_keyboard.value) return createTool(type, amount, 0, character); // Queue equip
         else return; // Not enough
     };
 
     // Check if Greg is high enough level to equip
-    if(character.Hoes[type]+amount-1>=Gregory.lvl+Six.data.tool_slots.value) { 
+    if(character.Hoes[type]+amount-1>=Gregory.lvl+Jared.data.tool_slots.value) { 
         toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
         currently_crafting=0;
         return;
@@ -2074,7 +2069,7 @@ function updateAllTools() {
 
         // Bill & Belle
         if(charString == 'bill' || charString == 'belle') {
-            let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl+Six.data.tool_slots.value);
+            let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl+Jared.data.tool_slots.value);
             style(img, 'glowing', glowState);
             style(img, 'blackedout', !glowState);
         }
@@ -2083,7 +2078,7 @@ function updateAllTools() {
             // Can afford and is unlocked
             if(
                 gregLevelTest(type)
-                && toolCost(type, multibuy[mbsel]) * ((Six.data.greg_min_start.value / 100) || 1) <= player.carrots
+                && toolCost(type, multibuy[mbsel]) * ((Jared.data.greg_min_start.value / 100) || 1) <= player.carrots
             ) {
                 img.classList.remove('blackedout');
                 img.classList.remove('grayedout');
@@ -2100,7 +2095,7 @@ function updateAllTools() {
 
 
         // Number
-        if(character.Hoes[type] == Gregory.lvl + Six.data.tool_slots.value && Gregory.lvl != 0) {
+        if(character.Hoes[type] == Gregory.lvl + Jared.data.tool_slots.value && Gregory.lvl != 0) {
             eInnerText(count, 'MAX');
             img.classList.remove('blackedout');
             img.classList.remove('grayedout');
@@ -2137,15 +2132,6 @@ function seeButton(button = 'prestige') {
 
 
 //#endregion
-
-
-// Game loop (temporary)
-setInterval(() => {
-    updateAllTools();
-    carrotCount();
-    updateCPC();
-}, 300);
-
 
 /*-----------------Statistics-----------------*/
 //#region 
@@ -2299,8 +2285,6 @@ function tipchange() {
     tipsHTMLupdate = true;
 }
 //#endregion
-
-
 
 /*-----------Boost system----------- */
 //#region 

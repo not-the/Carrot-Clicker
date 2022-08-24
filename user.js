@@ -807,8 +807,8 @@ function unlock(type, thingToUnlock, subtype, raw) {
     }
     else if(type == 'trinket'){
         try {
-            Six.data[thingToUnlock].available = true;
-            populateSix();
+            Jared.data[thingToUnlock].available = true;
+            populateJared();
         } catch (error) {
             console.warn(`[Unlock] Trinket "${thingToUnlock}" doesn't exist`);
         }   
@@ -868,9 +868,9 @@ function buyCarl(type, item, subtype = false) {
 
 /** Buy Trinket  */
 function buyTrinket(id) {
-    if(characterQuery('six') != true) return;
-    let item = sixShop[id];
-    let data = Six.data[id];
+    if(characterQuery('jared') != true) return;
+    let item = jaredShop[id];
+    let data = Jared.data[id];
     let price = item.price[data.level];
     if(!data.available || price > player.cash || item.currency != 'cash' || data.level >= item.price.length) return;
 
@@ -880,22 +880,22 @@ function buyTrinket(id) {
     data.value = item.value[data.level];
 
     // Store completion value
-    player.trinket_completion = sixCompletion();
+    player.trinket_completion = jaredCompletion();
     
     // Update page
-    populateSix(id);
+    populateJared(id);
     mouseConfetti([3,3], ccWhite, 150, 1);
     if(item.update) item.update();
 
     /** Calculates and returns completion (#/#) of trinkets */
-    function sixCompletion() {
-        let keys = sixShop.keys;
+    function jaredCompletion() {
+        let keys = jaredShop.keys;
         let comTotal = 0;
         let maxTotal = 0;
         for(i = 0; i < keys.length; i++) {
             let key = keys[i];
-            comTotal += Six?.data[key]?.level;
-            maxTotal += sixShop[key].price.length;
+            comTotal += Jared?.data[key]?.level;
+            maxTotal += jaredShop[key].price.length;
         }
         return `${comTotal}/${maxTotal}`;
     }
@@ -1022,18 +1022,18 @@ function isDebug() {
                 toast('', 'Devtools: All Cosmetics now available');
             }
             window.allTrinkets = () => {
-                unlock('character', 'six', true);
-                let keys = sixShop.keys;
+                unlock('character', 'jared', true);
+                let keys = jaredShop.keys;
                 for(i = 0; i < keys.length; i++) {
                     let key = keys[i];
-                    let item = sixShop[key];
-                    let data = Six.data?.[key];
+                    let item = jaredShop[key];
+                    let data = Jared.data?.[key];
                     if(data == undefined) continue;
                     let prices = item.price;
                     data.level = prices.length;
                     data.value = item.value[data.level];
                 }
-                populateSix();
+                populateJared();
                 toast('', 'Devtools: All Trinkets now maxed');
             }
             window.allTips = () => {
@@ -1048,6 +1048,7 @@ function isDebug() {
                 allCosmetics();
                 allTrinkets();
                 allTips();
+                updateAllTools();
             }
             window.updateValues = () => {
                 // Carrots
@@ -1270,8 +1271,8 @@ function isDebug() {
         Carl.shop.theme,
         Carl.shop.cosmetic,
 
-        Six,
-        Six.data,
+        Jared,
+        Jared.data,
     ];
     var onu_templates = [
         default_player,
@@ -1296,8 +1297,8 @@ function isDebug() {
         Default_Carl.shop.theme,
         Default_Carl.shop.cosmetic,
 
-        Default_Six,
-        Default_Six.data,
+        Default_Jared,
+        Default_Jared.data,
     ];
     //#endregion
     if(
@@ -1504,7 +1505,7 @@ function isDebug() {
     updateToolPrices();
     updateMainIcon();
     populateCarl();
-    populateSix();
+    populateJared();
     if(player.new_theme == true) { newIndicator(true, 'theme'); }
     if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
     if(player.prestige_available == true) { seeButton('prestige'); } // Prestige button visibility

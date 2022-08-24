@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.5';
+    const game_version = 'dev beta v1.16.6';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -38,7 +38,7 @@ const toasts = {
 
     // Misc
     notice_trinkets: ['Trinkets now available', 'Use cash to buy trinkets with special abilities.'],
-    error_six_hire_cost: ['More carrots needed', 'Six needs at least 500 million carrots to move in.'],
+    error_jared_hire_cost: ['More carrots needed', 'Jared needs at least 250 million carrots to move in.'],
 }
 //#endregion
 
@@ -115,7 +115,7 @@ const default_tips = {
         "Craft the carrot, Greg.",
         "Study the carrot, Charles.",
         "Paint the carrot, Carl.",
-        "Sell carrot knicknacks, Six",
+        "Sell carrot knicknacks, Jared",
     ],
     fun_advanced: [
         "World hunger has been cured, but there must be more we can do.",
@@ -296,7 +296,7 @@ const cosmetics = {
             'greg':     'default',
             'charles':  'default',
             'carl':     'default',
-            'six':      'default',
+            'jared':      'default',
             'tools':    'default',
         },
         // Cookie
@@ -353,7 +353,7 @@ const cosmetics = {
             'greg':     'developer_art',
             'charles':  'developer_art',
             'carl':     'developer_art',
-            'six':      'developer_art',
+            'jared':      'developer_art',
             'tools':    'blockgame',
         },
         // All Bill
@@ -369,7 +369,7 @@ const cosmetics = {
             'greg':     'bill',
             'charles':  'bill',
             'carl':     'bill',
-            'six':      'bill',
+            'jared':      'bill',
             'tools':    'bill',
         },
     },
@@ -787,22 +787,22 @@ const cosmetics = {
             'image': './assets/characters/Bill.png',
         },
     },
-    six: {
+    jared: {
         'default': {
-            'name': 'six (Default)',
+            'name': 'jared (Default)',
             'desc': 'placeholder',
             'group': 'default',
 
-            'rename': 'six',
+            'rename': 'jared',
             'image': './assets/achievements/missing.png',
         },
         'developer_art': {
             'name': 'Developer Art',
-            'desc': 'The original Six in all [Six] glory',
+            'desc': 'The original Jared in all [Jared] glory',
             'group': 'developer_art',
 
             'rename': false,
-            'image': './assets/theme/developer_art/Six.png',
+            'image': './assets/theme/developer_art/Jared.png',
         },
         'bill': {
             'name': 'Bill',
@@ -1003,13 +1003,13 @@ const achievements = {
             'noToast': false,
         }
     },
-    'hire_six': {
+    'hire_jared': {
         'name': 'One Man\'s Trash',
         'desc': 'Hire the shopkeep',
         'image': false,
-        'reward': 'character:six',
+        'reward': 'character:jared',
         'pages': 1,
-        'conditions': ['player.characters.six', true],
+        'conditions': ['player.characters.jared', true],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1117,7 +1117,7 @@ const achievements = {
     '12_tomes': {
         'name': 'Tome\'d You so',
         'desc': 'Obtain 12 tomes',
-        'image': false,
+        'image': './assets/achievements/tome animated.gif',
         'reward': 'cosmetic:charles/special_charles',
         'pages': 3,
         'conditions': [
@@ -1134,7 +1134,7 @@ const achievements = {
     '24_tomes': {
         'name': 'Librarian',
         'desc': 'Obtain 24 tomes',
-        'image': false,
+        'image': './assets/achievements/tome animated.gif',
         'reward': false,
         'pages': 4,
         'conditions': [
@@ -1151,7 +1151,7 @@ const achievements = {
     '140_tomes': {
         'name': 'Infinite Library',
         'desc': 'Obtain 140 tomes',
-        'image': false,
+        'image': './assets/achievements/tome animated.gif',
         'reward': false,
         'pages': 5,
         'conditions': [
@@ -1207,7 +1207,7 @@ const achievements = {
     'bill_lvl_10': {
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill to level 10',
-        'image': false,
+        'image': './assets/achievements/bill_pointer.png',
         'reward': 'shop:cosmetic/bill/biker_bill',
         'pages': false,
         'conditions': ['Boomer_Bill.lvl', 10],
@@ -1235,7 +1235,7 @@ const achievements = {
     'bill_lvl_500': {
         'name': 'Billtona 500',
         'desc': 'Upgrade Bill to level 500',
-        'image': false,
+        'image': './assets/achievements/bill_pointer.png',
         'reward': 'cosmetic:bundle/bill',
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 500],
@@ -1249,7 +1249,7 @@ const achievements = {
     'bill_lvl_1000': {
         'name': 'Milennial Bill',
         'desc': 'Upgrade Bill to level 1000',
-        'image': false,
+        'image': './assets/achievements/bill_pointer.png',
         'reward': false,
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
@@ -1266,7 +1266,7 @@ const achievements = {
     'belle_lvl_15': {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle to level 15',
-        'image': false,
+        'image': './assets/characters/Belle.png',
         'reward': false,
         'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
@@ -1280,7 +1280,7 @@ const achievements = {
     'belle_lvl_100': {
         'name': 'Tough Belle',
         'desc': 'Upgrade Belle to level 100',
-        'image': false,
+        'image': './assets/characters/Belle.png',
         'reward': false,
         'pages': 1,
         'conditions': ['Belle_Boomerette.lvl', 100],
@@ -1294,7 +1294,7 @@ const achievements = {
     'belle_lvl_500': {
         'name': 'Um-belle-ifer Sellerer',
         'desc': 'Upgrade Belle to level 500',
-        'image': false,
+        'image':'./assets/characters/Belle.png',
         'reward': false,
         'pages': 3,
         'conditions': ['Belle_Boomerette.lvl', 500],
@@ -1309,7 +1309,7 @@ const achievements = {
     'greg_lvl_25': {
         'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
         'desc': 'Upgrade Gregory to level 25',
-        'image': false,
+        'image': './assets/characters/Greg.png',
         'reward': false,
         'pages': false,
         'conditions': ['Gregory.lvl', 25],
@@ -1427,7 +1427,7 @@ const achievements = {
     '1_quadrillion_carrots': {
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
-        'image': false,
+        'image': './assets/achievements/carrot_pile.png',
         'reward': [
             'shop:cosmetic/bundle/developer_art',
             'shop:cosmetic/tools/fertilizer',
@@ -1538,7 +1538,7 @@ const achievements = {
         }
     },
     '1_undecillion_carrots': {
-        'name': 'Carrot God',
+        'name': 'Hoe God',
         'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become something greater...',
         'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
@@ -1783,7 +1783,7 @@ const achievements = {
     '500_clicks': {
         'name': 'Click the Carrot, Bill.',
         'desc': 'Click the carrot 500 times',
-        'image': false,
+        'image': './assets/achievements/12_clicks_per_second.png',
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 500],
@@ -1797,7 +1797,7 @@ const achievements = {
     '5000_clicks': {
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 5,000 times',
-        'image': false,
+        'image': './assets/achievements/12_clicks_per_second.png',
         'reward': 'shop:cosmetic/farmable/pixel_carrot',
         'pages': false,
         'conditions': ['player.lifetime.clicks', 5000],
@@ -1811,7 +1811,7 @@ const achievements = {
     '50000_clicks': {
         'name': 'Destroyer of Mice',
         'desc': 'Click the carrot 50,000 times',
-        'image': false,
+        'image': './assets/achievements/12_clicks_per_second.png',
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 50000],
@@ -1825,7 +1825,7 @@ const achievements = {
     '100000_clicks': {
         'name': '"My Finger Hurts"',
         'desc': 'Click the carrot 100,000 times',
-        'image': false,
+        'image': './assets/achievements/12_clicks_per_second.png',
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 100000],
@@ -1839,7 +1839,7 @@ const achievements = {
     '1000000_clicks': {
         'name': 'Clicker God',
         'desc': 'Click the carrot 1 million times (Hidden achievement)',
-        'image': false,
+        'image': './assets/achievements/12_clicks_per_second.png',
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 1000000],
@@ -1932,7 +1932,7 @@ const achievements = {
     },
 
     // Trinkets
-    'all_trinkets': { // six
+    'all_trinkets': { // jared
         'name': 'Complete Collection',
         'desc': 'Buy and fully upgrade every trinket',
         'image': false,
@@ -2177,7 +2177,7 @@ const achievements = {
     '100_falling_consecutive': {
         'name': 'Juggle Master',
         'desc': 'Grab 100 falling carrots in a row',
-        'image': false,
+        'image': './assets/achievements/parachute_carrot.png',
         'reward': false,
         'pages': false,
         'conditions': ['player.fallingConsecRecord', 100],
@@ -2303,10 +2303,10 @@ const achievements = {
         'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
     },
-    'internal_six_available': {
+    'internal_jared_available': {
         'internal': true,
-        'name': 'internal_six_available',
-        'reward': () => { unlock('character', 'six', 'ready'); },
+        'name': 'internal_jared_available',
+        'reward': () => { unlock('character', 'jared', 'ready'); },
         'pages': false,
         'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 500000000', true],
     },
@@ -2394,7 +2394,7 @@ function playerCosmeticsCount() {
 // Static character data
 //#region 
 // Shop info (Static)
-const sixShop = {
+const jaredShop = {
     // 'mp3_player': {
     //     name:      'MP3 Player',
     //     desc:      'Seems to have some old music on it',
@@ -2518,7 +2518,7 @@ const sixShop = {
     // },
     // Dreamcatcher?
 }
-sixShop.keys = Object.keys(sixShop);
+jaredShop.keys = Object.keys(jaredShop);
 //#endregion
 
 

@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.6
+    8-22-2022
+// ----------------------------------------------------------- //
+    -Tome multibuy fixed issue #63
+    -Hoe count size decreased
+    -Game loop replaced
+    -Switched code to refer to Jared and not Six
+    -Fixed Can't afford Jared toast
+    -Failed to add an info button to the prestige menu
+    -Started using assets already in the game to use as images for achievemensts without one
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.5
     8-21-2022
 // ----------------------------------------------------------- //

@@ -1307,22 +1307,22 @@ function populateCarl() {
     }
 }
 
-const elSixShop = dom('six_shop');
-/** Populate six's shop */
-function populateSix(specific=false) {
-    if(characterQuery('six') != true) return;
+const elJaredShop = dom('jared_shop');
+/** Populate jared's shop */
+function populateJared(specific=false) {
+    if(characterQuery('jared') != true) return;
 
     let html = '';
-    let keys = sixShop.keys;
+    let keys = jaredShop.keys;
 
     // Populate all
     if(!specific) {
         for(i = 0; i < keys.length; i++) {
             let key = keys[i];
-            html += sixHTML(key);
+            html += jaredHTML(key);
         }
 
-        elSixShop.innerHTML = html;
+        elJaredShop.innerHTML = html;
         // "Check back later for more trinkets"
         html += `
         <p class="secondary_text center" style="padding: 4px; margin-top: 8px;">
@@ -1331,12 +1331,12 @@ function populateSix(specific=false) {
     }
     // Populate single
     else {
-        let item = sixShop?.[specific];
+        let item = jaredShop?.[specific];
         console.log(item);
-        if(item == undefined) return console.warn(`populateSix(): [${specific}] is not a valid trinket`);
+        if(item == undefined) return console.warn(`populateJared(): [${specific}] is not a valid trinket`);
 
-        let ahtml = new DOMParser().parseFromString(sixHTML(specific), "text/html").body.firstChild;
-        let replace = document.getElementById(`six_shop_${specific}`);
+        let ahtml = new DOMParser().parseFromString(jaredHTML(specific), "text/html").body.firstChild;
+        let replace = document.getElementById(`jared_shop_${specific}`);
         replace.parentNode.replaceChild(ahtml, replace);
         return;
     }
@@ -1344,10 +1344,10 @@ function populateSix(specific=false) {
 
     cashCount(false);
 
-    /** Six HTML template */
-    function sixHTML(key) {
-        let item = sixShop[key];
-        let data = Six.data?.[key];
+    /** Jared HTML template */
+    function jaredHTML(key) {
+        let item = jaredShop[key];
+        let data = Jared.data?.[key];
         if(!data.available || data == undefined) return;
 
         // Segment bar
@@ -1367,7 +1367,7 @@ function populateSix(specific=false) {
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
 
         return `
-        <div id="six_shop_${key}" class="tooltip_area">
+        <div id="jared_shop_${key}" class="tooltip_area">
             <div class="shop_item ${styles}" onclick="buyTrinket('${key}')" tabindex="0" role="button">
                 <img src="${src}" alt="" class="shop_img">
                 <div class="info">

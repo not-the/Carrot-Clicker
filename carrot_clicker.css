@@ -1331,7 +1331,7 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
     display: inline-block;
     position: absolute;
     z-index: 1;
-    font-size: 11pt;
+    font-size: 9pt;
     transform: translateX(16px) translateY(20px);
     text-shadow: 0 0 4px var(--text-inverted),
                  1px 1px 0 var(--text-inverted),
@@ -1353,7 +1353,7 @@ body:not(.c_belle) .belle_related,
 body:not(.c_greg) .greg_related,
 body:not(.c_charles) .charles_related,
 body:not(.c_carl) .carl_related,
-body:not(.c_six) .six_related,
+body:not(.c_jared) .jared_related,
 body:not(.t_mp3) .music_related/*,
 body:not(.gp) #golden_carrot_count*/ {
     display: none;
@@ -1376,7 +1376,7 @@ body:not(.c_carl) .char_custom_button {
     margin-bottom: 20px;
 }
 .Greg .toolnumber {
-    font-size: 14pt;
+    font-size: 11pt;
     transform: translateX(22px) translateY(24px);
 }
 #greg_crafting_info {
@@ -1473,7 +1473,7 @@ body:not(.c_carl) .char_custom_button {
 }
 
 
-/* Charles, Carl, Six */
+/* Charles, Carl, Jared */
 .Charles .shop_item {
     padding-bottom: 1px;
     padding-top: 1px;
@@ -1509,7 +1509,7 @@ body:not(.c_carl) .char_custom_button {
     padding: 6px 0;
     margin-top: 6px;
 }
-/* .six .shop_bottom { max-height: 301px; } */
+/* .jared .shop_bottom { max-height: 301px; } */
 
 /* Character shops */
 .shop_item {
@@ -1608,7 +1608,7 @@ body:not(.c_carl) .char_custom_button {
 .shop_item.complete {
     filter: brightness(85%);
 }
-/* Six segments */
+/* Jared segments */
 .darker_bg_color {
     background-color: var(--bg-darker);
 }
@@ -2146,7 +2146,11 @@ body:not(.c_carl) .char_custom_button {
     padding-top: 4px;
     font-size: 20pt;
 }
-
+#golden_carrot_info_button{
+    position: absolute;
+    transform-origin: center;
+    transition:  opacity, transform 0.15s ease;
+}
 /* Inventory menu */
 /* #inventory_menu {
     padding: 24px;
@@ -2434,6 +2438,10 @@ footer .user_card { text-decoration: none !important; }
     .footer_bottom {
         display:block;
     }
+    
+    #golden_carrot_info_button{
+        right:240px;
+    }
 }
 
 /* 460px - mobile small*/
@@ -2469,6 +2477,9 @@ footer .user_card { text-decoration: none !important; }
     .key_column {
         padding: 0;
         margin: 0;
+    }
+    #golden_carrot_info_button{
+        right:30px;
     }
 }
 
