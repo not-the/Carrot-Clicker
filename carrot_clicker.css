@@ -435,7 +435,6 @@ summary:hover { background-color: var(--border-color); }
 .main_bg_color { background-color: var(--bg); }
 .toast_close {
     font-family: var(--font-x);
-    color: var(--gray);
     padding: 10px;
     margin: 4px 4px 0 0;
     position: absolute;
@@ -665,7 +664,8 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
 /* Keybinds */
 #keybinds_menu {
     width: 800px;
-    height: 800px;
+    height: 95%;
+    max-height: 800px;
     padding: 24px;
     overflow: auto;
 }
@@ -1328,11 +1328,13 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
 }
 .toolnumber {
     color: var(--text);
+
     display: inline-block;
     position: absolute;
     z-index: 1;
-    font-size: 9pt;
-    transform: translateX(16px) translateY(20px);
+    transform: translateX(17px) translateY(20px);
+
+    font-size: 10pt;
     text-shadow: 0 0 4px var(--text-inverted),
                  1px 1px 0 var(--text-inverted),
                  -1px 1px 0 var(--text-inverted),
@@ -1376,8 +1378,8 @@ body:not(.c_carl) .char_custom_button {
     margin-bottom: 20px;
 }
 .Greg .toolnumber {
-    font-size: 11pt;
-    transform: translateX(22px) translateY(24px);
+    font-size: 13pt;
+    transform: translateX(26px) translateY(26px);
 }
 #greg_crafting_info {
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
@@ -1608,7 +1610,7 @@ body:not(.c_carl) .char_custom_button {
 .shop_item.complete {
     filter: brightness(85%);
 }
-/* Jared segments */
+/* Shop segments */
 .darker_bg_color {
     background-color: var(--bg-darker);
 }
@@ -1887,7 +1889,7 @@ body:not(.c_carl) .char_custom_button {
     visibility: hidden;
     position: absolute;
 }
-.achievement_locked .achievement_img {
+.achievement_locked img {
     opacity: 0.7;
     filter: saturate(0%);
 }
@@ -2146,11 +2148,7 @@ body:not(.c_carl) .char_custom_button {
     padding-top: 4px;
     font-size: 20pt;
 }
-#golden_carrot_info_button{
-    position: absolute;
-    transform-origin: center;
-    transition:  opacity, transform 0.15s ease;
-}
+
 /* Inventory menu */
 /* #inventory_menu {
     padding: 24px;
@@ -2159,8 +2157,7 @@ body:not(.c_carl) .char_custom_button {
     max-width: 985px;
 
     background-color: var(--bg-popup);
-} */
-#inventory {
+}#inventory {
     display: flex;
     flex-wrap: wrap;
     height: 560px;
@@ -2193,7 +2190,6 @@ body:not(.c_carl) .char_custom_button {
 }
 
 #inventory_preview {
-    /* background-color: teal; */
     border-left: 1px solid var(--border-color);
     width: 430px;
     padding: 0 16px;
@@ -2206,7 +2202,7 @@ body:not(.c_carl) .char_custom_button {
 }
 .item_preview img {
     padding: 24px;
-}
+} */
 
 /* Footer */
 footer { text-align: center; }
@@ -2257,7 +2253,8 @@ footer .user_card { text-decoration: none !important; }
 /* Tips menu */
 #tips_menu {
     width: 500px;
-    height: 640px;
+    height: 95%;
+    max-height: 640px;
     overflow-y: auto;
 }
 #tips_list h3 {
@@ -2438,48 +2435,27 @@ footer .user_card { text-decoration: none !important; }
     .footer_bottom {
         display:block;
     }
-    
-    #golden_carrot_info_button{
-        right:240px;
-    }
 }
 
 /* 460px - mobile small*/
 @media only screen and (max-width: 460px) {
     /* Overlay */
-    #overlay {
-        height: 100vh;
-    }
-    #prestige_menu {
-        max-height: 360px;
-    }
-    #prestige_menu .prestige_menu_flex {
-        flex-direction: column;
-    }
+    #overlay { height: 100vh; }
+    #prestige_menu {  max-height: 360px; }
+    #prestige_menu .prestige_menu_flex { flex-direction: column; }
+    #prestige_menu .half_width { width: 100% !important; }
 
-    #prestige_menu .half_width {
-        width: 100% !important;
-    }
     /* Tripane */
     #tripane .tab .button_icon {
         visibility: hidden;
         position: absolute;
     }
-    .panel_select {
-        width: 150px;
-    }
-    .achieve_grid .achievement_item .achievement_details {
-        max-width: 55vw;
-    }
-    #keybinds_list {
-        display: block;
-    }
+    .panel_select { width: 150px; }
+    .achieve_grid .achievement_item .achievement_details {max-width: 55vw; }
+    #keybinds_list { display: block; }
     .key_column {
         padding: 0;
         margin: 0;
-    }
-    #golden_carrot_info_button{
-        right:30px;
     }
 }
 

@@ -110,7 +110,7 @@
                         </a>
 
                         <!-- Changelog -->
-                        <a href="./changelog/" target="_blank" rel="noopener noreferrer" tabindex="0">
+                        <a href="https://www.notkal.com/posts/carrot-clicker-changelog/" target="_blank" rel="noopener noreferrer" tabindex="0">
                             <div class="menu_item link_styling secondary_text">
                                 <img src="./assets/icons/refresh.svg" alt="" class="dropdown_img">
                                 Changelog
@@ -175,9 +175,9 @@
                     <p id="list_pages" class="secondary_text" style="margin-right:-24px">
                         Tome Pages: <span id="page_count">Loading...</span> <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast(...toasts.info_pages)">?</span>
                     </p>
-                    <p class="secondary_text">
-                        <span id="golden_carrot_count"></span>
-                    </p><br>
+                    <p id="list_golden_carrots" class="secondary_text charles_related" style="margin-right:-24px">
+                        Golden Carrots: <span id="golden_carrot_count">0</span> <span tabindex="0" class="question_mark" title="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!" onclick="toast(...toasts.info_golden_carrots)">?</span>
+                    </p><br/>
                 </div>
                 
                 <!-- Buttons -->
@@ -544,7 +544,7 @@
 
                     <!--Jared Rendering-->
                     <div class="jared characterbox char_locked" id="jared_box">
-                        <div class="char_info" id="jareed_info">
+                        <div class="char_info" id="jared_info">
                             <h2>Jared</h2>
                             <p class="secondary_text">- Shopkeep -</p>
                             <hr>
@@ -556,14 +556,14 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                                src="./assets/achievements/missing.png"
-                                alt="jared"
+                                src="./assets/characters/Jared.png"
+                                alt="Jared"
                                 id="jared_avatar"
                                 class="characterimg"
-                                title="jared"
+                                title="Jared"
                                 onclick="characterInfo('jared')">
                             <div class="characterdesc">
-                                <b id="jared_name" class="character_name">? (WIP)</b>
+                                <b id="jared_name" class="character_name">Jared</b>
                                 <p class="secondary_text">
                                     Trinket shop
                                 </p>
@@ -943,7 +943,7 @@
                         <!-- Links -->
                         <div class="footer_column">
                             <h3>More</h3>
-                            <a href="./changelog/" class="user_card footer_card">
+                            <a href="https://www.notkal.com/posts/carrot-clicker-changelog/" class="user_card footer_card">
                                 <div class="flex">
                                     <img src="./assets/icons/refresh.svg" alt="" class="invert_alt">
                                     <p>Changelog</p>
@@ -995,7 +995,7 @@
                     <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
                     Cosmetics
                 </button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" role="button" tabindex="0">x</h2>
             </div>
 
             <!-- Title -->
@@ -1028,7 +1028,7 @@
             <div class="switcher_bar flex">
                 <button class="tab" onclick="themeSwitcher()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
-                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
+                <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" role="button" tabindex="0">x</h2>
             </div>
             
             <!-- Title -->
@@ -1095,9 +1095,9 @@
                     <div id="carl_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
-                <!-- jared -->
+                <!-- Jared -->
                 <details open class="cosmetic_collapse jared_related" id="collapse_jared">
-                    <summary class="h3">jared:</summary>
+                    <summary class="h3">Jared:</summary>
                     <div id="jared_cosmetics" class="cosmetics_mini"></div>
                 </details>
 
@@ -1353,25 +1353,27 @@
                             <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
                         </div>
                     </div> -->
-                    
                     <!-- Golden Carrot count -->
                     <div class="flex prestige_item main_bg_color">
                         <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
                         <div>
                             <h6 class="prestige_number" id="prestige_menu_gc_count">Loading...</h6>
-                            <p>Golden Carrots</p>
+                            <p>
+                                Golden Carrots
+                                <span tabindex="0" class="question_mark" title="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!" onclick="toast(...toasts.info_golden_carrots)">?</span>
+                            </p>
                         </div>
-                        <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button" id="golden_carrot_info_button" onclick="characterInfo('bill')" tabindex="0" role="button">
                     </div>
 
-                    <!-- Tome page 
-                        
-                        count -->
+                    <!-- Tome page count -->
                     <div class="flex prestige_item main_bg_color">
                         <img src="./assets/items/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
                         <div>
                             <h6 class="prestige_number" id="prestige_menu_tp_count">Loading...</h6>
-                            <p>Tome Pages</p>
+                            <p>
+                                Tome Pages
+                                <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast(...toasts.info_pages)">?</span>
+                            </p>
                         </div>
                     </div>
                 </div>

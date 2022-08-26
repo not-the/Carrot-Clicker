@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.6';
+    const game_version = 'dev beta v1.16.7';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -24,7 +24,10 @@ const infot = ['', true, true];
 const toasts = {
     // Info blurbs
     info_coins: ['Info: Coins', 'While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!', ...infot],
-    info_pages: ['Info: Tome Pages', `For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!`, ...infot],
+    info_pages: ['Info: Tome Pages', 'For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!', ...infot],
+
+    info_golden_carrots: ['Info: Golden Carrots', 'Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!', ...infot],
+
     info_achieve_percent: ['Info: Achievement Progress', 'Secret (or hidden) achievements are not required to reach 100%.', ...infot],
     info_cosmetic_percent: ['Info: Cosmetics Percentage', 'This does not include default cosmetics. Secret cosmetics are not required to reach 100%. A more detailed breakdown is in the cosmetics menu.', ...infot],
     info_boosts: ['Info: Boosts', 'Boosts will not be remembered if the game is closed', ...infot],
@@ -33,7 +36,7 @@ const toasts = {
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
     tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
     tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the boosts bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
-    tutorial_charles: ['Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming,', '', true, false, false, true],
+    tutorial_charles: ['Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming!', '', true, false, false, true],
     // tutorial_golden_carrots is in carrot_clicker.js
 
     // Misc
@@ -296,7 +299,7 @@ const cosmetics = {
             'greg':     'default',
             'charles':  'default',
             'carl':     'default',
-            'jared':      'default',
+            'jared':    'default',
             'tools':    'default',
         },
         // Cookie
@@ -353,7 +356,7 @@ const cosmetics = {
             'greg':     'developer_art',
             'charles':  'developer_art',
             'carl':     'developer_art',
-            'jared':      'developer_art',
+            'jared':    'developer_art',
             'tools':    'blockgame',
         },
         // All Bill
@@ -369,7 +372,7 @@ const cosmetics = {
             'greg':     'bill',
             'charles':  'bill',
             'carl':     'bill',
-            'jared':      'bill',
+            'jared':    'bill',
             'tools':    'bill',
         },
     },
@@ -789,16 +792,16 @@ const cosmetics = {
     },
     jared: {
         'default': {
-            'name': 'jared (Default)',
+            'name': 'Jared (Default)',
             'desc': 'placeholder',
             'group': 'default',
 
-            'rename': 'jared',
-            'image': './assets/achievements/missing.png',
+            'rename': 'Jared',
+            'image': './assets/characters/Jared.png',
         },
         'developer_art': {
             'name': 'Developer Art',
-            'desc': 'The original Jared in all [Jared] glory',
+            'desc': 'The original Jared in all his glory',
             'group': 'developer_art',
 
             'rename': false,
@@ -1003,20 +1006,6 @@ const achievements = {
             'noToast': false,
         }
     },
-    'hire_jared': {
-        'name': 'One Man\'s Trash',
-        'desc': 'Hire the shopkeep',
-        'image': false,
-        'reward': 'character:jared',
-        'pages': 1,
-        'conditions': ['player.characters.jared', true],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
 
     // Prestiging
     '1_prestige': {
@@ -1029,6 +1018,20 @@ const achievements = {
         ],
         'pages': 5,
         'conditions': ['player.lifetime.prestige_count', 1],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'hire_jared': {
+        'name': 'One Man\'s Trash',
+        'desc': 'Hire the shopkeep',
+        'image': './assets/characters/Jared.png',
+        'reward': 'character:jared',
+        'pages': 1,
+        'conditions': ['player.characters.jared', true],
         'mystery': {
             'name': true,
             'desc': false,
@@ -1117,7 +1120,7 @@ const achievements = {
     '12_tomes': {
         'name': 'Tome\'d You so',
         'desc': 'Obtain 12 tomes',
-        'image': './assets/achievements/tome animated.gif',
+        'image': './assets/achievements/tome animated.gif', // needs unique art
         'reward': 'cosmetic:charles/special_charles',
         'pages': 3,
         'conditions': [
@@ -1134,7 +1137,7 @@ const achievements = {
     '24_tomes': {
         'name': 'Librarian',
         'desc': 'Obtain 24 tomes',
-        'image': './assets/achievements/tome animated.gif',
+        'image': './assets/achievements/tome animated.gif', // needs unique art
         'reward': false,
         'pages': 4,
         'conditions': [
@@ -1151,7 +1154,7 @@ const achievements = {
     '140_tomes': {
         'name': 'Infinite Library',
         'desc': 'Obtain 140 tomes',
-        'image': './assets/achievements/tome animated.gif',
+        'image': './assets/achievements/tome animated.gif', // needs unique art
         'reward': false,
         'pages': 5,
         'conditions': [
@@ -1207,7 +1210,7 @@ const achievements = {
     'bill_lvl_10': {
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill to level 10',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': './assets/achievements/bill_pointer.png', // needs unique art
         'reward': 'shop:cosmetic/bill/biker_bill',
         'pages': false,
         'conditions': ['Boomer_Bill.lvl', 10],
@@ -1221,7 +1224,7 @@ const achievements = {
     'bill_lvl_100': {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill to level 100',
-        'image': './assets/achievements/bill_pointer.png', // Needs better art, maybe animated
+        'image': './assets/achievements/bill_pointer.png',
         'reward': false,
         'pages': 1,
         'conditions': ['Boomer_Bill.lvl', 100],
@@ -1235,7 +1238,7 @@ const achievements = {
     'bill_lvl_500': {
         'name': 'Billtona 500',
         'desc': 'Upgrade Bill to level 500',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': './assets/achievements/bill_pointer.png', // needs unique art
         'reward': 'cosmetic:bundle/bill',
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 500],
@@ -1249,7 +1252,7 @@ const achievements = {
     'bill_lvl_1000': {
         'name': 'Milennial Bill',
         'desc': 'Upgrade Bill to level 1000',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': './assets/achievements/bill_pointer.png', // needs unique art
         'reward': false,
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
@@ -1266,7 +1269,7 @@ const achievements = {
     'belle_lvl_15': {
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle to level 15',
-        'image': './assets/characters/Belle.png',
+        'image': './assets/characters/Belle.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
@@ -1280,7 +1283,7 @@ const achievements = {
     'belle_lvl_100': {
         'name': 'Tough Belle',
         'desc': 'Upgrade Belle to level 100',
-        'image': './assets/characters/Belle.png',
+        'image': './assets/characters/Belle.png', // needs unique art
         'reward': false,
         'pages': 1,
         'conditions': ['Belle_Boomerette.lvl', 100],
@@ -1294,7 +1297,7 @@ const achievements = {
     'belle_lvl_500': {
         'name': 'Um-belle-ifer Sellerer',
         'desc': 'Upgrade Belle to level 500',
-        'image':'./assets/characters/Belle.png',
+        'image': './assets/characters/Belle.png', // needs unique art
         'reward': false,
         'pages': 3,
         'conditions': ['Belle_Boomerette.lvl', 500],
@@ -1309,7 +1312,7 @@ const achievements = {
     'greg_lvl_25': {
         'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
         'desc': 'Upgrade Gregory to level 25',
-        'image': './assets/characters/Greg.png',
+        'image': './assets/characters/Greg.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['Gregory.lvl', 25],
@@ -1427,7 +1430,7 @@ const achievements = {
     '1_quadrillion_carrots': {
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
-        'image': './assets/achievements/carrot_pile.png',
+        'image': './assets/achievements/carrot_pile.png', // needs unique art
         'reward': [
             'shop:cosmetic/bundle/developer_art',
             'shop:cosmetic/tools/fertilizer',
@@ -1538,7 +1541,7 @@ const achievements = {
         }
     },
     '1_undecillion_carrots': {
-        'name': 'Hoe God',
+        'name': 'Carrot God', // Carrot God / Hoe God
         'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become something greater...',
         'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
@@ -1783,7 +1786,7 @@ const achievements = {
     '500_clicks': {
         'name': 'Click the Carrot, Bill.',
         'desc': 'Click the carrot 500 times',
-        'image': './assets/achievements/12_clicks_per_second.png',
+        'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 500],
@@ -1797,7 +1800,7 @@ const achievements = {
     '5000_clicks': {
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 5,000 times',
-        'image': './assets/achievements/12_clicks_per_second.png',
+        'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': 'shop:cosmetic/farmable/pixel_carrot',
         'pages': false,
         'conditions': ['player.lifetime.clicks', 5000],
@@ -1811,7 +1814,7 @@ const achievements = {
     '50000_clicks': {
         'name': 'Destroyer of Mice',
         'desc': 'Click the carrot 50,000 times',
-        'image': './assets/achievements/12_clicks_per_second.png',
+        'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 50000],
@@ -1825,7 +1828,7 @@ const achievements = {
     '100000_clicks': {
         'name': '"My Finger Hurts"',
         'desc': 'Click the carrot 100,000 times',
-        'image': './assets/achievements/12_clicks_per_second.png',
+        'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 100000],
@@ -1839,7 +1842,7 @@ const achievements = {
     '1000000_clicks': {
         'name': 'Clicker God',
         'desc': 'Click the carrot 1 million times (Hidden achievement)',
-        'image': './assets/achievements/12_clicks_per_second.png',
+        'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['player.lifetime.clicks', 1000000],
@@ -1902,13 +1905,13 @@ const achievements = {
     },
 
     // Cash
-    '500_lifetime_cash': {
+    '2000_lifetime_cash': {
         'name': 'Penny Pincher',
-        'desc': 'Earn 500 coins',
+        'desc': 'Earn 2000 coins',
         'image': false,
         'reward': false,
         'pages': 1,
-        'conditions': ['player.lifetime.cash', 500],
+        'conditions': ['player.lifetime.cash', 2000],
         'mystery': {
             'name': false,
             'desc': false,
@@ -1932,7 +1935,21 @@ const achievements = {
     },
 
     // Trinkets
-    'all_trinkets': { // jared
+    '1_trinket': {
+        'name': 'Not so Useless',
+        'desc': 'Buy your first trinket',
+        'image': false,
+        'reward': false,
+        'pages': 1,
+        'conditions': ['percentage(...player.trinket_completion.split("/"))', 0.001],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': true,
+            'noToast': false,
+        }
+    },
+    'all_trinkets': {
         'name': 'Complete Collection',
         'desc': 'Buy and fully upgrade every trinket',
         'image': false,
@@ -1992,14 +2009,12 @@ const achievements = {
         }
     },
 
-    // Hoes
-    'first_hoe': {
+    // Tools
+    'first_tool': {
         'name': 'The Tools to Victory',
         'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
-        'reward': () => {
-            toast(...toasts.tutorial_tools);
-        },
+        'reward': () => { toast(...toasts.tutorial_tools); },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
         'mystery': {
@@ -2009,9 +2024,9 @@ const achievements = {
             'noToast': true,
         }
     },
-    '1_netherite_hoe': {
+    'obtain_tool_six': {
         'name': 'Extreme Farming',
-        'desc': 'Obtain the ultimate farming implement (Netherite Hoe)',
+        'desc': 'Obtain the ultimate farming implement (tool 6)',
         'image': './assets/tools/tool_5.png',
         'reward': 'cosmetic:farmable/netherite_hoe',
         'pages': 10,
@@ -2023,6 +2038,25 @@ const achievements = {
             'noToast': false,
         }
     },
+
+    // Themes
+    'all_themes': {
+        'name': 'all_themes',
+        'desc': 'Unlock every theme',
+        'image': './assets/theme/theme_red.png', // needs unique art
+        'reward': false,
+        'pages': 3,
+        'conditions': ['player.themes.length', themesKeys.length],
+
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
+    // Achievement achievements
     '50_percent_achievements': {
         'name': 'Half Way There',
         'desc': 'Reach 50% achievements unlocked',
@@ -2177,7 +2211,7 @@ const achievements = {
     '100_falling_consecutive': {
         'name': 'Juggle Master',
         'desc': 'Grab 100 falling carrots in a row',
-        'image': './assets/achievements/parachute_carrot.png',
+        'image': './assets/achievements/parachute_carrot.png', // needs unique art
         'reward': false,
         'pages': false,
         'conditions': ['player.fallingConsecRecord', 100],

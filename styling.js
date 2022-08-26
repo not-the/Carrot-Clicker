@@ -25,9 +25,11 @@ var menuState = {
     credits:   false,
 }
 
-// Don't regenerate achievements list unless necessary
-var achieveHTMLupdate = true;
-var tipsHTMLupdate    = true;
+// Don't populate lists unless necessary
+var achieveHTMLupdate  = true;
+var tipsHTMLupdate     = true;
+var themesHTMLupdate   = true;
+var cosmeticHTMLupdate = true;
 
 // Dialog Elements
 const overlay = dom("overlay");
@@ -153,7 +155,6 @@ function buttonSound() {
  */
 function openDialog(title, desc, buttonName, buttonStyle, button_action) {
     openMenu('dialog');
-    buttonSound();
 
     // Fill out dialog text, if applicable
     if(title)        eInnerText(elDialog.title, title);
@@ -185,38 +186,22 @@ function closeDialog(accept=false) {
 
     // Hide other popup menus
     //#region
-    if(menuState.dialog) {
-        menuState.dialog = false;
-    }
+    if(menuState.dialog) menuState.dialog = false;
     if(menuState.character) {
         dom(`${menuState.character}_box`).classList.remove('show_info');
         menuState.character = false;
     }
-    if(menuState.theme) {
-        menuState.theme = false;
-    }
-    if(menuState.cosmetic) {
-        menuState.cosmetic = false;
-    }
-    if(menuState.keybinds) {
-        menuState.keybinds = false;
-    }
-    if(menuState.prestige) {
-        menuState.prestige = false;
-    }
-    if(menuState.prestige) {
-        menuState.prestige = false;
-    }
-    if(menuState.tips) {
-        menuState.tips = false;
-    }
-    if(menuState.credits) {
-        menuState.credits = false;
-    }
+    if(menuState.theme)    menuState.theme = false;
+    if(menuState.cosmetic) menuState.cosmetic = false;
+    if(menuState.keybinds) menuState.keybinds = false;
+    if(menuState.prestige) menuState.prestige = false;
+    if(menuState.prestige) menuState.prestige = false;
+    if(menuState.tips)     menuState.tips = false;
+    if(menuState.credits)  menuState.credits = false;
 
     // Enable keyboard navigation for main page
     dom('main').ariaHidden = false;
-    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main select, #main a').forEach(element => {
+    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main select, #main a, #main textarea').forEach(element => {
         element.tabIndex = 0;
     });
     //#endregion
@@ -297,7 +282,7 @@ function toast(
         toastElement.classList = `toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}`;
         toastElement.innerHTML =`
         <!-- Close button -->
-        <span class="toast_close" onclick="closeToast(${toastID})">X</span>
+        <span class="toast_close" role="button" tabindex="0" onclick="closeToast(${toastID})">X</span>
         <!-- Details -->
         <div class="achievement_details flex">
             <img src="${noImg ? './assets/achievements/missing.png' : achieve.image}" alt="${achieve.name}" id="${achievement}_img" class="achievement_img" title="${achieve.name}">
@@ -508,7 +493,7 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 function themeSwitcher() {
     openMenu('theme');
     newIndicator(false, 'theme');
-    buttonSound();
+    populateThemeList();
 }
 /** Closes the theme menu */
 function closeThemeSwitcher(noOverlay = false) {
@@ -523,7 +508,6 @@ function cosmeticSwitcher(category = false) {
     if(!characterQuery('carl')) return;
     openMenu('cosmetic');
     newIndicator(false, 'cosmetic');
-    buttonSound();
 
     // Uncollapse intended category
     if(category) {
@@ -541,6 +525,8 @@ function cosmeticSwitcher(category = false) {
             e.open = true;
         });
     }
+
+    populateCosmeticsList();
 }
 /** Closes the cosmetic menu */
 function closeCosmeticSwitcher(noOverlay = false) {
@@ -557,10 +543,12 @@ function openMenu(id) {
 
     // Disable keyboard navigation for main page
     dom('main').ariaHidden = true;
-    document.querySelectorAll('#main *[tabindex="0"], #main button, #main input, #main select, #main a').forEach(element => {
+    document.querySelectorAll('#main *[tabindex="-1"], #main button, #main input, #main select, #main a, #main textarea').forEach(element => {
         element.tabIndex = -1;
     });
     menuState[id] = true;
+
+    buttonSound();
 }
 
 /** Opens the prestige menu */
@@ -570,7 +558,6 @@ function openPrestigeMenu() {
     
     openMenu('prestige');
     updatePrestigeMenu();
-    buttonSound();
 }
 
 /* ----- Inventory ----- */
@@ -579,51 +566,36 @@ function openPrestigeMenu() {
 //     menuState.inventory = true;
 //     overlay.classList.add("visible");
 //     elBody.classList.add('overflow_hidden');
-
-//     buttonSound();
 // }
 
 /* ----- Tips Menu ----- */
 function openTipsMenu() {
-    if(tipsHTMLupdate == true) {
-        populateTipsMenu();
-        tipsHTMLupdate = false;
-    }
     openMenu('tips');
-    buttonSound();
 }
 const elTipsList = dom('tips_list');
 function populateTipsMenu() {
+    if(!tipsHTMLupdate) return;
+    tipsHTMLupdate = false;
+
     let html = '';
     let best = player.flags['all_tips'] == true ? tl.length - 1 : tips.best;
-    console.log(tips.best);
     // Loop
     for(let i = 0; i <= best + 0.5; i += 0.5) {
         let ri = Math.floor(i);
         let type = '';
         if(i % 1 != 0) { type = 'fun_'; }
-        // console.log(type + ri);
 
         let id = `${type}${tl[ri]}`;
         let cat = tips[id];
-        if(type != 'fun_') { html += `<h3>${capitalizeFL(id.split('_').join(' '))}</h3>`; }
-        
+        if(type != 'fun_') html += `<h3>${capitalizeFL(id.split('_').join(' '))}</h3>`;
 
         for(ii = 0; ii < cat.length; ii++) {
-            // console.log(cat[ii]);
             // Normal
-            if(tips.seen[id][ii] == true || player.flags['all_tips'] == true) {
-                html += `
-                <p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
-            }
-            // ???
-            else {
-                html += `
-                <p class="tip_item secondary_text${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>???</p>`;
-            }
+            if(tips.seen[id][ii] == true || player.flags['all_tips'] == true) html += `<p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
+            // Fun
+            else html += `<p class="tip_item secondary_text${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>???</p>`;
         }
     }
-
     elTipsList.innerHTML = html;
 }
 
@@ -665,8 +637,7 @@ function setCosmetic(target, to, resetState = false) {
     // console.log('Switching ' + target + '\'s cosmetic to: ' + to);
 
     // Reset to default first
-    if(resetState == false && to != 'default')
-    { setCosmetic(target, 'default', true); }
+    if(resetState == false && to != 'default') setCosmetic(target, 'default', true);
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
@@ -678,9 +649,8 @@ function setCosmetic(target, to, resetState = false) {
             for(i = 0; i < cosmeticsKeys.length; i++) {
                 let target = cosmeticsKeys[i];
                 if(target == 'bundle') continue;
-                if(cosmetic.hasOwnProperty(target))
-                {setCosmetic(target, cosmetic[target]);}
-                else {setCosmetic(target, 'default');}
+                if(cosmetic.hasOwnProperty(target)) setCosmetic(target, cosmetic[target]);
+                else setCosmetic(target, 'default');
             }
             break;
         
@@ -762,6 +732,9 @@ function setCosmetic(target, to, resetState = false) {
 
 // Populate theme switcher list on page load
 function populateThemeList() {
+    if(!themesHTMLupdate) return;
+    themesHTMLupdate = false;
+
     var themeHTML = '';
     var stillLocked = 0;
 
@@ -791,7 +764,7 @@ function populateThemeList() {
         themeHTML += /* html */
         `
         <div class="theme_item flex" title="${theme.name}" onclick="setTheme('${key}')" tabindex="0" role="button">
-            <img src="${imgsrc}" alt="img" class="theme_preview" id="theme">
+            <img src="${imgsrc}" alt="img" class="theme_preview" id="theme" loading="lazy">
             <div>
                 <h3>${theme.name}</h3>
                 <p class="secondary_text">${theme.desc}</p>
@@ -823,33 +796,27 @@ cosmeticsView.addEventListener('input', () => {
     cosmeticsGridMode();
 });
 
+/**  */
 function cosmeticsGridMode() {
     let value = cosmeticsView.value;
     let elements = document.querySelectorAll('.cosmetics_mini');
-    
-    if(value == 'grid') {
-        elements.forEach(element => {
-            element.classList.add('cosmetics_grid');
-        });
-    } else {
-        elements.forEach(element => {
-            element.classList.remove('cosmetics_grid');
-        });
-    }
+    elements.forEach(element => { style(element, 'cosmetics_grid', (value == 'grid')); });
 
     // Save preference
     settings.cosmetics_grid = value == 'list' ? false : true;
     saveSettings();
 }
 
-// New
-// var debug;
-function populateCosmeticsList(target) {
-    // Do all lists
+/** Populate cosmetics list
+ * @param {string} target Cosmetic type to populate, or "all" for all
+ */
+function populateCosmeticsList(target='all') {
+    // Update all lists
     if(target == 'all') {
-        for(let i = 0; i < cosmeticsKeys.length; i++) {
-            populateCosmeticsList(cosmeticsKeys[i]);
-        }
+        if(!cosmeticHTMLupdate) return;
+        cosmeticHTMLupdate = false;
+
+        for(let i = 0; i < cosmeticsKeys.length; i++) populateCosmeticsList(cosmeticsKeys[i]);
 
         // Size adjust
         setTimeout(() => {
@@ -861,24 +828,15 @@ function populateCosmeticsList(target) {
             // 655 theme popup width
             // minus 64 to get actual used space
             let amount = Math.floor(width / item_width);
-            // console.log(amount);
             
             for(i = 0; i < cosmeticsKeys.length; i++) {
                 let category = dom(`collapse_${cosmeticsKeys[i]}`);
                 let item_list = category.querySelectorAll('.cosmetic_item');
                 let iterate = 1;
-
                 item_list.forEach(item => {
-                    if(iterate > amount / 2) {
-                        // console.log(item);
-                        item.classList.add('desc_fit');
-                    }
-                    // Count
-                    if(iterate < amount) {
-                        iterate++;
-                    } else {
-                        iterate = 1;
-                    }
+                    if(iterate > amount / 2) item.classList.add('desc_fit');
+                    if(iterate < amount) iterate++;
+                    else iterate = 1;
                 });
             }
         }, 50);
@@ -902,7 +860,7 @@ function populateCosmeticsList(target) {
             cosmeticHTML += /* html */
             `
             <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" tabindex="0" role="button">
-                <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}">
+                <img src="./assets/locked_transparent.png" alt="img" class="theme_preview" id="cosmetic_${key}" loading="lazy">
                 <div class="description">
                     <h3>???</h3>
                     <p class="secondary_text">Locked</p>
@@ -943,10 +901,11 @@ const elAchievementFilter = dom('achievement_filter');
  * @param {string} specific Accepts an achievement key and updates only that achievement instead
  */
 function populateAchievements(specific=false) {
-    const filter = dom('achievement_filter').value;
     // Don't populate if not needed
     if(!achieveHTMLupdate) return;
     achieveHTMLupdate = false;
+
+    const filter = dom('achievement_filter').value;
     var achievementHTML = '';
 
     // Populate all
@@ -1000,19 +959,19 @@ function populateAchievements(specific=false) {
 
 
         // Rewards info
-        if(achieve.reward != false && unlocked == true) {
+        if(achieve.reward != false) {
             let inner = '';
             // Multiple rewards
             if(Array.isArray(achieve.reward) == true) {
                 for(let i = 0; i < achieve.reward.length; i++) {
                     let reward = achieve.reward[i];
-                    inner += rewardHTML(reward);
+                    inner += rewardHTML(reward, unlocked);
                 }
             }
             // Single reward
             else if(typeof achieve.reward === 'string' || achieve.reward instanceof String) {
                 let reward = achieve.reward;
-                inner += rewardHTML(reward);
+                inner += rewardHTML(reward, unlocked);
             }
 
             // Export HTML
@@ -1022,7 +981,7 @@ function populateAchievements(specific=false) {
         // Achievement info
         // cheat:       onclick="grantAchievement('${key}')"
         // unlock date: onclick="toast('', new Date(player.achievements['${key}']), '', true, true)"
-        let pagesHTML = unlocked && achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
+        let pagesHTML = achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
         let name = unlocked || achieve.mystery.name != true ? achieve.name : '???';
         let desc = unlocked || achieve.mystery.desc != true ? achieve.desc : '???';
         let img = achieve.image || './assets/achievements/missing.png';
@@ -1047,6 +1006,7 @@ function populateAchievements(specific=false) {
                     id="${key}_img"
                     class="achievement_img"
                     title="${title}"
+                    loading="lazy"
                 >
                 <div>
                     <h2>${name}</h2>
@@ -1058,7 +1018,7 @@ function populateAchievements(specific=false) {
         `;
 
         /** Achievement reward HTML */
-        function rewardHTML(reward) {
+        function rewardHTML(reward, unlocked) {
             let [rewardType, rewardName] =
             typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
             let subtype;
@@ -1071,7 +1031,11 @@ function populateAchievements(specific=false) {
             if(rewardType == 'function' || rewardType == 'shop') return '';
 
             // Get reward info
-            if(rewardType == 'theme') {
+            if(!unlocked) {
+                informalName = "Locked";
+                icon = './assets/gift.png';
+            }
+            else if(rewardType == 'theme') {
                 informalName = themes[rewardName].name;
                 icon = themes[rewardName].image
             }
@@ -1087,7 +1051,7 @@ function populateAchievements(specific=false) {
                 icon = defaultChar[rewardName].img; // Get image
             }
             // Cash
-            else if(rewardType == 'cash') {
+            if(rewardType == 'cash') {
                 icon = './assets/piggy_bank.png';
                 informalName = `${rewardName} coins`;
                 rewardType = '';
@@ -1225,7 +1189,6 @@ function keybindsMenu() {
     let checked = elDisableKeybinds.checked;
     style(elKeybindsBlurb, 'color_red', checked);
     elKeybindsBlurb.innerText = checked ? 'Warning: Keybinds are currently disabled in settings.' : keyBlurbText;
-    buttonSound();
 }
 
 const carlShop = dom('carl_shop');
@@ -1290,7 +1253,7 @@ function populateCarl() {
         return `
         <div class="tooltip_area">
             <div id="carl_shop_${internalName}" class="shop_item flex" onclick="buyCarl('${type}', '${internalName}')" tabindex="0" role="button">
-                <img src="${img}" alt="" class="shop_img">
+                <img src="${img}" alt="" class="shop_img" loading="lazy">
                 <div class="info">
                     <b>${name}</b>
                     <p class="secondary_text">${capitalizeFL(type)}</p>
@@ -1308,7 +1271,7 @@ function populateCarl() {
 }
 
 const elJaredShop = dom('jared_shop');
-/** Populate jared's shop */
+/** Populate Jared's shop */
 function populateJared(specific=false) {
     if(characterQuery('jared') != true) return;
 
@@ -1332,16 +1295,14 @@ function populateJared(specific=false) {
     // Populate single
     else {
         let item = jaredShop?.[specific];
-        console.log(item);
         if(item == undefined) return console.warn(`populateJared(): [${specific}] is not a valid trinket`);
 
         let ahtml = new DOMParser().parseFromString(jaredHTML(specific), "text/html").body.firstChild;
-        let replace = document.getElementById(`jared_shop_${specific}`);
+        let replace = document.getElementById(`jared_shop_container_${specific}`);
         replace.parentNode.replaceChild(ahtml, replace);
         return;
     }
     
-
     cashCount(false);
 
     /** Jared HTML template */
@@ -1367,9 +1328,9 @@ function populateJared(specific=false) {
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
 
         return `
-        <div id="jared_shop_${key}" class="tooltip_area">
-            <div class="shop_item ${styles}" onclick="buyTrinket('${key}')" tabindex="0" role="button">
-                <img src="${src}" alt="" class="shop_img">
+        <div id="jared_shop_container_${key}" class="tooltip_area">
+            <div id="jared_shop_${key}" class="shop_item ${styles}" onclick="buyTrinket('${key}')" tabindex="0" role="button">
+                <img src="${src}" alt="" class="shop_img" loading="lazy">
                 <div class="info">
                     <b>${item.name}</b>
                     <div class="segment_bar darker_bg_color">${segments}</div>

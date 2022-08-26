@@ -1,14 +1,53 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.16.6
-    8-22-2022
+    VERSION dev beta 1.16.7
+    8-25-2022
 // ----------------------------------------------------------- //
-    -Tome multibuy fixed issue #63
-    -Hoe count size decreased
-    -Game loop replaced
-    -Switched code to refer to Jared and not Six
-    -Fixed Can't afford Jared toast
-    -Failed to add an info button to the prestige menu
-    -Started using assets already in the game to use as images for achievemensts without one
+
+- Gave Jared an image
+- Added info buttons to the prestige menu (subject to change if not implemented how JJ intended)
+- New achievement: "Not so Useless" (For buying your first trinket)
+- Most images will now lazy load
+- The theme and cosmetic lists will now populate when first opened instead of on page load
+- Prestige potential is no longer calculated every time the carrot is clicked, just when CPC/CPS change
+- New achievement: all_themes
+- All cosmetics are now obtainable- some were accidentally left out of Carl's shop: bill/dollar_bill, greg/safety_greg
+- Updated the changelog URL
+- You can now see if locked achievements have rewards/pages
+- Penny Pincher achievement conditions changed (500 -> 2000)
+- data_version bumped to 16
+
+Bug fixes:
+- Fixed updateAllTools() not running when characters are unlocked
+- Fixed the import/export textarea being keyboard focusable while a popup menu is open
+- Fixed toast X buttons not being keyboard focusable
+- Added player.cosmetics to the object updater, new characters or cosmetic types will no longer cause a crash
+- Rewrote isUnlocked() to be more efficient
+- Possibly (?) fixed Classic Theme's tome sprites not appearing
+- Fixed Jared shop highlighting not working
+- Fixed coin count not updating after buying a trinket
+- Fixed the tips and keybinds menus not scaling down vertically to fit the screen
+- Fixed user being unable to change keybinds using keyboard-only navigation (Issue #64)
+- Fixed dialogs instantly being accepted while using keyboard navigation (Issue #50)
+- Fixed spacebar autoclick stopping when mousing out from the carrot (Issue #62)
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.16.6
+    8-24-2022
+// ----------------------------------------------------------- //
+
+- Tome multibuy fixed (Issue #63)
+- Hoe count font size decreased
+- Game loop replaced
+- Switched code to refer to Jared and not Six
+- Fixed Can't afford Jared toast
+- Failed to add an info button to the prestige menu
+- Started using assets already in the game to use as images for achievemensts without one
+
+~ JJ
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.16.5

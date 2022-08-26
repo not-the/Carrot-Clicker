@@ -240,33 +240,26 @@ document.addEventListener('keydown', event => {
     if(settings.disableKeybinds || menuOpen()) return;
     if(key == settings.keybinds['key_carrot'] && !keyCarrotFiring) {
         keyCarrotFiring = true;
-        holdStart(false);
+        holdStart(false, 1);
     }
 });
 
 
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
-    // Close/Accept dialog
-    if(menuState.dialog) {
-        if(event.key == "Escape"){
-            closeDialog();
-            if(equipWaiting != -1) cancelToolEquip();
-        } else if(event.key == "Enter"){
-            closeDialog(true);``
-        }
+    // Browser keyboard navigation enter acts as click
+    if(event.key == "Enter") {
+        let tag = document.activeElement.tagName;
+        if(tag != 'SUMMARY') document.activeElement.click();
         return;
-    } else {
-        if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip();
-    }
-    // Close theme switcher
-    if(menuOpen()) {
-        if(event.key == "Escape") closeDialog();
-        else if(prestigeMenuOpen && event.key == "Enter") openDialog(...dialog.prestige_confirm);
     }
 
-    // When on main page send to keybind handler
-    keybindHandler(event, 'keyup');
+    
+    if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
+    else if(menuOpen() && event.key == "Escape") closeDialog(); // Close menu
+    if(menuState.prestige && event.key == "Enter") openDialog(...dialog.prestige_confirm);
+
+    keybindHandler(event, 'keyup'); // When on main page send to keybind handler
 });
 
 
@@ -362,6 +355,7 @@ function keybindHandler(event, state) {
         if(keyCombo == keyCodes[ci]) { keyComboHandler(ci); }
     }
 
+    /** Keyboard combo detector */
     function keyComboHandler(combo) {
         console.log(`keyComboHandler(${combo})`);
         keyCombo = '';
@@ -385,13 +379,6 @@ function keybindHandler(event, state) {
     }
     //#endregion
 
-
-    // Browser keyboard navigation enter acts as click
-    if(key == "Enter"){
-        let tag = document.activeElement.tagName;
-        if(tag != 'SUMMARY') { document.activeElement.click(); }
-    }
-
     // Stop if keybinds need to be ignored
     if(
         settings.disableKeybinds == "true"
@@ -403,24 +390,16 @@ function keybindHandler(event, state) {
 
     // if(state != 'keyup') return;
 
-
     // Multibuy
-    if(
-        key == settings.keybinds['key_multibuy']
-        && state == 'keyup')
-    {
-        multibuySpin();
-    }
+    if(key == settings.keybinds['key_multibuy'] && state == 'keyup') multibuySpin();
     // Carrot click
     if(key == settings.keybinds['key_carrot']) {
-        onClick(false, 'click', 1);
+        onClick(false, 1);
         keyCarrotFiring = false;
         holdStop();
 
         // Prevent spacebar scrolling (for some reason this works even if the parent if statement resolves to false)
-        if(key == "Spacebar") {
-            event.preventDefault();
-        }
+        if(key == "Spacebar") event.preventDefault();
     }
 
     //Level up
@@ -431,9 +410,7 @@ function keybindHandler(event, state) {
             cancelToolEquip()
         }
         // Level up
-        else {
-            levelUp(Boomer_Bill, multibuy[mbsel]);
-        }
+        else levelUp(Boomer_Bill, multibuy[mbsel]);
     }
     else if(key == settings.keybinds['key_belle_lvlup']) {
         // Waiting to equip hoe
@@ -442,9 +419,7 @@ function keybindHandler(event, state) {
             cancelToolEquip();
         }
         // Level up
-        else {
-            levelUp(Belle_Boomerette, multibuy[mbsel]);
-        }
+        else levelUp(Belle_Boomerette, multibuy[mbsel]);
     }
     else if(key == settings.keybinds['key_greg_lvlup']) {
         // Waiting to equip hoe
@@ -453,9 +428,7 @@ function keybindHandler(event, state) {
             cancelToolEquip();
         }
         // Level up
-        else {
-            levelUp(Gregory, multibuy[mbsel]);
-        }
+        else levelUp(Gregory, multibuy[mbsel]);
     }
 
     // Tools
@@ -463,17 +436,12 @@ function keybindHandler(event, state) {
         for(i = 0; i <= 5; i++) {
             // Craft
             if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == false) {
-                // console.log(`key_craft_${i}: Craft`);
                 createTool(i, multibuy[mbsel]);
             }
             // Equip
             else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == true) {
-                // console.log(`key_craft_${i}: Ready to equip hoe #${i}`);
-
-                // No hoes
                 if(Gregory.Hoes[i] < 1) return;
-
-                equipToastID = toast('Equipping Hoe', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
+                equipToastID = toast('Equipping Tool', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
                 equipWaiting = i;
             }
         }
@@ -715,17 +683,13 @@ function grantAchievement(key) {
 
 /** Unlock themes, cosmetics, characters, etc */
 function unlock(type, thingToUnlock, subtype, raw) {
-    if(isUnlocked(type, thingToUnlock, subtype) == true) {
-        console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
-        return;
-    }
-    // console.log('unlock(): ' + type + ':' + thingToUnlock);
+    if(isUnlocked(type, thingToUnlock, subtype)) return console.warn(`${type}:${subtype ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
 
     // Theme
     if(type == 'theme') {
         player.themes.push(thingToUnlock);
-
         newIndicator(true, 'theme');
+        themesHTMLupdate = true;
         populateThemeList();
     }
     // Cosmetic
@@ -740,38 +704,34 @@ function unlock(type, thingToUnlock, subtype, raw) {
                 if(key == 'bundle') continue;
 
                 let target = cosmetics[key];
-
                 // Loop through cosmetics
                 for(let c = 0; c < target['keys'].length; c++) {
-                    if(target[ target['keys'][c] ].group == thingToUnlock) {
-                        unlock('cosmetic', target.keys[c], key);
-                    }
+                    if(target[ target['keys'][c] ].group == thingToUnlock) unlock('cosmetic', target.keys[c], key);
                 }
             }
 
         }
 
         player.cosmetics[subtype].push(thingToUnlock);
-        populateCosmeticsList('all');
-
+        cosmeticHTMLupdate = true;
+        populateCosmeticsList();
         newIndicator(true, 'cosmetic');
         playerCosmeticsCount();
 
         // Auto equip
-        if(settings.cosmetic_auto_equip == true) {
-            setCosmetic(subtype, thingToUnlock);
-        }
+        if(settings.cosmetic_auto_equip) setCosmetic(subtype, thingToUnlock);
     }
     // Character
     else if(type == 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
-        if(!characterQuery(thingToUnlock)) { charbox.classList.add('char_anim'); }
+        if(!characterQuery(thingToUnlock)) charbox.classList.add('char_anim');
         player.characters[thingToUnlock] = subtype || true;
         charbox.classList.remove('char_locked');
         playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
         if(playerCharKeys.length >= chars.length) dom('more_chars_tooltip').classList.add('char_locked');
+        setTimeout(updateAllTools, 10);
     }
     // Carl shop item
     else if(type == 'shop_item') {
@@ -880,15 +840,16 @@ function buyTrinket(id) {
     data.value = item.value[data.level];
 
     // Store completion value
-    player.trinket_completion = jaredCompletion();
+    player.trinket_completion = trinketCompletion();
     
     // Update page
+    cashCount(false);
     populateJared(id);
     mouseConfetti([3,3], ccWhite, 150, 1);
     if(item.update) item.update();
 
     /** Calculates and returns completion (#/#) of trinkets */
-    function jaredCompletion() {
+    function trinketCompletion() {
         let keys = jaredShop.keys;
         let comTotal = 0;
         let maxTotal = 0;
@@ -902,9 +863,7 @@ function buyTrinket(id) {
 }
 
 /** Test if a character is unlocked */
-function characterQuery(char) {
-    return player.characters[char];
-}
+function characterQuery(char) { return player.characters[char]; }
 /** Test if all characters are unlocked */
 function allCharQuery() {
     let c = 0;
@@ -916,45 +875,27 @@ function allCharQuery() {
 /** Test if player has an achievement - True = yes, False = no */
 function achieveQuery(key) {
     if(player.achievements[key] != undefined) return true;
-    else return false;
+    return false;
 }
 
 /** Test if theme is unlocked or not: params example: 'cosmetic', 'biker_bill', 'bill' */
 function isUnlocked(type = 'theme', key, subtype) {
     // Theme
-    if(type == 'theme') {
-        for(let i = 0; i < player.themes.length; i++) {
-            if(key == player.themes[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
+    if(type == 'theme' && player.themes.includes(key)) return true;
     // Cosmetic
     else if(type == 'cosmetic') {
-        // console.log(player.cosmetics[subtype]);
-        // console.log(player.cosmetics[subtype].length);
-
-        for(let i = 0; i < player.cosmetics[subtype].length; i++) {
-            // console.log(key == player.cosmetics[subtype][i]);
-            if(key == player.cosmetics[subtype][i]) return true;
-        }
-        return false;
+        let list = player.cosmetics[subtype];
+        if(list.includes(key)) return true;
     }
-    else if(type == 'shop_item') {
-        return carlShopQuery(subtype, key);
-    }
-    // Does not return anything for characters
+    else if(type == 'shop_item') return carlShopQuery(subtype, key);
+    return false;
 }
 
 /** Fill out keybinds menu */
 function populateKeybinds() {
     for(i = 0; i < settings.keybinds.keys.length; i++) {
-        let keybindName =   settings.keybinds.keys[i];
-        let key =           settings.keybinds[keybindName];
-    
-        // console.log(keybindName + ' ' + key);
-    
+        let keybindName = settings.keybinds.keys[i];
+        let key = settings.keybinds[keybindName];
         if(dom(keybindName) != null) {
             let element = dom(keybindName);
             element.innerHTML = interpretKey(key);
@@ -1002,6 +943,7 @@ function isDebug() {
             window.allCharacters = () => {
                 for(let ci = 0; ci < chars.length; ci++) unlock('character', chars[ci], true);
                 toast('', 'Devtools: All Characters now available');
+                populateJared();
             }
             window.allAchievements = () => {
                 for(let i = 0; i < achievementsKeys.length; i++) grantAchievement(achievementsKeys[i]);
@@ -1048,7 +990,6 @@ function isDebug() {
                 allCosmetics();
                 allTrinkets();
                 allTips();
-                updateAllTools();
             }
             window.updateValues = () => {
                 // Carrots
@@ -1252,6 +1193,7 @@ function isDebug() {
         player,
         player.prestige,
         player.lifetime,
+        player.cosmetics,
         
         settings,
         settings.cosmetics,
@@ -1278,6 +1220,7 @@ function isDebug() {
         default_player,
         playerPrestigeTemplate,
         default_player.lifetime,
+        default_player.cosmetics,
 
         default_settings,
         default_settings.cosmetics,
@@ -1381,8 +1324,8 @@ function isDebug() {
     //#region 
 
     // Enable unlocked characters
-    for(i = 0; i < playerCharKeys.length; i++) {
-        let key = playerCharKeys[i];
+    for(i = 0; i < chars.length; i++) {
+        let key = chars[i];
         let value = player.characters[key];
         if(characterQuery(key)) unlock('character', key, value);
     }
@@ -1391,32 +1334,21 @@ function isDebug() {
     achieveCompactMode(settings.compact_achievements);
     achieveGridMode(settings.achievements_grid);
 
-    // Theme Switcher
-    populateThemeList();
-    populateCosmeticsList('all');
-
     // Set user theme on page load
     if(settings.theme != 'theme_dark') {
         let theme = settings.theme;
-        // console.log(`Theme setting found, switching to: ${theme}`);
-        // optionTheme.value = theme;
         setTheme(theme);
     }
     // Set user cosmetics on page load
     for(let i = 1; i < cosmeticsKeys.length; i++) {
-        if( settings.cosmetics[ cosmeticsKeys[i] ] == 'default' ) continue;
-
+        if(settings.cosmetics[ cosmeticsKeys[i] ] == 'default') continue;
         setCosmetic(cosmeticsKeys[i], settings.cosmetics[ cosmeticsKeys[i] ]);
     }
     // Switch to previously open panel on page load
-    if(settings.openpanel != null) {
-        // console.log('openpanel found, switching to: ' + settings.openpanel);
-        panelChange(settings.openpanel, true);
-    } else {
-        panelChange('achievements-panel');
-    }
+    if(settings.openpanel != null) panelChange(settings.openpanel, true);
+
     // Set cosmetics grid mode
-    if(settings.cosmetics_grid == true) {
+    if(settings.cosmetics_grid) {
         cosmeticsView.value = 'grid';
         cosmeticsGridMode();
     }
@@ -1506,10 +1438,10 @@ function isDebug() {
     updateMainIcon();
     populateCarl();
     populateJared();
-    if(player.new_theme == true) { newIndicator(true, 'theme'); }
-    if(player.new_cosmetic == true) { newIndicator(true, 'cosmetic'); }
-    if(player.prestige_available == true) { seeButton('prestige'); } // Prestige button visibility
-    if(player.lifetime.prestige_count > 0) { showPrestigeStats(); } // Has prestiged before
+    if(player.new_theme == true) newIndicator(true, 'theme');
+    if(player.new_cosmetic == true) newIndicator(true, 'cosmetic');
+    if(player.prestige_available == true) seeButton('prestige'); // Prestige button visibility
+    if(player.lifetime.prestige_count > 0) showPrestigeStats(); // Has prestiged before
 
     // Finished
 })();
