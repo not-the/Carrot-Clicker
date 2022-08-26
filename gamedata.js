@@ -793,7 +793,7 @@ const cosmetics = {
     jared: {
         'default': {
             'name': 'Jared (Default)',
-            'desc': 'placeholder',
+            'desc': 'Jared has never been involved in a controversy',
             'group': 'default',
 
             'rename': 'Jared',

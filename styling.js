@@ -599,7 +599,7 @@ function populateTipsMenu() {
     elTipsList.innerHTML = html;
 }
 
-/** Open difficulty menu */
+/** Toggles hardmode, replace with save file menu perhaps */
 function openDifficultyMenu() {
     if(player.flags['hardcore'] != true) {
         player.flags['hardcore'] = true;
@@ -609,23 +609,6 @@ function openDifficultyMenu() {
         toast('Hardmode disabled', '', '', false, true);
     }
     updateMainIcon();
-}
-
-
-// Page elements
-const characterAvatars = {
-    'bill':     dom('bill_avatar'),
-    'belle':    dom('belle_avatar'),
-    'greg':     dom('greg_avatar'),
-    'charles':  dom('charles_avatar'),
-    'carl':     dom('carl_avatar'),
-}
-const characterNames = {
-    'bill':     dom('bill_name'),
-    'belle':    dom('belle_name'),
-    'greg':     dom('greg_name'),
-    'charles':  dom('charles_name'),
-    'carl':     dom('carl_name'),
 }
 
 /** Change cosmetics
@@ -670,19 +653,7 @@ function setCosmetic(target, to, resetState = false) {
                 mainCarrot.classList.remove('render_pixelated');
             }
             break;
-
-        case 'bill':
-        case 'belle':
-        case 'greg':
-        case 'charles':
-        case 'carl':
-            if(!characterQuery(target)) return;
-            if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
-            {characterAvatars[target]['src'] = cosmetic.image;}
-            if(cosmetic.hasOwnProperty('rename') && cosmetic.rename != false)
-            {eInnerText(characterNames[target], cosmetic.rename);}
-            break;
-
+        // Tools
         case 'tools':
             for(hi = 0; hi < Default_Gregory.HoePrices.length; hi++) {
                 if(cosmetic.hasOwnProperty(`${hi}`) && cosmetic[`${hi}`] != false) {
@@ -691,6 +662,12 @@ function setCosmetic(target, to, resetState = false) {
                     });
                 }
             }
+            break;
+        // Character
+        default:
+            if(!characterQuery(target)) return;
+            if(cosmetic.image) dom(`${target}_avatar`)['src'] = cosmetic.image;
+            if(cosmetic.rename) eInnerText(dom(`${target}_name`), cosmetic.rename);
             break;
     }
 
@@ -845,18 +822,15 @@ function populateCosmeticsList(target='all') {
     }
 
     var cosmeticHTML = '';
-    var stillLocked = 0;
     let list = cosmetics[target];
     for(let i = 0; i < list['keys'].length; i++) {
         let key = list['keys'][i];
         let cosmetic = list[key];
-        // console.log(target + '/' + key);
 
-        // If not unlocked
+        // Locked
         if(isUnlocked('cosmetic', key, target) == false) {
             // Test if hidden
             if(cosmetic.hidden == true) continue;
-            stillLocked++;
             cosmeticHTML += /* html */
             `
             <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" tabindex="0" role="button">
@@ -887,7 +861,6 @@ function populateCosmeticsList(target='all') {
         </div>
         `;
     }
-
 
     dom(`${target}_cosmetics`).innerHTML = cosmeticHTML;
 }
