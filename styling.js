@@ -878,6 +878,7 @@ function populateAchievements(specific=false) {
     if(!achieveHTMLupdate) return;
     achieveHTMLupdate = false;
 
+    achievementProgress();
     const filter = dom('achievement_filter').value;
     var achievementHTML = '';
 

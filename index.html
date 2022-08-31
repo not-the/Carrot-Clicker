@@ -253,21 +253,18 @@
                         <!-- Top -->
                         <div class="top flex">
                             <img
-                            src="./assets/characters/Bill.png"
-                            alt="Boomer Bill"
-                            id="bill_avatar"
-                            class="characterimg"
-                            title="Boomer Bill"
-                            onclick="characterInfo('bill')">
+                                src="./assets/characters/Bill.png"
+                                alt="Boomer Bill"
+                                id="bill_avatar"
+                                class="characterimg"
+                                title="Boomer Bill"
+                                onclick="characterInfo('bill')">
 
                             <div class="characterdesc">
                                 <b id="bill_name" class="character_name">Bill</b>
-                                <p class="secondary_text">
-                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpBillCost" class="upgrade_cost white"></span>
-                                </p>
-                                <figcaption id="Bill_lvl" class="characterlevel secondary_text"></figcaption>
+                                <p>Upgrade cost: <span id="UpBillCost" class="upgrade_cost white">-</span></p>
+                                <p>Level: <input type="text" value="-" id="Bill_lvl" class="discreet dev_input" disabled></p>
                             </div>
-
                         </div>
 
                         <!-- Bottom -->
@@ -319,13 +316,9 @@
                             onclick="characterInfo('belle')">
 
                             <div class="characterdesc">
-                                <b id="belle_name" class="character_name">
-                                    Belle
-                                </b>
-                                <p class="secondary_text">
-                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpBelleCost" class="upgrade_cost white"></span>
-                                </p>
-                                <figcaption id="Belle_lvl" class="characterlevel secondary_text"></figcaption>
+                                <b id="belle_name" class="character_name">Belle</b>
+                                <p>Upgrade cost: <span id="UpBelleCost" class="upgrade_cost white">-</span></p>
+                                <p>Level: <input type="text" value="-" id="Belle_lvl" class="discreet dev_input" disabled></p>
                             </div>
                         </div>
 
@@ -378,10 +371,8 @@
                             onclick="characterInfo('greg')">
                             <div class="characterdesc">
                                 <b id="greg_name" class="character_name">Greg</b>
-                                <p class="secondary_text">
-                                    <span class="text_upgrade_cost">Upgrade cost: </span><span id="UpGregCost" class="upgrade_cost white"></span>
-                                </p>
-                                <figcaption id="Greg_lvl" class="characterlevel secondary_text"></figcaption>
+                                <p>Upgrade cost: <span id="UpGregCost" class="upgrade_cost white">-</span></p>
+                                <p>Level: <input type="text" value="-" id="Greg_lvl" class="discreet dev_input" disabled><span id="greg_next">Next tool at -</span></p>
                             </div>
                         </div>
 
@@ -814,9 +805,9 @@
                 <!-- Fun Tip Percentage-->
                 <div class="slidecontainer">
                     <label for="FunTipPercentage"><b>Percentage of fun tips:</b><br>
-                        <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider" step="10"><span id="FunTipsSliderLabel" class="secondary_text">50</span><span class="secondary_text">%</span><br>
-                    </label><br>
-                </div>
+                        <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><input type="number" name="FunTipsSliderLabel" id="FunTipsSliderLabel" class="discreet" min="0" max="100">
+                    </label>
+                </div><br/>
 
                 <!-- Options item -->
                 <b>Keybinds</b><br>
@@ -827,7 +818,7 @@
                 <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
                     <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
                     Edit Keybinds
-                </button><br><br>
+                </button><br/><br/>
 
                 <!-- Autosave -->
                 <label for="autosave_interval"><b>Autosave Frequency</b><br>
@@ -836,7 +827,7 @@
                     <input type="number" id="autosave_interval" min="1" max="60" value="5"/>
                     <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
                     <button onclick="resetAutosave()">Reset</button>
-                </label><br><br>
+                </label><br/><br/>
 
                 <!-- Disable main progress bar -->
                 <b>Interface</b><br>
@@ -851,10 +842,10 @@
                 <label for="confetti_effects">
                     <input type="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
                     Confetti effects
-                </label><br><br>
+                </label><br/><br/>
 
                 <!-- Sounds options -->
-                <b>Sounds</b><br>
+                <b>Sounds</b><br/>
                 <!-- All sounds -->
                 <label for="enable_sounds">
                     <input type="checkbox" id="enable_sounds" checked onclick="settingSounds()">
@@ -864,33 +855,19 @@
                 <label for="enable_music">
                     <input type="checkbox" id="enable_music" onclick="settingMusic()">
                         Beta music
-                </label><br>
+                </label><br/>
                 <!-- Carrot sounds -->
                 <label for="enable_carrot_sounds">
                     <input type="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
                         Beta carrot sounds
-                </label><br>
+                </label><br/><br/>
 
                 <!-- Volume sliders -->
-                <!-- <b>Sound Volume:</b> -->
-                <table>
-                    <!-- Master Volume -->
-                    <tr>
-                        <td>
-                            <label for="volume_master">Volume:</label>
-                        </td>
-                        <td>
-                            <div class="slidecontainer">
-                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_master">
-                            </div>
-                        </td>
-                        <td>
-                            <span id="volume_master_percent" class="secondary_text">100%</span>
-                        </td>
-                    </tr>
-                </table><br>
-
-                
+                <div class="slidecontainer">
+                    <label for="volume_master"><b>Volume</b><br/>
+                        <input type="range" min="0" max="100" value="0" class="slider" id="volume_master"><input type="number" name="volume_master_percent" id="volume_master_percent" class="discreet" min="0" max="100" value="0">
+                    </label>
+                </div><br/>
 
                 <!-- Notification Length -->
                 <label for="notificationLength"><b>Notification Length</b><br>
@@ -1505,7 +1482,7 @@
             <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg" target="_blank" rel="noopener noreferrer">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
             <a href="https://commons.wikimedia.org/wiki/File:High-contrast-system-lock-screen.svg" target="_blank" rel="noopener noreferrer">Padlock Icon</a>, <a href="http://www.gnu.org/licenses/lgpl.html">LGPL</a>, via Wikimedia Commons
             Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/" target="_blank" rel="noopener noreferrer">https://andersonseedsmn.com/home/dirt-background/</a>
-            
+            <!-- <a href="https://commons.wikimedia.org/wiki/File:Reload_icon_-_Green.svg">Reload Icon</a> by Wenflou, CC0, via Wikimedia Commons -->
 
             <span class="secondary_text">And thanks to:</span>
             W3Schools, Stack Overflow, and MDN Web Docs

@@ -885,38 +885,16 @@ function optionSoundsDisable(state) {
         elEnableCarrotSounds.disabled = false;
     }
 }
-// Volume slider
-function volumeSliderHandler(source=-1) {
-    let value;
-    if(source == 0) {
-        value = elVolumeMaster.value;
-        volumeMasterDropdown.value = value;
-    } else if(source == 1) {
-        value = volumeMasterDropdown.value;
-        elVolumeMaster.value = value;
-    } else if(source == -1) {
-        value = settings.master_volume * 100;
-        volumeMasterDropdown.value = value;
-        elVolumeMaster.value = value;
-    }
-
-    // Dropdown volume icon
-    if(value == 0) {
-        vmdImage.src = './assets/icons/mute.svg';
-    } else if(vmdImage.src != './assets/icons/volume.svg') {
-        vmdImage.src = './assets/icons/volume.svg';
-    }
-
-    // Update percentage
-    eInnerText(elVolumeMaster_label, value > 0 ? `${value}%` : 'OFF');
-
-    volume = value / 100;
-
-    if(music !== undefined) {
-        music.volume = volume;
-    }
-
-    settings.master_volume = value / 100;
+/** Volume slider handler */
+function volumeSliderHandler(event=false) {
+    let v = event ? event.srcElement.value : settings.master_volume * 100;
+    volumeMasterDropdown.value = v;
+    elVolumeMaster.value = v;
+    elVolumeMaster_label.value = v;
+    vmdImage.src = v != 0 && vmdImage.src != './assets/icons/volume.svg' ? './assets/icons/volume.svg' : './assets/icons/mute.svg';
+    volume = v / 100;
+    if(music !== undefined) music.volume = volume;
+    settings.master_volume = volume;
     saveSettings();
 }
 /** Fill out settings page options */
@@ -927,7 +905,7 @@ function fillSettingsPage() {
     dom('cosmetic_auto_equip').checked = settings.cosmetic_auto_equip;
     // Fun tips
     elFunTipsSlider.value = settings.fun_tip_percentage;
-    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
+    elFunTipsSlider_label.value = settings.fun_tip_percentage;
 
     dom('full_numbers').checked = settings.full_numbers;
     dom('compact_achievements').checked = settings.compact_achievements;
@@ -1377,25 +1355,23 @@ function cashCount(flash = true) {
 function characterPrices() {
     // Update page
     eInnerText(
-        elCharacterUpCost.bill,
-        DisplayRounded(getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0), 1),
+        elCharacterUpCost.bill, DisplayRounded(getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0), 1),
     );
     eInnerText(
-        elCharacterUpCost.belle,
-        DisplayRounded(getLevelPrice(Belle_Boomerette, Belle_Boomerette.lvl, multibuy[mbsel]).toFixed(0), 1),
+        elCharacterUpCost.belle, DisplayRounded(getLevelPrice(Belle_Boomerette, Belle_Boomerette.lvl, multibuy[mbsel]).toFixed(0), 1),
     );
     eInnerText(
-        elCharacterUpCost.greg,
-        DisplayRounded(getLevelPrice(Gregory, Gregory.lvl, multibuy[mbsel]).toFixed(0), 1),
+        elCharacterUpCost.greg, DisplayRounded(getLevelPrice(Gregory, Gregory.lvl, multibuy[mbsel]).toFixed(0), 1),
     );
     
     // Character levels
-    eInnerText(elCharacterLevel.bill, `Level: ${numCommas(Boomer_Bill.lvl, 1)}`);
-    eInnerText(elCharacterLevel.belle, `Level: ${numCommas(Belle_Boomerette.lvl, 1)}`);
+    elCharacterLevel.bill.value = numCommas(Boomer_Bill.lvl, 1);
+    elCharacterLevel.belle.value = numCommas(Belle_Boomerette.lvl, 1);
     let gl = Gregory.lvl;
-    let gnext = ` / Next tool at ${gl == 0 ? 1 : (gl + (25 - gl % 25))}`;
-    if(gl >= (Gregory.Hoes.length-1) * 25) { gnext = '' };
-    eInnerText(elCharacterLevel.greg, `Level: ${numCommas(gl)}${gnext}`);
+    let gnext = `Next tool at ${gl == 0 ? 1 : (gl + (25 - gl % 25))}`;
+    if(gl >= (Gregory.Hoes.length-1) * 25) gnext = '';
+    elCharacterLevel.greg.value = numCommas(gl);
+    dom('greg_next').innerText = gnext;
 }
 /** Updates CPC and CPS values on the page */
 function updateCPC(flash=true) {

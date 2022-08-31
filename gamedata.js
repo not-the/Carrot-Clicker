@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.7';
+    const game_version = 'dev beta v1.16.8';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -60,7 +60,7 @@ const default_tips = {
     starter: [ // 0
         "Tip: Click the carrot",
         "Click here to cycle through available tips!",
-        "Click the lvl up arrow to level up characters",
+        "Click the level up arrow to upgrade your characters",
         "Click a character's \"i\" symbol to learn more about them",
         "Greg can craft tools that will buff your other characters",
         "If you see a ? near something you can click it to get a more detailed description of what it does",

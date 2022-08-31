@@ -53,14 +53,15 @@ function menuOpen() {
 /*---------------OPTIONS-------------------*/
 
 // Update the current slider value (each time you drag the slider handle)
-elFunTipsSlider.oninput = () => {
-    // Update percentage
-    eInnerText(elFunTipsSlider_label, elFunTipsSlider.value);
-    
-    // Set modifier
-    settings.fun_tip_percentage = parseInt(elFunTipsSlider.value);
+function updateTipsInput(event) {
+    let v = event.srcElement.value;
+    elFunTipsSlider.value = v;
+    elFunTipsSlider_label.value = v;
+    settings.fun_tip_percentage = parseInt(elFunTipsSlider.value); // Set modifier
     saveSettings();
 }
+elFunTipsSlider.oninput = updateTipsInput;
+elFunTipsSlider_label.onchange = updateTipsInput;
 
 /** Universal checkbox option updater (not used by everything because some options need extra code)
  * @param option Option to update
@@ -68,19 +69,13 @@ elFunTipsSlider.oninput = () => {
 function setting(option, notif=true) {
     let state = dom(option).checked;
     console.log(`${option} set to ${state}`);
-
     settings[option] = state;
     saveSettings();
-
-    if(option == 'compact_achievements') {
-        achieveCompactMode(state);
-    } else if(option == 'achievements_grid') {
-        achieveGridMode(state);
-    }
-
+    if(option == 'compact_achievements') achieveCompactMode(state);
+    else if(option == 'achievements_grid') achieveGridMode(state);
     // Toast
     if(notif != true) return;
-    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state == true ? 'enabled' : 'disabled'}`,
+    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 }
 
@@ -161,7 +156,7 @@ function resetAutosave() {
 function settingMainProgress() {
     let state = elEnableMainProgress.checked;
     console.log(`enableMainProgress set to ${state}`);
-    toast("Settings", `Status bar progress is now ${state == true ? 'enabled' : 'disabled'}`,
+    toast("Settings", `Status bar progress is now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 
     // localStorage
@@ -186,36 +181,24 @@ function settingSounds(notif=true) {
 
     // Toast
     if(notif != true) return;
-    toast("Settings", `Sounds are now ${state == true ? 'enabled' : 'disabled'}`,
+    toast("Settings", `Sounds are now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 }
-
 
 function settingMusic(noToast = false) {
     let state = elEnableMusic.checked;
     console.log(`enableMusic set to ${state}`);
-    if(noToast == false) {
-        toast("Settings", `Music is now ${state == true ? 'enabled' : 'disabled'}`,
-        '', false, true);
-    }
-
-    // localStorage
+    if(!noToast) toast("Settings", `Music is now ${state ? 'enabled' : 'disabled'}`, '', false, true);
     settings.enableMusic = state;
     saveSettings();
-
-    // Start/Stop
-    if(state == true) {
-        playMusic();
-    } else {
-        stopMusic();
-    }
+    return state ? playMusic() : stopMusic(); // Start/Stop
 }
 
-// Carrot sounds
+/** Settings - Carrot sounds */
 function settingCarrotSounds() {
     let state = elEnableCarrotSounds.checked;
     console.log(`enableCarrotSounds set to ${state}`);
-    toast("Settings", `Carrot sounds are now ${state == true ? 'enabled' : 'disabled'}`,
+    toast("Settings", `Carrot sounds are now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 
     // localStorage
@@ -224,10 +207,9 @@ function settingCarrotSounds() {
 }
 
 // Volume slider
-elVolumeMaster.oninput = () => { volumeSliderHandler(0); }
-volumeMasterDropdown.oninput = () => { volumeSliderHandler(1); }
-
-
+elVolumeMaster.oninput = volumeSliderHandler;
+volumeMasterDropdown.oninput = volumeSliderHandler;
+elVolumeMaster_label.onchange = volumeSliderHandler;
 
 /*------------EVENT LISTENERS--------------*/
 
@@ -253,94 +235,15 @@ document.addEventListener('keyup', event => {
         if(tag != 'SUMMARY') document.activeElement.click();
         return;
     }
-
     
     if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
     else if(menuOpen() && event.key == "Escape") closeDialog(); // Close menu
     if(menuState.prestige && event.key == "Enter") openDialog(...dialog.prestige_confirm);
 
-    keybindHandler(event, 'keyup'); // When on main page send to keybind handler
-});
-
-
-/*---------------------Keybinds---------------------*/
-//#region
-
-var keyCombo = '';
-const keyCodes = [
-    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight B A Enter ',
-    'G A M I N G ',
-    'J J C V I P ',
-    'P I N E A P P L E ',
-    'H U H W H U H ',
-    'C O N F E T T I ',
-    'B O R I N G ',
-];
-const keyCodesCode = {
-    0: () => { mouseConfetti([24,24], confettiColors, 300); },
-    1: () => {
-        setTheme('theme_retro');
-        mouseConfetti([24,24], ['gray'], 300);
-    },
-    2: () => {
-        openDialog(...dialog.jjcvip);
-        // mouseConfetti([24,24], ccCarrot, 600);
-    },
-    3: () => { setCosmetic('farmable', 'pineapple'); },
-    4: () => {
-        toast('huh', 'huh whuh', 'blue', true);
-        unlock('cosmetic', 'huhwhuh', 'farmable');
-        setCosmetic('farmable', 'huhwhuh');
-    },
-    5: () => {
-        // toast('Confetti?', '', '', true, false, false, false, () => {
-        //     randomConfetti();
-        // }, 'Confetti!');
-        randomConfetti();
-        document.onclick = randomConfetti;
-        
-        /** Create confetti with randomized colors */
-        function randomConfetti() {
-            let hex = '0123456789abcdef';
-            // mouseConfetti([64,64], ['orange', 'teal', 'coral', 'goldenrod', 'whitesmoke'], 600);
-            function rhex() { return hex[r(16) + 1]; }
-            let c = '#';
-            let cs = [];
-            // Loop across number of colors
-            for(i = 0; i < 5; i++) {
-                // Loop across individual characters
-                for(ii = 0; ii < 6; ii++) { c += rhex(); }
-                cs.push(c);
-                c = '#';
-            }
-            mouseConfetti([40,50], cs, 400);
-        }
-    },
-    6: () => {
-        setTheme('theme_dark');
-        setCosmetic('bundle', 'default');
-    },
-}
-// Variable achievement(s) test for
-var keyTrigger = [];
-var easterEgg = 0;
-function eggUp() {
-    easterEgg += easterEgg < 101 ? 1 : 0;
-    mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
-    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300, 4, true); }
-}
-var equipWaiting = -1;
-var equipToastID = false;
-
-function keybindHandler(event, state) {
-    // Ignore if CTRL or meta key was held
-    if(event.ctrlKey == true || event.metaKey == true) return;
-
+    // KEYBIND HANDLER
+    let state = 'keyup';
+    if(event.ctrlKey == true || event.metaKey == true) return; // Ignore if CTRL or meta key was held
     let key = interpretKey(event.key);
-    // console.log(key);
-    // console.log(equipWaiting);
-
-
 
     // Custom keybinds
     if(keyWaiting[0] == true) {
@@ -382,13 +285,11 @@ function keybindHandler(event, state) {
     // Stop if keybinds need to be ignored
     if(
         settings.disableKeybinds == "true"
-        || menuState.dialog == true
+        || menuState.dialog
         || document.activeElement.nodeName == 'TEXTAREA'
         || document.activeElement.nodeName == 'INPUT'
         || menuOpen()
     ) return;
-
-    // if(state != 'keyup') return;
 
     // Multibuy
     if(key == settings.keybinds['key_multibuy'] && state == 'keyup') multibuySpin();
@@ -485,7 +386,77 @@ function keybindHandler(event, state) {
     //         closeDialog();
     //     }
     // }
+});
+
+
+/*---------------------Keybinds---------------------*/
+//#region
+
+var keyCombo = '';
+const keyCodes = [
+    'ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft ArrowRight B A Enter ',
+    'G A M I N G ',
+    'J J C V I P ',
+    'P I N E A P P L E ',
+    'H U H W H U H ',
+    'C O N F E T T I ',
+    'B O R I N G ',
+];
+const keyCodesCode = {
+    0: () => { mouseConfetti([24,24], confettiColors, 300); },
+    1: () => {
+        setTheme('theme_retro');
+        mouseConfetti([24,24], ['gray'], 300);
+    },
+    2: () => {
+        openDialog(...dialog.jjcvip);
+        // mouseConfetti([24,24], ccCarrot, 600);
+    },
+    3: () => { setCosmetic('farmable', 'pineapple'); },
+    4: () => {
+        toast('huh', 'huh whuh', 'blue', true);
+        unlock('cosmetic', 'huhwhuh', 'farmable');
+        setCosmetic('farmable', 'huhwhuh');
+    },
+    5: () => {
+        // toast('Confetti?', '', '', true, false, false, false, () => {
+        //     randomConfetti();
+        // }, 'Confetti!');
+        randomConfetti();
+        document.onclick = randomConfetti;
+        
+        /** Create confetti with randomized colors */
+        function randomConfetti() {
+            let hex = '0123456789abcdef';
+            // mouseConfetti([64,64], ['orange', 'teal', 'coral', 'goldenrod', 'whitesmoke'], 600);
+            function rhex() { return hex[r(16) + 1]; }
+            let c = '#';
+            let cs = [];
+            // Loop across number of colors
+            for(i = 0; i < 5; i++) {
+                // Loop across individual characters
+                for(ii = 0; ii < 6; ii++) { c += rhex(); }
+                cs.push(c);
+                c = '#';
+            }
+            mouseConfetti([40,50], cs, 400);
+        }
+    },
+    6: () => {
+        setTheme('theme_dark');
+        setCosmetic('bundle', 'default');
+    },
 }
+// Variable achievement(s) test for
+var keyTrigger = [];
+var easterEgg = 0;
+function eggUp() {
+    easterEgg += easterEgg < 101 ? 1 : 0;
+    mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
+    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300, 4, true); }
+}
+var equipWaiting = -1;
+var equipToastID = false;
 
 /** Cancel tool equip */
 function cancelToolEquip() {
@@ -510,14 +481,12 @@ function detectKey(bind) {
 /** Runs when keybind is set or cancelled */
 function doneKeybind(key, set=true) {
     let element = dom(keyWaiting[1]);
-
     if(key == 'Escape') key = 'Not set';
-    
     element.blur();
     closeToast(keyWaitingToast);
 
     // Set and reset
-    if(set == true) {
+    if(set) {
         element.innerText = key;
         setKeybind(keyWaiting[1], key);
     }
@@ -558,89 +527,54 @@ function evaluateConditions(key) {
     var multifulfilled = 0;
     
     // One condition
-    if(!multicondition) {
-        tests(key, achievement.conditions);
-    }
+    if(!multicondition) tests(key, achievement.conditions);
     // Multiple conditions
     else if(multicondition) {
         // Amount that need to be fulfilled
         multiamount = achievement.hasOwnProperty('condition_amount') ? achievement.condition_amount : achievement.conditions.length;
-        // Loop
-        for(let i = 0; i < achievement.conditions.length; i++) {
-            tests(key, achievement.conditions[i]);
-        }
+        for(let i = 0; i < achievement.conditions.length; i++) tests(key, achievement.conditions[i]);
     }
 
     // Run tests
     function tests(key, conditions) {
-        let variable =      Function(`return ${conditions[0]}`)();
-        let requirement =   conditions[1];
-
+        let variable = Function(`return ${conditions[0]}`)();
+        let requirement = conditions[1];
         // Grant achievement if reached requirement
-        // console.log(`${key}: ${variable} >= ${requirement}`);
         if(variable >= requirement) {
             multifulfilled++;
-            if((multicondition && multiamount <= multifulfilled) || !multicondition) {
-                grantAchievement(key);
-            }
+            if((multicondition && multiamount <= multifulfilled) || !multicondition) grantAchievement(key);
         }
     }
 }
 
 /** Takes in an achievement and grants rewards */
 function rewardBreakdown(achieve, retroactive = false) {
-    // console.log(`rewardBreakdown(${achieve}, ${retroactive})`);
     let reward = achieve?.reward;
     if(reward == undefined) return;
+    if(Array.isArray(reward)) { // Check if there are multiple rewards
+        for(let i = 0; i < reward.length; i++) giveReward(reward[i], retroactive);
+    } else giveReward(reward, retroactive);
 
-    // Check if there are multiple rewards
-    if(Array.isArray(reward) == true) {
-        for(let i = 0; i < reward.length; i++) {
-            giveReward(reward[i], retroactive);
-        }
-    } else {
-        giveReward(reward, retroactive);
-    }
-
-    // Reward user
+    /** Reward user */
     function giveReward(reward, retroactive = false) {
         // console.log(reward);
         let [rewardType, rewardName] =
         typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
-        if(
-            retroactive == true
-            &&
-            (rewardType   == 'cash'
-            || rewardType == 'function'
-            || rewardType == 'character')
-        ) { return; }
-        if(reward == false) return;
+        if(reward == false || retroactive && (rewardType == 'cash' || rewardType == 'function' || rewardType == 'character')) return;
 
-        // Theme reward
-        if(rewardType == 'theme') {
-            unlock(rewardType, rewardName);
-        }
-        // Cosmetic reward
-        else if(rewardType == 'cosmetic') {
+        // Give
+        if(rewardType == 'theme') unlock(rewardType, rewardName); // Theme reward
+        else if(rewardType == 'cosmetic') { // Cosmetic reward
             let [target, cosmetic] = rewardName.split('/');
             unlock(rewardType, cosmetic, target);
         }
-        // Shop reward
-        else if(rewardType == 'shop') {
+        else if(rewardType == 'shop') { // Carl shop
             let [target, item] = rewardName.split('/');
             unlock("shop_item", item, target, reward);
         }
-        // Cash reward
-        else if(rewardType == 'cash') {
-            earnCash(parseInt(rewardName), 'achievement');
-        }
-        // Function reward
-        else if(rewardType == 'function') {
-            rewardName();
-        }
-
-        // Character reward
-        else if(rewardType == 'character') {
+        else if(rewardType == 'cash') earnCash(parseInt(rewardName), 'achievement'); // Cash reward
+        else if(rewardType == 'function') rewardName(); // Function reward
+        else if(rewardType == 'character') { // Character reward
             console.log('Character unlocked: ' + rewardName);
             unlock('character', rewardName);
         }
@@ -649,10 +583,7 @@ function rewardBreakdown(achieve, retroactive = false) {
 
 /** Grant Achievement (Takes in object key) */
 function grantAchievement(key) {
-    if(achieveQuery(key)) {
-        console.warn(key + ' achievement already unlocked');
-        return;
-    }
+    if(achieveQuery(key)) return console.warn(key + ' achievement already unlocked');
 
     let achieve = achievements[key];
 
@@ -677,7 +608,6 @@ function grantAchievement(key) {
     if(currentPanel == "achievements-panel") populateAchievements(key);
 
     // Update page
-    achievementProgress();
     updateMainIcon();
 }
 
@@ -759,7 +689,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
         }
 
         // Toast
-        if(settings.carl_shop_toasts == true && characterQuery('carl')) {
+        if(settings.carl_shop_toasts && characterQuery('carl')) {
             toast('', 'Carl: A new item is now available', '', false, true);
         }
         // Carl.shop_order.unshift(raw.split(':')[1]);
@@ -786,7 +716,7 @@ function buyCarl(type, item, subtype = false) {
     };
 
     // Check if already unlocked or bought
-    if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought == true) {
+    if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought) {
         console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
         toast('Whoops', 'You already own this', '', false, true);
 
@@ -913,14 +843,7 @@ function resetKeybinds() {
 
 var hashlist;
 /** Returns true if game is in debug or developer mode */
-function isDebug() {
-    if(hashlist.includes('dev')
-    || hashlist.includes('developer')
-    || hashlist.includes('cheatmode')
-    || hashlist.includes('debug')
-    || player.flags['debug'] == true)
-    return true;
-}
+function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) return true; }
 
 // URL hashes
 (() => {
@@ -991,7 +914,7 @@ function isDebug() {
                 allTrinkets();
                 allTips();
             }
-            window.updateValues = () => {
+            window.updateValues = event => {
                 // Carrots
                 let cc = parseInt(setCarrotsEl.value);
                 player.carrots          = 0;
@@ -1012,12 +935,21 @@ function isDebug() {
                     updateGC();
                     updateCharlesShop();
                 }
+
                 // Levels
-                if(setBillLvlEl.value != '') {
-                    let lbill = parseInt(setBillLvlEl.value);
-                    Boomer_Bill.lvl = lbill;
-                    characterPrices();
+                const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
+                for(li = 0; li < levelable.length; li++) {
+                    let character = levelable[li];
+                    let nick = character.nickname;
+                    let v = parseInt(elCharacterLevel[nick].value.split(',').join(''));
+                    if(typeof v == "number" && !Number.isNaN(v) && v <= 500 && v >= 0) {
+                        character.lvl = v;
+                    } else toast('Invalid level', 'Must be a number, and must be no more than 500', 'error');
                 }
+                recalculateCarrotsPer();
+                characterPrices();
+                characterButtons();
+                updateAllTools();
             }
             //#endregion
             
@@ -1026,10 +958,7 @@ function isDebug() {
             window.importSave = () => {
                 let imported = dom('import_export').value;
                 // Textarea is empty
-                if(imported == '') {
-                    toast('Savedata manager', 'Please input exported savedata', '', false, true);
-                    return;
-                }
+                if(imported == '') return toast('Savedata manager', 'Please input exported savedata', '', false, true);
                 imported = imported.split('//+//');
                 try {
                     for(let i = 0; i < saveListKeys.length; i++) {
@@ -1041,7 +970,7 @@ function isDebug() {
                     setTimeout(() => { location.reload(); }, 50); // Reload after a delay
                 } catch (error) {
                     console.error(error);
-                    toast('Import error', error);
+                    toast('Import error', error, 'error');
                 }
             }
             window.exportSave = () => {
@@ -1107,15 +1036,6 @@ function isDebug() {
                             <input id="setCash" class="dev_input" type="number" value="9999">
                         </td>
                     </tr>
-
-                    <tr>
-                        <td>
-                            <label for="setBillLvl">Bill's Level:</label>
-                        </td>
-                        <td>
-                            <input id="setBillLvl" class="dev_input" type="number">
-                        </td>
-                    </tr>
                 </table>
                 <button onclick="updateValues()">Update Values</button>
                 
@@ -1133,13 +1053,13 @@ function isDebug() {
             window.setCarrotsEl       = dom("setCarrot");
             window.setGoldenCarrotsEl = dom("setGoldenCarrot");
             window.setCashEl          = dom("setCash");
-            window.setBillLvlEl       = dom("setBillLvl");
             window.elSetCarrotRounded = dom('setCarrotRounded')
 
             // Enter key updates values
             document.querySelectorAll('.dev_input').forEach(element => {
+                element.disabled = false;
                 element.addEventListener('keyup', e => {
-                    if(e.key == 'Enter') { updateValues(); }
+                    if(e.key == 'Enter') updateValues();
                 });
             });
 
@@ -1148,10 +1068,7 @@ function isDebug() {
                 if(setCarrotsEl.value == '') return;
                 elSetCarrotRounded.innerText = `(${DisplayRounded(setCarrotsEl.value)})`;
             });
-
-            // toast('Dev Tools enabled', false);
         }
-
         // Disable Annoying Notifications
         if(hashlist.includes('dan')) {
             player.flags['no_achievement_toasts'] = true;
@@ -1159,14 +1076,17 @@ function isDebug() {
             setting('tutorial_messages', false);
             dom('carl_shop_toasts').checked = false;
             setting('carl_shop_toasts', false);
-        } else {
-            player.flags['no_achievement_toasts'] = false;
-        }
+        } else player.flags['no_achievement_toasts'] = false;
 
-        // Settings
-        // if(hashlist.join('#').includes('$')) {
-        //     console.log('setting hash');
-        // }
+        // Console to toast
+        if(hashlist.includes('log')) {
+            window.clog = console.log;
+            console.log = (...args) => { clog(args); toast('', '☰ ' + Array.prototype.slice.call(args).join(', ')); }
+            window.cwarn = console.warn;
+            console.warn = (...args) => { cwarn(args); toast('', '⚠ ' + Array.prototype.slice.call(args).join(', ')); }
+            window.cerror = console.error;
+            console.error = (...args) => { cerror(args); toast('', '⛔ ' + Array.prototype.slice.call(args).join(', ')); }
+        } else if(typeof clog == 'function') [console.log, console.warn, console.error] = [clog, cwarn, cerror];
 
         // Update page
         updateMainIcon();
@@ -1244,11 +1164,7 @@ function isDebug() {
         Default_Jared.data,
     ];
     //#endregion
-    if(
-        default_player.data_version > player.data_version
-        || player.hasOwnProperty('data_version') == false
-        || isDebug() == true && !player.flags.debug_dont_autoupdate
-    ) {
+    if(default_player.data_version > player.data_version || isDebug() && !player.flags.debug_dont_autoupdate) {
         try {
             // Loop through onu_templates array
             //#region 
@@ -1276,15 +1192,11 @@ function isDebug() {
                 let achieve = achievements[key];
 
                 // Page count
-                if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) { pagesIntended += achieve.pages; }
+                if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) pagesIntended += achieve.pages;
 
                 // Check that the player has recieved all achievement rewards
                 let reward = achieve.reward;
-                // console.log(reward);
-                if(achieveQuery(key) && reward != false) {
-                    // console.log(`Re-granting reward for ${key}: ${achieve.reward}`);
-                    rewardBreakdown(achieve, true);
-                }
+                if(achieveQuery(key) && reward != false) rewardBreakdown(achieve, true);
             }
             // Check that the players' page count is correct
             if(player.pages != pagesIntended) {
@@ -1303,7 +1215,7 @@ function isDebug() {
     
             // Done
             console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);
-            if(isDebug() == true && player.data_version != default_player.data_version) {
+            if(isDebug() && player.data_version != default_player.data_version) {
                 toast('', `Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`, '', true);
             }
 
@@ -1357,7 +1269,6 @@ function isDebug() {
         console.log('[Greg] Restarting unfinished craft job');
         try { createTool(...Gregory.crafting); }
         catch (error) { console.error(error); }
-        
     }
     
     // OFFLINE EARNINGS
@@ -1376,26 +1287,17 @@ function isDebug() {
 
     //#endregion
     
-
     // Figure out how many achievements aren't hidden
     for(let i = 0; i < achievementsKeys.length; i++) {
         let key = achievementsKeys[i];
         let achievement = achievements[key];
-        if(achievement.internal == true) {
-            internalAchievements++;
-            continue;
-        };
-        if(achievement.mystery.list == true) { hiddenAchievements++; }
-        if(achievement.style == 'challenge') { challengeAchievements++; }
+        if(achievement.internal) { internalAchievements++; continue; };
+        if(achievement.mystery.list) hiddenAchievements++;
+        if(achievement.style == 'challenge') challengeAchievements++;
     }
 
     // Populate achievements if said tab is open
-    if(currentPanel == "achievements-panel") {
-        populateAchievements();
-    }
-    achievementProgress();
-
-
+    if(currentPanel == "achievements-panel") populateAchievements();
 
     /* --------------- TUTORIAL --------------- */
     // Cookie usage notification
@@ -1411,20 +1313,22 @@ function isDebug() {
             }, 'Accept'
         );
     }
-
     // Initial Welcome
     if(player.flags.tutorial0 != true) {
-        // Welcome message
         toast("Welcome to Carrot Clicker!",
         "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!",
         "", true);
         player.flags.tutorial0 = true;
     }
+    // Update notice
+    // if(player.flags['v1.0_changelog'] != true) {
+    //     toast("Version 1.0 changelog", "Carrot Clicker 1.0 has been released. Read the changelog here:", "", true);
+    //     player.flags['v1.0_changelog'] = true;
+    // }
 
     /* -------------------- Fill out page -------------------- */
     populateKeybinds();
-    fillSettingsPage(); // Fill out settings page from settings object
-
+    fillSettingsPage();
     carrotCount();
     updateCPC(false);
     cashCount(false);
@@ -1438,12 +1342,10 @@ function isDebug() {
     updateMainIcon();
     populateCarl();
     populateJared();
-    if(player.new_theme == true) newIndicator(true, 'theme');
-    if(player.new_cosmetic == true) newIndicator(true, 'cosmetic');
-    if(player.prestige_available == true) seeButton('prestige'); // Prestige button visibility
+    if(player.new_theme) newIndicator(true, 'theme');
+    if(player.new_cosmetic) newIndicator(true, 'cosmetic');
+    if(player.prestige_available) seeButton('prestige'); // Prestige button visibility
     if(player.lifetime.prestige_count > 0) showPrestigeStats(); // Has prestiged before
-
-    // Finished
-})();
+})(); // Finished
 
 loadCheck = true;
