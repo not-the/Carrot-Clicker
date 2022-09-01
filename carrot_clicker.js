@@ -48,59 +48,7 @@ const elCharacterLevel = {
     belle: dom("Belle_lvl"),
     greg:  dom("Greg_lvl") 
 };
-const elHoes = {
-    bill: [
-        dom("bill_wooden_hoe"),
-        dom("bill_stone_hoe"),
-        dom("bill_iron_hoe"),
-        dom("bill_gold_hoe"),
-        dom("bill_diamond_hoe"),
-        dom("bill_netherite_hoe")
-    ],
-    belle: [
-        dom("belle_wooden_hoe"),
-        dom("belle_stone_hoe"),
-        dom("belle_iron_hoe"),
-        dom("belle_gold_hoe"),
-        dom("belle_diamond_hoe"),
-        dom("belle_netherite_hoe")
-    ],
-    greg: [
-        dom("greg_wooden_hoe"),
-        dom("greg_stone_hoe"),
-        dom("greg_iron_hoe"),
-        dom("greg_gold_hoe"),
-        dom("greg_diamond_hoe"),
-        dom("greg_netherite_hoe")
-    ]
-}
 
-const elHoeCount = {
-    bill: [
-        dom("Bill_Wooden_Hoe_Number"),
-        dom("Bill_Stone_Hoe_Number"),
-        dom("Bill_Iron_Hoe_Number"),
-        dom("Bill_Gold_Hoe_Number"),
-        dom("Bill_Diamond_Hoe_Number"),
-        dom("Bill_Netherite_Hoe_Number")
-    ],
-    belle: [
-        dom("Belle_Wooden_Hoe_Number"),
-        dom("Belle_Stone_Hoe_Number"),
-        dom("Belle_Iron_Hoe_Number"),
-        dom("Belle_Gold_Hoe_Number"),
-        dom("Belle_Diamond_Hoe_Number"),
-        dom("Belle_Netherite_Hoe_Number")
-    ],
-    greg: [
-        dom("Greg_Wooden_Hoe_Number"),
-        dom("Greg_Stone_Hoe_Number"),
-        dom("Greg_Iron_Hoe_Number"),
-        dom("Greg_Gold_Hoe_Number"),
-        dom("Greg_Diamond_Hoe_Number"),
-        dom("Greg_Netherite_Hoe_Number")
-    ]
-}
 const elToolPrices = document.querySelectorAll('.tool_price');
 const elMainProgressContainer = dom('main_progress_container');
 const elMainProgressBar = dom('main_progress_bar');
@@ -1511,7 +1459,7 @@ function pagesCount(flash=true) {
     // Flash
     if(flash != true) return;
     dom('list_pages').classList.add('flash_white');
-    setTimeout(() => { dom('list_pages').classList.remove('flash_white'); }, 2000);
+    setTimeout(() => { dom('list_pages').classList.remove('flash_white'); }, 4000);
 }
 const elMainIcon = dom('main_icon');
 /** Changes the Icon at the top of the page dynamically */
@@ -1523,7 +1471,7 @@ function updateMainIcon() {
     }
     // Dev mode
     else if(isDebug()) {
-        elMainIcon.src   = './assets/items/keyboard_2.png';
+        elMainIcon.src   = './assets/items/trinkets/keyboard_2.png';
         elMainIcon.title = 'Developer mode';
     }
     // Gold Medal
@@ -1669,14 +1617,14 @@ function levelUp(character=Boomer_Bill, amount=1) {
         character.lvl += amount;
         character.lvlupPrice = getLevelPrice(character, character.lvl); // Set next lvlupprice
 
-        // Update page
+        // Recalculate
         recalculateCarrotsPer(character);
+        // Update page
         carrotCount();
         characterPrices();
         characterButtons();
         updateCPC();
         updateAllTools();
-
         // Animation
         mouseConfetti([2, 3], ccGold);
     }
@@ -1910,7 +1858,7 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
     if(currently_crafting == 1) return "Tool is already being crafted"; // Return if crafting is already in progress
     if(!gregLevelTest(type)) { // Checks if Greg is experienced enough
         let required = type >= 1 ? (type*25) : 1;
-        return toast("Unable to craft", `Greg too inexperienced. Greg must be at least Level: ${required} to create this tool`, '', false, true);
+        return toast("Unable to craft", `Greg is too inexperienced. He must be at least level ${required} to create this tool`, '', false, true);
     }
     // Checks to see if Greg can hold more of this type
     if(Gregory.lvl == 0 || Gregory.Hoes[type]+amount-1 >= Gregory.lvl+Jared.data.tool_slots.value) return toast("Insufficient upgrades", "You must upgrade Greg to hold more tools of that type", '', false, true);
@@ -2038,8 +1986,8 @@ function updateAllTools() {
     /** Updates tool affordability highlighting */
     function updateTool(character, type) {
         let charString = character.nickname;
-        let count = elHoeCount[charString][type];
-        let img = elHoes[charString][type];
+        let count = dom(`${charString}_tool_${type}_number`);
+        let img = dom(`${charString}_tool_${type}`);
 
         // Bill & Belle
         if(charString == 'bill' || charString == 'belle') {
@@ -2050,10 +1998,7 @@ function updateAllTools() {
         // Greg
         else if(charString == 'greg') {
             // Can afford and is unlocked
-            if(
-                gregLevelTest(type)
-                && toolCost(type, multibuy[mbsel]) * ((Jared.data.greg_min_start.value / 100) || 1) <= player.carrots
-            ) {
+            if(gregLevelTest(type) && toolCost(type, multibuy[mbsel]) * ((Jared.data.greg_min_start.value / 100) || 1) <= player.carrots) {
                 img.classList.remove('blackedout');
                 img.classList.remove('grayedout');
                 eInnerText(count, '');

@@ -553,9 +553,7 @@ function openMenu(id) {
 
 /** Opens the prestige menu */
 function openPrestigeMenu() {
-    // Prevent from opening if unavailable
-    if(player.prestige_available != true) {return};
-    
+    if(!player.prestige_available) return; // Prevent from opening if unavailable
     openMenu('prestige');
     updatePrestigeMenu();
 }
@@ -570,6 +568,7 @@ function openPrestigeMenu() {
 
 /* ----- Tips Menu ----- */
 function openTipsMenu() {
+    populateTipsMenu();
     openMenu('tips');
 }
 const elTipsList = dom('tips_list');
@@ -642,9 +641,9 @@ function setCosmetic(target, to, resetState = false) {
             if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
             { mainCarrot.src = cosmetic.image; }
             // Name
-            if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
-                nameLoop(cosmetic.farmable);
-            } else { nameLoop('Carrot'); }
+            // if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
+            //     nameLoop(cosmetic.farmable);
+            // } else { nameLoop('Carrot'); }
             // Image render type
             if(cosmetic.hasOwnProperty('render_type') && cosmetic.render_type != false) {
                 // Pixelated
@@ -672,11 +671,11 @@ function setCosmetic(target, to, resetState = false) {
     }
 
     // Loop through page elements containing farmable item name and set accordingly
-    function nameLoop(farmable) {
-        document.querySelectorAll('.farmable_name').forEach(e => {
-            e.innerText = farmable + 's';
-        });
-    }
+    // function nameLoop(farmable) {
+    //     document.querySelectorAll('.farmable_name').forEach(e => {
+    //         e.innerText = farmable + 's';
+    //     });
+    // }
 
     // Save
     settings.cosmetics[target] = to;
@@ -1214,7 +1213,7 @@ function populateCarl() {
     // Update page
     if(html == '') {
         html = `
-        <p class="padding-5px secondary_text center">
+        <p class="padding-5px secondary_text center" style="padding: 5px;">
             That's all for now. Complete more achievements for more things to buy!
         </p>`;
     }
@@ -1233,7 +1232,7 @@ function populateCarl() {
                     <p class="secondary_text">${capitalizeFL(type)}</p>
     
                     <div class="shop_price">
-                        ${price} coins
+                        <span class="secondary_text">Cost: </span><span class="color_cash">⚬</span> ${price}
                     </div>
                 </div>
             </div>
@@ -1309,7 +1308,7 @@ function populateJared(specific=false) {
                     <b>${item.name}</b>
                     <div class="segment_bar darker_bg_color">${segments}</div>
                     <div class="shop_value secondary_text">${value}</div>
-                    <div class="shop_price">${price} ${currency}</div>
+                    <div class="shop_price"><span class="secondary_text">Cost: </span><span class="color_cash">⚬</span> ${price}</div>
                 </div>
             </div>
             <div class="shop_tooltip">${item.desc}</div>

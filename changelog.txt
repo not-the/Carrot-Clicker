@@ -1,10 +1,14 @@
 // ----------------------------------------------------------- //
-    VERSION dev beta 1.16.8 (Unfinished)
-    8-30-2022
+    VERSION dev beta 1.16.8
+    8-31-2022
 // ----------------------------------------------------------- //
 
+- Overhauled the section underneath the main carrot
 - All sliders in settings now have number inputs alongside them
+- Coins are now represented by the ⚬ symbol everywhere
+- Fixed tips menu not loading
 - Moved keybind handler function into the event listener
+- Reduced the amount of CSS some more themes use: theme_oled
 
 Dev tools:
 - Replaced character levels with input boxes that can only be interacted with in dev mode

@@ -2,47 +2,6 @@
 Users settings, keybind handling, and tutorial handling
 ------------------------------------------------------------- */
 
-/*---------------AUDIO HANDLING-------------------*/
-//#region 
-// Volume variable
-var volume = 0.8;
-
-/** Plays a sound from the sound folder
- * @param {string} file Filename
- * @param {string} path Only specify if file is outside of './assets/sounds/'
- * @returns 
- */
-function playSound(file, path = './assets/sounds/') {
-    if(settings.enableSounds == false) return;
-    var audio = new Audio(path + file);
-    audio.play();
-}
-
-// Play Music
-var music;
-function playMusic(file = 'music.m4a', loop = false, path='./assets/music/') {
-    // Return if sounds are disabled
-    if(settings.enableSounds == false || settings.enableMusic == false) return;
-
-    // Create
-    music = new Audio(path + file);
-    music.volume = volume;
-    music.loop = loop;
-
-    console.log('playMusic() - Playing track 1...');
-    music.play();
-}
-
-function stopMusic() {
-    if(!music) {
-        console.log('stopMusic(): No music is playing');
-        return;
-    };
-    music.pause();
-    music.currentTime = 0;
-}
-//#endregion
-
 /** Returns true if any menu or popup is open */
 function menuOpen() {
     if(menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige /*|| menuState.inventory*/ || menuState.tips || menuState.credits)
@@ -906,6 +865,13 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 populateTipsMenu();
                 toast('', 'Devtools: All Tips now visible');
             }
+            window.allPrestige = () => {
+                let l = player.lifetime.prestige_count
+                l = l == 0 ? 1 : l;
+                player.prestige_available = true;
+                seeButton('prestige');
+                showPrestigeStats()
+            }
             window.allUnlocks = () => {
                 allCharacters();
                 allAchievements();
@@ -997,6 +963,11 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 <button onclick="clearSave()" class="button_red">Quick Reset</button>
 
                 <h4>Unlock all</h4>
+                <div class="flex unlock_buttons">
+                    <style>
+
+                    </style>
+                </div>
                 <button onclick="allUnlocks()">Everything</button>
                 <button onclick="allCharacters()">Characters</button>
                 <button onclick="allAchievements()">Achievements</button>
@@ -1005,6 +976,8 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 <button onclick="allCosmetics()">Cosmetics</button>
                 <button onclick="allTrinkets()">Trinkets</button>
                 <button onclick="allTips()">Tips</button>
+                <br/>
+                <button onclick="allPrestige()">Show prestige</button>
                 <br/>
                 
                 <h4>Set Values</h4>
@@ -1059,6 +1032,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             document.querySelectorAll('.dev_input').forEach(element => {
                 element.disabled = false;
                 element.addEventListener('keyup', e => {
+                    if(e.key == 'Escape' || e.key == 'Enter') document.activeElement.blur();
                     if(e.key == 'Enter') updateValues();
                 });
             });

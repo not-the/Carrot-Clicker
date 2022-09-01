@@ -2432,7 +2432,7 @@ const jaredShop = {
     // 'mp3_player': {
     //     name:      'MP3 Player',
     //     desc:      'Seems to have some old music on it',
-    //     img:       './assets/items/tome_tools.png',
+    //     img:       './assets/items/trinkets/tome_tools.png',
     //     currency:  'cash',
     //     price:     [50],
     //     value:     [false, true],
@@ -2441,7 +2441,7 @@ const jaredShop = {
     'clickrate': {
         name:      'Golden Mouse',
         desc:      'Increases hold-to-click speed',
-        img:       './assets/items/mouse_2.png',
+        img:       './assets/items/trinkets/mouse_2.png',
         currency:  'cash',
         price:     [   5, 10, 25, 45, 70, 100, 135],
         value:     [2, 3,  4,  5,  6,  7,   8,   9],
@@ -2450,7 +2450,7 @@ const jaredShop = {
     'level_up_discount': {
         name:      'Coupon Book',
         desc:      'Decreases level up prices',
-        img:       './assets/items/coupon_book.png',
+        img:       './assets/items/trinkets/coupon_book.png',
         currency:  'cash',
         price:     [     89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
         value:     [100, 95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
@@ -2460,7 +2460,7 @@ const jaredShop = {
     'belle_bonus': {
         name:      'Synergy Drink',
         desc:      'Increases Belle\'s output while the carrot is being clicked',
-        img:       './assets/items/synergy.png',
+        img:       './assets/items/trinkets/synergy.png',
         currency:  'cash',
         price:     [   24, 32, 40, 50,   65,  80,  95, 120, 150, 185],
         value:     [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
@@ -2478,7 +2478,7 @@ const jaredShop = {
     'tool_slots': {
         name:      'Tool Box',
         desc:      'Gives all characters additional tool slots on top of Greg\'s level',
-        img:       './assets/items/tool_box.png',
+        img:       './assets/items/trinkets/tool_box.png',
         currency:  'cash',
         price:     [   1, 1, 1, 1, 1, 1, 1, 1, 1,  1],
         value:     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -2488,7 +2488,7 @@ const jaredShop = {
     'greg_speed': {
         name:      'Propane Tank',
         desc:      'Increases Greg\'s crafting speed',
-        img:       './assets/items/propane.png',
+        img:       './assets/items/trinkets/propane.png',
         currency:  'cash',
         price:     [   38, 53,  74, 92, 121, 176, 204],
         value:     [1, 1.5,  2,   4,  8,  16,  32, 64],
@@ -2497,7 +2497,7 @@ const jaredShop = {
     'greg_min_start': {
         name:      'Credit Card',
         desc:      'Allows Greg to craft a tool before you can afford it. Percent value is how much of the tool\'s cost you need to start crafting.',
-        img:       './assets/items/credit.png',
+        img:       './assets/items/trinkets/credit.png',
         currency:  'cash',
         price:     [     40, 47, 54, 61, 68],
         value:     [100, 90, 80, 70, 60, 50],
@@ -2507,7 +2507,7 @@ const jaredShop = {
     'falling_bonus': {
         name:      'Cistern',
         desc:      'Increases falling carrot rewards',
-        img:       './assets/items/cistern.png',
+        img:       './assets/items/trinkets/cistern.png',
         currency:  'cash',
         price:     [   60, 112, 163, 252, 309],
         value:     [0, 20,  40,  60,  80, 100],
@@ -2516,7 +2516,7 @@ const jaredShop = {
     'page_bonus': {
         name:      'Origami',
         desc:      'Increases your tome pages\' prestige buff',
-        img:       './assets/items/origami.png',
+        img:       './assets/items/trinkets/origami.png',
         currency:  'cash',
         price:     [   100, 133, 167, 202, 240, 281, 324, 363, 415, 471],
         value:     [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,   2],
@@ -2526,7 +2526,7 @@ const jaredShop = {
     'magic_keyboard': {
         name:      'Magic Keyboard',
         desc:      'Allows the use of spacebar and click at the same time. Secondary ability: you can queue equip a tool if Greg has none ready.', // allows you to single-click to craft & equip tools when Greg has none to give
-        img:       './assets/items/keyboard_2.png',
+        img:       './assets/items/trinkets/keyboard_2.png',
         currency:  'cash',
         price:     [       200],
         value:     [false, true],
