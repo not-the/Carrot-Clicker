@@ -322,7 +322,7 @@ const Default_Gregory = new Blacksmith(
     "greg", './assets/characters/Greg.png',
     0, 5000,
     [ // Price scaling
-        { min: 0,   modifier: 0.21156 },
+        { min: 0,   modifier: 0.17706 },
         { min: 25,  modifier: 0.1874  },
         { min: 50,  modifier: 0.227   },
         { min: 75,  modifier: 0.284   },
@@ -623,6 +623,7 @@ const Default_Carl = {
             },
         }
     },
+    order: [],
 }
 Default_Carl.shop.theme.keys =    Object.keys(Default_Carl.shop.theme);
 Default_Carl.shop.cosmetic.keys = Object.keys(Default_Carl.shop.cosmetic);
@@ -1123,7 +1124,7 @@ function holdStart(useMousePos = true, method=0) {
         clearInterval(hold.clock)
         hold.clock = setInterval(() => {
             if(document.hidden) return clearInterval(hold.clock);
-            onClick(useMousePos, method);
+            carrotClick(false, useMousePos, method);
         }, 1000 / (Jared.data.clickrate.value || 2));
     }, 250);
 }
@@ -1139,8 +1140,7 @@ function holdStop() {
 mainCarrot.addEventListener('mouseup', () => { holdStop(); });
 mainCarrot.addEventListener('mouseout', event => {
     if(!hold.active || clickMethod == 1) return;
-    // Don't stop if moused out to falling carrot
-    let obstruct = event.relatedTarget;
+    let obstruct = event.relatedTarget; // Don't stop if moused out to falling carrot
     if(obstruct.classList.contains('falling_carrot')) return obstruct.click();
     holdStop();
 });
@@ -1151,26 +1151,26 @@ window.onblur = () => { holdStop(); }
 
 
 // Carrot click
-// var isTouchDevice = 'ontouchstart' in document.documentElement;
-mainCarrot.addEventListener(/*isTouchDevice ? 'touchstart' : */'click', event => {
-    // event.preventDefault();
-    onClick(true, 'click');
-});
-var clickMethod = -1; // -1 = any, 0 = click, 1 = key
+mainCarrot.addEventListener('touchstart', event => { carrotClick(event, true, 2) });
+mainCarrot.addEventListener('click', event => { carrotClick(event) });
+
+var clickMethod = -1; // -1 = any, 0 = click, 1 = key, 2 = touch
 var clickMethodTimer;
 /** Carrot Click
  * @param {Boolean} useMousePos Whether or not to use the mouse position for the number popup
  * @param {Number} source To prevent spacebar & click from being used simultaneously
  * @returns 
  */
-function onClick(useMousePos, source=0) {
-    // Prevent click/spacebar at the same time
-    if(clickMethod == -1) {
+function carrotClick(event, useMousePos=true, source=0) {
+    if(clickMethod == -1) { // Prevent click/spacebar at the same time
         clickMethod = source;
         clearTimeout(clickMethodTimer);
         clickMethodTimer = setTimeout(() => clickMethod = -1, 1000);
     }
-    if(clickMethod != source && clickMethod != -1 && !Jared.data.magic_keyboard.value) return;
+    if(
+        (clickMethod != source && clickMethod != -1 && !Jared.data.magic_keyboard.value) ||
+        (source == 2 && clickMethod == 2)
+    ) return;
 
     // Grant carrots
     earnCarrots(player.cpc, 'click');
@@ -1179,7 +1179,7 @@ function onClick(useMousePos, source=0) {
     fallingConsecutive = 0;
     cpsbuff = 5; // Used by trinkets
 
-    // Page stuff
+    // Update page
     carrotCount();
     popupHandler(useMousePos, DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort));
     mouseConfetti([1, 2], ccCarrot);
@@ -1322,29 +1322,30 @@ function characterPrices() {
     dom('greg_next').innerText = gnext;
 }
 /** Updates CPC and CPS values on the page */
-function updateCPC(flash=true) {
+function updateCPC(specific=false) {
     let cpc;
     let cps;
 
-    // Belle bonus display
-    let star = '';
-    if(cpsbuff == 0 || Jared.data.belle_bonus.value == 0 || player.cps == 0) {
-        cps = player.cps;
-    } else {
-        cps = player.cps * ((Jared.data.belle_bonus.value / 100) + 1) || 0;
-        star = '*';
+    // CPC
+    if(!specific || specific == 'cpc') {
+        cpc = DisplayRounded(Math.floor(player.cpc),2);
+        eInnerText(elCPC, cpc);
     }
 
-    // Full numbers or not
-    if(settings.full_numbers != true) {
-        cpc = DisplayRounded(Math.floor(player.cpc),2);
+
+    // CPS
+    if(!specific || specific == 'cps') {
+        // Belle bonus display
+        let star = '';
+        if(cpsbuff == 0 || Jared.data.belle_bonus.value == 0 || player.cps == 0) {
+            cps = player.cps;
+        } else {
+            cps = player.cps * ((Jared.data.belle_bonus.value / 100) + 1) || 0;
+            star = '*';
+        }
         cps = DisplayRounded(Math.floor(cps),2) + star;
-    } else {
-        cpc = numCommas(Math.floor(player.cpc));
-        cps = numCommas(Math.floor(cps)) + star;;
+        eInnerText(elCPS, cps);
     }
-    eInnerText(elCPC, cpc);
-    eInnerText(elCPS, cps);
 }
 /** Updates character's upgrade buttons to be grayed out if it's too expensive */
 function characterButtons() {
@@ -1366,7 +1367,7 @@ function characterButtons() {
 function updateToolPrices() {
     elToolPrices.forEach(element => {
         let type = Number(element.dataset.toolId);
-        eInnerText(element, /*gregLevelTest(type) ? */`${DisplayRounded(toolCost(type, multibuy[mbsel]),1)}`/* : '---'*/);
+        eInnerText(element, /*gregLevelTest(type) ? */`${DisplayRounded(toolCost(type, multibuy[mbsel]), 1000, undefined, undefined, true)}`/* : '---'*/);
     });
 }
 /** Updates Charles' shop content */
@@ -1502,30 +1503,28 @@ function updateMainIcon() {
 }
 const elPrestigeMenuGCCount = dom('prestige_menu_gc_count');
 const elPrestigeMenuTPCount = dom('prestige_menu_tp_count');
+const elPrestigeMenuTPBonus = dom('menu_tome_bonus');
 /** Updates the prestige menu */
 function updatePrestigeMenu() {
     eInnerText(elPrestigeMenuGCCount, DisplayRounded(player.golden_carrots));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
+    eInnerText(elPrestigeMenuTPBonus, `+${Math.round(player.pages * (Jared.data.page_bonus.value || 1) / 10) * 10}%`);
     eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
 }
 
-
-setInterval(() => {
-    clickSpeedHandler(false);
-}, 1000);
-/**
- * Click speed handler
+setInterval(clickSpeedHandler, 1000);
+/** Click speed handler
  * @param {boolean} clicked 
  */
 function clickSpeedHandler(clicked = false) {
-    if(clicked == true) { clickArray.push(Date.now()); }
+    if(clicked) clickArray.push(Date.now());
 
     // Purge clicks older than 1 second
     for(let i = 0; i < clickArray.length; i++) {
         if(clickArray[i] < Date.now() - 3000) {
             // Check if there is only 1 left or not because splice doesn't work with arrays with 1 value
-            if(clickArray.length != 1) { clickArray.splice(i, i); }
-            else { clickArray = []; }
+            if(clickArray.length != 1) clickArray.splice(i, i);
+            else clickArray = [];
         };
     }
 
@@ -1535,7 +1534,6 @@ function clickSpeedHandler(clicked = false) {
     if(clickSpeed == 0) clickSpeedBest = 0; // Reset best on 0
 
     // Update page
-    // if(n != 0) return;
     eInnerText(elClickSpeed, `${clickSpeed}/${clickSpeedBest} clicks per second`);
 }
 
@@ -1553,9 +1551,9 @@ function carrotsPerSecond() {
     }
     earnCarrots(cps/10, 'idle');
 
-    // Might want to change this but it seems to be fine   for now
-    // Note: this being here is the only reason the counter gets updated immediately, if this gets removed it needs to go in every function that changes carrot count
+    // Update page
     carrotCount();
+    if(Jared.data.belle_bonus.value) updateCPC(); // Trinket indicator
 }
 
 /** Calculates and returns a character's level up price at a given level
@@ -1715,7 +1713,7 @@ function prestige() {
  function calculateCarrots(character) {
     let SixToolBonus = Math.floor(character.Hoes[5]/10*Math.floor(Math.pow(character.Hoes[0]*character.Hoes[1]*character.Hoes[2]*character.Hoes[3]*character.Hoes[4],0.3))) || 1;
     let betterHoes=1+Charles.betterHoes.value/100 // Calculate betterHoes bonus
-    let iwcBonus=0.01;
+    let iwcBonus=0.1;
     let iwc = (Charles.improveWorkingConditions.value*iwcBonus)+1;
     // Calculates tool values
     let modifier = 10;
@@ -2015,20 +2013,21 @@ function updateAllTools() {
 
         // Number
         if(character.Hoes[type] == Gregory.lvl + Jared.data.tool_slots.value && Gregory.lvl != 0) {
-            eInnerText(count, 'MAX');
+            // eInnerText(count, 'MAX');
+            eInnerText(count, `x${character.Hoes[type]}`);
             img.classList.remove('blackedout');
             img.classList.remove('grayedout');
-            // count.classList.add('toolfull');
+            count.classList.add('toolfull');
         }
         else if(character.Hoes[type] >= 1) {
             // Not full, show number
-            // count.classList.remove('toolfull');
+            count.classList.remove('toolfull');
             img.classList.remove('blackedout');
             img.classList.remove('grayedout');
             eInnerText(count, `x${character.Hoes[type]}`);
         } else {
             // Hide number
-            // count.classList.remove('toolfull');
+            count.classList.remove('toolfull');
             eInnerText(count, '');
         }
     }
@@ -2041,7 +2040,7 @@ function seeButton(button = 'prestige') {
         updateGC();
         dom("prestige-section").classList.add('visible');
         dom('prestige_menu_button').disabled = false;
-        dom('prestige_menu_button').title = "Prestige";
+        dom('prestige_menu_button').setAttribute('data-tooltip', 'Prestige');
         dom('prestige_menu_button_img').src = `./assets/icons/pixel_carrot_white.png`; 
     } else if(button == 'hardmode') {
         dom('difficulty_menu_button').classList.remove('hidden');

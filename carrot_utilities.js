@@ -75,9 +75,10 @@ const unitsLong = [" thousand", " million", " billion", " trillion", " quadrilli
  * @param {Array} units Array of big number units
  * @returns Rounded number
  */
-function DisplayRounded(value, Fixedto=3, min=0, units=unitsShort) {
+function DisplayRounded(value, Fixedto=3, min=0, units=unitsShort, ignore_full_nums=false) {
+    if(typeof value != 'number') value = Number(value);
     let fixed = value % 1 == 0 ? 0 : Fixedto;
-    if(value < min) return numCommas(value.toFixed(fixed)); // Return with commas instead if min is specified
+    if(value < min || (settings.full_numbers && !ignore_full_nums)) return numCommas(value.toFixed(fixed)); // Return with commas instead if min is specified
     for(i = 0; i < units.length; i++) {
         fixed = value / bases[i] % 1 == 0 ? 0 : Fixedto;
         if(value < bases[i + 1] && value > bases[0]) return (value / bases[i]).toFixed(fixed) + units[i];

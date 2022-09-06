@@ -205,10 +205,7 @@ document.addEventListener('keyup', event => {
     let key = interpretKey(event.key);
 
     // Custom keybinds
-    if(keyWaiting[0] == true) {
-        doneKeybind(key, true);
-        return;
-    }
+    if(keyWaiting[0]) return doneKeybind(key, true);
 
     // Keyboard combos //
     //#region 
@@ -254,7 +251,7 @@ document.addEventListener('keyup', event => {
     if(key == settings.keybinds['key_multibuy'] && state == 'keyup') multibuySpin();
     // Carrot click
     if(key == settings.keybinds['key_carrot']) {
-        onClick(false, 1);
+        carrotClick(false, false, 1);
         keyCarrotFiring = false;
         holdStop();
 
@@ -339,11 +336,8 @@ document.addEventListener('keyup', event => {
 
     // Inventory
     // else if(key == settings.keybinds['key_inventory']) {
-    //     if(inventoryOpen == false) {
-    //         openInventory();
-    //     } else {
-    //         closeDialog();
-    //     }
+    //     if(!inventoryOpen) openInventory();
+    //     else closeDialog();
     // }
 });
 
@@ -630,37 +624,28 @@ function unlock(type, thingToUnlock, subtype, raw) {
             try {
                 Carl.shop['theme'][thingToUnlock].available = true;
                 console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
-            } catch (error) {
-                console.warn(error);
             }
+            catch (error) { console.warn(error); }
         }
         // Cosmetic
         else if(subtype == 'cosmetic') {
             let target = raw.split('/')[1];
             let cosmetic = raw.split('/')[2];
-            // console.log(`${target}/${cosmetic}`);
             try {
                 Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
                 console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
-            } catch (error) {
-                console.warn(error);
             }
+            catch (error) { console.warn(error); }
         }
 
-        // Toast
-        if(settings.carl_shop_toasts && characterQuery('carl')) {
-            toast('', 'Carl: A new item is now available', '', false, true);
-        }
-        // Carl.shop_order.unshift(raw.split(':')[1]);
+        if(settings.carl_shop_toasts && characterQuery('carl')) toast('', 'Carl: A new item is now available', '', false, true);
         populateCarl();
     }
-    else if(type == 'trinket'){
+    else if(type == 'trinket') {
         try {
             Jared.data[thingToUnlock].available = true;
             populateJared();
-        } catch (error) {
-            console.warn(`[Unlock] Trinket "${thingToUnlock}" doesn't exist`);
-        }   
+        } catch (error) {console.warn(`[Unlock] Trinket "${thingToUnlock}" doesn't exist`); }   
     }
 }
 
@@ -732,8 +717,8 @@ function buyTrinket(id) {
     player.trinket_completion = trinketCompletion();
     
     // Update page
-    cashCount(false);
     populateJared(id);
+    cashCount(false);
     mouseConfetti([3,3], ccWhite, 150, 1);
     if(item.update) item.update();
 
@@ -818,7 +803,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         // Dev tools
         if(isDebug()) {
             player.flags['cookies_accepted'] = true; // Auto-accept cookie notice
-            seeButton('hardmode'); // Features in development
+            seeButton('hardmode'); // Feature in development
 
             // Register cheat functions globally
             //#region
@@ -959,26 +944,32 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             // Put dev panel in settings
             $('#devp').innerHTML = /* html */
             `<div class="footer_bottom brown_darker_color" style="display: block; padding: 16px 24px;">
+                <style type="text/css">
+                    .unlock_buttons { width: 100%; max-width: 400px; }
+                    .unlock_buttons button { width: 100%; margin-right: 4px; }
+                </style>
+
+
                 <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
                 <button onclick="clearSave()" class="button_red">Quick Reset</button>
 
                 <h4>Unlock all</h4>
-                <div class="flex unlock_buttons">
-                    <style>
-
-                    </style>
+                <div class="unlock_buttons">
+                    <div class="flex">
+                        <button onclick="allUnlocks()">Everything</button>
+                        <button onclick="allCharacters()">Characters</button>
+                        <button onclick="allAchievements()">Achievements</button>
+                    </div>
+                    <div class="flex">
+                        <button onclick="allThemes()">Themes</button>
+                        <button onclick="allCosmetics()">Cosmetics</button>
+                        <button onclick="allTrinkets()">Trinkets</button>
+                    </div>
+                    <div class="flex">
+                        <button onclick="allTips()">Tips</button>
+                        <button onclick="allPrestige()">Show prestige</button>
+                    </div>
                 </div>
-                <button onclick="allUnlocks()">Everything</button>
-                <button onclick="allCharacters()">Characters</button>
-                <button onclick="allAchievements()">Achievements</button>
-                <br/>
-                <button onclick="allThemes()">Themes</button>
-                <button onclick="allCosmetics()">Cosmetics</button>
-                <button onclick="allTrinkets()">Trinkets</button>
-                <button onclick="allTips()">Tips</button>
-                <br/>
-                <button onclick="allPrestige()">Show prestige</button>
-                <br/>
                 
                 <h4>Set Values</h4>
                 <table>
@@ -1304,7 +1295,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     populateKeybinds();
     fillSettingsPage();
     carrotCount();
-    updateCPC(false);
+    updateCPC();
     cashCount(false);
     characterPrices();
     characterButtons();

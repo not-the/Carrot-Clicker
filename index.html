@@ -40,30 +40,26 @@
         <!-- Status bar -->
         <div class="status_bar">
             <!-- Display when Javascript is turned off -->
-            <noscript>
-                <div class="noscript center">
+            <noscript class="center">
+                <style>noscript > div { width: 100%; padding: 16px 0; background-color: var(--warning-red); }</style>
+                <div class="center">
                     <b><u>Notice:</u></b> Javascript is required to play Carrot Clicker.<br/>
                     You'll need to enable Javascript for this site in your browser's settings
                 </div>
             </noscript>
 
             <!-- Status bar -->
-            <div class="Basic_Info flex">
-                <!-- Info -->
-                <p id="Basic_Info">
-                    <!-- Main Icon -->
-                    <img src="./assets/pixel_carrot_32x.png" alt="" id="main_icon"
-                    style="position: absolute; transform: translate(-38px, -6px)"
-                    title="Carrot Clicker">
-
-                    <b style="padding-left: 2px;">Carrot Clicker</b>
-
+            <div class="basic_info flex">
+                <img src="./assets/pixel_carrot_32x.png" alt="" id="main_icon"
+                style="position: absolute; transform: translate(-38px, -6px)"
+                title="Carrot Clicker">
+                <h1 style="font-size: 16px; margin: 0; padding-left: 2px;">Carrot Clicker</h1>
                 <!-- Tips -->
                 <div id="Tip" class="link_styling" onclick="tipchange()" tabindex="0" role="button">Tip: Click the carrot</div>
 
                 <div id="info_dropdown" tabindex="0">
                     ▼
-                    <div class="hover_menu">
+                    <nav class="hover_menu">
                         <!-- Settings -->
                         <a href="#settings" onclick="panelChange(`settings-panel`)" tabindex="0">
                             <div class="menu_item link_styling secondary_text">
@@ -127,7 +123,7 @@
                             </div>
                         </a>
 
-                    </div>
+                    </nav>
                 </div>
             </div>
 
@@ -199,19 +195,19 @@
                 <!-- Buttons -->
                 <div class="main_buttons flex">
                     <!-- Prestige button -->
-                    <button onClick="openPrestigeMenu()" title="???" class="main_button_item" id="prestige_menu_button" disabled>
+                    <button onClick="openPrestigeMenu()" class="main_button_item" id="prestige_menu_button" data-tooltip="???" disabled>
                         <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
                     </button>
                     <!-- Inventory button -->
-                    <!-- <button onClick="openInventory()" title="Inventory" class="main_button_item" id="inventory_button">
+                    <!-- <button onClick="openInventory()" data-tooltip="Inventory" class="main_button_item" id="inventory_button">
                         <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
                     </button> -->
                     <!-- Tips button -->
-                    <button onClick="openTipsMenu()" title="Tips" class="main_button_item" id="tips_menu_button">
+                    <button onClick="openTipsMenu()" data-tooltip="Tips" class="main_button_item" id="tips_menu_button">
                         <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
                     </button>
                     <!-- Hardmode button -->
-                    <button onClick="openDifficultyMenu()" title="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
+                    <button onClick="openDifficultyMenu()" data-tooltip="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
                         <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
                     </button>
                 </div>
@@ -662,9 +658,9 @@
         <!-- Tripane -->
         <div id="settings"></div>
         <div id="tripane">
-            <nav class="flex">
+            <div id="tab_bar" class="flex">
                 <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
-            </nav>
+            </div>
 
             <!-- Achievements Panel -->
             <div id="achievements-panel" class="panel remove unremove">
@@ -935,7 +931,7 @@
                         </div>
 
                         <!-- Links -->
-                        <div class="footer_column">
+                        <nav class="footer_column">
                             <h3>More</h3>
                             <a href="https://www.notkal.com/posts/carrot-clicker-changelog/" class="user_card footer_card">
                                 <div class="flex">
@@ -949,7 +945,7 @@
                                     <p>Github</p>
                                 </div>
                             </a>
-                        </div>
+                        </nav>
                     </div>
 
                 </footer>
@@ -1332,62 +1328,40 @@
             <h2 class="toast_close generic_close" title="Close" onclick="closeDialog()" tabindex="0" role="button">x</h2>
             <h1>Prestige</h1>
 
-            <div class="prestige_menu_flex flex">
-                <!-- Current -->
-                <div class="half_width">
-                    <!-- Tomes -->
-                    <!-- <div class="flex">
-                        <div class="prestige_item">
-                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
-                        </div>
-                        <div class="prestige_item">
-                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
-                        </div>
-                        <div class="prestige_item">
-                            <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
-                        </div>
-                    </div> -->
-                    <!-- Golden Carrot count -->
-                    <div class="flex prestige_item main_bg_color">
-                        <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots" class="prestige_item_img">
-                        <div>
-                            <h6 class="prestige_number" id="prestige_menu_gc_count">Loading...</h6>
-                            <p>
-                                Golden Carrots
-                                <span tabindex="0" class="question_mark" title="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!" onclick="toast(...toasts.info_golden_carrots)">?</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Tome page count -->
-                    <div class="flex prestige_item main_bg_color">
-                        <img src="./assets/items/tome_page.png" alt="Golden Carrots" class="prestige_item_img">
-                        <div>
-                            <h6 class="prestige_number" id="prestige_menu_tp_count">Loading...</h6>
-                            <p>
-                                Tome Pages
-                                <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast(...toasts.info_pages)">?</span>
-                            </p>
-                        </div>
-                    </div>
+            <!-- Current -->
+            <!-- Golden Carrot count -->
+            <div class="flex prestige_item main_bg_color">
+                <img src="./assets/theme/pixel_golden_carrot.png" alt="Golden Carrots">
+                <div>
+                    <span class="prestige_number" id="prestige_menu_gc_count">Loading...</span> Golden Carrots
+                    <span tabindex="0" class="question_mark" title="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!" onclick="toast(...toasts.info_golden_carrots)">?</span><br/>
+                    Prestige to earn more!
                 </div>
-
-                <!-- Next prestige -->
-                <p class="prestigetooltip center half_width" style="padding-top: 6px;">
-                    <!-- Prestige button -->
-                    <button onClick="openDialog(...dialog.prestige_confirm);" class="button_gold full_width" title="Prestige">
-                        Prestige
-                    </button><br>
-                    Prestiging now will result in:<br/>
-                    <span id="prestige_potential">
-                        0
-                    </span> Golden Carrots
-                </p>
             </div>
 
-            
+            <!-- Tome page count -->
+            <div class="flex prestige_item main_bg_color">
+                <img src="./assets/items/tome_page.png" alt="Golden Carrots">
+                <div>
+                    <span class="prestige_number" id="prestige_menu_tp_count">Loading...</span> Tome Pages
+                    <span tabindex="0" class="question_mark" title="For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!" onclick="toast(...toasts.info_pages)">?</span><br/>
+                    <b id="menu_tome_bonus">+...%</b> golden carrot bonus when prestiging
+                </div>
+            </div>
 
-
+            <!-- Next prestige -->
+            <p class="prestigetooltip center" style="padding-top: 6px;">
+                <!-- Charles button -->
+                <button onClick="characterInfo('charles')" class="full_width" title="Prestige">
+                    Buy tomes
+                </button><br/>
+                <!-- Prestige button -->
+                <button onClick="openDialog(...dialog.prestige_confirm)" class="button_gold full_width" title="Prestige" style="height: 40px;">
+                    Prestige
+                </button><br/>
+                Prestiging now will result in:<br/>
+                <span id="prestige_potential">0</span> Golden Carrots
+            </p>
         </div>
 
         <!-- Inventory -->

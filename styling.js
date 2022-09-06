@@ -20,7 +20,7 @@ var menuState = {
     cosmetic:  false,
     keybinds:  false,
     prestige:  false,
-    inventory: false,
+    // inventory: false,
     tips:      false,
     credits:   false,
 }
@@ -58,7 +58,7 @@ const cosmList = {
     carl:       dom('carl_cosmetics'),
 }
 const prestigeMenu =  dom('prestige_menu');
-const inventoryMenu = dom('inventory_menu');
+// const inventoryMenu = dom('inventory_menu');
 const tipsMenu =      dom('tips_menu');
 //#endregion
 
@@ -424,19 +424,16 @@ function panelChange(to, noSound = false) {
  */
 //#region 
 function popupHandler(useMousePos = true, amount, style = 'carrot') {
-    // Create Element
-    var clickVisualElement = document.createElement("div");
+    var clickVisualElement = document.createElement("div"); // Create Element
 
     // Give element random displacement along with mouse position
-    var randomX = Math.floor((Math.random() * 10) - 5) + mouseX;
-    var randomY = Math.floor((Math.random() * 10) - 5) + mouseY;
-    // var randomRot = Math.floor((Math.random() * 16) - 8);
+    var randomX = randomOffset() + mouseX;
+    var randomY = randomOffset() + mouseY;
 
     // Get position of carrot image (used when useMousePos is false)
     var mcPosition = mainCarrot.getBoundingClientRect();
-    var fixedX = Math.floor((Math.random() * 10) - 5) + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
-    // var fixedY = mcPosition.top + (mcPosition.bottom - mcPosition.top) / 2;
-    var fixedY = Math.floor((Math.random() * 10) - 5) + mcPosition.bottom - 12;
+    var fixedX = randomOffset() + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
+    var fixedY = randomOffset() + mcPosition.bottom - 12;
 
     if(useMousePos == true) {
         clickVisualElement.style.left = randomX + "px";
@@ -446,43 +443,38 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
         clickVisualElement.style.top =  fixedY + "px";
     }
 
-    // clickVisualElement.style.transform = `translateX(-50%) rotate(${randomRot}deg)`;
     clickVisualElement.classList.add("clickvisual");
     clickVisualElement.id = `bonus${bonusID}`;
 
     // Negative number
     let sign = amount[0] == '-' ? '' : '+';
-    if(sign == '') { clickVisualElement.classList.add('clickvisual_negative'); }
+    if(sign == '') clickVisualElement.classList.add('clickvisual_negative');
 
+    let text = '';
     // Carrot
-    if(style == 'carrot') {
-        clickVisualElement.innerText = `${sign}${amount}`; 
-    }
+    if(style == 'carrot') text = `${sign}${amount}`; 
     // Falling carrot
     else if(style == 'falling') {
-        clickVisualElement.innerText = `${sign}${amount}`;
+        text = `${sign}${amount}`;
         clickVisualElement.classList.add("clickvisual_falling");
     }
     // Cash
     else if(style == 'cash') {
-        clickVisualElement.innerText = `⚬${amount}`;
+        text = `⚬${amount}`;
         clickVisualElement.classList.add("clickvisual_cash");
     }
-    
+    clickVisualElement.innerText = text;
     bonusVisualArea.append(clickVisualElement);
 
     // Delete Popup after animation finishes/2 seconds
     var bonusCurrent = dom("bonus" + bonusID);
-    setTimeout(() => {
-        bonusCurrent.remove();
-    }, 2000);
+    setTimeout(() => { bonusCurrent.remove(); }, 2000);
 
     // Incremement element ids
-    if(bonusID < 100) {
-        bonusID += 1;
-    } else {
-        bonusID = 0;
-    }
+    if(bonusID < 100)  bonusID += 1;
+    else bonusID = 0;
+
+    function randomOffset() { return Math.floor((Math.random() * 10) - 5); }
 }
 //#endregion
 
@@ -560,7 +552,7 @@ function openPrestigeMenu() {
 
 /* ----- Inventory ----- */
 // function openInventory() {
-//     closeDialog();
+//     openMenu('inventory');
 //     menuState.inventory = true;
 //     overlay.classList.add("visible");
 //     elBody.classList.add('overflow_hidden');
@@ -616,10 +608,7 @@ function openDifficultyMenu() {
  * @param {boolean} resetState 
  */
 function setCosmetic(target, to, resetState = false) {
-    // console.log('Switching ' + target + '\'s cosmetic to: ' + to);
-
-    // Reset to default first
-    if(resetState == false && to != 'default') setCosmetic(target, 'default', true);
+    if(!resetState && to != 'default') setCosmetic(target, 'default', true); // Reset to default first
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
@@ -631,35 +620,23 @@ function setCosmetic(target, to, resetState = false) {
             for(i = 0; i < cosmeticsKeys.length; i++) {
                 let target = cosmeticsKeys[i];
                 if(target == 'bundle') continue;
-                if(cosmetic.hasOwnProperty(target)) setCosmetic(target, cosmetic[target]);
+                if(cosmetic[target]) setCosmetic(target, cosmetic[target]);
                 else setCosmetic(target, 'default');
             }
             break;
-        
+
+        // Farmable
         case 'farmable':
-            // Image
-            if(cosmetic.hasOwnProperty('image') && cosmetic.image != false)
-            { mainCarrot.src = cosmetic.image; }
-            // Name
-            // if(cosmetic.hasOwnProperty('farmable') && cosmetic.farmable != false) {
-            //     nameLoop(cosmetic.farmable);
-            // } else { nameLoop('Carrot'); }
-            // Image render type
-            if(cosmetic.hasOwnProperty('render_type') && cosmetic.render_type != false) {
-                // Pixelated
-                if(cosmetic.render_type == 'pixel') { mainCarrot.classList.add('render_pixelated'); }
-            } else {
-                mainCarrot.classList.remove('render_pixelated');
-            }
+            if(cosmetic.image) mainCarrot.src = cosmetic.image; // Image
+            if(cosmetic.farmable) nameLoop(cosmetic.farmable); // Name
+            else nameLoop('Carrot');
+            if(cosmetic.render_type == 'pixel') mainCarrot.classList.add('render_pixelated'); // Image render type (Pixelated)
+            else mainCarrot.classList.remove('render_pixelated');
             break;
         // Tools
         case 'tools':
             for(hi = 0; hi < Default_Gregory.HoePrices.length; hi++) {
-                if(cosmetic.hasOwnProperty(`${hi}`) && cosmetic[`${hi}`] != false) {
-                    document.querySelectorAll(`.tool_${hi}`).forEach(element => {
-                        element.src = cosmetic[hi];
-                    });
-                }
+                if(cosmetic[hi]) document.querySelectorAll(`.tool_${hi}`).forEach(e => { e.src = cosmetic[hi]; });
             }
             break;
         // Character
@@ -670,34 +647,22 @@ function setCosmetic(target, to, resetState = false) {
             break;
     }
 
-    // Loop through page elements containing farmable item name and set accordingly
-    // function nameLoop(farmable) {
-    //     document.querySelectorAll('.farmable_name').forEach(e => {
-    //         e.innerText = farmable + 's';
-    //     });
-    // }
-
     // Save
     settings.cosmetics[target] = to;
     saveSettings();
 
     // Update page
     cosmeticSwitcherCheckmark(target, to, from);
+
+    /** Set farmable name */
+    function nameLoop(farmable) { document.querySelectorAll('.farmable_name').forEach(e => { e.innerText = farmable + 's'; }); }
+
     /** Theme switcher checkmarks */
     function cosmeticSwitcherCheckmark(target, to, from = false) {
-        var elCosmetic = dom(`${target}_cosmetic_${to}_checkmark`);
-
-        // Uncheck previous
-        if(from == false || !dom(`${target}_cosmetic_${to}_checkmark`)) return;
-        try {
-            dom(`${target}_cosmetic_${from}_checkmark`).classList.add('opacity0');
-        } catch (error) {
-            console.error(error);
-        }
-
-        // Check new
-        if(!elCosmetic) return;
-        elCosmetic.classList.remove('opacity0');
+        var cm_to = dom(`${target}_cosmetic_${to}_checkmark`);
+        let cm_from = dom(`${target}_cosmetic_${from}_checkmark`);
+        if(cm_from != null) cm_from.classList.add('opacity0'); // Uncheck previous
+        if(cm_to != null) cm_to.classList.remove('opacity0'); // Check new
     }
 }
 //#endregion
@@ -1151,7 +1116,6 @@ function startCredits(toast = false) {
 // Stop autoscroll if player scrolls
 elCredits.addEventListener('wheel', () => { clearInterval(creditInterval); });
 
-
 // Keybinds menu
 const elKeybindsMenu = dom('keybinds_menu');
 const elKeybindsBlurb = dom('keybinds_blurb');
@@ -1165,22 +1129,17 @@ function keybindsMenu() {
 }
 
 const carlShop = dom('carl_shop');
-// var pageCarl = 1;
-/** Populate Carls' shop */
+/** Populate Carl's shop */
 function populateCarl() {
     let html = '';
     carlShopData = {};
-    // let count = 0;
 
     // Loop through themes
     let theme_keys = Carl.shop.theme.keys;
     for(let ti = 0; ti < theme_keys.length; ti++) {
         let name = theme_keys[ti];
         let item = Carl.shop.theme[name];
-        if(
-            item.available == false ||
-            item.bought == true
-        ) continue;
+        if(!item.available || item.bought) continue;
 
         carlShopData[name] = item.price;
 
@@ -1189,7 +1148,6 @@ function populateCarl() {
         let desc = theme.desc;
 
         html += carlHTML(name, 'theme', theme.name, img, item.price, desc);
-        // count++;
     }
 
     // Loop through cosmetics
@@ -1207,7 +1165,6 @@ function populateCarl() {
         let desc = cosmetic.desc;
 
         html += carlHTML(name, `${ca} Cosmetic`, cosmetic.name, img, item.price, desc);
-        // count++;
     }
 
     // Update page
@@ -1295,7 +1252,7 @@ function populateJared(specific=false) {
         let currency = '';
         let styles = 'complete';
         if(price != '✓ Done') {
-            currency = 'coins';
+            currency = '<span class="secondary_text">Cost: </span><span class="color_cash">⚬</span> ';
             styles = '';
         }
         let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
@@ -1308,7 +1265,7 @@ function populateJared(specific=false) {
                     <b>${item.name}</b>
                     <div class="segment_bar darker_bg_color">${segments}</div>
                     <div class="shop_value secondary_text">${value}</div>
-                    <div class="shop_price"><span class="secondary_text">Cost: </span><span class="color_cash">⚬</span> ${price}</div>
+                    <div class="shop_price">${currency}${price}</div>
                 </div>
             </div>
             <div class="shop_tooltip">${item.desc}</div>
@@ -1358,15 +1315,22 @@ function achieveGridMode(state) {
 // https://stackoverflow.com/a/7790764
 (function() {
     document.onmousemove = handleMouseMove;
+
+    document.ontouchstart = handleMouseMove;
+    document.ontouchmove = handleMouseMove;
     function handleMouseMove(event) {
         var eventDoc, doc, body;
-
         event = event || window.event; // IE-ism
 
-        // If pageX/Y aren't available and clientX/Y are,
-        // calculate pageX/Y - logic taken from jQuery.
-        // (This is to support old IE)
-        if (event.pageX == null && event.clientX != null) {
+        // Touch 
+        if(event.type == 'touchstart' || event.type == 'touchmove' || event.type == 'touchend' || event.type == 'touchcancel'){
+            var evt = (typeof event.originalEvent === 'undefined') ? event : event.originalEvent;
+            var touch = evt.touches[0] || evt.changedTouches[0];
+            mouseX = Number(touch.pageX.toFixed(0));
+            mouseY = Number(touch.pageY.toFixed(0));
+        }
+        // Mouse
+        else if(event.pageX == null && event.clientX != null && event.type == 'mousedown' || event.type == 'mouseup' || event.type == 'mousemove' || event.type == 'mouseover'|| event.type=='mouseout' || event.type=='mouseenter' || event.type=='mouseleave') {
             eventDoc = (event.target && event.target.ownerDocument) || document;
             doc = eventDoc.documentElement;
             body = eventDoc.body;
@@ -1377,10 +1341,10 @@ function achieveGridMode(state) {
             event.pageY = event.clientY +
             (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
             (doc && doc.clientTop  || body && body.clientTop  || 0 );
+
+            mouseX = event.pageX;
+            mouseY = event.pageY;
         }
-        
-        mouseX = event.pageX;
-        mouseY = event.pageY;
     }
 })();
 //#endregion

@@ -71,17 +71,21 @@ body.theme_oled {
 body.theme_oled * { box-shadow: none !important;}
 body.theme_oled .blackedout { filter: contrast(0%) brightness(30%); }
 /* Tri-pane */
-body.theme_oled nav .tab {
+body.theme_oled #tripane #tab_bar .tab,
+body.theme_oled .switcher_bar .tab,
+body.theme_oled .dialog_close {
     background-color: var(--alt-bg-lighter);
-    border-bottom: 1px solid white;
     color: var(--gray);
 }
-body.theme_oled nav .activetab {
+body.theme_oled #tripane #tab_bar .tab { border-bottom: 1px solid white; }
+body.theme_oled #tripane #tab_bar .activetab,
+body.theme_oled .switcher_bar .activetab {
     background-color: black;
-    border: 1px solid white;
-    border-bottom: none;
     color: white;
+    border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color);
 }
+body.theme_oled #tripane #tab_bar .activetab { border: 1px solid white; border-bottom: none;}
+body.theme_oled #tripane #tab_bar .activetab,
 body.theme_oled .panel {
     border-left: 1px solid white;
     border-right: 1px solid white;
@@ -306,24 +310,24 @@ body.theme_classic {
 .theme_grey #tripane {
     background-color: var(--bg-lighter);
 }
-.theme_red #tripane nav,
-.theme_green #tripane nav,
-.theme_blue #tripane nav,
-.theme_grey #tripane nav {
+.theme_red #tripane #tab_bar,
+.theme_green #tripane #tab_bar,
+.theme_blue #tripane #tab_bar,
+.theme_grey #tripane #tab_bar {
     background-color: var(--bg-lighter);
 }
-.theme_red #tripane nav .tab,
-.theme_green #tripane nav .tab,
-.theme_blue #tripane nav .tab,
-.theme_grey #tripane nav .tab {
+.theme_red #tripane #tab_bar .tab,
+.theme_green #tripane #tab_bar .tab,
+.theme_blue #tripane #tab_bar .tab,
+.theme_grey #tripane #tab_bar .tab {
     background-color: var(--bg);
     color: var(--gray);
     border-color: var(--border-color);
 }
-.theme_red #tripane nav .activetab,
-.theme_green #tripane nav .activetab,
-.theme_blue #tripane nav .activetab,
-.theme_grey #tripane nav .activetab {
+.theme_red #tripane #tab_bar .activetab,
+.theme_green #tripane #tab_bar .activetab,
+.theme_blue #tripane #tab_bar .activetab,
+.theme_grey #tripane #tab_bar .activetab {
     background-color: var(--bg-lighter);
     color: white;
 }
@@ -645,7 +649,7 @@ body.theme_classic {
 .theme_terminal button:hover { text-decoration: underline; }
 .theme_terminal button:not(.main_button_item)::before { content: "["; }
 .theme_terminal button:not(.main_button_item)::after  { content: "]"; }
-.theme_terminal #tripane nav .tab::before { margin-right: -7px; }
+.theme_terminal #tripane #tab_bar .tab::before { margin-right: -7px; }
 .theme_terminal .small_confetti {
     width: 10px !important;
     height: 10px !important;
@@ -653,13 +657,13 @@ body.theme_classic {
 
 /* Dashed borders */
 .theme_terminal .popup_box,
-.theme_terminal #tripane nav {
+.theme_terminal #tripane #tab_bar {
     border-top: 2px dashed var(--gray);
 }
 .theme_terminal .popup_box,
 .theme_terminal .Basic_Info,
 .theme_terminal .box,
-.theme_terminal #tripane nav {
+.theme_terminal #tripane #tab_bar {
     border-bottom: 2px dashed var(--gray);
 }
 /* Bottom padding */
@@ -684,10 +688,10 @@ body.theme_classic {
     background: white;
 }
 .theme_terminal .levelupimg { filter: saturate(0%) brightness(150%); }
-.theme_terminal #tripane nav .tab:not(.activetab) {
+.theme_terminal #tripane #tab_bar .tab:not(.activetab) {
     color: var(--gray);
 }
-.theme_terminal #tripane nav .tab:hover {
+.theme_terminal #tripane #tab_bar .tab:hover {
     transform: none;
     color: var(--text);
 }
@@ -740,7 +744,7 @@ body.theme_classic {
 }
 .theme_blockgame button:hover,
 .theme_blockgame select:hover,
-.theme_blockgame #tripane nav .tab:hover {
+.theme_blockgame #tripane #tab_bar .tab:hover {
     background-image: url(./assets/theme/blockgame/button_active.png);
     color: white;
 }
@@ -893,11 +897,11 @@ body.theme_classic {
 }
 
 /* Tri-pane */
-.theme_blockgame #tripane nav .tab {
+.theme_blockgame #tripane #tab_bar .tab {
     color: rgb(163, 163, 163);
     padding-bottom: 20px;
 }
-.theme_blockgame #tripane nav .activetab {
+.theme_blockgame #tripane #tab_bar .activetab {
     color: white;
     filter: none;
     outline-color: white;
@@ -1057,23 +1061,23 @@ body.theme_classic {
     visibility: hidden;
     position: absolute;
 }
-.theme_chatapp #tripane nav .tab::before {
+.theme_chatapp #tripane #tab_bar .tab::before {
     content: "#";
 }
-.theme_chatapp #tripane nav {
+.theme_chatapp #tripane #tab_bar {
     background-color: #2f3136;
     border-radius: 0;
 }
-.theme_chatapp #tripane nav .tab {
+.theme_chatapp #tripane #tab_bar .tab {
     background-color: #2f3136;
     border-radius: 10px !important;
     border-color: transparent;
 }
-.theme_chatapp #tripane nav .tab:not(.activetab):hover {
+.theme_chatapp #tripane #tab_bar .tab:not(.activetab):hover {
     background-color: #34373c;
     color: white;
 }
-.theme_chatapp #tripane nav .tab.activetab {
+.theme_chatapp #tripane #tab_bar .tab.activetab {
     background-color: #393c43;
 }
 .theme_chatapp .panel {

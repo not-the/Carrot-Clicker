@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.8';
+    const game_version = 'dev beta v1.16.9';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -69,21 +69,24 @@ const default_tips = {
     beginner: [ // 1
         "To equip a tool, you must first craft one, then click the corresponding tool type under Bill or Belle",
         "Each character can only hold up to 1 tool (per type) for every level Greg has reached",
-        "By completing achievements you will earn mysterious tome pages.",
+        "By completing achievements you will earn mysterious tome pages",
         "Completing achievements will give you additional themes and cosmetics to buy",
         "When clicking the carrot, cash will sometimes drop. Make sure to grab it!",
     ],
     intermediate: [ // 2
         "When you're ready, click the prestige button. You will start over but gain the ability to buy tomes",
-        "Golden carrots can be used to buy tomes, which give you permanent buffs", // "Golden carrots increase your characters by 10%", // old tip, don't delete
-        "Every Tome Page you have will give you a +1% golden carrot increase when prestiging",
-        "Earning a few special achievements will update the game icon in the top left",
+        "Golden carrots can be used to buy tomes, which give you permanent buffs",
+        "Every Tome Page you have will give you a +1% golden carrot (or more!) bonus when prestiging",
+        "Some achievements will change the game icon in the top left to indicate your progress",
         "The more tools the better!",
     ],
     advanced: [ // 3
         "You've earned more than 1 billion carrots this prestige. That's a lot!",
         "Good luck!", // placeholder?
-        // "Unlocking every theme will make a special theme available",
+        "Buy tomes from Charles to buff your farm",
+        "Make sure to spend your golden carrots on tomes before you start farming",
+        "There is a merchant who sells powerful trinkets",
+        // "Unlocking every theme will make a special theme available", // (Referring to theme_custom)
     ],
 
     // Fun tips
@@ -2480,8 +2483,8 @@ const jaredShop = {
         desc:      'Gives all characters additional tool slots on top of Greg\'s level',
         img:       './assets/items/trinkets/tool_box.png',
         currency:  'cash',
-        price:     [   1, 1, 1, 1, 1, 1, 1, 1, 1,  1],
-        value:     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        price:     [   96, 106, 120, 144, 196, 218, 242, 328, 362, 400],
+        value:     [0,  1,   2,   3,   4,   5,   6,   7,   8,   9,  10],
         written:   '+@ slots',
         update:    () => { updateAllTools(); },
     },
@@ -2528,7 +2531,7 @@ const jaredShop = {
         desc:      'Allows the use of spacebar and click at the same time. Secondary ability: you can queue equip a tool if Greg has none ready.', // allows you to single-click to craft & equip tools when Greg has none to give
         img:       './assets/items/trinkets/keyboard_2.png',
         currency:  'cash',
-        price:     [       200],
+        price:     [       100],
         value:     [false, true],
         written:   '',
     },

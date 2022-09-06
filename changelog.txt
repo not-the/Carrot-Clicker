@@ -1,4 +1,38 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.9
+    9-5-2022
+// ----------------------------------------------------------- //
+
+Touchscreen support
+
+- Reenabled farmable cosmetics being able to change the name of the item you're farming, and condensed the setCosmetic function
+- Fixed character levels being the wrong color in safari
+- Tool numbers now change color instead of display as "MAX" when full
+- Fixed a bug where buying a trinket would prevent it from greying out once it became too expensive
+- Replaced main button item's titles with tooltips
+- Slightly reworked the prestige menu
+  + Prestige menu now shows you the exact prestige bonus you recieve from tomes
+  + Added a "Buy tomes" button that opens Charles
+- Renamed function: onClick -> carrotClicker
+- Clicking the carrot now supports:
+  + Multi touch
+  + Number popup now follows your finger
+- Misc changes to improve SEO/appropriate use of semantic tags
+
+Balance changes:
+- Tomes:
+    IWC bonus:       1% -> 10%
+- Trinkets prices (coins):
+    Magic keyboard:  200 -> 100
+    Tool box:        (Has prices now)
+- Greg price scaling:
+    Levels 0-24:     0.21156 -> 0.17706
+    The upgrade cost when a new tool is about to be unlocked is now always 1/3 the cost of that tool
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.8
     8-31-2022
 // ----------------------------------------------------------- //
