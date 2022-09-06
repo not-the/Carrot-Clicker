@@ -936,7 +936,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 dom('import_export').value = exported;
             }
             window.optionDebugUpdate = () => {
-                player.flags.debug_dont_autoupdate = dom('debug_dont_autoupdate').checked;
+                player.flags.debug_dont_autoupdate = !(dom('debug_dont_autoupdate').checked);
                 toast('Flag set', `\ndebug_dont_autoupdate = ${player.flags.debug_dont_autoupdate}`, '', false, true);
             }
             //#endregion
@@ -948,7 +948,6 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     .unlock_buttons { width: 100%; max-width: 400px; }
                     .unlock_buttons button { width: 100%; margin-right: 4px; }
                 </style>
-
 
                 <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
                 <button onclick="clearSave()" class="button_red">Quick Reset</button>
@@ -1005,7 +1004,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 
                 <h4>Save data management</h4>
                 <label for="debug_dont_autoupdate">
-                <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
+                <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${!player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
                 onclick="optionDebugUpdate()">
                     Auto-update save while in debug mode
                 </label><br/>

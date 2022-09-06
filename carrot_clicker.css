@@ -1773,6 +1773,8 @@ button:after {
     min-height: 85vh;
     height: min-content;
     width: 100%;
+}
+.panel, footer {
     padding: 0px 24px 64px;
 }
 

@@ -1367,7 +1367,7 @@ function characterButtons() {
 function updateToolPrices() {
     elToolPrices.forEach(element => {
         let type = Number(element.dataset.toolId);
-        eInnerText(element, /*gregLevelTest(type) ? */`${DisplayRounded(toolCost(type, multibuy[mbsel]), 1000, undefined, undefined, true)}`/* : '---'*/);
+        eInnerText(element, /*gregLevelTest(type) ? */`${DisplayRounded(toolCost(type, multibuy[mbsel]), 1, undefined, undefined, true)}`/* : '---'*/);
     });
 }
 /** Updates Charles' shop content */

@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.9.1
+    9-5-2022
+// ----------------------------------------------------------- //
+
+- Fixed a crash
+- Dev panel: "Auto-update save while in debug mode" option now functions as expected
+- The footer is now visible at all times instead of just in settings
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.9
     9-5-2022
 // ----------------------------------------------------------- //
