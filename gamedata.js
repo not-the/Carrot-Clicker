@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.10';
+    const game_version = 'dev beta v1.16.11';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -1228,7 +1228,7 @@ const achievements = {
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill to level 100',
         'image': './assets/achievements/bill_pointer.png',
-        'reward': false,
+        'reward': 'cosmetic:bundle/bill',
         'pages': 1,
         'conditions': ['Boomer_Bill.lvl', 100],
         'mystery': {
@@ -1242,7 +1242,7 @@ const achievements = {
         'name': 'Billtona 500',
         'desc': 'Upgrade Bill to level 500',
         'image': './assets/achievements/bill_pointer.png', // needs unique art
-        'reward': 'cosmetic:bundle/bill',
+        'reward': false,
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 500],
         'mystery': {
@@ -1733,6 +1733,20 @@ const achievements = {
         'reward': false,
         'pages': 3,
         'conditions': ['player.cps', 100000],
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+    'greg_debt': {
+        'name': 'IOU',
+        'desc': 'Have fewer than 1000 carrots while Greg is crafting',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.carrots < 1000 && Gregory.crafting != false', true],
         'mystery': {
             'name': true,
             'desc': false,

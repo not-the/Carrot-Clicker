@@ -1,4 +1,34 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.11
+    9-9-2022
+// ----------------------------------------------------------- //
+
+- Added a navigation bar that appears by default on mobile
+- Updated the favicon
+- Classic theme now has the old mini info style
+- Falling carrots now have multitouch support
+- Moved "All Bill" cosmetic back to the bill_lvl_100 achievement (was bill_lvl_500)
+- New achievement: IOU - Have fewer than 1000 carrots while Greg is crafting
+- Fixed crafting not updating the carrot count
+- Fixed tool highlighting not updating when earnCarrots runs (Issue #69)
+- Toggling full numbers will now update some major numbers instantly
+- Hopefully fixed an issue where extreme crafting speeds could drain your carrots instead of stopping at the price of the tool
+- Different tools now have different crafting speeds
+- Footer links now open in a new tab
+
+Balance changes:
+- Tool crafting speeds:
+    Hoe:         0.01 -> 0.06
+    Sturdy Hoe:  0.01 -> 0.03
+    Scythe:      0.01 -> 0.01 (Unchanged)
+    Plough:      0.01 -> 0.009
+    Gilded Hoe:  0.01 -> 0.007
+    Tool 6:      0.01 -> 0.005
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.10
     9-7-2022
 // ----------------------------------------------------------- //

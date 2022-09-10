@@ -285,13 +285,21 @@ default_player.lifetime = new statsTracker(0,0,0,0,0,0,0,0,0,{crafted: [0, 0, 0,
 
 /** Tool price scaling */
 const toolScaling = [
-    // False means fall back to default (0.02)
-    false,
+    false, // False means fall back to default (0.02)
     0.024,
     0.021,
     0.019,
     0.018,
     0.03,
+];
+/** Tool craft speed */
+const tool_craft_speed = [
+    0.06,
+    0.03,
+    0.01,
+    0.009,
+    0.007,
+    0.005,
 ];
 
 // Character Defaults
@@ -726,12 +734,12 @@ const chars = [
     'jared',
 ];
 const defaultChar = {
-    'bill':    clone(Default_Boomer_Bill),
-    'belle':   clone(Default_Belle_Boomerette),
-    'greg':    clone(Default_Gregory),
-    'charles': clone(Default_Charles),
-    'carl':    clone(Default_Carl),
-    'jared':   clone(Default_Jared),
+    'bill':    Default_Boomer_Bill,
+    'belle':   Default_Belle_Boomerette,
+    'greg':    Default_Gregory,
+    'charles': Default_Charles,
+    'carl':    Default_Carl,
+    'jared':   Default_Jared,
 }
 
 /** Return number of available shop items
@@ -772,7 +780,6 @@ var Carl;
 var Jared;
 
 // Use savedata if available, otherwise use default
-// console.log('[Autosave] Player has savedata, importing...');
 player           = localStorage.getObject("player")  || clone(default_player);
 Boomer_Bill      = localStorage.getObject("Bill")    || clone(Default_Boomer_Bill);
 Belle_Boomerette = localStorage.getObject("Belle")   || clone(Default_Belle_Boomerette);
@@ -780,6 +787,8 @@ Gregory          = localStorage.getObject("Greg")    || clone(Default_Gregory);
 saved_Charles    = localStorage.getObject("Charles") || clone(Default_Charles);
 Carl             = localStorage.getObject("Carl")    || clone(Default_Carl);
 Jared            = localStorage.getObject("Jared")   || clone(Default_Jared);
+
+// Update Charles
 Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
 Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
 Charles.decreaseWages=new tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
@@ -859,6 +868,7 @@ function fillSettingsPage() {
     dom('full_numbers').checked = settings.full_numbers;
     dom('compact_achievements').checked = settings.compact_achievements;
     dom('achievements_grid').checked = settings.achievements_grid;
+    dom('show_nav').checked = settings.show_nav;
     elEnableMainProgress.checked = settings.enableMainProgress;
     dom('confetti_effects').checked = settings.confetti_effects;
     elEnableSounds.checked = settings.enableSounds;
@@ -974,6 +984,7 @@ const default_settings = {
         tools:    'default',
     },
     openpanel: null,            // string
+    show_nav: (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)), // boolean
     cosmetics_grid: true,       // boolean
     achievements_grid: false,   // boolean
     compact_achievements: false,// boolean
@@ -1087,6 +1098,7 @@ function earnCarrots(amount, type, useMousePos = false) {
     // Update page
     carrotCount();
     characterButtons();
+    updateAllTools();
 
     // Bonus
     if(type == 'bonus') popupHandler(useMousePos, DisplayRounded(amount, 1), 'falling');
@@ -1182,14 +1194,11 @@ function carrotClick(event, useMousePos=true, source=0) {
     // Update page
     carrotCount();
     popupHandler(useMousePos, DisplayRounded(Math.floor(player.cpc,2), 1, 10000, unitsShort));
-    mouseConfetti([1, 2], ccCarrot);
-
+    mouseConfetti([0, 2], ccCarrot, 200, 5);
     clickSpeedHandler(true); // Click speed
     fallingCarrot(); // Falling carrot chance
 
-    // Sound effect
-    if(!settings.enableSounds || !settings.enableCarrotSounds) return;
-    randomSound('crunch', 95);
+    if(settings.enableCarrotSounds) randomSound('crunch', 95); // Sound effect
 }
 
 // Falling carrots
@@ -1199,27 +1208,19 @@ var fallingConsecutive = 0;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
 function fallingCarrot() {
-    // Roll
-    let roll = Math.ceil((Math.random() * 100));
+    let roll = Math.ceil((Math.random() * 100)); // Roll out of 100
     let rollchance = boostEffects['fc_chance']; // 1% chance
+    if(roll > rollchance) return; // No FC
 
-    if(roll <= rollchance || fallingCarrotPromiser >= 100) fallingCarrotPromiser = 0; 
-    else return fallingCarrotPromiser++;
-    
-    // Create element
-    var element = document.createElement("img");
-    
-    // 6% chance the drop is money instead
-    let type = Math.ceil(Math.random() * 100) <= (6 / rollchance) ? 'cash' : 'carrot';
-
-    element.src = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png';
+    var element = document.createElement("img"); // Create element
+    let type = Math.ceil(Math.random() * 100) <= (6 / rollchance) ? 'cash' : 'carrot'; // 6% chance the drop is money instead
+    element.setAttribute('src', type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png');
     element.classList.add('falling_carrot');
-    if(Math.floor(Math.random() * 2) == 0) { element.classList.add('mirror'); }
+    if(Math.round(Math.random())) element.classList.add('mirror');
     element.id = fallingID;
     fallingID++;
 
     let amount;
-
     if(type == 'carrot') {
         // Carrot reward
         // Between 500% and 2000% of player's CPC
@@ -1234,25 +1235,22 @@ function fallingCarrot() {
         // After 1q lifetime: 12-24
         let max = 5; // maximum, minus the minimum
         let min = 5; // minimum, added after
-        if(player.lifetime.carrots >= 1000000000)       { max =  8; }
-        if(player.lifetime.carrots >= 1000000000000)    { min =  8; }
-        if(player.lifetime.carrots >= 1000000000000000) { min = 12; max = 12; }
+        if(player.lifetime.carrots >= 1000000000000000)   { min = 12; max = 12; }
+        else if(player.lifetime.carrots >= 1000000000000) { min =  8; }
+        else if(player.lifetime.carrots >= 1000000000)    { max =  8; }
         amount = Math.ceil((Math.random() * max)) + min;
     }
 
     // Set onclick function
-    element.onclick = () => { catchCarrot(element.id, type, amount); };
-
-    // Positioning
-    let randomX = Math.floor((Math.random() * 324));
+    let catchfunc = () => { catchCarrot(element.id, type, amount); };
+    element.addEventListener('mouseup', catchfunc);
+    element.addEventListener('touchend', catchfunc);
+    let randomX = Math.floor((Math.random() * 324)); // Positioning
     element.style.left = randomX + "px";
 
     // To page
     fallingCarrotsArea.append(element);
-    element.classList.add('bright_200');
-    setTimeout(() => {
-        if(dom(element.id) != null) dom(element.id).remove();
-    }, 2600);
+    setTimeout(() => { if(dom(element.id) != null) dom(element.id).remove(); }, 2600);
 
     /** Grant reward when falling carrot is caught */
     function catchCarrot(id, type, amount) {
@@ -1395,7 +1393,7 @@ function updateCharlesShop() {
     }
 
     // Update tome effects
-    eInnerText(tomeEffect.iwc, `+${Charles.improveWorkingConditions.value}%`);
+    eInnerText(tomeEffect.iwc, `+${Charles.improveWorkingConditions.value * 10}%`);
     eInnerText(tomeEffect.bh,  `+${Charles.betterHoes.value}%`);
     eInnerText(tomeEffect.dww, `-${(decreaseWagesEffects()*100).toFixed(2)}%`);
 
@@ -1882,26 +1880,21 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
 
     // Run crafting loop
     craftingInterval = setInterval(frame, 100);
-    function frame() {
-        if(progress < price) craft(); // While crafting
-        else whenDone(); // Done crafting
-    }
-
+    function frame() { progress < price ? craft() : whenDone(); }
     function craft() {
-        let adjust = ((Jared.data.greg_speed.value / 100) || 0.01) * player.carrots;
-        progress += adjust;
+        let adjust = tool_craft_speed[type] * player.carrots * (Jared.data.greg_speed.value || 1);
+        progress += adjust <= player.carrots ? adjust : player.carrots;
         player.carrots -= adjust;
         Gregory.crafting = [type, amount, progress]; // Save crafting progress in case of page refresh
 
         // Update page
+        carrotCount();
         elGregProgress.style.width = `${Math.ceil(100*(progress/price))}%`;
-        if(settings.enableMainProgress == true) {
+        if(settings.enableMainProgress) {
             elMainProgressBar.style.opacity = '1';
             elMainProgressBar.style.width  = `${Math.ceil(100*(progress/price))}%`;
         }
-        // eInnerText(elClickSpeed, `${DisplayRounded(p)}/${DisplayRounded(price)}`);
     }
-
     function whenDone() {
         clearInterval(craftingInterval);
         player.carrots+=progress-price;
@@ -1926,10 +1919,8 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
 }
 /** Updates crafting bar progress */
 function updateCraftingBar(){
-    // Greg progress
-    elGregProgress.style.width = "0%";
-    // Main progress
-    if(settings.enableMainProgress == true) elMainProgressBar.style.width = "0%";
+    elGregProgress.style.width = "0%"; // Greg progress
+    if(settings.enableMainProgress) elMainProgressBar.style.width = "0%"; // Main progress
     elMainProgressContainer.classList.remove('status_tidbit_in');
     dom('greg_crafting_info').classList.add('inactive');
     dom('greg_crafting_info').title = 'Idle';
@@ -1983,18 +1974,18 @@ function updateAllTools() {
 
     /** Updates tool affordability highlighting */
     function updateTool(character, type) {
-        let charString = character.nickname;
-        let count = dom(`${charString}_tool_${type}_number`);
-        let img = dom(`${charString}_tool_${type}`);
+        let nick = character.nickname;
+        let count = dom(`${nick}_tool_${type}_number`);
+        let img = dom(`${nick}_tool_${type}`);
 
         // Bill & Belle
-        if(charString == 'bill' || charString == 'belle') {
+        if(nick == 'bill' || nick == 'belle') {
             let glowState = (Gregory.Hoes[type] >= 1 && character.Hoes[type] != Gregory.lvl+Jared.data.tool_slots.value);
             style(img, 'glowing', glowState);
             style(img, 'blackedout', !glowState);
         }
         // Greg
-        else if(charString == 'greg') {
+        else if(nick == 'greg') {
             // Can afford and is unlocked
             if(gregLevelTest(type) && toolCost(type, multibuy[mbsel]) * ((Jared.data.greg_min_start.value / 100) || 1) <= player.carrots) {
                 img.classList.remove('blackedout');

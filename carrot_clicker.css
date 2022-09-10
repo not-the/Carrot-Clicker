@@ -128,6 +128,13 @@ img {
 .transition_none { transition: none !important; }
 .pointer {cursor: pointer;}
 
+.anchor_offset {
+    display: block;
+    position: relative;
+    top: -96px;
+    visibility: hidden;
+}
+
 /* Hide/unhide */
 .hidden { visibility: hidden !important; }
 .visible { visibility: visible !important; }
@@ -303,11 +310,11 @@ summary:hover { background-color: var(--border-color); }
 #bonusVisualArea,
 #mouse_confetti {
     position: absolute;
-    height: 100vh; width: 100%;
+    min-height: 100vh; width: 100%;
     top: 0; right: 0; left: 0;
     z-index: 300 !important;
     pointer-events: none !important;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 .small_confetti {
     background-color: var(--text);
@@ -787,6 +794,46 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
     -webkit-user-drag: none;
 }
 
+/* Game Nav */
+body.hide_nav #game_nav {
+    display: none;
+}
+#game_nav {
+    /* width: 100%; */
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+
+    background-color: var(--bg-lighter);
+    border: 1px solid var(--border-color);
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+
+    text-align: center;
+    justify-content: center;
+}
+#game_nav > a { text-decoration: none; }
+#game_nav > a > figure {
+    min-width: 70px !important;
+    padding: 0 4px 4px;
+    margin: 0;
+    opacity: 0.7;
+    cursor: pointer;
+}
+#game_nav > a > figure:hover { opacity: 1; }
+#game_nav > a:not(a:last-of-type) > figure { border-right: 1px solid var(--border-color); }
+#game_nav > a > figure > img {
+    box-sizing: unset;
+    width: 24px;
+    height: 24px;
+    padding: 8px 12px 0;
+}
+#game_nav > a > figure > figcaption { margin-bottom: 4px; margin-top: -2px; color: var(--text); font-size: 10pt; }
+
+
 /* Hover info */
 .question_mark {
     color: var(--gray);
@@ -969,7 +1016,7 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
 }
 
 /* Left section */
-#left-section {
+#game_section {
     max-width: 388px;
     /* width: 420px; */
     /* margin-left: auto; */
@@ -1255,10 +1302,10 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
 }
 .characterbox:hover .char_mini_button,
 .characterbox:focus-within .char_mini_button,
-#left-section:hover .char_mini_button {
+#game_section:hover .char_mini_button {
     opacity: 1;
 }
-/* #left-section .char_mini_button {
+/* #game_section .char_mini_button {
     top: unset;
     bottom: 24px;
     right: 16px;
@@ -1300,12 +1347,13 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
     height: 32px;
     width: auto;
 }
-.toolicon:hover,
+.toolicon:hover:not(.no_craft),
 .levelupimg:hover {
     transform: scale(1.2, 1.2);
     filter: brightness(150%);
 }
-.toolicon:active, .levelupimg:active {
+.toolicon:active:not(.no_craft),
+.levelupimg:active {
     transform: scale(0.9, 0.9);
     filter: brightness(70%);
 }
@@ -2167,7 +2215,7 @@ input.discreet:focus,
 #prestige_menu {
     width: 100%;
     max-width: 480px;
-    height: fit-content;
+    height: auto;
     max-height: 95%;
     overflow-y: auto;
 }
@@ -2395,7 +2443,7 @@ footer .user_card { text-decoration: none !important; }
 
 /* 1300px - 2 character columns*/
 @media only screen and (min-width: 1200px) {
-    #right-section { display: flex; }
+    #character_section { display: flex; }
 }
 
 /* 848px - mobile layout*/
@@ -2441,7 +2489,7 @@ footer .user_card { text-decoration: none !important; }
         align-items: center;
         max-width: 100%;
     }
-    #left-section {
+    #game_section {
         /* width: 100%; */
         max-width: 100%;
         margin: 0 auto;
@@ -2454,7 +2502,7 @@ footer .user_card { text-decoration: none !important; }
     }
 
     /* Right */
-    #right-section { border: none; }
+    #character_section { border: none; }
 
     /* Tripane */
     #tripane { margin-bottom: 80px; border-radius: 16px; }
@@ -2471,8 +2519,6 @@ footer .user_card { text-decoration: none !important; }
 @media only screen and (max-width: 460px) {
     /* Overlay */
     #overlay { height: 100vh; }
-    #prestige_menu {  max-height: 360px; }
-    #prestige_menu .half_width { width: 100% !important; }
 
     /* Tripane */
     #tripane .tab .button_icon { visibility: hidden; position: absolute; }
@@ -2484,7 +2530,7 @@ footer .user_card { text-decoration: none !important; }
 
 /* 400px - very small*/
 @media only screen and (max-width: 400px) {
-    #right-section { max-width: 100%; }
+    #character_section { max-width: 100%; }
     .status_progress_bar { border-radius: 0; border-right: none; border-left: none; }
     #tripane .button_icon { visibility: hidden; position: absolute; }
 }

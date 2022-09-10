@@ -38,7 +38,7 @@ body.theme_light .invert_alt,
 body.theme_light .button_icon:not(.invert),
 body.theme_light .dropdown_img:not(.invert) { filter: invert(); }
 /* Basic Info */
-body.theme_light .Basic_Info { box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); }
+body.theme_light .basic_info { box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); }
 body.theme_light .main_button_img { filter: invert(); }
 body.theme_light .characterbox:hover { box-shadow: 0px 6px 12px rgba(145, 98, 98, 0.4); }
 body.theme_light .characterbox .bottom { box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2) inset; }
@@ -161,7 +161,7 @@ body.theme_classic {
     border-radius: 0;
     box-shadow: none;
 }
-.theme_classic .Basic_Info {
+.theme_classic .basic_info {
     background-color: #4e3f34;
     background-image: url(./assets/Dirt-Background.jpg);
     padding-left: 20px;
@@ -169,12 +169,38 @@ body.theme_classic {
 .theme_classic #main_icon { visibility: hidden; }
 .theme_classic .hover_menu { background-color: #4e3f34; }
 
-.theme_classic #left-section {
+.theme_classic #game_section {
     box-shadow: none;
     background-color: transparent;
 }
 .theme_classic #main_carrot { filter: none; }
 .theme_classic #main_carrot:active { filter: none; }
+.theme_classic .mini_stats > .row {
+    display: unset;
+}
+.theme_classic .mini_stats > .row > .mini_item {
+    min-height: unset;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    text-align: center;
+}
+.theme_classic .mini_stats > .row > .mini_item > img,
+.theme_classic .mini_stats .color_cash { display: none; }
+.theme_classic .mini_stats > .row > .mini_item > .mini_number {
+    float: none;
+    color: var(--secondary-text)
+}
+.theme_classic .mini_stats > .row > .mini_item > .mini_number::before { content: ": "; }
+.theme_classic .mini_stats > .row > .mini_item#list_cpc > .mini_name { display: none; }
+.theme_classic .mini_stats > .row > .mini_item#list_cpc::before { content: "Carrots per click"; }
+.theme_classic .mini_stats > .row > .mini_item#list_cps > .mini_name { display: none; }
+.theme_classic .mini_stats > .row > .mini_item#list_cps::before { content: "Carrots per second"; }
+.theme_classic .mini_stats > .row > .mini_item#list_cpc::before,
+.theme_classic .mini_stats > .row > .mini_item#list_cps::before {
+    margin-right: -3px;
+}
 
 .theme_classic .box { border-color: rgb(29, 248, 0); }
 .theme_classic .character_name {
@@ -231,7 +257,7 @@ body.theme_classic {
 .theme_original,
 .theme_original button,
 .theme_original #backdrop,
-.theme_original .Basic_Info,
+.theme_original .basic_info,
 .theme_original .hover_menu,
 .theme_original .shop_bottom {
     background-color: #291c11 !important;
@@ -346,7 +372,24 @@ body.theme_classic {
 
 
 
-
+/* Grey theme experiment */
+/* body.theme_grey img {
+    transition-property: filter, padding, border-radius;
+    transition-duration: 0.25s;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+body.theme_grey .characterbox:not(.characterbox:hover) .levelupimg,
+body.theme_grey .characterbox:not(.characterbox:hover) .segment.filled {
+    filter: saturate(0) opacity(25%);
+}
+body.theme_grey .characterbox:not(.characterbox:hover)  .characterimg {
+    filter: saturate(0) opacity(50%);
+}
+body.theme_grey .characterbox:not(.characterbox:hover) .shop_item img {
+    filter: contrast(0) opacity(20%);
+    padding: 6px;
+    border-radius: 8px;
+} */
 
 
 
@@ -357,10 +400,10 @@ body.theme_classic {
 .theme_red {
     background-color: rgb(112, 37, 37);
 }
-.theme_red .Basic_Info {
+.theme_red .basic_info {
     background-color: #913535;
 }
-.theme_red #left-section {
+.theme_red #game_section {
     background-color: rgb(63, 20, 20);
 }
 .theme_red .box {
@@ -393,10 +436,10 @@ body.theme_classic {
 .theme_green {
     background-color: rgb(37, 49, 34);
 }
-.theme_green .Basic_Info {
+.theme_green .basic_info {
     background-color: rgb(76, 105, 73);
 }
-.theme_green #left-section {
+.theme_green #game_section {
     background-color: rgb(25, 34, 22);
 }
 .theme_green .box {
@@ -429,10 +472,10 @@ body.theme_classic {
 .theme_blue {
     background-color: rgb(40, 50, 70);
 }
-.theme_blue .Basic_Info {
+.theme_blue .basic_info {
     background-color: rgb(69, 87, 121);
 }
-.theme_blue #left-section {
+.theme_blue #game_section {
     background-color: rgb(24, 30, 48);
 }
 .theme_blue .box {
@@ -458,7 +501,7 @@ body.theme_classic {
 /* .theme_bw * {
     filter: saturate(0);
 } */
-.theme_bw #left-section,
+.theme_bw #game_section,
 .theme_bw .status_bar,
 .theme_bw .box,
 .theme_bw #tripane,
@@ -478,7 +521,7 @@ body.theme_classic {
     filter: saturate(0%);
     /* image-rendering: unset; */
 /* }
-.theme_bw .Basic_Info {
+.theme_bw .basic_info {
     background-color: rgb(71, 71, 71);
 }
 .theme_bw .box {
@@ -661,18 +704,18 @@ body.theme_classic {
     border-top: 2px dashed var(--gray);
 }
 .theme_terminal .popup_box,
-.theme_terminal .Basic_Info,
+.theme_terminal .basic_info,
 .theme_terminal .box,
 .theme_terminal #tripane #tab_bar {
     border-bottom: 2px dashed var(--gray);
 }
 /* Bottom padding */
-.theme_terminal .Basic_Info,
+.theme_terminal .basic_info,
 .theme_terminal .box {
     padding-bottom: 12px;
 }
 
-.theme_terminal .Basic_Info { padding-top: 10px; }
+.theme_terminal .basic_info { padding-top: 10px; }
 .theme_terminal #main_carrot { padding: 0; }
 .theme_terminal #main_carrot:active {
     transform: translateY(4px);
@@ -816,14 +859,14 @@ body.theme_classic {
 }
 
 /* Gamespace */
-.theme_blockgame .Basic_Info {
+.theme_blockgame .basic_info {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
         url(./assets/theme/blockgame/grass_block_side.png);
     background-size: 64px;
     background-position: top;
     image-rendering: pixelated;
 }
-.theme_blockgame #left-section {
+.theme_blockgame #game_section {
     box-shadow: none;
     /* background-color: unset; */
     background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
@@ -946,12 +989,12 @@ body.theme_classic {
                 url('./assets/theme/camo/camo.png');
     background-size: 1200px;
 }
-.theme_camo .Basic_Info,
+.theme_camo .basic_info,
 .theme_camo .hover_menu {
     background-color: #464b31;
     border-color: var(--gray);
 }
-.theme_camo #left-section {
+.theme_camo #game_section {
     background-color: rgba(0, 0, 0, 0.55);
     /* backdrop-filter: blur(7px); */
 }
@@ -998,11 +1041,11 @@ body.theme_classic {
 }
 
 /* Status bar */
-.theme_chatapp .Basic_Info {
+.theme_chatapp .basic_info {
     background-color: #202225;
     border-color: transparent;
 }
-.theme_chatapp .Basic_Info,
+.theme_chatapp .basic_info,
 .theme_chatapp #info_dropdown {
     border-color: none;
 }
@@ -1019,7 +1062,7 @@ body.theme_classic {
 }
 
 /* Left */
-.theme_chatapp #left-section {
+.theme_chatapp #game_section {
     /* background-color: #2f3136; */
     border-radius: 10px !important;
 }
@@ -1045,7 +1088,7 @@ body.theme_classic {
 .theme_chatapp input[type="text"],
 .theme_chatapp input[type="number"],
 .theme_chatapp select,
-.theme_chatapp #left-section,
+.theme_chatapp #game_section,
 .theme_chatapp .theme_item,
 .theme_chatapp .brown_darker_color,
 .theme_chatapp #greg_crafting_info {

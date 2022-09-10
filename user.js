@@ -32,8 +32,15 @@ function setting(option, notif=true) {
     saveSettings();
     if(option == 'compact_achievements') achieveCompactMode(state);
     else if(option == 'achievements_grid') achieveGridMode(state);
+    else if(option == 'full_numbers') {
+        carrotCount();
+        updateCPC();
+        characterPrices();
+    } else if(option == 'show_nav') {
+        style(elBody, 'hide_nav', !state);
+    }
     // Toast
-    if(notif != true) return;
+    if(!notif) return;
     toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 }
@@ -382,13 +389,12 @@ const keyCodesCode = {
         function randomConfetti() {
             let hex = '0123456789abcdef';
             // mouseConfetti([64,64], ['orange', 'teal', 'coral', 'goldenrod', 'whitesmoke'], 600);
-            function rhex() { return hex[r(16) + 1]; }
             let c = '#';
             let cs = [];
             // Loop across number of colors
             for(i = 0; i < 5; i++) {
                 // Loop across individual characters
-                for(ii = 0; ii < 6; ii++) { c += rhex(); }
+                for(ii = 0; ii < 6; ii++) { c += hex[r(16) + 1]; }
                 cs.push(c);
                 c = '#';
             }
@@ -406,7 +412,7 @@ var easterEgg = 0;
 function eggUp() {
     easterEgg += easterEgg < 101 ? 1 : 0;
     mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
-    if(easterEgg == 100) { mouseConfetti([24,24], confettiColors, 300, 4, true); }
+    if(easterEgg == 100) mouseConfetti([24,24], confettiColors, 300, 4, true);
 }
 var equipWaiting = -1;
 var equipToastID = false;
@@ -1234,6 +1240,8 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         try { createTool(...Gregory.crafting); }
         catch (error) { console.error(error); }
     }
+    // Disable bottom nav
+    if(!settings.show_nav) elBody.classList.add('hide_nav');
     
     // OFFLINE EARNINGS
     // Doesn't work, Date.now() is imprecise

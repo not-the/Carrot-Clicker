@@ -7,7 +7,7 @@
 
     <!-- Main -->
     <title id="page_title">Carrot Clicker</title>
-    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="./assets/stats/carrot.png"/>
     <meta name="theme-color" content="#312e2e" id="theme_color">
 
     <!-- CSS -->
@@ -143,7 +143,8 @@
         <!-- Carrot / Characters -->
         <div id="container" class="flex">
             <!-- Left Section -->
-            <div id="left-section">
+            <div id="home" class="anchor_offset"></div>
+            <section id="game_section">
 
                 <!-- Falling Carrots -->
                 <div id="fallingCarrotsArea"></div>
@@ -216,14 +217,13 @@
                 <p id="prestige-section" class="secondary_text center" style="padding-top: 6px;">
                     Prestige potential: <span id="main_prestige_potential">-</span>
                 </p>
-            </div>
-
-
+            </section>
 
             <!-- Right Section -->
-            <div id="right-section" class="character_column">
+            <div id="characters" class="anchor_offset"></div>
+            <section id="character_section">
                 
-                <!-- Character column 1 -->
+                <!-- Column 1 -->
                 <div class="character_column">
 
                     <!-- Powers -->
@@ -257,7 +257,8 @@
                             <h2>Bill</h2>
                             <p class="secondary_text">- Farmer -</p>
                             <hr>
-                            Upgrading Bill will increase your carrots per click (CPC) by one.
+                            <p>Upgrading Bill will increase your carrots per click (CPC) by one.</p>
+                            
                         </div>
                         <img src="./assets/icons/palette.svg" alt="Customize" title="Cosmetics" class="button_icon char_mini_button char_custom_button" onclick="cosmeticSwitcher('bill')" tabindex="0" role="button">
                         <img src="./assets/icons/info.svg" alt="Info" title="Info" class="button_icon char_mini_button char_info_button" onclick="characterInfo('bill')" tabindex="0" role="button">
@@ -651,13 +652,35 @@
                 </div>
                 <!-- #endregion -->
 
-            </div>
-            <!-- End Right section -->
+            </section>
         </div>
 
 
+        <!-- Game navigation -->
+        <nav id="game_nav" class="flex">
+            <a href="#home">
+                <figure>
+                    <img src="./assets/icons/pixel_carrot_white.png" alt="Play" class="invert_alt">
+                    <figcaption>Home</figcaption>
+                </figure>
+            </a>
+            <a href="#characters">
+                <figure>
+                    <img src="./assets/icons/silhouette.png" alt="Characters" class="invert_alt">
+                    <figcaption>Characters</figcaption>
+                </figure>
+            </a>
+            <a href="#settings">
+                <figure>
+                    <img src="./assets/icons/plus.png" alt="More" class="invert_alt">
+                    <figcaption>More</figcaption>
+                </figure>
+            </a>
+        </nav>
+
+
         <!-- Tripane -->
-        <div id="settings"></div>
+        <div id="settings" class="anchor_offset"></div>
         <div id="tripane">
             <div id="tab_bar" class="flex">
                 <button class="activetab tab secondary_text" id="achievements-panel-button" onclick="panelChange(`achievements-panel`)"><img src="./assets/icons/medal.png" alt="" class="button_icon"> Achievements</button><button class="tab secondary_text" id="stats-panel-button" onclick="panelChange(`stats-panel`)"><img src="./assets/icons/info.png" alt="" class="button_icon"> Statistics</button><button class="tab secondary_text" id="settings-panel-button" onclick="panelChange(`settings-panel`)"><img src="./assets/icons/settings.svg" alt="" class="button_icon invert"> Settings</button>
@@ -849,6 +872,10 @@
                     <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')">
                     Full numbers
                 </label><br>
+                <label for="show_nav">
+                    <input type="checkbox" id="show_nav" onclick="setting('show_nav')">
+                    Navigation bar
+                </label><br>
                 <label for="enable_main_progress">
                     <input type="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
                     Always-on-top progress bar
@@ -916,13 +943,13 @@
                     <div class="footer_column">
                         <h3>Created by</h3>
                         <div class="flex" style="align-items: center; justify-content: center;">
-                            <a href="https://www.notkal.com/" class="user_card">
+                            <a href="https://www.notkal.com/" class="user_card" target="_blank" rel="noopener noreferrer">
                                 <div class="flex" style="margin-right: 8px;">
                                     <img src="https://avatars.githubusercontent.com/u/87151784?v=4" alt="Avatar">
                                     <p>not-the</p>
                                 </div>
                             </a>
-                            <a href="https://github.com/JJCVIP" class="user_card">
+                            <a href="https://github.com/JJCVIP" class="user_card" target="_blank" rel="noopener noreferrer">
                                 <div class="flex">
                                     <img src="https://avatars.githubusercontent.com/u/88807892?v=4" alt="Avatar">
                                     <p>JJCVIP</p>
@@ -935,13 +962,13 @@
                     <!-- Links -->
                     <nav class="footer_column">
                         <h3>More</h3>
-                        <a href="https://www.notkal.com/posts/carrot-clicker-changelog/" class="user_card footer_card">
+                        <a href="https://www.notkal.com/posts/carrot-clicker-changelog/" class="user_card footer_card" target="_blank" rel="noopener noreferrer">
                             <div class="flex">
                                 <img src="./assets/icons/refresh.svg" alt="" class="invert_alt">
                                 <p>Changelog</p>
                             </div>
                         </a>
-                        <a href="https://github.com/not-the/Carrot-Clicker" class="user_card footer_card">
+                        <a href="https://github.com/not-the/Carrot-Clicker" class="user_card footer_card" target="_blank" rel="noopener noreferrer">
                             <div class="flex">
                                 <img src="./assets/icons/github.png" alt="Github logo" class="invert_alt">
                                 <p>Github</p>
