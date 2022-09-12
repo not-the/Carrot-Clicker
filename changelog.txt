@@ -103,8 +103,6 @@ Balance changes:
     8-31-2022
 // ----------------------------------------------------------- //
 
-With images: https://www.notkal.com/posts/carrot-clicker-changelog/#dev-beta-1_16_5
-
 - Overhauled the section underneath the main carrot
 - All sliders in settings now have number inputs alongside them
 - Coins are now represented by the ⚬ symbol everywhere
