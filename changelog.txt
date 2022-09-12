@@ -1,4 +1,16 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.12
+    9-11-2022
+// ----------------------------------------------------------- //
+
+- Settings menu overhaul
+- When a dialog opens the accept button will automatically be focused
+- Keyboard focused buttons will now look the same as hovered buttons
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.11
     9-9-2022
 // ----------------------------------------------------------- //

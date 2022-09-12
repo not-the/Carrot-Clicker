@@ -81,7 +81,7 @@ const tomeCount = {
 const elFunTipsSlider = dom("FunTipsSlider");
 const elFunTipsSlider_label = dom("FunTipsSliderLabel");
 
-const elDisableKeybinds = dom('disableKeybinds');
+const elEnableKeybinds = dom('enable_keybinds');
 const elEnableSounds = dom('enable_sounds');
 const elEnableMusic = dom('enable_music');
 const elEnableCarrotSounds = dom('enable_carrot_sounds');
@@ -89,6 +89,7 @@ const elEnableCarrotSounds = dom('enable_carrot_sounds');
 const elVolumeMaster = dom('volume_master');
 const elVolumeMaster_label = dom('volume_master_percent');
 const volumeMasterDropdown = dom('volume_master_dropdown');
+const vmImage = dom('volume_master_img');
 const vmdImage = dom('volume_master_dropdown_img');
 const elEnableMainProgress = dom('enable_main_progress');
 //#endregion
@@ -849,7 +850,7 @@ function volumeSliderHandler(event=false) {
     volumeMasterDropdown.value = v;
     elVolumeMaster.value = v;
     elVolumeMaster_label.value = v;
-    vmdImage.src = v != 0 && vmdImage.src != './assets/icons/volume.svg' ? './assets/icons/volume.svg' : './assets/icons/mute.svg';
+    vmImage.src = vmdImage.src = v != 0 && vmdImage.src != './assets/icons/volume.svg' ? './assets/icons/volume.svg' : './assets/icons/mute.svg';
     volume = v / 100;
     if(music !== undefined) music.volume = volume;
     settings.master_volume = volume;
@@ -884,6 +885,7 @@ function fillSettingsPage() {
     // Update autosave variable
     if(settings.autosave_interval != default_settings.autosave_interval) {
         dom('autosave_interval').value = settings.autosave_interval;
+        dom('autosave_interval_label').value = settings.autosave_interval;
         clearInterval(autosave);
         autosave = setInterval(() => {
             saveGame();
@@ -893,11 +895,12 @@ function fillSettingsPage() {
     // Notification time
     if(settings.notificationLength != default_settings.notificationLength) {
         dom('notificationLength').value = settings.notificationLength;
+        dom('notificationLength_label').value = settings.notificationLength;
     }
 
     // Disable keybinds
-    if(settings.disableKeybinds != default_settings.disableKeybinds) {
-        elDisableKeybinds.checked = settings.disableKeybinds;
+    if(settings.enable_keybinds != default_settings.enable_keybinds) {
+        elEnableKeybinds.checked = settings.enable_keybinds;
     }
 
     optionSoundsDisable(settings.enableSounds);
@@ -955,7 +958,7 @@ keybinds_default['keys'] = Object.keys(keybinds_default);
 // Default settings object
 const default_settings = {
     notificationLength: 6,      // number - Time in seconds
-    disableKeybinds: false,     // boolean
+    enable_keybinds: true,     // boolean
     autosave_interval: 5,
 
     tutorial_messages: true,    // boolean

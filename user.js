@@ -47,67 +47,27 @@ function setting(option, notif=true) {
 
 
 // Notification length
-notificationLength.addEventListener('input', () => {saveOption('notificationLength')} );
-function saveOption() {
-    let value = parseInt(notificationLength.value);
-    if(value >= 2 && value <= 15) {
-        console.log(`[Settings] Notification length set to: ${value}`);
-        settings.notificationLength = value;
-        saveSettings();
-        toast("Notification time set", `Notifications will disappear after ${value} seconds`,
-        '', false, true);
-    } else {
-        toast("Invalid Number", "Must be between 2 and 15 seconds", "red", false, true);
-    }
-}
-// Reset notification time to default
-function resetOption(option = 'notificationLength') {
-    let value = default_settings[option];
-    settings[option] = value;
-    notificationLength.value = value;
-
+const elNotificationLength = dom('notificationLength');
+const elNotificationLength_label = dom('notificationLength_label');
+elNotificationLength.addEventListener('change', optionNotificationLength);
+elNotificationLength_label.addEventListener('change', optionNotificationLength);
+function optionNotificationLength(event) {
+    let value = parseInt(event.srcElement.value);
+    elNotificationLength.value = elNotificationLength_label.value = value;
+    settings.notificationLength = value;
     saveSettings();
-    toast("Notification time reset", `Notifications will disappear after ${value} seconds`,
-    '', false, true);
 }
 
 // Autosave interval
 // Intended to be universal but needs unique code so just leaving it as is
-dom('autosave_interval').addEventListener('input', () => { settingText('autosave_interval') });
-function settingText(option) {
-    let value = dom(option).value;
-
-    if(value == '') return;
-
-    if(value >= 1 && value <= 60) {
-        console.log(`[Settings] Autosave interval set to: ${value}`);
-
-        settings.autosave_interval = value;
-        saveSettings();
-
-        toast("Autosave interval set", `Game will save every ${value} seconds`,
-        '', false, true);
-
-        // Update autosave variable
-        clearInterval(autosave);
-        autosave = setInterval(() => {
-            saveGame();
-        }, value * 1000);
-    } else {
-        toast("Invalid Number", "Must be between 1 and 60 seconds", "red", false, true);
-    }
-}
-function resetAutosave() {
-    let value = default_settings.autosave_interval;
-
-    console.log(`[Settings] Autosave interval reset to: ${value}`);
+dom('autosave_interval').addEventListener('change', settingAutosave);
+dom('autosave_interval_label').addEventListener('change', settingAutosave);
+function settingAutosave(event) {
+    let value = event.srcElement.value;
     dom('autosave_interval').value = value;
-
+    dom('autosave_interval_label').value = value;
     settings.autosave_interval = value;
     saveSettings();
-
-    toast("Autosave interval reset", `Game will save every ${value} seconds`,
-    '', false, true);
 
     // Update autosave variable
     clearInterval(autosave);
@@ -185,7 +145,7 @@ document.addEventListener('keydown', event => {
     let key = event.key;
     if(key == " ") event.preventDefault();
     key = interpretKey(key);
-    if(settings.disableKeybinds || menuOpen()) return;
+    if(!settings.enable_keybinds || menuOpen()) return;
     if(key == settings.keybinds['key_carrot'] && !keyCarrotFiring) {
         keyCarrotFiring = true;
         holdStart(false, 1);
@@ -195,13 +155,7 @@ document.addEventListener('keydown', event => {
 
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
-    // Browser keyboard navigation enter acts as click
-    if(event.key == "Enter") {
-        let tag = document.activeElement.tagName;
-        if(tag != 'SUMMARY') document.activeElement.click();
-        return;
-    }
-    
+    if(event.key == "Enter") return document.activeElement.tagName != 'SUMMARY' ? document.activeElement.click() : undefined; // Browser keyboard navigation enter acts as click
     if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
     else if(menuOpen() && event.key == "Escape") closeDialog(); // Close menu
     if(menuState.prestige && event.key == "Enter") openDialog(...dialog.prestige_confirm);
@@ -217,9 +171,7 @@ document.addEventListener('keyup', event => {
     // Keyboard combos //
     //#region 
     keyCombo += key + ' ';
-    for(let ci = 0; ci < keyCodes.length; ci++) {
-        if(keyCombo == keyCodes[ci]) { keyComboHandler(ci); }
-    }
+    if(keyCodes.includes(keyCombo)) keyComboHandler(keyCodes.indexOf(keyCombo));
 
     /** Keyboard combo detector */
     function keyComboHandler(combo) {
@@ -228,26 +180,21 @@ document.addEventListener('keyup', event => {
         keyTrigger[combo] = true;
         keyCodesCode[combo](); // Reward
     }
-    //#endregion
 
     // Check if string is on track to be correct or not
-    for(i = 0; i < keyCombo.length; i++) {
-        if(keyCombo[i] != keyCodes[0][i]
-        && keyCombo[i] != keyCodes[1][i]
-        && keyCombo[i] != keyCodes[2][i]
-        && keyCombo[i] != keyCodes[3][i]
-        && keyCombo[i] != keyCodes[4][i]
-        && keyCombo[i] != keyCodes[5][i]
-        && keyCombo[i] != keyCodes[6][i]) {
-            keyCombo = '';
-            break;
+    for(combo of keyCombo) {
+        for(code of keyCodes) {
+            if(combo == code) {
+                keyCombo = '';
+                break;
+            }
         }
     }
     //#endregion
 
     // Stop if keybinds need to be ignored
     if(
-        settings.disableKeybinds == "true"
+        settings.enable_keybinds == false
         || menuState.dialog
         || document.activeElement.nodeName == 'TEXTAREA'
         || document.activeElement.nodeName == 'INPUT'
@@ -268,42 +215,34 @@ document.addEventListener('keyup', event => {
 
     //Level up
     else if(key == settings.keybinds['key_bill_lvlup']) {
-        // Waiting to equip hoe
-        if(equipWaiting != -1) {
+        if(equipWaiting != -1) { // Waiting to equip
             equipTool(Boomer_Bill, equipWaiting, multibuy[mbsel]);
             cancelToolEquip()
         }
-        // Level up
-        else levelUp(Boomer_Bill, multibuy[mbsel]);
+        else levelUp(Boomer_Bill, multibuy[mbsel]); // Level up
     }
     else if(key == settings.keybinds['key_belle_lvlup']) {
-        // Waiting to equip hoe
-        if(equipWaiting != -1) {
+        if(equipWaiting != -1) { // Waiting to equip
             equipTool(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
             cancelToolEquip();
         }
-        // Level up
-        else levelUp(Belle_Boomerette, multibuy[mbsel]);
+        else levelUp(Belle_Boomerette, multibuy[mbsel]); // Level up
     }
     else if(key == settings.keybinds['key_greg_lvlup']) {
-        // Waiting to equip hoe
-        if(equipWaiting != -1) {
+        if(equipWaiting != -1) { // Waiting to equip
             equipTool(Gregory, equipWaiting, multibuy[mbsel]);
             cancelToolEquip();
         }
-        // Level up
-        else levelUp(Gregory, multibuy[mbsel]);
+        else levelUp(Gregory, multibuy[mbsel]); // Level up
     }
 
     // Tools
     else {
         for(i = 0; i <= 5; i++) {
             // Craft
-            if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == false) {
-                createTool(i, multibuy[mbsel]);
-            }
+            if(key == settings.keybinds[`key_craft_${i}`] && !event.altKey) createTool(i, multibuy[mbsel]);
             // Equip
-            else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey == true) {
+            else if(key == settings.keybinds[`key_craft_${i}`] && !event.altKey) {
                 if(Gregory.Hoes[i] < 1) return;
                 equipToastID = toast('Equipping Tool', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
                 equipWaiting = i;

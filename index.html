@@ -91,9 +91,7 @@
                         <div class="menu_item link_styling secondary_text">
                             <label for="volume_master_dropdown">
                                 <img src="./assets/icons/volume.svg" alt="" class="dropdown_img invert" id="volume_master_dropdown_img">
-                                <div class="slidecontainer">
-                                    <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
-                                </div>
+                                <input type="range" min="0" max="100" value="100" class="slider" id="volume_master_dropdown">
                             </label>
                         </div>
 
@@ -810,121 +808,186 @@
                 <!-- Developer -->
                 <div id="devp"></div>
 
-                <!-- Themes -->
-                <label for="theme_dropdown">
-                    <b>Customization</b><br>
-                    <button id="theme_button" onclick="themeSwitcher()">
-                        <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
-                        Themes
-                    </button>
-                    <button id="cosmetic_button" onclick="cosmeticSwitcher()" class="cosmetic_related">
-                        <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
-                        <img src="./assets/icons/cosmetic.svg" alt="" class="button_icon invert">
-                        Cosmetics
-                    </button><br><br>
-                </label>
+                <!-- Options -->
+                <div id="options_container">
+                    <!-- Customization -->
+                    <section>
+                        <h6>Customization</h6>
+                        <label for="theme_button">
+                            <div class="option" id="theme_button" onclick="themeSwitcher()" role="button" tabindex="0">
+                                <img src="./assets/icons/palette.svg" alt="" class="button_icon invert">
+                                Themes
+                                <img src="./assets/icons/right_arrow.svg" alt="" class="button_icon invert ra">
+                            </div>
+                        </label>
+                        <label for="cosmetic_button">
+                            <div class="option cosmetic_related" id="cosmetic_button" onclick="cosmeticSwitcher()" role="button" tabindex="0">
+                                <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
+                                <img src="./assets/icons/cosmetic.svg" alt="" class="button_icon invert">
+                                Cosmetics
+                                <img src="./assets/icons/right_arrow.svg" alt="" class="button_icon invert ra">
+                            </div>
+                        </label>
+                        <label for="cosmetic_auto_equip">
+                            <div class="option">
+                                <img src="./assets/icons/cosmetic_gear.png" alt="" class="button_icon invert">
+                                Auto-equip new cosmetics
+                                <input type="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                            </div>
+                        </label>
+                        <label for="FunTipPercentage">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Percentage of fun tips<br/>
+                                <div class="flex">
+                                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
+                                    <input type="number" name="FunTipsSliderLabel" id="FunTipsSliderLabel" class="discreet" min="0" max="100">
+                                </div>
+                            </div>
+                        </label>
+                    </section>
 
-                <!-- Gameplay -->
-                <b>Gameplay</b><br>
-                <label for="tutorial_messages">
-                    <input type="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
-                    Tutorial messages<br>
-                </label>
-                <label for="carl_shop_toasts">
-                    <input type="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
-                    Carl shop notifications<br>
-                </label>
-                <label for="cosmetic_auto_equip">
-                    <input type="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
-                    Auto-equip new cosmetics<br><br>
-                </label>
+                    <!-- Gameplay -->
+                    <section>
+                        <h6>Gameplay</h6>
+                        <label for="edit_keybinds">
+                            <div class="option" id="edit_keybinds" onclick="keybindsMenu()" role="button" tabindex="0">
+                                <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
+                                Keybinds
+                                <img src="./assets/icons/right_arrow.svg" alt="" class="button_icon invert ra">
+                            </div>
+                        </label>
+                        <label for="enable_keybinds">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Enable keybinds
+                                <input type="checkbox" id="enable_keybinds" onclick="setting('enable_keybinds')" checked>
+                            </div>
+                        </label>
 
-                <!-- Fun Tip Percentage-->
-                <div class="slidecontainer">
-                    <label for="FunTipPercentage"><b>Percentage of fun tips:</b><br>
-                        <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider"><input type="number" name="FunTipsSliderLabel" id="FunTipsSliderLabel" class="discreet" min="0" max="100">
-                    </label>
-                </div><br/>
+                        <label for="tutorial_messages">
+                            <div class="option">
+                                <img src="./assets/icons/info.svg" alt="" class="button_icon invert">
+                                Tutorial messages
+                                <input type="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
+                            </div>
+                        </label>
+                        <label for="carl_shop_toasts">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Carl shop notifications
+                                <input type="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
+                            </div>
+                        </label>
+                        <label for="autosave_interval">
+                            <div class="option">
+                                <img src="./assets/icons/floppy.svg" alt="" class="button_icon invert">
+                                Autosave Frequency
+                                <p class="secondary_text">Game will also save when closed in supported browsers</p>
+                                <div class="flex">
+                                    <input type="range" id="autosave_interval" min="1" max="60" value="5" class="slider">
+                                    <input type="number" id="autosave_interval_label" min="1" max="60" value="5" class="discreet"/>
+                                </div>
+                            </div>
+                        </label>
+                    </section>
 
-                <!-- Options item -->
-                <b>Keybinds</b><br>
-                <label for="disableKeybinds">
-                <input type="checkbox" id="disableKeybinds" onclick="setting('disableKeybinds')"">
-                    Disable keybinds
-                </label><br>
-                <button id="edit_keybinds" onclick="keybindsMenu()" class="vertical_align_middle">
-                    <img src="./assets/icons/keyboard.svg" alt="" class="button_icon bright_200">
-                    Edit Keybinds
-                </button><br/><br/>
+                    <!-- Interface -->
+                    <section>
+                        <h6>Interface</h6>
+                        <label for="show_nav">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Mobile nav bar
+                                <input type="checkbox" id="show_nav" onclick="setting('show_nav')">
+                            </div>
+                        </label>
+                        <label for="full_numbers">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Full numbers
+                                <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')">
+                            </div>
+                        </label>
+                        <label for="enable_main_progress">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Always-on-top progress bar
+                                <input type="checkbox" id="enable_main_progress" onclick="settingMainProgress()">
+                            </div>
+                        </label>
+                        <label for="confetti_effects">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Confetti effects
+                                <input type="checkbox" id="confetti_effects" onclick="setting('confetti_effects')">
+                            </div>
+                        </label>
+                        <label for="notificationLength">
+                            <div class="option">
+                                <img src="./assets/stats/clock.png" alt="" class="button_icon">
+                                Notification Length
+                                <p class="secondary_text">Time (in seconds) that notifications will stay on your screen</p>
+                                <div class="flex">
+                                    <input type="range" id="notificationLength" min="2" max="15" value="6" class="slider">
+                                    <input type="number" id="notificationLength_label" min="2" max="15" value="6" class="discreet"/>
+                                </div>
+                            </div>
+                        </label>
+                    </section>
 
-                <!-- Autosave -->
-                <label for="autosave_interval"><b>Autosave Frequency</b><br>
-                    <p class="secondary_text">Game will also save when closed in supported browsers</p>
-
-                    <input type="number" id="autosave_interval" min="1" max="60" value="5"/>
-                    <!-- <button onclick="settingText('autosave_interval')">Save</button> -->
-                    <button onclick="resetAutosave()">Reset</button>
-                </label><br/><br/>
-
-                <!-- Disable main progress bar -->
-                <b>Interface</b><br>
-                <label for="full_numbers">
-                    <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')">
-                    Full numbers
-                </label><br>
-                <label for="show_nav">
-                    <input type="checkbox" id="show_nav" onclick="setting('show_nav')">
-                    Navigation bar
-                </label><br>
-                <label for="enable_main_progress">
-                    <input type="checkbox" id="enable_main_progress" checked onclick="settingMainProgress()">
-                    Always-on-top progress bar
-                </label><br>
-                <label for="confetti_effects">
-                    <input type="checkbox" id="confetti_effects" checked onclick="setting('confetti_effects')">
-                    Confetti effects
-                </label><br/><br/>
-
-                <!-- Sounds options -->
-                <b>Sounds</b><br/>
-                <!-- All sounds -->
-                <label for="enable_sounds">
-                    <input type="checkbox" id="enable_sounds" checked onclick="settingSounds()">
-                        Sounds
-                </label><br>
-                <!-- Music toggle -->
-                <label for="enable_music">
-                    <input type="checkbox" id="enable_music" onclick="settingMusic()">
-                        Beta music
-                </label><br/>
-                <!-- Carrot sounds -->
-                <label for="enable_carrot_sounds">
-                    <input type="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
-                        Beta carrot sounds
-                </label><br/><br/>
-
-                <!-- Volume sliders -->
-                <div class="slidecontainer">
-                    <label for="volume_master"><b>Volume</b><br/>
-                        <input type="range" min="0" max="100" value="0" class="slider" id="volume_master"><input type="number" name="volume_master_percent" id="volume_master_percent" class="discreet" min="0" max="100" value="0">
-                    </label>
-                </div><br/>
-
-                <!-- Notification Length -->
-                <label for="notificationLength"><b>Notification Length</b><br>
-                    <p class="secondary_text">Time (in seconds) that notifications will stay on your screen for</p>
+                    <!-- Sounds options -->
+                    <section>
+                        <h6>Audio</h6>
+                        <label for="enable_sounds">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Sounds
+                                <input type="checkbox" id="enable_sounds" onclick="settingSounds()">
+                            </div>
+                        </label>
+                        <label for="enable_music">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Beta music
+                                <input type="checkbox" id="enable_music" onclick="settingMusic()">
+                            </div>
+                        </label>
+                        <label for="enable_carrot_sounds">
+                            <div class="option">
+                                <img src="./assets/blank.png" alt="" class="button_icon invert">
+                                Beta carrot sounds
+                                <input type="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
+                            </div>
+                        </label>
+                        <label for="volume_master">
+                            <div class="option">
+                                <img src="./assets/icons/volume.svg" alt="" class="button_icon invert" id="volume_master_img">
+                                Volume
+                                <div class="flex">
+                                    <input type="range" min="0" max="100" value="0" class="slider" id="volume_master">
+                                    <input type="number" name="volume_master_percent" id="volume_master_percent" class="discreet" min="0" max="100" value="0">
+                                </div>
+                            </div>
+                        </label>
+                    </section>
                     
-                    <input type="number" id="notificationLength" min="2" max="15" value="6"/>
-                    <button onclick="resetOption()">Reset</button>
-                </label><br><br>
-                
-                <!-- Options item -->
-                <b>Danger Zone</b><br/>
-                <button id="clear_save_data" class="button_red" onClick="openDialog(...dialog.clearsave)">
-                    Delete Save Data
-                </button>
-                <!-- Reset button -->
-                <button onClick="openDialog(...dialog.settings_reset)">Reset Settings</button>
+                    <!-- Danger Zone -->
+                    <section>
+                        <h6>Danger Zone</h6>
+                        <div class="flex">
+                            <!-- Delete save -->
+                            <button class="button_red full_width" onClick="openDialog(...dialog.clearsave)" style="margin-right: 6px;">
+                                Delete Save Data
+                            </button>
+                            <!-- Reset settings -->
+                            <button onClick="openDialog(...dialog.settings_reset)" class="full_width">
+                                Reset Settings
+                            </button>
+                        </div>
+
+                    </section>
+                </div>
             </div>
 
             <!-- Footer -->
@@ -1501,6 +1564,8 @@
             <a href="https://commons.wikimedia.org/wiki/File:High-contrast-system-lock-screen.svg" target="_blank" rel="noopener noreferrer">Padlock Icon</a>, <a href="http://www.gnu.org/licenses/lgpl.html">LGPL</a>, via Wikimedia Commons
             Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/" target="_blank" rel="noopener noreferrer">https://andersonseedsmn.com/home/dirt-background/</a>
             <!-- <a href="https://commons.wikimedia.org/wiki/File:Reload_icon_-_Green.svg">Reload Icon</a> by Wenflou, CC0, via Wikimedia Commons -->
+            <!-- <a href="https://commons.wikimedia.org/wiki/File:Right_arrow.svg">User:Superm401</a>, Public domain, via Wikimedia Commons -->
+            <a href="https://commons.wikimedia.org/wiki/File:Antu_document-save-as-template.svg">Floppy Disk Icon</a>: Fabián Alexis, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons
 
             <span class="secondary_text">And thanks to:</span>
             W3Schools, Stack Overflow, and MDN Web Docs

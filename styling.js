@@ -162,6 +162,7 @@ function openDialog(title, desc, buttonName, buttonStyle, button_action) {
     if(buttonName)   eInnerText(elDialog.buttons.accept, buttonName);
     if(buttonStyle)  elDialog.buttons.accept.classList.add(buttonStyle);
     if(button_action) elDialog.buttons.accept.onclick = button_action;
+    elDialog.buttons.accept.focus();
 }
 
 /** Close all popup menus
@@ -296,24 +297,10 @@ function toast(
     toastsList[id] = replaceable == true ? 'replace' : id;
     toastsList[id] += hide_close == true ? '_noclose' : '';
 
-    // Increase Toast ID
-    toastID++;
-
-    // Clear all button
-    if(Object.keys(toastsList).length > 2) {
-        toastsClear.classList.add("visible");
-    }
-
-    if(!persistent) {
-        let timeout = settings.notificationLength * 1000;
-        // if(achievement != false ) timeout *= 2;
-        // console.log(timeout);
-
-        setTimeout(() => { closeToast(id); }, timeout);
-    }
-
-    // Return toast's id
-    return id;
+    toastID++; // Increase Toast ID
+    if(Object.keys(toastsList).length > 2) toastsClear.classList.add("visible"); // Clear all button
+    if(!persistent) setTimeout(() => { closeToast(id); }, settings.notificationLength * 1000);
+    return id; // Return toast id
     
     /** Disable tutorial toasts */
     function disableTutorials(toastID) {
@@ -539,7 +526,6 @@ function openMenu(id) {
         element.tabIndex = -1;
     });
     menuState[id] = true;
-
     buttonSound();
 }
 
@@ -1123,7 +1109,7 @@ let keyBlurbText = elKeybindsBlurb.innerHTML;
 /** Opens the keybind menu */
 function keybindsMenu() {
     openMenu('keybinds');
-    let checked = elDisableKeybinds.checked;
+    let checked = elEnableKeybinds.checked;
     style(elKeybindsBlurb, 'color_red', checked);
     elKeybindsBlurb.innerText = checked ? 'Warning: Keybinds are currently disabled in settings.' : keyBlurbText;
 }

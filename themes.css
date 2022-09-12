@@ -27,11 +27,7 @@ body.theme_light {
     --alt-bg-darkest: rgb(230, 230, 230);
     --alt-bg-lighter: white;
 }
-/* On top */
-body.theme_light .theme_item {
-    background-color: whitesmoke;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-}
+
 /* Icon */
 body.theme_light .invert { filter: none; }
 body.theme_light .invert_alt,
@@ -44,6 +40,8 @@ body.theme_light .characterbox:hover { box-shadow: 0px 6px 12px rgba(145, 98, 98
 body.theme_light .characterbox .bottom { box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2) inset; }
 body.theme_light .char_mini_button { filter: opacity(70%) !important; }
 body.theme_light .shop_item.cant_afford { filter: brightness(90%) contrast(90%); }
+/* Tripane */
+body.theme_light #options_container section { filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3)); }
 /* #endregion */
 
 

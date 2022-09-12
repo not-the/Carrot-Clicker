@@ -118,7 +118,6 @@ img {
 .bold { font-weight: bold; }
 .unbold { font-weight: unset; }
 .underline { text-decoration: underline !important; }
-.vertical_align_middle { vertical-align: middle; }
 .bright_200 { filter: brightness(200%); }
 .no_border { border: none !important; }
 .render_pixelated { image-rendering: pixelated !important; }
@@ -190,29 +189,37 @@ button {
     transition-duration: 0.25s;
 
     vertical-align: middle;
+    outline: none;
 }
-button:hover {
+button:hover,
+button:focus-visible {
     color: var(--text-inverted);
     background-color: var(--button-color);
 
     transform: translateY(-1px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
-button:hover:not(.tab) .button_icon:not(.invert) { filter: invert() !important; }
 button[disabled] {
     opacity: 0.3;
     cursor: not-allowed;
 }
-button[disabled]:hover {
+button[disabled]:hover,
+button:focus-visible[disabled] {
     background-color: var(--button-bg);
     transform: none;
 }
-button[disabled]:hover img { filter: none !important; }
+button:focus-visible[disabled] { outline: 1px solid -webkit-focus-ring-color; }
+
+/* Button icon */
 .button_icon {
     transform: translateY(2px);
     width: 15px;
     display: inline-block;
+    image-rendering: unset;
 }
+button:hover:not(.tab) .button_icon:not(.invert),
+button:focus-visible:not(.tab) .button_icon:not(.invert) { filter: invert() !important; }
+button[disabled]:hover img { filter: none !important; }
 
 /* Button colors */
 .button_gold { --button-color: var(--golden-carrot); }
@@ -2091,6 +2098,54 @@ button:after {
 }
 
 /* Settings */
+#options_container {
+    /* outline: 1px solid red; */
+    width: 100%;
+    max-width: 550px;
+}
+#options_container h6 {
+    font-size: 15pt;
+    margin: 16px 0 7px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--alt-bg-darkest);
+}
+#options_container section {
+    margin: 6px 0;
+}
+#options_container .option {
+    width: 100%;
+    padding: 6px 12px;
+
+    background-color: var(--alt-bg-darker);
+    border: 1px solid var(--alt-bg-darker);
+    border-bottom: 1px solid var(--alt-bg);
+}
+#options_container label:first-of-type .option {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+#options_container label:last-of-type .option {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom: none;
+}
+
+#options_container .option input[type="checkbox"],
+#options_container .option[role="button"]:not(body:not(.c_carl) .cosmetic_related) { cursor: pointer; }
+#options_container .option[role="button"]:not(body:not(.c_carl) .cosmetic_related):hover { box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.3); border-color: var(--alt-bg-darkest); }
+
+#options_container .option img { vertical-align: text-top; object-fit: contain; margin-right: 6px; height: 18px; width: 18px; }
+#options_container .option img.ra { opacity: 0.6; margin: 0 2px 0 0; }
+#options_container .option:hover img.ra { opacity: 1; }
+#options_container .option input[type="checkbox"] { width: 16px; height: 16px; }
+#options_container .option input.discreet { transform: translateY(-10px) }
+#options_container .option img.ra,
+#options_container .option input[type="checkbox"],
+#options_container .option input.discreet { float: right; }
+#options_container .option input[type="range"] { margin: 6px 12px 0 26px; max-width: 100%; }
+#options_container p { margin-left: 26px; }
+
+
 input.discreet, input.discreet[disabled] {
     font-family: var(--font);
     font-size: 12pt;
@@ -2120,7 +2175,7 @@ input.discreet:focus,
 
 /* Tripane input */
 #tripane input.discreet {
-    background-color: var(--alt-bg-darker);
+    background-color: var(--alt-bg-darkest);
     color: var(--secondary-text);
     margin-left: 6px;
     max-width: 72px !important;
@@ -2136,13 +2191,10 @@ input.discreet:focus,
 
 
 /* HTML Slider */
-.slidecontainer {
-    width: 100%; /* Width of the outside container */
-}
 .slider {
     /* -webkit-appearance: none;
     appearance: none; */
-    width: 10%;
+    /* width: 10%; */
     height: 2px;
     outline: none;
     -webkit-transition: .2s;
@@ -2158,7 +2210,7 @@ input.discreet:focus,
     appearance: none; */
     /* width: 4px;
     height: 4px; */
-    transform: scale(2.3, 2.3);
+    /* transform: scale(2.3, 2.3); */
     border-radius: 50%;
     background: white;
     cursor: pointer;
