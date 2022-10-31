@@ -808,15 +808,14 @@ body.hide_nav #game_nav {
 #game_nav {
     /* width: 100%; */
     position: fixed;
-    bottom: 0;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 99;
 
     background-color: var(--bg-lighter);
     border: 1px solid var(--border-color);
-    border-bottom: 0;
-    border-radius: 6px 6px 0 0;
+    border-radius: 12px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 
     text-align: center;
@@ -825,18 +824,18 @@ body.hide_nav #game_nav {
 #game_nav > a { text-decoration: none; }
 #game_nav > a > figure {
     min-width: 70px !important;
-    padding: 0 4px 4px;
+    padding: 1px 4px 5px;
     margin: 0;
     opacity: 0.7;
     cursor: pointer;
 }
-#game_nav > a > figure:hover { opacity: 1; }
+#game_nav > a > figure:hover { opacity: 1; background-color: var(--bg-lighter); }
 #game_nav > a:not(a:last-of-type) > figure { border-right: 1px solid var(--border-color); }
 #game_nav > a > figure > img {
     box-sizing: unset;
-    width: 24px;
-    height: 24px;
-    padding: 8px 12px 0;
+    width: 32px;
+    height: 32px;
+    padding: 8px 12px 2px;
 }
 #game_nav > a > figure > figcaption { margin-bottom: 4px; margin-top: -2px; color: var(--text); font-size: 10pt; }
 
@@ -1409,6 +1408,7 @@ body:not(.gp) #golden_carrot_count*/ {
 body:not(.c_carl) .cosmetic_related { color: var(--gray); border-color: var(--gray); background-color: var(--locked-bg); }
 body:not(.c_carl) .cosmetic_related .dropdown_img:not(.cosmetic_padlock),
 body:not(.c_carl) .cosmetic_related .button_icon:not(.cosmetic_padlock) { display: none; }
+body:not(.c_carl) .cosmetic_related .new_indicator { display: none; }
 body.c_carl .cosmetic_padlock { display: none; }
 body:not(.c_carl) .char_custom_button {
     content: url(./assets/icons/padlock.svg);
@@ -2558,7 +2558,7 @@ footer .user_card { text-decoration: none !important; }
 
     /* Tripane */
     #tripane { margin-bottom: 80px; border-radius: 16px; }
-    #tripane #tab_bar { top: 55px; }
+    #tripane #tab_bar { top: 74px; }
     .rewards_list { display: block; }
     .reward {
         border-right: none;

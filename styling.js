@@ -370,8 +370,8 @@ const settingsTab     = dom("settings-panel-button");
  * @param {boolean} noSound True prevents the button sound from playing
  * @returns 
  */
-function panelChange(to, noSound = false) {
-    if(currentPanel == to) return;
+function panelChange(to) {
+    if(currentPanel == to || menuOpen()) return;
     else {
         currentPanel = to;
 
@@ -397,7 +397,7 @@ function panelChange(to, noSound = false) {
     }
 
     // Update achievements list
-    if(to == 'achievements-panel' && achieveHTMLupdate == true)  populateAchievements();
+    if(to == 'achievements-panel' && achieveHTMLupdate)  populateAchievements();
     if(to == 'stats-panel') statsInterval = setInterval(() => {loadStatistics()}, 1000);
     else clearInterval(statsInterval);
 }
@@ -1093,9 +1093,7 @@ function startCredits(toast = false) {
     clearInterval(creditInterval);
     creditInterval = setInterval(() => {
         elCredits.scrollTop += 1;
-        if(elCredits.scrollHeight - elCredits.scrollTop === elCredits.clientHeight) {
-            clearInterval(creditInterval);
-        }
+        if(elCredits.scrollHeight - elCredits.scrollTop === elCredits.clientHeight) clearInterval(creditInterval);
     }, 30);
 }
 
@@ -1110,8 +1108,8 @@ let keyBlurbText = elKeybindsBlurb.innerHTML;
 function keybindsMenu() {
     openMenu('keybinds');
     let checked = elEnableKeybinds.checked;
-    style(elKeybindsBlurb, 'color_red', checked);
-    elKeybindsBlurb.innerText = checked ? 'Warning: Keybinds are currently disabled in settings.' : keyBlurbText;
+    style(elKeybindsBlurb, 'color_red', !checked);
+    elKeybindsBlurb.innerText = checked ? keyBlurbText : 'Warning: Keybinds are currently disabled in settings.';
 }
 
 const carlShop = dom('carl_shop');
@@ -1186,11 +1184,12 @@ function populateCarl() {
     }
 }
 
-const elJaredShop = dom('jared_shop');
+
 /** Populate Jared's shop */
 function populateJared(specific=false) {
     if(characterQuery('jared') != true) return;
 
+    const elJaredShop = dom('jared_shop');
     let html = '';
     let keys = jaredShop.keys;
 
@@ -1260,28 +1259,15 @@ function populateJared(specific=false) {
 }
 
 
-// Theme/cosmetic NEW indicator
-const carl_theme_button =       dom('carl_theme_button');
-const carl_cosmetic_button =    dom('carl_cosmetic_button');
-const theme_tab_button =        dom('theme_tab_button');
-const cosmetic_tab_button =     dom('cosmetic_tab_button');
-function newIndicator(state, type, item, subtype) {
-    let carl_element = type == 'theme' ? carl_theme_button : carl_cosmetic_button;
-    let tab_element =  type == 'theme' ? theme_tab_button  : cosmetic_tab_button;
-    let buttonName = type == 'theme' ? 'Themes' : 'Cosmetics';
-    let html = `${buttonName}<div class="new_indicator">NEW</div>`;
-
-    // Save
-    player[`new_${type}`] = state;
-
-    // Page
-    if(state == true) {
-        carl_element.innerHTML = html;
-        tab_element.innerHTML  = html;
-    } else {
-        carl_element.innerHTML = buttonName;
-        tab_element.innerHTML  = buttonName;
-    }
+/** Theme/cosmetic NEW indicator
+ * @param {boolean} state Add or remove NEW indicator
+ * @param {string} type Accepts "theme" or "cosmetic"
+ */
+function newIndicator(state, type) {
+    if(document.querySelector(`.new_indicator_${type} > .new_indicator`)) return;
+    player[`new_${type}`] = state; // Save
+    let buttons = document.querySelectorAll(`.new_indicator_${type}`);
+    buttons.forEach(e => { e.innerHTML += '<div class="new_indicator">NEW</div>'; })
 }
 
 /** Enable/disable compact achievement CSS */

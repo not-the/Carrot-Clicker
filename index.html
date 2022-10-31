@@ -615,10 +615,10 @@
                                 <div>
                                     <b id="carl_name" class="character_name">Carl</b>
                                     <div class="flex" style="margin-top: 2px;">
-                                        <button id="carl_theme_button" class="char_button" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
+                                        <button id="carl_theme_button" class="char_button new_indicator_theme" onclick="themeSwitcher()" style="width: 140px; margin-left: 2px;">
                                             Themes
                                         </button>
-                                        <button id="carl_cosmetic_button" class="char_button" onclick="cosmeticSwitcher()" style="width: 140px">
+                                        <button id="carl_cosmetic_button" class="char_button new_indicator_cosmetic" onclick="cosmeticSwitcher()" style="width: 140px">
                                             Cosmetics
                                         </button>
                                     </div>
@@ -735,7 +735,7 @@
             <div id="stats-panel" class="panel remove">
                 <div id="info-inner">
                     <h1>Statistics</h1>
-                    <i class="secondary_text">Updates every second</i><br/><br/>
+                    <i class="secondary_text">View your numbers</i><br/><br/>
 
                     <!-- Statistics -->
                     <div id="statistics">
@@ -751,12 +751,12 @@
                             <p><img src="./assets/stats/pointer.png" alt="" class="stats_icon button_icon"> Total Clicks: <b id="prestige_clicks">---</b></p>
                             <details class="stat_collapse">
                                 <summary><img src="./assets/tools/tool_0.png" alt="" class="stats_icon button_icon"> Tools crafted: <b id="prestige_hoes_crafted_total">---</b><br/></summary>
-                                <p>Wooden: <b id="prestige_hoes_crafted_0">---</b></p>
-                                <p>Stone:  <b id="prestige_hoes_crafted_1">---</b></p>
-                                <p>Iron:   <b id="prestige_hoes_crafted_2">---</b></p>
-                                <p>Golden: <b id="prestige_hoes_crafted_3">---</b></p>
-                                <p>Diamond: <b id="prestige_hoes_crafted_4">---</b></p>
-                                <p>Netherite: <b id="prestige_hoes_crafted_5">---</b></p>
+                                <p>Hoe:        <b id="prestige_hoes_crafted_0">---</b></p>
+                                <p>Sturdy Hoe: <b id="prestige_hoes_crafted_1">---</b></p>
+                                <p>Scythe:     <b id="prestige_hoes_crafted_2">---</b></p>
+                                <p>Plough:     <b id="prestige_hoes_crafted_3">---</b></p>
+                                <p>Gilded Hoe: <b id="prestige_hoes_crafted_4">---</b></p>
+                                <p>tool_6:     <b id="prestige_hoes_crafted_5">---</b></p>
                             </details>
                             <p>Falling Carrots grabbed: <b id="prestige_falling_carrots_grabbed">---</b></p>
                         </div>
@@ -772,12 +772,12 @@
                         <p><img src="./assets/stats/pointer.png" alt="" class="stats_icon button_icon"> Total Clicks: <b id="lifetime_clicks">---</b></p>
                         <details class="stat_collapse">
                             <summary>Tools crafted: <b id="lifetime_hoes_crafted_total">---</b><br/></summary>
-                            <p>Wooden: <b id="lifetime_hoes_crafted_0">---</b></p>
-                            <p>Stone:  <b id="lifetime_hoes_crafted_1">---</b></p>
-                            <p>Iron:   <b id="lifetime_hoes_crafted_2">---</b></p>
-                            <p>Golden: <b id="lifetime_hoes_crafted_3">---</b></p>
-                            <p>Diamond: <b id="lifetime_hoes_crafted_4">---</b></p>
-                            <p>Netherite: <b id="lifetime_hoes_crafted_5">---</b></p>
+                            <p>Hoe:        <b id="lifetime_hoes_crafted_0">---</b></p>
+                            <p>Sturdy Hoe: <b id="lifetime_hoes_crafted_1">---</b></p>
+                            <p>Scythe:     <b id="lifetime_hoes_crafted_2">---</b></p>
+                            <p>Plough:     <b id="lifetime_hoes_crafted_3">---</b></p>
+                            <p>Gilded Hoe: <b id="lifetime_hoes_crafted_4">---</b></p>
+                            <p>tool_6:     <b id="lifetime_hoes_crafted_5">---</b></p>
                         </details>
                         <p>Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b></p><br/>
 
@@ -882,7 +882,7 @@
                         <label for="autosave_interval">
                             <div class="option">
                                 <img src="./assets/icons/floppy.svg" alt="" class="button_icon invert">
-                                Autosave Frequency
+                                Autosave Frequency (seconds)
                                 <p class="secondary_text">Game will also save when closed in supported browsers</p>
                                 <div class="flex">
                                     <input type="range" id="autosave_interval" min="1" max="60" value="5" class="slider">
@@ -1072,7 +1072,7 @@
             <!-- Tabs -->
             <div class="switcher_bar flex">
                 <button class="tab activetab">Themes</button>
-                <button class="tab cosmetic_related" onclick="cosmeticSwitcher()" id="cosmetic_tab_button">
+                <button class="tab cosmetic_related new_indicator_cosmetic" onclick="cosmeticSwitcher()" id="cosmetic_tab_button">
                     <img src="./assets/icons/padlock.svg" alt="" class="button_icon invert cosmetic_padlock">
                     Cosmetics
                 </button>
@@ -1107,7 +1107,7 @@
         <div id="cosmetic_menu" class="popup_box fancy_switcher">
             <!-- Tab bar -->
             <div class="switcher_bar flex">
-                <button class="tab" onclick="themeSwitcher()" id="theme_tab_button">Themes</button>
+                <button class="tab new_indicator_theme" onclick="themeSwitcher()" id="theme_tab_button">Themes</button>
                 <button class="tab activetab">Cosmetics</button>
                 <h2 class="toast_close dialog_close main_bg_color" title="Close" onclick="closeDialog()" role="button" tabindex="0">x</h2>
             </div>
@@ -1280,7 +1280,7 @@
 
                     <div class="keybind_item">
                         <label for="key_craft_0">
-                            <p>Craft hoe:</p>
+                            <p>Craft Hoe:</p>
                             <button class="edit_keybind" id="key_craft_0" onclick="detectKey('key_craft_0')">
                                 -
                             </button>
@@ -1288,7 +1288,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_1">
-                            <p>Craft Stone hoe:</p>
+                            <p>Craft Sturdy hoe:</p>
                             <button class="edit_keybind" id="key_craft_1" onclick="detectKey('key_craft_1')">
                                 -
                             </button>
@@ -1296,7 +1296,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_2">
-                            <p>Craft Iron hoe:</p>
+                            <p>Craft Scythe:</p>
                             <button class="edit_keybind" id="key_craft_2" onclick="detectKey('key_craft_2')">
                                 -
                             </button>
@@ -1304,7 +1304,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_3">
-                            <p>Craft Golden hoe:</p>
+                            <p>Craft Plough:</p>
                             <button class="edit_keybind" id="key_craft_3" onclick="detectKey('key_craft_3')">
                                 -
                             </button>
@@ -1312,7 +1312,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_4">
-                            <p>Craft Diamond hoe:</p>
+                            <p>Craft Gilded Hoe:</p>
                             <button class="edit_keybind" id="key_craft_4" onclick="detectKey('key_craft_4')">
                                 -
                             </button>
@@ -1320,7 +1320,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_5">
-                            <p>Craft Netherite hoe:</p>
+                            <p>Craft tool_6:</p>
                             <button class="edit_keybind" id="key_craft_5" onclick="detectKey('key_craft_5')">
                                 -
                             </button>

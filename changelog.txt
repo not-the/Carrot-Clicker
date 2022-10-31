@@ -1,4 +1,23 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.13
+    10-31-2022
+// ----------------------------------------------------------- //
+
+- Pressing escape on the main page now opens the dropdown
+- Made the mobile nav bar larger
+- Replaced tools' placeholder text in statistics, keybinds and achievements
+- Toggling settings no longer generates a toast by default
+- A, S and D hotkeys no longer work when a menu is open
+
+- Rewrote the newIndicator() and fixed an issue where the cosmetics tab would appear unlocked if any cosmetic was unlocked without Carl
+- Fixed "Confetti Mode" achievement incorrectly referring to itself as party mode
+- Fixed the keybinds menu incorrectly stating that keybinds are disabled
+- Fixed tool equip keybinds not working
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.12
     9-11-2022
 // ----------------------------------------------------------- //

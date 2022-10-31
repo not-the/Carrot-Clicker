@@ -25,7 +25,7 @@ elFunTipsSlider_label.onchange = updateTipsInput;
 /** Universal checkbox option updater (not used by everything because some options need extra code)
  * @param option Option to update
 */
-function setting(option, notif=true) {
+function setting(option, notif=false) {
     let state = dom(option).checked;
     console.log(`${option} set to ${state}`);
     settings[option] = state;
@@ -156,8 +156,15 @@ document.addEventListener('keydown', event => {
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
     if(event.key == "Enter") return document.activeElement.tagName != 'SUMMARY' ? document.activeElement.click() : undefined; // Browser keyboard navigation enter acts as click
-    if(event.key == "Escape" && equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
-    else if(menuOpen() && event.key == "Escape") closeDialog(); // Close menu
+
+    // Escape
+    if(event.key == "Escape") {
+        if(equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
+        else if(menuOpen()) closeDialog(); // Close menu
+        else if(document.activeElement != elInfoDropdown) elInfoDropdown.focus();
+        else elInfoDropdown.blur();
+    }
+
     if(menuState.prestige && event.key == "Enter") openDialog(...dialog.prestige_confirm);
 
     // KEYBIND HANDLER
@@ -242,7 +249,7 @@ document.addEventListener('keyup', event => {
             // Craft
             if(key == settings.keybinds[`key_craft_${i}`] && !event.altKey) createTool(i, multibuy[mbsel]);
             // Equip
-            else if(key == settings.keybinds[`key_craft_${i}`] && !event.altKey) {
+            else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey) {
                 if(Gregory.Hoes[i] < 1) return;
                 equipToastID = toast('Equipping Tool', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
                 equipWaiting = i;
@@ -277,7 +284,7 @@ document.addEventListener('keyup', event => {
     else if(key == settings.keybinds['key_full_numbers']) {
         let element = dom('full_numbers');
         element.checked = !element.checked
-        setting('full_numbers');
+        setting('full_numbers', true);
     }
 
     // Inventory

@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.12';
+    const game_version = 'dev beta v1.16.13';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -487,13 +487,13 @@ const cosmetics = {
             'image': './assets/characters/Bill.png',
             'render_type': 'pixel',
         },
-        // Netherite hoe
-        "netherite_hoe": {
-            'name': 'Netherite hoe',
+        // Tool 6
+        "tool_6": {
+            'name': 'tool_6',
             'preview': './assets/tools/tool_5.png',
-            'desc': 'All hail',
+            'desc': 'This is your God',
 
-            'farmable': 'Netherite hoe',
+            'farmable': 'tool_6',
             'image': './assets/tools/tool_5.png',
             'render_type': 'pixel',
         },
@@ -2043,9 +2043,9 @@ const achievements = {
     },
     'obtain_tool_six': {
         'name': 'Extreme Farming',
-        'desc': 'Obtain the ultimate farming implement (tool 6)',
+        'desc': 'Obtain the ultimate farming implement (tool_6)',
         'image': './assets/tools/tool_5.png',
-        'reward': 'cosmetic:farmable/netherite_hoe',
+        'reward': 'cosmetic:farmable/tool_6',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
         'mystery': {
@@ -2275,7 +2275,7 @@ const achievements = {
     },
     'egg_confetti': {
         'name': 'Confetti mode',
-        'desc': 'Enable party mode by typing "confetti" (Hidden achievement)',
+        'desc': 'Enable confetti mode by typing "confetti" (Hidden achievement)',
         'image': false,
         'reward': false,
         'pages': false,
