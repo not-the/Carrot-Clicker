@@ -9,7 +9,7 @@
 - Toggling settings no longer generates a toast by default
 - A, S and D hotkeys no longer work when a menu is open
 
-- Rewrote the newIndicator() and fixed an issue where the cosmetics tab would appear unlocked if any cosmetic was unlocked without Carl
+- Rewrote the newIndicator() function and fixed an issue where the cosmetics tab would appear unlocked if any cosmetic was unlocked without Carl
 - Fixed "Confetti Mode" achievement incorrectly referring to itself as party mode
 - Fixed the keybinds menu incorrectly stating that keybinds are disabled
 - Fixed tool equip keybinds not working
