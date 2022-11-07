@@ -677,7 +677,7 @@ const Default_Jared = {
         'greg_speed': {
             available: true,
             level: 0,
-            value: 1,
+            value: 100,
         },
         'greg_min_start': {
             available: true,
@@ -711,6 +711,7 @@ const Default_Jared = {
         // },
     },
 }
+
 /** Hire Jared */
 function hireJared() {
     if(player.characters['jared'] != 'ready') {
@@ -794,6 +795,9 @@ Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
 Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
 Charles.decreaseWages=new tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
 Charles.betterHoes=new tome(saved_Charles.betterHoes.value,saved_Charles.betterHoes.price,22025);
+
+//update an outdated Jared object
+if(Jared.data.greg_speed.value === 1) Jared.data.greg_speed.value = 100;
 
 // Objects to save in localstorage
 const saveList = {
@@ -1127,8 +1131,9 @@ var hold = {
     delay:  undefined,
     clock:  undefined,
 }
-mainCarrot.addEventListener('mousedown',  () => { holdStart(); });
-mainCarrot.addEventListener('touchstart', () => { holdStart(); });
+mainCarrot.addEventListener('mousedown',  (e) => { holdStart(); });
+mainCarrot.addEventListener('touchstart', (e) => { //e.stopImmediatePropagation(); 
+    holdStart(); });
 /** Holding down clicks carrots
  * @param {Boolean} useMousePos 
  */ 
@@ -1304,7 +1309,7 @@ function cashCount(flash = true) {
 function characterPrices() {
     // Update page
     eInnerText(
-        elCharacterUpCost.bill, DisplayRounded(getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0), 1),
+        elCharacterUpCost.bill, DisplayRounded(getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0)),
     );
     eInnerText(
         elCharacterUpCost.belle, DisplayRounded(getLevelPrice(Belle_Boomerette, Belle_Boomerette.lvl, multibuy[mbsel]).toFixed(0), 1),
@@ -1556,49 +1561,63 @@ function carrotsPerSecond() {
     carrotCount();
     if(Jared.data.belle_bonus.value) updateCPC(); // Trinket indicator
 }
+/**
+ * 
+ * @param {object} character 
+ * @param {number} total Items in Array
+ * @returns PriceArray
+ */
+function createPriceArray(character, totalItems){
+    //creates new array
+    let priceArray = new Array;
+    
+    //scalling modifer
+    let modifier = 0;
+    let scaling = defaultChar[character.nickname].scaling;
+
+    //decrease wages modifier
+    let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
+
+    //setting the price for the first level
+    priceArray.push(defaultChar[character.nickname].lvlupPrice*((Jared.data.level_up_discount.value || 100)/100));
+    
+    let originalIvalue = 1;
+    //since Bill's pricee curve starts at lvl 1 instead of zero we push original value twice so priceArray[1] is the price at lvl 1.
+    if(character==Boomer_Bill){
+        priceArray.push(defaultChar[character.nickname].lvlupPrice*((Jared.data.level_up_discount.value || 100)/100));
+        originalIvalue = 2;
+    }
+    //selects the correct scalling modifer and than pushes a new price onto the array
+    for(let i=originalIvalue; i<totalItems;i++){
+        for(let si = scaling.length-1; si >= 0; si--) {
+            let item = scaling[si];
+            if(i >= item.min) {
+                modifier = 1 + item.modifier;
+                break;
+            }
+        }
+       priceArray.push(dw_modifier * Math.floor(priceArray[i-1] * modifier));
+    }
+
+    //returns the price array
+    return priceArray;
+}
+
 
 /** Calculates and returns a character's level up price at a given level
  * @param {object} character Character object
- * @param {number} level Intended level
+ * @param {number} level current level
+ * @param {number} amount levels you want to add
  * @returns New character level up price
  */
-function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
-    if(amount != 1) return getMultiLevelPrice(character, amount); // Multibuy
-    if(level <= 0 || (level <= 1 && character == Boomer_Bill)) { // Stop recursion
-        let dp = defaultChar[character.nickname].lvlupPrice;
-        return initial ? dp * ((Jared.data.level_up_discount.value || 100) / 100) : dp;
-    }
-
-    let price = getLevelPrice(character, level-1, amount, false);
-    let modifier = 0;
-    let scaling = defaultChar[character.nickname].scaling;
-    for(let si = scaling.length-1; si >= 0; si--) {
-        let item = scaling[si];
-        if(level >= item.min) {
-            modifier = item.modifier;
-            break;
-        }
-    }
-
-    // Calculate
-    let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
-    price += dw_modifier * Math.floor(price * modifier);
-    // return price;
-    return initial ? price * ((Jared.data.level_up_discount.value || 100) / 100) : price;
-
-    /** Multibuy price */
-    function getMultiLevelPrice(character, amount) {
-        let current = character.lvl;
-        let target = current + amount;
-        // console.log(current, target);
-        let multi_price = 0;
-        for(let i = current; i <= target; i++) {
-            let add = getLevelPrice(character, current + i);
-            // console.log(`${i} - ${add}`);
-            multi_price += add;
-        }
-        return multi_price;
-    }
+function getLevelPrice(character=Boomer_Bill, level=1, amount=1) {
+    //creates a new price array from the create array function
+    const priceArray=createPriceArray(character,level+amount);
+    
+    //adds the appropriate value of array items to get a price
+    let sum = 0;
+    for(i=level;i<level+amount;i++){ sum+=priceArray[i];}
+    return sum;
 }
 
 /** Levels up characters
@@ -1607,7 +1626,7 @@ function getLevelPrice(character=Boomer_Bill, level=1, amount=1, initial=true) {
  * @returns If unable to level up
  */
 function levelUp(character=Boomer_Bill, amount=1) {
-    if(characterQuery(character.nickname) == false) return;
+    if(!characterQuery(character.nickname)) return;
 
     // Check if can afford
     let price = getLevelPrice(character, character.lvl, amount);
@@ -1775,16 +1794,6 @@ function calculatePrestigePotential() {
     return player.prestige_potential;
 }
 
-/** Recalculate lvl up prices */
-function recalculatePrices() {
-    const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
-    for(i = 0; i < levelable.length; i++) {
-        let char = levelable[i];
-        char.lvlupPrice = getLevelPrice(char, char.lvl-1);
-    }
-    characterPrices();
-    characterButtons();
-}
 
 //#endregion
 
@@ -1812,21 +1821,18 @@ function decreaseWagesEffects(){
  * @param {string} mode Options: "query" or "apply"
  * @returns Calculated tool cost
  */
-function toolCost(type=0, amount=1, mode="query") {
-    var p = Gregory.HoePrices[type];
-    var p2 = 0;
+ function toolCost(type=0, amount=1, mode="query") {
+    var originalPrice = Gregory.HoePrices[type];
+    var newPrice = 0;
     let scaling = toolScaling[type] || 0.02
-    if(amount==1){
-        if(mode=="apply") Gregory.HoePrices[type] += (scaling * p);
-        return p;
-    }
+    
     for(j = 0; j < amount; j++) {
-        p+=(scaling*p);
-        p2+=p;
+        originalPrice+=(scaling*originalPrice);
+        newPrice+=originalPrice;
     }
 
-    if(mode=="apply") Gregory.HoePrices[type] = p;
-    return p2;
+    if(mode=="apply") Gregory.HoePrices[type] = originalPrice;
+    return newPrice;
 }
 
 /** Returns tool image src given a tool ID
@@ -1882,11 +1888,13 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
     // mouseConfetti([1, 4], ccWhite);
 
     // Run crafting loop
-    craftingInterval = setInterval(frame, 100);
+    craftingInterval = setInterval(frame, Jared.data.greg_speed.value);
     function frame() { progress < price ? craft() : whenDone(); }
     function craft() {
-        let adjust = tool_craft_speed[type] * player.carrots * (Jared.data.greg_speed.value || 1);
-        progress += adjust <= player.carrots ? adjust : player.carrots;
+        let normalAdjustment = Math.floor(tool_craft_speed[type] * player.carrots); 
+        let inThreeFrames = progress+(3*Math.floor(tool_craft_speed[type] * player.carrots)); //aproximates how much progress will be done in three frames
+        let adjust = inThreeFrames>=price ? normalAdjustment : 0.3*normalAdjustment; //adjusts the progress; amount depends on if the hoe will be completed in three frames
+        progress += adjust;
         player.carrots -= adjust;
         Gregory.crafting = [type, amount, progress]; // Save crafting progress in case of page refresh
 
@@ -1918,6 +1926,7 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
 
         // Update page
         setTimeout(updateCraftingBar, 90);
+        //carrotCount();
     }
 }
 /** Updates crafting bar progress */

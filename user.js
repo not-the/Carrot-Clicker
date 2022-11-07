@@ -1126,8 +1126,6 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             }
             //#endregion
 
-            // Characters
-            recalculatePrices();
     
             // Done
             console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);

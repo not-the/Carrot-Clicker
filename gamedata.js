@@ -1,7 +1,7 @@
 // Game data
 // Game version
 (() => {
-    const game_version = 'dev beta v1.16.13';
+    const game_version = 'dev beta v1.16.14';
     dom('page_title').innerText = `Carrot Clicker ${game_version}`;
     dom('footer_version').innerText = `Version ${game_version} - Unstable`;
 })()
@@ -2472,7 +2472,7 @@ const jaredShop = {
         price:     [     89, 112, 160, 204, 245, 289, 344, 402, 460, 540],
         value:     [100, 95,  90,  85,  80,  75,  70,  65,  60,  55,  50],
         written:   '@%',
-        update:    () => { recalculatePrices(); }
+        update:    () => { characterPrices(); }
     },
     'belle_bonus': {
         name:      'Synergy Drink',
@@ -2507,9 +2507,9 @@ const jaredShop = {
         desc:      'Increases Greg\'s crafting speed',
         img:       './assets/items/trinkets/propane.png',
         currency:  'cash',
-        price:     [   38, 53,  74, 92, 121, 176, 204],
-        value:     [1, 1.5,  2,   4,  8,  16,  32, 64],
-        written:   'x@',
+        price:     [    38, 53, 74, 92, 121, 176, 204],
+        value:     [95, 90, 85, 80, 75,  70,  60,  50],//framerate for crafting; lower is faster
+        written:   'frames: @',
     },
     'greg_min_start': {
         name:      'Credit Card',
