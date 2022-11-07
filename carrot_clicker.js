@@ -677,7 +677,7 @@ const Default_Jared = {
         'greg_speed': {
             available: true,
             level: 0,
-            value: 100,
+            value: 1,
         },
         'greg_min_start': {
             available: true,
@@ -795,9 +795,6 @@ Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
 Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
 Charles.decreaseWages=new tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
 Charles.betterHoes=new tome(saved_Charles.betterHoes.value,saved_Charles.betterHoes.price,22025);
-
-//update an outdated Jared object
-if(Jared.data.greg_speed.value === 1) Jared.data.greg_speed.value = 100;
 
 // Objects to save in localstorage
 const saveList = {
@@ -1116,12 +1113,9 @@ function earnCarrots(amount, type, useMousePos = false) {
  * @param {string} type 'bonus' will use mouse position
  */
 function earnCash(amount, type) {
-    if(type == 'bonus') popupHandler(true, amount, 'cash');
-    else popupHandler(false, amount, 'cash');
-
+    popupHandler((type == 'bonus'), amount, 'cash');
     player.cash += amount;
     player.lifetime.cash += amount;
-
     cashCount(true);
 }
 
@@ -1131,9 +1125,8 @@ var hold = {
     delay:  undefined,
     clock:  undefined,
 }
-mainCarrot.addEventListener('mousedown',  (e) => { holdStart(); });
-mainCarrot.addEventListener('touchstart', (e) => { //e.stopImmediatePropagation(); 
-    holdStart(); });
+mainCarrot.addEventListener('mousedown',  e => { holdStart(); });
+mainCarrot.addEventListener('touchstart', e => { e.stopImmediatePropagation(); holdStart(); });
 /** Holding down clicks carrots
  * @param {Boolean} useMousePos 
  */ 
@@ -1611,8 +1604,8 @@ function createPriceArray(character, totalItems){
  * @returns New character level up price
  */
 function getLevelPrice(character=Boomer_Bill, level=1, amount=1) {
-    //creates a new price array from the create array function
-    const priceArray=createPriceArray(character,level+amount);
+    // Creates a new price array from the create array function
+    const priceArray = createPriceArray(character,level+amount);
     
     //adds the appropriate value of array items to get a price
     let sum = 0;
@@ -1805,10 +1798,7 @@ function calculatePrestigePotential() {
  * @param {string} mode Options: "query" or "apply"
  * @returns The calculated price
  */
-function decreaseWagesEffects(){
-    if(Charles.decreaseWages.value==false) return 0;
-    return Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146;
-}
+function decreaseWagesEffects(){ return Charles.decreaseWages.value ? Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146 : 0; }
 //#endregion
 
 
@@ -1839,7 +1829,7 @@ function decreaseWagesEffects(){
  * @param {number} type 
  * @returns Image source
  */
-function hoeImg(type) { return cosmetics['tools'][settings.cosmetics.tools][type]; }
+function toolImg(type) { return cosmetics['tools'][settings.cosmetics.tools][type]; }
 
 /** Returns true if Greg can craft a given tool
  * @param {number} type Tool ID
@@ -1879,16 +1869,17 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
 
     // Main progress bar
     if(settings.enableMainProgress) elMainProgressContainer.classList.add('status_tidbit_in');
-    dom('main_progress_image').src = hoeImg(type);
+    dom('main_progress_image').src = toolImg(type);
     
     // Greg info
-    dom('greg_progress_image').src = hoeImg(type);
+    dom('greg_progress_image').src = toolImg(type);
     dom('greg_crafting_info').classList.remove('inactive');
     dom('greg_crafting_info').title = 'Crafting...';
     // mouseConfetti([1, 4], ccWhite);
 
     // Run crafting loop
-    craftingInterval = setInterval(frame, Jared.data.greg_speed.value);
+    let interval = 1000 / (Jared.data.greg_speed.value * 10);
+    craftingInterval = setInterval(frame, interval);
     function frame() { progress < price ? craft() : whenDone(); }
     function craft() {
         let normalAdjustment = Math.floor(tool_craft_speed[type] * player.carrots); 
@@ -1900,6 +1891,7 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
 
         // Update page
         carrotCount();
+        characterButtons();
         elGregProgress.style.width = `${Math.ceil(100*(progress/price))}%`;
         if(settings.enableMainProgress) {
             elMainProgressBar.style.opacity = '1';
@@ -1953,8 +1945,8 @@ function equipTool(character=Boomer_Bill, type=0, amount=1){
     // Ensure Gregory has enough to give
     if(Gregory.Hoes[type] < amount) {
         if(Gregory.Hoes[type] > 0) amount = Gregory.Hoes[type]; // If multibuy, transfer remaining
-        else if(Jared.data.magic_keyboard.value) return createTool(type, amount, 0, character); // Queue equip
-        else return; // Not enough
+        else if(Jared.data.magic_keyboard.value) createTool(type, amount, 0, character); // Queue equip
+        return; // Not enough
     };
 
     // Check if Greg is high enough level to equip
@@ -2156,9 +2148,7 @@ var statsInterval;
 /*-----------Tips----------- */
 //#region
 var tips = default_tips;
-try {
-    tips.seen = localStorage.getObject('tips_seen') || tips.seen;
-}
+try { tips.seen = localStorage.getObject('tips_seen') || tips.seen; }
 catch (error) { console.error(error); }
 
 
@@ -2167,7 +2157,7 @@ var tipInterval = setInterval(() => {tipchange()}, 15000);
 
 /** Randomly choose a new tip to display in the status bar */
 function tipchange() {
-    if(menuOpen()) return 'Can\'t Choose new Tip; Menu Open';
+    if(menuOpen()) return;
     
     clearInterval(tipInterval);
     tipInterval = setInterval(() => {tipchange()}, 15000);
@@ -2177,21 +2167,14 @@ function tipchange() {
     else if(player.prestige.carrots > 1000000 && tips.tracker == 1) tips.tracker = 2; // 1 million
     else if(player.prestige.carrots > 1000000000 && tips.tracker == 2) tips.tracker = 3; // 1 billion
 
-    // Update best
-    if(tips.tracker > tips.best) tips.best = tips.tracker;
-
-    // 20% chance any tip tier can appear 
-    if(Math.random < 0.15) tips.tracker = Math.floor(Math.random() * tips.tracker);
-    
-    // Decides if the tip will be real or fun. 
-    tips.type = Math.random() < settings.fun_tip_percentage / 100 ? "fun" : "real";
+    if(tips.tracker > tips.best) tips.best = tips.tracker; // Update best
+    if(Math.random < 0.15) tips.tracker = Math.floor(Math.random() * tips.tracker); // 20% chance any tip tier can appear 
+    tips.type = Math.random() < settings.fun_tip_percentage / 100 ? "fun" : "real"; // Decides if the tip will be real or fun. 
 
     // Determine and display the tip
     let type = tips.type == "fun" ? 'fun_' : '';
     type += tl[tips.tracker];
-
-    // Roll tip
-    tips.number = Math.floor(Math.random() * tips[type].length);
+    tips.number = Math.floor(Math.random() * tips[type].length); // Roll tip
 
     // Page
     elTips.innerText = tips[type][tips.number];
@@ -2199,9 +2182,7 @@ function tipchange() {
     // Mark tip as seen
     if(tips.seen[type][tips.number] != true) {
         tips.seen[type][tips.number] = true;
-        if(player.flags['cookies_accepted'] == true) {
-            localStorage.setObject('tips_seen', tips.seen);
-        };
+        if(player.flags['cookies_accepted']) localStorage.setObject('tips_seen', tips.seen);
     }
     tipsHTMLupdate = true;
 }

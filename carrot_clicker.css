@@ -784,7 +784,12 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
     pointer-events: none;
 }
 .status_bar * { pointer-events: all; }
-#main_icon { height: 32px; width: 32px; }
+#main_icon {
+    height: 32px;
+    width: 32px;
+    position: absolute;
+    transform: translate(-38px, -6px);
+}
 .basic_info {
     background-color: var(--bg-lighter);
     border-bottom: 1px solid var(--border-color);
@@ -802,11 +807,8 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
 }
 
 /* Game Nav */
-body.hide_nav #game_nav {
-    display: none;
-}
+body.hide_nav #game_nav { display: none; }
 #game_nav {
-    /* width: 100%; */
     position: fixed;
     bottom: 12px;
     left: 50%;
@@ -838,7 +840,6 @@ body.hide_nav #game_nav {
     padding: 8px 12px 2px;
 }
 #game_nav > a > figure > figcaption { margin-bottom: 4px; margin-top: -2px; color: var(--text); font-size: 10pt; }
-
 
 /* Hover info */
 .question_mark {
@@ -883,7 +884,6 @@ body.hide_nav #game_nav {
     transition-duration: 0.2s;
     transition-timing-function: ease;
 
-    /* visibility: hidden; */
     pointer-events: none;
     transform: translateY(-20px);
     opacity: 0;
@@ -1024,8 +1024,6 @@ body.hide_nav #game_nav {
 /* Left section */
 #game_section {
     max-width: 388px;
-    /* width: 420px; */
-    /* margin-left: auto; */
     margin-right: 20px;
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3) inset;
     border-radius: 24px;
@@ -1112,7 +1110,6 @@ body.hide_nav #game_nav {
 }
 /* Prestige */
 #prestige-section {
-    /* margin: 20px 0 20px; */
     padding-bottom: 20px;
     visibility: hidden;
 
@@ -1148,7 +1145,6 @@ body.hide_nav #game_nav {
     transition-property: box-shadow, border, background-color, outline;
     transition-duration: 0.15s;
 
-    /* 3D */
     transform: perspective(800px);
 }
 .character_name { color: var(--text); }
@@ -1205,8 +1201,6 @@ body.hide_nav #game_nav {
 }
 .power_item .shop_tooltip {
     width: max-content;
-    /* top: unset; */
-    /* bottom: 100%; */
     text-align: left;
 }
 .power_item img:hover {
@@ -1227,8 +1221,6 @@ body.hide_nav #game_nav {
     z-index: 11;
 }
 .characterbox.show_info {
-    /* width: 400px; */
-
     position: fixed;
     top: 50%;
     left: 50%;
@@ -1265,23 +1257,6 @@ body.hide_nav #game_nav {
     position: absolute;
     bottom: 12px;
 }
-
-/* Tooltips */
-/* .tooltip {
-    padding: 10px 14px;
-    background-color: var(--classic-tooltip-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    max-width: 260px;
-    position: absolute;
-
-    opacity: 0;
-    pointer-events: none;
-} */
-
 .char_mini_button {
     width: 16px;
     filter: invert() opacity(80%);
@@ -1311,11 +1286,6 @@ body.hide_nav #game_nav {
 #game_section:hover .char_mini_button {
     opacity: 1;
 }
-/* #game_section .char_mini_button {
-    top: unset;
-    bottom: 24px;
-    right: 16px;
-} */
 
 /* Character info */
 .characterdesc {
@@ -1415,11 +1385,6 @@ body:not(.c_carl) .char_custom_button {
     opacity: 0.5 !important;
 }
 
-/* Obfuscate mini stats */
-/* body:not(.c_charles) #list_golden_carrots { background-color: var(--bg); }
-body:not(.c_charles) #list_golden_carrots > * { color: var(--gray); }
-body:not(.c_charles) #list_golden_carrots:after { display: none; } */
-
 /* Greg */
 .Greg .toolicon {
     height: 48px;
@@ -1462,7 +1427,6 @@ body:not(.c_charles) #list_golden_carrots:after { display: none; } */
     0% { transform: translate(24px, 6px) rotate(0deg); }
     100% { transform: translate(24px, 6px) rotate(360deg); }
 }
-
 .Greg .tool_price {
     font-size: 0.9rem;
     position: absolute;
@@ -1470,9 +1434,7 @@ body:not(.c_charles) #list_golden_carrots:after { display: none; } */
     width: 45px;
     text-align: center;
 }
-.Greg .levelupimg {
-    margin-bottom: 25px;
-}
+.Greg .levelupimg { margin-bottom: 25px; }
 #Greg_Bar{
     width: 100%;
     height: 10px;
@@ -1503,9 +1465,7 @@ body:not(.c_charles) #list_golden_carrots:after { display: none; } */
     animation: progress_animate 12s infinite linear;
 }
 @keyframes progress_animate {
-    to {
-        background-position-x: -400px;
-    }
+    to { background-position-x: -400px; }
 }
 
 
@@ -1545,7 +1505,6 @@ body:not(.c_charles) #list_golden_carrots:after { display: none; } */
     padding: 6px 0;
     margin-top: 6px;
 }
-/* .jared .shop_bottom { max-height: 301px; } */
 
 /* Character shops */
 .shop_item {
@@ -1602,7 +1561,6 @@ body:not(.c_charles) #list_golden_carrots:after { display: none; } */
 }
 *[data-tooltip]:hover::after { visibility: visible; }
 .Greg *[data-tooltip]:after {
-    /* text-align: center; */
     top: 100%;
     left: 50%;
     transform: translateX(-50%);

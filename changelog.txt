@@ -1,13 +1,20 @@
 // ----------------------------------------------------------- //
     VERSION dev beta 1.16.14
-    10-31-2022
+    11-7-2022
 // ----------------------------------------------------------- //
 
 - Fixed issue #71; Crafting now slows in the final three frames to limit weird carrot count changes
 - Fixed level up price inconsistency by making the function generate an array and using those values to give a price
 - Fixed touch inputs not working (Issue #70)
+- Removed the unused changelog page
+- Fixed the main_icon being off to the left on mobile
+- Fixed character buttons' highlighting not updating when a tool is crafted
+- Reworked the way the Propane Tank trinket works
+  + Prices are overall cheaper
+  + Maximum speed is x10
+  + Value is now used in the craft interval instead of as a carrot multiplier
 
-~ JJ & Kal
+~ JJ, Kal
 
 
 // ----------------------------------------------------------- //

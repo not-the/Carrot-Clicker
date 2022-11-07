@@ -2507,9 +2507,9 @@ const jaredShop = {
         desc:      'Increases Greg\'s crafting speed',
         img:       './assets/items/trinkets/propane.png',
         currency:  'cash',
-        price:     [    38, 53, 74, 92, 121, 176, 204],
-        value:     [95, 90, 85, 80, 75,  70,  60,  50],//framerate for crafting; lower is faster
-        written:   'frames: @',
+        price:     [    12,  38, 53, 68, 74, 92, 121],
+        value:     [1, 1.2, 1.5,  2,  3,  5,  7,  10], // Craft - cycles per second divided by 10
+        written:   'x@',
     },
     'greg_min_start': {
         name:      'Credit Card',

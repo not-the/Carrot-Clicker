@@ -4,9 +4,7 @@ Users settings, keybind handling, and tutorial handling
 
 /** Returns true if any menu or popup is open */
 function menuOpen() {
-    if(menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige /*|| menuState.inventory*/ || menuState.tips || menuState.credits)
-    return true;
-    return false;
+    return (menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige /*|| menuState.inventory*/ || menuState.tips || menuState.credits);
 }
 
 /*---------------OPTIONS-------------------*/
@@ -270,15 +268,15 @@ document.addEventListener('keyup', event => {
     }
 
     // Menus
-    else if(key == settings.keybinds['key_tips_menu'])         { openTipsMenu(); }
-    else if(key == settings.keybinds['key_prestige'])          { openPrestigeMenu(); }
-    else if(key == settings.keybinds['key_themes'])            { themeSwitcher(); }
-    else if(key == settings.keybinds['key_cosmetics'])         { cosmeticSwitcher(); }
+    else if(key == settings.keybinds['key_tips_menu'])         openTipsMenu();
+    else if(key == settings.keybinds['key_prestige'])          openPrestigeMenu();
+    else if(key == settings.keybinds['key_themes'])            themeSwitcher();
+    else if(key == settings.keybinds['key_cosmetics'])         cosmeticSwitcher();
 
     // Tripane
-    else if(key == settings.keybinds['key_pane_achievements']) { panelChange(`achievements-panel`); }
-    else if(key == settings.keybinds['key_pane_statistics'])   { panelChange(`stats-panel`); }
-    else if(key == settings.keybinds['key_pane_settings'])     { panelChange(`settings-panel`); }
+    else if(key == settings.keybinds['key_pane_achievements']) panelChange(`achievements-panel`);
+    else if(key == settings.keybinds['key_pane_statistics'])   panelChange(`stats-panel`);
+    else if(key == settings.keybinds['key_pane_settings'])     panelChange(`settings-panel`);
 
     // Settings
     else if(key == settings.keybinds['key_full_numbers']) {
