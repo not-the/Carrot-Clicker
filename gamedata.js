@@ -2035,7 +2035,7 @@ const achievements = {
     },
     'obtain_tool_six': {
         'name': 'Extreme Farming',
-        'desc': 'Obtain the ultimate farming implement (tool_6)',
+        'desc': 'Obtain the ultimate farming implement, the Gilded Hoe',
         'image': './assets/tools/tool_5.png',
         'reward': 'cosmetic:farmable/tool_6',
         'pages': 10,
@@ -2141,21 +2141,22 @@ const achievements = {
             'noToast': false,
         }
     },
-    // Commented out for now since it's not doable without boosts
-    // '10_falling_consecutive': { 
-    //     'name': '10_falling_consecutive',
-    //     'desc': 'Grab 10 falling carrots in a row',
-    //     'image': false,
-    //     'reward': false,
-    //     'pages': false,
-    //     'conditions': ['player.fallingConsecRecord', 10],
-    //     'mystery': {
-    //         'name': true,
-    //         'desc': false,
-    //         'image': false,
-    //         'noToast': false,
-    //     }
-    // },
+    '10_falling_consecutive': { 
+        'name': 'Carrot-ay',
+        'desc': 'Grab 10 falling carrots in a row',
+        'image': false,
+        'reward': false,
+        'pages': false,
+        'conditions': ['player.fallingConsecRecord', 10],
+        'style': 'secret', // until boosts are added
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+            'list': true,
+        }
+    },
     'no_bonus_carrots_challenge': {
         'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
@@ -2589,12 +2590,12 @@ const boosts = {
     // CPC
     'cpc_2x': {
         name: 'CPC doubler',
-        desc: 'desc',
+        desc: 'Double CPC for 2 minutes',
         img: './assets/pixel_carrot_32x.png',
 
         type: 'cpc',
         multiplier: 2,
-        time: 30, // seconds
+        time: 120, // seconds
 
         currency: 'gc',
         price: 3,
@@ -2602,6 +2603,18 @@ const boosts = {
     'cpc_5x': {
         name: 'cpc_5x',
         desc: 'desc',
+        img: './assets/pixel_carrot_32x.png',
+
+        type: 'cpc',
+        multiplier: 2,
+        time: 60,
+
+        currency: 'gc',
+        price: 6,
+    },
+    'cpc_15x': {
+        name: 'CPC x15',
+        desc: '15x CPC for 30 seconds',
         img: './assets/pixel_carrot_32x.png',
 
         type: 'cpc',
@@ -2666,7 +2679,7 @@ const boosts = {
     'fc_2x': {
         name: 'Rain Song',
         desc: '2x falling carrot chance for 5 minutes',
-        img: './assets/pixel_carrot_32x.png',
+        img: './assets/boosts/falling.png',
 
         type: 'fc_chance',
         multiplier: 2,
@@ -2678,7 +2691,7 @@ const boosts = {
     'fc_5x': {
         name: 'fc_5x',
         desc: '5x falling carrot chance for 2 minutes',
-        img: './assets/pixel_carrot_32x.png',
+        img: './assets/boosts/falling.png',
 
         type: 'fc_chance',
         multiplier: 5,
@@ -2688,9 +2701,9 @@ const boosts = {
         // price: 300,
     },
     'fc_10x': {
-        name: 'fc_10x',
+        name: 'Carrot Storm',
         desc: '10x falling carrot chance for 1 minute',
-        img: './assets/pixel_carrot_32x.png',
+        img: './assets/boosts/falling.png',
 
         type: 'fc_chance',
         multiplier: 10,
@@ -2702,7 +2715,7 @@ const boosts = {
     'fc_frenzy': {
         name: 'Falling Frenzy',
         desc: 'Falling Carrots are guaranteed',
-        img: './assets/pixel_carrot_32x.png',
+        img: './assets/boosts/falling.png',
 
         type: 'fc_chance',
         multiplier: 1000,

@@ -765,13 +765,16 @@ body:not(.theme_light) .theme_checkmark { filter: invert(); }
     animation: falling_carrot 2.5s ease-in forwards;
 }
 @keyframes falling_carrot { to {transform: translateY(790px)} }
-.falling_carrot.mirror {
+.falling_carrot.mirror:not(.falling_boost) {
     animation: falling_carrot_mirror 2.5s ease-in forwards;
     filter: drop-shadow(-8px 8px 4px rgba(0, 0, 0, 0.5)) !important;
 }
 @keyframes falling_carrot_mirror {
     0% { transform: scaleX(-1); }
     100% { transform: scaleX(-1) translateY(790px); }
+}
+.falling_boost {
+    animation: falling_carrot 6s cubic-bezier(0.7, 0.8, 0.1, 0.2) forwards;
 }
 
 

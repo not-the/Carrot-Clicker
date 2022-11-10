@@ -3,6 +3,7 @@
     11-9-2022
 // ----------------------------------------------------------- //
 
+- Added an extremely small chance for a boost to drop when clicking the carrot
 - Gilded hoe is now the final tool
 - All tools now have sprites
 - Condensed the characterPrices() function

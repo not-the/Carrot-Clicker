@@ -1210,19 +1210,17 @@ var fallingID = 0;
 var fallingConsecutive = 0;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
-function fallingCarrot() {
+function fallingCarrot(allow_boosts=true) {
     let roll = Math.ceil((Math.random() * 100)); // Roll out of 100
     let rollchance = boostEffects['fc_chance']; // 1% chance
     if(roll > rollchance) return; // No FC
 
-    var element = document.createElement("img"); // Create element
-    let type = Math.ceil(Math.random() * 100) <= (6 / rollchance) ? 'cash' : 'carrot'; // 6% chance the drop is money instead
-    element.setAttribute('src', type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image : './assets/cash.png');
-    element.classList.add('falling_carrot');
-    if(Math.round(Math.random())) element.classList.add('mirror');
-    element.id = fallingID;
-    fallingID++;
+    // Type
+    let type = 'carrot';
+    if(allow_boosts && (Math.ceil(Math.random() * 100) <= (2 / rollchance))) type = 'boost'; // 2% chance that a boost drops
+    else if(Math.ceil(Math.random() * 100) <= (6 / rollchance)) type = 'cash'; // 6% chance that cash drops
 
+    // Reward
     let amount;
     if(type == 'carrot') {
         // Carrot reward
@@ -1242,7 +1240,25 @@ function fallingCarrot() {
         else if(player.lifetime.carrots >= 1000000000000) { min =  8; }
         else if(player.lifetime.carrots >= 1000000000)    { max =  8; }
         amount = Math.ceil((Math.random() * max)) + min;
+    } else if(type == 'boost') {
+        // FC boost
+        let boostroll = Math.ceil(Math.random * 100)
+        if(boostroll <= 50 && boostEffects['fc_chance'] === 1) amount = 'fc_10x'; // 50%
+        else if(boostroll <= 90 && boostEffects['cpc'] === 1) amount = 'cpc_5x' // 40%
+        else if(boostEffects['cpc'] === 1) amount = 'cpc_15x' // 10%
+        else return;
     }
+    
+    // Create element
+    var element = document.createElement("img");
+    let image = type == 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image
+        : type == 'cash' ? './assets/cash.png' : './assets/boosts/falling.png';
+    element.setAttribute('src', image);
+    element.classList.add('falling_carrot');
+    if(type == 'boost') element.classList.add('falling_boost');
+    if(Math.round(Math.random())) element.classList.add('mirror');
+    element.id = fallingID;
+    fallingID++;
 
     // Set onclick function
     let catchfunc = () => { catchCarrot(element.id, type, amount); };
@@ -1253,7 +1269,8 @@ function fallingCarrot() {
 
     // To page
     fallingCarrotsArea.append(element);
-    setTimeout(() => { if(dom(element.id) != null) dom(element.id).remove(); }, 2600);
+    let time = type == 'boost' ? 6000 : 2600;
+    setTimeout(() => { if(dom(element.id) != null) dom(element.id).remove(); }, time);
 
     /** Grant reward when falling carrot is caught */
     function catchCarrot(id, type, amount) {
@@ -1272,6 +1289,8 @@ function fallingCarrot() {
         } else if(type == 'cash') {
             earnCash(amount, 'bonus');
             mouseConfetti([8, 10], ccGold, 300);
+        } else if(type == 'boost') {
+            useBoost(amount);
         }
 
         clickSpeedHandler(true);
@@ -1324,7 +1343,6 @@ function updateCPC(specific=false) {
         cpc = DisplayRounded(Math.floor(player.cpc),2);
         eInnerText(elCPC, cpc);
     }
-
 
     // CPS
     if(!specific || specific == 'cps') {
@@ -2237,7 +2255,7 @@ function useBoost(boost = 'cpc_2x') {
         if(hours != 0) {
             hours = `${hours}:`;
             if(minutes.toString().length == 1) { minutes = `0${minutes}`; }
-        } else { hours = ''; }
+        } else hours = '';
 
         // Update page
         dom(`time_boost_${id}`).innerText = `${hours}${minutes}:${seconds}`;
