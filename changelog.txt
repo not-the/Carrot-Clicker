@@ -7,6 +7,7 @@
 - All tools now have sprites
 - Condensed the characterPrices() function
 - Fixed theme/cosmetic NEW indicators not going away
+- Removed the version from the page title
 - Achievements:
   + no_bill_challenge name changed and given artwork
   + all_themes given artwork
