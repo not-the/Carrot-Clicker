@@ -1264,10 +1264,16 @@ function populateJared(specific=false) {
  * @param {string} type Accepts "theme" or "cosmetic"
  */
 function newIndicator(state, type) {
-    if(document.querySelector(`.new_indicator_${type} > .new_indicator`)) return;
     player[`new_${type}`] = state; // Save
-    let buttons = document.querySelectorAll(`.new_indicator_${type}`);
-    buttons.forEach(e => { e.innerHTML += '<div class="new_indicator">NEW</div>'; })
+    
+    if(state) {
+        let buttons = document.querySelectorAll(`.new_indicator_${type}`);
+        if(document.querySelector(`.new_indicator_${type} > .new_indicator`)) return;
+        buttons.forEach(e => { e.innerHTML += '<div class="new_indicator">NEW</div>'; })
+    } else {
+        let indicators = document.querySelectorAll(`.new_indicator_${type} > .new_indicator`);
+        indicators.forEach(e => e.remove());
+    }
 }
 
 /** Enable/disable compact achievement CSS */

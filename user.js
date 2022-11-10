@@ -838,7 +838,6 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 }
 
                 // Levels
-                const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
                 for(li = 0; li < levelable.length; li++) {
                     let character = levelable[li];
                     let nick = character.nickname;

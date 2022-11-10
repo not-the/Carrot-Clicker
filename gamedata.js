@@ -1,11 +1,3 @@
-// Game data
-// Game version
-(() => {
-    const game_version = 'dev beta v1.16.14';
-    dom('page_title').innerText = `Carrot Clicker ${game_version}`;
-    dom('footer_version').innerText = `Version ${game_version} - Unstable`;
-})()
-
 // Message templates
 //#region
 // Dialog templates
@@ -1670,7 +1662,7 @@ const achievements = {
     // CPC
     '9000_cpc': {
         'name': 'There\'s a Joke Here Somewhere',
-        'desc': 'Get your Carrots Per Click (Click power level™️) over 9000',
+        'desc': 'Get your Carrots Per Click (Click power level\™️) over 9000',
         'image': './assets/achievements/9000.png',
         'reward': 'shop:theme/theme_chatapp',
         'pages': 1,
@@ -2058,12 +2050,29 @@ const achievements = {
 
     // Themes
     'all_themes': {
-        'name': 'all_themes',
+        'name': 'All Themes',
         'desc': 'Unlock every theme',
-        'image': './assets/theme/theme_red.png', // needs unique art
+        'image': './assets/achievements/all_themes.png',
         'reward': false,
         'pages': 3,
         'conditions': ['player.themes.length', themesKeys.length],
+
+        'mystery': {
+            'name': true,
+            'desc': false,
+            'image': false,
+            'noToast': false,
+        }
+    },
+
+    // Cosmetics
+    'all_cosmetics': {
+        'name': 'All Cosmetics',
+        'desc': 'Unlock every cosmetic',
+        'image': false,
+        'reward': false,
+        'pages': 3,
+        'conditions': ['percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)', 100],
 
         'mystery': {
             'name': true,
@@ -2163,9 +2172,9 @@ const achievements = {
         }
     },
     'no_bill_challenge': {
-        'name': 'You\'re Free to Wait', // Renamed from "Patience is free"
+        'name': 'Have a Seat', // "Patience is free" -> "You\'re Free to Wait"
         'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
-        'image': false,
+        'image': './assets/achievements/chair.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['ex_noBill()', true],

@@ -790,6 +790,8 @@ saved_Charles    = localStorage.getObject("Charles") || clone(Default_Charles);
 Carl             = localStorage.getObject("Carl")    || clone(Default_Carl);
 Jared            = localStorage.getObject("Jared")   || clone(Default_Jared);
 
+const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
+
 // Update Charles
 Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
 Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
@@ -1301,23 +1303,15 @@ function cashCount(flash = true) {
 /** Updates character level up prices on the page */
 function characterPrices() {
     // Update page
-    eInnerText(
-        elCharacterUpCost.bill, DisplayRounded(getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0)),
-    );
-    eInnerText(
-        elCharacterUpCost.belle, DisplayRounded(getLevelPrice(Belle_Boomerette, Belle_Boomerette.lvl, multibuy[mbsel]).toFixed(0), 1),
-    );
-    eInnerText(
-        elCharacterUpCost.greg, DisplayRounded(getLevelPrice(Gregory, Gregory.lvl, multibuy[mbsel]).toFixed(0), 1),
-    );
-    
-    // Character levels
-    elCharacterLevel.bill.value = numCommas(Boomer_Bill.lvl, 1);
-    elCharacterLevel.belle.value = numCommas(Belle_Boomerette.lvl, 1);
+    for(character of levelable) {
+        eInnerText(elCharacterUpCost[character.nickname], DisplayRounded(getLevelPrice(character, character.lvl, multibuy[mbsel]).toFixed(0), 1, 10000)); // Price
+        elCharacterLevel[character.nickname].value = numCommas(character.lvl); // Level
+    }
+
+    // Greg
     let gl = Gregory.lvl;
     let gnext = `Next tool at ${gl == 0 ? 1 : (gl + (25 - gl % 25))}`;
     if(gl >= (Gregory.Hoes.length-1) * 25) gnext = '';
-    elCharacterLevel.greg.value = numCommas(gl);
     dom('greg_next').innerText = gnext;
 }
 /** Updates CPC and CPS values on the page */

@@ -1,4 +1,21 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.16.15
+    11-9-2022
+// ----------------------------------------------------------- //
+
+- Gilded hoe is now the final tool
+- All tools now have sprites
+- Condensed the characterPrices() function
+- Fixed theme/cosmetic NEW indicators not going away
+- Achievements:
+  + no_bill_challenge name changed and given artwork
+  + all_themes given artwork
+  + New achievement: all_cosmetics
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.14
     11-7-2022
 // ----------------------------------------------------------- //
