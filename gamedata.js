@@ -480,12 +480,12 @@ const cosmetics = {
             'render_type': 'pixel',
         },
         // Tool 6
-        "tool_6": {
-            'name': 'tool_6',
+        "gilded_hoe": {
+            'name': 'Gilded Hoe',
             'preview': './assets/tools/tool_5.png',
             'desc': 'This is your God',
 
-            'farmable': 'tool_6',
+            'farmable': 'Idol',
             'image': './assets/tools/tool_5.png',
             'render_type': 'pixel',
         },
@@ -2037,7 +2037,7 @@ const achievements = {
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement, the Gilded Hoe',
         'image': './assets/tools/tool_5.png',
-        'reward': 'cosmetic:farmable/tool_6',
+        'reward': 'cosmetic:farmable/gilded_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
         'mystery': {
