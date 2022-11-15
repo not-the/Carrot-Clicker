@@ -33,7 +33,7 @@ const toasts = {
 
     // Misc
     notice_trinkets: ['Trinkets now available', 'Use cash to buy trinkets with special abilities.'],
-    error_jared_hire_cost: ['More carrots needed', 'Jared needs at least 250 million carrots to move in.'],
+    error_jared_hire_cost: ['More carrots needed', 'Jared needs at least 10 million carrots to move in.'],
 }
 //#endregion
 
