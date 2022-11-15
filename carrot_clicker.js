@@ -1209,14 +1209,15 @@ var fallingID = 0;
 var fallingConsecutive = 0;
 const fallingCarrotsArea = dom('fallingCarrotsArea');
 /** Creates a falling carrot */
-function fallingCarrot(allow_boosts=true) {
+function fallingCarrot() {
     let roll = Math.ceil((Math.random() * 100)); // Roll out of 100
     let rollchance = boostEffects['fc_chance']; // 1% chance
     if(roll > rollchance) return; // No FC
 
     // Type
     let type = 'carrot';
-    if(allow_boosts && (Math.ceil(Math.random() * 100) <= (2 / rollchance))) type = 'boost'; // 2% chance that a boost drops
+    // let type = 'boost';
+    if(Math.ceil(Math.random() * 100) <= (2 / rollchance)) type = 'boost'; // 3% chance that a boost drops
     else if(Math.ceil(Math.random() * 100) <= (6 / rollchance)) type = 'cash'; // 6% chance that cash drops
 
     // Reward
@@ -1241,10 +1242,11 @@ function fallingCarrot(allow_boosts=true) {
         amount = Math.ceil((Math.random() * max)) + min;
     } else if(type == 'boost') {
         // FC boost
-        let boostroll = Math.ceil(Math.random * 100)
-        if(boostroll <= 50 && boostEffects['fc_chance'] === 1) amount = 'fc_10x'; // 50%
-        else if(boostroll <= 90 && boostEffects['cpc'] === 1) amount = 'cpc_5x' // 40%
-        else if(boostEffects['cpc'] === 1) amount = 'cpc_15x' // 10%
+        let boostroll = Math.ceil(Math.random() * 100);
+        console.log(boostroll);
+        if(boostroll <= 35 && boostEffects['fc_chance'] === 1) amount = 'fc_10x'; // 35%
+        else if(boostroll <= 70 && boostEffects['cpc'] === 1) amount = 'cpc_2x' // 35%
+        else if(boostEffects['cpc'] === 1) amount = 'cpc_5x' // 30%
         else return;
     }
     
@@ -1290,6 +1292,8 @@ function fallingCarrot(allow_boosts=true) {
             mouseConfetti([8, 10], ccGold, 300);
         } else if(type == 'boost') {
             useBoost(amount);
+            popupHandler(true, boosts[amount].name, 'boost');
+            mouseConfetti([14, 16], ['white', '#cd72da', '#fffd89'], 340, 3);
         }
 
         clickSpeedHandler(true);
@@ -1347,7 +1351,7 @@ function updateCPC(specific=false) {
     if(!specific || specific == 'cps') {
         // Belle bonus display
         let star = '';
-        if(cpsbuff == 0 || Jared.data.belle_bonus.value == 0 || player.cps == 0) {
+        if(cpsbuff == 0 || Jared.data.belle_bonus.value == 0 || player.cps == 0 || boostEffects['cps'] !== 1) {
             cps = player.cps;
         } else {
             cps = player.cps * ((Jared.data.belle_bonus.value / 100) + 1) || 0;
@@ -1359,19 +1363,12 @@ function updateCPC(specific=false) {
 }
 /** Updates character's upgrade buttons to be grayed out if it's too expensive */
 function characterButtons() {
-    let bill  = (player.carrots < Boomer_Bill.lvlupPrice);
-    let belle = (player.carrots < Belle_Boomerette.lvlupPrice);
-    let greg  = (player.carrots < Gregory.lvlupPrice);
-    // States
-    if(mbsel != 0) {
-        bill  = (player.carrots < getLevelPrice(Boomer_Bill, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0));
-        belle = (player.carrots < getLevelPrice(Belle_Boomerette, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0));
-        greg  = (player.carrots < getLevelPrice(Gregory, Boomer_Bill.lvl, multibuy[mbsel]).toFixed(0));
+    for(i in levelable) {
+        let character = levelable[i];
+        let state  = (player.carrots < character.lvlupPrice);
+        if(mbsel != 0) state = (player.carrots < getLevelPrice(character, character.lvl, multibuy[mbsel]).toFixed(0));
+        style(dom(`${character.nickname}_level_up`), 'grayedout', state);
     }
-    // Update page
-    style(dom('Bill_level_up'),  'grayedout', bill);
-    style(dom('Belle_level_up'), 'grayedout', belle);
-    style(dom('Greg_level_up'),  'grayedout', greg);
 }
 /** Updates tool prices on the page */
 function updateToolPrices() {
@@ -1518,7 +1515,7 @@ const elPrestigeMenuTPBonus = dom('menu_tome_bonus');
 function updatePrestigeMenu() {
     eInnerText(elPrestigeMenuGCCount, DisplayRounded(player.golden_carrots));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
-    eInnerText(elPrestigeMenuTPBonus, `+${Math.round(player.pages * (Jared.data.page_bonus.value || 1) / 10) * 10}%`);
+    eInnerText(elPrestigeMenuTPBonus, `+${Math.round(player.pages * (Jared.data.page_bonus.value || 1))}%`);
     eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
 }
 
@@ -2070,7 +2067,7 @@ const statsNumbers = {
     prestige_carrots_bonus:      dom('prestige_carrots_bonus'),
     prestige_clicks:             dom('prestige_clicks'),
     prestige_falling_carrots_grabbed: dom('prestige_falling_carrots_grabbed'),
-    // prestige_boosts_used:        dom('prestige_boosts_used'),
+    prestige_boosts_used:        dom('prestige_boosts_used'),
     prestige_hoes_crafted_total: dom('prestige_hoes_crafted_total'),
     prestige_hoes_crafted_0:     dom('prestige_hoes_crafted_0'),
     prestige_hoes_crafted_1:     dom('prestige_hoes_crafted_1'),
@@ -2091,7 +2088,7 @@ const statsNumbers = {
     lifetime_cash_spent:              dom('lifetime_cash_spent'),
     lifetime_clicks:                  dom('lifetime_clicks'),
     lifetime_falling_carrots_grabbed: dom('lifetime_falling_carrots_grabbed'),
-    // lifetime_boosts_used:             dom('lifetime_boosts_used'),
+    lifetime_boosts_used:             dom('lifetime_boosts_used'),
     lifetime_hoes_crafted_total:      dom('lifetime_hoes_crafted_total'),
     lifetime_hoes_crafted_0:          dom('lifetime_hoes_crafted_0'),
     lifetime_hoes_crafted_1:          dom('lifetime_hoes_crafted_1'),
@@ -2116,7 +2113,7 @@ function loadStatistics() {
     statsNumbers.prestige_carrots_bonus.innerText           = DisplayRounded(player.prestige.bonus_carrots.toFixed(0));
     statsNumbers.prestige_clicks.innerText                  = numCommas(player.prestige.clicks);
     statsNumbers.prestige_falling_carrots_grabbed.innerText = numCommas(player.prestige.falling_carrots_grabbed);
-    // statsNumbers.prestige_boosts_used.innerText             = numCommas(player.prestige.prestige_boosts_used);
+    statsNumbers.prestige_boosts_used.innerText             = numCommas(player.prestige.boosts_used);
     statsNumbers.prestige_hoes_crafted_total.innerText      = numCommas(player.prestige.hoes.craftedTotal);
     statsNumbers.prestige_hoes_crafted_0.innerText          = numCommas(player.prestige.hoes.crafted[0]);
     statsNumbers.prestige_hoes_crafted_1.innerText          = numCommas(player.prestige.hoes.crafted[1]);
@@ -2139,7 +2136,7 @@ function loadStatistics() {
     statsNumbers.lifetime_cash_spent.innerText              = numCommas(player.lifetime.cash - player.cash);
     statsNumbers.lifetime_clicks.innerText                  = numCommas(player.lifetime.clicks);
     statsNumbers.lifetime_falling_carrots_grabbed.innerText = numCommas(player.lifetime.falling_carrots_grabbed);
-    // statsNumbers.lifetime_boosts_used.innerText             = numCommas(player.lifetime.prestige_boosts_used);
+    statsNumbers.lifetime_boosts_used.innerText             = numCommas(player.lifetime.boosts_used);
     statsNumbers.lifetime_hoes_crafted_total.innerText      = player.lifetime.hoes.craftedTotal;
     statsNumbers.lifetime_hoes_crafted_0.innerText          = player.lifetime.hoes.crafted[0];
     statsNumbers.lifetime_hoes_crafted_1.innerText          = player.lifetime.hoes.crafted[1];
@@ -2275,7 +2272,9 @@ function useBoost(boost = 'cpc_2x') {
     function boostHTML(id, item) {
         return `
         <div class="power_item tooltip_area" id="boost_${id}">
-            <img src="${item.img}" alt="" onclick="endBoost(${id})"><span id="time_boost_${id}">-:--</span>
+            <img src="${item.img}" alt="Cancel boost" onclick="endBoost(${id})" role="button" tabindex="0">
+            <span class="boost_multiplier">x${item.multiplier}</span>
+            <span id="time_boost_${id}" class="secondary_text">-:--</span>
             <div class="shop_tooltip">
                 ${item.name}
                 <p class="secondary_text">${item.desc}</p>

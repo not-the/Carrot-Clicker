@@ -28,6 +28,7 @@ const toasts = {
     tutorial_tools: ["Tutorial: Tools", "You've created your first tool! To equip it, click one of the glowing tools on either Bill or Belle. The character will recieve a permanent buff, but remember that equipping a tools is irreversible (for now).", "", true],
     tutorial_pages: ["Tutorial: Tome pages", "You've earned a tome page! For every tome page you have you will recieve a +1% golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!", "", true],
     tutorial_multibuy: ['Tutorial: Multibuy', 'Press shift, or click the 10x indicator in the boosts bar to cycle multibuy. Multibuy allows you to level up more characters, craft and equip tools more tools at once.', '', true],
+    tutorial_prestige_available: ['Tutorial: Prestiging', 'When you\'re ready to prestige, you can click the white carrot button. Try seeing how far you can get before prestiging to maximize your Golden Carrots!', undefined, true],
     tutorial_charles: ['Tutorial: Golden Carrots', 'Now that you\'ve prestiged, you\'ll want to buy some tomes. Visit Charles\' shop to see what tomes are available to you. Be sure to spend all of your golden carrots before you start farming!', '', true, false, false, true],
     // tutorial_golden_carrots is in carrot_clicker.js
 
@@ -127,8 +128,6 @@ const default_tips = {
         "Carrots are people too",
         "Carrots have been proven to improve eyesight by 9000%. It's true!",
     ],
-
-
 
     // Mark as seen
     seen: {
@@ -503,7 +502,7 @@ const cosmetics = {
         // Alien Carrot
         "alien_carrot": {
             'name': 'Alien Carrot',
-            'preview': './assets/theme/alien carrot/alien_carrot.png',
+            'preview': './assets/theme/alien_carrot.png',
             'desc': 'So strange',
 
             'farmable': 'Alien Carrot',
@@ -542,7 +541,7 @@ const cosmetics = {
             'preview': './assets/theme/orange_arrow/upvote.png',
 
             'desc': 'This is better than going outside',
-            'farmable': 'Arrow',
+            'farmable': 'up arrow',
             'image': './assets/theme/orange_arrow/upvote.png',
             'hidden': true,
         },
@@ -1425,7 +1424,7 @@ const achievements = {
     '1_quadrillion_carrots': {
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
-        'image': './assets/achievements/carrot_pile.png', // needs unique art
+        'image': './assets/achievements/Carrot Continent.png',
         'reward': [
             'shop:cosmetic/bundle/developer_art',
             'shop:cosmetic/tools/fertilizer',
@@ -1947,7 +1946,7 @@ const achievements = {
     '1_trinket': {
         'name': 'Not so Useless',
         'desc': 'Buy your first trinket',
-        'image': false,
+        'image': './assets/achievements/Not So Useless.png',
         'reward': false,
         'pages': 1,
         'conditions': ['percentage(...player.trinket_completion.split("/"))', 0.001],
@@ -1961,7 +1960,7 @@ const achievements = {
     'all_trinkets': {
         'name': 'Complete Collection',
         'desc': 'Buy and fully upgrade every trinket',
-        'image': false,
+        'image': './assets/achievements/Complete Collection.png',
         'reward': false,
         'pages': 10,
         'conditions': ['percentage(...player.trinket_completion.split("/"))', 100],
@@ -2036,7 +2035,7 @@ const achievements = {
     'obtain_tool_six': {
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement, the Gilded Hoe',
-        'image': './assets/tools/tool_5.png',
+        'image': './assets/achievements/Extreme Farming.png',
         'reward': 'cosmetic:farmable/gilded_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
@@ -2319,7 +2318,10 @@ const achievements = {
         'name': 'Not Funny',
         'desc': 'Upgrade Bill, Belle, and Greg to Level 69 (Hidden achievement)',
         'image': './assets/achievements/nice.png',
-        'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
+        'reward': () => {
+            mouseConfetti([24,24], confettiColors, 300);
+            unlock('cosmetic', 'upvote', 'farmable');
+        },
         'pages': false,
         'conditions': ['ex_notFunny()', 1],
         'style': 'secret',
@@ -2360,6 +2362,7 @@ const achievements = {
             player.prestige_available = true;
             saveGame();
             seeButton('prestige');
+            toast(toasts.tutorial_prestige_available);
         },
         'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
@@ -2507,8 +2510,8 @@ const jaredShop = {
         desc:      'Gives all characters additional tool slots on top of Greg\'s level',
         img:       './assets/items/trinkets/tool_box.png',
         currency:  'cash',
-        price:     [   96, 106, 120, 144, 196, 218, 242, 328, 362, 400],
-        value:     [0,  1,   2,   3,   4,   5,   6,   7,   8,   9,  10],
+        price:     [   76, 86, 96, 106, 120, 144, 196, 218, 242, 328/*, 362, 400*/],
+        value:     [0,  1,  2,  3,   4,   5,   6,   7,   8,   9,  10],
         written:   '+@ slots',
         update:    () => { updateAllTools(); },
     },
@@ -2517,8 +2520,8 @@ const jaredShop = {
         desc:      'Increases Greg\'s crafting speed',
         img:       './assets/items/trinkets/propane.png',
         currency:  'cash',
-        price:     [    12,  38, 53, 68, 74, 92, 121],
-        value:     [1, 1.2, 1.5,  2,  3,  5,  7,  10], // Craft - cycles per second divided by 10
+        price:     [     12,  20, 38, 53, 68, 86, 121],
+        value:     [1, 1.25, 1.5,  2,  3,  5,  7,  10], // Craft - cycles per second divided by 10
         written:   'x@',
     },
     'greg_min_start': {
@@ -2589,7 +2592,7 @@ jaredShop.keys = Object.keys(jaredShop);
 const boosts = {
     // CPC
     'cpc_2x': {
-        name: 'CPC doubler',
+        name: 'Click doubler',
         desc: 'Double CPC for 2 minutes',
         img: './assets/pixel_carrot_32x.png',
 
@@ -2601,12 +2604,12 @@ const boosts = {
         price: 3,
     },
     'cpc_5x': {
-        name: 'cpc_5x',
+        name: 'Click x5',
         desc: 'desc',
         img: './assets/pixel_carrot_32x.png',
 
         type: 'cpc',
-        multiplier: 2,
+        multiplier: 5,
         time: 60,
 
         currency: 'gc',
@@ -2624,18 +2627,18 @@ const boosts = {
         currency: 'gc',
         price: 6,
     },
-    'cpc_10000x': {
-        name: 'cpc_10000x',
-        desc: 'desc',
-        img: './assets/pixel_carrot_32x.png',
+    // 'cpc_10000x': {
+    //     name: 'cpc_10000x',
+    //     desc: 'desc',
+    //     img: './assets/pixel_carrot_32x.png',
 
-        type: 'cpc',
-        multiplier: 10000,
-        time: 10,
+    //     type: 'cpc',
+    //     multiplier: 10000,
+    //     time: 10,
 
-        currency: 'gc',
-        price: 6000,
-    },
+    //     currency: 'gc',
+    //     price: 6000,
+    // },
 
     // CPS
     'cps_2x': {

@@ -412,10 +412,7 @@ function panelChange(to) {
 //#region 
 function popupHandler(useMousePos = true, amount, style = 'carrot') {
     var clickVisualElement = document.createElement("div"); // Create Element
-
-    // Give element random displacement along with mouse position
-    var randomX = randomOffset() + mouseX;
-    var randomY = randomOffset() + mouseY;
+    let [randomX, randomY] = [randomOffset() + mouseX, randomOffset() + mouseY]; // Give element random displacement along with mouse position
 
     // Get position of carrot image (used when useMousePos is false)
     var mcPosition = mainCarrot.getBoundingClientRect();
@@ -439,17 +436,11 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
 
     let text = '';
     // Carrot
-    if(style == 'carrot') text = `${sign}${amount}`; 
-    // Falling carrot
-    else if(style == 'falling') {
-        text = `${sign}${amount}`;
-        clickVisualElement.classList.add("clickvisual_falling");
-    }
-    // Cash
-    else if(style == 'cash') {
-        text = `⚬${amount}`;
-        clickVisualElement.classList.add("clickvisual_cash");
-    }
+    if(style == 'carrot') text = `${sign}${amount}`; // Normal click
+    else if(style == 'falling')  text = `${sign}${amount}`; // Falling carrot
+    else if(style == 'cash') text = `⚬${amount}`; // Cash
+    else text = amount;
+    clickVisualElement.classList.add(`clickvisual_${style}`);
     clickVisualElement.innerText = text;
     bonusVisualArea.append(clickVisualElement);
 
@@ -910,7 +901,6 @@ function populateAchievements(specific=false) {
         let desc = unlocked || achieve.mystery.desc != true ? achieve.desc : '???';
         let img = achieve.image || './assets/achievements/missing.png';
         img  =  unlocked || achieve.mystery.image == false ? img : './assets/achievements/locked.png';
-        let title = name == '???' ? 'This achievement has not been unlocked' : name;
 
         // Create
         return /* htmla */ `
@@ -929,7 +919,6 @@ function populateAchievements(specific=false) {
                     alt="${name}"
                     id="${key}_img"
                     class="achievement_img"
-                    title="${title}"
                     loading="lazy"
                 >
                 <div>
@@ -1069,7 +1058,8 @@ function setTheme(theme) {
 
 
 /** Opens character info screen */
-function characterInfo(character, state=undefined) {
+function characterInfo(character='bill', state=undefined) {
+    if(characterQuery(character) != true) return toast('This feature isn\'t available yet.', 'Progress through the game to unlock this.', undefined, false, true);
     let charbox = dom(`${character}_box`);
     if(charbox.classList.contains('show_info') || state == false) {
         charbox.classList.remove('show_info');

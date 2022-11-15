@@ -1,5 +1,51 @@
 
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.17
+    11-15-2022
+// ----------------------------------------------------------- //
+
+- Falling boosts now produce confetti and a text popup with the name of the boost when collected
+- Falling boost drop chance changed 2% -> 3% (keep in mind this is if the 1% falling carrot chance has already succeeded, so 3% is actually a 0.03% every time you click)
+- Cancel boost buttons are now keyboard focusable
+- A boosts multiplier now appears alongside its timer
+- "Boosts used" statistic now appears in the statistics menu
+- Added a tutorial message for when the prestiging becomes available
+- Tool prices now visually change depending on if the tool is unlocked or if you can afford it
+- Removed the hover title from achievement icons
+- Fixed the "Orange Arrow" cosmetic not being obtainable via the achievement
+- Achievements:
+    + Added "Not So Useless" artwork
+    + Added "Complete Collection" artwork
+    + Added "Extreme Farming" artwork
+    + Added "Carrot Continent" artwork
+    + Updated "Two's Company" artwork
+    + Updated "Heavy Metal" artwork
+    + Updated "Boomer Bill Gates" artwork
+- Cosmetics:
+    + Updated "Biker Bill" artwork
+    + Updated "Fancy Bill" artwork
+    + Updated "Dollar Bill" artwork
+
+Trinkets:
+- Propane tank is now slightly cheaper, level 1 multipler change from 1.2x -> 1.25x
+- Tool box is now cheaper overall
+
+Bug fixes:
+- Fixed the golden carrot bonus % shown in the prestige menu being incorrect
+- Fixed carrot count not updating when Jared is hired
+- Fixed Jared hire button and error message price being incorrect
+- Fixed tooltips appearing underneath other elements when activated via focus-visible
+- Fixed only one boost type being given by falling boosts
+- The "Buy tomes" button creates a toast when Charles isn't unlocked
+
+Internal changes:
+- Dev panel now appears on the right side of settings
+- Condensed the characterButtons() function
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.16.16
     11-14-2022
 // ----------------------------------------------------------- //

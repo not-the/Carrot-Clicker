@@ -892,75 +892,83 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
 
             // Put dev panel in settings
             $('#devp').innerHTML = /* html */
-            `<div class="footer_bottom brown_darker_color" style="display: block; padding: 16px 24px;">
-                <style type="text/css">
-                    .unlock_buttons { width: 100%; max-width: 400px; }
-                    .unlock_buttons button { width: 100%; margin-right: 4px; }
-                </style>
+            `<div style="">
+                <div class="footer_bottom brown_darker_color">
+                    <style type="text/css">
+                        #devp > div { width: 100%; max-width: 550px; float: right; margin-top: -96px; }
+                        #devp > div > div { display: block; padding: 12px 20px; margin-left: 32px; }
+                        .unlock_buttons { width: 100%; max-width: 400px; }
+                        .unlock_buttons button { width: 100%; margin-right: 4px; }
+                        @media only screen and (max-width: 1200px) {
+                            #devp > div { width: 100%; max-width: unset; float: unset; margin: 0; }
+                            #devp > div > div { display: block; padding: 12px 20px; margin-left: 0; margin-bottom: 24px; }
+                        }
+                    </style>
 
-                <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
-                <button onclick="clearSave()" class="button_red">Quick Reset</button>
+                    <b style="font-size: 18pt; color: rgb(255, 161, 53)">Dev Tools</b><br>
+                    <button onclick="clearSave()" class="button_red">Quick Reset</button>
 
-                <h4>Unlock all</h4>
-                <div class="unlock_buttons">
-                    <div class="flex">
-                        <button onclick="allUnlocks()">Everything</button>
-                        <button onclick="allCharacters()">Characters</button>
-                        <button onclick="allAchievements()">Achievements</button>
+                    <h4>Unlock all</h4>
+                    <div class="unlock_buttons">
+                        <div class="flex">
+                            <button onclick="allUnlocks()">Everything</button>
+                            <button onclick="allCharacters()">Characters</button>
+                            <button onclick="allAchievements()">Achievements</button>
+                        </div>
+                        <div class="flex">
+                            <button onclick="allThemes()">Themes</button>
+                            <button onclick="allCosmetics()">Cosmetics</button>
+                            <button onclick="allTrinkets()">Trinkets</button>
+                        </div>
+                        <div class="flex">
+                            <button onclick="allTips()">Tips</button>
+                            <button onclick="allPrestige()">Show prestige</button>
+                        </div>
                     </div>
-                    <div class="flex">
-                        <button onclick="allThemes()">Themes</button>
-                        <button onclick="allCosmetics()">Cosmetics</button>
-                        <button onclick="allTrinkets()">Trinkets</button>
-                    </div>
-                    <div class="flex">
-                        <button onclick="allTips()">Tips</button>
-                        <button onclick="allPrestige()">Show prestige</button>
-                    </div>
+                    
+                    <h4>Set Values</h4>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="setCarrot">Carrots:</label>
+                            </td>
+                            <td>
+                                <input id="setCarrot" class="dev_input" type="number" value="500000">
+                            </td>
+                            <td id="setCarrotRounded" class="secondary_text"></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label for="setGoldenCarrot">Golden Carrots:</label>
+                            </td>
+                            <td>
+                                <input id="setGoldenCarrot" class="dev_input" type="number">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label for="setCash">Coins:</label>
+                            </td>
+                            <td>
+                                <input id="setCash" class="dev_input" type="number" value="9999">
+                            </td>
+                        </tr>
+                    </table>
+                    <button onclick="updateValues()">Update Values</button>
+                    
+                    <h4>Save data management</h4>
+                    <label for="debug_dont_autoupdate">
+                    <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${!player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
+                    onclick="optionDebugUpdate()">
+                        Auto-update save while in debug mode
+                    </label><br/>
+                    <textarea name="import_export" id="import_export" cols="40" rows="3" style="max-width: 100%; min-width: 100%;" onclick="this.focus();this.select()"></textarea><br/>
+                    <button onclick="exportSave()" style="width: 159px;">🠹 Export</button>
+                    <button onclick="importSave()" style="width: 159px;">🠻 Import</button>
                 </div>
-                
-                <h4>Set Values</h4>
-                <table>
-                    <tr>
-                        <td>
-                            <label for="setCarrot">Carrots:</label>
-                        </td>
-                        <td>
-                            <input id="setCarrot" class="dev_input" type="number" value="500000">
-                        </td>
-                        <td id="setCarrotRounded" class="secondary_text"></td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <label for="setGoldenCarrot">Golden Carrots:</label>
-                        </td>
-                        <td>
-                            <input id="setGoldenCarrot" class="dev_input" type="number">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <label for="setCash">Coins:</label>
-                        </td>
-                        <td>
-                            <input id="setCash" class="dev_input" type="number" value="9999">
-                        </td>
-                    </tr>
-                </table>
-                <button onclick="updateValues()">Update Values</button>
-                
-                <h4>Save data management</h4>
-                <label for="debug_dont_autoupdate">
-                <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${!player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
-                onclick="optionDebugUpdate()">
-                    Auto-update save while in debug mode
-                </label><br/>
-                <textarea name="import_export" id="import_export" cols="40" rows="3" style="max-width: 100%; min-width: 100%;" onclick="this.focus();this.select()"></textarea><br/>
-                <button onclick="exportSave()" style="width: 159px;">🠹 Export</button>
-                <button onclick="importSave()" style="width: 159px;">🠻 Import</button>
-            </div><br>`;
+            </div>`;
 
             window.setCarrotsEl       = dom("setCarrot");
             window.setGoldenCarrotsEl = dom("setGoldenCarrot");
