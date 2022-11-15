@@ -327,45 +327,25 @@ body.theme_classic {
 
 
 
-/* Tripane - All color themes */
-.theme_red #tripane,
-.theme_green #tripane,
-.theme_blue #tripane,
-.theme_grey #tripane {
-    background-color: var(--bg-lighter);
-}
-.theme_red #tripane #tab_bar,
-.theme_green #tripane #tab_bar,
-.theme_blue #tripane #tab_bar,
-.theme_grey #tripane #tab_bar {
-    background-color: var(--bg-lighter);
-}
-.theme_red #tripane #tab_bar .tab,
-.theme_green #tripane #tab_bar .tab,
-.theme_blue #tripane #tab_bar .tab,
-.theme_grey #tripane #tab_bar .tab {
-    background-color: var(--bg);
-    color: var(--gray);
-    border-color: var(--border-color);
-}
-.theme_red #tripane #tab_bar .activetab,
-.theme_green #tripane #tab_bar .activetab,
-.theme_blue #tripane #tab_bar .activetab,
-.theme_grey #tripane #tab_bar .activetab {
-    background-color: var(--bg-lighter);
-    color: white;
-}
-.theme_red .achievement_item,
-.theme_green .achievement_item,
-.theme_blue .achievement_item,
-.theme_grey .achievement_item,
+/* Grey theme */
+body.theme_grey,
+body.theme_red,
+body.theme_green,
+body.theme_blue {
+    /* Backgrounds */
+    --bg:               #242222;
+    --bg-lighter:       #312e2e;
+    --bg-popup:         #353535;
+    --bg-darker:        #1f1d1d;
+    --border-color:     #4b4747;
 
-.theme_red .footer_bottom,
-.theme_green .footer_bottom,
-.theme_blue .footer_bottom,
-.theme_grey .footer_bottom {
-    background-color: var(--bg-darker);
+    /* Tri-pane colors */
+    --alt-bg:           #312e2e;
+    --alt-bg-darker:    #242222;
+    --alt-bg-darkest:   #1f1d1d;
+    /* --alt-bg-lighter:   #635145; */
 }
+
 
 
 

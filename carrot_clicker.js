@@ -133,10 +133,7 @@ class Player{
 }
 
 class statsTracker{
-    constructor(
-        carrots,click_carrots,idle_carrots,bonus_carrots,
-        cash,falling_carrots_grabbed,golden_carrots,prestige_count,
-        clicks,hoes,tomes_bought,trinkets_complete){
+    constructor(carrots,click_carrots,idle_carrots,bonus_carrots,cash,falling_carrots_grabbed,golden_carrots,prestige_count,clicks,hoes,tomes_bought,trinkets_complete,boosts_used) {
         this.carrots=carrots;
         this.click_carrots=click_carrots;
         this.idle_carrots= idle_carrots;
@@ -149,6 +146,7 @@ class statsTracker{
         this.hoes=hoes;
         this.tomes_bought=tomes_bought;
         this.trinkets_complete=trinkets_complete;
+        this.boosts_used=boosts_used;
     }
 }
 
@@ -232,6 +230,7 @@ const playerPrestigeTemplate = {
         crafted: [0, 0, 0, 0, 0, 0],
         craftedTotal: 0,
     },
+    boosts_used: 0,
 };
 
 const default_player = new Player(
@@ -276,7 +275,7 @@ const default_player = new Player(
 
     {}  //flags
 )
-default_player.lifetime = new statsTracker(0,0,0,0,0,0,0,0,0,{crafted: [0, 0, 0, 0, 0, 0],craftedTotal: 0},0,0);
+default_player.lifetime = new statsTracker(0,0,0,0,0,0,0,0,0,{crafted: [0, 0, 0, 0, 0, 0],craftedTotal: 0},0,0,0);
 
 
 /* --- Tools --- */
@@ -718,7 +717,7 @@ function hireJared() {
         if(player.characters['jared'] == true) populateJared();
         else return; // Not available for hire or already hired
     }
-    const hireCost = 250000000;
+    const hireCost = 10000000;
     if(player.carrots < hireCost) return toast(...toasts.error_jared_hire_cost); // Too expensive
     player.carrots -= hireCost;
     player.characters['jared'] = true;
@@ -2071,6 +2070,7 @@ const statsNumbers = {
     prestige_carrots_bonus:      dom('prestige_carrots_bonus'),
     prestige_clicks:             dom('prestige_clicks'),
     prestige_falling_carrots_grabbed: dom('prestige_falling_carrots_grabbed'),
+    // prestige_boosts_used:        dom('prestige_boosts_used'),
     prestige_hoes_crafted_total: dom('prestige_hoes_crafted_total'),
     prestige_hoes_crafted_0:     dom('prestige_hoes_crafted_0'),
     prestige_hoes_crafted_1:     dom('prestige_hoes_crafted_1'),
@@ -2091,6 +2091,7 @@ const statsNumbers = {
     lifetime_cash_spent:              dom('lifetime_cash_spent'),
     lifetime_clicks:                  dom('lifetime_clicks'),
     lifetime_falling_carrots_grabbed: dom('lifetime_falling_carrots_grabbed'),
+    // lifetime_boosts_used:             dom('lifetime_boosts_used'),
     lifetime_hoes_crafted_total:      dom('lifetime_hoes_crafted_total'),
     lifetime_hoes_crafted_0:          dom('lifetime_hoes_crafted_0'),
     lifetime_hoes_crafted_1:          dom('lifetime_hoes_crafted_1'),
@@ -2106,8 +2107,8 @@ const statsNumbers = {
 
     stat_achievements:                dom('stat_achievements'),
 }
+/** Fills out statistics page */
 function loadStatistics() {
-
     // Prestige
     statsNumbers.prestige_carrots.innerText                 = DisplayRounded(player.prestige.carrots.toFixed(0));
     statsNumbers.prestige_carrots_clicked.innerText         = DisplayRounded(player.prestige.click_carrots.toFixed(0));
@@ -2115,6 +2116,7 @@ function loadStatistics() {
     statsNumbers.prestige_carrots_bonus.innerText           = DisplayRounded(player.prestige.bonus_carrots.toFixed(0));
     statsNumbers.prestige_clicks.innerText                  = numCommas(player.prestige.clicks);
     statsNumbers.prestige_falling_carrots_grabbed.innerText = numCommas(player.prestige.falling_carrots_grabbed);
+    // statsNumbers.prestige_boosts_used.innerText             = numCommas(player.prestige.prestige_boosts_used);
     statsNumbers.prestige_hoes_crafted_total.innerText      = numCommas(player.prestige.hoes.craftedTotal);
     statsNumbers.prestige_hoes_crafted_0.innerText          = numCommas(player.prestige.hoes.crafted[0]);
     statsNumbers.prestige_hoes_crafted_1.innerText          = numCommas(player.prestige.hoes.crafted[1]);
@@ -2137,6 +2139,7 @@ function loadStatistics() {
     statsNumbers.lifetime_cash_spent.innerText              = numCommas(player.lifetime.cash - player.cash);
     statsNumbers.lifetime_clicks.innerText                  = numCommas(player.lifetime.clicks);
     statsNumbers.lifetime_falling_carrots_grabbed.innerText = numCommas(player.lifetime.falling_carrots_grabbed);
+    // statsNumbers.lifetime_boosts_used.innerText             = numCommas(player.lifetime.prestige_boosts_used);
     statsNumbers.lifetime_hoes_crafted_total.innerText      = player.lifetime.hoes.craftedTotal;
     statsNumbers.lifetime_hoes_crafted_0.innerText          = player.lifetime.hoes.crafted[0];
     statsNumbers.lifetime_hoes_crafted_1.innerText          = player.lifetime.hoes.crafted[1];
@@ -2240,7 +2243,11 @@ function useBoost(boost = 'cpc_2x') {
     updateBoostEffects(item);
     elNoPowers.classList.add('remove');
 
-    // Boost timer
+    // Statistics
+    player.lifetime.boosts_used++;
+    player.prestige.boosts_used++;
+
+    /** Boost timer */
     function timer(id, target_time) {
         // Get the date
         let now = Date.now();

@@ -1,3 +1,23 @@
+
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.16.16
+    11-14-2022
+// ----------------------------------------------------------- //
+
+Jared changes:
+- Lifetime carrots required for him to appear: 50m -> 5m
+- Hire cost: 250m -> 10m
+- No longer requires you to have prestiged to appear
+
+Hopefully these changes will make the early game more interesting since you're accumulating cash from the start
+
+Other:
+- Added new statistics: Boosts Used (lifetime and prestige) - won't appear in statistics yet
+- Fixed theme_grey not changing settings
+
+~ Kal
+
+
 // ----------------------------------------------------------- //
     VERSION dev beta 1.16.15.1
     11-11-2022

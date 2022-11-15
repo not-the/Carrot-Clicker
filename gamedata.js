@@ -2369,7 +2369,7 @@ const achievements = {
         'name': 'internal_jared_available',
         'reward': () => { unlock('character', 'jared', 'ready'); },
         'pages': false,
-        'conditions': ['player.lifetime.prestige_count > 0 && player.lifetime.carrots >= 500000000', true],
+        'conditions': ['player.lifetime.carrots >= 5000000', true],
     },
     // 'internal_custom_theme_available': {
     //     'internal': true,
