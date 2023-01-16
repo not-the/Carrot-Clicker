@@ -1,3 +1,19 @@
+// ----------------------------------------------------------- //
+    VERSION dev beta 1.17.1
+    1-16-2023
+// ----------------------------------------------------------- //
+
+- Fixed a typo that made the prestiging tutorial toast throw an error (and break "Unlock all" in devtools)
+- Cosmetics:
+    + Updated "Baker Bill" artwork
+    + Updated "Business Bill" artwork
+    + Updated "Ugly Sweater Bill" artwork
+    + Updated "Grandma Belle" artwork
+    + Updated "High Vis Greg" artwork
+    + Fixed "Alien Carrot" cosmetic not loading
+
+~ Kal
+
 
 // ----------------------------------------------------------- //
     VERSION dev beta 1.17

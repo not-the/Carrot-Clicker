@@ -506,7 +506,7 @@ const cosmetics = {
             'desc': 'So strange',
 
             'farmable': 'Alien Carrot',
-            'image': './assets/theme/alien carrot/alien_carrot.png',
+            'image': './assets/theme/alien_carrot.png',
         },
         // Demon Carrot
         "demon_carrot": {
@@ -2362,7 +2362,7 @@ const achievements = {
             player.prestige_available = true;
             saveGame();
             seeButton('prestige');
-            toast(toasts.tutorial_prestige_available);
+            toast(...toasts.tutorial_prestige_available);
         },
         'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
