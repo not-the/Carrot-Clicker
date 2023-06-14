@@ -1,4 +1,15 @@
 // ----------------------------------------------------------- //
+    Stable repository
+    6-14-2023
+// ----------------------------------------------------------- //
+
+Made a copy of the repository to be hosted on the website. Changes don't apply to main repo.
+- Removed all comments and condensed code
+- Removed all console.log and console.warn lines
+- Removed code for inventory and hardmode
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.17.2
     6-14-2023
 // ----------------------------------------------------------- //
