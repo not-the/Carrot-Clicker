@@ -28,18 +28,18 @@ function setting(option, notif=false) {
     console.log(`${option} set to ${state}`);
     settings[option] = state;
     saveSettings();
-    if(option == 'compact_achievements') achieveCompactMode(state);
-    else if(option == 'achievements_grid') achieveGridMode(state);
-    else if(option == 'full_numbers') {
+    if(option === 'compact_achievements') achieveCompactMode(state);
+    else if(option === 'achievements_grid') achieveGridMode(state);
+    else if(option === 'full_numbers') {
         carrotCount();
         updateCPC();
         characterPrices();
-    } else if(option == 'show_nav') {
+    } else if(option === 'show_nav') {
         style(elBody, 'hide_nav', !state);
     }
     // Toast
     if(!notif) return;
-    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] == 's' ? 'are' : 'is'} now ${state ? 'enabled' : 'disabled'}`,
+    toast("Settings", `${capitalizeFL(option.split('_').join(' '))} ${option[option.length - 1] === 's' ? 'are' : 'is'} now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 }
 
@@ -104,7 +104,7 @@ function settingSounds(notif=true) {
     settingMusic(true);
 
     // Toast
-    if(notif != true) return;
+    if(notif !== true) return;
     toast("Settings", `Sounds are now ${state ? 'enabled' : 'disabled'}`,
     '', false, true);
 }
@@ -141,10 +141,10 @@ elVolumeMaster_label.onchange = volumeSliderHandler;
 var keyCarrotFiring = false;
 document.addEventListener('keydown', event => {
     let key = event.key;
-    if(key == " ") event.preventDefault();
+    if(key === " ") event.preventDefault();
     key = interpretKey(key);
     if(!settings.enable_keybinds || menuOpen()) return;
-    if(key == settings.keybinds['key_carrot'] && !keyCarrotFiring) {
+    if(key === settings.keybinds['key_carrot'] && !keyCarrotFiring) {
         keyCarrotFiring = true;
         holdStart(false, 1);
     }
@@ -153,21 +153,21 @@ document.addEventListener('keydown', event => {
 
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
-    if(event.key == "Enter") return document.activeElement.tagName != 'SUMMARY' ? document.activeElement.click() : undefined; // Browser keyboard navigation enter acts as click
+    if(event.key === "Enter") return document.activeElement.tagName !== 'SUMMARY' ? document.activeElement.click() : undefined; // Browser keyboard navigation enter acts as click
 
     // Escape
-    if(event.key == "Escape") {
-        if(equipWaiting != -1) cancelToolEquip(); // Cancel tool equip
+    if(event.key === "Escape") {
+        if(equipWaiting !== -1) cancelToolEquip(); // Cancel tool equip
         else if(menuOpen()) closeDialog(); // Close menu
-        else if(document.activeElement != elInfoDropdown) elInfoDropdown.focus();
+        else if(document.activeElement !== elInfoDropdown) elInfoDropdown.focus();
         else elInfoDropdown.blur();
     }
 
-    if(menuState.prestige && event.key == "Enter") openDialog(...dialog.prestige_confirm);
+    if(menuState.prestige && event.key === "Enter") openDialog(...dialog.prestige_confirm);
 
     // KEYBIND HANDLER
     let state = 'keyup';
-    if(event.ctrlKey == true || event.metaKey == true) return; // Ignore if CTRL or meta key was held
+    if(event.ctrlKey || event.metaKey) return; // Ignore if CTRL or meta key was held
     let key = interpretKey(event.key);
 
     // Custom keybinds
@@ -189,7 +189,7 @@ document.addEventListener('keyup', event => {
     // Check if string is on track to be correct or not
     for(combo of keyCombo) {
         for(code of keyCodes) {
-            if(combo == code) {
+            if(combo === code) {
                 keyCombo = '';
                 break;
             }
@@ -199,42 +199,42 @@ document.addEventListener('keyup', event => {
 
     // Stop if keybinds need to be ignored
     if(
-        settings.enable_keybinds == false
+        !settings.enable_keybinds
         || menuState.dialog
-        || document.activeElement.nodeName == 'TEXTAREA'
-        || document.activeElement.nodeName == 'INPUT'
+        || document.activeElement.nodeName === 'TEXTAREA'
+        || document.activeElement.nodeName === 'INPUT'
         || menuOpen()
     ) return;
 
     // Multibuy
-    if(key == settings.keybinds['key_multibuy'] && state == 'keyup') multibuySpin();
+    if(key === settings.keybinds['key_multibuy'] && state === 'keyup') multibuySpin();
     // Carrot click
-    if(key == settings.keybinds['key_carrot']) {
+    if(key === settings.keybinds['key_carrot']) {
         carrotClick(false, false, 1);
         keyCarrotFiring = false;
         holdStop();
 
         // Prevent spacebar scrolling (for some reason this works even if the parent if statement resolves to false)
-        if(key == "Spacebar") event.preventDefault();
+        if(key === "Spacebar") event.preventDefault();
     }
 
     //Level up
-    else if(key == settings.keybinds['key_bill_lvlup']) {
-        if(equipWaiting != -1) { // Waiting to equip
+    else if(key === settings.keybinds['key_bill_lvlup']) {
+        if(equipWaiting !== -1) { // Waiting to equip
             equipTool(Boomer_Bill, equipWaiting, multibuy[mbsel]);
             cancelToolEquip()
         }
         else levelUp(Boomer_Bill, multibuy[mbsel]); // Level up
     }
-    else if(key == settings.keybinds['key_belle_lvlup']) {
-        if(equipWaiting != -1) { // Waiting to equip
+    else if(key === settings.keybinds['key_belle_lvlup']) {
+        if(equipWaiting !== -1) { // Waiting to equip
             equipTool(Belle_Boomerette, equipWaiting, multibuy[mbsel]);
             cancelToolEquip();
         }
         else levelUp(Belle_Boomerette, multibuy[mbsel]); // Level up
     }
-    else if(key == settings.keybinds['key_greg_lvlup']) {
-        if(equipWaiting != -1) { // Waiting to equip
+    else if(key === settings.keybinds['key_greg_lvlup']) {
+        if(equipWaiting !== -1) { // Waiting to equip
             equipTool(Gregory, equipWaiting, multibuy[mbsel]);
             cancelToolEquip();
         }
@@ -245,9 +245,9 @@ document.addEventListener('keyup', event => {
     else {
         for(i = 0; i <= 5; i++) {
             // Craft
-            if(key == settings.keybinds[`key_craft_${i}`] && !event.altKey) createTool(i, multibuy[mbsel]);
+            if(key === settings.keybinds[`key_craft_${i}`] && !event.altKey) createTool(i, multibuy[mbsel]);
             // Equip
-            else if(key == settings.keybinds[`key_craft_${i}`] && event.altKey) {
+            else if(key === settings.keybinds[`key_craft_${i}`] && event.altKey) {
                 if(Gregory.Hoes[i] < 1) return;
                 equipToastID = toast('Equipping Tool', 'Press a character\'s upgrade key to equip. Press escape to cancel.', '', true, false, false, true, () => { cancelToolEquip() }, 'Cancel');
                 equipWaiting = i;
@@ -256,7 +256,7 @@ document.addEventListener('keyup', event => {
     }
 
     // Close all Toasts
-    if(key == settings.keybinds['key_cleartoasts']) {
+    if(key === settings.keybinds['key_cleartoasts']) {
         event.preventDefault();
         clearToasts(false);
     }
@@ -268,25 +268,25 @@ document.addEventListener('keyup', event => {
     }
 
     // Menus
-    else if(key == settings.keybinds['key_tips_menu'])         openTipsMenu();
-    else if(key == settings.keybinds['key_prestige'])          openPrestigeMenu();
-    else if(key == settings.keybinds['key_themes'])            themeSwitcher();
-    else if(key == settings.keybinds['key_cosmetics'])         cosmeticSwitcher();
+    else if(key === settings.keybinds['key_tips_menu'])         openTipsMenu();
+    else if(key === settings.keybinds['key_prestige'])          openPrestigeMenu();
+    else if(key === settings.keybinds['key_themes'])            themeSwitcher();
+    else if(key === settings.keybinds['key_cosmetics'])         cosmeticSwitcher();
 
     // Tripane
-    else if(key == settings.keybinds['key_pane_achievements']) panelChange(`achievements-panel`);
-    else if(key == settings.keybinds['key_pane_statistics'])   panelChange(`stats-panel`);
-    else if(key == settings.keybinds['key_pane_settings'])     panelChange(`settings-panel`);
+    else if(key === settings.keybinds['key_pane_achievements']) panelChange(`achievements-panel`);
+    else if(key === settings.keybinds['key_pane_statistics'])   panelChange(`stats-panel`);
+    else if(key === settings.keybinds['key_pane_settings'])     panelChange(`settings-panel`);
 
     // Settings
-    else if(key == settings.keybinds['key_full_numbers']) {
+    else if(key === settings.keybinds['key_full_numbers']) {
         let element = dom('full_numbers');
         element.checked = !element.checked
         setting('full_numbers', true);
     }
 
     // Inventory
-    // else if(key == settings.keybinds['key_inventory']) {
+    // else if(key === settings.keybinds['key_inventory']) {
     //     if(!inventoryOpen) openInventory();
     //     else closeDialog();
     // }
@@ -355,8 +355,8 @@ var keyTrigger = [];
 var easterEgg = 0;
 function eggUp() {
     easterEgg += easterEgg < 101 ? 1 : 0;
-    mouseConfetti([1, easterEgg == 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
-    if(easterEgg == 100) mouseConfetti([24,24], confettiColors, 300, 4, true);
+    mouseConfetti([1, easterEgg === 101 ? 2 : Math.floor(easterEgg/5)], ccCarrot);
+    if(easterEgg === 100) mouseConfetti([24,24], confettiColors, 300, 4, true);
 }
 var equipWaiting = -1;
 var equipToastID = false;
@@ -384,7 +384,7 @@ function detectKey(bind) {
 /** Runs when keybind is set or cancelled */
 function doneKeybind(key, set=true) {
     let element = dom(keyWaiting[1]);
-    if(key == 'Escape') key = 'Not set';
+    if(key === 'Escape') key = 'Not set';
     element.blur();
     closeToast(keyWaitingToast);
 
@@ -406,8 +406,7 @@ function doneKeybind(key, set=true) {
 
 /** Returns user-friendly keybind names when given event.key */
 function interpretKey(key) {
-    if(key == ' ') return 'Spacebar';
-    return capitalizeFL(key);
+    return key === ' ' ? 'Spacebar' : capitalizeFL(key);
 }
 //#endregion
 
@@ -453,7 +452,7 @@ function evaluateConditions(key) {
 /** Takes in an achievement and grants rewards */
 function rewardBreakdown(achieve, retroactive = false) {
     let reward = achieve?.reward;
-    if(reward == undefined) return;
+    if(reward === undefined) return;
     if(Array.isArray(reward)) { // Check if there are multiple rewards
         for(let i = 0; i < reward.length; i++) giveReward(reward[i], retroactive);
     } else giveReward(reward, retroactive);
@@ -463,21 +462,21 @@ function rewardBreakdown(achieve, retroactive = false) {
         // console.log(reward);
         let [rewardType, rewardName] =
         typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
-        if(reward == false || retroactive && (rewardType == 'cash' || rewardType == 'function' || rewardType == 'character')) return;
+        if(!reward || retroactive && (rewardType === 'cash' || rewardType === 'function' || rewardType === 'character')) return;
 
         // Give
-        if(rewardType == 'theme') unlock(rewardType, rewardName); // Theme reward
-        else if(rewardType == 'cosmetic') { // Cosmetic reward
+        if(rewardType === 'theme') unlock(rewardType, rewardName); // Theme reward
+        else if(rewardType === 'cosmetic') { // Cosmetic reward
             let [target, cosmetic] = rewardName.split('/');
             unlock(rewardType, cosmetic, target);
         }
-        else if(rewardType == 'shop') { // Carl shop
+        else if(rewardType === 'shop') { // Carl shop
             let [target, item] = rewardName.split('/');
             unlock("shop_item", item, target, reward);
         }
-        else if(rewardType == 'cash') earnCash(parseInt(rewardName), 'achievement'); // Cash reward
-        else if(rewardType == 'function') rewardName(); // Function reward
-        else if(rewardType == 'character') { // Character reward
+        else if(rewardType === 'cash') earnCash(parseInt(rewardName), 'achievement'); // Cash reward
+        else if(rewardType === 'function') rewardName(); // Function reward
+        else if(rewardType === 'character') { // Character reward
             console.log('Character unlocked: ' + rewardName);
             unlock('character', rewardName);
         }
@@ -492,23 +491,23 @@ function grantAchievement(key) {
 
     // Notification
     console.log(`Achievement earned: ${achieve.name} (${key})`);
-    if(achieve.internal != true && achieve.mystery.noToast != true && player.flags['no_achievement_toasts'] != true) {
+    if(achieve.internal !== true && achieve.hide_toast !== true && player.flags['no_achievement_toasts'] !== true) {
         toast('', '', '', false, false, key);
     }
 
     player.achievements[key] = Date.now(); // Add achievement to player.achievements
     if(achieve.internal) player.internal++;
-    if(achieve.reward != false) rewardBreakdown(achieve); // Check if there is an award to give
+    if(achieve.reward !== false) rewardBreakdown(achieve); // Check if there is an award to give
 
     // Give pages
-    if(achieve.pages != false && achieve.pages != null) {
+    if(achieve.pages !== false && achieve.pages !== null) {
         player.pages += achieve.pages;
         pagesCount();
     }
 
     // Update achievement list
     achieveHTMLupdate = true;
-    if(currentPanel == "achievements-panel") populateAchievements(key);
+    if(currentPanel === "achievements-panel") populateAchievements(key);
 
     // Update page
     updateMainIcon();
@@ -519,27 +518,27 @@ function unlock(type, thingToUnlock, subtype, raw) {
     if(isUnlocked(type, thingToUnlock, subtype)) return console.warn(`${type}:${subtype ? '/'+subtype : ''}${thingToUnlock} is already unlocked`);
 
     // Theme
-    if(type == 'theme') {
+    if(type === 'theme') {
         player.themes.push(thingToUnlock);
         newIndicator(true, 'theme');
         themesHTMLupdate = true;
         populateThemeList();
     }
     // Cosmetic
-    else if(type == 'cosmetic') {
+    else if(type === 'cosmetic') {
         // For bundles
-        if(subtype == 'bundle') {
+        if(subtype === 'bundle') {
             console.log('Unlocking a cosmetic bundle! ' + subtype + thingToUnlock);
 
             // Loop across subtypes and unlock all relevant cosmetics
             for(let t = 0; t < cosmeticsKeys.length; t++) {
                 let key = cosmeticsKeys[t];
-                if(key == 'bundle') continue;
+                if(key === 'bundle') continue;
 
                 let target = cosmetics[key];
                 // Loop through cosmetics
                 for(let c = 0; c < target['keys'].length; c++) {
-                    if(target[ target['keys'][c] ].group == thingToUnlock) unlock('cosmetic', target.keys[c], key);
+                    if(target[ target['keys'][c] ].group === thingToUnlock) unlock('cosmetic', target.keys[c], key);
                 }
             }
 
@@ -555,43 +554,30 @@ function unlock(type, thingToUnlock, subtype, raw) {
         if(settings.cosmetic_auto_equip) setCosmetic(subtype, thingToUnlock);
     }
     // Character
-    else if(type == 'character') {
+    else if(type === 'character') {
         let charbox = dom(`${thingToUnlock}_box`);
         if(!characterQuery(thingToUnlock)) charbox.classList.add('char_anim');
         player.characters[thingToUnlock] = subtype || true;
         charbox.classList.remove('char_locked');
-        playerCharKeys = Object.keys(player.characters);
         elBody.classList.add(`c_${thingToUnlock}`);
 
-        if(playerCharKeys.length >= chars.length) dom('more_chars_tooltip').classList.add('char_locked');
+        if(Object.keys(player.characters).length >= chars.length) dom('more_chars_tooltip').classList.add('char_locked');
         setTimeout(updateAllTools, 10);
     }
     // Carl shop item
-    else if(type == 'shop_item') {
-        // console.log(raw);
-        // Theme
-        if(subtype == 'theme') {
-            try {
-                Carl.shop['theme'][thingToUnlock].available = true;
-                console.log(`[Shop] New ${subtype}: "${thingToUnlock}" now available (Carl)}`);
-            }
-            catch (error) { console.warn(error); }
+    else if(type === 'shop_item') {
+        // Make available
+        const thing = subtype === 'cosmetic' ? `${raw.split('/')[1]}/${raw.split('/')[2]}`: thingToUnlock;
+        try {
+            Carl.shop['cosmetic'][thing].available = true;
+            console.log(`[Shop] New ${subtype}: "${thing}" now available (Carl)}`);
         }
-        // Cosmetic
-        else if(subtype == 'cosmetic') {
-            let target = raw.split('/')[1];
-            let cosmetic = raw.split('/')[2];
-            try {
-                Carl.shop['cosmetic'][`${target}/${cosmetic}`].available = true;
-                console.log(`[Shop] New ${subtype}: "${target}/${cosmetic}" now available (Carl)}`);
-            }
-            catch (error) { console.warn(error); }
-        }
+        catch (error) { console.warn(error); }
 
         if(settings.carl_shop_toasts && characterQuery('carl')) toast('', 'Carl: A new item is now available', '', false, true);
         populateCarl();
     }
-    else if(type == 'trinket') {
+    else if(type === 'trinket') {
         try {
             Jared.data[thingToUnlock].available = true;
             populateJared();
@@ -604,19 +590,18 @@ function buyCarl(type, item, subtype = false) {
     let raw = item;
 
     // Fix input data for cosmetics
-    if(type[type.length - 1] == 'c') {
+    if(type[type.length - 1] === 'c') {
         type = 'cosmetic';
         [subtype, item] = item.split('/');
     };
 
     // Check if already unlocked or bought
     if(isUnlocked(type, item, subtype) || Carl.shop[type][raw].bought) {
-        console.warn(`${type}:${subtype != false ? '/'+subtype : ''}${item} is already unlocked`);
+        console.warn(`${type}:${subtype !== false ? '/'+subtype : ''}${item} is already unlocked`);
         toast('Whoops', 'You already own this', '', false, true);
 
         Carl.shop[type][raw].bought = true;
-        populateCarl();
-        return;
+        return populateCarl();
     }
 
     // Check if Carl is unlocked
@@ -625,7 +610,7 @@ function buyCarl(type, item, subtype = false) {
     if(!characterQuery('carl') || !carlListing.available) return;
 
     // Currency: Cash
-    if(defaultCarlListing.currency == 'cash') {
+    if(defaultCarlListing.currency === 'cash') {
         // Buy
         if(player.cash >= defaultCarlListing.price) {
             player.cash -= defaultCarlListing.price;
@@ -652,11 +637,11 @@ function buyCarl(type, item, subtype = false) {
 
 /** Buy Trinket  */
 function buyTrinket(id) {
-    if(characterQuery('jared') != true) return;
+    if(characterQuery('jared') !== true) return;
     let item = jaredShop[id];
     let data = Jared.data[id];
     let price = item.price[data.level];
-    if(!data.available || price > player.cash || item.currency != 'cash' || data.level >= item.price.length) return;
+    if(!data.available || price > player.cash || item.currency !== 'cash' || data.level >= item.price.length) return;
 
     // Upgrade
     player.cash -= price;
@@ -692,26 +677,26 @@ function characterQuery(char) { return player.characters[char]; }
 function allCharQuery() {
     let c = 0;
     for(i=0; i<chars.length; i++) { if(characterQuery(chars[i])) c++; }
-    if(c == chars.length) return true;
+    if(c === chars.length) return true;
     return false;
 }
 
 /** Test if player has an achievement - True = yes, False = no */
 function achieveQuery(key) {
-    if(player.achievements[key] != undefined) return true;
+    if(player.achievements[key] !== undefined) return true;
     return false;
 }
 
 /** Test if theme is unlocked or not: params example: 'cosmetic', 'biker_bill', 'bill' */
 function isUnlocked(type = 'theme', key, subtype) {
     // Theme
-    if(type == 'theme' && player.themes.includes(key)) return true;
+    if(type === 'theme' && player.themes.includes(key)) return true;
     // Cosmetic
-    else if(type == 'cosmetic') {
+    else if(type === 'cosmetic') {
         let list = player.cosmetics[subtype];
         if(list.includes(key)) return true;
     }
-    else if(type == 'shop_item') return carlShopQuery(subtype, key);
+    else if(type === 'shop_item') return carlShopQuery(subtype, key);
     return false;
 }
 
@@ -720,7 +705,7 @@ function populateKeybinds() {
     for(i = 0; i < settings.keybinds.keys.length; i++) {
         let keybindName = settings.keybinds.keys[i];
         let key = settings.keybinds[keybindName];
-        if(dom(keybindName) != null) {
+        if(dom(keybindName) !== null) {
             let element = dom(keybindName);
             element.innerHTML = interpretKey(key);
         }
@@ -787,7 +772,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     let key = keys[i];
                     let item = jaredShop[key];
                     let data = Jared.data?.[key];
-                    if(data == undefined) continue;
+                    if(data === undefined) continue;
                     let prices = item.price;
                     data.level = prices.length;
                     data.value = item.value[data.level];
@@ -802,7 +787,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             }
             window.allPrestige = () => {
                 let l = player.lifetime.prestige_count
-                l = l == 0 ? 1 : l;
+                l = l === 0 ? 1 : l;
                 player.prestige_available = true;
                 seeButton('prestige');
                 showPrestigeStats()
@@ -823,14 +808,14 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 player.prestige.carrots = 0;
                 earnCarrots(cc);
                 // Cash
-                if(setCashEl.value != '') {
+                if(setCashEl.value !== '') {
                     let coinc = parseInt(setCashEl.value);
                     player.cash          = 0;
                     player.lifetime.cash = 0;
                     earnCash(coinc);
                 }
                 // Golden carrots
-                if(setGoldenCarrotsEl.value != '') {
+                if(setGoldenCarrotsEl.value !== '') {
                     let gcc = parseInt(setGoldenCarrotsEl.value);
                     player.golden_carrots = gcc
                     updateGC();
@@ -842,7 +827,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     let character = levelable[li];
                     let nick = character.nickname;
                     let v = parseInt(elCharacterLevel[nick].value.split(',').join(''));
-                    if(typeof v == "number" && !Number.isNaN(v) && v <= 500 && v >= 0) {
+                    if(typeof v === "number" && !Number.isNaN(v) && v <= 500 && v >= 0) {
                         character.lvl = v;
                     } else toast('Invalid level', 'Must be a number, and must be no more than 500', 'error');
                 }
@@ -858,7 +843,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             window.importSave = () => {
                 let imported = dom('import_export').value;
                 // Textarea is empty
-                if(imported == '') return toast('Savedata manager', 'Please input exported savedata', '', false, true);
+                if(imported === '') return toast('Savedata manager', 'Please input exported savedata', '', false, true);
                 imported = imported.split('//+//');
                 try {
                     for(let i = 0; i < saveListKeys.length; i++) {
@@ -879,7 +864,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     let key = saveListKeys[i];
                     let obj = saveList[key];
                     exported += JSON.stringify(obj);
-                    if(i == saveListKeys.length - 1) break;
+                    if(i === saveListKeys.length - 1) break;
                     exported += '//+//';
                 }
                 dom('import_export').value = exported;
@@ -960,7 +945,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     
                     <h4>Save data management</h4>
                     <label for="debug_dont_autoupdate">
-                    <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${!player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate == undefined ? 'checked' : ''}
+                    <input type="checkbox" name="debug_dont_autoupdate" id="debug_dont_autoupdate" ${!player.flags.debug_dont_autoupdate || player.flags.debug_dont_autoupdate === undefined ? 'checked' : ''}
                     onclick="optionDebugUpdate()">
                         Auto-update save while in debug mode
                     </label><br/>
@@ -979,14 +964,14 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             document.querySelectorAll('.dev_input').forEach(element => {
                 element.disabled = false;
                 element.addEventListener('keyup', e => {
-                    if(e.key == 'Escape' || e.key == 'Enter') document.activeElement.blur();
-                    if(e.key == 'Enter') updateValues();
+                    if(e.key === 'Escape' || e.key === 'Enter') document.activeElement.blur();
+                    if(e.key === 'Enter') updateValues();
                 });
             });
 
             // DisplayRounded preview
             setCarrotsEl.addEventListener('input', () => {
-                if(setCarrotsEl.value == '') return;
+                if(setCarrotsEl.value === '') return;
                 elSetCarrotRounded.innerText = `(${DisplayRounded(setCarrotsEl.value)})`;
             });
         }
@@ -1007,7 +992,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             console.warn = (...args) => { cwarn(args); toast('', '⚠ ' + Array.prototype.slice.call(args).join(', ')); }
             window.cerror = console.error;
             console.error = (...args) => { cerror(args); toast('', '⛔ ' + Array.prototype.slice.call(args).join(', ')); }
-        } else if(typeof clog == 'function') [console.log, console.warn, console.error] = [clog, cwarn, cerror];
+        } else if(typeof clog === 'function') [console.log, console.warn, console.error] = [clog, cwarn, cerror];
 
         // Update page
         updateMainIcon();
@@ -1022,7 +1007,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     // console.log('Running onLoad');
 
     // Flag for early playtesters
-    player.flags['playtest'] = true;
+    // player.flags['playtest'] = true;
 
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
@@ -1097,7 +1082,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 let template_keys = Object.keys(template);
                 for(i = 0; i < template_keys.length; i++) {
                     let key = template_keys[i];
-                    if(obj.hasOwnProperty(key) == false) {
+                    if(!obj.hasOwnProperty(key)) {
                         console.log(key + ' property not found, updating save...');
                         obj[key] = JSON.parse(JSON.stringify(template[key]));
                     }
@@ -1113,14 +1098,14 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 let achieve = achievements[key];
 
                 // Page count
-                if(achieveQuery(key) && achieve.pages != false && achieve.pages != null) pagesIntended += achieve.pages;
+                if(achieveQuery(key) && achieve.pages !== false && achieve.pages !== null) pagesIntended += achieve.pages;
 
                 // Check that the player has recieved all achievement rewards
                 let reward = achieve.reward;
-                if(achieveQuery(key) && reward != false) rewardBreakdown(achieve, true);
+                if(achieveQuery(key) && reward !== false) rewardBreakdown(achieve, true);
             }
             // Check that the players' page count is correct
-            if(player.pages != pagesIntended) {
+            if(player.pages !== pagesIntended) {
                 console.log('Achievement page rewards have been changed');
                 let toaster = toast(
                     'Page Rewards Changed',
@@ -1134,7 +1119,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     
             // Done
             console.log(`Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`);
-            if(isDebug() && player.data_version != default_player.data_version) {
+            if(isDebug() && player.data_version !== default_player.data_version) {
                 toast('', `Player object has been updated (Version ${player.data_version} -> ${default_player.data_version})`, '', true);
             }
 
@@ -1166,17 +1151,17 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     achieveGridMode(settings.achievements_grid);
 
     // Set user theme on page load
-    if(settings.theme != 'theme_dark') {
+    if(settings.theme !== 'theme_dark') {
         let theme = settings.theme;
         setTheme(theme);
     }
     // Set user cosmetics on page load
     for(let i = 1; i < cosmeticsKeys.length; i++) {
-        if(settings.cosmetics[ cosmeticsKeys[i] ] == 'default') continue;
+        if(settings.cosmetics[ cosmeticsKeys[i] ] === 'default') continue;
         setCosmetic(cosmeticsKeys[i], settings.cosmetics[ cosmeticsKeys[i] ]);
     }
     // Switch to previously open panel on page load
-    if(settings.openpanel != null) panelChange(settings.openpanel, true);
+    if(settings.openpanel !== null) panelChange(settings.openpanel, true);
 
     // Set cosmetics grid mode
     if(settings.cosmetics_grid) {
@@ -1184,7 +1169,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         cosmeticsGridMode();
     }
     // Restart unfinished crafting job (Greg)
-    if(Gregory.crafting != false) {
+    if(Gregory.crafting !== false) {
         console.log('[Greg] Restarting unfinished craft job');
         try { createTool(...Gregory.crafting); }
         catch (error) { console.error(error); }
@@ -1194,7 +1179,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     
     // OFFLINE EARNINGS
     // Doesn't work, Date.now() is imprecise
-    // if(player.time_last_saved != false) {
+    // if(player.time_last_saved !== false) {
     //     // Convert to seconds
     //     let ls = (player.time_last_saved / 1000).toFixed(0);
     //     let now = (parseInt(JSON.stringify(Date.now())) / 1000).toFixed(0);
@@ -1203,7 +1188,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     //     let earned = difference * player.cps;
     //     toast('Offline Earnings', `${difference} seconds\n${earned} carrots`);
 
-    //     player.time_last_saved == false;
+    //     player.time_last_saved === false;
     // }
 
     //#endregion
@@ -1213,16 +1198,16 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         let key = achievementsKeys[i];
         let achievement = achievements[key];
         if(achievement.internal) { internalAchievements++; continue; };
-        if(achievement.mystery.list) hiddenAchievements++;
-        if(achievement.style == 'challenge') challengeAchievements++;
+        if(achievement.hide_list) hiddenAchievements++;
+        if(achievement.style === 'challenge') challengeAchievements++;
     }
 
     // Populate achievements if said tab is open
-    if(currentPanel == "achievements-panel") populateAchievements();
+    if(currentPanel === "achievements-panel") populateAchievements();
 
     /* --------------- TUTORIAL --------------- */
     // Cookie usage notification
-    if(player.flags['cookies_accepted'] != true) {
+    if(player.flags['cookies_accepted'] !== true) {
         let cookieToast = toast(
             'Cookie Usage',
             'By playing Carrot Clicker you agree to the usage of cookies to save your progress.',
@@ -1235,14 +1220,14 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         );
     }
     // Initial Welcome
-    if(player.flags.tutorial0 != true) {
+    if(player.flags.tutorial0 !== true) {
         toast("Welcome to Carrot Clicker!",
         "Click the carrot to farm. Spend your carrots on hiring/upgrading new workers. Eventually you will be able to buy them better tools to work with. Good luck!",
         "", true);
         player.flags.tutorial0 = true;
     }
     // Update notice
-    // if(player.flags['v1.0_changelog'] != true) {
+    // if(player.flags['v1.0_changelog'] !== true) {
     //     toast("Version 1.0 changelog", "Carrot Clicker 1.0 has been released. Read the changelog here:", "", true);
     //     player.flags['v1.0_changelog'] = true;
     // }

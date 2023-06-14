@@ -142,8 +142,7 @@ function randomSound(type, ignoreChance = 0) {
     playSound(`crunch${randomNum}.flac`)
 }
 function buttonSound() {
-    if(settings.enableSounds == false) return;
-    playSound('click.flac');
+    if(settings.enableSounds) playSound('click.flac');
 }
 
 /** Popup Dialog
@@ -192,13 +191,7 @@ function closeDialog(accept=false) {
         dom(`${menuState.character}_box`).classList.remove('show_info');
         menuState.character = false;
     }
-    if(menuState.theme)    menuState.theme = false;
-    if(menuState.cosmetic) menuState.cosmetic = false;
-    if(menuState.keybinds) menuState.keybinds = false;
-    if(menuState.prestige) menuState.prestige = false;
-    if(menuState.prestige) menuState.prestige = false;
-    if(menuState.tips)     menuState.tips = false;
-    if(menuState.credits)  menuState.credits = false;
+    for([key, value] of Object.entries(menuState)) menuState[key] = false;
 
     // Enable keyboard navigation for main page
     dom('main').ariaHidden = false;
@@ -234,10 +227,10 @@ function toast(
 ) {
     // Cancel if tutorial message, and tutorial messages are disabled
     let istutorial = (title.toUpperCase().includes('TUTORIAL') || title.toUpperCase().includes('CARROT CLICKER'))
-    if(istutorial && settings.tutorial_messages == false) return;
+    if(istutorial && !settings.tutorial_messages) return;
 
     // Replace old if replace is true
-    if(toastsList[toastID - 1] != undefined && toastsList[toastID - 1].includes('replace') == true) {
+    if(toastsList[toastID - 1] !== undefined && toastsList[toastID - 1].includes('replace')) {
         closeToast(toastID - 1, false);
     }
 
@@ -250,13 +243,13 @@ function toast(
     if(!achievement) {
         toastElement.classList = `toast background_${color}`;
         toastElement.innerHTML = `
-        ${title == '' || title == false || title == undefined ? '' : `<h3>${title}</h3>`}
-        ${ hide_close == true ? '' : `<span class="toast_close" onclick="closeToast(${toastID})">X</span>`}
-        ${desc == '' || desc == false || desc == undefined ? '' : `<p>${desc}</p>`}
+        ${title === '' || !title || title === undefined ? '' : `<h3>${title}</h3>`}
+        ${hide_close ? '' : `<span class="toast_close" onclick="closeToast(${toastID})">X</span>`}
+        ${desc === '' || !desc || desc === undefined ? '' : `<p>${desc}</p>`}
         `;
 
         // Button
-        if(button_action != false) {
+        if(button_action !== false) {
             var toastButton = document.createElement("button");
             toastButton.onclick = button_action;
             toastButton.innerText = button_name;
@@ -278,9 +271,9 @@ function toast(
     else {
         let achieve = achievements[achievement];
         let noImg = false;
-        if(achieve.image == false || achieve.image == undefined) { noImg = true; }
+        if(!achieve.image || achieve.image === undefined) { noImg = true; }
 
-        toastElement.classList = `toast achievement_item${achieve.mystery.list != true ? '' : ' achievement_secret'}${achieve.style != false ? ' style_' + achieve.style : ''}`;
+        toastElement.classList = `toast achievement_item${achieve.hide_list !== true ? '' : ' achievement_secret'}${achieve.style !== false ? ' style_' + achieve.style : ''}`;
         toastElement.innerHTML =`
         <!-- Close button -->
         <span class="toast_close" role="button" tabindex="0" onclick="closeToast(${toastID})">X</span>
@@ -294,8 +287,8 @@ function toast(
     }
 
     toastContainer.prepend(toastElement);
-    toastsList[id] = replaceable == true ? 'replace' : id;
-    toastsList[id] += hide_close == true ? '_noclose' : '';
+    toastsList[id] = replaceable ? 'replace' : id;
+    toastsList[id] += hide_close ? '_noclose' : '';
 
     toastID++; // Increase Toast ID
     if(Object.keys(toastsList).length > 2) toastsClear.classList.add("visible"); // Clear all button
@@ -321,17 +314,15 @@ function closeToast(id, animate = true) {
     var element = dom(`toast${id}`);
 
     // Clear all button
-    if(Object.keys(toastsList).length <= 2) {
-        toastsClear.classList.remove("visible");
-    }
+    if(Object.keys(toastsList).length <= 2) toastsClear.classList.remove("visible");
 
     // No animation
-    if(animate == true && element != null) {
+    if(animate && element !== null) {
         // Dismiss Animation
         element.classList.add("toast_out");
         setTimeout(() => { element.remove(); }, 300);
     }
-    else if(element != null) { element.remove(); }
+    else if(element !== null) { element.remove(); }
 
     delete toastsList[id];
 }
@@ -343,7 +334,7 @@ function clearToasts(force = false) {
     for(entry in toastsList) {
         // console.log(entry);
         let t = toastsList[entry];
-        if(t != undefined && t.includes('noclose') == true && force != true) continue;
+        if(t !== undefined && t.includes('noclose') && force !== true) continue;
         closeToast(entry);
     }
 }
@@ -371,7 +362,7 @@ const settingsTab     = dom("settings-panel-button");
  * @returns 
  */
 function panelChange(to) {
-    if(currentPanel == to || menuOpen()) return;
+    if(currentPanel === to || menuOpen()) return;
     else {
         currentPanel = to;
 
@@ -397,8 +388,8 @@ function panelChange(to) {
     }
 
     // Update achievements list
-    if(to == 'achievements-panel' && achieveHTMLupdate)  populateAchievements();
-    if(to == 'stats-panel') statsInterval = setInterval(() => {loadStatistics()}, 1000);
+    if(to === 'achievements-panel' && achieveHTMLupdate)  populateAchievements();
+    if(to === 'stats-panel') statsInterval = setInterval(() => {loadStatistics()}, 1000);
     else clearInterval(statsInterval);
 }
 //#endregion
@@ -419,7 +410,7 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
     var fixedX = randomOffset() + (mcPosition.left + (mcPosition.right - mcPosition.left) / 2);
     var fixedY = randomOffset() + mcPosition.bottom - 12;
 
-    if(useMousePos == true) {
+    if(useMousePos) {
         clickVisualElement.style.left = randomX + "px";
         clickVisualElement.style.top =  randomY + "px";
     } else {
@@ -431,14 +422,14 @@ function popupHandler(useMousePos = true, amount, style = 'carrot') {
     clickVisualElement.id = `bonus${bonusID}`;
 
     // Negative number
-    let sign = amount[0] == '-' ? '' : '+';
-    if(sign == '') clickVisualElement.classList.add('clickvisual_negative');
+    let sign = amount[0] === '-' ? '' : '+';
+    if(sign === '') clickVisualElement.classList.add('clickvisual_negative');
 
     let text = '';
     // Carrot
-    if(style == 'carrot') text = `${sign}${amount}`; // Normal click
-    else if(style == 'falling')  text = `${sign}${amount}`; // Falling carrot
-    else if(style == 'cash') text = `⚬${amount}`; // Cash
+    if(style === 'carrot') text = `${sign}${amount}`; // Normal click
+    else if(style === 'falling')  text = `${sign}${amount}`; // Falling carrot
+    else if(style === 'cash') text = `⚬${amount}`; // Cash
     else text = amount;
     clickVisualElement.classList.add(`clickvisual_${style}`);
     clickVisualElement.innerText = text;
@@ -468,7 +459,7 @@ function themeSwitcher() {
 /** Closes the theme menu */
 function closeThemeSwitcher(noOverlay = false) {
     themeMenu.classList.remove('visible');
-    if(noOverlay == false) overlay.classList.remove("visible"); 
+    if(!noOverlay) overlay.classList.remove("visible"); 
 }
 
 /* ----- Fancy Cosmetic Switcher ----- */
@@ -489,7 +480,7 @@ function cosmeticSwitcher(category = false) {
         // Uncollapse
         dom(`collapse_${category}`).open = true;
         uncollapseNeeded = true;
-    } else if(uncollapseNeeded == true) {
+    } else if(uncollapseNeeded) {
         uncollapseNeeded = false;
         document.querySelectorAll('.cosmetic_collapse').forEach(e => {
             e.open = true;
@@ -546,22 +537,22 @@ function populateTipsMenu() {
     tipsHTMLupdate = false;
 
     let html = '';
-    let best = player.flags['all_tips'] == true ? tl.length - 1 : tips.best;
+    let best = player.flags['all_tips'] ? tl.length - 1 : tips.best;
     // Loop
     for(let i = 0; i <= best + 0.5; i += 0.5) {
         let ri = Math.floor(i);
         let type = '';
-        if(i % 1 != 0) { type = 'fun_'; }
+        if(i % 1 !== 0) { type = 'fun_'; }
 
         let id = `${type}${tl[ri]}`;
         let cat = tips[id];
-        if(type != 'fun_') html += `<h3>${capitalizeFL(id.split('_').join(' '))}</h3>`;
+        if(type !== 'fun_') html += `<h3>${capitalizeFL(id.split('_').join(' '))}</h3>`;
 
         for(ii = 0; ii < cat.length; ii++) {
             // Normal
-            if(tips.seen[id][ii] == true || player.flags['all_tips'] == true) html += `<p class="tip_item${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
+            if(tips.seen[id][ii] || player.flags['all_tips']) html += `<p class="tip_item${type === 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>${cat[ii]}</p>`;
             // Fun
-            else html += `<p class="tip_item secondary_text${type == 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>???</p>`;
+            else html += `<p class="tip_item secondary_text${type === 'fun_' ? ' fun': ''}"><span class="tip_number">${ii + 1}</span>???</p>`;
         }
     }
     elTipsList.innerHTML = html;
@@ -569,7 +560,7 @@ function populateTipsMenu() {
 
 /** Toggles hardmode, replace with save file menu perhaps */
 function openDifficultyMenu() {
-    if(player.flags['hardcore'] != true) {
+    if(player.flags['hardcore'] !== true) {
         player.flags['hardcore'] = true;
         toast('Hardmode enabled', '', 'error', false, true);
     } else {
@@ -585,7 +576,7 @@ function openDifficultyMenu() {
  * @param {boolean} resetState 
  */
 function setCosmetic(target, to, resetState = false) {
-    if(!resetState && to != 'default') setCosmetic(target, 'default', true); // Reset to default first
+    if(!resetState && to !== 'default') setCosmetic(target, 'default', true); // Reset to default first
 
     var from = settings.cosmetics[target];
     let cosmetic = cosmetics[target][to];
@@ -596,7 +587,7 @@ function setCosmetic(target, to, resetState = false) {
             // Loop types
             for(i = 0; i < cosmeticsKeys.length; i++) {
                 let target = cosmeticsKeys[i];
-                if(target == 'bundle') continue;
+                if(target === 'bundle') continue;
                 if(cosmetic[target]) setCosmetic(target, cosmetic[target]);
                 else setCosmetic(target, 'default');
             }
@@ -607,7 +598,7 @@ function setCosmetic(target, to, resetState = false) {
             if(cosmetic.image) mainCarrot.src = cosmetic.image; // Image
             if(cosmetic.farmable) nameLoop(cosmetic.farmable); // Name
             else nameLoop('Carrot');
-            if(cosmetic.render_type == 'pixel') mainCarrot.classList.add('render_pixelated'); // Image render type (Pixelated)
+            if(cosmetic.render_type === 'pixel') mainCarrot.classList.add('render_pixelated'); // Image render type (Pixelated)
             else mainCarrot.classList.remove('render_pixelated');
             break;
         // Tools
@@ -638,8 +629,8 @@ function setCosmetic(target, to, resetState = false) {
     function cosmeticSwitcherCheckmark(target, to, from = false) {
         var cm_to = dom(`${target}_cosmetic_${to}_checkmark`);
         let cm_from = dom(`${target}_cosmetic_${from}_checkmark`);
-        if(cm_from != null) cm_from.classList.add('opacity0'); // Uncheck previous
-        if(cm_to != null) cm_to.classList.remove('opacity0'); // Check new
+        if(cm_from !== null) cm_from.classList.add('opacity0'); // Uncheck previous
+        if(cm_to !== null) cm_to.classList.remove('opacity0'); // Check new
     }
 }
 //#endregion
@@ -661,7 +652,7 @@ function populateThemeList() {
         let theme = themes[key];
   
         // Test if unlocked
-        if(isUnlocked('theme', key) == false) {
+        if(!isUnlocked('theme', key)) {
             stillLocked++;
             // Locked HTML
             themeHTML += /* html */
@@ -688,7 +679,7 @@ function populateThemeList() {
                 <p class="secondary_text">${theme.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${settings.theme == key ? '' : ' opacity0'}" id="${key + '_checkmark'}">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${settings.theme === key ? '' : ' opacity0'}" id="${key + '_checkmark'}">
             </div>
         </div>
         `;
@@ -718,10 +709,10 @@ cosmeticsView.addEventListener('input', () => {
 function cosmeticsGridMode() {
     let value = cosmeticsView.value;
     let elements = document.querySelectorAll('.cosmetics_mini');
-    elements.forEach(element => { style(element, 'cosmetics_grid', (value == 'grid')); });
+    elements.forEach(element => { style(element, 'cosmetics_grid', (value === 'grid')); });
 
     // Save preference
-    settings.cosmetics_grid = value == 'list' ? false : true;
+    settings.cosmetics_grid = value === 'list' ? false : true;
     saveSettings();
 }
 
@@ -730,7 +721,7 @@ function cosmeticsGridMode() {
  */
 function populateCosmeticsList(target='all') {
     // Update all lists
-    if(target == 'all') {
+    if(target === 'all') {
         if(!cosmeticHTMLupdate) return;
         cosmeticHTMLupdate = false;
 
@@ -769,9 +760,9 @@ function populateCosmeticsList(target='all') {
         let cosmetic = list[key];
 
         // Locked
-        if(isUnlocked('cosmetic', key, target) == false) {
+        if(!isUnlocked('cosmetic', key, target)) {
             // Test if hidden
-            if(cosmetic.hidden == true) continue;
+            if(cosmetic.hidden) continue;
             cosmeticHTML += /* html */
             `
             <div class="theme_item cosmetic_item flex achievement_locked" title="Locked" tabindex="0" role="button">
@@ -797,7 +788,7 @@ function populateCosmeticsList(target='all') {
                 <p class="secondary_text">${cosmetic.desc}</p>
             </div>
             <div class="theme_checkbox">
-                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${key == 'default' ? '' : ' opacity0'}" id="${target}_cosmetic_${key}_checkmark">
+                <img src="./assets/checkmark.svg" alt="Selected" class="theme_checkmark${key === 'default' ? '' : ' opacity0'}" id="${target}_cosmetic_${key}_checkmark">
             </div>
         </div>
         `;
@@ -830,7 +821,7 @@ function populateAchievements(specific=false) {
     // Populate single
     else {
         let item = achievements?.[specific];
-        if(item == undefined) return console.warn(`populateAchievements(): [${specific}] is not a valid achievement`);
+        if(item === undefined) return console.warn(`populateAchievements(): [${specific}] is not a valid achievement`);
 
         let ahtml = new DOMParser().parseFromString(htmlTemplate(specific), "text/html").body.firstChild;
         let replace = document.getElementById(specific);
@@ -840,16 +831,16 @@ function populateAchievements(specific=false) {
 
 
     // Filter by unlocked
-    if(achievementHTML == '') {
-        if(filter == 'unlocked') {
+    if(achievementHTML === '') {
+        if(filter === 'unlocked') {
             achievementHTML = `<center><img src="./assets/theme/pixel_carrot.png" class="footer_carrot"><br/><p class="secondary_text">No achievements yet. :(</p></center>`;
         }
         // Filter by locked
-        else if(filter == 'locked') {
+        else if(filter === 'locked') {
             achievementHTML = `<center><img src="./assets/piggy_bank.png" class="footer_carrot"><p class="secondary_text">You've unlocked every achievement- great job!</p></center>`;
         }
         // Filter by secret
-        else if(filter == 'secret') {
+        else if(filter === 'secret') {
             achievementHTML = `<center><img src="./assets/easter_egg.png" class="footer_carrot pointer" onclick="mouseConfetti([24,24], confettiColors, 300)"><p class="secondary_text">Don't tell anyone, but: you don't have any secret achievements.<br/>Secret achievements don't appear in the list until unlocked and<br/> they don't count towards your completion percentage.</p></center>`;
         }
     }
@@ -864,20 +855,20 @@ function populateAchievements(specific=false) {
 
         // Filters
         if(
-            achieve.internal == true ||
-            filter == 'unlocked'  && unlocked == false ||
-            filter == 'locked'    && unlocked == true ||
-            filter == 'challenge' && achieve.style != 'challenge' || 
-            filter == 'secret'    && achieve.mystery.list != true ||
-            achieve.mystery.list == true && unlocked == false
+            achieve.internal ||
+            filter === 'unlocked'  && !unlocked ||
+            filter === 'locked'    && unlocked ||
+            filter === 'challenge' && achieve.style !== 'challenge' || 
+            filter === 'secret'    && achieve.hide_list !== true ||
+            achieve.hide_list   && !unlocked
         ) return '';
 
 
         // Rewards info
-        if(achieve.reward != false) {
+        if(achieve.reward !== false) {
             let inner = '';
             // Multiple rewards
-            if(Array.isArray(achieve.reward) == true) {
+            if(Array.isArray(achieve.reward)) {
                 for(let i = 0; i < achieve.reward.length; i++) {
                     let reward = achieve.reward[i];
                     inner += rewardHTML(reward, unlocked);
@@ -896,11 +887,11 @@ function populateAchievements(specific=false) {
         // Achievement info
         // cheat:       onclick="grantAchievement('${key}')"
         // unlock date: onclick="toast('', new Date(player.achievements['${key}']), '', true, true)"
-        let pagesHTML = achieve.pages != false && achieve.pages != null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
-        let name = unlocked || achieve.mystery.name != true ? achieve.name : '???';
-        let desc = unlocked || achieve.mystery.desc != true ? achieve.desc : '???';
+        let pagesHTML = achieve.pages !== false && achieve.pages !== null ? `<div class="achieve_pages secondary_text">+${achieve.pages} pages</div>` : '';
+        let name = unlocked || achieve.hide_name !== true ? achieve.name : '???';
+        let desc = unlocked || achieve.hide_desc !== true ? achieve.desc : '???';
         let img = achieve.image || './assets/achievements/missing.png';
-        img  =  unlocked || achieve.mystery.image == false ? img : './assets/achievements/locked.png';
+        img  =  unlocked || !achieve.hide_image ? img : './assets/achievements/locked.png';
 
         // Create
         return /* htmla */ `
@@ -908,8 +899,8 @@ function populateAchievements(specific=false) {
             id="${key}"
             class="achievement_item 
             ${unlocked ? '' : 'achievement_locked'}
-            ${achieve.mystery.list != true ? '' : ' achievement_secret'}
-            ${achieve.style != false ? ' style_' + achieve.style : ''}"
+            ${achieve.hide_list !== true ? '' : ' achievement_secret'}
+            ${achieve.style !== false ? ' style_' + achieve.style : ''}"
         >
             <!-- Details -->
             <div class="achievement_details flex">
@@ -941,30 +932,30 @@ function populateAchievements(specific=false) {
             let extraClass = '';
 
             // Don't show function rewards
-            if(rewardType == 'function' || rewardType == 'shop') return '';
+            if(rewardType === 'function' || rewardType === 'shop') return '';
 
             // Get reward info
             if(!unlocked) {
                 informalName = "Locked";
                 icon = './assets/gift.png';
             }
-            else if(rewardType == 'theme') {
+            else if(rewardType === 'theme') {
                 informalName = themes[rewardName].name;
                 icon = themes[rewardName].image
             }
             // Cosmetic
-            else if(rewardType == 'cosmetic') {
+            else if(rewardType === 'cosmetic') {
                 [subtype, rewardName] = rewardName.split('/');
                 informalName = cosmetics[subtype][rewardName].name;
                 icon = cosmetics[subtype][rewardName].image || cosmetics[subtype][rewardName].preview;
             }
             // Character
-            else if(rewardType == 'character') {
+            else if(rewardType === 'character') {
                 informalName = capitalizeFL(rewardName);
                 icon = defaultChar[rewardName].img; // Get image
             }
             // Cash
-            if(rewardType == 'cash') {
+            if(rewardType === 'cash') {
                 icon = './assets/piggy_bank.png';
                 informalName = `${rewardName} coins`;
                 rewardType = '';
@@ -1045,7 +1036,7 @@ function setTheme(theme) {
         var elTheme = dom(`${theme}_checkmark`);
 
         // Uncheck previous
-        if(from == false || !dom(`${from}_checkmark`)) return;
+        if(!from || !dom(`${from}_checkmark`)) return;
         dom(`${from}_checkmark`).classList.add('opacity0');
 
         // Check new
@@ -1059,9 +1050,9 @@ function setTheme(theme) {
 
 /** Opens character info screen */
 function characterInfo(character='bill', state=undefined) {
-    if(characterQuery(character) != true) return toast('This feature isn\'t available yet.', 'Progress through the game to unlock this.', undefined, false, true);
+    if(characterQuery(character) !== true) return toast('This feature isn\'t available yet.', 'Progress through the game to unlock this.', undefined, false, true);
     let charbox = dom(`${character}_box`);
-    if(charbox.classList.contains('show_info') || state == false) {
+    if(charbox.classList.contains('show_info') || !state) {
         charbox.classList.remove('show_info');
         closeDialog();
     } else {
@@ -1109,15 +1100,11 @@ function populateCarl() {
     carlShopData = {};
 
     // Loop through themes
-    let theme_keys = Carl.shop.theme.keys;
-    for(let ti = 0; ti < theme_keys.length; ti++) {
-        let name = theme_keys[ti];
-        let item = Carl.shop.theme[name];
+    for(const [name, item] of Object.entries(Carl.shop.theme)) {
         if(!item.available || item.bought) continue;
 
         carlShopData[name] = item.price;
-
-        let theme = themes[theme_keys[ti]];
+        let theme = themes[name];
         let img = theme.image;
         let desc = theme.desc;
 
@@ -1125,14 +1112,10 @@ function populateCarl() {
     }
 
     // Loop through cosmetics
-    let cosm_keys = Carl.shop.cosmetic.keys;
-    for(let ti = 0; ti < cosm_keys.length; ti++) {
-        let name = cosm_keys[ti];
-        let item = Carl.shop.cosmetic[name];
+    for(const [name, item] of Object.entries(Carl.shop.cosmetic)) {
         if(!item.available || item.bought) continue;
 
         carlShopData[name] = item.price;
-
         let [ca, cb] = name.split('/');
         let cosmetic = cosmetics[ca][cb];
         let img = cosmetic.image || cosmetic.preview;
@@ -1142,7 +1125,7 @@ function populateCarl() {
     }
 
     // Update page
-    if(html == '') {
+    if(html === '') {
         html = `
         <p class="padding-5px secondary_text center" style="padding: 5px;">
             That's all for now. Complete more achievements for more things to buy!
@@ -1169,15 +1152,14 @@ function populateCarl() {
             </div>
 
             <div class="shop_tooltip">${desc}</div>
-        </div>
-        `;
+        </div>`;
     }
 }
 
 
 /** Populate Jared's shop */
 function populateJared(specific=false) {
-    if(characterQuery('jared') != true) return;
+    if(characterQuery('jared') !== true) return;
 
     const elJaredShop = dom('jared_shop');
     let html = '';
@@ -1200,7 +1182,7 @@ function populateJared(specific=false) {
     // Populate single
     else {
         let item = jaredShop?.[specific];
-        if(item == undefined) return console.warn(`populateJared(): [${specific}] is not a valid trinket`);
+        if(item === undefined) return console.warn(`populateJared(): [${specific}] is not a valid trinket`);
 
         let ahtml = new DOMParser().parseFromString(jaredHTML(specific), "text/html").body.firstChild;
         let replace = document.getElementById(`jared_shop_container_${specific}`);
@@ -1214,7 +1196,7 @@ function populateJared(specific=false) {
     function jaredHTML(key) {
         let item = jaredShop[key];
         let data = Jared.data?.[key];
-        if(!data.available || data == undefined) return;
+        if(!data.available || data === undefined) return;
 
         // Segment bar
         let src = item.img || './assets/achievements/missing.png';
@@ -1226,11 +1208,11 @@ function populateJared(specific=false) {
         let price = item.price[data.level] || '✓ Done';
         let currency = '';
         let styles = 'complete';
-        if(price != '✓ Done') {
+        if(price !== '✓ Done') {
             currency = '<span class="secondary_text">Cost: </span><span class="color_cash">⚬</span> ';
             styles = '';
         }
-        let value = typeof data.value == 'string' ? data.value : item.written.split('@').join(data.value);
+        let value = typeof data.value === 'string' ? data.value : item.written.split('@').join(data.value);
 
         return `
         <div id="jared_shop_container_${key}" class="tooltip_area">
@@ -1291,14 +1273,14 @@ function achieveGridMode(state) {
         event = event || window.event; // IE-ism
 
         // Touch 
-        if(event.type == 'touchstart' || event.type == 'touchmove' || event.type == 'touchend' || event.type == 'touchcancel'){
+        if(event.type === 'touchstart' || event.type === 'touchmove' || event.type === 'touchend' || event.type === 'touchcancel'){
             var evt = (typeof event.originalEvent === 'undefined') ? event : event.originalEvent;
             var touch = evt.touches[0] || evt.changedTouches[0];
             mouseX = Number(touch.pageX.toFixed(0));
             mouseY = Number(touch.pageY.toFixed(0));
         }
         // Mouse
-        else if(event.pageX == null && event.clientX != null && event.type == 'mousedown' || event.type == 'mouseup' || event.type == 'mousemove' || event.type == 'mouseover'|| event.type=='mouseout' || event.type=='mouseenter' || event.type=='mouseleave') {
+        else if(event.pageX === null && event.clientX !== null && event.type === 'mousedown' || event.type === 'mouseup' || event.type === 'mousemove' || event.type === 'mouseover'|| event.type=='mouseout' || event.type=='mouseenter' || event.type=='mouseleave') {
             eventDoc = (event.target && event.target.ownerDocument) || document;
             doc = eventDoc.documentElement;
             body = eventDoc.body;

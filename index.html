@@ -275,7 +275,7 @@
                             <div class="characterdesc">
                                 <b id="bill_name" class="character_name">Bill</b>
                                 <p>Upgrade cost: <span id="UpBillCost" class="upgrade_cost white">-</span></p>
-                                <p>Level: <input type="text" value="-" id="Bill_lvl" class="discreet dev_input" disabled></p>
+                                <p>Level: <input type="text" value="-" id="Bill_lvl" class="discreet dev_input" autocomplete="off" disabled></p>
                             </div>
                         </div>
 
@@ -330,7 +330,7 @@
                             <div class="characterdesc">
                                 <b id="belle_name" class="character_name">Belle</b>
                                 <p>Upgrade cost: <span id="UpBelleCost" class="upgrade_cost white">-</span></p>
-                                <p>Level: <input type="text" value="-" id="Belle_lvl" class="discreet dev_input" disabled></p>
+                                <p>Level: <input type="text" value="-" id="Belle_lvl" class="discreet dev_input" autocomplete="off" disabled></p>
                             </div>
                         </div>
 
@@ -383,7 +383,7 @@
                             <div class="characterdesc">
                                 <b id="greg_name" class="character_name">Greg</b>
                                 <p>Upgrade cost: <span id="UpGregCost" class="upgrade_cost white">-</span></p>
-                                <p>Level: <input type="text" value="-" id="Greg_lvl" class="discreet dev_input" disabled><span id="greg_next">Next tool at -</span></p>
+                                <p>Level: <input type="text" value="-" id="Greg_lvl" class="discreet dev_input" autocomplete="off" disabled><span id="greg_next">Next tool at -</span></p>
                             </div>
                         </div>
 
@@ -714,10 +714,10 @@
                     <span tabindex="0" class="question_mark" title="Secret (or hidden) achievements are not required to reach 100%" onclick="toast(...toasts.info_achieve_percent)">?</span>
                 </p><br>
                 <label for="compact_achievements">
-                    <input type="checkbox" id="compact_achievements" onclick="setting('compact_achievements')"> Compact mode
+                    <input type="checkbox" id="compact_achievements" onclick="setting('compact_achievements')" data-option> Compact mode
                 </label>
                 <label for="achievements_grid">
-                    <input type="checkbox" id="achievements_grid" onclick="setting('achievements_grid')"> Grid view
+                    <input type="checkbox" id="achievements_grid" onclick="setting('achievements_grid')" data-option> Grid view
                 </label><br><br>
                 
                 <div id="achievements_list">
@@ -835,7 +835,7 @@
                             <div class="option">
                                 <img src="./assets/icons/cosmetic_gear.png" alt="" class="button_icon invert">
                                 Auto-equip new cosmetics
-                                <input type="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')">
+                                <input type="checkbox" id="cosmetic_auto_equip" onclick="setting('cosmetic_auto_equip')" data-option>
                             </div>
                         </label>
                         <label for="FunTipPercentage">
@@ -843,8 +843,8 @@
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Percentage of fun tips<br/>
                                 <div class="flex">
-                                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider">
-                                    <input type="number" name="FunTipsSliderLabel" id="FunTipsSliderLabel" class="discreet" min="0" max="100">
+                                    <input type="range" min="0" max="100" value="50" class="slider" id="FunTipsSlider" data-option-slider="fun_tip_percentage">
+                                    <input type="number" name="fun_tip_percentage_label" id="FunTipsSliderLabel" class="discreet" min="0" max="100" data-option-slider="fun_tip_percentage">
                                 </div>
                             </div>
                         </label>
@@ -864,7 +864,7 @@
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Enable keybinds
-                                <input type="checkbox" id="enable_keybinds" onclick="setting('enable_keybinds')" checked>
+                                <input type="checkbox" id="enable_keybinds" onclick="setting('enable_keybinds')" data-option checked>
                             </div>
                         </label>
 
@@ -872,14 +872,14 @@
                             <div class="option">
                                 <img src="./assets/icons/info.svg" alt="" class="button_icon invert">
                                 Tutorial messages
-                                <input type="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" checked>
+                                <input type="checkbox" id="tutorial_messages" onclick="setting('tutorial_messages')" data-option checked>
                             </div>
                         </label>
                         <label for="carl_shop_toasts">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Carl shop notifications
-                                <input type="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')">
+                                <input type="checkbox" id="carl_shop_toasts" checked onclick="setting('carl_shop_toasts')" data-option>
                             </div>
                         </label>
                         <label for="autosave_interval">
@@ -888,8 +888,8 @@
                                 Autosave Frequency (seconds)
                                 <p class="secondary_text">Game will also save when closed in supported browsers</p>
                                 <div class="flex">
-                                    <input type="range" id="autosave_interval" min="1" max="60" value="5" class="slider">
-                                    <input type="number" id="autosave_interval_label" min="1" max="60" value="5" class="discreet"/>
+                                    <input type="range" id="autosave_interval" min="1" max="60" value="5" class="slider" data-option-slider="autosave_interval">
+                                    <input type="number" id="autosave_interval_label" min="1" max="60" value="5" class="discreet" data-option-slider="autosave_interval"/>
                                 </div>
                             </div>
                         </label>
@@ -902,28 +902,28 @@
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Mobile nav bar
-                                <input type="checkbox" id="show_nav" onclick="setting('show_nav')">
+                                <input type="checkbox" id="show_nav" onclick="setting('show_nav')" data-option>
                             </div>
                         </label>
                         <label for="full_numbers">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Full numbers
-                                <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')">
+                                <input type="checkbox" id="full_numbers" onclick="setting('full_numbers')" data-option>
                             </div>
                         </label>
-                        <label for="enable_main_progress">
+                        <label for="enableMainProgress">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Always-on-top progress bar
-                                <input type="checkbox" id="enable_main_progress" onclick="settingMainProgress()">
+                                <input type="checkbox" id="enableMainProgress" onclick="settingMainProgress()" data-option/>
                             </div>
                         </label>
                         <label for="confetti_effects">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Confetti effects
-                                <input type="checkbox" id="confetti_effects" onclick="setting('confetti_effects')">
+                                <input type="checkbox" id="confetti_effects" onclick="setting('confetti_effects')" data-option>
                             </div>
                         </label>
                         <label for="notificationLength">
@@ -932,8 +932,8 @@
                                 Notification Length
                                 <p class="secondary_text">Time (in seconds) that notifications will stay on your screen</p>
                                 <div class="flex">
-                                    <input type="range" id="notificationLength" min="2" max="15" value="6" class="slider">
-                                    <input type="number" id="notificationLength_label" min="2" max="15" value="6" class="discreet"/>
+                                    <input type="range" id="notificationLength" min="2" max="15" value="6" class="slider" data-option-slider="notificationLength">
+                                    <input type="number" id="notificationLength_label" min="2" max="15" value="6" class="discreet" data-option-slider="notificationLength"/>
                                 </div>
                             </div>
                         </label>
@@ -942,25 +942,25 @@
                     <!-- Sounds options -->
                     <section>
                         <h6>Audio</h6>
-                        <label for="enable_sounds">
+                        <label for="enableSounds">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Sounds
-                                <input type="checkbox" id="enable_sounds" onclick="settingSounds()">
+                                <input type="checkbox" id="enableSounds" onclick="settingSounds()" data-option>
                             </div>
                         </label>
-                        <label for="enable_music">
+                        <label for="enableMusic">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Beta music
-                                <input type="checkbox" id="enable_music" onclick="settingMusic()">
+                                <input type="checkbox" id="enableMusic" onclick="settingMusic()" data-option>
                             </div>
                         </label>
-                        <label for="enable_carrot_sounds">
+                        <label for="enableCarrotSounds">
                             <div class="option">
                                 <img src="./assets/blank.png" alt="" class="button_icon invert">
                                 Beta carrot sounds
-                                <input type="checkbox" id="enable_carrot_sounds" onclick="settingCarrotSounds()">
+                                <input type="checkbox" id="enableCarrotSounds" onclick="settingCarrotSounds()" data-option>
                             </div>
                         </label>
                         <label for="volume_master">
@@ -1000,7 +1000,7 @@
                 <div>
                     <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot" onclick="eggUp()" tabindex="0" role="button">
                     <h1 style="margin-top: 8px;">Carrot Clicker</h1>
-                    <p id="footer_version">Version Beta v1.17.1 - Unstable</p>
+                    <p id="footer_version">Version Beta v1.17.2 - Unstable</p>
                 </div>
 
                 <!-- Columns -->

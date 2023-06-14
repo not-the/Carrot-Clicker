@@ -84,7 +84,8 @@ body.theme_oled .switcher_bar .activetab {
 }
 body.theme_oled #tripane #tab_bar .activetab { border: 1px solid white; border-bottom: none;}
 body.theme_oled #tripane #tab_bar .activetab,
-body.theme_oled .panel {
+body.theme_oled .panel,
+body.theme_oled footer {
     border-left: 1px solid white;
     border-right: 1px solid white;
 }
@@ -223,10 +224,10 @@ body.theme_classic {
     border-color: transparent;
 }
 /* Content replacement */
-.theme_classic .levelupimg { content: url("./assets/icons/lvl_up_arrow_old.png"); }
-.theme_classic .tome_iwc   { content: url("./assets/items/old/tome_iwc.png"); }
-.theme_classic .tome_tools { content: url("./assets/items/old/tome_tools.png"); }
-.theme_classic .tome_dww   { content: url("./assets/items/old/tome_dww.png"); }
+.theme_classic .levelupimg { content: url(./assets/icons/lvl_up_arrow_old.png); }
+.theme_classic .tome_iwc   { content: url(./assets/items/old/tome_iwc.png); }
+.theme_classic .tome_tools { content: url(./assets/items/old/tome_tools.png); }
+.theme_classic .tome_dww   { content: url(./assets/items/old/tome_dww.png); }
 
 .theme_classic #greg_crafting_info {
     visibility: hidden;

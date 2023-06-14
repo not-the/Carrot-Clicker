@@ -875,7 +875,7 @@ for(let i = 0; i < cosmeticsKeys.length; i++) {
 
     // Figure out how many cosmetics there are
     for(let c = 1; c < target.keys.length; c++) {
-        if(target[target.keys[c]].hidden == true) continue;
+        if(target[target.keys[c]].hidden) continue;
         totalCosmetics++;
     }
 }
@@ -903,151 +903,101 @@ for(let i = 0; i < cosmetics.bundle.keys.length; i++) {
 //     console.log(`${entry}:${achievements[entry]}`);
 // }
 
+class achievement {
+    constructor(data) {
+        // Stack data
+        let combined = {
+            ...{ // Defaults
+                name: 'name',
+                desc: 'description',
+                image: false,
+                reward: false,
+                pages: false,
+                conditions: false,
+
+                hide_name: true,
+                hide_desc: false,
+                hide_image: false,
+                hide_toast: false,
+                internal: false,
+            },
+            ...data,
+        }
+        for(const key in combined) this[key] = combined[key];
+    }
+}
+
 // For the conditions parameter:
 // - First (0) value is the variable you want to test- will also accept a function
 // - Second (1) value is the minimum required for the achievement (at the moment it will only test if the FIRST is greater than or equal to the SECOND)
 // If you need to test for anything other than if FIRST >= SECOND you can simply use a function and only return a passing number if it comes out to true
 const achievements = {
-
-    // OLD Template
-    // 'template': {
-    //     'name': 'Achievement',
-    //     'desc': 'Description',
-    //     'image': './assets/achievements/generic.png',
-    //     'reward': 'Reward',
-    //     'conditions': '',
-    //     'rarity': '0'
-    // },
-
-    // Template
-    // 'template': {
-    //     'name': 'Achievement',
-    //     'desc': 'Description',
-    //     'image': './assets/achievements/generic.png',
-    //     'reward': 'rewardtype:reward', // accepts one string or an array of strings
-    //     'conditions': [
-    //         ['player.themes.length', 4],
-    //         ['player.cosmetics.length', 2],
-    //     ],
-    //     // 'condition_amount': 1, // when there are multiple conditions, minimum required (or don't specify for all)
-    //     'style': false,
-    //     'mystery': { // parts of the achievement to hide before it's unlocked
-    //         'name': true,
-    //         'desc': false,
-    //         'image': true,
-    //         'noToast': false,
-    //     }
-    // },
-
     // Carrots
-    '1_carrot': {
-        'name': 'Farming is hard',
-        'desc': 'Your first Carrot!',
-        'image': './assets/achievements/1_carrot.png',
-        'reward': false,
-        'pages': false,
-        'conditions': ['player.lifetime.carrots', 1],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'bill_lvl_2': {
+    '1_carrot': new achievement({
+        name: 'Farming is hard',
+        desc: 'Your first Carrot!',
+        image: './assets/achievements/1_carrot.png',
+        conditions: ['player.lifetime.carrots', 1],
+        hide_name: false,
+    }),
+    'bill_lvl_2': new achievement({
         'name': 'Two\'s Company',
         'desc': 'Upgrade Bill and attract the attention of another farmer',
         'image': './assets/achievements/bill_and_belle.png',
         'reward': 'character:belle',
-        'pages': false,
         'conditions': ['Boomer_Bill.lvl', 2],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '5000_carrot': {
+    }),
+    '5000_carrot': new achievement({
         'name': 'Heavy Metal',
         'desc': 'Earn enough carrots to get the attention of a blacksmith',
         'image': './assets/achievements/unlock_greg.png',
         'reward': 'character:greg',
-        'pages': false,
+
         'conditions': ['player.lifetime.carrots', 5000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'themery': {
+    }),
+    'themery': new achievement({
         'name': 'Taking in the Themery',
         'desc': 'Gain the attention of the artist',
         'image': './assets/achievements/themery.png',
         'reward': 'character:carl',
-        'pages': false,
         'conditions': [
             ['carlItemsAvailable()', 3],
             ['player.cash', 6],
         ],
-        // 'condition_amount': 1,
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Prestiging
-    '1_prestige': {
-        'name': 'Prestigious',
-        'desc': 'Prestige for the first time and attract the attention of the professor',
-        'image': './assets/achievements/prestige_once.gif',
-        'reward': [
+    '1_prestige': new achievement({
+        name: 'Prestigious',
+        desc: 'Prestige for the first time and attract the attention of the professor',
+        image: './assets/achievements/prestige_once.gif',
+        reward: [
             'character:charles',
             'shop:theme/theme_bw',
         ],
-        'pages': 5,
-        'conditions': ['player.lifetime.prestige_count', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'hire_jared': {
+        pages: 5,
+        conditions: ['player.lifetime.prestige_count', 1],
+        hide_image: true,
+    }),
+    'hire_jared': new achievement({
         'name': 'One Man\'s Trash',
         'desc': 'Hire the shopkeep',
         'image': './assets/characters/Jared.png',
         'reward': 'character:jared',
         'pages': 1,
         'conditions': ['player.characters.jared', true],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '10_prestiges': {
+        hide_image: true,
+    }),
+    '10_prestiges': new achievement({
         'name': 'Wibbly Wobbly',
         'desc': 'Prestige ten times',
         'image': './assets/achievements/wobbly.gif',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 5,
         'conditions': ['player.lifetime.prestige_count', 10],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'use_charles': {
+        hide_image: true,
+    }),
+    'use_charles': new achievement({
         'name': 'Raw Knowledge',
         'desc': 'Give Charles a Golden Carrot in exchange for his knowledge',
         'image': './assets/achievements/tome animated.gif',
@@ -1057,267 +1007,159 @@ const achievements = {
             'shop:cosmetic/farmable/ascii_color',
         ],
         'pages': 1,
-        'conditions': ['ex_charlesUses()', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        'conditions': [`(
+            Charles.improveWorkingConditions.value > Default_Charles.improveWorkingConditions.value
+            || Charles.betterHoes.value > Default_Charles.betterHoes.value
+            || Charles.decreaseWages.value > Default_Charles.decreaseWages.value
+            )`, 1],
+        hide_image: true,
+    }),
 
     // Tome types
-    '1_improve_working_conditions': {
+    '1_improve_working_conditions': new achievement({
         'name': 'OSHA Violator',
         'desc': 'Buy a tome that improves working conditions. Your workers are now safe.',
         'image': './assets/achievements/working_conditions.png',
         'reward': 'shop:cosmetic/greg/safety_greg',
-        'pages': false,
+
         'conditions': ['Charles.improveWorkingConditions.value', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_improve_hoe_costs': {
+        hide_image: true,
+    }),
+    '1_improve_hoe_costs': new achievement({
         'name': 'Divine Intervention',
         'desc': 'Buy a tome that improves tool quality. Unholy magic, I say.',
         'image': './assets/achievements/tome_improve_hoe_costs.png',
-        'reward': false,
-        'pages': false,
         'conditions': ['Charles.betterHoes.value', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_decrease_wages': {
+        hide_image: true,
+    }),
+    '1_decrease_wages': new achievement({
         'name': 'Dollar Bill',
         'desc': 'Buy a tome that reduces worker wages. Cheapskate.',
         'image': './assets/achievements/tome_decrease_wages.png',
         'reward': 'shop:cosmetic/bill/dollar_bill',
-        'pages': false,
         'conditions': ['Charles.decreaseWages.value', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Number of tomes
-    '12_tomes': {
+    '12_tomes': new achievement({
         'name': 'Tome\'d You so',
         'desc': 'Obtain 12 tomes',
         'image': './assets/achievements/tome animated.gif', // needs unique art
         'reward': 'cosmetic:charles/special_charles',
         'pages': 3,
-        'conditions': [
-            'player.lifetime.tomes_bought',
-            12
-        ],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '24_tomes': {
+        'conditions': ['player.lifetime.tomes_bought', 12],
+        hide_image: true,
+    }),
+    '24_tomes': new achievement({
         'name': 'Librarian',
         'desc': 'Obtain 24 tomes',
         'image': './assets/achievements/tome animated.gif', // needs unique art
-        'reward': false,
         'pages': 4,
-        'conditions': [
-            'player.lifetime.tomes_bought',
-            24
-        ],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '140_tomes': {
+        'conditions': ['player.lifetime.tomes_bought', 24],
+        hide_image: true,
+    }),
+    '140_tomes': new achievement({
         'name': 'Infinite Library',
         'desc': 'Obtain 140 tomes',
         'image': './assets/achievements/tome animated.gif', // needs unique art
-        'reward': false,
         'pages': 5,
-        'conditions': [
-            'player.lifetime.tomes_bought',
-            140
-        ],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        'conditions': ['player.lifetime.tomes_bought', 140],
+        hide_image: true,
+    }),
 
     // Tome pages tutorial message
-    'first_tome_page': {
+    'first_tome_page': new achievement({
         'name': 'Paginator',
         'desc': 'Earn a tome page (Tutorial milestone)',
         'image': './assets/achievements/paginator.png',
         'reward': () => {
             toast(...toasts.tutorial_pages);
         },
-        'pages': false,
         'conditions': ['player.pages', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': true,
-        }
-    },
+        hide_image: true,
+        hide_toast: true,
+    }),
 
     // Character usage
-    'upgrade_all_characters_once': {
+    'upgrade_all_characters_once': new achievement({
         'name': '3 Heads Are Better Than One',
         'desc': 'Upgrade every (upgradeable) character at least once',
         'image': './assets/achievements/3_heads.png',
         'reward': ['shop:theme/theme_red', 'shop:theme/theme_green', 'shop:theme/theme_blue'],
-        'pages': false,
         'conditions': [
             ['Boomer_Bill.lvl',      2],
             ['Gregory.lvl',          1],
             ['Belle_Boomerette.lvl', 1],
         ],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+
+    }),
     // Bill level
-    'bill_lvl_10': {
+    'bill_lvl_10': new achievement({
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill to level 10',
         'image': './assets/achievements/bill_pointer.png', // needs unique art
         'reward': 'shop:cosmetic/bill/biker_bill',
-        'pages': false,
         'conditions': ['Boomer_Bill.lvl', 10],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'bill_lvl_100': {
+    }),
+    'bill_lvl_100': new achievement({
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill to level 100',
         'image': './assets/achievements/bill_pointer.png',
         'reward': 'cosmetic:bundle/bill',
         'pages': 1,
         'conditions': ['Boomer_Bill.lvl', 100],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'bill_lvl_500': {
+        hide_image: true,
+    }),
+    'bill_lvl_500': new achievement({
         'name': 'Billtona 500',
         'desc': 'Upgrade Bill to level 500',
         'image': './assets/achievements/bill_pointer.png', // needs unique art
-        'reward': false,
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 500],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'bill_lvl_1000': {
+        hide_image: true,
+    }),
+    'bill_lvl_1000': new achievement({
         'name': 'Milennial Bill',
         'desc': 'Upgrade Bill to level 1000',
         'image': './assets/achievements/bill_pointer.png', // needs unique art
-        'reward': false,
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
+        hide_image: true,
+        hide_list: true,
+    }),
     // Belle level
-    'belle_lvl_15': {
+    'belle_lvl_15': new achievement({
         'name': 'Saved by the Belle',
         'desc': 'Upgrade Belle to level 15',
         'image': './assets/characters/Belle.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['Belle_Boomerette.lvl', 15],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'belle_lvl_100': {
+    }),
+    'belle_lvl_100': new achievement({
         'name': 'Tough Belle',
         'desc': 'Upgrade Belle to level 100',
         'image': './assets/characters/Belle.png', // needs unique art
-        'reward': false,
         'pages': 1,
         'conditions': ['Belle_Boomerette.lvl', 100],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'belle_lvl_500': {
+        hide_image: true,
+    }),
+    'belle_lvl_500': new achievement({
         'name': 'Um-belle-ifer Sellerer',
         'desc': 'Upgrade Belle to level 500',
         'image': './assets/characters/Belle.png', // needs unique art
-        'reward': false,
         'pages': 3,
         'conditions': ['Belle_Boomerette.lvl', 500],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
     // Greg level
-    'greg_lvl_25': {
+    'greg_lvl_25': new achievement({
         'name': 'The Gregs of Defeat', // alternatively "The Gregs of Society"
         'desc': 'Upgrade Gregory to level 25',
         'image': './assets/characters/Greg.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['Gregory.lvl', 25],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'greg_lvl_64': {
+    }),
+    'greg_lvl_64': new achievement({
         'name': 'Professional Crafter',
         'desc': 'Upgrade Gregory to level 64',
         'image': './assets/achievements/pixel_block.png',
@@ -1328,17 +1170,11 @@ const achievements = {
         ],
         'pages': 1,
         'conditions': ['Gregory.lvl', 64],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'unlock_all_characters': {
+        hide_image: true,
+    }),
+    'unlock_all_characters': new achievement({
         'name': 'Carrot Convention',
         'desc': 'Unlock every character',
-        'image': false,
         'reward': [
             'cash:24',
             'shop:cosmetic/carl/joker_carl',
@@ -1346,16 +1182,10 @@ const achievements = {
         ],
         'pages': 5,
         'conditions': ['allCharQuery()', true],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Big carrot numbers
-    '401000_carrot': {
+    '401000_carrot': new achievement({
         'name': 'Retirement Fund',
         'desc': 'Earn 401k carrots. I don\'t think you know what a 401k is.',
         'image': './assets/achievements/401k.png',
@@ -1363,30 +1193,17 @@ const achievements = {
             'shop:theme/theme_camo',
             () => { mouseConfetti([24,24], confettiColors, 300) },
         ],
-        'pages': false,
         'conditions': ['player.lifetime.carrots', 401000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_million_carrots': {
+    }),
+    '1_million_carrots': new achievement({
         'name': 'Me Millionth Carrot',
         'desc': 'Earn your 1 millionth carrot',
         'image': './assets/achievements/1_million_carrots.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 1,
         'conditions': ['player.lifetime.carrots', 1000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_billion_carrots': {
+    }),
+    '1_billion_carrots': new achievement({
         'name': 'Boomer Bill Gates',
         'desc': 'Earn your 1 billionth carrot',
         'image': './assets/theme/boomer_bill_gates.png',
@@ -1397,14 +1214,9 @@ const achievements = {
         ],
         'pages': 2,
         'conditions': ['player.lifetime.carrots', 1000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_trillion_carrots': {
+        hide_image: true,
+    }),
+    '1_trillion_carrots': new achievement({
         'name': 'Lifetime Supply',
         'desc': 'Earn your 1 trillionth carrot. Phew!',
         'image': './assets/achievements/carrot_pile.png',
@@ -1414,14 +1226,9 @@ const achievements = {
         ],
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_quadrillion_carrots': {
+        hide_image: true,
+    }),
+    '1_quadrillion_carrots': new achievement({
         'name': 'Carrot Continent',
         'desc': 'Earn your 1 quadrillionth carrot. That\'s a lot!',
         'image': './assets/achievements/Carrot Continent.png',
@@ -1432,14 +1239,9 @@ const achievements = {
         ],
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_quintillion_carrots': {
+        hide_image: true,
+    }),
+    '1_quintillion_carrots': new achievement({
         'name': 'A World Fed',
         'desc': 'Earn your 1 QUINTILLIONTH carrot. Earth\'s hunger problem is now solved.',
         'image': './assets/achievements/earth.png',
@@ -1447,14 +1249,9 @@ const achievements = {
         'pages': 3,
         'conditions': ['player.lifetime.carrots', 1000000000000000000n],
         'style': 'endgame',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '1_sextillion_carrots': {
+        hide_image: true,
+    }),
+    '1_sextillion_carrots': new achievement({
         'name': 'Carrot Singularity',
         'desc': 'Earn your 1 SEXTILLIONTH carrot. We\'re on the verge of something beautiful.',
         'image': './assets/achievements/singularity.png',
@@ -1462,410 +1259,215 @@ const achievements = {
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_septillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_septillion_carrots': new achievement({
         'name': 'Carrot Nebula',
         'desc': 'Earn your 1 SEPTILLIONTH carrot. The culmination of our efforts.',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_octillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_octillion_carrots': new achievement({
         'name': 'Carrot Galaxy',
         'desc': 'Earn your 1 OCTILLIONTH carrot. Something bigger than us has taken notice.',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 4,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_nonillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_nonillion_carrots': new achievement({
         'name': 'Carrot Universe',
         'desc': 'Earn your 1 NONILLIONTH carrot. There is not a single non-carrot molecule in the universe. Besides you of course.',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_decillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_decillion_carrots': new achievement({
         'name': 'Carrot Multiverse',
         'desc': 'Earn your 1 DECILLIONTH carrot. Finding new places to put them I see.',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_undecillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_undecillion_carrots': new achievement({
         'name': 'Carrot God', // Carrot God / Hoe God
         'desc': 'Earn your 1 UNDECILLIONTH carrot. You\'ve surpassed a higher state of being and become something greater...',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_duodecillion_carrots': {
+        hide_image: true,
+        hide_list: true,
+    }),
+    '1_duodecillion_carrots': new achievement({
         'name': 'Carrot Big Bang',
         'desc': 'Earn your 1 DUODECILLIONTH carrot. Must create...',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000n],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    '1_tredecillion_carrots': {
+        hide_list: true,
+    }),
+    '1_tredecillion_carrots': new achievement({
         'name': 'Carrot Timelines',
         'desc': 'Earn your 1 TREDECILLIONTH carrot. Everywhere and everytime.',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 6,
         'conditions': ['player.lifetime.carrots', 1000000000000000000000000000000000000000000n],
         'style': 'endgame',
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
+        hide_list: true,
+    }),
 
     // Misc
-    '5000000_idle_carrots': {
+    '5000000_idle_carrots': new achievement({
         'name': 'On the Clock',
         'desc': 'Earn 5,000,000 carrots with CPS',
         'image': './assets/achievements/clock.png',
-        'reward': false,
         'pages': 2,
         'conditions': ['player.lifetime.idle_carrots', 5000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_trillion_carrots_at_once': {
+    }),
+    '1_trillion_carrots_at_once': new achievement({
         'name': 'Trillionwhere?',
         'desc': 'Have 1 trillion carrots at once',
-        'image': false,
-        'reward': false,
         'pages': 3,
         'conditions': ['player.carrots', 1000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_quadrillion_carrots_at_once': {
+    }),
+    '1_quadrillion_carrots_at_once': new achievement({
         'name': 'Quadraphonic ',
         'desc': 'Have 1 quadrillion carrots at once',
-        'image': false,
-        'reward': false,
         'pages': 4,
         'conditions': ['player.carrots', 1000000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Tips
-    'basic_tips': {
+    'basic_tips': new achievement({
         'name': 'Tip of the Iceberg',
         'desc': 'Read all basic tips. Carrot Clicker Iceberg Explained.',
-        'image': false,
-        'reward': false,
-        'pages': false,
         'conditions': ['ex_allTips()', 2],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'all_tips': {
+        hide_name: false,
+    }),
+    'all_tips': new achievement({
         'name': 'Professor',
         'desc': 'Read every tip',
-        'image': false,
-        'reward': false,
         'pages': 5,
         'conditions': ['ex_allTips()', tl.length],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // CPC
-    '9000_cpc': {
+    '9000_cpc': new achievement({
         'name': 'There\'s a Joke Here Somewhere',
         'desc': 'Get your Carrots Per Click (Click power level\™️) over 9000',
         'image': './assets/achievements/9000.png',
         'reward': 'shop:theme/theme_chatapp',
         'pages': 1,
         'conditions': ['player.cpc', 9000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_billion_cpc': {
+    }),
+    '1_billion_cpc': new achievement({
         'name': 'Carrot Printer',
         'desc': 'Get your Carrots Per Click (CPC) to 1 billion',
-        'image': false,
-        'reward': false,
         'pages': 2,
         'conditions': ['player.cpc', 1000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1_trillion_cpc': {
+    }),
+    '1_trillion_cpc': new achievement({
         'name': 'Trilobite',
         'desc': 'Get your Carrots Per Click (CPC) to 1 trillion',
-        'image': false,
-        'reward': false,
         'pages': 3,
         'conditions': ['player.cpc', 1000000000000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // CPS
-    '1000_cps': {
+    '1000_cps': new achievement({
         'name': 'Time is Hungry',
         'desc': 'Produce 1,000 carrots every second',
-        'image': false,
         'reward': 'shop:cosmetic/bill/business_bill',
-        'pages': false,
         'conditions': ['player.cps', 1000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '100000_cps': {
+    }),
+    '100000_cps': new achievement({
         'name': 'Six Figure Income',
         'desc': 'Get your Carrots Per Second above 100,000',
-        'image': false,
-        'reward': false,
         'pages': 3,
         'conditions': ['player.cps', 100000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    'greg_debt': {
+    }),
+    'greg_debt': new achievement({
         'name': 'IOU',
         'desc': 'Have fewer than 1000 carrots while Greg is crafting',
-        'image': false,
-        'reward': false,
-        'pages': false,
-        'conditions': ['player.carrots < 1000 && Gregory.crafting != false', true],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+        'conditions': ['player.carrots < 1000 && Gregory.crafting !== false', true],
+    }),
 
     // Falling carrots
-    '50_falling_carrots': {
+    '50_falling_carrots': new achievement({
         'name': 'Free Falling',
         'desc': 'Grab 50 falling carrots',
         'image': './assets/achievements/parachute_carrot.png',
-        'reward': false,
-        'pages': false,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 50],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '250_falling_carrots': {
+    }),
+    '250_falling_carrots': new achievement({
         'name': 'Carrot Rain',
         'desc': 'Grab 250 falling carrots',
-        'image': false,
         'reward': 'shop:cosmetic/bundle/cookie',
         'pages': 1,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 250],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '2048_falling_carrots': {
+    }),
+    '2048_falling_carrots': new achievement({
         'name': 'Falling Into Place',
         'desc': 'Grab 2048 falling carrots',
         'image': './assets/achievements/tetris.gif',
-        'reward': false,
         'pages': 3,
         'conditions': ['player.lifetime.falling_carrots_grabbed', 2048],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Clicks
-    '500_clicks': {
+    '500_clicks': new achievement({
         'name': 'Click the Carrot, Bill.',
         'desc': 'Click the carrot 500 times',
         'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['player.lifetime.clicks', 500],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '5000_clicks': {
+    }),
+    '5000_clicks': new achievement({
         'name': 'Clicker Hero',
         'desc': 'Click the carrot 5,000 times',
         'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
         'reward': 'shop:cosmetic/farmable/pixel_carrot',
-        'pages': false,
         'conditions': ['player.lifetime.clicks', 5000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '50000_clicks': {
+    }),
+    '50000_clicks': new achievement({
         'name': 'Destroyer of Mice',
         'desc': 'Click the carrot 50,000 times',
         'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['player.lifetime.clicks', 50000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '100000_clicks': {
+    }),
+    '100000_clicks': new achievement({
         'name': '"My Finger Hurts"',
         'desc': 'Click the carrot 100,000 times',
         'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['player.lifetime.clicks', 100000],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1000000_clicks': {
+    }),
+    '1000000_clicks': new achievement({
         'name': 'Clicker God',
         'desc': 'Click the carrot 1 million times (Hidden achievement)',
         'image': './assets/achievements/12_clicks_per_second.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['player.lifetime.clicks', 1000000],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
+        hide_list: true,
+    }),
 
     // Golden Carrots
-    '50_golden_carrots': {
+    '50_golden_carrots': new achievement({
         'name': 'Golden',
         'desc': 'Earn 50 golden carrots',
         'image': './assets/achievements/golden.png',
@@ -1874,215 +1476,124 @@ const achievements = {
             'shop:cosmetic/farmable/pixel_golden_carrot',
             () => { mouseConfetti([24,24], confettiColors, 300) }
         ],
-        'pages': false,
         'conditions': ['player.lifetime.golden_carrots', 50],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '500_golden_carrots': {
+        hide_name: false,
+    }),
+    '500_golden_carrots': new achievement({
         'name': 'M[Au]numental',
         'desc': 'Earn 500 golden carrots',
         'image': './assets/achievements/gold_au.png',
-        'reward': false,
         'pages': 2,
         'conditions': ['player.lifetime.golden_carrots', 500],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '1989_golden_carrots': {
+        hide_name: false,
+    }),
+    '1989_golden_carrots': new achievement({
         'name': 'Retro',
         'desc': 'Earn 1989 golden carrots',
         'image': './assets/theme/theme_retro.png',
         'reward': 'theme:theme_retro',
         'pages': 3,
         'conditions': ['player.lifetime.golden_carrots', 1989],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Cash
-    '2000_lifetime_cash': {
+    '2000_lifetime_cash': new achievement({
         'name': 'Penny Pincher',
         'desc': 'Earn 2000 coins',
-        'image': false,
-        'reward': false,
         'pages': 1,
         'conditions': ['player.lifetime.cash', 2000],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '250_cash': {
+        hide_name: false,
+    }),
+    '250_cash': new achievement({
         'name': 'Savings Account',
         'desc': 'Have 250 coins in the bank without spending them',
-        'image': false,
-        'reward': false,
         'pages': 1,
         'conditions': ['player.cash', 250],
-        'mystery': {
-            'name': false,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+        hide_name: false,
+    }),
 
     // Trinkets
-    '1_trinket': {
+    '1_trinket': new achievement({
         'name': 'Not so Useless',
         'desc': 'Buy your first trinket',
         'image': './assets/achievements/Not So Useless.png',
-        'reward': false,
         'pages': 1,
         'conditions': ['percentage(...player.trinket_completion.split("/"))', 0.001],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'all_trinkets': {
+        hide_image: true,
+    }),
+    'all_trinkets': new achievement({
         'name': 'Complete Collection',
         'desc': 'Buy and fully upgrade every trinket',
         'image': './assets/achievements/Complete Collection.png',
-        'reward': false,
         'pages': 10,
         'conditions': ['percentage(...player.trinket_completion.split("/"))', 100],
         'style': 'endgame',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Misc
-    '9_clicks_per_second': {
+    '9_clicks_per_second': new achievement({
         'name': 'Gotta Grow Fast',
         'desc': 'Click 9 times in one second',
         'image': './assets/achievements/12_clicks_per_second.png',
-        'reward': false,
-        'pages': false,
         'conditions': ['player.clickSpeedRecord', 9],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
-    '13_clicks_per_second': {
+    }),
+    '13_clicks_per_second': new achievement({
         'name': 'Olympic Clicking Games',
         'desc': 'Click 13 times in one second',
         'image': './assets/achievements/16_clicks_per_second.png',
-        'reward': false,
-        'pages': false,
         'conditions': ['player.clickSpeedRecord', 13],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '15_clicks_per_second': {
+        hide_image: true,
+    }),
+    '15_clicks_per_second': new achievement({
         'name': 'I am Seed',
         'desc': 'Click 15 times in one second',
         'image': './assets/achievements/21_clicks_per_second.gif',
         'reward': 'cosmetic:farmable/cursor',
-        'pages': false,
         'conditions': ['player.clickSpeedRecord', 15],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Tools
-    'first_tool': {
+    'first_tool': new achievement({
         'name': 'The Tools to Victory',
         'desc': 'Craft your first farming tool (Tutorial milestone)',
         'image': './assets/achievements/forge.png',
         'reward': () => { toast(...toasts.tutorial_tools); },
         'pages': 1,
         'conditions': ['player.lifetime.hoes.craftedTotal', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': true,
-        }
-    },
-    'obtain_tool_six': {
+        hide_image: true,
+        hide_toast: true,
+    }),
+    'obtain_tool_six': new achievement({
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement, the Gilded Hoe',
         'image': './assets/achievements/Extreme Farming.png',
         'reward': 'cosmetic:farmable/gilded_hoe',
         'pages': 10,
         'conditions': ['player.lifetime.hoes.crafted[5]', 1],
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Themes
-    'all_themes': {
+    'all_themes': new achievement({
         'name': 'All Themes',
         'desc': 'Unlock every theme',
         'image': './assets/achievements/all_themes.png',
-        'reward': false,
         'pages': 3,
         'conditions': ['player.themes.length', themesKeys.length],
-
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Cosmetics
-    'all_cosmetics': {
+    'all_cosmetics': new achievement({
         'name': 'All Cosmetics',
         'desc': 'Unlock every cosmetic',
-        'image': false,
-        'reward': false,
         'pages': 3,
         'conditions': ['percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)', 100],
-
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-        }
-    },
+    }),
 
     // Achievement achievements
-    '50_percent_achievements': {
+    '50_percent_achievements': new achievement({
         'name': 'Half Way There',
         'desc': 'Reach 50% achievements unlocked',
         'image': './assets/achievements/bronze_medal.gif',
@@ -2095,15 +1606,9 @@ const achievements = {
         ],
         'pages': 5,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 50],
-
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'all_normal_achievements': {
+        hide_image: true,
+    }),
+    'all_normal_achievements': new achievement({
         'name': 'All Normal Achievements',
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
@@ -2116,108 +1621,66 @@ const achievements = {
         'pages': 10,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - challengeAchievements - 3))', 100],
         // 'style': 'endgame',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Challenge achievements
-    '3_falling_consecutive': {
+    '3_falling_consecutive': new achievement({
         'name': 'Match 3',
         'desc': 'Grab 3 falling carrots in a row',
-        'image': false,
         'reward': 'cash:12',
-        'pages': false,
         'conditions': ['player.fallingConsecRecord', 3],
         'style': 'challenge',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    '10_falling_consecutive': { 
+        hide_image: true,
+    }),
+    '10_falling_consecutive': new achievement({ 
         'name': 'Carrot-ay',
         'desc': 'Grab 10 falling carrots in a row',
-        'image': false,
-        'reward': false,
-        'pages': false,
         'conditions': ['player.fallingConsecRecord', 10],
         'style': 'secret', // until boosts are added
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'no_bonus_carrots_challenge': {
+        hide_list: true,
+    }),
+    'no_bonus_carrots_challenge': new achievement({
         'name': 'Fall Guy',
         'desc': 'Farm 500,000 carrots in a single prestige without catching a single falling carrot (Challenge achievement)',
         'image': './assets/achievements/no_falling_carrots.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
         'pages': 5,
-        'conditions': ['ex_noBonusCarrots()', true],
+        'conditions': ['(player.prestige.carrots >= 500000 && player.prestige.falling_carrots_grabbed === 0)', true],
         'style': 'challenge',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'no_bill_challenge': {
+        hide_image: true,
+    }),
+    'no_bill_challenge': new achievement({
         'name': 'Have a Seat', // "Patience is free" -> "You\'re Free to Wait"
         'desc': 'Farm 2,500,000 carrots without upgrading Bill (Challenge achievement)',
         'image': './assets/achievements/chair.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
-        'conditions': ['ex_noBill()', true],
+        'conditions': ['(Boomer_Bill.lvl === 1 && player.prestige.carrots >= 2500000)', true],
         'style': 'challenge',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'no_belle_challenge': {
+        hide_image: true,
+    }),
+    'no_belle_challenge': new achievement({
         'name': 'Off the Clock',
         'desc': 'Farm 5,000,000 carrots without Belle (Challenge achievement)',
         'image': './assets/achievements/broken_clock.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 5,
-        'conditions': ['ex_noBelle()', true],
+        'conditions': ['(Belle_Boomerette.lvl === 0 && player.prestige.carrots >= 5000000)', true],
         'style': 'challenge',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
-    'no_hoes_challenge': {
+        hide_image: true,
+    }),
+    'no_hoes_challenge': new achievement({
         'name': 'Nonbeliever',
         'desc': 'Farm 5,000,000 carrots without crafting a single tool (Challenge achievement)',
-        'image': false,
         'reward': () => { mouseConfetti([24,24], confettiColors, 300)},
         'pages': 8,
-        'conditions': ['ex_noHoes()', true],
+        'conditions': ['(player.prestige.hoes.craftedTotal === 0 && player.prestige.carrots >= 5000000)', true],
         'style': 'challenge',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
-    'all_achievements': {
+    'all_achievements': new achievement({
         'name': 'Completionist', // Originally "Achievement Hunter"
         'desc': 'Unlock every achievement',
         'image': './assets/achievements/medal_spin_bg.gif',
@@ -2225,96 +1688,61 @@ const achievements = {
         'pages': 15,
         'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 100],
         'style': 'endgame',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': true,
-            'noToast': false,
-        }
-    },
+        hide_image: true,
+    }),
 
     // Secret Achievements
-    '100_falling_consecutive': {
+    '100_falling_consecutive': new achievement({
         'name': 'Juggle Master',
         'desc': 'Grab 100 falling carrots in a row',
         'image': './assets/achievements/parachute_carrot.png', // needs unique art
-        'reward': false,
-        'pages': false,
         'conditions': ['player.fallingConsecRecord', 100],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': false,
-            'image': false,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'easter_egg_hunter': {
+        hide_list: true,
+    }),
+    'easter_egg_hunter': new achievement({
         'name': 'Easter Egg Hunter',
         'desc': 'Enter the Konami code, at least according to Wikipedia. There are multiple versions, apparently. (Hidden achievement)',
         'image': './assets/achievements/easter_egg.png',
         'reward': () => { mouseConfetti([24,24], confettiColors, 300) },
-        'pages': false,
         'conditions': ['keyTrigger[0]', true],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'pineapple': {
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
+    'pineapple': new achievement({
         'name': 'Pineapple',
         'desc': 'Hey that\'s me (Hidden achievement)',
         'image': './assets/achievements/pineapple_achieve.png',
         'reward': 'cosmetic:farmable/pineapple',
-        'pages': false,
         'conditions': ['keyTrigger[3]', true],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'egg_confetti': {
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
+    'egg_confetti': new achievement({
         'name': 'Confetti mode',
         'desc': 'Enable confetti mode by typing "confetti" (Hidden achievement)',
-        'image': false,
-        'reward': false,
-        'pages': false,
+        'image': './assets/achievements/confetti_mode.png',
         'conditions': ['keyTrigger[5]', true],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'footer_carrot_clicker': {
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
+    'footer_carrot_clicker': new achievement({
         'name': 'Carrot Clicker Clicker',
         'desc': 'Click the carrot in settings 100 times (Hidden achievement)',
         'image': './assets/achievements/footer_carrot.png',
-        'reward': false,
-        'pages': false,
         'conditions': ['easterEgg', 100],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'not_funny': {
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
+    'not_funny': new achievement({
         'name': 'Not Funny',
         'desc': 'Upgrade Bill, Belle, and Greg to Level 69 (Hidden achievement)',
         'image': './assets/achievements/nice.png',
@@ -2322,18 +1750,13 @@ const achievements = {
             mouseConfetti([24,24], confettiColors, 300);
             unlock('cosmetic', 'upvote', 'farmable');
         },
-        'pages': false,
-        'conditions': ['ex_notFunny()', 1],
+        'conditions': ['(Boomer_Bill.lvl === 69 && Belle_Boomerette.lvl === 69 && Gregory.lvl === 69)', 1],
         'style': 'secret',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
-    'playtester': {
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
+    'playtester': new achievement({
         'name': 'Early Playtester',
         'desc': 'Thanks for playtesting!',
         'image': './assets/achievements/early_playtester.png',
@@ -2341,21 +1764,16 @@ const achievements = {
             'theme:theme_classic',
             'cash:32',
         ],
-        'pages': false,
         'conditions': ['0', 1],
-        // 'conditions': ['store("playtest")', 'yes'],
+        'conditions': ['store("playtest") === "yes" || player.flags["playtest"] === true', true],
         'style': 'shine',
-        'mystery': {
-            'name': true,
-            'desc': true,
-            'image': true,
-            'noToast': false,
-            'list': true,
-        }
-    },
+        hide_desc: true,
+        hide_image: true,
+        hide_list: true,
+    }),
 
     // Internal achievements- won't appear in game but it's way easier to use the achievements system to trigger certain events
-    'internal_prestige_available': {
+    'internal_prestige_available': new achievement({
         'internal': true,
         'name': 'internal_prestige_available',
         'reward': () => {
@@ -2364,16 +1782,14 @@ const achievements = {
             seeButton('prestige');
             toast(...toasts.tutorial_prestige_available);
         },
-        'pages': false,
         'conditions': ['(player.lifetime.golden_carrots > 0 || player.prestige_potential > 0)', true],
-    },
-    'internal_jared_available': {
+    }),
+    'internal_jared_available': new achievement({
         'internal': true,
         'name': 'internal_jared_available',
         'reward': () => { unlock('character', 'jared', 'ready'); },
-        'pages': false,
         'conditions': ['player.lifetime.carrots >= 5000000', true],
-    },
+    }),
     // 'internal_custom_theme_available': {
     //     'internal': true,
     //     'name': 'internal_custom_theme_available',
@@ -2392,47 +1808,12 @@ var internalAchievements = 0;
 
 // External achievement checks
 //#region 
-/** use_charles */
-function ex_charlesUses() {
-    if(
-    Charles.improveWorkingConditions.value > Default_Charles.improveWorkingConditions.value
-    || Charles.betterHoes.value > Default_Charles.betterHoes.value
-    || Charles.decreaseWages.value > Default_Charles.decreaseWages.value
-    ) return true;
-    return false;
-}
-/** No falling carrots challenge */
-function ex_noBonusCarrots() {
-    if(player.prestige.carrots >= 500000 && player.prestige.falling_carrots_grabbed == 0) return true;
-    return false;
-}
-/** No Bill challenge */
-function ex_noBill() {
-    if(Boomer_Bill.lvl == 1 && player.prestige.carrots >= 2500000) return true;
-    return false;
-}
-/** No Belle challenge */
-function ex_noBelle() {
-    if(Belle_Boomerette.lvl == 0 && player.prestige.carrots >= 5000000) return true;
-    return false;
-}
-/** No hoes challenge */
-function ex_noHoes() {
-    if(player.prestige.hoes.craftedTotal == 0 && player.prestige.carrots >= 5000000) return true;
-    return false;
-}
-
-/** Not funny */
-function ex_notFunny() {
-    if(Boomer_Bill.lvl == 69 && Belle_Boomerette.lvl == 69 && Gregory.lvl == 69) return 1;
-    return 0;
-}
 /** All tips (basic_tips, all_tips) */
 function ex_allTips() {
     let tally = 0;
     for(i = 0; i < tl.length; i++) {
         let type = tl[i];
-        if(Object.keys(tips.seen[type]).length == default_tips[type].length && Object.keys(tips.seen[`fun_${type}`]).length == default_tips[`fun_${type}`].length) {
+        if(Object.keys(tips.seen[type]).length === default_tips[type].length && Object.keys(tips.seen[`fun_${type}`]).length === default_tips[`fun_${type}`].length) {
             tally++;
         }
     }
@@ -2442,9 +1823,7 @@ function ex_allTips() {
 /** Get total cosmetics count */
 function playerCosmeticsCount() {
     let a = 0;
-    for(i = 0; i < cosmeticsKeys.length; i++) {
-        a += player.cosmetics[cosmeticsKeys[i]].length - 1;
-    }
+    for(i = 0; i < cosmeticsKeys.length; i++) a += player.cosmetics[cosmeticsKeys[i]].length - 1;
     return a;
 }
 //#endregion

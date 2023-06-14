@@ -1,4 +1,19 @@
 // ----------------------------------------------------------- //
+    VERSION dev beta 1.17.2
+    6-14-2023
+// ----------------------------------------------------------- //
+
+- Fixed Greg's tool prices being higher than intended (Issue #72)
+- Condensed and improved some code
+- Disabled the automatic granting of the "playtest" flag and enabled the achievement for it
+- Made the statistics menu a bit more readable
+- Achievements:
+    + Added "Confetti Mode" artwork
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
     VERSION dev beta 1.17.1
     1-16-2023
 // ----------------------------------------------------------- //
