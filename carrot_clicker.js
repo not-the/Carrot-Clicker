@@ -144,6 +144,7 @@ class statsTracker{
         this.tomes_bought=tomes_bought;
         this.trinkets_complete=trinkets_complete;
         this.boosts_used=boosts_used;
+        this.version = 1;
     }
 }
 
@@ -156,6 +157,7 @@ class Character{
     constructor(nickname, img) {
         this.nickname=nickname;
         this.img=img;
+        this.version=1;
     }
     unlock(){
         //possibly a method to unlock the characters
@@ -180,6 +182,58 @@ class Farmer extends Character{
         this.lvlupPrice=lvlupPrice;
         this.scaling=scaling;
         this.Hoes=Hoes;
+        this.version=1;
+    }
+
+    /** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
+     * @param {Object} character 
+     * @returns Carrots per Click or Carrots per Second
+     */
+    calculateCarrots(scholar, boostModifer) {
+
+        //A special bonus impelemented only if you have 10 gilded_hoes, It uses the power of the other hoes to give massive buffs
+        //If the player does not have 10 gilded_hoes the multiplied defaults to 1
+        let SpecialGildedHoeBonus = Math.floor(
+            //finds how many gilded_hoes the player has. Each multiple of ten gives increases the buff
+            Math.floor(this.Hoes[5]/10) * 
+            
+            //calculates the buff(Might want to make more powerful, is currently the cuberoot of all the other hoes multiplied together )
+            Math.floor(
+                Math.pow(this.Hoes[0]*this.Hoes[1]*this.Hoes[2]*this.Hoes[3]*this.Hoes[4],0.3)
+            )
+        ) || 1;
+        
+
+        //Charles Stuff
+
+
+        //holy book Buff, Currently takes the tome value + 1 and cubes it, so a level 1 tome would give 9 and a level two tome would give 64..
+        const holyBookBuff = math.pow(scholar.bibleTome.value+1,3)
+        
+        
+        //cheaper steel, currently uses a rational function to get a value(equivelent to a percentage) to multiply the better hoes by. 
+        //curve at https://www.desmos.com/calculator/jh78yzukji  
+        const cheaperSteelDebuff = 1/(0.03*scholar.cheaperSteelTome.value+1);
+
+        //salary management
+        //same curve as cheaper steel
+        const salaryManagementDebuff = 1/(0.03*scholar.salaryManagementTome.value+1);
+        
+        //improved farming practices
+        const farmingPracticeBuffs = 1 + scholar.improvedFarmingPracticeTome.value/20;
+
+        //improved craftsmenship
+        const craftsmenshipBuff = 1 + scholar.improveCraftsmanshipTome.value/20;
+
+
+        /* Calculates the Hoe modifier by creating a shallow copy of this.Hoes and multiplying
+           each entry by 10 to the power of that hoes index. Example 1, 10, 100, 1000
+           then that shallow array is summed up with the base multiplier of 1
+        */
+        const hoeModifier = 1+this.Hoes.map((hoe,index)=> hoe*betterHoes*Math.pow(10,index)).reduce((a,b) => a+b);
+
+        // Returns the correct value
+        return this.lvl * specialGildedHoeBonus * boostModifer * hoeModifier * cheaperSteelDebuff * salaryManagementDebuff * farmingPracticeBuffs * craftsmenshipBuff;
     }
 }
 class Blacksmith extends Character{
@@ -201,12 +255,14 @@ class Blacksmith extends Character{
         this.Hoes=Hoes;
         this.HoePrices=HoePrices;
         this.crafting=crafting;
+        this.version = 1;
     }
 }
 
 class Scholar extends Character{
     constructor(nickname, img){
         super(nickname,img);
+        this.version = 1;
     }
 }
 
@@ -339,13 +395,20 @@ const Default_Gregory = new Blacksmith(
     false,
 );
 
-class tome {
-    constructor(value=0,price=1,max=25000){
+class Tome {
+    constructor(value=0,price=1,max=25000,price_scaling=1.01){
         this.value=value;
         this.price=price;
         this.max=max;
+        this.scaling=price_scaling;
+        this.version = 1;
     }
-
+    /**
+     * 
+     * @param {Number} amount number of items you want to buy. 
+     * @param {Boolean} sendNewPrice if True it sends the price of the next tome otherwise it queries the price you 
+     * @returns 
+     */
     priceQuery(amount=1, sendNewPrice=false){
         //handling cases where the tomes can not be bought
         if(typeof(amount)!=="number") return console.error("amount needs to be a number");
@@ -356,14 +419,15 @@ class tome {
         let target = valueDummy+amount;
         let sum = this.price;
         let newPrice = this.price;
-        let scaling = 1.001;
-
+        let scaling = this.price_scaling
         //multibuy for loop
         for(let i=0;i<amount+10;i++){
+            
+            
             //scaling
-            if(valueDummy>99)       scaling = 1.01;
-            else if(valueDummy>375) scaling = 1.003;
-            else if(valueDummy>1000)scaling = 1.00101;
+            if(valueDummy>99)       scaling = this.scaling;
+            else if(valueDummy>375) scaling = this.scaling*0.993069030;
+            else if(valueDummy>1000)scaling = this.scaling*0.9910990099;
 
             //set new price
             newPrice=Math.ceil(newPrice*scaling);
@@ -378,6 +442,7 @@ class tome {
         if(sendNewPrice) return newPrice;
         else return sum;
     } 
+
 
     add(amount=1){
         // Handling cases where the tomes can not be bought
@@ -404,12 +469,16 @@ class tome {
         updateGC();
         mouseConfetti([3, 8], ccWhite);
     }
+
 }
 
 const Default_Charles = new Scholar("charles",'./assets/characters/Charles.png',)
-Default_Charles.improveWorkingConditions=new tome (0,1,22025);
-Default_Charles.decreaseWages=new tome(0,1,22025);
-Default_Charles.betterHoes=new tome(0,1,22025);
+Default_Charles.improvedFarmingPracticeTome = new Tome(0,1,22025);
+Default_Charles.improveCraftsmanshipTome    = new Tome(0,1,22025);
+Default_Charles.cheaperSteelTome            = new Tome(0,1,22025);
+Default_Charles.salaryManagementTome        = new Tome(0,1,22025);
+Default_Charles.bibleTome                   = new Tome(0,100,1000,1.9);
+
 
 class carlListing {
     constructor(price=1, currency='cash', available=false, bought=false) {
@@ -417,6 +486,7 @@ class carlListing {
         this.currency = currency;
         this.available = available;
         this.bought = bought;
+        this.version = 1;
     }
 }
 
@@ -478,6 +548,7 @@ const Default_Carl = {
     },
     order: [],
 }
+
 const Default_Jared = {
     // Info
     name: "Jared",
@@ -604,16 +675,11 @@ var player           = localStorage.getObject("player")  || clone(default_player
 var Boomer_Bill      = localStorage.getObject("Bill")    || clone(Default_Boomer_Bill);
 var Belle_Boomerette = localStorage.getObject("Belle")   || clone(Default_Belle_Boomerette);
 var Gregory          = localStorage.getObject("Greg")    || clone(Default_Gregory);
-var saved_Charles    = localStorage.getObject("Charles") || clone(Default_Charles);
+var Charles          = localStorage.getObject("Charles") || clone(Default_Charles);
 var Carl             = localStorage.getObject("Carl")    || clone(Default_Carl);
 var Jared            = localStorage.getObject("Jared")   || clone(Default_Jared);
 const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
 
-// Update Charles
-Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
-Charles.improveWorkingConditions=new tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
-Charles.decreaseWages=new tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
-Charles.betterHoes=new tome(saved_Charles.betterHoes.value,saved_Charles.betterHoes.price,22025);
 
 // Objects to save in localstorage
 const saveList = {
@@ -1025,7 +1091,7 @@ function fallingCarrot() {
         else if(boostroll <= 70 && boostEffects['cpc'] === 1) amount = 'cpc_2x' // 35%
         else if(boostEffects['cpc'] === 1) amount = 'cpc_5x' // 30%
         else return;
-    }
+    } 
     
     // Create element
     var element = document.createElement("img");
@@ -1156,51 +1222,7 @@ function updateToolPrices() {
 }
 /** Updates Charles' shop content */
 function updateCharlesShop() {
-    // Highlight when affordable
-    style(elCharles.shop.improveWorkingConditions, 'cant_afford', (Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
-    style(elCharles.shop.betterHoes, 'cant_afford', (Charles.betterHoes.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
-    style(elCharles.shop.decreaseWages, 'cant_afford', (Charles.decreaseWages.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
-
-    // Update tome prices
-    if(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel])>99999){
-        eInnerText(elCharles.prices.improveWorkingConditions, `${DisplayRounded(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
-    }else{
-        eInnerText(elCharles.prices.improveWorkingConditions, `${numCommas(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]))} Golden Carrots`);
-    }
-    if(Charles.betterHoes.priceQuery(multibuy[mbsel])>99999){
-        eInnerText(elCharles.prices.betterHoes, `${DisplayRounded(Charles.betterHoes.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
-    }else{
-        eInnerText(elCharles.prices.betterHoes, `${numCommas(Charles.betterHoes.priceQuery(multibuy[mbsel]))} Golden Carrots`);
-    }
-    if(Charles.decreaseWages.priceQuery(multibuy[mbsel])>99999){
-        eInnerText(elCharles.prices.decreaseWages, `${DisplayRounded(Charles.decreaseWages.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
-    }else{
-        eInnerText(elCharles.prices.decreaseWages, `${numCommas(Charles.decreaseWages.priceQuery(multibuy[mbsel]))} Golden Carrots`);
-    }
-
-    // Update tome effects
-    eInnerText(tomeEffect.iwc, `+${Charles.improveWorkingConditions.value * 10}%`);
-    eInnerText(tomeEffect.bh,  `+${Charles.betterHoes.value}%`);
-    eInnerText(tomeEffect.dww, `-${(decreaseWagesEffects()*100).toFixed(2)}%`);
-
-    // Update tome counts
-    
-    eInnerText(tomeCount.iwc, `Owned: ${numCommas(Charles.improveWorkingConditions.value)}`);
-    eInnerText(tomeCount.bh,  `Owned: ${numCommas(Charles.betterHoes.value)}`);
-    eInnerText(tomeCount.dww, `Owned: ${numCommas(Charles.decreaseWages.value)}`);
-    
-    // Make Characters glow
-    style(dom('charles_box'), 'glowing', (
-        Charles.improveWorkingConditions.price <= player.golden_carrots
-        || Charles.betterHoes.price <= player.golden_carrots
-        || Charles.decreaseWages.price <= player.golden_carrots
-    ));
-
-    // Debugging tooltip
-    eInnerText(elCharles.debug,
-        `${Math.floor(Charles.improveWorkingConditions.value)}%\n
-        BH: ${Math.floor(Charles.betterHoes.value)}%\n
-        DWW: ${(decreaseWagesEffects()*100).toFixed(2)}%`);
+    //see JJ playground
 }
 
 /** Updates golden carrot count on the page. Won't run if prestige_available is false */
@@ -1354,7 +1376,7 @@ function createPriceArray(character, totalItems){
     let scaling = defaultChar[character.nickname].scaling;
 
     //decrease wages modifier
-    let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
+    //let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
 
     //setting the price for the first level
     priceArray.push(defaultChar[character.nickname].lvlupPrice*((Jared.data.level_up_discount.value || 100)/100));
@@ -1507,33 +1529,12 @@ function prestige() {
  * @param {Object} character 
  * @returns Carrots per Click or Carrots per Second
  */
- function calculateCarrots(character) {
-    let SixToolBonus = Math.floor(character.Hoes[5]/10*Math.floor(Math.pow(character.Hoes[0]*character.Hoes[1]*character.Hoes[2]*character.Hoes[3]*character.Hoes[4],0.3))) || 1;
-    let betterHoes=1+Charles.betterHoes.value/100 // Calculate betterHoes bonus
-    let iwcBonus=0.1;
-    let iwc = (Charles.improveWorkingConditions.value*iwcBonus)+1;
-    // Calculates tool values
-    let modifier = 10;
-    let cpHoes = (1*betterHoes*(character.Hoes[0]) + 1);
-    for(let i = 1; i < character.Hoes.length; i++) {
-        let toolValue = (modifier*betterHoes*character.Hoes[i]);
-        cpHoes += toolValue;
-        modifier *= 10;
-    }
-    
-    // Boost handler
-    let boosted = 1;
-    if(character === Boomer_Bill) boosted = boostEffects.cpc;
-    else if(character === Belle_Boomerette) boosted = boostEffects.cps;
-
-    // Returns the correct value
-    return character.lvl * SixToolBonus * iwc * boosted * (cpHoes>0 ? cpHoes:1);
-}
 
 /** Recalculates and sets CPC and CPS */
 function recalculateCarrotsPer() {
-    player.cpc = calculateCarrots(Boomer_Bill);
-    player.cps = calculateCarrots(Belle_Boomerette);
+    player.cpc = Boomer_Bill.calculateCarrots(Charles, boostEffects.cpc);
+    player.cps = Belle_Boomerette.calculateCarrots(Charles, boostEffects.cps);
+
     calculatePrestigePotential();
     updateCPC();
 }
@@ -1569,18 +1570,6 @@ function calculatePrestigePotential() {
 
 
 //#endregion
-
-/*---------------------Charles functions------------------*/
-//#region 
-/** Calculates and optionally sets the prices for Charles' tomes
- * @param {*} tome Example: Charles.improveWorkingConditions
- * @param {number} amount 
- * @param {string} mode Options: "query" or "apply"
- * @returns The calculated price
- */
-function decreaseWagesEffects(){ return Charles.decreaseWages.value ? Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146 : 0; }
-//#endregion
-
 
 /*-----------Tool functions--------------*/
 //#region

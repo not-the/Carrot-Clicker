@@ -1,4 +1,38 @@
 // ----------------------------------------------------------- //
+    Version dev Beta 1.18 (Planned)
+    TBD
+// ----------------------------------------------------------- //
+
+-Add 2 new tomes to Charles and make the tomes a more interesting game mechanic (25% complete; tomes exist but are not yet fully implement)
+-implement system so that older charles saves can be updated
+-add a version tag to each class to make checking if the localstorage needs to be updated easier
+-finish and add atleast the main theme
+- Fix issue #73 crafting tools will subtract wrong amount of carrots
+- Fix issue #74 the names of dual sickle and gilded hoe are incorrect
+- Fix issue #75 character info button doesn't work
+- Make a written Bio of all the characters (Doesn't have to be final since I haven't gotten to all of them yet in the bible)
+- Game updated toast
+
+#Maybe Do this if you feel like it
+-Lay ground works for character Ascendion
+-sound affects rehual
+-Move level up functions into the character class + hoe functions into the blacksmith class
+Move the default character objects to JSON files to make the code more navigatable
+
+// ----------------------------------------------------------- //
+    Version dev beta 1.17.3 
+    9-23-2023
+// ----------------------------------------------------------- //
+-Added/renamed Charles Tomes, They are now
+    + ImprovedFarmingPractices
+    + improveCraftsmanship
+    + CheaperSteel
+    + SalaryManagement
+    + Bible
+- cleaned up, moved to a character method and implement Tome modifiers to CalculateCarrots()
+- Added version tags to most classes
+
+// ----------------------------------------------------------- //
     Stable repository
     6-14-2023
 // ----------------------------------------------------------- //
