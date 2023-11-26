@@ -20,7 +20,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://carrot.notkal.com/" />
     <meta property="og:image" content="https://carrot.notkal.com/assets/Carrot%20Clicker.png" />
-    <meta property="og:description" content="Click the carrot, Bill. Carrot Clicker is an exponential growth clicker game where clicking is always incentivised." />
+
+    <!-- Description -->
+    <meta name="description" content="Carrot Clicker is an exponential growth clicker game where clicking is always incentivised">
+    <meta property="og:description" content="Carrot Clicker is an exponential growth clicker game where clicking is always incentivised" />
 
     <!-- Javascript -->
     <script src="carrot_utilities.js" defer></script>
@@ -28,6 +31,10 @@
     <script src="carrot_clicker.js" defer></script>
     <script src="styling.js" defer></script>
     <script src="user.js" defer></script>
+
+    <!-- Adsense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1407840358707118"
+     crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Toast notifications -->
@@ -122,6 +129,14 @@
                             </div>
                         </a>
 
+                        <!-- Privacy Policy -->
+                        <a href="https://www.notkal.com/about/#privacy" target="_blank" rel="noopener noreferrer" tabindex="0">
+                            <div class="menu_item link_styling secondary_text">
+                                <!-- <img src="https://www.notkal.com/assets/icon.png" alt="" class="dropdown_img"> -->
+                                Privacy Policy
+                                <img src="./assets/icons/external.svg" alt="(External)" class="dropdown_img right_img">
+                            </div>
+                        </a>
                     </nav>
                 </div>
             </div>
@@ -137,7 +152,6 @@
             </div>
 
         </div>
-
         
         <!-- Carrot / Characters -->
         <div id="container" class="flex">
@@ -210,6 +224,19 @@
                     <button onClick="openDifficultyMenu()" data-tooltip="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
                         <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
                     </button>
+                    <!-- Share -->
+                    <!-- <script>
+                        function shareProgress() {
+                            navigator.share({
+                                // text:`I\'ve farmed ${player.carrots} carrots in Carrot Clicker so far. Check it out!\n\nhttps://carrot.notkal.com/`,
+                                url:'https://carrot.notkal.com/'
+                            }).catch(err => {toast('didnt work rip')});
+                        }
+                    </script>
+                    <button onClick="shareProgress()" data-tooltip="Share your progress" class="main_button_item flex" style="width: auto; padding: 5px 9px;">
+                        <img src="./assets/icons/share.png" class="main_button_img icon">
+                        <span style="margin: 7px 0 0 6px;">Share</span>
+                    </button> -->
                 </div>
 
                 <!-- Prestige potential -->
@@ -647,6 +674,20 @@
                     <p class="secondary_text center" id="more_chars_tooltip">
                         Progress through the game to unlock additional characters!
                     </p>
+
+                    <!-- Advertisement -->
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1407840358707118"
+                        crossorigin="anonymous"></script>
+                    <!-- Square -->
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-1407840358707118"
+                        data-ad-slot="3248600008"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 
                 </div>
                 <!-- #endregion -->
@@ -654,6 +695,20 @@
             </section>
         </div>
 
+
+        <!-- Advertisement -->
+        <div class="center_ad">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1407840358707118"
+            crossorigin="anonymous"></script>
+            <!-- Bottom -->
+            <ins class="adsbygoogle ad_banner"
+                style="display:inline-block;width:900px;height:90px"
+                data-ad-client="ca-pub-1407840358707118"
+                data-ad-slot="5874725350"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
 
         <!-- Game navigation -->
         <nav id="game_nav" class="flex">
@@ -676,7 +731,6 @@
                 </figure>
             </a>
         </nav>
-
 
         <!-- Tripane -->
         <div id="settings" class="anchor_offset"></div>
@@ -756,8 +810,8 @@
                                 <p>Sturdy Hoe: <b id="prestige_hoes_crafted_1">---</b></p>
                                 <p>Scythe:     <b id="prestige_hoes_crafted_2">---</b></p>
                                 <p>Plough:     <b id="prestige_hoes_crafted_3">---</b></p>
-                                <p>Gilded Hoe: <b id="prestige_hoes_crafted_4">---</b></p>
-                                <p>tool_6:     <b id="prestige_hoes_crafted_5">---</b></p>
+                                <p>Dual Sickle:<b id="prestige_hoes_crafted_4">---</b></p>
+                                <p>Gilded Hoe: <b id="prestige_hoes_crafted_5">---</b></p>
                             </details>
                             <p>Falling Carrots grabbed: <b id="prestige_falling_carrots_grabbed">---</b></p>
                             <p>Boosts used: <b id="prestige_boosts_used">---</b></p>
@@ -765,6 +819,8 @@
 
                         <!-- Lifetime -->
                         <h3>Lifetime:</h3>
+                        <p>Time played: <b id="stat_time_played">---</b></p><br/>
+
                         <details class="stat_collapse">
                             <summary><img src="./assets/stats/carrot.png" alt="" class="stats_icon button_icon"> Carrots earned: <b id="lifetime_carrots">---</b></summary>
                             <p>From clicking: <b id="lifetime_carrots_clicked">---</b></p>
@@ -778,8 +834,8 @@
                             <p>Sturdy Hoe: <b id="lifetime_hoes_crafted_1">---</b></p>
                             <p>Scythe:     <b id="lifetime_hoes_crafted_2">---</b></p>
                             <p>Plough:     <b id="lifetime_hoes_crafted_3">---</b></p>
-                            <p>Gilded Hoe: <b id="lifetime_hoes_crafted_4">---</b></p>
-                            <p>tool_6:     <b id="lifetime_hoes_crafted_5">---</b></p>
+                            <p>Dual Sickle: <b id="lifetime_hoes_crafted_4">---</b></p>
+                            <p>Gilded Hoe:     <b id="lifetime_hoes_crafted_5">---</b></p>
                         </details>
                         <p>Falling Carrots grabbed: <b id="lifetime_falling_carrots_grabbed">---</b></p>
                         <p>Boosts used: <b id="lifetime_boosts_used">---</b></p><br/>
@@ -1000,7 +1056,7 @@
                 <div>
                     <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" title="Carrot Clicker" class="footer_carrot" onclick="eggUp()" tabindex="0" role="button">
                     <h1 style="margin-top: 8px;">Carrot Clicker</h1>
-                    <p id="footer_version">Version Beta v1.17.2 - Unstable</p>
+                    <p id="footer_version">Version Beta v1.17.4</p>
                 </div>
 
                 <!-- Columns -->
@@ -1022,7 +1078,8 @@
                                 </div>
                             </a>
                         </div>
-                        <button onclick="startCredits()" style="width: 100%; max-width: 240px; margin-top: 8px;">View Credits</button>
+                        <button onclick="startCredits()" style="width: 100%; max-width: 240px; margin-top: 8px;">View Credits</button><br/>
+                        © All rights reserved
                     </div>
 
                     <!-- Links -->
@@ -1038,6 +1095,11 @@
                             <div class="flex">
                                 <img src="./assets/icons/github.png" alt="Github logo" class="invert_alt">
                                 <p>Github</p>
+                            </div>
+                        </a>
+                        <a href="https://www.notkal.com/about/#privacy" class="user_card footer_card" target="_blank" rel="noopener noreferrer">
+                            <div class="flex">
+                                <p>Privacy Policy</p>
                             </div>
                         </a>
                     </nav>
@@ -1291,7 +1353,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_1">
-                            <p>Craft Sturdy hoe:</p>
+                            <p>Craft Sturdy Hoe:</p>
                             <button class="edit_keybind" id="key_craft_1" onclick="detectKey('key_craft_1')">
                                 -
                             </button>
@@ -1315,7 +1377,7 @@
                     </div>
                     <div class="keybind_item">
                         <label for="key_craft_4">
-                            <p>Craft placeholder:</p>
+                            <p>Craft Dual Sickle:</p>
                             <button class="edit_keybind" id="key_craft_4" onclick="detectKey('key_craft_4')">
                                 -
                             </button>
@@ -1446,11 +1508,11 @@
             <!-- Next prestige -->
             <p class="prestigetooltip center" style="padding-top: 6px;">
                 <!-- Charles button -->
-                <button onClick="characterInfo('charles')" class="full_width" title="Prestige">
+                <button onClick="characterInfo('charles')" class="full_width">
                     Buy tomes
                 </button><br/>
                 <!-- Prestige button -->
-                <button onClick="openDialog(...dialog.prestige_confirm)" class="button_gold full_width" title="Prestige" style="height: 40px;">
+                <button onClick="openDialog(...dialog.prestige_confirm)" class="button_gold full_width" style="height: 40px;">
                     Prestige
                 </button><br/>
                 Prestiging now will result in:<br/>
@@ -1564,7 +1626,8 @@
             <a href="https://commons.wikimedia.org/wiki/File:Clothes_hanger_icon_3.svg">Clothes Hanger Icon</a> Paris 16, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
             <a href="https://commons.wikimedia.org/wiki/File:Faenza-input-keyboard-symbolic.svg" target="_blank" rel="noopener noreferrer">Keyboard icon</a> made by Matthieu James, <a href="http://www.gnu.org/licenses/gpl.html" target="_blank" rel="noopener noreferrer">GPL</a>, via Wikimedia Commons
             <a href="https://commons.wikimedia.org/wiki/File:External_Link_(89630)_-_The_Noun_Project.svg" target="_blank" rel="noopener noreferrer">External Link icon</a> made by Consumer Financial Protection Bureau, CC0, via Wikimedia Commons
-            <a href="https://commons.wikimedia.org/wiki/File:High-contrast-system-lock-screen.svg" target="_blank" rel="noopener noreferrer">Padlock Icon</a>, <a href="http://www.gnu.org/licenses/lgpl.html">LGPL</a>, via Wikimedia Commons
+            <a href="https://commons.wikimedia.org/wiki/File:High-contrast-system-lock-screen.svg" target="_blank" rel="noopener noreferrer">Padlock Icon</a>, <a href="http://www.gnu.org/licenses/lgpl.html" target="_blank" rel="noopener noreferrer">LGPL</a>, via Wikimedia Commons
+            <a href="https://www.flaticon.com/free-icons/share" title="share icons" target="_blank" rel="noopener noreferrer">Share icons created by Bankume - Flaticon</a>
             Dirt background image from <a href="https://andersonseedsmn.com/home/dirt-background/" target="_blank" rel="noopener noreferrer">https://andersonseedsmn.com/home/dirt-background/</a>
             <!-- <a href="https://commons.wikimedia.org/wiki/File:Reload_icon_-_Green.svg">Reload Icon</a> by Wenflou, CC0, via Wikimedia Commons -->
             <!-- <a href="https://commons.wikimedia.org/wiki/File:Right_arrow.svg">User:Superm401</a>, Public domain, via Wikimedia Commons -->
@@ -1580,7 +1643,8 @@
             <div>
                 <h1>Carrot Clicker</h1>
                 <p class="secondary_text">
-                    Carrot Clicker Project 2021 - 2022
+                    Carrot Clicker Project 2021 - 2023
+                    © All rights reserved
                 </p>
                 <button onclick="closeDialog()" style="width: 180px; margin-top: 24px;">Done</button>
                 <!-- <img src="./assets/theme/pixel_carrot.png" alt="Carrot Clicker" class="footer_carrot"> -->

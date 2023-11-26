@@ -1112,7 +1112,7 @@ const achievements = {
         hide_image: true,
     }),
     'bill_lvl_500': new achievement({
-        'name': 'Billtona 500',
+        'name': 'Bill 500',
         'desc': 'Upgrade Bill to level 500',
         'image': './assets/achievements/bill_pointer.png', // needs unique art
         'pages': 2,
@@ -1125,9 +1125,7 @@ const achievements = {
         'image': './assets/achievements/bill_pointer.png', // needs unique art
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
-        'style': 'secret',
         hide_image: true,
-        hide_list: true,
     }),
     // Belle level
     'belle_lvl_15': new achievement({
@@ -1376,6 +1374,12 @@ const achievements = {
         'pages': 1,
         'conditions': ['player.cpc', 9000],
     }),
+    '10_million_cpc': new achievement({
+        'name': '10 million CPC',
+        'desc': 'Get your Carrots Per Click (CPC) to 10 million',
+        'pages': 1,
+        'conditions': ['player.cpc', 10000000],
+    }),
     '1_billion_cpc': new achievement({
         'name': 'Carrot Printer',
         'desc': 'Get your Carrots Per Click (CPC) to 1 billion',
@@ -1593,11 +1597,12 @@ const achievements = {
     }),
 
     // Achievement achievements
-    '50_percent_achievements': new achievement({
-        'name': 'Half Way There',
-        'desc': 'Reach 50% achievements unlocked',
+    '50_achievements': new achievement({
+        'name': 'Bronze Medal',
+        'desc': 'Unlock 50 unique achievements',
         'image': './assets/achievements/bronze_medal.gif',
         'reward': [
+            'shop:theme/theme_original',
             'shop:cosmetic/farmable/alien_carrot',
             'shop:cosmetic/farmable/demon_carrot',
             'shop:cosmetic/farmable/ghost_carrot',
@@ -1605,7 +1610,7 @@ const achievements = {
             () => { mouseConfetti([24,24], confettiColors, 300)},
         ],
         'pages': 5,
-        'conditions': ['Math.round(percentage(Object.keys(player.achievements).length, achievementsKeys.length - hiddenAchievements - 1))', 50],
+        'conditions': ['Object.keys(player.achievements).length', 50],
         hide_image: true,
     }),
     'all_normal_achievements': new achievement({
@@ -1613,7 +1618,6 @@ const achievements = {
         'desc': 'Unlock every non-challenge achievement',
         'image': './assets/achievements/silver_medal.gif',
         'reward': [
-            'shop:theme/theme_original',
             () => {
                 let sc = toast("Congrats!", "Thanks for playing!", "cyan", true, false, false, false, () => { startCredits(sc); }, "View credits");
             }
@@ -1889,8 +1893,8 @@ const jaredShop = {
         desc:      'Gives all characters additional tool slots on top of Greg\'s level',
         img:       './assets/items/trinkets/tool_box.png',
         currency:  'cash',
-        price:     [   76, 86, 96, 106, 120, 144, 196, 218, 242, 328/*, 362, 400*/],
-        value:     [0,  1,  2,  3,   4,   5,   6,   7,   8,   9,  10],
+        price:     [   46, 56, 66, 76, 86, 96, 106, 120, 144, 196, /*218, 242, 328, 362, 400*/],
+        value:     [0,  1, 2,  3,  4,  5,  6,  7,   8,   9,    10],
         written:   '+@ slots',
         update:    () => { updateAllTools(); },
     },
@@ -1984,7 +1988,7 @@ const boosts = {
     },
     'cpc_5x': {
         name: 'Click x5',
-        desc: 'desc',
+        desc: 'Quintupled CPC for 1 minute',
         img: './assets/pixel_carrot_32x.png',
 
         type: 'cpc',

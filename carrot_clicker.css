@@ -53,7 +53,7 @@
 
     /* Misc */
     --progress-light:   lightgreen;
-    --progress-dark:    rgb(94, 209, 94);
+    --progress-dark:    rgb(75, 192, 75);
     --gray:             gray;
     --color-cash:       goldenrod;
     --generic-blue:     #518ed4;
@@ -1462,12 +1462,10 @@ body:not(.c_carl) .char_custom_button {
     text-align: center;
 }
 .Greg .levelupimg { margin-bottom: 25px; }
-#Greg_Bar{
+#Greg_Bar {
     width: 100%;
     height: 10px;
-    background-color: var(--bg-darker);
-    border-end-start-radius: 10px;
-    border-end-end-radius: 10px;
+    border-radius: 0 0 10px 10px;
     overflow: hidden;
 }
 .progress {
@@ -1475,24 +1473,28 @@ body:not(.c_carl) .char_custom_button {
     transition-duration: 100ms;
     transition-timing-function: linear;
 
-    width: 0%;
+    float: right;
+    width: 100%;
     max-width: 100%;
-    height: 100%;
+    height: 10px;
 
+    background-color: var(--bg-darker);
+}
+.pbar {
     background: var(--progress-light);
     background-repeat: repeat-x;
     background: repeating-linear-gradient(
         45deg,
         var(--progress-light),
-        var(--progress-light) 14px,
-        var(--progress-dark) 14px,
-        var(--progress-dark) 28px
+        var(--progress-light) 24px,
+        var(--progress-dark) 24px,
+        var(--progress-dark) 48px
         );
     background-position: top;
     animation: progress_animate 12s infinite linear;
 }
 @keyframes progress_animate {
-    to { background-position-x: -400px; }
+    to { background-position-x: 300px; }
 }
 
 

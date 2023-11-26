@@ -1032,7 +1032,7 @@ function setTheme(theme) {
 
     themeSwitcherCheckmark(theme, from);
     /** Theme switcher checkmarks */
-    function themeSwitcherCheckmark(theme, from = false) {
+    function themeSwitcherCheckmark(theme, from=false) {
         var elTheme = dom(`${theme}_checkmark`);
 
         // Uncheck previous
@@ -1049,10 +1049,10 @@ function setTheme(theme) {
 
 
 /** Opens character info screen */
-function characterInfo(character='bill', state=undefined) {
+function characterInfo(character='bill', state) {
     if(characterQuery(character) !== true) return toast('This feature isn\'t available yet.', 'Progress through the game to unlock this.', undefined, false, true);
     let charbox = dom(`${character}_box`);
-    if(charbox.classList.contains('show_info') || !state) {
+    if(charbox.classList.contains('show_info') || state === false) {
         charbox.classList.remove('show_info');
         closeDialog();
     } else {

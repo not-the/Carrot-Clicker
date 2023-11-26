@@ -3,26 +3,69 @@
     TBD
 // ----------------------------------------------------------- //
 
--Add 2 new tomes to Charles and make the tomes a more interesting game mechanic (25% complete; tomes exist but are not yet fully implement)
--implement system so that older charles saves can be updated
--add a version tag to each class to make checking if the localstorage needs to be updated easier
--finish and add atleast the main theme
-- Fix issue #73 crafting tools will subtract wrong amount of carrots
-- Fix issue #74 the names of dual sickle and gilded hoe are incorrect
-- Fix issue #75 character info button doesn't work
+- Add 2 new tomes to Charles and make the tomes a more interesting game mechanic (25% complete; tomes exist but are not yet fully implement)
+- implement system so that older charles saves can be updated
+- add a version tag to each class to make checking if the localstorage needs to be updated easier
+- finish and add atleast the main theme
 - Make a written Bio of all the characters (Doesn't have to be final since I haven't gotten to all of them yet in the bible)
-- Game updated toast
 
 #Maybe Do this if you feel like it
--Lay ground works for character Ascendion
--sound affects rehual
--Move level up functions into the character class + hoe functions into the blacksmith class
-Move the default character objects to JSON files to make the code more navigatable
+- Lay ground works for character Ascendion
+- sound affects rehual
+- Move level up functions into the character class + hoe functions into the blacksmith class
+- Move the default character objects to JSON files to make the code more navigatable
+
 
 // ----------------------------------------------------------- //
-    Version dev beta 1.17.3 
+    Version dev beta 1.17.4
+    11-25-2023
+// ----------------------------------------------------------- //
+
+Reverted 1.17.3 changes and moved them to the charles experiment branch
+
+New
+- Added copyright symbol to credits+footer
+- Added "Time played" statistic. It will pause when the window is unfocused (even if still running)
+- Added a game updated toast when the data_version is bumped
+- Bumped data_version version to 17
+
+Balance Changes
+- Changed "50_percent_achievements" achievement to require 50 achievements instead of a percentage. Renamed: "Half Way There" -> "Bronze Medal"
+- Made the Tool Box trinket cheaper. Starting price: 76 -> 46
+- The Classic-er theme is now made available after the Bronze Medal achievement is unlocked (instead of "all achievements")
+- Made the "Milennial Bill" achievement no longer hidden
+
+Bug Fixes
+- Fixed boosts directly effecting prestige potential
+- Fixed the page not updating when buying tomes from Charles
+- Fixed Charles' menu not auto-opening after prestiging
+- Fixed Charles' icons not appearing in the classic theme
+- Fixed progress bars being janky (Issue #19)
+
+Implemented features from 1.17.2 stable revisions 1 and 2
+Revision 2:
+- Fixed incorrect/placeholder tool names in statistics (Issue #74)
+- Added adsense advertisements. Clicking the X button -> report -> ad covered content will hide them.
+Revision 1:
+- Fixed characterInfo not working (Issue #75)
+- Fixed tool names in the keybinds menu:
+    - Sturdy hoe -> Sturdy Hoe
+    - placeholder -> Dual Sickle
+- Updated the cookie notice with some extra text and a link to the privacy policy
+- Added a privacy policy link to the dropdown and the footer
+- Added share icon attribution to credits
+- Commented out (doesn't work on iOS): Added share button to main_buttons
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    Version dev beta 1.17.3   (-> Charles Experiment branch)
     9-23-2023
 // ----------------------------------------------------------- //
+
+Charles experimental - This update has been reverted and moved to its own branch
+
 -Added/renamed Charles Tomes, They are now
     + ImprovedFarmingPractices
     + improveCraftsmanship
@@ -31,6 +74,9 @@ Move the default character objects to JSON files to make the code more navigatab
     + Bible
 - cleaned up, moved to a character method and implement Tome modifiers to CalculateCarrots()
 - Added version tags to most classes
+
+~ JJ
+
 
 // ----------------------------------------------------------- //
     Stable repository

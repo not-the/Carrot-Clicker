@@ -450,7 +450,7 @@ function evaluateConditions(key) {
 }
 
 /** Takes in an achievement and grants rewards */
-function rewardBreakdown(achieve, retroactive = false) {
+function rewardBreakdown(achieve, retroactive=false) {
     let reward = achieve?.reward;
     if(reward === undefined) return;
     if(Array.isArray(reward)) { // Check if there are multiple rewards
@@ -458,7 +458,7 @@ function rewardBreakdown(achieve, retroactive = false) {
     } else giveReward(reward, retroactive);
 
     /** Reward user */
-    function giveReward(reward, retroactive = false) {
+    function giveReward(reward, retroactive=false) {
         // console.log(reward);
         let [rewardType, rewardName] =
         typeof reward === 'string' || reward instanceof String ? reward.split(':') : ['function', reward];
@@ -472,6 +472,7 @@ function rewardBreakdown(achieve, retroactive = false) {
         }
         else if(rewardType === 'shop') { // Carl shop
             let [target, item] = rewardName.split('/');
+            console.error("shop_item", item, target, reward);
             unlock("shop_item", item, target, reward);
         }
         else if(rewardType === 'cash') earnCash(parseInt(rewardName), 'achievement'); // Cash reward
@@ -827,9 +828,9 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                     let character = levelable[li];
                     let nick = character.nickname;
                     let v = parseInt(elCharacterLevel[nick].value.split(',').join(''));
-                    if(typeof v === "number" && !Number.isNaN(v) && v <= 500 && v >= 0) {
+                    if(typeof v === "number" && !Number.isNaN(v) && v <= 1000 && v >= 0) {
                         character.lvl = v;
-                    } else toast('Invalid level', 'Must be a number, and must be no more than 500', 'error');
+                    } else toast('Invalid level', 'Must be a number, and must be no more than 1000', 'error');
                 }
                 recalculateCarrotsPer();
                 characterPrices();
@@ -1012,8 +1013,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     /* --------------- PLAYER OBJECT --------------- */
     // player object compatibility check (because of the way the player object is created and saved, any new properties added to the player template will not carry over)
 
-    // List of objects that need to be updated
-    // onu = objects_need_updating
+    // List of objects that need to be updated. "Objects Need Updating (onu)"
     //#region 
     var onu = [
         player,
@@ -1072,6 +1072,10 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     //#endregion
     if(default_player.data_version > player.data_version || isDebug() && !player.flags.debug_dont_autoupdate) {
         try {
+            // Changelog toast
+            if(!isDebug())
+             toast('Update Beta 1.17.4', '- Added a "Time Played" statistic<br/>- Balance changes & bug fixes<br/><br/><a href="https://www.notkal.com/posts/carrot-clicker-changelog/#dev-beta-1_17_4">Full changelog</a>', undefined, true,);
+
             // Loop through onu_templates array
             //#region 
             for(oi = 0; oi < onu_templates.length; oi++) {
@@ -1109,7 +1113,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
                 console.log('Achievement page rewards have been changed');
                 let toaster = toast(
                     'Page Rewards Changed',
-                    `The page rewards for completing achievements have been changed. Your Page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange',
+                    `The page rewards for completing achievements have been changed. Your page count has been updated to reflect those changes (${player.pages} -> ${pagesIntended})`, 'orange',
                     true, false, false, true, () => { closeToast(toaster); }, 'Got it'
                 );
                 player.pages = pagesIntended;
@@ -1209,8 +1213,8 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     // Cookie usage notification
     if(player.flags['cookies_accepted'] !== true) {
         let cookieToast = toast(
-            'Cookie Usage',
-            'By playing Carrot Clicker you agree to the usage of cookies to save your progress.',
+            'Cookies & Privacy',
+            'By clicking accept you agree to the usage of cookies to save your progress. If you choose not to click accept your progress will not be saved. <a href="https://www.notkal.com/about/#privacy">Privacy Policy</a>',
             'purple', true, false, false, true,
             () => {
                 closeToast(cookieToast);

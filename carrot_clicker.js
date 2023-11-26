@@ -13,6 +13,7 @@ setTimeout(() => {
         );
     }
 }, 1000);
+let startTime = Date.now();
 
 /*------------Page Setup---------------*/
 //#region
@@ -144,7 +145,6 @@ class statsTracker{
         this.tomes_bought=tomes_bought;
         this.trinkets_complete=trinkets_complete;
         this.boosts_used=boosts_used;
-        this.version = 1;
     }
 }
 
@@ -157,7 +157,6 @@ class Character{
     constructor(nickname, img) {
         this.nickname=nickname;
         this.img=img;
-        this.version=1;
     }
     unlock(){
         //possibly a method to unlock the characters
@@ -182,58 +181,6 @@ class Farmer extends Character{
         this.lvlupPrice=lvlupPrice;
         this.scaling=scaling;
         this.Hoes=Hoes;
-        this.version=1;
-    }
-
-    /** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
-     * @param {Object} character 
-     * @returns Carrots per Click or Carrots per Second
-     */
-    calculateCarrots(scholar, boostModifer) {
-
-        //A special bonus impelemented only if you have 10 gilded_hoes, It uses the power of the other hoes to give massive buffs
-        //If the player does not have 10 gilded_hoes the multiplied defaults to 1
-        let SpecialGildedHoeBonus = Math.floor(
-            //finds how many gilded_hoes the player has. Each multiple of ten gives increases the buff
-            Math.floor(this.Hoes[5]/10) * 
-            
-            //calculates the buff(Might want to make more powerful, is currently the cuberoot of all the other hoes multiplied together )
-            Math.floor(
-                Math.pow(this.Hoes[0]*this.Hoes[1]*this.Hoes[2]*this.Hoes[3]*this.Hoes[4],0.3)
-            )
-        ) || 1;
-        
-
-        //Charles Stuff
-
-
-        //holy book Buff, Currently takes the tome value + 1 and cubes it, so a level 1 tome would give 9 and a level two tome would give 64..
-        const holyBookBuff = math.pow(scholar.bibleTome.value+1,3)
-        
-        
-        //cheaper steel, currently uses a rational function to get a value(equivelent to a percentage) to multiply the better hoes by. 
-        //curve at https://www.desmos.com/calculator/jh78yzukji  
-        const cheaperSteelDebuff = 1/(0.03*scholar.cheaperSteelTome.value+1);
-
-        //salary management
-        //same curve as cheaper steel
-        const salaryManagementDebuff = 1/(0.03*scholar.salaryManagementTome.value+1);
-        
-        //improved farming practices
-        const farmingPracticeBuffs = 1 + scholar.improvedFarmingPracticeTome.value/20;
-
-        //improved craftsmenship
-        const craftsmenshipBuff = 1 + scholar.improveCraftsmanshipTome.value/20;
-
-
-        /* Calculates the Hoe modifier by creating a shallow copy of this.Hoes and multiplying
-           each entry by 10 to the power of that hoes index. Example 1, 10, 100, 1000
-           then that shallow array is summed up with the base multiplier of 1
-        */
-        const hoeModifier = 1+this.Hoes.map((hoe,index)=> hoe*betterHoes*Math.pow(10,index)).reduce((a,b) => a+b);
-
-        // Returns the correct value
-        return this.lvl * specialGildedHoeBonus * boostModifer * hoeModifier * cheaperSteelDebuff * salaryManagementDebuff * farmingPracticeBuffs * craftsmenshipBuff;
     }
 }
 class Blacksmith extends Character{
@@ -255,14 +202,12 @@ class Blacksmith extends Character{
         this.Hoes=Hoes;
         this.HoePrices=HoePrices;
         this.crafting=crafting;
-        this.version = 1;
     }
 }
 
 class Scholar extends Character{
     constructor(nickname, img){
         super(nickname,img);
-        this.version = 1;
     }
 }
 
@@ -287,7 +232,7 @@ const playerPrestigeTemplate = {
 };
 
 const default_player = new Player(
-    16,//data_version; needs to be incremented by 1 any time any game object is changed
+    17,//data_version; needs to be incremented by 1 any time any game object is changed
     0, //carrots
     1, //cpc; Carrots per click
     0, //cps; Carrots per Second
@@ -396,19 +341,12 @@ const Default_Gregory = new Blacksmith(
 );
 
 class Tome {
-    constructor(value=0,price=1,max=25000,price_scaling=1.01){
+    constructor(value=0,price=1,max=25000){
         this.value=value;
         this.price=price;
         this.max=max;
-        this.scaling=price_scaling;
-        this.version = 1;
     }
-    /**
-     * 
-     * @param {Number} amount number of items you want to buy. 
-     * @param {Boolean} sendNewPrice if True it sends the price of the next tome otherwise it queries the price you 
-     * @returns 
-     */
+
     priceQuery(amount=1, sendNewPrice=false){
         //handling cases where the tomes can not be bought
         if(typeof(amount)!=="number") return console.error("amount needs to be a number");
@@ -419,15 +357,14 @@ class Tome {
         let target = valueDummy+amount;
         let sum = this.price;
         let newPrice = this.price;
-        let scaling = this.price_scaling
+        let scaling = 1.001;
+
         //multibuy for loop
         for(let i=0;i<amount+10;i++){
-            
-            
             //scaling
-            if(valueDummy>99)       scaling = this.scaling;
-            else if(valueDummy>375) scaling = this.scaling*0.993069030;
-            else if(valueDummy>1000)scaling = this.scaling*0.9910990099;
+            if(valueDummy>99)       scaling = 1.01;
+            else if(valueDummy>375) scaling = 1.003;
+            else if(valueDummy>1000)scaling = 1.00101;
 
             //set new price
             newPrice=Math.ceil(newPrice*scaling);
@@ -443,7 +380,6 @@ class Tome {
         else return sum;
     } 
 
-
     add(amount=1){
         // Handling cases where the tomes can not be bought
         if(typeof(amount)!=="number") return console.error("amount needs to be a number");
@@ -453,7 +389,7 @@ class Tome {
         let price = this.priceQuery(amount)
         if(player.golden_carrots < price) return; 
 
-        //updates values
+        // Updates values
         player.golden_carrots -= price;
         this.value += amount;
         this.price = this.priceQuery(amount,true);
@@ -461,7 +397,8 @@ class Tome {
 
         // Recalculate CPC/CPS/level up prices
         recalculateCarrotsPer();
-        recalculatePrices();
+        characterPrices();
+        characterButtons();
 
         // Update page
         updateCharlesShop();
@@ -469,16 +406,12 @@ class Tome {
         updateGC();
         mouseConfetti([3, 8], ccWhite);
     }
-
 }
 
 const Default_Charles = new Scholar("charles",'./assets/characters/Charles.png',)
-Default_Charles.improvedFarmingPracticeTome = new Tome(0,1,22025);
-Default_Charles.improveCraftsmanshipTome    = new Tome(0,1,22025);
-Default_Charles.cheaperSteelTome            = new Tome(0,1,22025);
-Default_Charles.salaryManagementTome        = new Tome(0,1,22025);
-Default_Charles.bibleTome                   = new Tome(0,100,1000,1.9);
-
+Default_Charles.improveWorkingConditions=new Tome (0,1,22025);
+Default_Charles.decreaseWages=new Tome(0,1,22025);
+Default_Charles.betterHoes=new Tome(0,1,22025);
 
 class carlListing {
     constructor(price=1, currency='cash', available=false, bought=false) {
@@ -486,7 +419,6 @@ class carlListing {
         this.currency = currency;
         this.available = available;
         this.bought = bought;
-        this.version = 1;
     }
 }
 
@@ -548,7 +480,6 @@ const Default_Carl = {
     },
     order: [],
 }
-
 const Default_Jared = {
     // Info
     name: "Jared",
@@ -675,11 +606,16 @@ var player           = localStorage.getObject("player")  || clone(default_player
 var Boomer_Bill      = localStorage.getObject("Bill")    || clone(Default_Boomer_Bill);
 var Belle_Boomerette = localStorage.getObject("Belle")   || clone(Default_Belle_Boomerette);
 var Gregory          = localStorage.getObject("Greg")    || clone(Default_Gregory);
-var Charles          = localStorage.getObject("Charles") || clone(Default_Charles);
+var saved_Charles    = localStorage.getObject("Charles") || clone(Default_Charles);
 var Carl             = localStorage.getObject("Carl")    || clone(Default_Carl);
 var Jared            = localStorage.getObject("Jared")   || clone(Default_Jared);
 const levelable = [Boomer_Bill, Belle_Boomerette, Gregory];
 
+// Update Charles
+Charles=new Scholar(saved_Charles.nickname,saved_Charles.img);
+Charles.improveWorkingConditions=new Tome (saved_Charles.improveWorkingConditions.value,saved_Charles.improveWorkingConditions.price,22025);
+Charles.decreaseWages=new Tome(saved_Charles.decreaseWages.value,saved_Charles.decreaseWages.price,22025);
+Charles.betterHoes=new Tome(saved_Charles.betterHoes.value,saved_Charles.betterHoes.price,22025);
 
 // Objects to save in localstorage
 const saveList = {
@@ -695,6 +631,7 @@ const saveListKeys = Object.keys(saveList);
 var preventSaveGame = false;
 /** Saves objects data to Local Storage */
 function saveGame() {
+    setTimePlayed(true);
     if(preventSaveGame || player.flags['cookies_accepted'] !== true) return;
     // player.time_last_saved = Date.now();
     for(let i = 0; i < saveListKeys.length; i++) {
@@ -702,6 +639,12 @@ function saveGame() {
         let obj = saveList[key];
         localStorage.setObject(key, obj);
     }
+}
+function setTimePlayed(skippable) {
+    if(window?.blurred && skippable) return;
+    let now = Date.now();
+    player.time_played = (player.time_played??0) + ((now - startTime)/1000); // Calculate playtime
+    startTime = now;
 }
 
 // Autosave
@@ -1003,7 +946,12 @@ mainCarrot.addEventListener('mouseout', event => {
 });
 mainCarrot.addEventListener('touchend', () => { holdStop(); });
 mainCarrot.addEventListener('touchcancel', () => { holdStop(); });
-window.onblur = () => { holdStop(); }
+window.addEventListener('blur', () => {
+    holdStop();
+    setTimePlayed();
+    window.blurred = true;
+})
+window.addEventListener('focus', () => startTime = Date.now(), window.blurred = undefined);
 //#endregion
 
 
@@ -1091,7 +1039,7 @@ function fallingCarrot() {
         else if(boostroll <= 70 && boostEffects['cpc'] === 1) amount = 'cpc_2x' // 35%
         else if(boostEffects['cpc'] === 1) amount = 'cpc_5x' // 30%
         else return;
-    } 
+    }
     
     // Create element
     var element = document.createElement("img");
@@ -1222,7 +1170,51 @@ function updateToolPrices() {
 }
 /** Updates Charles' shop content */
 function updateCharlesShop() {
-    //see JJ playground
+    // Highlight when affordable
+    style(elCharles.shop.improveWorkingConditions, 'cant_afford', (Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
+    style(elCharles.shop.betterHoes, 'cant_afford', (Charles.betterHoes.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
+    style(elCharles.shop.decreaseWages, 'cant_afford', (Charles.decreaseWages.priceQuery(multibuy[mbsel]) >= player.golden_carrots));
+
+    // Update tome prices
+    if(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel])>99999){
+        eInnerText(elCharles.prices.improveWorkingConditions, `${DisplayRounded(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
+    }else{
+        eInnerText(elCharles.prices.improveWorkingConditions, `${numCommas(Charles.improveWorkingConditions.priceQuery(multibuy[mbsel]))} Golden Carrots`);
+    }
+    if(Charles.betterHoes.priceQuery(multibuy[mbsel])>99999){
+        eInnerText(elCharles.prices.betterHoes, `${DisplayRounded(Charles.betterHoes.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
+    }else{
+        eInnerText(elCharles.prices.betterHoes, `${numCommas(Charles.betterHoes.priceQuery(multibuy[mbsel]))} Golden Carrots`);
+    }
+    if(Charles.decreaseWages.priceQuery(multibuy[mbsel])>99999){
+        eInnerText(elCharles.prices.decreaseWages, `${DisplayRounded(Charles.decreaseWages.priceQuery(multibuy[mbsel]),2)} Golden Carrots`);
+    }else{
+        eInnerText(elCharles.prices.decreaseWages, `${numCommas(Charles.decreaseWages.priceQuery(multibuy[mbsel]))} Golden Carrots`);
+    }
+
+    // Update tome effects
+    eInnerText(tomeEffect.iwc, `+${Charles.improveWorkingConditions.value * 10}%`);
+    eInnerText(tomeEffect.bh,  `+${Charles.betterHoes.value}%`);
+    eInnerText(tomeEffect.dww, `-${(decreaseWagesEffects()*100).toFixed(2)}%`);
+
+    // Update tome counts
+    
+    eInnerText(tomeCount.iwc, `Owned: ${numCommas(Charles.improveWorkingConditions.value)}`);
+    eInnerText(tomeCount.bh,  `Owned: ${numCommas(Charles.betterHoes.value)}`);
+    eInnerText(tomeCount.dww, `Owned: ${numCommas(Charles.decreaseWages.value)}`);
+    
+    // Make Characters glow
+    style(dom('charles_box'), 'glowing', (
+        Charles.improveWorkingConditions.price <= player.golden_carrots
+        || Charles.betterHoes.price <= player.golden_carrots
+        || Charles.decreaseWages.price <= player.golden_carrots
+    ));
+
+    // Debugging tooltip
+    eInnerText(elCharles.debug,
+        `${Math.floor(Charles.improveWorkingConditions.value)}%\n
+        BH: ${Math.floor(Charles.betterHoes.value)}%\n
+        DWW: ${(decreaseWagesEffects()*100).toFixed(2)}%`);
 }
 
 /** Updates golden carrot count on the page. Won't run if prestige_available is false */
@@ -1292,9 +1284,9 @@ function updateMainIcon() {
         elMainIcon.title = 'All normal achievements complete';
     }
     // Bronze Medal
-    else if(achieveQuery('50_percent_achievements')) {
+    else if(achieveQuery('50_achievements')) {
         elMainIcon.src   = './assets/medal_bronze_transparent.gif';
-        elMainIcon.title = '50% Completion';
+        elMainIcon.title = 'Bronze Medal (50 achievements unlocked)';
     }
     // Golden Carrot
     else if(achieveQuery('1_prestige')) {
@@ -1376,7 +1368,7 @@ function createPriceArray(character, totalItems){
     let scaling = defaultChar[character.nickname].scaling;
 
     //decrease wages modifier
-    //let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
+    let dw_modifier = 1 - decreaseWagesEffects(); // Decrease wages
 
     //setting the price for the first level
     priceArray.push(defaultChar[character.nickname].lvlupPrice*((Jared.data.level_up_discount.value || 100)/100));
@@ -1511,6 +1503,7 @@ function prestige() {
     }
 
     // Recalculate & update prestige potential
+    unlock('character', 'charles');
     recalculateCarrotsPer();
     calculatePrestigePotential();
     seeButton('prestige');
@@ -1523,18 +1516,41 @@ function prestige() {
     showPrestigeStats();
 
     // Prompt player to use Charles
-    setTimeout(() => { characterInfo('charles') }, 100);
+    setTimeout(() => {
+        characterInfo('charles');
+    }, 100);
 }
 /** Calculates Carrots Per Click or Per Second Based on inputing Bill or Belle
  * @param {Object} character 
  * @returns Carrots per Click or Carrots per Second
  */
+ function calculateCarrots(character) {
+    let SixToolBonus = Math.floor(character.Hoes[5]/10*Math.floor(Math.pow(character.Hoes[0]*character.Hoes[1]*character.Hoes[2]*character.Hoes[3]*character.Hoes[4],0.3))) || 1;
+    let betterHoes=1+Charles.betterHoes.value/100 // Calculate betterHoes bonus
+    let iwcBonus=0.1;
+    let iwc = (Charles.improveWorkingConditions.value*iwcBonus)+1;
+    // Calculates tool values
+    let modifier = 10;
+    let cpHoes = (1*betterHoes*(character.Hoes[0]) + 1);
+    for(let i = 1; i < character.Hoes.length; i++) {
+        let toolValue = (modifier*betterHoes*character.Hoes[i]);
+        cpHoes += toolValue;
+        modifier *= 10;
+    }
+    
+    // Boost handler
+    let boosted = 1;
+    if(character === Boomer_Bill) boosted = boostEffects.cpc;
+    else if(character === Belle_Boomerette) boosted = boostEffects.cps;
+
+    // Returns the correct value
+    return character.lvl * SixToolBonus * iwc * boosted * (cpHoes>0 ? cpHoes:1);
+}
 
 /** Recalculates and sets CPC and CPS */
 function recalculateCarrotsPer() {
-    player.cpc = Boomer_Bill.calculateCarrots(Charles, boostEffects.cpc);
-    player.cps = Belle_Boomerette.calculateCarrots(Charles, boostEffects.cps);
-
+    player.cpc = calculateCarrots(Boomer_Bill);
+    player.cps = calculateCarrots(Belle_Boomerette);
     calculatePrestigePotential();
     updateCPC();
 }
@@ -1543,7 +1559,7 @@ function recalculateCarrotsPer() {
 function calculatePrestigePotential() {
     // Prestige Potential
     let pageValue = (Jared.data.page_bonus.value || 1) / 100;
-    let defaultPotential = player.cpc*player.cps;
+    let defaultPotential = (player.cpc/boostEffects.cpc) * (player.cps/boostEffects.cps);
     let characterLevelMultiplier = Boomer_Bill.lvl+Belle_Boomerette.lvl+Gregory.lvl;
     let tomePageBonus = 1 + (player.pages * pageValue);
 
@@ -1570,6 +1586,18 @@ function calculatePrestigePotential() {
 
 
 //#endregion
+
+/*---------------------Charles functions------------------*/
+//#region 
+/** Calculates and optionally sets the prices for Charles' tomes
+ * @param {*} tome Example: Charles.improveWorkingConditions
+ * @param {number} amount 
+ * @param {string} mode Options: "query" or "apply"
+ * @returns The calculated price
+ */
+function decreaseWagesEffects(){ return Charles.decreaseWages.value ? Math.pow(Math.log(Charles.decreaseWages.value+100),0.5)-2.146 : 0; }
+//#endregion
+
 
 /*-----------Tool functions--------------*/
 //#region
@@ -1661,10 +1689,11 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
         // Update page
         carrotCount();
         characterButtons();
-        elGregProgress.style.width = `${Math.ceil(100*(progress/price))}%`;
+        let progressPercent = `${100 - Math.ceil(100*(progress/price))}%`;
+        elGregProgress.style.width = progressPercent;
         if(settings.enableMainProgress) {
             elMainProgressBar.style.opacity = '1';
-            elMainProgressBar.style.width  = `${Math.ceil(100*(progress/price))}%`;
+            elMainProgressBar.style.width  = progressPercent;
         }
     }
     function whenDone() {
@@ -1690,10 +1719,10 @@ function createTool(type=0, amount=1, progress=0, intended_character=false) {
         //carrotCount();
     }
 }
-/** Updates crafting bar progress */
+/** Resets crafting bar on page */
 function updateCraftingBar(){
-    elGregProgress.style.width = "0%"; // Greg progress
-    if(settings.enableMainProgress) elMainProgressBar.style.width = "0%"; // Main progress
+    elGregProgress.style.width = "100%"; // Greg progress
+    if(settings.enableMainProgress) elMainProgressBar.style.width = "100%"; // Main progress
     elMainProgressContainer.classList.remove('status_tidbit_in');
     dom('greg_crafting_info').classList.add('inactive');
     dom('greg_crafting_info').title = 'Idle';
@@ -1838,6 +1867,7 @@ const statsNumbers = {
     prestige_hoes_crafted_5:     dom('prestige_hoes_crafted_5'),
 
     // Lifetime
+    stat_time_played:                 dom('stat_time_played'),
     lifetime_carrots:                 dom('lifetime_carrots'),
     lifetime_carrots_clicked:         dom('lifetime_carrots_clicked'),
     lifetime_carrots_idled:           dom('lifetime_carrots_idled'),
@@ -1883,7 +1913,29 @@ function loadStatistics() {
     statsNumbers.prestige_hoes_crafted_4.innerText          = numCommas(player.prestige.hoes.crafted[4]);
     statsNumbers.prestige_hoes_crafted_5.innerText          = numCommas(player.prestige.hoes.crafted[5]);
 
+    function displayTime(duration) {
+        let seconds = duration,
+            minutes = seconds - (seconds % 60),
+            hours = seconds - (seconds % 3600)//,
+            // days = seconds - (seconds % 86400);
+
+        seconds -= minutes;
+        minutes -= hours;
+        let total_hours = hours/3600;
+        // hours -= days;
+        minutes /= 60;
+        // hours /= 3600;
+        // days /= 86400;
+
+        // return hours + "h " + minutes + "m " + seconds + "s";
+        // return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds.toFixed(0)} seconds (${total_hours}h)`;
+        return total_hours > 1 ? `${total_hours}h ${minutes}m` : `${minutes}m ${seconds.toFixed(0)}s`;
+    }
+
     // Lifetime
+    // statsNumbers.stat_time_played.innerText                 = `${player.time_played}s`;
+    statsNumbers.stat_time_played.innerText                 = displayTime(player.time_played);
+
     statsNumbers.lifetime_carrots.innerText                 = DisplayRounded(player.lifetime.carrots.toFixed(0));
     statsNumbers.lifetime_carrots_clicked.innerText         = DisplayRounded(player.lifetime.click_carrots.toFixed(0)) ;
     statsNumbers.lifetime_carrots_idled.innerText           = DisplayRounded(player.lifetime.idle_carrots.toFixed(0));
