@@ -570,7 +570,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
         // Make available
         const thing = subtype === 'cosmetic' ? `${raw.split('/')[1]}/${raw.split('/')[2]}`: thingToUnlock;
         try {
-            Carl.shop['cosmetic'][thing].available = true;
+            Carl.shop[subtype][thing].available = true;
             console.log(`[Shop] New ${subtype}: "${thing}" now available (Carl)}`);
         }
         catch (error) { console.warn(error); }
@@ -589,6 +589,7 @@ function unlock(type, thingToUnlock, subtype, raw) {
 /** Carl buy item */
 function buyCarl(type, item, subtype = false) {
     let raw = item;
+    console.log(type, item, subtype);
 
     // Fix input data for cosmetics
     if(type[type.length - 1] === 'c') {
@@ -1074,7 +1075,10 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
         try {
             // Changelog toast
             if(!isDebug())
-             toast('Update Beta 1.17.4', '- Added a "Time Played" statistic<br/>- Balance changes & bug fixes<br/><br/><a href="https://www.notkal.com/posts/carrot-clicker-changelog/#dev-beta-1_17_4">Full changelog</a>', undefined, true,);
+             toast(
+                'Update Beta 1.17.5',
+                '- New Bill cosmetic<br/>- New achievement & achievement icons<br/>- Achievement unlock condition changes & bug fixes<br/><br/><a href="https://www.notkal.com/posts/carrot-clicker-changelog/#dev-beta-1_17_5" target="_blank">Full changelog</a>',
+                undefined, true,);
 
             // Loop through onu_templates array
             //#region 
@@ -1094,19 +1098,20 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
             }
             //#endregion
     
-            // Achievements
+            // Loop Achievements
             //#region 
             let pagesIntended = 0;
             for(let i = 0; i < achievementsKeys.length; i++) {
                 let key = achievementsKeys[i];
                 let achieve = achievements[key];
+                let is_unlocked = achieveQuery(key);
 
                 // Page count
-                if(achieveQuery(key) && achieve.pages !== false && achieve.pages !== null) pagesIntended += achieve.pages;
+                if(is_unlocked && achieve.pages !== false && achieve.pages !== null) pagesIntended += achieve.pages;
 
-                // Check that the player has recieved all achievement rewards
+                // Re-grant rewards
                 let reward = achieve.reward;
-                if(achieveQuery(key) && reward !== false) rewardBreakdown(achieve, true);
+                if(is_unlocked && reward !== false) rewardBreakdown(achieve, true);
             }
             // Check that the players' page count is correct
             if(player.pages !== pagesIntended) {
@@ -1214,7 +1219,7 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     if(player.flags['cookies_accepted'] !== true) {
         let cookieToast = toast(
             'Cookies & Privacy',
-            'By clicking accept you agree to the usage of cookies to save your progress. If you choose not to click accept your progress will not be saved. <a href="https://www.notkal.com/about/#privacy">Privacy Policy</a>',
+            'By clicking accept you agree to the usage of cookies to save your progress. If you choose not to click accept your progress will not be saved. <a href="https://www.notkal.com/about/#privacy" target="_blank">Privacy Policy</a>',
             'purple', true, false, false, true,
             () => {
                 closeToast(cookieToast);

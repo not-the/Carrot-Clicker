@@ -15,6 +15,30 @@
 - Move level up functions into the character class + hoe functions into the blacksmith class
 - Move the default character objects to JSON files to make the code more navigatable
 
+// ----------------------------------------------------------- //
+    Version dev beta 1.17.5
+    12-14-2023
+// ----------------------------------------------------------- //
+
+- New cosmetic:
+    + Gold Suit Bill (Millenial Bill achievement adds it to Carl's shop)
+- New achievement for crafting the dual sickle
+- Changed achievement unlock conditions:
+    - "Carrot Rain" 250 -> 800 fallen carrots
+    - "Falling Into Place" 2048 -> 4096 fallen carrots
+- Gave some achievements artwork:
+    + bill_lvl_10
+    + bill_lvl_100
+    + bill_lvl_500
+    + bill_lvl_1000
+    + 800_falling_carrots
+    + all_cosmetics
+- Fixed themes and some cosmetics not appearing in Carl's shop
+- Fixed "Time played" statistic missing hours
+- Bumped data_version to 18
+
+~ Kal
+
 
 // ----------------------------------------------------------- //
     Version dev beta 1.17.4

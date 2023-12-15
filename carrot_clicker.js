@@ -232,7 +232,7 @@ const playerPrestigeTemplate = {
 };
 
 const default_player = new Player(
-    17,//data_version; needs to be incremented by 1 any time any game object is changed
+    18,//data_version; needs to be incremented by 1 any time any game object is changed
     0, //carrots
     1, //cpc; Carrots per click
     0, //cps; Carrots per Second
@@ -432,9 +432,9 @@ const Default_Carl = {
             'theme_classic': new carlListing(16, undefined, true),
             'theme_bw': new carlListing(6),
             'theme_terminal': new carlListing(12),
-            'theme_chatapp':  new carlListing(5),
+            'theme_chatapp': new carlListing(5),
             'theme_camo':  new carlListing(3),
-            'theme_original':  new carlListing(54),
+            'theme_original': new carlListing(54),
             'theme_red':  new carlListing(5),
             'theme_green': new carlListing(5),
             'theme_blue': new carlListing(5),
@@ -464,12 +464,16 @@ const Default_Carl = {
 
             // Bill 
             'bill/biker_bill': new carlListing(5),
-            'bill/dollar_bill': new carlListing(10),
             'bill/fancy_bill': new carlListing(40),
+            'bill/dollar_bill': new carlListing(10),
             'bill/business_bill': new carlListing(5),
+            'bill/gold_fancy_bill': new carlListing(100),
 
             // Greg
             'greg/safety_greg': new carlListing(12),
+
+            // Charles
+            'charles/special_charles': new carlListing(3),
             
             // Carl
             'carl/joker_carl': new carlListing(8),
@@ -1304,7 +1308,7 @@ const elPrestigeMenuTPCount = dom('prestige_menu_tp_count');
 const elPrestigeMenuTPBonus = dom('menu_tome_bonus');
 /** Updates the prestige menu */
 function updatePrestigeMenu() {
-    eInnerText(elPrestigeMenuGCCount, DisplayRounded(player.golden_carrots));
+    eInnerText(elPrestigeMenuGCCount, DisplayRounded(player.golden_carrots, 2));
     eInnerText(elPrestigeMenuTPCount, numCommas(player.pages));
     eInnerText(elPrestigeMenuTPBonus, `+${Math.round(player.pages * (Jared.data.page_bonus.value || 1))}%`);
     eInnerText(elPrestigePotential, DisplayRounded(player.prestige_potential.toFixed(0),2));
@@ -1927,9 +1931,11 @@ function loadStatistics() {
         // hours /= 3600;
         // days /= 86400;
 
+        console.log(total_hours);
+
         // return hours + "h " + minutes + "m " + seconds + "s";
         // return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds.toFixed(0)} seconds (${total_hours}h)`;
-        return total_hours > 1 ? `${total_hours}h ${minutes}m` : `${minutes}m ${seconds.toFixed(0)}s`;
+        return total_hours > 0 ? `${total_hours}h ${minutes}m` : `${minutes}m ${seconds.toFixed(0)}s`;
     }
 
     // Lifetime

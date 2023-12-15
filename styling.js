@@ -1126,9 +1126,13 @@ function populateCarl() {
 
     // Update page
     if(html === '') {
+        // let unlockedEverything = (
+        //     player.themes.length === player.themes.length
+        // );
+        let blurb = "That's all for now. Complete more achievements for more things to buy!";
         html = `
         <p class="padding-5px secondary_text center" style="padding: 5px;">
-            That's all for now. Complete more achievements for more things to buy!
+            ${blurb}
         </p>`;
     }
     carlShop.innerHTML = html;

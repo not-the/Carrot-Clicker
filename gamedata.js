@@ -114,7 +114,7 @@ const default_tips = {
         "Craft the carrot, Greg.",
         "Study the carrot, Charles.",
         "Paint the carrot, Carl.",
-        "Sell carrot knicknacks, Jared",
+        "Sell carrot knicknacks, Jared.",
     ],
     fun_advanced: [
         "World hunger has been cured, but there must be more we can do.",
@@ -624,6 +624,13 @@ const cosmetics = {
             'rename': false,
             'image': './assets/theme/plumber_bill.png',
         },
+        'gold_fancy_bill': {
+            'name': 'Gold Suit Bill',
+            'desc': 'Forget silver, gold is where it\'s at',
+
+            'rename': false,
+            'image': './assets/theme/gold_fancy_bill.png',
+        },
         'developer_art': {
             'name': 'Developer Art',
             'desc': 'The original Bill in all his glory',
@@ -852,7 +859,7 @@ const cosmetics = {
         'bill': {
             'name': 'Bill',
             'preview': './assets/characters/Bill.png',
-            'desc': 'Return to Bill',
+            'desc': 'Return to Bill.',
             'group': 'bill',
 
             '0': './assets/theme/transparent_bill.png',
@@ -988,6 +995,17 @@ const achievements = {
         'conditions': ['player.characters.jared', true],
         hide_image: true,
     }),
+    'unlock_all_characters': new achievement({
+        'name': 'Carrot Convention',
+        'desc': 'Unlock every character',
+        'reward': [
+            'cash:24',
+            'shop:cosmetic/carl/joker_carl',
+            'shop:cosmetic/bundle/xmas',
+        ],
+        'pages': 5,
+        'conditions': ['allCharQuery()', true],
+    }),
     '10_prestiges': new achievement({
         'name': 'Wibbly Wobbly',
         'desc': 'Prestige ten times',
@@ -1098,14 +1116,14 @@ const achievements = {
     'bill_lvl_10': new achievement({
         'name': 'Here\'s the Bill',
         'desc': 'Upgrade Bill to level 10',
-        'image': './assets/achievements/bill_pointer.png', // needs unique art
+        'image': './assets/achievements/bill_levelup_1.png', // needs unique art
         'reward': 'shop:cosmetic/bill/biker_bill',
         'conditions': ['Boomer_Bill.lvl', 10],
     }),
     'bill_lvl_100': new achievement({
         'name': 'Bill of the Century',
         'desc': 'Upgrade Bill to level 100',
-        'image': './assets/achievements/bill_pointer.png',
+        'image': './assets/achievements/bill_levelup_2.png',
         'reward': 'cosmetic:bundle/bill',
         'pages': 1,
         'conditions': ['Boomer_Bill.lvl', 100],
@@ -1114,7 +1132,7 @@ const achievements = {
     'bill_lvl_500': new achievement({
         'name': 'Bill 500',
         'desc': 'Upgrade Bill to level 500',
-        'image': './assets/achievements/bill_pointer.png', // needs unique art
+        'image': './assets/achievements/bill_levelup_3.png', // needs unique art
         'pages': 2,
         'conditions': ['Boomer_Bill.lvl', 500],
         hide_image: true,
@@ -1122,7 +1140,10 @@ const achievements = {
     'bill_lvl_1000': new achievement({
         'name': 'Milennial Bill',
         'desc': 'Upgrade Bill to level 1000',
-        'image': './assets/achievements/bill_pointer.png', // needs unique art
+        'image': './assets/achievements/bill_levelup_4.png', // needs unique art
+        'reward': [
+            'shop:cosmetic/bill/gold_fancy_bill'
+        ],
         'pages': 3,
         'conditions': ['Boomer_Bill.lvl', 1000],
         hide_image: true,
@@ -1169,17 +1190,6 @@ const achievements = {
         'pages': 1,
         'conditions': ['Gregory.lvl', 64],
         hide_image: true,
-    }),
-    'unlock_all_characters': new achievement({
-        'name': 'Carrot Convention',
-        'desc': 'Unlock every character',
-        'reward': [
-            'cash:24',
-            'shop:cosmetic/carl/joker_carl',
-            'shop:cosmetic/bundle/xmas',
-        ],
-        'pages': 5,
-        'conditions': ['allCharQuery()', true],
     }),
 
     // Big carrot numbers
@@ -1419,19 +1429,21 @@ const achievements = {
         'image': './assets/achievements/parachute_carrot.png',
         'conditions': ['player.lifetime.falling_carrots_grabbed', 50],
     }),
-    '250_falling_carrots': new achievement({
+    '800_falling_carrots': new achievement({
         'name': 'Carrot Rain',
-        'desc': 'Grab 250 falling carrots',
+        'desc': 'Grab 800 falling carrots',
+        'image': './assets/achievements/carrot_rain.png',
         'reward': 'shop:cosmetic/bundle/cookie',
         'pages': 1,
-        'conditions': ['player.lifetime.falling_carrots_grabbed', 250],
+        'conditions': ['player.lifetime.falling_carrots_grabbed', 800],
+        hide_image: true,
     }),
-    '2048_falling_carrots': new achievement({
+    '4096_falling_carrots': new achievement({
         'name': 'Falling Into Place',
-        'desc': 'Grab 2048 falling carrots',
+        'desc': 'Grab 4096 falling carrots',
         'image': './assets/achievements/tetris.gif',
         'pages': 3,
-        'conditions': ['player.lifetime.falling_carrots_grabbed', 2048],
+        'conditions': ['player.lifetime.falling_carrots_grabbed', 4096],
         hide_image: true,
     }),
 
@@ -1569,7 +1581,16 @@ const achievements = {
         hide_image: true,
         hide_toast: true,
     }),
-    'obtain_tool_six': new achievement({
+    'obtain_tool_4': new achievement({
+        'name': 'Dark Age',
+        'desc': 'Obtain the most impractical farming implement, the Dual Sickle',
+        // 'image': './assets/achievements/Extreme Farming.png',
+        // 'reward': 'cosmetic:farmable/gilded_hoe',
+        'pages': 3,
+        'conditions': ['player.lifetime.hoes.crafted[4]', 1],
+        hide_image: true,
+    }),
+    'obtain_tool_5': new achievement({
         'name': 'Extreme Farming',
         'desc': 'Obtain the ultimate farming implement, the Gilded Hoe',
         'image': './assets/achievements/Extreme Farming.png',
@@ -1592,6 +1613,7 @@ const achievements = {
     'all_cosmetics': new achievement({
         'name': 'All Cosmetics',
         'desc': 'Unlock every cosmetic',
+        'image': './assets/achievements/all_cosmetics.png',
         'pages': 3,
         'conditions': ['percentage(playerCosmeticsCount(), totalCosmetics).toFixed(0)', 100],
     }),
@@ -1845,7 +1867,7 @@ const jaredShop = {
     // 'mp3_player': {
     //     name:      'MP3 Player',
     //     desc:      'Seems to have some old music on it',
-    //     img:       './assets/items/trinkets/tome_tools.png',
+    //     img:       './assets/items/tome.png',
     //     currency:  'cash',
     //     price:     [50],
     //     value:     [false, true],
