@@ -22,6 +22,21 @@ function eInnerText(element, text) { if(element.innerText != text) element.inner
  */
 function eInnerHTML(element, html) { if(element.innerHTML != html) element.innerHTML = html; }
 
+// AJAX
+//#region 
+/** Get JSON - https://stackoverflow.com/a/22790025/11039898
+ * @param {string} url JSON file URL
+ * @param {boolean} parse Whether or not to convert into a JS object
+ * @returns 
+ */
+function get(url, parse=true){
+    var rq = new XMLHttpRequest(); // a new request
+    rq.open("GET", url, false);
+    rq.send(null);
+    return parse ? JSON.parse(rq.responseText) : rq.responseText;          
+}
+//#endregion
+
 // Localstorage
 //#region 
 /** localStorage shorthand. Providing only a key will getItem, providing a value will setItem
