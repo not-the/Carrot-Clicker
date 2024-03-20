@@ -20,7 +20,7 @@ var menuState = {
     cosmetic:  false,
     keybinds:  false,
     prestige:  false,
-    // inventory: false,
+    inventory: false,
     tips:      false,
     credits:   false,
 }
@@ -58,7 +58,7 @@ const cosmList = {
     carl:       dom('carl_cosmetics'),
 }
 const prestigeMenu =  dom('prestige_menu');
-// const inventoryMenu = dom('inventory_menu');
+const inventoryMenu = dom('inventory_menu');
 const tipsMenu =      dom('tips_menu');
 //#endregion
 
@@ -519,12 +519,12 @@ function openPrestigeMenu() {
 }
 
 /* ----- Inventory ----- */
-// function openInventory() {
-//     openMenu('inventory');
-//     menuState.inventory = true;
-//     overlay.classList.add("visible");
-//     elBody.classList.add('overflow_hidden');
-// }
+function openInventory() {
+    openMenu('inventory');
+    menuState.inventory = true;
+    overlay.classList.add("visible");
+    elBody.classList.add('overflow_hidden');
+}
 
 /* ----- Tips Menu ----- */
 function openTipsMenu() {

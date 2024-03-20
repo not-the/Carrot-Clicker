@@ -163,7 +163,7 @@ img {
 #overlay.show_theme #theme_menu,
 #overlay.show_cosmetic #cosmetic_menu,
 #overlay.show_prestige #prestige_menu,
-/* #overlay.show_inventory #inventory_menu, */
+#overlay.show_inventory #inventory_menu,
 #overlay.show_tips #tips_menu,
 #overlay.show_keybinds #keybinds_menu,
 #overlay.show_credits #credits
@@ -2288,7 +2288,7 @@ input.discreet:focus,
 }
 
 /* Inventory menu */
-/* #inventory_menu {
+#inventory_menu {
     padding: 24px;
     width: 100%;
     height: 750px;
@@ -2341,7 +2341,7 @@ input.discreet:focus,
 }
 .item_preview img {
     padding: 24px;
-} */
+}
 
 /* Footer */
 footer { text-align: center; }

@@ -4,7 +4,7 @@ Users settings, keybind handling, and tutorial handling
 
 /** Returns true if any menu or popup is open */
 function menuOpen() {
-    return (menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige /*|| menuState.inventory*/ || menuState.tips || menuState.credits);
+    return (menuState.dialog || menuState.character ||  menuState.theme || menuState.cosmetic /*|| menuState.keybinds*/ || menuState.prestige || menuState.inventory || menuState.tips || menuState.credits);
 }
 
 /*---------------OPTIONS-------------------*/
@@ -286,10 +286,10 @@ document.addEventListener('keyup', event => {
     }
 
     // Inventory
-    // else if(key === settings.keybinds['key_inventory']) {
-    //     if(!inventoryOpen) openInventory();
-    //     else closeDialog();
-    // }
+    else if(key === settings.keybinds['key_inventory']) {
+        if(!inventoryOpen) openInventory();
+        else closeDialog();
+    }
 });
 
 
