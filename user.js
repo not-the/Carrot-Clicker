@@ -1187,17 +1187,17 @@ function isDebug() { if(hashlist.includes('dev') || player.flags['debug']) retur
     if(!settings.show_nav) elBody.classList.add('hide_nav');
     
     // OFFLINE EARNINGS
-    // Doesn't work, Date.now() is imprecise
+    // console.log(player.time_last_saved);
     // if(player.time_last_saved !== false) {
     //     // Convert to seconds
-    //     let ls = (player.time_last_saved / 1000).toFixed(0);
-    //     let now = (parseInt(JSON.stringify(Date.now())) / 1000).toFixed(0);
-    //     console.log(ls, now);
-    //     let difference = now - ls;
+    //     // let now = Math.round(Date.now() / 1000);
+    //     let now = get("https://worldtimeapi.org/api/timezone/America/Chicago").unixtime;
+    //     let difference = now - player.time_last_saved;
     //     let earned = difference * player.cps;
-    //     toast('Offline Earnings', `${difference} seconds\n${earned} carrots`);
 
-    //     player.time_last_saved === false;
+    //     toast('Offline Earnings', `${difference} seconds\n${earned} carrots`, 'purple', true);
+    //     player.time_last_saved = false;
+    //     saveGame();
     // }
 
     //#endregion

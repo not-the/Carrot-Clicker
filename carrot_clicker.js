@@ -15,6 +15,11 @@ setTimeout(() => {
 }, 1000);
 let startTime = Date.now();
 
+// Date
+// let epoch = get("https://worldtimeapi.org/api/timezone/America/Chicago").unixtime;
+// console.log(epoch);
+// console.log(Math.round(Date.now()/1000));
+
 /*------------Page Setup---------------*/
 //#region
 
@@ -637,7 +642,8 @@ var preventSaveGame = false;
 function saveGame() {
     setTimePlayed(true);
     if(preventSaveGame || player.flags['cookies_accepted'] !== true) return;
-    // player.time_last_saved = Date.now();
+    // player.time_last_saved = Math.round(Date.now() / 1000);
+    player.time_last_saved = get("https://worldtimeapi.org/api/timezone/America/Chicago").unixtime;
     for(let i = 0; i < saveListKeys.length; i++) {
         let key = saveListKeys[i];
         let obj = saveList[key];
