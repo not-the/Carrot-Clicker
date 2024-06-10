@@ -1056,6 +1056,7 @@ function fallingCarrot() {
     let image = type === 'carrot' ? cosmetics.farmable[settings.cosmetics.farmable].image
         : type === 'cash' ? './assets/cash.png' : './assets/boosts/falling.png';
     element.setAttribute('src', image);
+    element.setAttribute('draggable', "false");
     element.classList.add('falling_carrot');
     if(type === 'boost') element.classList.add('falling_boost');
     if(Math.round(Math.random())) element.classList.add('mirror');
