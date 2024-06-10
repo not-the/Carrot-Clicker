@@ -104,9 +104,8 @@ hr {
     background-color: var(--border-color);
 }
 img {
-    user-select: none;
-    -webkit-user-select: none;
     -webkit-user-drag: none;
+
     touch-action: manipulation;
     image-rendering: pixelated;
     object-fit: cover;
