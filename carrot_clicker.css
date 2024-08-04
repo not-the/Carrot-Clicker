@@ -322,6 +322,19 @@ summary:hover { background-color: var(--border-color); }
 .background_blue,
 .background_purple { border: 2px solid white !important; }
 
+
+/* Ads */
+.center_ad {
+    margin: 0 auto;
+    width: min-content;
+    margin-top: 6px;
+}
+ins.adsbygoogle {
+    background-color: var(--border-color);
+    outline: 2px solid white;
+}
+
+
 /* Always on top elements */
 #bonusVisualArea,
 #mouse_confetti {
