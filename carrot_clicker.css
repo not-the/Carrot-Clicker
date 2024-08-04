@@ -330,8 +330,7 @@ summary:hover { background-color: var(--border-color); }
     margin-top: 6px;
 }
 ins.adsbygoogle {
-    background-color: var(--border-color);
-    outline: 2px solid white;
+    background-color: var(--bg-darker);
 }
 
 
@@ -1237,8 +1236,8 @@ body.hide_nav #game_nav { display: none; }
     width: max-content;
     text-align: left;
 }
-.power_item img:hover,
-.power_item img:focus-visible {
+.power_item:hover img,
+.power_item:focus-visible img {
     content: url('./assets/icons/close_x.png');
 }
 .boost_multiplier {
