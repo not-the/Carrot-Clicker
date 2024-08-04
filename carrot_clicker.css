@@ -107,6 +107,7 @@ img {
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
+
     touch-action: manipulation;
     image-rendering: pixelated;
     object-fit: cover;
@@ -1108,6 +1109,34 @@ body.hide_nav #game_nav { display: none; }
             brightness(85%)
             saturate(110%);
 }
+
+/* Lower game section */
+/* .home_lower {
+    position: relative;
+}
+.game_panel {
+    position: absolute;
+    inset: 9px;
+    top: 0;
+    z-index: 1;
+
+    padding: 12px 24px;
+    background-color: var(--bg-lighter);
+    border: 1px solid var(--border-color);
+    border-radius: 17px;
+    box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.35);
+
+    animation: game_panel 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+@keyframes game_panel {
+    from {
+        transform: translateY(16px);
+        filter: brightness(50%) opacity(0);
+    }
+}
+.game_panel .toast_close {
+    font-weight: 900;
+} */
 
 /* Main buttons */
 .main_buttons { justify-content: center; }

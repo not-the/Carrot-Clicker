@@ -163,86 +163,95 @@
                 <div id="fallingCarrotsArea"></div>
 
                 <!-- Carrot image-->
-                <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" role="button" tabindex="0">
+                <img src="./assets/Carrot Clicker.png" id="main_carrot" alt="Carrot" role="button" tabindex="0" draggable="false">
 
-                <!-- Numbers/Info Section -->
-                <div class="mini_stats">
-                    <p class="Carrot_Count"><span id="Carrot_Count">-</span> <span class="farmable_name">Carrots</span></p>
-                    <p><span id="click_speed">0/0 clicks per second</span></p><br>
+                <!-- Lower game section -->
+                <div class="home_lower">
+                    <!-- Game panel -->
+                    <!-- <div class="game_panel">
+                        <div class="toast_close" role="button" tabindex="0">X</div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora iste quae animi fuga. Sunt quos amet deserunt itaque hic modi?
+                    </div> -->
 
-                    <div class="row flex">
-                        <!-- CPC -->
-                        <div class="mini_item" id="list_cpc" data-tooltip="Carrots Per Click">
-                            <img src="./assets/stats/cursor_white.png" alt="" class="invert_alt"><span class="mini_name">CPC</span><span id="cpc" class="mini_number">...</span>
-                        </div>
-                        <!-- CPS -->
-                        <div class="mini_item" id="list_cps" data-tooltip="Carrots Per Second">
-                            <img src="./assets/stats/clock.png" alt="" class="invert_alt"><span class="mini_name">CPS</span><span id="cps" class="mini_number">...</span>
-                        </div>
-                    </div><br/>
+                    <!-- Numbers/Info Section -->
+                    <div class="mini_stats">
+                        <p class="Carrot_Count"><span id="Carrot_Count">-</span> <span class="farmable_name">Carrots</span></p>
+                        <p><span id="click_speed">0/0 clicks per second</span></p><br>
 
-                    <div class="row flex">
-                        <!-- Golden Carrots -->
-                        <div class="mini_item" id="list_golden_carrots" data-tooltip="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!">
-                            <span class="mini_name">Golden Carrots</span><span id="golden_carrot_count" class="mini_number">0</span>
+                        <div class="row flex">
+                            <!-- CPC -->
+                            <div class="mini_item" id="list_cpc" data-tooltip="Carrots Per Click">
+                                <img src="./assets/stats/cursor_white.png" alt="" class="invert_alt"><span class="mini_name">CPC</span><span id="cpc" class="mini_number">...</span>
+                            </div>
+                            <!-- CPS -->
+                            <div class="mini_item" id="list_cps" data-tooltip="Carrots Per Second">
+                                <img src="./assets/stats/clock.png" alt="" class="invert_alt"><span class="mini_name">CPS</span><span id="cps" class="mini_number">...</span>
+                            </div>
+                        </div><br/>
+
+                        <div class="row flex">
+                            <!-- Golden Carrots -->
+                            <div class="mini_item" id="list_golden_carrots" data-tooltip="Golden carrots are created when you prestige. Use them to buy tomes to give your farmers permanent buffs. Be sure to spend all of your golden carrots before you start farming!">
+                                <span class="mini_name">Golden Carrots</span><span id="golden_carrot_count" class="mini_number">0</span>
+                            </div>
+                            <!-- Tome Pages -->
+                            <div class="mini_item" id="list_pages" data-tooltip="For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!">
+                                <span class="mini_name">Tome Pages</span><span id="page_count" class="mini_number">...</span>
+                            </div>
                         </div>
-                        <!-- Tome Pages -->
-                        <div class="mini_item" id="list_pages" data-tooltip="For every tome page you have you will recieve a +1% (or more) golden carrot bonus when prestiging. Earn additional tome pages by completing achievements!">
-                            <span class="mini_name">Tome Pages</span><span id="page_count" class="mini_number">...</span>
+
+                        <div class="row flex">
+                            <!-- Coins -->
+                            <div class="mini_item" id="list_cash" data-tooltip="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!">
+                                <span class="mini_name">Coins</span><span class="mini_number"><span class="color_cash">⚬</span> <span id="cash_count">...</span></span>
+                            </div>
+                            <!-- Stamps -->
+                            <!-- <div class="mini_item" id="list_stamps" data-tooltip="placeholder">
+                                <span class="mini_name">Stamps:</span><span id="stamp_count" class="mini_number">...</span>
+                            </div> -->
                         </div>
+
+
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="main_buttons flex">
+                        <!-- Prestige button -->
+                        <button onClick="openPrestigeMenu()" class="main_button_item" id="prestige_menu_button" data-tooltip="???" disabled>
+                            <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
+                        </button>
+                        <!-- Inventory button -->
+                        <!-- <button onClick="openInventory()" data-tooltip="Inventory" class="main_button_item" id="inventory_button">
+                            <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
+                        </button> -->
+                        <!-- Tips button -->
+                        <button onClick="openTipsMenu()" data-tooltip="Tips" class="main_button_item" id="tips_menu_button">
+                            <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
+                        </button>
+                        <!-- Hardmode button -->
+                        <button onClick="openDifficultyMenu()" data-tooltip="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
+                            <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
+                        </button>
+                        <!-- Share -->
+                        <!-- <script>
+                            function shareProgress() {
+                                navigator.share({
+                                    // text:`I\'ve farmed ${player.carrots} carrots in Carrot Clicker so far. Check it out!\n\nhttps://carrot.notkal.com/`,
+                                    url:'https://carrot.notkal.com/'
+                                }).catch(err => {toast('didnt work rip')});
+                            }
+                        </script>
+                        <button onClick="shareProgress()" data-tooltip="Share your progress" class="main_button_item flex" style="width: auto; padding: 5px 9px;">
+                            <img src="./assets/icons/share.png" class="main_button_img icon">
+                            <span style="margin: 7px 0 0 6px;">Share</span>
+                        </button> -->
                     </div>
 
-                    <div class="row flex">
-                        <!-- Coins -->
-                        <div class="mini_item" id="list_cash" data-tooltip="While clicking the carrot there is a chance that coins will drop instead of carrots. Make sure to grab them!">
-                            <span class="mini_name">Coins</span><span class="mini_number"><span class="color_cash">⚬</span> <span id="cash_count">...</span></span>
-                        </div>
-                        <!-- Stamps -->
-                        <!-- <div class="mini_item" id="list_stamps" data-tooltip="placeholder">
-                            <span class="mini_name">Stamps:</span><span id="stamp_count" class="mini_number">...</span>
-                        </div> -->
-                    </div>
-
-
+                    <!-- Prestige potential -->
+                    <p id="prestige-section" class="secondary_text center" style="padding-top: 6px;">
+                        Prestige potential: <span id="main_prestige_potential">-</span>
+                    </p>
                 </div>
-                
-                <!-- Buttons -->
-                <div class="main_buttons flex">
-                    <!-- Prestige button -->
-                    <button onClick="openPrestigeMenu()" class="main_button_item" id="prestige_menu_button" data-tooltip="???" disabled>
-                        <img src="./assets/icons/question_mark.svg" alt="Prestige" class="main_button_img" id="prestige_menu_button_img">
-                    </button>
-                    <!-- Inventory button -->
-                    <!-- <button onClick="openInventory()" data-tooltip="Inventory" class="main_button_item" id="inventory_button">
-                        <img src="./assets/icons/backpack.svg" alt="Inventory" class="main_button_img" id="inventory_button_img">
-                    </button> -->
-                    <!-- Tips button -->
-                    <button onClick="openTipsMenu()" data-tooltip="Tips" class="main_button_item" id="tips_menu_button">
-                        <img src="./assets/icons/lightbulb.svg" alt="Tips" class="main_button_img" id="tips_button_img">
-                    </button>
-                    <!-- Hardmode button -->
-                    <button onClick="openDifficultyMenu()" data-tooltip="Hardmode" class="main_button_item button_red hidden position_absolute" id="difficulty_menu_button">
-                        <img src="./assets/icons/medal.png" alt="Hardmode" class="main_button_img" id="tips_button_img">
-                    </button>
-                    <!-- Share -->
-                    <!-- <script>
-                        function shareProgress() {
-                            navigator.share({
-                                // text:`I\'ve farmed ${player.carrots} carrots in Carrot Clicker so far. Check it out!\n\nhttps://carrot.notkal.com/`,
-                                url:'https://carrot.notkal.com/'
-                            }).catch(err => {toast('didnt work rip')});
-                        }
-                    </script>
-                    <button onClick="shareProgress()" data-tooltip="Share your progress" class="main_button_item flex" style="width: auto; padding: 5px 9px;">
-                        <img src="./assets/icons/share.png" class="main_button_img icon">
-                        <span style="margin: 7px 0 0 6px;">Share</span>
-                    </button> -->
-                </div>
-
-                <!-- Prestige potential -->
-                <p id="prestige-section" class="secondary_text center" style="padding-top: 6px;">
-                    Prestige potential: <span id="main_prestige_potential">-</span>
-                </p>
             </section>
 
             <!-- Right Section -->
