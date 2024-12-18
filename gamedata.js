@@ -57,7 +57,7 @@ const default_tips = {
         "Click a character's \"i\" symbol to learn more about them",
         "Greg can craft tools that will buff your other characters",
         "If you see a ? near something you can click it to get a more detailed description of what it does",
-        "You can also press amd hold the carrot as a slower alternative to clicking",
+        "You can also press and hold the carrot as a slower alternative to clicking",
     ],
     beginner: [ // 1
         "To equip a tool, you must first craft one, then click the corresponding tool type under Bill or Belle",
