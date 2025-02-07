@@ -643,7 +643,7 @@ function saveGame() {
     setTimePlayed(true);
     if(preventSaveGame || player.flags['cookies_accepted'] !== true) return;
     // player.time_last_saved = Math.round(Date.now() / 1000);
-    player.time_last_saved = get("https://worldtimeapi.org/api/timezone/America/Chicago").unixtime;
+    // player.time_last_saved = get("https://worldtimeapi.org/api/timezone/America/Chicago").unixtime;
     for(let i = 0; i < saveListKeys.length; i++) {
         let key = saveListKeys[i];
         let obj = saveList[key];
