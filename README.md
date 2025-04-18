@@ -1,4 +1,4 @@
-# Carrot Clicker
+# Carrot Clicker (Legacy)
 *"Click the Carrot Bill"*
  
 Clicker game themed around carrots
