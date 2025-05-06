@@ -1,6 +1,17 @@
 // ----------------------------------------------------------- //
-    Version dev Beta 1.18 (Planned)
-    TBD
+    Version dev beta 1.17.5.1
+    5-6-2025
+// ----------------------------------------------------------- //
+
+- Fixed keyboard combo easter eggs not working
+- Fixed secret achievements not appearing in the achievements list
+
+~ Kal
+
+
+// ----------------------------------------------------------- //
+    Version dev Beta 1.18
+    Scrapped, no longer planned
 // ----------------------------------------------------------- //
 
 - Add 2 new tomes to Charles and make the tomes a more interesting game mechanic (25% complete; tomes exist but are not yet fully implement)
