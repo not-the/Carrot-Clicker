@@ -812,21 +812,26 @@ function populateAchievements(specific=false) {
 
     achievementProgress();
     const filter = dom('achievement_filter').value;
-    var achievementHTML = '';
+    let achievementHTML = '';
 
     // Populate all
     if(!specific) {
-        for(let i = 0; i < achievementsKeys.length; i++) achievementHTML += htmlTemplate(achievementsKeys[i]);
+        populateAllAchievements();
     }
     // Populate single
     else {
-        let item = achievements?.[specific];
+        const item = achievements?.[specific];
         if(item === undefined) return console.warn(`populateAchievements(): [${specific}] is not a valid achievement`);
 
-        let ahtml = new DOMParser().parseFromString(htmlTemplate(specific), "text/html").body.firstChild;
-        let replace = document.getElementById(specific);
-        replace.parentNode.replaceChild(ahtml, replace);
-        return;
+        const ahtml = new DOMParser().parseFromString(htmlTemplate(specific), "text/html").body.firstChild;
+        const replace = document.getElementById(specific);
+
+        if(replace !== null) return replace.parentNode.replaceChild(ahtml, replace);
+        else populateAllAchievements();
+    }
+
+    function populateAllAchievements() {
+        for(let i = 0; i < achievementsKeys.length; i++) achievementHTML += htmlTemplate(achievementsKeys[i]);
     }
 
 
