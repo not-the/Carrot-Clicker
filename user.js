@@ -153,7 +153,28 @@ document.addEventListener('keydown', event => {
 
 // Key up (used for normal keybinds)
 document.addEventListener('keyup', event => {
-    if(event.key === "Enter") return document.activeElement.tagName !== 'SUMMARY' ? document.activeElement.click() : undefined; // Browser keyboard navigation enter acts as click
+
+    const key = interpretKey(event.key);
+
+    // Keyboard combo (easter eggs)
+    //#region 
+    keyCombo += key + ' ';
+    keyCodes.forEach((code, index) => {
+        // Give reward
+        if(keyCombo.endsWith(code)) {
+            keyCombo = '';
+            keyTrigger[index] = true;
+            keyCodesCode[index](); // Reward
+        }
+    })
+
+    // Max memory length
+    if(keyCombo.length > 128) keyCombo = keyCombo.slice(-128);
+    //#endregion
+
+
+    // Browser keyboard navigation enter acts as click
+    if(event.key === "Enter") return document.activeElement.tagName !== 'SUMMARY' ? document.activeElement.click() : undefined;
 
     // Escape
     if(event.key === "Escape") {
@@ -168,34 +189,10 @@ document.addEventListener('keyup', event => {
     // KEYBIND HANDLER
     let state = 'keyup';
     if(event.ctrlKey || event.metaKey) return; // Ignore if CTRL or meta key was held
-    let key = interpretKey(event.key);
 
     // Custom keybinds
     if(keyWaiting[0]) return doneKeybind(key, true);
 
-    // Keyboard combos //
-    //#region 
-    keyCombo += key + ' ';
-    if(keyCodes.includes(keyCombo)) keyComboHandler(keyCodes.indexOf(keyCombo));
-
-    /** Keyboard combo detector */
-    function keyComboHandler(combo) {
-        console.log(`keyComboHandler(${combo})`);
-        keyCombo = '';
-        keyTrigger[combo] = true;
-        keyCodesCode[combo](); // Reward
-    }
-
-    // Check if string is on track to be correct or not
-    for(combo of keyCombo) {
-        for(code of keyCodes) {
-            if(combo === code) {
-                keyCombo = '';
-                break;
-            }
-        }
-    }
-    //#endregion
 
     // Stop if keybinds need to be ignored
     if(
